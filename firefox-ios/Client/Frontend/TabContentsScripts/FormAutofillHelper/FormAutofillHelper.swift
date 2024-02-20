@@ -8,7 +8,23 @@ import WebKit
 import Common
 import Storage
 
+enum AutofillFieldValueType: String {
+    case address
+    case creditCard
+}
+
+struct AutofillFieldValuePayload {
+    let fieldValue: AutofillFieldValueType
+    let fieldData: Any?
+}
+
 class FormAutofillHelper: TabContentScript {
+    // MARK: - Handler Names Enum
+    enum HandlerName: String {
+        case addressFormMessageHandler
+        case creditCardFormMessageHandler
+    }
+
     // MARK: - Properties
 
     private weak var tab: Tab?
@@ -16,7 +32,7 @@ class FormAutofillHelper: TabContentScript {
     private var frame: WKFrameInfo?
 
     // Closure to send the field values
-    var foundFieldValues: ((UnencryptedCreditCardFields,
+    var foundFieldValues: ((AutofillFieldValuePayload,
                             FormAutofillPayloadType?,
                             WKFrameInfo?) -> Void)?
 
@@ -35,7 +51,7 @@ class FormAutofillHelper: TabContentScript {
     // MARK: - Script Message Handler
 
     func scriptMessageHandlerNames() -> [String]? {
-        return ["addressFormMessageHandler", "creditCardFormMessageHandler"]
+        return [HandlerName.addressFormMessageHandler.rawValue, HandlerName.creditCardFormMessageHandler.rawValue]
     }
 
     // MARK: - Deinitialization
@@ -46,24 +62,54 @@ class FormAutofillHelper: TabContentScript {
 
     // MARK: - Retrieval
 
+    /// Called when the user content controller receives a script message.
+    ///
+    /// - Parameters:
+    ///   - userContentController: The user content controller.
+    ///   - message: The script message received.
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         // Note: We require frame so that we can submit information
         // to an embedded iframe on a webpage for injecting card info
         frame = message.frameInfo
 
-        guard let data = getValidPayloadData(from: message),
-              let fieldValues = parseFieldType(messageBody: data),
-              let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
-        else {
-            logger.log("Unable to find the payloadType for the credit card JS input",
-                       level: .warning,
-                       category: .webview)
-            return
-        }
+        switch HandlerName(rawValue: message.name) {
+        case .addressFormMessageHandler:
+            // Parse message payload for address form autofill
+            guard let data = getValidPayloadData(from: message),
+                  let fieldValues = parseFieldType(messageBody: data, formType: FillAddressAutofillForm.self),
+                  let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
+            else {
+                // Log a warning if payload parsing fails
+                logger.log("Unable to find the payloadType for the address form JS input",
+                           level: .warning,
+                           category: .webview)
+                return
+            }
 
-        let payloadData = fieldValues.creditCardPayload
-        foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
+            let payloadData = fieldValues.addressPayload
+            foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
+
+        case .creditCardFormMessageHandler:
+            // Parse message payload for credit card form autofill
+            guard let data = getValidPayloadData(from: message),
+                  let fieldValues = parseFieldType(messageBody: data, formType: FillCreditCardForm.self),
+                  let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
+            else {
+                // Log a warning if payload parsing fails
+                logger.log("Unable to find the payloadType for the credit card form JS input",
+                           level: .warning,
+                           category: .webview)
+                return
+            }
+
+            let payloadData = fieldValues.creditCardPayload
+            foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
+
+        case .none:
+            // Do nothing if the handler name is not recognized
+            break
+        }
     }
 
     // MARK: - Payload Data Handling
@@ -72,23 +118,21 @@ class FormAutofillHelper: TabContentScript {
         return message.body as? [String: Any]
     }
 
-    func parseFieldType(messageBody: [String: Any]) -> FillCreditCardForm? {
+    func parseFieldType<T: Decodable>(messageBody: [String: Any], formType: T.Type) -> T? {
         let decoder = JSONDecoder()
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: messageBody, options: .prettyPrinted)
-            let fillCreditCardForm = try decoder.decode(FillCreditCardForm.self, from: jsonData)
-            return fillCreditCardForm
+            let formData = try decoder.decode(formType, from: jsonData)
+            return formData
         } catch let error {
-            logger.log("Unable to parse field type for the credit card, \(error)",
-                       level: .warning,
-                       category: .webview)
+            logger.log("Unable to parse field type, \(error)", level: .warning, category: .webview)
         }
 
         return nil
     }
 
-    func getFieldTypeValues(payload: CreditCardPayload) -> UnencryptedCreditCardFields {
+    func getFieldTypeValues(payload: CreditCardPayload) -> AutofillFieldValuePayload {
         var ccPlainText = UnencryptedCreditCardFields()
         let creditCardValidator = CreditCardValidator()
 
@@ -98,9 +142,23 @@ class FormAutofillHelper: TabContentScript {
         ccPlainText.ccNumber = "\(payload.ccNumber.filter { $0.isNumber })"
         ccPlainText.ccNumberLast4 = ccPlainText.ccNumber.count > 4 ? String(ccPlainText.ccNumber.suffix(4)) : ""
         ccPlainText.ccType = creditCardValidator.cardTypeFor(ccPlainText.ccNumber)?.rawValue ?? ""
-        return ccPlainText
+        return AutofillFieldValuePayload(fieldValue: .creditCard, fieldData: ccPlainText)
     }
 
+    func getFieldTypeValues(payload: AddressAutofillPayload) -> AutofillFieldValuePayload {
+        var addressPlainText = UnencryptedAddressFields(
+            addressLevel1: payload.addressLevel1,
+            organization: payload.organization,
+            country: payload.country,
+            addressLevel2: payload.addressLevel2,
+            email: payload.email,
+            streetAddress: payload.streetAddress,
+            name: payload.name,
+            postalCode: payload.postalCode
+        )
+
+        return AutofillFieldValuePayload(fieldValue: .address, fieldData: addressPlainText)
+    }
     // MARK: - Injection
 
     static func injectCardInfo(logger: Logger,
@@ -149,11 +207,11 @@ class FormAutofillHelper: TabContentScript {
         let sanitizedName = card.ccName.htmlEntityEncodedString
         let sanitizedNumber = card.ccNumber.htmlEntityEncodedString
         let injectionJSON: [String: Any] = [
-                "cc-name": sanitizedName,
-                "cc-number": sanitizedNumber,
-                "cc-exp-month": card.ccExpMonth,
-                "cc-exp-year": card.ccExpYear,
-                "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
+            "cc-name": sanitizedName,
+            "cc-number": sanitizedNumber,
+            "cc-exp-month": card.ccExpMonth,
+            "cc-exp-year": card.ccExpYear,
+            "cc-exp": "\(card.ccExpMonth)/\(card.ccExpYear)",
         ]
         return injectionJSON
     }

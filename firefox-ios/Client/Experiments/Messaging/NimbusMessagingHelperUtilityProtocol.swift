@@ -11,30 +11,14 @@ protocol NimbusMessagingHelperUtilityProtocol {
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol?
 }
 
-/// Responsible for creating a ``NimbusMessagingHelper`` with appropriate context.
 class NimbusMessagingHelperUtility: NimbusMessagingHelperUtilityProtocol {
-    private var logger: Logger
-    private let nimbus: NimbusMessagingProtocol
+    private let createMessageHelper: () -> NimbusMessagingHelperProtocol?
 
-    init(logger: Logger = DefaultLogger.shared, nimbus: NimbusMessagingProtocol = Experiments.shared) {
-        self.logger = logger
-        self.nimbus = nimbus
+    init(createMessageHelper: @escaping () -> NimbusMessagingHelperProtocol? = Experiments.createJexlHelper) {
+        self.createMessageHelper = createMessageHelper
     }
 
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol? {
-        let contextProvider = GleanPlumbContextProvider()
-
-        do {
-            // Attempt to create our message helper
-            return try nimbus.createMessageHelper(
-                additionalContext: contextProvider.createAdditionalDeviceContext())
-        } catch {
-            // If we're here, then all of Messaging is in limbo!
-            // Report the error and let the caller handle the error.
-            logger.log("NimbusMessagingHelper could not be created! With error \(error)",
-                       level: .warning,
-                       category: .experiments)
-            return nil
-        }
+        createMessageHelper()
     }
 }

@@ -216,9 +216,21 @@ enum Experiments {
 }
 
 extension Experiments {
+    public static func createJexlHelper() -> NimbusMessagingHelperProtocol? {
+        let contextProvider = GleanPlumbContextProvider()
+        let context = contextProvider.createAdditionalDeviceContext()
+        return try? sdk.createMessageHelper(additionalContext: context)
+    }
+
     public static var messaging: GleanPlumbMessageManagerProtocol = {
         GleanPlumbMessageManager()
     }()
+
+    public static var events: NimbusEventStore = {
+        sdk.events
+    }()
+
+    public static var sdk: NimbusInterface = shared
 }
 
 private extension AppBuildChannel {
