@@ -199,8 +199,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
-        waitForExistence(app.collectionViews["FxCollectionView"].cells.staticTexts[defaultTopSite["bookmarkLabel"]!], 
-                         timeout: 3)
+        waitForExistence(app.collectionViews["FxCollectionView"].cells
+            .staticTexts[defaultTopSite["bookmarkLabel"]!], timeout: 3)
         app.collectionViews["FxCollectionView"].cells.staticTexts[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
 
