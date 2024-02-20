@@ -50,6 +50,7 @@ open class WeakList<T: AnyObject>: Sequence {
         items.removeAll()
     }
 
+    @discardableResult
     open func remove(_ item: T) -> Int? {
         guard let index = self.index(of: item) else { return nil }
         items.remove(at: index)
