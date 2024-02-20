@@ -36,6 +36,7 @@
         "FakespotTests\/testAcceptTheRejectedOptInNotification()",
         "FakespotTests\/testFakespotAvailable()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
+        "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
         "FindInPageTests",
         "FirefoxSuggestTest",
