@@ -127,6 +127,7 @@ class LoginsHelper: TabContentScript {
               let type = res["type"] as? String
         else { return }
 
+        //NOTE: FXIOS-3856 will further enhance the logs into actual callback
         if let parsedMessage = parseFieldFocusMessage(from: res) {
             logger.log("Parsed message \(String(describing: parsedMessage))",
                        level: .debug,
@@ -151,7 +152,9 @@ class LoginsHelper: TabContentScript {
         }
     }
 
-    func sendMessageType(_ message: FieldFocusMessage) {
+    private func sendMessageType(_ message: FieldFocusMessage) {
+        // NOTE: This is a partial stub / placeholder
+        // FXIOS-3856 will further enhance the logs into actual callback
         switch message.fieldType {
         case .username:
             logger.log("Parsed message username",
@@ -344,6 +347,7 @@ class LoginsHelper: TabContentScript {
             let loginData = LoginInjectionData(requestId: self.currentRequestId,
                                                logins: logins)
 
+            // NOTE: FXIOS-3856 This will get disabled in future with addtion of bottom sheet
             guard let tab = self.tab else {
                 return
             }
