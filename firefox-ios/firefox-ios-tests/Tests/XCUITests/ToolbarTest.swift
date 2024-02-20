@@ -65,11 +65,7 @@ class ToolbarTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[website1["label"]!])
-        if iPad() {
-            app.cells.element(boundBy: 1).tap()
-        } else {
-            app.cells.element(boundBy: 0).tap()
-        }
+        app.cells.element(boundBy: 0).tap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Test to see if all the buttons are enabled.

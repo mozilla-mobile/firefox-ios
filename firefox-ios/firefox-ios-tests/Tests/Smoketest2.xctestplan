@@ -97,6 +97,7 @@
         "TopTabsTest\/testCloseAllTabs()",
         "TopTabsTest\/testCloseAllTabsPrivateMode()",
         "TopTabsTest\/testCloseOneTab()",
+        "TopTabsTest\/testOpenTabsViewCurrentTabThumbnail()",
         "TopTabsTest\/testSwitchBetweenTabs()",
         "TopTabsTestIpad",
         "TrackingProtectionTests\/testBasicMoreInfo()",
