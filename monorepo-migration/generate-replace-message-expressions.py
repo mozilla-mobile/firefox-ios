@@ -59,6 +59,7 @@ def main():
 
     # TBD: Need to create regexes
     regexes += [
+        "regex:^==>[focus-ios] ",
             ]
 
     with open(DATA_DIR / "message-expressions.txt", "w") as f:

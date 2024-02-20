@@ -59,7 +59,7 @@ function _setup_temporary_repo() {
 function _update_repo_branch() {
     git checkout "$TMP_REPO_BRANCH_NAME"
     git rebase main
-    #git push origin "$TMP_REPO_BRANCH_NAME" --force
+    git push origin "$TMP_REPO_BRANCH_NAME" --force
 }
 
 function _update_repo_numbers() {
