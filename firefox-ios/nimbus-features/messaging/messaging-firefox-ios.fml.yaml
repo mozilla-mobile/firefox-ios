@@ -1,0 +1,79 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+import:
+  - path: messaging.fml.yaml
+    channel: release
+    features:
+      messaging:
+        - value:
+            triggers:
+              # Using attributes built into the Nimbus SDK
+              USER_RECENTLY_INSTALLED: days_since_install < 7
+              USER_RECENTLY_UPDATED: days_since_update < 7 && days_since_install != days_since_update
+              USER_TIER_ONE_COUNTRY: ('US' in locale || 'GB' in locale || 'CA' in locale || 'DE' in locale || 'FR' in locale)
+              USER_EN_SPEAKER: "'en' in locale"
+              USER_ES_SPEAKER: "'es' in locale"
+              USER_DE_SPEAKER: "'de' in locale"
+              USER_FR_SPEAKER: "'fr' in locale"
+              DEVICE_ANDROID: os == 'Android'
+              DEVICE_IOS: os == 'iOS'
+
+              DAY_1_AFTER_INSTALL: days_since_install == 1
+              DAY_2_AFTER_INSTALL: days_since_install == 2
+              DAY_3_AFTER_INSTALL: days_since_install == 3
+              DAY_4_AFTER_INSTALL: days_since_install == 4
+              DAY_5_AFTER_INSTALL: days_since_install == 5
+              MORE_THAN_24H_SINCE_INSTALLED_OR_UPDATED: days_since_update >= 1
+
+              NOT_LAUNCHED_YESTERDAY:   "'app_cycle.foreground'|eventLastSeen('Days', 1) > 1"
+              AFTER_THREE_LAUNCHES_THIS_WEEK: "'app_cycle.foreground'|eventSum('Weeks', 1, 0) >= 3"
+
+              I_AM_DEFAULT_BROWSER:     "is_default_browser"
+              I_AM_NOT_DEFAULT_BROWSER: "is_default_browser == false"
+              SUPPORTS_DEFAULT_BROWSER: os_version|versionCompare('14.!') >= 0
+              INACTIVE_NEW_USER:        "is_inactive_new_user"
+              ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
+
+            actions:
+              OPEN_SETTINGS:                      ://deep-link?url=settings/general
+              OPEN_SETTINGS_NEW_TAB:              ://deep-link?url=settings/newtab
+              OPEN_SETTINGS_HOMESCREEN:           ://deep-link?url=settings/homepage
+              OPEN_SETTINGS_WALLPAPERS:           ://deep-link?url=settings/wallpaper
+              OPEN_SETTINGS_EMAIL:                ://deep-link?url=settings/mailto
+              OPEN_SETTINGS_SEARCH_ENGINE:        ://deep-link?url=settings/search
+              OPEN_SETTINGS_PRIVACY:              ://deep-link?url=settings/clear-private-data
+              OPEN_SETTINGS_FXA:                  ://deep-link?url=settings/fxa
+              OPEN_SETTINGS_THEME:                ://deep-link?url=settings/theme
+              VIEW_BOOKMARKS:                     ://deep-link?url=homepanel/bookmarks
+              VIEW_TOP_SITES:                     ://deep-link?url=homepanel/top-sites
+              VIEW_READING_LIST:                  ://deep-link?url=homepanel/reading-list
+              VIEW_HISTORY:                       ://deep-link?url=homepanel/history
+              VIEW_DOWNLOADS:                     ://deep-link?url=homepanel/downloads
+              ENABLE_PRIVATE_BROWSING:            ://deep-link?url=homepanel/new-private-tab
+              OPEN_NEW_TAB:                       ://deep-link?url=homepanel/new-tab
+              MAKE_DEFAULT_BROWSER:               ://deep-link?url=default-browser/system-settings
+              MAKE_DEFAULT_BROWSER_WITH_TUTORIAL: ://deep-link?url=default-browser/tutorial
+            styles:
+              FALLBACK:
+                priority: 40
+                max-display-count: 20
+              DEFAULT:
+                priority: 50
+                max-display-count: 5
+              NOTIFICATION:
+                priority: 50
+                max-display-count: 1
+              PERSISTENT:
+                priority: 50
+                max-display-count: 20
+              SURVEY:
+                priority: 55
+                max-display-count: 10
+              WARNING:
+                priority: 60
+                max-display-count: 10
+              URGENT:
+                priority: 100
+                max-display-count: 10
