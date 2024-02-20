@@ -93,6 +93,28 @@ class FakespotTests: IphoneOnlyTestCase {
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358901
+    func testPriceTagNotDisplayedOnSitesNotIntegratedFakespot() {
+        if skipPlatform { return }
+        // Navigate to ebay.com
+        navigator.openURL("https://www.ebay.com")
+        waitUntilPageLoad()
+        // The price tag icon is not displayed
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        // Open a product detail page and check the address bar
+        let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
+        mozWaitForElementToExist(searchField)
+        searchField.tap()
+        searchField.typeText("Shoe")
+        mozWaitForElementToExist(app.webViews["contentView"].webViews.buttons["Search"])
+        app.webViews["contentView"].webViews.buttons["Search"].tap()
+        waitUntilPageLoad()
+        app.webViews["contentView"].links.element(boundBy: 7).tap()
+        waitUntilPageLoad()
+        // The price tag icon is not displayed
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+    }
+
     private func validateHighlightsSection() {
         if app.staticTexts[AccessibilityIdentifiers.Shopping.HighlightsCard.title].exists {
             let highlights = AccessibilityIdentifiers.Shopping.HighlightsCard.self

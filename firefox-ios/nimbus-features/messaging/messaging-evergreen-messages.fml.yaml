@@ -1,0 +1,52 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+# This file configures "evergreen" messages that are displayed via
+# the Nimbus Messaging system.
+#
+# They are "evergreen" in that they apply to all users, and shipped with the app.
+#
+# This file is intended to grow new messages once messages have been tested via
+# experiment, rolled out to everyone in the release, and are ready to be rolled out
+# without the remote prompting from Experimenter.
+#
+# When adding new messages to this file, please add the experiment (and/or rollout) URLs used to
+# validate them.
+#
+# Triggers, actions and styles are configured in messaging-fenix.fml.yaml.
+import:
+  - path: messaging.fml.yaml
+    channel: release
+    features:
+      messaging:
+        # This message displays on the homescreen, asking the user to set Firefox as the default.
+        # It is triggered after a minimum of 4 launches of the app.
+        - value:
+            messages:
+              default-browser:
+                surface: new-tab-card
+                style: FALLBACK
+                trigger:
+                  - I_AM_NOT_DEFAULT_BROWSER
+                  - SUPPORTS_DEFAULT_BROWSER
+                  - ON_FOURTH_LAUNCH_THIS_YEAR
+                title: Default Browser/DefaultBrowserCard.Title
+                text: Default Browser/DefaultBrowserCard.Description
+                button-label: Default Browser/DefaultBrowserCard.Button.v2
+                action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
+            triggers:
+              ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
+
+        - channel: developer
+          value:
+            messages:
+              # Serves as an example of how survey message might be formatted
+              survey-surface-message:
+                surface: survey
+                style: SURVEY
+                trigger:
+                  - NEVER
+                text: ResearchSurface/Body.Text.v112
+                button-label: ResearchSurface/PrimaryButton.Label.v112
+                action: https://www.macrumors.com

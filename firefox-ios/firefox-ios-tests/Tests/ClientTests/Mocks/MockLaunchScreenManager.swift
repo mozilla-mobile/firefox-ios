@@ -14,7 +14,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
 
     override init(
         profile: Profile,
-        messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
+        messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
         onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)

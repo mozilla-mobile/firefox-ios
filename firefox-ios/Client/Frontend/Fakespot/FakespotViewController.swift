@@ -146,7 +146,7 @@ class FakespotViewController: UIViewController,
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(windowUUID: uuid)
+                return BrowserViewControllerState(appState: appState, uuid: uuid)
             })
         })
     }

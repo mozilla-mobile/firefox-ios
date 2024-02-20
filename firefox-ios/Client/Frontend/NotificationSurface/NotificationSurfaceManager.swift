@@ -40,7 +40,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     }
 
     // MARK: - Initialization
-    init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
+    init(messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
          notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.messagingManager = messagingManager
         self.notificationManager = notificationManager

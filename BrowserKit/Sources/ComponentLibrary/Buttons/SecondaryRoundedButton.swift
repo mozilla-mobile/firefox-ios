@@ -48,16 +48,17 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         }
         updatedConfiguration.baseForegroundColor = foregroundColor
 
-        updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+        let transformer = UIConfigurationTextAttributesTransformer { [weak foregroundColor] incoming in
             var container = incoming
 
-            container.foregroundColor = updatedConfiguration.baseForegroundColor
+            container.foregroundColor = foregroundColor
             container.font = DefaultDynamicFontHelper.preferredBoldFont(
                 withTextStyle: .callout,
                 size: UX.buttonFontSize
             )
             return container
         }
+        updatedConfiguration.titleTextAttributesTransformer = transformer
 
         configuration = updatedConfiguration
     }
