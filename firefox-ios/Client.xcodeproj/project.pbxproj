@@ -363,7 +363,7 @@
 		4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4393931F29AC6CE900DC5A85 /* EnvironmentValues+Extension.swift */; };
 		439A220F29F69A0C00F120EE /* Notification.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A220D29F69A0C00F120EE /* Notification.strings */; };
 		439A221229F69A0C00F120EE /* ZoomPageBar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A221029F69A0C00F120EE /* ZoomPageBar.strings */; };
-		439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B78172A09721600CAAE37 /* CreditCardHelperTests.swift */; };
+		439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B78172A09721600CAAE37 /* FormAutofillHelperTests.swift */; };
 		439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439C489B29760575007C3DCD /* CreditCardValidator.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
 		43A7153D2A2DF94F00DD5747 /* Footer.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A7153B2A2DF94F00DD5747 /* Footer.strings */; };
@@ -943,6 +943,8 @@
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
 		B26ADF852B339ED000C6E127 /* AddressAutofillSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26ADF842B339ED000C6E127 /* AddressAutofillSetting.swift */; };
+		B28BF6602B7A9E4F006357CA /* FillAddressAutofillForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28BF65F2B7A9E4F006357CA /* FillAddressAutofillForm.swift */; };
+		B28BF6622B7ACC17006357CA /* UnencryptedAddressFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28BF6612B7ACC17006357CA /* UnencryptedAddressFields.swift */; };
 		B2981F8A2B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2981F892B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift */; };
 		B2999FED2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */; };
 		B2999FEF2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2999FEE2B044B4E00F0FEC1 /* RustAutofillEncryptionKeys.swift */; };
@@ -4071,7 +4073,7 @@
 		439A626229C8776D005428EB /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/ErrorState.strings; sourceTree = "<group>"; };
 		439A626329C8776D005428EB /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Settings.strings; sourceTree = "<group>"; };
 		439A626429C8776D005428EB /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/SnackBar.strings; sourceTree = "<group>"; };
-		439B78172A09721600CAAE37 /* CreditCardHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardHelperTests.swift; sourceTree = "<group>"; };
+		439B78172A09721600CAAE37 /* FormAutofillHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAutofillHelperTests.swift; sourceTree = "<group>"; };
 		439BC6462AC1A4E000AF4D58 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Share.strings; sourceTree = "<group>"; };
 		439BC6472AC1A4E000AF4D58 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/TabLocation.strings; sourceTree = "<group>"; };
 		439BE0CE2B554A1D00E73966 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/TabToolbar.strings; sourceTree = "<group>"; };
@@ -6225,6 +6227,8 @@
 		B25849AE8A390529836D27F0 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = "sq.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		B25D4E72A0116CFE5BEC29CC /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		B26ADF842B339ED000C6E127 /* AddressAutofillSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAutofillSetting.swift; sourceTree = "<group>"; };
+		B28BF65F2B7A9E4F006357CA /* FillAddressAutofillForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillAddressAutofillForm.swift; sourceTree = "<group>"; };
+		B28BF6612B7ACC17006357CA /* UnencryptedAddressFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnencryptedAddressFields.swift; sourceTree = "<group>"; };
 		B29049688244A8F79950DF35 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Shared.strings; sourceTree = "<group>"; };
 		B2944B3EAFB1DA22E7F28520 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Shared.strings; sourceTree = "<group>"; };
 		B2981F892B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillAccessoryViewButtonItem.swift; sourceTree = "<group>"; };
@@ -8727,7 +8731,6 @@
 			isa = PBXGroup;
 			children = (
 				ABEF80D82A2F283D003F52C4 /* CreditCardBottomSheetViewModelTests.swift */,
-				439B78172A09721600CAAE37 /* CreditCardHelperTests.swift */,
 				96AF8C1B29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift */,
 				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
 				43B658D829CE251C00C9EF08 /* CreditCardInputViewModelTests.swift */,
@@ -9866,6 +9869,14 @@
 			path = CreditCardBottomSheet;
 			sourceTree = "<group>";
 		};
+		B23620492B7EAF2C000B1DE7 /* Autofill */ = {
+			isa = PBXGroup;
+			children = (
+				439B78172A09721600CAAE37 /* FormAutofillHelperTests.swift */,
+			);
+			path = Autofill;
+			sourceTree = "<group>";
+		};
 		B2999FF82B194B3D00F0FEC1 /* FormAutofillHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -9875,6 +9886,7 @@
 				0BA02DB12942605600C92603 /* FormAutofillHelper.swift */,
 				B2999FF42B194AB200F0FEC1 /* FormAutofillHelperError.swift */,
 				B2999FF62B194ADE00F0FEC1 /* FormAutofillPayloadType.swift */,
+				B28BF65F2B7A9E4F006357CA /* FillAddressAutofillForm.swift */,
 			);
 			path = FormAutofillHelper;
 			sourceTree = "<group>";
@@ -10492,6 +10504,7 @@
 				15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */,
 				D05434E2225BBC4100FDE4EF /* RustShared.swift */,
 				B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */,
+				B28BF6612B7ACC17006357CA /* UnencryptedAddressFields.swift */,
 			);
 			path = Rust;
 			sourceTree = "<group>";
@@ -11504,6 +11517,7 @@
 				C889D7CD2858C4B500121E1D /* ContextMenuHelperTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
 				43B658D729CE249D00C9EF08 /* CreditCard */,
+				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
 				D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */,
@@ -13123,6 +13137,7 @@
 				D076971F206AC60900FACFD8 /* ReadingList.swift in Sources */,
 				28E08C9A1AF44F00009BA2FA /* BrowserSchema.swift in Sources */,
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
+				B28BF6622B7ACC17006357CA /* UnencryptedAddressFields.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
 				2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */,
 				D05434D9225BAA6200FDE4EF /* RustPlaces.swift in Sources */,
@@ -14040,6 +14055,7 @@
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
 				DFD104682B2341F900938418 /* ProductAdsCache.swift in Sources */,
 				C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */,
+				B28BF6602B7A9E4F006357CA /* FillAddressAutofillForm.swift in Sources */,
 				21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */,
 				E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
@@ -14280,7 +14296,7 @@
 				212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */,
 				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
-				439B78182A09721600CAAE37 /* CreditCardHelperTests.swift in Sources */,
+				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */,
 				8A83B74A2A265044002FF9AC /* SettingsCoordinatorTests.swift in Sources */,
