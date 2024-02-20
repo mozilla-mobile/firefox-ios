@@ -336,16 +336,14 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private func sanitizeTriggers(_ unsafeTriggers: [String], table: [String: String]) -> [String]? {
         var triggers = [String]()
         for unsafeTrigger in unsafeTriggers {
-            guard let safeTrigger = table[unsafeTrigger] else {
-                return nil
-            }
+            guard let safeTrigger = table[unsafeTrigger] else { return nil }
             triggers.append(safeTrigger)
         }
         return triggers
     }
 
     private func sanitizeStyle(_ unsafeStyle: String, table: [String: StyleData]) -> StyleData? {
-        table[unsafeStyle]
+        return table[unsafeStyle]
     }
 
     private func baseTelemetryExtras(using message: GleanPlumbMessage) -> [String: String] {
