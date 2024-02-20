@@ -105,14 +105,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // feature! For that reason, return `nil`. We need to recreate the helper
         // for each request to get a message because device context can change.
         guard let messagingHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
-        var jexlCache = [String: Bool]()
 
         var excluded: Set<String> = []
         return getNextMessage(for: surface,
                               availableMessages: availableMessages,
                               excluded: &excluded,
-                              messagingHelper: messagingHelper,
-                              jexlCache: &jexlCache)
+                              messagingHelper: messagingHelper)
     }
 
     // TODO: inout removal ticket https://mozilla-hub.atlassian.net/browse/FXIOS-6572
@@ -120,8 +118,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             for surface: MessageSurfaceId,
             availableMessages: [GleanPlumbMessage],
             excluded: inout Set<String>,
-            messagingHelper: NimbusMessagingHelperProtocol,
-            jexlCache: inout [String: Bool]
+            messagingHelper: NimbusMessagingHelperProtocol
     ) -> GleanPlumbMessage? {
         let feature = messagingFeature.value()
         let message = availableMessages.first { message in
@@ -131,8 +128,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             }
             do {
                 return try evaluationUtility.isMessageEligible(message,
-                                                               messageHelper: messagingHelper,
-                                                               jexlCache: &jexlCache)
+                                                               messageHelper: messagingHelper)
             } catch {
                 return false
             }
@@ -163,8 +159,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             return getNextMessage(for: surface,
                                   availableMessages: availableMessages,
                                   excluded: &excluded,
-                                  messagingHelper: messagingHelper,
-                                  jexlCache: &jexlCache)
+                                  messagingHelper: messagingHelper)
         }
     }
 
