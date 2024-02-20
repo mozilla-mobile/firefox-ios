@@ -55,7 +55,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Properties
     static let shared = GleanPlumbMessageManager()
 
-    private let helperUtility: NimbusMessagingHelperUtilityProtocol
+    private let createMessagingHelper: NimbusMessagingHelperUtilityProtocol
     private let evaluationUtility: NimbusMessagingEvaluationUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature: FeatureHolder<Messaging>
@@ -70,13 +70,13 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Inits
 
     init(
-        helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        createMessagingHelper: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
         messagingUtility: NimbusMessagingEvaluationUtility = NimbusMessagingEvaluationUtility(),
         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
         messagingFeature: FeatureHolder<Messaging> = FxNimbusMessaging.shared.features.messaging
     ) {
-        self.helperUtility = helperUtility
+        self.createMessagingHelper = createMessagingHelper
         self.evaluationUtility = messagingUtility
         self.messagingStore = messagingStore
         self.applicationHelper = applicationHelper
@@ -108,7 +108,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // If `NimbusMessagingHelper` creation fails, we cannot continue with this
         // feature! For that reason, return `nil`. We need to recreate the helper
         // for each request to get a message because device context can change.
-        guard let messagingHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
+        guard let messagingHelper = createMessagingHelper.createNimbusMessagingHelper() else { return nil }
 
         var excluded: Set<String> = []
         return getNextMessage(for: surface,
@@ -180,7 +180,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessagePressed(_ message: GleanPlumbMessage) {
         messagingStore.onMessagePressed(message)
 
-        guard let helper = helperUtility.createNimbusMessagingHelper() else { return }
+        guard let helper = createMessagingHelper.createNimbusMessagingHelper() else { return }
 
         // Make substitutions where they're needed.
         let template = message.action
