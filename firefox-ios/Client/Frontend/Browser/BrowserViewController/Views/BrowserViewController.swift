@@ -2259,7 +2259,7 @@ extension BrowserViewController: LegacyTabDelegate {
                         // Dismiss keyboard
                         webView.resignFirstResponder()
                         // Authenticate and show bottom sheet with select a card flow
-                        self?.authenticateSelectSavedLoginsClosureBottomSheet()
+//                        self?.authenticateSelectSavedLoginsClosureBottomSheet()
                     }
                 }
             }
