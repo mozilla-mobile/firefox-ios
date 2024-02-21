@@ -482,7 +482,8 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
-        if !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+        if NightModeHelper.isActivated(),
+           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
             NightModeHelper.turnOff(tabManager: tabManager)
             themeManager.reloadTheme()
         }
