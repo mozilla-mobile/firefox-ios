@@ -57,10 +57,10 @@ def main():
                 )
                 regexes.append(regex)
 
-    # TBD: Need to create regexes
+    # Add regexes if there are wrong replacements
     regexes += [
         "regex:^==>[focus-ios] ",
-            ]
+    ]
 
     with open(DATA_DIR / "message-expressions.txt", "w") as f:
         f.write("".join(regexes))
