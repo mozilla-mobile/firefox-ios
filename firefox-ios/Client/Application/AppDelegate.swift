@@ -104,7 +104,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .profileInitialized,
             .preLaunchDependenciesComplete,
             .postLaunchDependenciesComplete,
-            .accountManagerInitialized
+            .accountManagerInitialized,
+            .browserIsReady
         ])
 
         // Then setup dependency container as it's needed for everything else
