@@ -77,7 +77,6 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
@@ -765,6 +764,7 @@ class BrowserViewController: UIViewController,
         prepareURLOnboardingContextualHint()
 
         browserDelegate?.browserHasLoaded()
+        AppEventQueue.signal(event: .browserIsReady)
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1579,6 +1579,7 @@ class BrowserViewController: UIViewController,
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
         guard !isCrashAlertShowing else {
             urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
+            logger.log("Saving urlFromAnotherApp since crash alert is showing", level: .debug, category: .tabs)
             return
         }
         popToBVC()
@@ -1586,7 +1587,6 @@ class BrowserViewController: UIViewController,
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
             return
         }
-        openedUrlFromExternalSource = true
 
         if let uuid = uuid, let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
@@ -1607,6 +1607,7 @@ class BrowserViewController: UIViewController,
             request = URLRequest(url: url)
         } else {
             request = nil
+            logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
@@ -1644,7 +1645,6 @@ class BrowserViewController: UIViewController,
             tabManager.addTab(nil, isPrivate: isPrivate)
             return
         }
-        openedUrlFromExternalSource = true
 
         let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
         freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)

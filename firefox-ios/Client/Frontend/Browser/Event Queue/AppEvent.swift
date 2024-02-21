@@ -18,6 +18,7 @@ public enum AppEvent: AppEventType {
     case preLaunchDependenciesComplete
     case postLaunchDependenciesComplete
     case accountManagerInitialized
+    case browserIsReady
 
     // Activities: Profile Syncing
     case profileSyncing
