@@ -264,6 +264,36 @@ extension URL {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
         return scheme.map { schemes.contains($0) } ?? false
     }
+
+    /// Extracts the second-level domain and TLD considering ccSLDs using URLComponents.
+    public func secondLevelDomainAndTLD() -> String? {
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              let host = components.host else { return nil }
+
+        let parts = host.components(separatedBy: ".")
+        // Ensure there's at least a domain and a TLD, otherwise return nil
+        guard parts.count > 1 else { return nil }
+        if parts.count >= 3 {
+            // Example logic to handle common ccSLDs
+            let lastTwoParts = parts.suffix(2).joined(separator: ".")
+            // Adjust logic here if you we need a specific list of country code second level domains to handle.
+            let knownCCSLDs = ["co.uk", "com.au", "gov.uk", "ac.uk", "org.uk"]
+            if knownCCSLDs.contains(lastTwoParts) {
+                return parts.suffix(3).joined(separator: ".")
+            }
+        }
+
+        // Fallback for non-ccSLD cases or if not matched by the above logic
+        return parts.suffix(2).joined(separator: ".")
+    }
+
+    /// Checks if the current URL is related to another URL based on the second-level domain and TLD.
+    public func isRelated(toURL url: URL) -> Bool {
+        guard let domain1 = self.secondLevelDomainAndTLD(), let domain2 = url.secondLevelDomainAndTLD() else {
+            return false
+        }
+        return domain1.lowercased() == domain2.lowercased()
+    }
 }
 
 private struct ETLDEntry: CustomStringConvertible {

@@ -2245,21 +2245,25 @@ extension BrowserViewController: LegacyTabDelegate {
                 theme: themeManager.currentTheme
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
-            logins.foundFieldValues = { field in
-//                self?.profile.autofill.listCreditCards(completion: { cards, error in
-//                    guard let cards = cards, !cards.isEmpty, error == nil else { return }
-                    DispatchQueue.main.async {
+            logins.foundFieldValues = { [weak self] field in
+                Task {
+                    guard let tabURL = tab.url else { return }
+                    let logins = (try? await self?.profile.logins.listLogins()) ?? []
+                    let loginsForCurrentTab = logins.filter { login in
+                        guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+                        return recordHostnameURL.isRelated(toURL: tabURL)
+                    }
+                    if !loginsForCurrentTab.isEmpty {
                         tab.webView?.accessoryView.reloadViewFor(.login)
                         tab.webView?.reloadInputViews()
                     }
-//                })
+                }
 
                 tab.webView?.accessoryView.savedLoginsClosure = {
                     DispatchQueue.main.async { [weak self] in
                         // Dismiss keyboard
                         webView.resignFirstResponder()
-                        // Authenticate and show bottom sheet with select a card flow
-//                        self?.authenticateSelectSavedLoginsClosureBottomSheet()
+                        self?.authenticateSelectSavedLoginsClosureBottomSheet()
                     }
                 }
             }
@@ -2308,6 +2312,21 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+    }
+
+    private func authenticateSelectSavedLoginsClosureBottomSheet() {
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                // Note: Since we are injecting card info, we pass on the frame
+                // for special iframe cases
+                self.navigationHandler?.showSavedLoginAutofill()
+            case .deviceOwnerFailed:
+                break // Keep showing bvc
+            case .passCodeRequired:
+                self.navigationHandler?.showRequiredPassCode()
+            }
+        }
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {

@@ -271,4 +271,26 @@ final class URLExtensionTests: XCTestCase {
         let givenURL = URL(string: "data://google.com")!
         XCTAssertNil(givenURL.origin)
     }
+
+    func testSecondLevelDomainAndTLD() {
+        // Test standard domain
+        XCTAssertEqual(URL(string: "https://example.com")?.secondLevelDomainAndTLD(), "example.com")
+        // Test subdomain
+        XCTAssertEqual(URL(string: "https://sub.example.com")?.secondLevelDomainAndTLD(), "example.com")
+        // Test co.uk domain
+        XCTAssertEqual(URL(string: "https://example.co.uk")?.secondLevelDomainAndTLD(), "example.co.uk")
+        // Test with path
+        XCTAssertEqual(URL(string: "https://example.com/path/to/resource")?.secondLevelDomainAndTLD(), "example.com")
+        // Test another TLD
+        XCTAssertEqual(URL(string: "https://example.net")?.secondLevelDomainAndTLD(), "example.net")
+        // Test missing TLD
+        XCTAssertNil(URL(string: "https://localhost")?.secondLevelDomainAndTLD())
+    }
+
+    func testIsRelatedToURL() {
+        XCTAssertTrue(URL(string: "https://sub.example.com")!.isRelated(toURL: URL(string: "https://www.example.com")!))
+        XCTAssertFalse(URL(string: "https://example.com")!.isRelated(toURL: URL(string: "https://example.net")!))
+        XCTAssertFalse(URL(string: "https://example.com")!.isRelated(toURL: URL(string: "https://example.org")!))
+        XCTAssertTrue(URL(string: "https://sub.example.co.uk")!.isRelated(toURL: URL(string: "https://www.example.co.uk")!))
+    }
 }

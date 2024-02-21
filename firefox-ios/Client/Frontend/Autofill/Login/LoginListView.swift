@@ -66,12 +66,12 @@ struct LoginListView_Previews: PreviewProvider {
 import Storage
 
 extension RustLogins: LoginStorage {
-    func listLogins() async throws -> [Login] {
+    func listLogins() async throws -> [EncryptedLogin] {
         return try await withCheckedThrowingContinuation { continuation in
             self.listLogins().upon { result in
                 switch result {
                 case .success(let logins):
-                    continuation.resume(returning: logins.map(Login.init(encryptedLogin:)))
+                    continuation.resume(returning: logins)
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
@@ -81,29 +81,32 @@ extension RustLogins: LoginStorage {
 }
 
 protocol LoginStorage {
-    func listLogins() async throws -> [Login]
+    func listLogins() async throws -> [EncryptedLogin]
 }
 
 class MockLoginStorage: LoginStorage {
-    func listLogins() async throws -> [Login] {
+    func listLogins() async throws -> [EncryptedLogin] {
         // Simulate a delay to fetch logins
         try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC) // 0.5 seconds
 
         // Return mock login data
-        let mockLogins = [
-            Login(website: "foo@example.com", username: "**********"),
-            Login(website: "bar@example.com", username: "**********"),
-            Login(website: "foo@example.com", username: "**********"),
-            Login(website: "bar@example.com", username: "**********"),
-            Login(website: "foo@example.com", username: "**********"),
-            Login(website: "bar@example.com", username: "**********"),
-            Login(website: "foo@example.com", username: "**********"),
-            Login(website: "bar@example.com", username: "**********"),
-            Login(website: "foo@example.com", username: "**********"),
-            Login(website: "bar@example.com", username: "**********"),
-            Login(website: "foo@example.com", username: "**********"),
-            Login(website: "bar@example.com", username: "**********"),
-            // Repeat as needed
+        let mockLogins: [EncryptedLogin] = [
+            EncryptedLogin(
+                credentials: URLCredential(
+                    user: "test",
+                    password: "doubletest",
+                    persistence: .permanent
+                ),
+                protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+            ),
+            EncryptedLogin(
+                credentials: URLCredential(
+                    user: "test",
+                    password: "doubletest",
+                    persistence: .permanent
+                ),
+                protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+            )
         ]
 
         return mockLogins

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
 protocol LoggerProtocol {
     func log(_ message: String, level: LogLevel, category: LogCategory, description: String)
@@ -17,17 +18,17 @@ enum LogCategory {
 }
 
 class LoginListViewModel: ObservableObject {
-    @Published var logins: [Login] = []
+    @Published var logins: [EncryptedLogin] = []
 
     private let loginStorage: LoginStorage
     private let logger: LoggerProtocol
-    let onLoginCellTap: (Login) -> Void
+    let onLoginCellTap: (EncryptedLogin) -> Void
     let manageLoginInfoAction: () -> Void
 
     init(
         loginStorage: LoginStorage,
         logger: LoggerProtocol,
-        onLoginCellTap: @escaping (Login) -> Void,
+        onLoginCellTap: @escaping (EncryptedLogin) -> Void,
         manageLoginInfoAction: @escaping () -> Void
     ) {
         self.loginStorage = loginStorage

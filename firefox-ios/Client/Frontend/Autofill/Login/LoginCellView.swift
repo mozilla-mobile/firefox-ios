@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import Storage
 
 // MARK: - LoginCellView
 
@@ -24,7 +25,7 @@ struct LoginCellView: View {
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
 
-    private(set) var login: Login
+    private(set) var login: EncryptedLogin
     @Environment(\.themeType)
     var theme
     private(set) var onTap: () -> Void
@@ -42,11 +43,11 @@ struct LoginCellView: View {
                     .foregroundColor(iconPrimary)
                     .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
                 VStack(alignment: .leading) {
-                    Text(login.website)
+                    Text(login.decryptedUsername)
                         .font(.body)
                         .foregroundColor(textColor)
                         .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
-                    Text(login.username)
+                    Text("******")
                         .font(.subheadline)
                         .foregroundColor(customLightGray)
                 }
@@ -103,10 +104,17 @@ struct LoginButtonStyle: ButtonStyle {
 struct LoginCellView_Previews: PreviewProvider {
     static var previews: some View {
         // Create a sample login item
-        let sampleLogin = Login(website: "http://firefox.com", username: "user@example.com")
+        let loginRecord = EncryptedLogin(
+            credentials: URLCredential(
+                user: "test",
+                password: "doubletest",
+                persistence: .permanent
+            ),
+            protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+        )
 
         // Render the LoginCellView
-        LoginCellView(login: sampleLogin, onTap: {})
+        LoginCellView(login: loginRecord, onTap: {})
             .padding()
     }
 }
