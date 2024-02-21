@@ -889,7 +889,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func startAtHomeCheck() -> Bool {
         let startAtHomeManager = StartAtHomeHelper(prefs: profile.prefs, isRestoringTabs: !tabRestoreHasFinished)
 
-        guard !startAtHomeManager.shouldSkipStartHome else { return false }
+        guard !startAtHomeManager.shouldSkipStartHome else {
+            logger.log("Skipping start at home", level: .debug, category: .tabs)
+            return false
+        }
 
         if startAtHomeManager.shouldStartAtHome() {
             let wasLastSessionPrivate = selectedTab?.isPrivate ?? false
