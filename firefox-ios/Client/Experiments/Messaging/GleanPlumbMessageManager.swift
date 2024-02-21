@@ -55,7 +55,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Properties
     static let shared = GleanPlumbMessageManager()
 
-    private let helperUtility: NimbusMessagingHelperUtilityProtocol
+    private let createMessagingHelper: NimbusMessagingHelperUtilityProtocol
     private let evaluationUtility: NimbusMessagingEvaluationUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature: FeatureHolder<Messaging>
@@ -64,20 +64,19 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
 
     private enum CreateMessageError: Error {
-        case expired
         case malformed
     }
 
     // MARK: - Inits
 
     init(
-        helperUtility: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
+        createMessagingHelper: NimbusMessagingHelperUtilityProtocol = NimbusMessagingHelperUtility(),
         messagingUtility: NimbusMessagingEvaluationUtility = NimbusMessagingEvaluationUtility(),
         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-        messagingFeature: FeatureHolder<Messaging> = FxNimbus.shared.features.messaging
+        messagingFeature: FeatureHolder<Messaging> = FxNimbusMessaging.shared.features.messaging
     ) {
-        self.helperUtility = helperUtility
+        self.createMessagingHelper = createMessagingHelper
         self.evaluationUtility = messagingUtility
         self.messagingStore = messagingStore
         self.applicationHelper = applicationHelper
@@ -94,45 +93,42 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Returns the next valid and triggered message for the surface, if one exists.
     public func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
-        return getNextMessage(for: surface, availableMessages: getMessages(messagingFeature.value()))
+        return getNextMessage(for: surface, from: getMessages(messagingFeature.value()))
     }
 
     public func getNextMessage(
         for surface: MessageSurfaceId,
-        availableMessages: [GleanPlumbMessage]
+        from messages: [GleanPlumbMessage]
     ) -> GleanPlumbMessage? {
+        let availableMessages = messages.filter {
+            $0.data.surface == surface
+        }.filter {
+            !$0.isExpired && !$0.isInteractedWith
+        }
         // If `NimbusMessagingHelper` creation fails, we cannot continue with this
         // feature! For that reason, return `nil`. We need to recreate the helper
         // for each request to get a message because device context can change.
-        guard let messagingHelper = helperUtility.createNimbusMessagingHelper() else { return nil }
-        var jexlCache = [String: Bool]()
+        guard let messagingHelper = createMessagingHelper.createNimbusMessagingHelper() else { return nil }
 
-        var excluded: Set<String> = []
         return getNextMessage(for: surface,
-                              availableMessages: availableMessages,
-                              excluded: &excluded,
-                              messagingHelper: messagingHelper,
-                              jexlCache: &jexlCache)
+                              from: availableMessages,
+                              excluded: [],
+                              messagingHelper: messagingHelper)
     }
 
-    // TODO: inout removal ticket https://mozilla-hub.atlassian.net/browse/FXIOS-6572
     private func getNextMessage(
-            for surface: MessageSurfaceId,
-            availableMessages: [GleanPlumbMessage],
-            excluded: inout Set<String>,
-            messagingHelper: NimbusMessagingHelperProtocol,
-            jexlCache: inout [String: Bool]
+        for surface: MessageSurfaceId,
+        from availableMessages: [GleanPlumbMessage],
+        excluded: Set<String>,
+        messagingHelper: NimbusMessagingHelperProtocol
     ) -> GleanPlumbMessage? {
-        let feature = messagingFeature.value()
         let message = availableMessages.first { message in
-            guard message.surface == surface &&
-                    !excluded.contains(message.id) else {
+            if excluded.contains(message.id) {
                 return false
             }
             do {
                 return try evaluationUtility.isMessageEligible(message,
-                                                               messageHelper: messagingHelper,
-                                                               jexlCache: &jexlCache)
+                                                               messageHelper: messagingHelper)
             } catch {
                 return false
             }
@@ -155,16 +151,15 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // because they're not displayed.
         messagingStore.onMessageDisplayed(message)
 
-        switch feature.onControl {
+        switch messagingFeature.value().onControl {
         case .showNone:
             return nil
         case .showNextMessage:
-            excluded.insert(message.id)
+            let excluded = excluded + [message.id]
             return getNextMessage(for: surface,
-                                  availableMessages: availableMessages,
-                                  excluded: &excluded,
-                                  messagingHelper: messagingHelper,
-                                  jexlCache: &jexlCache)
+                                  from: availableMessages,
+                                  excluded: Set(excluded),
+                                  messagingHelper: messagingHelper)
         }
     }
 
@@ -183,7 +178,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessagePressed(_ message: GleanPlumbMessage) {
         messagingStore.onMessagePressed(message)
 
-        guard let helper = helperUtility.createNimbusMessagingHelper() else { return }
+        guard let helper = createMessagingHelper.createNimbusMessagingHelper() else { return }
 
         // Make substitutions where they're needed.
         let template = message.action
@@ -290,24 +285,24 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         message: MessageData,
         lookupTables: Messaging
     ) -> Result<GleanPlumbMessage, CreateMessageError> {
-        // Guard against a message with a blank `text` property.
-        guard !message.text.isEmpty else { return .failure(.malformed) }
+        var action: String
+        if !message.isControl {
+            // Guard against a message with a blank `text` property.
+            guard !message.text.isEmpty else { return .failure(.malformed) }
 
-        // Ascertain a Message's style, to know priority and max impressions.
-        guard let style = lookupTables.styles[message.style] else { return .failure(.malformed) }
-
-        // The message action should be either from the lookup table OR a URL.
-        let action = lookupTables.actions[message.action] ?? message.action
-        guard action.contains("://") else { return .failure(.malformed) }
-
-        let triggers = message.trigger.compactMap { trigger in
-            lookupTables.triggers[trigger]
+            // The message action should be either from the lookup table OR a URL.
+            guard let safeAction = sanitizeAction(message.action, table: lookupTables.actions) else {
+                return .failure(.malformed)
+            }
+            action = safeAction
+        } else {
+            action = "CONTROL_ACTION"
         }
 
-        // Be sure the count on `triggers` and `message.triggers` are equal.
-        // If these mismatch, that means a message contains a trigger not in the triggers lookup table.
-        // JEXLS can only be evaluated on supported triggers. Otherwise, consider the message malformed.
-        if triggers.count != message.trigger.count {
+        // Ascertain a Message's style, to know priority and max impressions.
+        guard let style = sanitizeStyle(message.style, table: lookupTables.styles) else { return .failure(.malformed) }
+
+        guard let triggers = sanitizeTriggers(message.trigger, table: lookupTables.triggers) else {
             return .failure(.malformed)
         }
 
@@ -320,6 +315,28 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                               style: style,
                               metadata: messageMetadata)
         )
+    }
+
+    private func sanitizeAction(_ unsafeAction: String, table: [String: String]) -> String? {
+        let action = table[unsafeAction] ?? unsafeAction
+        if action.contains("://") {
+            return action
+        } else {
+            return nil
+        }
+    }
+
+    private func sanitizeTriggers(_ unsafeTriggers: [String], table: [String: String]) -> [String]? {
+        var triggers = [String]()
+        for unsafeTrigger in unsafeTriggers {
+            guard let safeTrigger = table[unsafeTrigger] else { return nil }
+            triggers.append(safeTrigger)
+        }
+        return triggers
+    }
+
+    private func sanitizeStyle(_ unsafeStyle: String, table: [String: StyleData]) -> StyleData? {
+        return table[unsafeStyle]
     }
 
     private func baseTelemetryExtras(using message: GleanPlumbMessage) -> [String: String] {

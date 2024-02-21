@@ -10,14 +10,6 @@ import WebKit
 import ComponentLibrary
 import SwiftUI
 
-class SelfSizingHostingController<Content>: UIHostingController<Content>, BottomSheetChild where Content: View {
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.view.invalidateIntrinsicContentSize()
-    }
-    public func willDismiss() {}
-}
-
 class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
 
@@ -147,6 +139,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     func showPassCodeController() {
         let passwordController = DevicePasscodeRequiredViewController()
         passwordController.profile = profile
+        passwordController.parentType = .paymentMethods
         router.present(passwordController)
     }
 

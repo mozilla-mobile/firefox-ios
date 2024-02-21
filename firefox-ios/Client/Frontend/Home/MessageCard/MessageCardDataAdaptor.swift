@@ -22,7 +22,7 @@ class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor {
         }
     }
 
-    init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
+    init(messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging) {
         self.messagingManager = messagingManager
     }
 
@@ -34,10 +34,8 @@ class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor {
     /// An expired message will not trigger a reload of the section
     /// - Parameter surface: Message surface id
     func updateMessage(for surface: MessageSurfaceId = .newTabCard) {
-        guard let validMessage = messagingManager.getNextMessage(for: surface) else { return }
-
-        if !validMessage.isExpired {
-            message = validMessage
+        if let message = messagingManager.getNextMessage(for: surface) {
+            self.message = message
             delegate?.didLoadNewData()
         }
     }

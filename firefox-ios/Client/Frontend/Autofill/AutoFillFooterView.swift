@@ -13,14 +13,14 @@ struct AutoFillFooterView: View {
         static let actionButtonBottomSpace: CGFloat = 24
     }
 
-    private let primaryButtonTitle: String
+    private let actionButtonTitle: String
     private let primaryAction: () -> Void
 
     init(
         title: String,
         primaryAction: @escaping () -> Void
     ) {
-        self.primaryButtonTitle = title
+        self.actionButtonTitle = title
         self.primaryAction = primaryAction
     }
 
@@ -30,7 +30,7 @@ struct AutoFillFooterView: View {
     var body: some View {
         VStack {
             Button(action: primaryAction) {
-                Text(primaryButtonTitle)
+                Text(actionButtonTitle)
                     .font(.system(size: UX.actionButtonFontSize))
                     .frame(maxWidth: .infinity, alignment: .leading)
             }

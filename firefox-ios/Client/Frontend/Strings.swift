@@ -1828,9 +1828,9 @@ extension String {
                 value: "Default Search Engine",
                 comment: "Title for the `default search engine` settings section in the Search page in the Settings menu.")
             public static let AlternateSearchEnginesTitle = MZLocalizedString(
-                key: "Settings.Search.AlternateSearchEngines.Title.v124",
+                key: "Settings.Search.AlternateSearchEngines.Title.v124.v2",
                 tableName: "Settings",
-                value: "Alternate Search Engines",
+                value: "Alternative Search Engines",
                 comment: "Title for alternate search engines settings section in the Search page in the Settings menu.")
             public static let EnginesSuggestionsTitle = MZLocalizedString(
                 key: "Settings.Search.EnginesSuggestions.Title.v124",
@@ -2521,6 +2521,11 @@ extension String {
         tableName: "Credentials",
         value: "To save and automatically fill passwords, enable Face ID, Touch ID, or a device passcode.",
         comment: "Message shown when you enter Logins & Passwords without having a device passcode set.")
+    public static let PaymentMethodsDevicePasscodeRequiredMessage = MZLocalizedString(
+        key: "Logins.PaymentMethods.DevicePasscodeRequired.Message.v124",
+        tableName: "Credentials",
+        value: "To save and autofill credit cards cards, enable Face ID, Touch ID, or a device passcode.",
+        comment: "Message shown when you enter Payment Methods without having a device passcode set.")
     public static let LoginsDevicePasscodeRequiredLearnMoreButtonTitle = MZLocalizedString(
         key: "Logins.DevicePasscodeRequired.LearnMoreButtonTitle",
         tableName: nil,

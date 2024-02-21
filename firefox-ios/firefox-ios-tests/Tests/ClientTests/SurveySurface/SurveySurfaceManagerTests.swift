@@ -29,14 +29,6 @@ class SurveySurfaceManagerTests: XCTestCase {
         XCTAssertFalse(subject.shouldShowSurveySurface)
     }
 
-    func testExpiredMessage_surveySurfaceShouldNotShow() {
-        let subject = createSubject()
-        let expiredMessage = createMessage(isExpired: true)
-        messageManager.message = expiredMessage
-
-        XCTAssertFalse(subject.shouldShowSurveySurface)
-    }
-
     func testGoodButNotSurveyMessage_surveySurfaceShouldNotShow() {
         let subject = createSubject()
         let goodMessage = createMessage(for: .newTabCard, isExpired: false)

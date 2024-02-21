@@ -33,14 +33,6 @@ class MessageCardDataAdaptorImplementationTests: XCTestCase {
         XCTAssertNil(subject.getMessageCardData())
     }
 
-    func testSettingDelegateUpdateData_expiredMessage() {
-        messageManager.message = createMessage(isExpired: true)
-        let subject = createSubject()
-        subject.delegate = self
-        XCTAssertEqual(didLoadNewDataCalled, 0)
-        XCTAssertNil(subject.getMessageCardData())
-    }
-
     func testSettingDelegateUpdateData_validMessage() {
         let message = createMessage(isExpired: false)
         messageManager.message = message
