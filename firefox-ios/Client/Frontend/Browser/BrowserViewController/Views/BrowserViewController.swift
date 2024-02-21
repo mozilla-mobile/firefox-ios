@@ -482,11 +482,7 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
-        if NightModeHelper.isActivated(),
-           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff(tabManager: tabManager)
-            themeManager.reloadTheme()
-        }
+        nightModeUpdates()
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
@@ -501,6 +497,16 @@ class BrowserViewController: UIViewController,
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
+    }
+
+    private func nightModeUpdates() {
+        if NightModeHelper.isActivated(),
+           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+            NightModeHelper.turnOff(tabManager: tabManager)
+            themeManager.reloadTheme()
+        }
+
+        NightModeHelper.cleanNightModeDefaults()
     }
 
     private func dismissModalsIfStartAtHome() {

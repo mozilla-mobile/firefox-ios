@@ -49,4 +49,8 @@ class MockUserDefaults: UserDefaultsInterface {
     func register(defaults registrationDictionary: [String: Any]) {
         self.registrationDictionary = registrationDictionary
     }
+
+    func removeObject(forKey defaultName: String) {
+        savedData[defaultName] = nil
+    }
 }

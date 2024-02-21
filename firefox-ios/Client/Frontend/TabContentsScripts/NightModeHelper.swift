@@ -36,14 +36,6 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
     }
 
-    static func turnOff(
-        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        tabManager: TabManager
-    ) {
-        guard isActivated() else { return }
-        setNightMode(userDefaults, tabManager: tabManager, enabled: false)
-    }
-
     static func setNightMode(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
         tabManager: TabManager,
@@ -56,18 +48,25 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         }
     }
 
-    static func setEnabledDarkTheme(
-        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        darkTheme enabled: Bool
-    ) {
-        userDefaults.set(enabled, forKey: NightModeKeys.DarkThemeEnabled)
-    }
-
-    static func hasEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
-        return userDefaults.bool(forKey: NightModeKeys.DarkThemeEnabled)
-    }
-
     static func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
         return userDefaults.bool(forKey: NightModeKeys.Status)
+    }
+
+    // MARK: - Temporary functions
+    // These functions are only here to help with the night mode experiment
+    // and will be removed once a decision from that experiment is reached.
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-8475
+    static func turnOff(
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        tabManager: TabManager
+    ) {
+        guard isActivated() else { return }
+        setNightMode(userDefaults, tabManager: tabManager, enabled: false)
+    }
+
+    static func cleanNightModeDefaults(
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard
+    ) {
+        userDefaults.removeObject(forKey: NightModeKeys.DarkThemeEnabled)
     }
 }
