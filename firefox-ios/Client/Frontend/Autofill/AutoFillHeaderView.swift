@@ -16,6 +16,9 @@ struct AutoFillHeaderView: View {
         static let buttonSize: CGFloat = 30
     }
 
+    @State private var textPrimary: Color = .clear
+    @State private var textSecondary: Color = .clear
+
     @Environment(\.themeType)
     var theme
 
@@ -34,15 +37,15 @@ struct AutoFillHeaderView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UX.logoSize, height: UX.logoSize)
-                    .foregroundColor(.accentColor) // Use your theme's accent color
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.body)
                         .fontWeight(.bold)
+                        .foregroundColor(textPrimary)
                     subtitle.map {
                         Text($0)
                             .font(.footnote)
-                            .foregroundColor(Color(theme.theme.colors.textSecondary))
+                            .foregroundColor(textSecondary)
                     }
                 }
                 Spacer()
@@ -50,6 +53,23 @@ struct AutoFillHeaderView: View {
         }
         .padding([.leading, .trailing], UX.headerElementsSpacing)
         .padding(.bottom, UX.bottomSpacing)
+
+        .onAppear {
+            applyTheme(theme: theme.theme)
+        }
+        .onChange(of: theme) { newThemeValue in
+            applyTheme(theme: newThemeValue.theme)
+        }
+    }
+
+    // MARK: - Theme Application
+
+    /// Applies the theme to the view.
+    /// - Parameter theme: The theme to be applied.
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        textPrimary = Color(color.textPrimary)
+        textSecondary = Color(color.textSecondary)
     }
 }
 
