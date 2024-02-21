@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Tocá dos veces y mantené pulsado para ver más opciones";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Conexión no segura. La protección contra rastreo mejorada está desactivada.";
 

@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Appuyez deux fois puis maintenez votre doigt appuyé pour afficher davantage d’options";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Connexion non sécurisée. La protection renforcée contre le pistage est désactivée.";
 
