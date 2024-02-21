@@ -24,6 +24,7 @@ struct LoginCellView: View {
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
+    @State private var stroke: Color = .clear
 
     private(set) var login: EncryptedLogin
     @Environment(\.themeType)
@@ -36,6 +37,7 @@ struct LoginCellView: View {
         Button(action: onTap) {
             HStack(alignment: .midAccountAndName, spacing: 24) {
                 Image(StandardImageIdentifiers.Large.login)
+                    .renderingMode(.template)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 22)
@@ -47,7 +49,7 @@ struct LoginCellView: View {
                         .font(.body)
                         .foregroundColor(textColor)
                         .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
-                    Text("******")
+                    Text("**********")
                         .font(.subheadline)
                         .foregroundColor(customLightGray)
                 }
@@ -55,14 +57,6 @@ struct LoginCellView: View {
             }
             .padding()
         }
-        .overlay(
-            RoundedRectangle(
-                cornerRadius: 12,
-                style: .continuous
-            )
-            .stroke(style: StrokeStyle())
-            .foregroundColor(Color(theme.theme.colors.actionSecondary))
-        )
         .buttonStyle(LoginButtonStyle(theme: theme.theme))
         .listRowSeparator(.hidden)
         .onAppear {
@@ -82,6 +76,7 @@ struct LoginCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
+        stroke = Color(color.actionSecondary)
     }
 }
 
@@ -94,7 +89,14 @@ struct LoginButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(configuration.isPressed ? Color(theme.colors.layer1) : Color(theme.colors.layer2))
-            .foregroundColor(.white)
+            .overlay(
+                RoundedRectangle(
+                    cornerRadius: 12,
+                    style: .continuous
+                )
+                .stroke(style: StrokeStyle())
+                .foregroundColor(Color(theme.colors.actionSecondary))
+            )
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
