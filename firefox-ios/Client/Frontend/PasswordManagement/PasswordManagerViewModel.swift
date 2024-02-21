@@ -113,8 +113,8 @@ final class PasswordManagerViewModel {
     }
 
     func indexPathForLogin(_ login: LoginRecord) -> IndexPath? {
-        guard let title = self.helper.titleForLogin(login),
-              let section = self.titles.firstIndex(of: title),
+        let title = self.helper.titleForLogin(login)
+        guard let section = self.titles.firstIndex(of: title),
               let row = self.loginRecordSections[title]?.firstIndex(of: login)
         else { return nil }
 

@@ -23,10 +23,10 @@ class PasswordManagerDataSourceHelper {
 
     // Small helper method for using the precomputed base domain to determine the title/section of the
     // given login.
-    func titleForLogin(_ login: LoginRecord) -> Character? {
+    func titleForLogin(_ login: LoginRecord) -> Character {
         // Fallback to hostname if we can't extract a base domain.
         let titleString = domainLookup[login.id]?.baseDomain?.uppercased() ?? login.hostname
-        return titleString.first
+        return titleString.first ?? Character("")
     }
 
     // Rules for sorting login URLS:
@@ -67,17 +67,13 @@ class PasswordManagerDataSourceHelper {
 
         self.setDomainLookup(logins)
         // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
-        logins.compactMap { self.titleForLogin($0) }.forEach { titleSet.insert($0) }
+        logins.forEach { titleSet.insert(self.titleForLogin($0)) }
 
         // 2. Setup an empty list for each title found.
         titleSet.forEach { sections[$0] = [LoginRecord]() }
 
         // 3. Go through our logins and put them in the right section.
-        logins.forEach { loginRecord in
-            if let key = self.titleForLogin(loginRecord) {
-                sections[key]?.append(loginRecord)
-            }
-        }
+        logins.forEach { sections[self.titleForLogin($0)]?.append($0) }
 
         // 4. Go through each section and sort.
         sections.forEach { sections[$0] = $1.sorted(by: self.sortByDomain) }
