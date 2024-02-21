@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct LoginAutoFillFooterView: View {
+struct AutoFillFooterView: View {
     // Constants for UI layout and styling adapted for LoginAutoFill feature
     private enum UX {
         static let actionButtonFontSize: CGFloat = 16
@@ -13,15 +13,15 @@ struct LoginAutoFillFooterView: View {
         static let actionButtonBottomSpace: CGFloat = 24
     }
 
-    private let actionButtonTitle: String
-    private let manageLoginInfoAction: () -> Void
+    private let primaryButtonTitle: String
+    private let primaryAction: () -> Void
 
     init(
         title: String,
-        manageLoginInfoAction: @escaping () -> Void
+        primaryAction: @escaping () -> Void
     ) {
-        self.actionButtonTitle = title
-        self.manageLoginInfoAction = manageLoginInfoAction
+        self.primaryButtonTitle = title
+        self.primaryAction = primaryAction
     }
 
     @Environment(\.themeType)
@@ -29,22 +29,22 @@ struct LoginAutoFillFooterView: View {
 
     var body: some View {
         VStack {
-            Button(action: manageLoginInfoAction) {
-                Text(actionButtonTitle)
+            Button(action: primaryAction) {
+                Text(primaryButtonTitle)
                     .font(.system(size: UX.actionButtonFontSize))
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding([.leading, .trailing], UX.actionButtonLeadingSpace)
-            .accessibility(identifier: AccessibilityIdentifiers.LoginAutofill.managePasswordsButton)
+            .accessibility(identifier: AccessibilityIdentifiers.Autofill.footerPrimaryAction)
         }
     }
 }
 
-struct LoginAutoFillFooterView_Previews: PreviewProvider {
+struct AutoFillFooterView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginAutoFillFooterView(
+        AutoFillFooterView(
             title: "Manage Login Info",
-            manageLoginInfoAction: { }
+            primaryAction: { }
         )
         .previewLayout(.sizeThatFits)
         .padding()

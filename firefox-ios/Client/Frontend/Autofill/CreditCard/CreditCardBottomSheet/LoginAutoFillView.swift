@@ -13,14 +13,14 @@ struct LoginAutoFillView: View {
 
     var body: some View {
         VStack {
-            LoginAutoFillHeaderView(
+            AutoFillHeaderView(
                 title: String.PasswordAutofill.UseSavedPasswordFromHeader,
-                header: String(format: String.PasswordAutofill.SignInWithSavedPassword, "cnn.com")
+                subtitle: String(format: String.PasswordAutofill.SignInWithSavedPassword, "cnn.com")
             )
             LoginListView(viewModel: viewModel)
-            LoginAutoFillFooterView(
+            AutoFillFooterView(
                 title: String.PasswordAutofill.ManagePasswordsButton,
-                manageLoginInfoAction: viewModel.manageLoginInfoAction
+                primaryAction: viewModel.manageLoginInfoAction
             )
         }
         .padding()
