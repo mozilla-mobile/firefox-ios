@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Common
 
 struct AutoFillFooterView: View {
     // Constants for UI layout and styling adapted for LoginAutoFill feature
@@ -12,6 +13,8 @@ struct AutoFillFooterView: View {
         static let actionButtonTopSpace: CGFloat = 24
         static let actionButtonBottomSpace: CGFloat = 24
     }
+
+    @State private var actionPrimary: Color = .clear
 
     private let actionButtonTitle: String
     private let primaryAction: () -> Void
@@ -33,10 +36,26 @@ struct AutoFillFooterView: View {
                 Text(actionButtonTitle)
                     .font(.system(size: UX.actionButtonFontSize))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(actionPrimary)
             }
             .padding([.leading, .trailing], UX.actionButtonLeadingSpace)
             .accessibility(identifier: AccessibilityIdentifiers.Autofill.footerPrimaryAction)
         }
+        .onAppear {
+            applyTheme(theme: theme.theme)
+        }
+        .onChange(of: theme) { newThemeValue in
+            applyTheme(theme: newThemeValue.theme)
+        }
+    }
+
+    // MARK: - Theme Application
+
+    /// Applies the theme to the view.
+    /// - Parameter theme: The theme to be applied.
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        actionPrimary = Color(color.actionPrimary)
     }
 }
 
