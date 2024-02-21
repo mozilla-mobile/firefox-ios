@@ -48,10 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sceneCoordinator = SceneCoordinator(scene: scene)
         self.sceneCoordinator = sceneCoordinator
         sceneCoordinator.start()
-
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
-            self?.handle(connectionOptions: connectionOptions)
-        }
+        handle(connectionOptions: connectionOptions)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -171,7 +168,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
+        logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
         sessionManager.launchSessionProvider.openedFromExternalSource = true
-        sceneCoordinator.findAndHandle(route: route)
+
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) {
+            sceneCoordinator.findAndHandle(route: route)
+        }
     }
 }

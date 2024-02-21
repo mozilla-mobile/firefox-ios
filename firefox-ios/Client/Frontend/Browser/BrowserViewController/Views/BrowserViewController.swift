@@ -764,6 +764,7 @@ class BrowserViewController: UIViewController,
         prepareURLOnboardingContextualHint()
 
         browserDelegate?.browserHasLoaded()
+        AppEventQueue.signal(event: .browserIsReady)
     }
 
     private func prepareURLOnboardingContextualHint() {
