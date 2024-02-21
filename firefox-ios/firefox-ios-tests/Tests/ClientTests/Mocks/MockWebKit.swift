@@ -82,3 +82,28 @@ class WKWebViewMock: WKWebView {
         return overridenURL
     }
 }
+
+// MARK: - WKScriptMessageMock
+class WKScriptMessageMock: WKScriptMessage {
+    let overridenBody: Any
+    let overridenName: String
+    let overridenFrameInfo: WKFrameInfo
+
+    init(name: String, body: Any, frameInfo: WKFrameInfo) {
+        overridenBody = body
+        overridenName = name
+        overridenFrameInfo = frameInfo
+    }
+
+    override var body: Any {
+        return overridenBody
+    }
+
+    override var name: String {
+        return overridenName
+    }
+
+    override var frameInfo: WKFrameInfo {
+        return overridenFrameInfo
+    }
+}
