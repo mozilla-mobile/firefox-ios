@@ -200,13 +200,11 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
-        // Due to the new AppEventQueue, this should not be needed anymore. Adding a fatal log to confirm
-        // this use case can be cleaned up
         guard browserIsReady, !tabManager.isRestoringTabs else {
             let readyMessage = "browser is ready? \(browserIsReady)"
             let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
             logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                       level: .fatal,
+                       level: .info,
                        category: .coordinator)
             return false
         }
