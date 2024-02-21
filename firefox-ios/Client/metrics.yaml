@@ -4281,6 +4281,16 @@ urlbar:
         description: |
           Comma separated list of result groups in order, groups may be        
           repeated, since the list will match 1:1 the results list, so we
+          Can link each result to a group, like  heuristic, adaptive_history,
+           search_history, search_suggest, top_pick, top_site, remote_tab, addon,
+            general, suggest
+      results:
+        type: string
+        description: |
+          Comma separated list of result types in order. Possible values are:
+           unknown, bookmark, history, search_engine, search_suggest, search_history,
+           tab, remote_tab, suggest_sponsor, suggest_non_sponsor
+
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-8110
     data_reviews:
