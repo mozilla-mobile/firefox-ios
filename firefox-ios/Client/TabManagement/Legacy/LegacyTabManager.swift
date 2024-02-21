@@ -655,7 +655,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func undoCloseAllTabs() {
-        tabs.append(contentsOf: backupCloseTabs)
+        tabs = backupCloseTabs
         storeChanges()
         backupCloseTabs = [Tab]()
     }
