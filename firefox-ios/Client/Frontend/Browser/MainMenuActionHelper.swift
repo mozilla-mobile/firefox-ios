@@ -476,7 +476,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             self.themeManager.reloadTheme()
-
         }.items
         items.append(nightMode)
 
