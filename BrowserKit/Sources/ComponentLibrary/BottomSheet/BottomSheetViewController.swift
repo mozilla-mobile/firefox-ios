@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import UIKit
-import SwiftUI
 
 /// Protocol followed by child of the bottom sheet, which holds the content shown in the bottom sheet.
 public protocol BottomSheetChild: UIViewController {
@@ -37,7 +36,7 @@ public class BottomSheetViewController: UIViewController,
 
     private let viewModel: BottomSheetViewModel
     private var useDimmedBackground: Bool
-    let childViewController: BottomSheetChild
+    private let childViewController: BottomSheetChild
 
     // Views
     private lazy var scrollView: FadeScrollView = .build { scrollView in

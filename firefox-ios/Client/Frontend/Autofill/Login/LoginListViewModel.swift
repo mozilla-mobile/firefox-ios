@@ -2,32 +2,21 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import Common
+import SwiftUI
 import Storage
-
-protocol LoggerProtocol {
-    func log(_ message: String, level: LogLevel, category: LogCategory, description: String)
-}
-
-enum LogLevel {
-    case info, warning, error
-}
-
-enum LogCategory {
-    case login
-}
 
 class LoginListViewModel: ObservableObject {
     @Published var logins: [EncryptedLogin] = []
 
     private let loginStorage: LoginStorage
-    private let logger: LoggerProtocol
+    private let logger: Logger
     let onLoginCellTap: (EncryptedLogin) -> Void
     let manageLoginInfoAction: () -> Void
 
     init(
         loginStorage: LoginStorage,
-        logger: LoggerProtocol,
+        logger: Logger,
         onLoginCellTap: @escaping (EncryptedLogin) -> Void,
         manageLoginInfoAction: @escaping () -> Void
     ) {
@@ -43,8 +32,34 @@ class LoginListViewModel: ObservableObject {
         } catch {
             self.logger.log("Error fetching logins",
                             level: .warning,
-                            category: .login,
-                            description: "Error fetching logins: \(error.localizedDescription)")
+                            category: .address,
+                            description: "Error fetching addresses: \(error.localizedDescription)")
         }
+    }
+}
+
+class MockLogger: Logger {
+    var crashedLastLaunch = false
+    var savedMessage: String?
+    var savedLevel: LoggerLevel?
+    var savedCategory: LoggerCategory?
+
+    func setup(sendUsageData: Bool) {}
+    func configure(crashManager: Common.CrashManager) {}
+    func copyLogsToDocuments() {}
+    func logCustomError(error: Error) {}
+    func deleteCachedLogFiles() {}
+
+    func log(_ message: String,
+             level: LoggerLevel,
+             category: LoggerCategory,
+             extra: [String: String]? = nil,
+             description: String? = nil,
+             file: String = #file,
+             function: String = #function,
+             line: Int = #line) {
+        savedMessage = message
+        savedLevel = level
+        savedCategory = category
     }
 }
