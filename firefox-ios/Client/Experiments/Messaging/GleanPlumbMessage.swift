@@ -42,7 +42,7 @@ struct GleanPlumbMessage {
     /// The minimal data about a message that we should persist.
     internal var metadata: GleanPlumbMessageMetaData
 
-    var isExpired: Bool {
+    internal var isExpired: Bool {
         metadata.isExpired || metadata.impressions >= style.maxDisplayCount
     }
 

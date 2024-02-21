@@ -93,12 +93,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Returns the next valid and triggered message for the surface, if one exists.
     public func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
-        return getNextMessage(for: surface, availableMessages: getMessages(messagingFeature.value()))
+        return getNextMessage(for: surface, from: getMessages(messagingFeature.value()))
     }
 
     public func getNextMessage(
         for surface: MessageSurfaceId,
-        availableMessages messages: [GleanPlumbMessage]
+        from messages: [GleanPlumbMessage]
     ) -> GleanPlumbMessage? {
         let availableMessages = messages.filter {
             $0.data.surface == surface
@@ -110,19 +110,17 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // for each request to get a message because device context can change.
         guard let messagingHelper = createMessagingHelper.createNimbusMessagingHelper() else { return nil }
 
-        var excluded: Set<String> = []
         return getNextMessage(for: surface,
-                              availableMessages: availableMessages,
-                              excluded: &excluded,
+                              from: availableMessages,
+                              excluded: [],
                               messagingHelper: messagingHelper)
     }
 
-    // TODO: inout removal ticket https://mozilla-hub.atlassian.net/browse/FXIOS-6572
     private func getNextMessage(
-            for surface: MessageSurfaceId,
-            availableMessages: [GleanPlumbMessage],
-            excluded: inout Set<String>,
-            messagingHelper: NimbusMessagingHelperProtocol
+        for surface: MessageSurfaceId,
+        from availableMessages: [GleanPlumbMessage],
+        excluded: Set<String>,
+        messagingHelper: NimbusMessagingHelperProtocol
     ) -> GleanPlumbMessage? {
         let message = availableMessages.first { message in
             if excluded.contains(message.id) {
@@ -157,10 +155,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         case .showNone:
             return nil
         case .showNextMessage:
-            excluded.insert(message.id)
+            let excluded = excluded + [message.id]
             return getNextMessage(for: surface,
-                                  availableMessages: availableMessages,
-                                  excluded: &excluded,
+                                  from: availableMessages,
+                                  excluded: Set(excluded),
                                   messagingHelper: messagingHelper)
         }
     }

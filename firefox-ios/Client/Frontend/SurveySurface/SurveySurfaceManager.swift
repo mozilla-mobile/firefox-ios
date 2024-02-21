@@ -46,7 +46,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     /// - Returns: An optional `SurveySurfaceViewController`
     func getSurveySurface() -> SurveySurfaceViewController? {
         guard let message = message,
-              !message.isExpired,
               let image = UIImage(named: ImageIdentifiers.logo)
         else { return nil }
 
@@ -66,11 +65,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
     /// Call messagingManager to retrieve the message for research surface.
     private func updateMessage() {
-        // Set the message to nil just to make sure we're not accidentally
-        // showing an old message.
-        message = nil
-        guard let newMessage = messagingManager.getNextMessage(for: surveySurfaceID) else { return }
-        if !newMessage.isExpired { message = newMessage }
+        message = messagingManager.getNextMessage(for: surveySurfaceID)
     }
 
     // MARK: - MessageSurfaceProtocol

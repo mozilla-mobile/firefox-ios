@@ -73,7 +73,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessage(messageId: "notification", surface: .notification),
             createMessage(messageId: expectedId, surface: .newTabCard)
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
@@ -87,7 +87,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessage(messageId: "infoCard-notyet", surface: .newTabCard, trigger: ["false"]),
             createMessage(messageId: expectedId, surface: .newTabCard)
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
@@ -101,7 +101,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessage(messageId: "infoCard-notyet", surface: .newTabCard, trigger: ["true", "false"]),
             createMessage(messageId: expectedId, surface: .newTabCard, trigger: ["true", "true"])
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
@@ -117,7 +117,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         let messages = [
             createMessage(messageId: expectedId, surface: .newTabCard, experiment: experiment)
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
@@ -138,7 +138,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessage(messageId: "control", surface: .newTabCard, experiment: experiment, isControl: true),
             createMessage(messageId: expectedId, surface: .newTabCard)
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
@@ -160,7 +160,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessage(messageId: "control", surface: .newTabCard, isControl: true),
             createMessage(messageId: expectedId, surface: .newTabCard)
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
@@ -186,7 +186,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             createMessage(messageId: "control-2", surface: .newTabCard, experiment: experiment, isControl: true),
             createMessage(messageId: expectedId, surface: .newTabCard)
         ]
-        guard let observed = subject.getNextMessage(for: .newTabCard, availableMessages: messages) else {
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
             XCTFail("Expected to retrieve message")
             return
         }
