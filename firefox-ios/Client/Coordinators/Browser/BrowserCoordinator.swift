@@ -90,6 +90,9 @@ class BrowserCoordinator: BaseCoordinator,
 
         // Once launch is done, we check for any saved Route
         if let savedRoute {
+            logger.log("Find and handle route called after didFinishLaunch after onboarding",
+                       level: .info,
+                       category: .coordinator)
             findAndHandle(route: savedRoute)
         }
     }
@@ -162,6 +165,9 @@ class BrowserCoordinator: BaseCoordinator,
         logger.log("Browser has loaded", level: .info, category: .coordinator)
 
         if let savedRoute {
+            logger.log("Find and handle route called after browserHasLoaded",
+                       level: .info,
+                       category: .coordinator)
             findAndHandle(route: savedRoute)
         }
     }
@@ -194,11 +200,13 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
+        // Due to the new AppEventQueue, this should not be needed anymore. Adding a fatal log to confirm
+        // this use case can be cleaned up
         guard browserIsReady, !tabManager.isRestoringTabs else {
             let readyMessage = "browser is ready? \(browserIsReady)"
             let restoringMessage = "is restoring tabs? \(tabManager.isRestoringTabs)"
             logger.log("Could not handle route, \(readyMessage), \(restoringMessage)",
-                       level: .info,
+                       level: .fatal,
                        category: .coordinator)
             return false
         }
@@ -213,6 +221,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     override func handle(route: Route) {
         guard browserIsReady, !tabManager.isRestoringTabs else {
+            logger.log("Not handling route. Ready? \(browserIsReady), restoring? \(tabManager.isRestoringTabs)",
+                       level: .info,
+                       category: .coordinator)
             return
         }
 
@@ -636,6 +647,9 @@ class BrowserCoordinator: BaseCoordinator,
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // Once tab restore is made, if there's any saved route we make sure to call it
         if let savedRoute {
+            logger.log("Find and handle route called after tabManagerDidRestoreTabs",
+                       level: .info,
+                       category: .coordinator)
             findAndHandle(route: savedRoute)
         }
     }
