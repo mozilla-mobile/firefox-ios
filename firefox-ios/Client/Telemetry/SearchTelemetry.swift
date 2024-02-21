@@ -282,7 +282,7 @@ class SearchTelemetry {
                                      object: .urlbarImpression,
                                      extras: extraDetails)
     }
-  
+
     // MARK: Engagement Telemetry
     func recordURLBarSearchEngagementTelemetryEvent() {
         guard let tab = tabManager.selectedTab else { return }

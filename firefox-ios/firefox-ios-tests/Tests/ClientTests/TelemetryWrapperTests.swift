@@ -920,7 +920,6 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.engagement)
     }
 
-      
   func test_AwesomebarAbandonment_GleanIsCalled() {
         let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
         let groups = SearchTelemetryValues.Groups.adaptiveHistory.rawValue
