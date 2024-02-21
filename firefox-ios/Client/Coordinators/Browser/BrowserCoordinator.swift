@@ -148,13 +148,15 @@ class BrowserCoordinator: BaseCoordinator,
         if let webviewController = webviewController {
             webviewController.update(webView: webView, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             browserViewController.frontEmbeddedContent(webviewController)
+            logger.log("Webview content was updated", level: .info, category: .coordinator)
         } else {
             let webviewViewController = WebviewViewController(
                 webView: webView,
                 isPrivate: tabManager.selectedTab?.isPrivate ?? false
             )
             webviewController = webviewViewController
-            _ = browserViewController.embedContent(webviewViewController)
+            let isEmbedded = browserViewController.embedContent(webviewViewController)
+            logger.log("Webview controller was created and embedded \(isEmbedded)", level: .info, category: .coordinator)
         }
 
         screenshotService.screenshotableView = webviewController
