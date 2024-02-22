@@ -18,8 +18,8 @@ features:
           provider should return suggestions of those types.
         type: Map<SuggestionType, Boolean>
         default:
-          amp: false
-          ampMobile: true
+          amp: true
+          ampMobile: false
           wikipedia: true
         
     defaults:
