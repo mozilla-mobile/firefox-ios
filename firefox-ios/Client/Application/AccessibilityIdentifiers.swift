@@ -617,5 +617,9 @@ public struct AccessibilityIdentifiers {
         static let manageCardsButton = "RememberCreditCard.manageCardsButton"
         static let notNowButton = "RememberCreditCard.notNowButton"
     }
+
+    enum Autofill {
+        static let footerPrimaryAction = "Autofill.footerPrimaryAction"
+    }
 }
 // swiftlint:enable line_length
