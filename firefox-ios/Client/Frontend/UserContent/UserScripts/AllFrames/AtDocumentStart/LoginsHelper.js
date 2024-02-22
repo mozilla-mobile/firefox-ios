@@ -584,63 +584,22 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     password: "password"
   };
 
-  // Extended the LoginManagerContent object with a new method for focus events
-  LoginManagerContent._addFocusListenerBasedOnHeuristics = function (form) {
-    // common form structure
-    var commonStructures = `input[type="text"], input[type="email"], input:not([type])`
-    var possibleUsernameFields = Array.from(form.querySelectorAll(commonStructures));
-    var passwordFields = form.querySelectorAll('input[type="password"]');
-
-    // add listener to password fields
-    passwordFields.forEach((field) => this._addFocusListener(field, FocusFieldType.password));
-
-    // determine possible username field
-    possibleUsernameFields = possibleUsernameFields.filter(field =>
-      field.placeholder.toLowerCase().includes("user") ||
-      field.placeholder.toLowerCase().includes("email") ||
-      field.id.toLowerCase().includes("user") ||
-      field.id.toLowerCase().includes("email") ||
-      field.name.toLowerCase().includes("user") ||
-      field.name.toLowerCase().includes("email"));
-
-    // prioritize fields closer to the first password field, if available
-    if (passwordFields.length > 0) {
-      const firstPasswordIndex = Array.from(form.elements).indexOf(passwordFields[0]);
-      possibleUsernameFields = possibleUsernameFields.filter(field =>
-        Array.from(form.elements).indexOf(field) < firstPasswordIndex);
+  function onFocusIn(event) {
+    const form = event.target?.form;
+    if (!form) {
+      return;
     }
 
-    // attach listeners to possible username fields, if not already focused on password fields
-    possibleUsernameFields.forEach((field) => this._addFocusListener(field, FocusFieldType.username));
-
-    // no clear username field is identified & password fields are present,
-    // attach to the first text input before the password field as a fallback
-    if (possibleUsernameFields.length === 0 && passwordFields.length > 0) {
-      let precedingTextFields = Array.from(passwordFields[0].parentNode.querySelectorAll('input[type="text"], input[type="email"], input:not([type])'));
-      if (precedingTextFields.length > 0) {
-        // Last text input before the first password field
-        let assumedUsernameField = precedingTextFields[precedingTextFields.length - 1];
-        this._addFocusListener(assumedUsernameField, FocusFieldType.username);
-      }
+    const [username, password] = LoginManagerContent._getFormFields(form, false);
+    if (username && password) {
+      webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+        type: "fieldType",
+        fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
+      });
     }
-  };
+  }
 
-  LoginManagerContent._addFocusListener = function (field, fieldType) {
-    field.addEventListener("focus", function () {
-      // send message with field focus information
-      var messageData = {
-        type: "fieldFocus",
-        fieldType: fieldType
-      };
-      webkit.messageHandlers.loginsManagerMessageHandler.postMessage(messageData);
-    });
-  };
-
-  var originalFindLogins = findLogins;
-  findLogins = function (form) {
-    originalFindLogins(form);
-    LoginManagerContent._addFocusListenerBasedOnHeuristics(form); // Use the new method here
-  };
+  document.addEventListener("focusin", (ev) => onFocusIn(ev));
     
   var LoginUtils = {
     /*
