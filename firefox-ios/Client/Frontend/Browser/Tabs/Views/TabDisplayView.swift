@@ -318,8 +318,8 @@ extension TabDisplayView: SwipeAnimatorDelegate {
 
         let tab = tabsState.tabs[indexPath.item]
         store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
-//        UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
-//                             argument: String.TabTrayClosingTabAccessibilityMessage)
+        UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
+                             argument: String.TabTrayClosingTabAccessibilityMessage)
     }
 
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
