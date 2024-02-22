@@ -259,13 +259,11 @@ class TabManagerMiddleware {
             await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
-                store.dispatch(TabTrayAction.tabTrayDidLoad(TabTrayPanelContext(panelType: .tabs, windowUUID: uuid)))
-                store.dispatch(TabPanelAction.tabPanelDidLoad(BoolValueContext(boolValue: false, windowUUID: uuid)))
+                store.dispatch(TabPanelAction.tabPanelDidLoad(BoolValueContext(boolValue: true, windowUUID: uuid)))
                 store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
             } else if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
                 store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
-                return
             } else {
                 store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
             }
