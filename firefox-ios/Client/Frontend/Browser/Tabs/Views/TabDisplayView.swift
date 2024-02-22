@@ -252,6 +252,7 @@ class TabDisplayView: UIView,
             else { return UICollectionViewCell() }
 
             let tabState = tabsState.tabs[indexPath.row]
+            cell.animator?.delegate = self
             cell.configure(with: tabState, theme: theme, delegate: self)
             return cell
         }
@@ -292,7 +293,6 @@ class TabDisplayView: UIView,
     }
 }
 
-
 // MARK: - SwipeAnimatorDelegate
 extension TabDisplayView: SwipeAnimatorDelegate {
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
@@ -319,8 +319,8 @@ extension TabDisplayView: SwipeAnimatorDelegate {
 
         let tab = tabsState.tabs[indexPath.item]
         store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
-        UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
-                             argument: String.TabTrayClosingTabAccessibilityMessage)
+//        UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
+//                             argument: String.TabTrayClosingTabAccessibilityMessage)
     }
 
     func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
