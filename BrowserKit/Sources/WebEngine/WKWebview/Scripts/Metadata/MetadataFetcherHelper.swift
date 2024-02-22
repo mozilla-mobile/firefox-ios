@@ -45,4 +45,3 @@ struct DefaultMetadataFetcherHelper: MetadataFetcherHelper {
         }
     }
 }
-
