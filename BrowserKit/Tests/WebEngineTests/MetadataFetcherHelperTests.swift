@@ -52,6 +52,18 @@ final class MetadataFetcherHelperTests: XCTestCase {
         XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
     }
 
+    func testFetchFromSessionGivenURLThenJavascriptIsProper() {
+        let expectedJavascript = "__firefox__.metadata && __firefox__.metadata.getMetadata()"
+        let subject = createSubject()
+        let session = MockWKEngineSession()
+        let url = URL(string: "https://mozilla.com")!
+
+        subject.fetch(fromSession: session, url: url)
+
+        XCTAssertEqual(session.webviewProvider.webView.savedJavaScript, expectedJavascript)
+        XCTAssertEqual(metadataDelegate.didLoadPageMetadataCalled, 0)
+    }
+
     func testFetchFromSessionGivenEmptyResultThenPageMetadataNil() {
         let subject = createSubject()
         let session = MockWKEngineSession()
