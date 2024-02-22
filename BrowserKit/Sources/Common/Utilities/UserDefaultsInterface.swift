@@ -16,6 +16,8 @@ public protocol UserDefaultsInterface {
 
     func register(defaults registrationDictionary: [String: Any])
     func array(forKey defaultName: String) -> [Any]?
+
+    func removeObject(forKey defaultName: String)
 }
 
 extension UserDefaults: UserDefaultsInterface {}
