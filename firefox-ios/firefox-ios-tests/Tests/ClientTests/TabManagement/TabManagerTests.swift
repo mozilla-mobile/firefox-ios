@@ -163,16 +163,21 @@ class TabManagerTests: XCTestCase {
     func testGetInactiveTabs() {
         let subject = createSubject()
         addTabs(to: subject, count: 3)
-        guard let tab = subject.tabs.first else {
-            XCTFail("First tab was expected to be found")
-            return
-        }
-        // Override session data to make tab active
-        tab.sessionData = LegacySessionData(currentPage: 0, urls: [], lastUsedTime: Date.now.toTimestamp())
+        XCTAssert(subject.tabs.count == 3, "Expected 3 newly added tabs.")
+
+        // Set createdAt date for all tabs to be distant past (inactive by default)
+        subject.tabs.forEach { $0.firstCreatedTime = Timestamp(0) }
+
+        // Override session data lastUsedTime of 1st tab to indicate tab active
+        let tab1 = subject.tabs[0]
+        tab1.sessionData = LegacySessionData(currentPage: 0,
+                                             urls: [],
+                                             lastUsedTime: Date.now.toTimestamp())
 
         let inactiveTabs = subject.getInactiveTabs()
         let expectedInactiveTabs = 2
 
+        // Expect 2 of 3 tabs are inactive (except 1st)
         XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
     }
 
