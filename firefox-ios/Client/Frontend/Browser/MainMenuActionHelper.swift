@@ -462,17 +462,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         let nightModeEnabled = NightModeHelper.isActivated()
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
-<<<<<<< HEAD
-        let nightMode = SingleActionViewModel(title: nightModeTitle,
-                                              iconString: ImageIdentifiers.nightMode,
-                                              isEnabled: nightModeEnabled) { _ in
-=======
         let nightMode = SingleActionViewModel(
             title: nightModeTitle,
-            iconString: StandardImageIdentifiers.Large.nightMode,
+            iconString: ImageIdentifiers.nightMode,
             isEnabled: nightModeEnabled
         ) { _ in
->>>>>>> 28cda07c1 (Refactor FXIOS-8413 [v123.2] Night mode experiment (#18803))
             NightModeHelper.toggle(tabManager: self.tabManager)
 
             if nightModeEnabled {
