@@ -5,7 +5,7 @@
 import SwiftUI
 import Shared
 
-struct LoginAutoFillView: View {
+struct LoginAutofillView: View {
     @Environment(\.themeType)
     var themeVal
 
@@ -13,12 +13,12 @@ struct LoginAutoFillView: View {
 
     var body: some View {
         VStack {
-            AutoFillHeaderView(
+            AutofillHeaderView(
                 title: String.PasswordAutofill.UseSavedPasswordFromHeader,
                 subtitle: String(format: String.PasswordAutofill.SignInWithSavedPassword, "cnn.com")
             )
             LoginListView(viewModel: viewModel)
-            AutoFillFooterView(
+            AutofillFooterView(
                 title: String.PasswordAutofill.ManagePasswordsButton,
                 primaryAction: viewModel.manageLoginInfoAction
             )
@@ -29,7 +29,7 @@ struct LoginAutoFillView: View {
 }
 
 #Preview {
-    LoginAutoFillView(
+    LoginAutofillView(
         viewModel: LoginListViewModel(
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),

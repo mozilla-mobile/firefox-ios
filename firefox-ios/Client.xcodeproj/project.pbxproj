@@ -859,12 +859,12 @@
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
 		8AFE4C2127480D0C00B97C65 /* LegacyTabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* LegacyTabTrayViewControllerTests.swift */; };
 		8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */; };
-		8C1953302B85E7EC00761B20 /* AutoFillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutoFillFooterView.swift */; };
-		8C1953322B85EAB500761B20 /* AutoFillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutoFillHeaderView.swift */; };
+		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
+		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
 		8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29627B2B1F473800571655 /* AdEventsResponse.swift */; };
 		8C41BD9C2B860F55005EFE3A /* LoginListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C41BD952B860F54005EFE3A /* LoginListView.swift */; };
 		8C41BD9D2B860F55005EFE3A /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C41BD962B860F54005EFE3A /* LoginListViewModel.swift */; };
-		8C41BDA02B860F55005EFE3A /* LoginAutoFillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C41BD992B860F54005EFE3A /* LoginAutoFillView.swift */; };
+		8C41BDA02B860F55005EFE3A /* LoginAutofillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C41BD992B860F54005EFE3A /* LoginAutofillView.swift */; };
 		8C41BDA52B860FC5005EFE3A /* LoginCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C41BDA42B860FC5005EFE3A /* LoginCellView.swift */; };
 		8C41BDA92B8633C4005EFE3A /* LoginStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C41BDA82B8633C4005EFE3A /* LoginStorage.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
@@ -5922,13 +5922,13 @@
 		8BFA4413BB71963DB0E69F82 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8BFD47109E07F897D604AEBE /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingHostingController.swift; sourceTree = "<group>"; };
-		8C19532F2B85E7EC00761B20 /* AutoFillFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillFooterView.swift; sourceTree = "<group>"; };
-		8C1953312B85EAB500761B20 /* AutoFillHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillHeaderView.swift; sourceTree = "<group>"; };
+		8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillFooterView.swift; sourceTree = "<group>"; };
+		8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHeaderView.swift; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
 		8C29627B2B1F473800571655 /* AdEventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdEventsResponse.swift; sourceTree = "<group>"; };
 		8C41BD952B860F54005EFE3A /* LoginListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListView.swift; sourceTree = "<group>"; };
 		8C41BD962B860F54005EFE3A /* LoginListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
-		8C41BD992B860F54005EFE3A /* LoginAutoFillView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutoFillView.swift; sourceTree = "<group>"; };
+		8C41BD992B860F54005EFE3A /* LoginAutofillView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAutofillView.swift; sourceTree = "<group>"; };
 		8C41BDA42B860FC5005EFE3A /* LoginCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCellView.swift; sourceTree = "<group>"; };
 		8C41BDA82B8633C4005EFE3A /* LoginStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStorage.swift; sourceTree = "<group>"; };
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
@@ -8830,8 +8830,8 @@
 				8C41BDA32B860F86005EFE3A /* Login */,
 				B2981F892B71AD7A00132C1B /* AutofillAccessoryViewButtonItem.swift */,
 				8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */,
-				8C19532F2B85E7EC00761B20 /* AutoFillFooterView.swift */,
-				8C1953312B85EAB500761B20 /* AutoFillHeaderView.swift */,
+				8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */,
+				8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */,
 				B2FEA6892B460CEC0058E616 /* Address */,
 				43D00491296FC46E00CB0F31 /* CreditCard */,
 			);
@@ -9828,7 +9828,7 @@
 			children = (
 				8C41BDAA2B863416005EFE3A /* Model */,
 				8C41BDA42B860FC5005EFE3A /* LoginCellView.swift */,
-				8C41BD992B860F54005EFE3A /* LoginAutoFillView.swift */,
+				8C41BD992B860F54005EFE3A /* LoginAutofillView.swift */,
 				8C41BD952B860F54005EFE3A /* LoginListView.swift */,
 				8C41BD962B860F54005EFE3A /* LoginListViewModel.swift */,
 			);
@@ -13529,7 +13529,7 @@
 				8C46E1B72B2209F000F56521 /* FakespotAdsEvent.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
-				8C1953322B85EAB500761B20 /* AutoFillHeaderView.swift in Sources */,
+				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
 				8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */,
@@ -14031,7 +14031,7 @@
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
 				8ADAE4242A33A126007BF926 /* StudiesToggleSetting.swift in Sources */,
-				8C1953302B85E7EC00761B20 /* AutoFillFooterView.swift in Sources */,
+				8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */,
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
 				81122E212B221AC0003DD9F8 /* SearchScreenState.swift in Sources */,
 				1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */,
@@ -14086,7 +14086,7 @@
 				96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */,
 				8ADAE41E2A33A0E2007BF926 /* ShowIntroductionSetting.swift in Sources */,
 				8AF10D8F29D774090086351D /* SceneSetupHelper.swift in Sources */,
-				8C41BDA02B860F55005EFE3A /* LoginAutoFillView.swift in Sources */,
+				8C41BDA02B860F55005EFE3A /* LoginAutofillView.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
 				E1A102D62AC19B30007B617A /* FakespotUtils.swift in Sources */,
 				5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */,

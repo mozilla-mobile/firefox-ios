@@ -122,7 +122,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             manageLoginInfoAction: {
             }
         )
-        let loginAutofillView = LoginAutoFillView(viewModel: viewModel)
+        let loginAutofillView = LoginAutofillView(viewModel: viewModel)
 
         let viewController = SelfSizingHostingController(rootView: loginAutofillView)
 
