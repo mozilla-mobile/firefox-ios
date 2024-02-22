@@ -2473,13 +2473,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
 
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
