@@ -252,7 +252,6 @@ class TabDisplayView: UIView,
             else { return UICollectionViewCell() }
 
             let tabState = tabsState.tabs[indexPath.row]
-            cell.animator?.delegate = self
             cell.configure(with: tabState, theme: theme, delegate: self)
             return cell
         }
