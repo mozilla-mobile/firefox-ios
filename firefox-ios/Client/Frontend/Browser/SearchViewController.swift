@@ -213,19 +213,23 @@ class SearchViewController: SiteTableViewController,
     }
 
     /// Whether to show sponsored suggestions from Firefox Suggest.
-    ///
-    /// Sponsored suggestions can be toggled by the user, and are never shown in
-    /// private browsing mode, even if "Show Suggestions in Private Browsing"
-    /// is switched on.
     private var shouldShowSponsoredSuggestions: Bool {
-        !viewModel.isPrivate &&
-            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowSponsoredSuggestions) ?? true
+        shouldShowNonSponsoredSuggestions &&
+        model.shouldShowSponsoredSuggestions
     }
 
     /// Whether to show non-sponsored suggestions from Firefox Suggest.
     private var shouldShowNonSponsoredSuggestions: Bool {
-        !viewModel.isPrivate &&
-            profile.prefs.boolForKey(PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions) ?? true
+        viewModel.isPrivate ?
+        model.shouldShowPrivateModeFirefoxSuggestions :
+        model.shouldShowFirefoxSuggestions
+    }
+
+    /// Whether to show suggestions from the search engine.
+    private var shoudShowSearchEngineSuggestions: Bool {
+        return viewModel.isPrivate ?
+        (searchEngines?.shouldShowPrivateModeSearchSuggestions ?? false) :
+        (searchEngines?.shouldShowSearchSuggestions ?? false)
     }
 
     func loadFirefoxSuggestions() -> Task<(), Never>? {
@@ -666,7 +670,6 @@ class SearchViewController: SiteTableViewController,
         suggestClient?.cancelPendingRequest()
 
         if searchQuery.isEmpty
-            || !(searchEngines?.shouldShowSearchSuggestions ?? false)
             || searchQuery.looksLikeAURL() {
             suggestions = []
             tableView.reloadData()
@@ -676,6 +679,7 @@ class SearchViewController: SiteTableViewController,
         loadSearchHighlights()
         _ = loadFirefoxSuggestions()
 
+        guard shoudShowSearchEngineSuggestions else { return }
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery,
                              callback: { suggestions, error in
@@ -1007,7 +1011,9 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
-            return model.shouldShowSearchSuggestions
+            return viewModel.isPrivate ?
+            model.shouldShowPrivateModeSearchSuggestions :
+            model.shouldShowSearchSuggestions
         default:
             return false
         }
