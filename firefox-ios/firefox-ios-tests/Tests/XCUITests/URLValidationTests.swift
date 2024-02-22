@@ -16,7 +16,6 @@ class URLValidationTests: BaseTestCase {
         app.tables.switches["Show Search Suggestions"].tap()
         scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
         app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].tap()
-        app.tables.switches["FirefoxSuggestShowSponsoredSuggestions"].tap()
         navigator.goto(NewTabScreen)
     }
 
