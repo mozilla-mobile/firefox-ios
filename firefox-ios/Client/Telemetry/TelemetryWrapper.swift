@@ -531,6 +531,7 @@ extension TelemetryWrapper {
         case fxSuggest = "fx-suggest"
         case webview = "webview"
         case urlbarImpression = "urlbar-impression"
+        case urlbarEngagement = "urlbar-engagement"
         case urlbarAbandonment = "urlbar-abandonment"
     }
 
@@ -648,7 +649,6 @@ extension TelemetryWrapper {
         case fxHomepageOrigin = "fxHomepageOrigin"
         case tabsQuantity = "tabsQuantity"
         case isRestoreTabsStarted = "is-restore-tabs-started"
-        case awesomebarSearchTapType = "awesomebarSearchTapType"
         case recordSearchLocation = "recordSearchLocation"
         case recordSearchEngineID = "recordSearchEngineID"
 
@@ -1085,18 +1085,6 @@ extension TelemetryWrapper {
             }
 
         // MARK: Awesomebar Search Results
-        case (.action, .tap, .awesomebarResults, _, let extras):
-            if let tapValue = extras?[EventExtraKey.awesomebarSearchTapType.rawValue] as? String {
-                let awesomebarExtraValue = GleanMetrics.Awesomebar.SearchResultTapExtra(type: tapValue)
-                GleanMetrics.Awesomebar.searchResultTap.record(awesomebarExtraValue)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
         case(.information, .view, .urlbarImpression, _, let extras):
             if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue] as? String,
                let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue] as? String,
@@ -1117,6 +1105,40 @@ extension TelemetryWrapper {
                                                                        sap: sap,
                                                                        searchMode: searchMode)
                 GleanMetrics.Urlbar.impression.record(extraDetails)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.action, .tap, .urlbarEngagement, _, let extras):
+            if let groups = extras?[EventExtraKey.UrlbarTelemetry.groups.rawValue] as? String,
+               let interaction = extras?[EventExtraKey.UrlbarTelemetry.interaction.rawValue] as? String,
+               let nChars = extras?[EventExtraKey.UrlbarTelemetry.nChars.rawValue] as? Int32,
+               let nResults = extras?[EventExtraKey.UrlbarTelemetry.nResults.rawValue] as? Int32,
+               let nWords = extras?[EventExtraKey.UrlbarTelemetry.nWords.rawValue] as? Int32,
+               let results = extras?[EventExtraKey.UrlbarTelemetry.results.rawValue] as? String,
+               let sap = extras?[EventExtraKey.UrlbarTelemetry.sap.rawValue] as? String,
+               let searchMode = extras?[EventExtraKey.UrlbarTelemetry.searchMode.rawValue] as? String,
+               let engagementType = extras?[EventExtraKey.UrlbarTelemetry.engagementType.rawValue] as? String,
+               let provider = extras?[EventExtraKey.UrlbarTelemetry.provider.rawValue] as? String,
+               let selectedResult = extras?[EventExtraKey.UrlbarTelemetry.selectedResult.rawValue] as? String,
+               let selectedResultSubtype = extras?[EventExtraKey.UrlbarTelemetry.selectedResultSubtype.rawValue] as? String {
+                let extraDetails = GleanMetrics.Urlbar.EngagementExtra(engagementType: engagementType,
+                                                                       groups: groups,
+                                                                       interaction: interaction,
+                                                                       nChars: nChars,
+                                                                       nResults: nResults,
+                                                                       nWords: nWords,
+                                                                       provider: provider,
+                                                                       results: results,
+                                                                       sap: sap,
+                                                                       searchMode: searchMode,
+                                                                       selectedResult: selectedResult,
+                                                                       selectedResultSubtype: selectedResultSubtype)
+                GleanMetrics.Urlbar.engagement.record(extraDetails)
             } else {
                 recordUninstrumentedMetrics(
                     category: category,
