@@ -812,36 +812,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     // MARK: - Awesomebar result tap
-    func test_AwesomebarResults_GleanIsCalledForSearchSuggestion() {
-        let extra = [ExtraKey.awesomebarSearchTapType.rawValue: ValueKey.searchSuggestion.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarResults,
-                                     extras: extra)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
-    }
-
-    func test_AwesomebarResults_GleanIsCalledRemoteTabs() {
-        let extra = [ExtraKey.awesomebarSearchTapType.rawValue: ValueKey.remoteTab.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarResults,
-                                     extras: extra)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
-    }
-
-    func test_AwesomebarResults_GleanIsCalledHighlights() {
-        let extra = [ExtraKey.awesomebarSearchTapType.rawValue: ValueKey.searchHighlights.rawValue]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarResults,
-                                     extras: extra)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.searchResultTap)
-    }
-
     func test_AwesomebarImpressions_GleanIsCalled() {
         let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
         let groups = SearchTelemetryValues.Groups.adaptiveHistory.rawValue
@@ -891,7 +861,68 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.impression)
     }
 
-    func test_AwesomebarAbandonment_GleanIsCalled() {
+    func test_AwesomebarEngagement_GleanIsCalled() {
+        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
+        let sap = SearchTelemetryValues.Sap.urlbar.rawValue
+
+        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
+        let interaction = SearchTelemetryValues.Interaction.persistedSearchTerms.rawValue
+
+        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
+        let searchMode = SearchTelemetryValues.SearchMode.tabs.rawValue
+
+        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
+        let nChars: Int32 = 5
+
+        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
+        let nResults: Int32 = 12
+
+        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
+        let nWords: Int32 = 1
+
+        let selectedResultKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResult.rawValue
+        let selectedResult = SearchTelemetryValues.SelectedResult.topSite.rawValue
+
+        let selectedResultSubtypeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResultSubtype.rawValue
+        let selectedResultSubtype = "unknown"
+
+        let providerKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.provider.rawValue
+        let provider = SearchEngine.none.rawValue
+
+        let engagementTypeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.engagementType.rawValue
+        let engagementType = SearchTelemetryValues.EngagementType.help.rawValue
+
+        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
+        let groups = SearchTelemetryValues.Groups.adaptiveHistory.rawValue
+
+        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
+        let results = SearchTelemetryValues.Results.searchEngine.rawValue + ","
+        + SearchTelemetryValues.Results.tabToSearch.rawValue
+
+        let extraDetails = [
+            sapKey: sap,
+            interactionKey: interaction,
+            searchModeKey: searchMode,
+            nCharsKey: nChars,
+            nWordsKey: nWords,
+            nResultsKey: nResults,
+            selectedResultKey: selectedResult,
+            selectedResultSubtypeKey: selectedResultSubtype,
+            providerKey: provider,
+            engagementTypeKey: engagementType,
+            groupsKey: groups,
+            resultsKey: results]
+        as [String: Any]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .urlbarEngagement,
+                                     extras: extraDetails)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Urlbar.engagement)
+    }
+
+  func test_AwesomebarAbandonment_GleanIsCalled() {
         let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
         let groups = SearchTelemetryValues.Groups.adaptiveHistory.rawValue
 
