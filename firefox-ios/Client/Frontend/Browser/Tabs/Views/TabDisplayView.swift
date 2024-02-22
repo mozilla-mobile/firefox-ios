@@ -292,6 +292,42 @@ class TabDisplayView: UIView,
     }
 }
 
+
+// MARK: - SwipeAnimatorDelegate
+extension TabDisplayView: SwipeAnimatorDelegate {
+    // Dragging on the collection view is either an 'active drag' where the item is moved, or
+    // that the item has been long pressed on (and not moved yet), and this gesture recognizer
+    // has been triggered
+    var isDragging: Bool {
+        return collectionView.hasActiveDrag || isLongPressGestureStarted
+    }
+
+    private var isLongPressGestureStarted: Bool {
+        var started = false
+        collectionView.gestureRecognizers?.forEach { recognizer in
+            if let recognizer = recognizer as? UILongPressGestureRecognizer,
+               recognizer.state == .began || recognizer.state == .changed {
+                started = true
+            }
+        }
+        return started
+    }
+
+    func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
+        guard let tabCell = animator.animatingView as? TabCell,
+              let indexPath = collectionView.indexPath(for: tabCell) else { return }
+
+        let tab = tabsState.tabs[indexPath.item]
+        store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
+        UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
+                             argument: String.TabTrayClosingTabAccessibilityMessage)
+    }
+
+    func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
+        return !isDragging
+    }
+}
+
 // MARK: - Drag and Drop delegates
 extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     func collectionView(_ collectionView: UICollectionView,

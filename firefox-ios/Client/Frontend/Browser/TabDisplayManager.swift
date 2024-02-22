@@ -498,6 +498,9 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
+//            guard let tabCell = cell as? TabCell else { return cell }
+//            tabCell.animator?.delegate = self
+//            tabCell.delegate = self
             return cell
         }
 
