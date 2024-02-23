@@ -30,10 +30,10 @@ extension SiteImageView {
     func updateImage(site: SiteImageModel) {
         Task {
             let imageModel = await imageFetcher.getImage(site: site)
-            guard uniqueID == imageModel.id else { return }
 
             DispatchQueue.main.async { [weak self] in
-                self?.setImage(imageModel: imageModel)
+                guard let self, uniqueID == imageModel.id else { return }
+                setImage(imageModel: imageModel)
             }
         }
     }
