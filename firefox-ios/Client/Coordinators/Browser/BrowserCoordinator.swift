@@ -562,9 +562,30 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
+    func showAddressAutofill(frame: WKFrameInfo?) {
+        let bottomSheetCoordinator = makeAddressAutofillCoordinator()
+        bottomSheetCoordinator.showAddressAutofill(frame: frame)
+    }
+
     func showRequiredPassCode() {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showPassCodeController()
+    }
+
+    private func makeAddressAutofillCoordinator() -> AddressAutofillCoordinator {
+        if let bottomSheetCoordinator = childCoordinators.first(where: {
+            $0 is AddressAutofillCoordinator
+        }) as? AddressAutofillCoordinator {
+            return bottomSheetCoordinator
+        }
+        let bottomSheetCoordinator = AddressAutofillCoordinator(
+            profile: profile,
+            router: router,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
+        add(child: bottomSheetCoordinator)
+        return bottomSheetCoordinator
     }
 
     private func makeCredentialAutofillCoordinator() -> CredentialAutofillCoordinator {

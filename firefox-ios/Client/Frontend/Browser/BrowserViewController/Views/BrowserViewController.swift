@@ -1911,6 +1911,12 @@ class BrowserViewController: UIViewController,
                     break
                 }
 
+                tabWebView.accessoryView.savedAddressesClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        webView.resignFirstResponder()
+                        self?.navigationHandler?.showAddressAutofill(frame: frame)
+                    }
+                }
             case .creditCard:
                 guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
                       let type = type,
