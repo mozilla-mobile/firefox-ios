@@ -1004,7 +1004,7 @@
 "Sans-serif" = "Sans-serif";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Shranite strani na bralni seznam, tako da tapnete na ikono knjige plus v ukazih bralnega pogleda.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Shranite strani na bralni seznam, tako da v ukazih bralnega pogleda tapnete ikono knjige s plusom.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "V redu";
@@ -1022,7 +1022,7 @@
 "ScanQRCode.View.Title" = "Skenirajte QR-kodo";
 
 /* Open search section of settings */
-"Search" = "Išči";
+"Search" = "Iskanje";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Iskanje ali naslov strani";
@@ -1553,10 +1553,10 @@
 "Settings.TrackingProtection.SectionName" = "Zaščita pred sledenjem";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Običajno (privzeto)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "Običajna (privzeto)";
 
 /* Tracking protection settings status showing the current option selected. */
-"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Običajno";
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Običajna";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Stroga";

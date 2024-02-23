@@ -73,7 +73,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     func testLaunchType_survey() async {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        let message = createMessage(isExpired: false)
+        let message = createMessage()
         messageManager.message = message
 
         let subject = createSubject()
@@ -86,21 +86,6 @@ final class LaunchScreenViewModelTests: XCTestCase {
         }
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
-    }
-
-    func testLaunchType_nilBrowserIsStarted() async {
-        profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        let message = createMessage(isExpired: true)
-        messageManager.message = message
-
-        let subject = createSubject()
-        subject.delegate = delegate
-        await subject.startLoading(appVersion: "112.0")
-
-        XCTAssertEqual(delegate.launchBrowserCalled, 1)
-        XCTAssertEqual(delegate.launchWithTypeCalled, 0)
-        XCTAssertNil(delegate.savedLaunchType)
     }
 
     // MARK: - Helpers
@@ -117,13 +102,12 @@ final class LaunchScreenViewModelTests: XCTestCase {
 
     private func createMessage(
         for surface: MessageSurfaceId = .survey,
-        isExpired: Bool,
         action: String = "OPEN_NEW_TAB"
     ) -> GleanPlumbMessage {
         let metadata = GleanPlumbMessageMetaData(id: "",
                                                  impressions: 0,
                                                  dismissals: 0,
-                                                 isExpired: isExpired)
+                                                 isExpired: false)
 
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),

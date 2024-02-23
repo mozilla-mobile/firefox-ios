@@ -71,22 +71,13 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         let a11yOnboarding = AccessibilityIdentifiers.Onboarding.onboarding
         let a11yUpgrade = AccessibilityIdentifiers.Upgrade.upgrade
 
-        // AppServices' Foreign Function Interface JEXL evaluator is an expensive
-        // function. Therefore, we create a JEXL cache at the top level, to
-        // be reused for each card, because the same conditions may have
-        // already been evaluated, increasing performance.
-        // However, this is unsing an `inout` operator, and that's poor practice.
-        // It will be removed in:
-        // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6572
-        var jexlCache = [String: Bool]()
-
         // If `NimbusMessagingHelper` creation fails, we cannot continue with
         // evaluating card triggers based on their JEXL prerequisites.
         // Therefore, we return an empty array.
         guard let helper = helperUtility.createNimbusMessagingHelper() else { return [] }
 
         return cardData.compactMap { cardName, cardData in
-            if cardIsValid(with: cardData, using: conditionTable, jexlCache: &jexlCache, and: helper) {
+            if cardIsValid(with: cardData, using: conditionTable, and: helper) {
                 return OnboardingCardInfoModel(
                     name: cardName,
                     order: cardData.order,
@@ -115,13 +106,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func cardIsValid(
         with card: NimbusOnboardingCardData,
         using conditionTable: [String: String],
-        jexlCache: inout [String: Bool],
         and helper: NimbusMessagingHelperProtocol
     ) -> Bool {
         let prerequisitesAreMet = verifyConditionEligibility(
             from: card.prerequisites,
             checkingAgainst: conditionTable,
-            using: &jexlCache,
             and: helper)
 
         guard !card.disqualifiers.isEmpty else {
@@ -131,7 +120,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         let noDisqualifiersAreMet = !verifyConditionEligibility(
             from: card.disqualifiers,
             checkingAgainst: conditionTable,
-            using: &jexlCache,
             and: helper)
 
         return prerequisitesAreMet && noDisqualifiersAreMet
@@ -140,7 +128,6 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     private func verifyConditionEligibility(
         from cardConditions: [String],
         checkingAgainst conditionLookupTable: [String: String],
-        using jexlCache: inout [String: Bool],
         and helper: NimbusMessagingHelperProtocol
     ) -> Bool {
         // Make sure conditions exist and have a value, and that the number
@@ -155,8 +142,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         do {
             return try NimbusMessagingEvaluationUtility().doesObjectMeet(
                 verificationRequirements: conditions,
-                using: helper,
-                and: &jexlCache)
+                using: helper)
         } catch {
             return false
         }

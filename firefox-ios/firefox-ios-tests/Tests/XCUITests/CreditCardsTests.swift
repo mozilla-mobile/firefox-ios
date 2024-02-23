@@ -89,31 +89,7 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306972
     func testManageCreditCardsOption() {
-        // Access any website with a credit card form and tap on the credit card number/ credit card name
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(CreditCardsSettings)
-        unlockLoginsView()
-        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        let saveAndFillPaymentMethodsSwitch = app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards]
-        if saveAndFillPaymentMethodsSwitch.value! as! String == "0" {
-            saveAndFillPaymentMethodsSwitch.tap()
-        }
-        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
-        addCreditCard(name: "Test", cardNumber: "2720994326581252", expirationDate: "0540")
-        navigator.goto(NewTabScreen)
-        navigator.openURL("https://checkout.stripe.dev/preview")
-        waitUntilPageLoad()
-        app.swipeUp()
-        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
-        mozWaitForElementToExist(cardNumber)
-        cardNumber.tapOnApp()
-        // Use saved card prompt is displayed
-        mozWaitForElementToExist(app.buttons[useSavedCard])
-        // Expand the prompt
-        app.buttons[useSavedCard].tap()
-        unlockLoginsView()
-        mozWaitForElementToExist(app.staticTexts["Use saved card"])
-        mozWaitForElementToExist(app.buttons[manageCards])
+        addCreditCardAndReachAutofillWebsite()
         // Tap on the "Manage credit cards" option
         app.buttons[manageCards].tap()
         unlockLoginsView()
@@ -175,6 +151,56 @@ class CreditCardsTests: BaseTestCase {
         cardNumber.tapOnApp()
         // The autofill option (Use saved card prompt) is displayed
         mozWaitForElementToExist(app.buttons[useSavedCard])
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306971
+    func testCreditCardsAutofill() {
+        addCreditCardAndReachAutofillWebsite()
+        // Select the saved credit card
+        mozWaitForElementToExist(app.scrollViews.otherElements.tables.staticTexts["Test"])
+        var attempts = 4
+        while app.scrollViews.otherElements.tables.staticTexts["Test"].isHittable && attempts > 0 {
+            app.scrollViews.otherElements.tables.cells.firstMatch.tapOnApp()
+            attempts -= 1
+        }
+        if app.staticTexts["TEST CARDS"].exists {
+            app.staticTexts["TEST CARDS"].tap()
+        }
+        // The credit card's number and name are imported correctly on the designated fields
+        let contentView = app.webViews["contentView"].webViews.textFields
+        XCTAssertEqual(contentView["Card number"].value! as! String, "2720 9943 2658 1252")
+        XCTAssertEqual(contentView["Expiration"].value! as! String, "05 / 40")
+        XCTAssertEqual(contentView["Full name on card"].value! as! String, "Test")
+        XCTAssertEqual(contentView["CVC"].value! as! String, "CVC")
+        XCTAssertEqual(contentView["ZIP"].value! as! String, "ZIP")
+    }
+
+    private func addCreditCardAndReachAutofillWebsite() {
+        // Access any website with a credit card form and tap on the credit card number/ credit card name
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(CreditCardsSettings)
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        let saveAndFillPaymentMethodsSwitch = app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards]
+        if saveAndFillPaymentMethodsSwitch.value! as! String == "0" {
+            saveAndFillPaymentMethodsSwitch.tap()
+        }
+        app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
+        addCreditCard(name: "Test", cardNumber: "2720994326581252", expirationDate: "0540")
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://checkout.stripe.dev/preview")
+        waitUntilPageLoad()
+        app.swipeUp()
+        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+        mozWaitForElementToExist(cardNumber)
+        cardNumber.tapOnApp()
+        // Use saved card prompt is displayed
+        mozWaitForElementToExist(app.buttons[useSavedCard])
+        // Expand the prompt
+        app.buttons[useSavedCard].tap()
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts["Use saved card"])
+        mozWaitForElementToExist(app.buttons[manageCards])
     }
 
     private func addCardAndReachViewCardPage() {

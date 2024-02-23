@@ -311,22 +311,30 @@ extension ContentBlocker {
 
     func compileListsNotInStore(completion: @escaping () -> Void) {
         let blocklists = BlocklistFileName.allCases.map { $0.filename }
-        let deferreds: [Deferred<Void>] = blocklists.map { filename in
-            let result = Deferred<Void>()
+        let dispatchGroup = DispatchGroup()
+        blocklists.forEach { filename in
+            dispatchGroup.enter()
             ruleStore?.lookUpContentRuleList(forIdentifier: filename) { [weak self] contentRuleList, error in
                 if contentRuleList != nil {
-                    result.fill(())
+                    dispatchGroup.leave()
                     return
                 }
                 self?.loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
                     guard let self,
-                          let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
+                          let range = str.range(of: "]", options: String.CompareOptions.backwards)
+                    else {
+                        dispatchGroup.leave()
+                        return
+                    }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
                     self.ruleStore?.compileContentRuleList(
                         forIdentifier: filename,
                         encodedContentRuleList: str
                     ) { rule, error in
+                        defer {
+                            dispatchGroup.leave()
+                        }
                         guard error == nil else {
                             self.logger.log(
                                 "Content blocker errored with: \(String(describing: error))",
@@ -345,15 +353,12 @@ extension ContentBlocker {
                             assert(rule != nil)
                             return
                         }
-
-                        result.fill(())
                     }
                 }
             }
-            return result
         }
 
-        all(deferreds).uponQueue(.main) { _ in
+        dispatchGroup.notify(queue: .main) {
             completion()
         }
     }

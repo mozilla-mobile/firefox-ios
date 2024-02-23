@@ -79,11 +79,7 @@ class TabCounterTests: BaseTestCase {
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
-        if isTablet {
-            mozWaitForElementToExist(app.navigationBars["Client.LegacyTabTrayView"])
-        } else {
-            mozWaitForElementToExist(app.navigationBars["Open Tabs"])
-        }
+        mozWaitForElementToExist(app.navigationBars["Open Tabs"])
         tabsOpen = app.segmentedControls.buttons.element(boundBy: 0).label
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         if !isTablet {

@@ -40,7 +40,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     }
 
     // MARK: - Initialization
-    init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
+    init(messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
          notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.messagingManager = messagingManager
         self.notificationManager = notificationManager
@@ -88,8 +88,8 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     private func scheduleNotification(message: GleanPlumbMessage, notificationId: String) {
         let userInfo = [Constant.messageIdKey: message.id]
         let fallbackTitle = String(format: .Notification.FallbackTitle, AppInfo.displayName)
-        let body = String(format: message.data.text, AppInfo.displayName)
-        notificationManager.schedule(title: message.data.title ?? fallbackTitle,
+        let body = String(format: message.text, AppInfo.displayName)
+        notificationManager.schedule(title: message.title ?? fallbackTitle,
                                      body: body,
                                      id: notificationId,
                                      userInfo: userInfo,
@@ -105,10 +105,6 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
 
     /// Call messagingManager to retrieve the message for notification surface.
     private func updateMessage() {
-        // Set the message to nil just to make sure we're not accidentally
-        // showing an old message.
-        message = nil
-        guard let newMessage = messagingManager.getNextMessage(for: notificationSurfaceID) else { return }
-        if !newMessage.isExpired { message = newMessage }
+        message = messagingManager.getNextMessage(for: notificationSurfaceID)
     }
 }
