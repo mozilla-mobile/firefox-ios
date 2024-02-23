@@ -108,11 +108,16 @@ public class RustAutofill {
                 return
             }
 
-            self.encryptCreditCard(creditCard: creditCard) { encCreditCard in
-                do {
-                    let id = try self.storage?.addCreditCard(cc: encCreditCard)
-                    completion(id!, nil)
-                } catch let err as NSError {
+            self.encryptCreditCard(creditCard: creditCard) { result in
+                switch result {
+                case .success(let encCreditCard):
+                    do {
+                        let card = try self.storage?.addCreditCard(cc: encCreditCard)
+                        completion(card, nil)
+                    } catch let err as NSError {
+                        completion(nil, err)
+                    }
+                case .failure(let err):
                     completion(nil, err)
                 }
             }
@@ -208,7 +213,7 @@ public class RustAutofill {
     public func updateCreditCard(
         id: String,
         creditCard: UnencryptedCreditCardFields,
-        completion: @escaping (Bool, Error?) -> Void
+        completion: @escaping (Bool?, Error?) -> Void
     ) {
         performDatabaseOperation { error in
             guard error == nil else {
@@ -216,12 +221,17 @@ public class RustAutofill {
                 return
             }
 
-            self.encryptCreditCard(creditCard: creditCard) { encCreditCard in
-                do {
-                    try self.storage?.updateCreditCard(guid: id, cc: encCreditCard)
-                    completion(true, nil)
-                } catch let err as NSError {
-                    completion(false, err)
+            self.encryptCreditCard(creditCard: creditCard) { result in
+                switch result {
+                case .success(let encCreditCard):
+                    do {
+                        try self.storage?.updateCreditCard(guid: id, cc: encCreditCard)
+                        completion(true, nil)
+                    } catch let err as NSError {
+                        completion(nil, err)
+                    }
+                case .failure(let err):
+                    completion(nil, err)
                 }
             }
         }
@@ -389,26 +399,28 @@ public class RustAutofill {
             switch (key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
                 // We expected the key to be present, and it is.
+                var canaryIsValid = false
                 do {
-                    let canaryIsValid = try rustKeys.checkCanary(
+                    canaryIsValid = try rustKeys.checkCanary(
                         canary: encryptedCanaryPhrase!,
                         text: rustKeys.canaryPhrase,
                         key: key!
                     )
-                    if canaryIsValid {
-                        completion(.success(key!))
-                    } else {
-                        self.logger.log("Autofill key was corrupted, new one generated",
-                                        level: .warning,
-                                        category: .storage)
-                        self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
-                    }
                 } catch let error as NSError {
-                    self.logger.log("Error retrieving autofill encryption key",
+                    self.logger.log("Error validating autofill encryption key",
                                     level: .warning,
                                     category: .storage,
                                     description: error.localizedDescription)
                     completion(.failure(error))
+                    return
+                }
+                if canaryIsValid {
+                    completion(.success(key!))
+                } else {
+                    self.logger.log("Autofill key was corrupted, new one generated",
+                                    level: .warning,
+                                    category: .storage)
+                    self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
                 }
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
                 // The key is present, but we didn't expect it to be there.
@@ -528,10 +540,9 @@ public class RustAutofill {
     }
 
     private func encryptCreditCard(creditCard: UnencryptedCreditCardFields,
-                                   completion: @escaping (UpdatableCreditCardFields) -> Void) {
+                                   completion: @escaping (Result<UpdatableCreditCardFields, Error>) -> Void) {
         getStoredKey { result in
-            var ccNumberEnc = ""
-
+            var ccNumberEnc: String
             switch result {
             case .success(let key):
                 do {
@@ -541,18 +552,20 @@ public class RustAutofill {
                                     level: .warning,
                                     category: .storage,
                                     description: error.localizedDescription)
+                    completion(.failure(error))
+                    return
                 }
-            case .failure:
-                break
-            }
 
-            let encCreditCard = UpdatableCreditCardFields(ccName: creditCard.ccName,
-                                                          ccNumberEnc: ccNumberEnc,
-                                                          ccNumberLast4: creditCard.ccNumberLast4,
-                                                          ccExpMonth: creditCard.ccExpMonth,
-                                                          ccExpYear: creditCard.ccExpYear,
-                                                          ccType: creditCard.ccType)
-            completion(encCreditCard)
+                let encCreditCard = UpdatableCreditCardFields(ccName: creditCard.ccName,
+                                                              ccNumberEnc: ccNumberEnc,
+                                                              ccNumberLast4: creditCard.ccNumberLast4,
+                                                              ccExpMonth: creditCard.ccExpMonth,
+                                                              ccExpYear: creditCard.ccExpYear,
+                                                              ccType: creditCard.ccType)
+                completion(.success(encCreditCard))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
 }

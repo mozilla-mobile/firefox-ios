@@ -133,7 +133,10 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
 
             self.viewModel.updateCreditCard(for: creditCard.guid,
                                             with: self.samplePlainTextCard) { didUpdate, error in
-                XCTAssertTrue(didUpdate)
+                XCTAssertNotNil(didUpdate)
+                if let updated = didUpdate {
+                    XCTAssert(updated)
+                }
                 XCTAssertNil(error)
                 expectationUpdate.fulfill()
             }
