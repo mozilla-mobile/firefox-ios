@@ -578,6 +578,29 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     },
   }
 
+  // define the field types for focus events
+  const FocusFieldType = {
+    username: "username",
+    password: "password"
+  };
+
+  function onFocusIn(event) {
+    const form = event.target?.form;
+    if (!form) {
+      return;
+    }
+
+    const [username, password] = LoginManagerContent._getFormFields(form, false);
+    if (password) {
+      webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+        type: "fieldType",
+        fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
+      });
+    }
+  }
+
+  document.addEventListener("focusin", (ev) => onFocusIn(ev));
+    
   var LoginUtils = {
     /*
      * _getPasswordOrigin
