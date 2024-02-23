@@ -591,7 +591,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     }
 
     const [username, password] = LoginManagerContent._getFormFields(form, false);
-    if (username && password) {
+    if (password) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
         fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
