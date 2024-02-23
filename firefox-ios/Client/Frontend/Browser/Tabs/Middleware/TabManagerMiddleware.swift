@@ -48,8 +48,8 @@ class TabManagerMiddleware {
             self.moveTab(state: state, from: originIndex, to: destinationIndex, uuid: uuid)
 
         case TabPanelAction.closeTab(let context):
-            let tabUUID = context.tabUUID
-            self.closeTabFromTabPanel(with: tabUUID, uuid: uuid)
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
+            self.closeTabFromTabPanel(with: context.tabUUID, uuid: uuid, isPrivate: tabsState.isPrivateMode)
 
         case TabPanelAction.undoClose:
             self.undoCloseTab(state: state, uuid: uuid)
@@ -72,20 +72,16 @@ class TabManagerMiddleware {
             self.undoCloseAllInactiveTabs(uuid: uuid)
 
         case TabPanelAction.closeInactiveTabs(let context):
-            let tabUUID = context.tabUUID
-            self.closeInactiveTab(for: tabUUID, state: state, uuid: uuid)
+            self.closeInactiveTab(for: context.tabUUID, state: state, uuid: uuid)
 
         case TabPanelAction.undoCloseInactiveTab:
             self.undoCloseInactiveTab(uuid: uuid)
 
         case TabPanelAction.learnMorePrivateMode(let context):
-            let urlRequest = context.urlRequest
-            self.didTapLearnMoreAboutPrivate(with: urlRequest, uuid: uuid)
+            self.didTapLearnMoreAboutPrivate(with: context.urlRequest, uuid: uuid)
 
         case RemoteTabsPanelAction.openSelectedURL(let context):
-            let url = context.url
-            let uuid = context.windowUUID
-            self.openSelectedURL(url: url, windowUUID: uuid)
+            self.openSelectedURL(url: context.url, windowUUID: uuid)
 
         case TabPeekAction.didLoadTabPeek(let context):
             let tabID = context.tabUUID
@@ -104,10 +100,9 @@ class TabManagerMiddleware {
             self.copyURL(tabID: tabID, uuid: uuid)
 
         case TabPeekAction.closeTab(let context):
-            let tabID = context.tabUUID
-            self.tabPeekCloseTab(with: tabID, uuid: uuid)
-            let context = ToastTypeContext(toastType: .singleTab, windowUUID: uuid)
-            store.dispatch(TabPanelAction.showToast(context))
+            guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
+            self.tabPeekCloseTab(with: context.tabUUID, uuid: uuid, isPrivate: tabsState.isPrivateMode)
+
         default:
             break
         }
@@ -258,11 +253,15 @@ class TabManagerMiddleware {
 
     /// Close tab and trigger refresh
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
-    private func closeTabFromTabPanel(with tabUUID: String, uuid: WindowUUID) {
+    private func closeTabFromTabPanel(with tabUUID: String, uuid: WindowUUID, isPrivate: Bool) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid)
-            await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid)
-            if shouldDismiss {
+            await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid, isPrivate: isPrivate)
+
+            if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
+                store.dispatch(TabPanelAction.tabPanelDidLoad(BoolValueContext(boolValue: true, windowUUID: uuid)))
+                store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
+            } else if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
                 store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
             } else {
@@ -273,9 +272,7 @@ class TabManagerMiddleware {
 
     /// Trigger refreshTabs action after a change in `TabManager`
     @MainActor
-    private func triggerRefresh(shouldScrollToTab: Bool, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+    private func triggerRefresh(shouldScrollToTab: Bool, uuid: WindowUUID, isPrivate: Bool) {
         let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: shouldScrollToTab, uuid: uuid)
         let context = RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)
         store.dispatch(TabPanelAction.refreshTab(context))
@@ -484,8 +481,10 @@ class TabManagerMiddleware {
         store.dispatch(TabPanelAction.showToast(context))
     }
 
-    private func tabPeekCloseTab(with tabID: String, uuid: WindowUUID) {
-        closeTabFromTabPanel(with: tabID, uuid: uuid)
+    private func tabPeekCloseTab(with tabID: String, uuid: WindowUUID, isPrivate: Bool) {
+        closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
+        let context = ToastTypeContext(toastType: .singleTab, windowUUID: uuid)
+        store.dispatch(TabPanelAction.showToast(context))
     }
 
     private func changePanel(_ panel: TabTrayPanelType, uuid: WindowUUID) {
