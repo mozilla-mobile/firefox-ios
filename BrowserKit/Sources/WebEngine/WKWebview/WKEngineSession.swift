@@ -385,7 +385,7 @@ class WKEngineSession: NSObject,
 
     // MARK: - MetadataFetcherDelegate
 
-    func didLoad(pageMetadata: EnginePagemetaData) {
+    func didLoad(pageMetadata: EnginePageMetadata) {
         delegate?.didLoad(pageMetadata: pageMetadata)
     }
 }

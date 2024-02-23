@@ -28,7 +28,7 @@ public protocol EngineSessionDelegate: AnyObject {
     func onLoadingStateChange(loading: Bool)
 
     /// Event to indicate that the page metadata was loaded or updated
-    func didLoad(pageMetadata: EnginePagemetaData)
+    func didLoad(pageMetadata: EnginePageMetadata)
 
     // MARK: Menu items
     /// Relates to adding native `UIMenuController.shared.menuItems` in webview textfields

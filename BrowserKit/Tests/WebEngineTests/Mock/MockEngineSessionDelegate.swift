@@ -26,7 +26,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedCanGoBack: Bool?
     var savedCanGoForward: Bool?
     var savedLoading: Bool?
-    var savedPagemetaData: EnginePagemetaData?
+    var savedPagemetaData: EnginePageMetadata?
     var savedFindInPageSelection: String?
     var savedSearchSelection: String?
 
@@ -67,7 +67,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
         savedLoading = loading
     }
 
-    func didLoad(pageMetadata: EnginePagemetaData) {
+    func didLoad(pageMetadata: EnginePageMetadata) {
         didLoadPagemetaDataCalled += 1
         savedPagemetaData = pageMetadata
     }

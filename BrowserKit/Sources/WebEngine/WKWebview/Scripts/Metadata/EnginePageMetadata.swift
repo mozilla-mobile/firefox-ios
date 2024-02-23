@@ -18,7 +18,7 @@ enum MetadataKeys: String {
 }
 
 /// Value types representing a page's metadata, is used amongst other things to fetch the faviconURL
-public struct EnginePagemetaData {
+public struct EnginePageMetadata {
     public let id: Int?
     public let siteURL: String
     public let mediaURL: String?
@@ -62,10 +62,10 @@ public struct EnginePagemetaData {
         self.keywordsString = keywords
     }
 
-    public static func fromDictionary(_ dict: [String: Any]) -> EnginePagemetaData? {
+    public static func fromDictionary(_ dict: [String: Any]) -> EnginePageMetadata? {
         guard let siteURL = dict[MetadataKeys.pageURL.rawValue] as? String else { return nil }
 
-        return EnginePagemetaData(
+        return EnginePageMetadata(
             id: nil,
             siteURL: siteURL,
             mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String,

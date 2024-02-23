@@ -12,7 +12,7 @@ protocol MetadataFetcherHelper {
 }
 
 protocol MetadataFetcherDelegate: AnyObject {
-    func didLoad(pageMetadata: EnginePagemetaData)
+    func didLoad(pageMetadata: EnginePageMetadata)
 }
 
 struct DefaultMetadataFetcherHelper: MetadataFetcherHelper {
@@ -35,7 +35,7 @@ struct DefaultMetadataFetcherHelper: MetadataFetcherHelper {
             }
 
             guard let dict = result as? [String: Any],
-                  let pageMetadata = EnginePagemetaData.fromDictionary(dict) else {
+                  let pageMetadata = EnginePageMetadata.fromDictionary(dict) else {
                 session.sessionData.pageMetadata = nil
                 return
             }

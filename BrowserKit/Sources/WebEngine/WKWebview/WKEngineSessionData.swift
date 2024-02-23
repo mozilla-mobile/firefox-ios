@@ -9,5 +9,5 @@ struct WKEngineSessionData {
     var url: URL?
     var lastRequest: URLRequest?
     var title: String?
-    var pageMetadata: EnginePagemetaData?
+    var pageMetadata: EnginePageMetadata?
 }
