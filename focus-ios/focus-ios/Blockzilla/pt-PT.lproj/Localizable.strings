@@ -476,7 +476,7 @@
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Cancelar";
 
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
-"ShowMeHowOnboarding.ButtonText.V2" = "Feito";
+"ShowMeHowOnboarding.ButtonText.V2" = "Concluído";
 
 /* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepOne.V2" = "Toque longo no ecrã inicial até que os ícones comecem a tremer.";

@@ -584,7 +584,7 @@
 "TooltipBodyText.TrashIcon.V2" = "Geçmişi ve çerezleri temizleyip yeni bir sekmede yeni bir başlangıç yapmak için buraya dokunun.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
-"TooltipTitleText.Privacy" = "Koruma altındasınız!";
+"TooltipTitleText.Privacy" = "Koruma altındasınız! ";
 
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Bağlantı güvenli değil";

@@ -44,7 +44,7 @@
 "actionSheet.openIn" = "Відкрити в %@";
 
 /* Button to dismiss the 'Add Pass Failed' alert. */
-"AddPass.Error.Dismiss" = "Гаразд";
+"AddPass.Error.Dismiss" = "OK";
 
 /* Message of the 'Add Pass Failed' alert. */
 "AddPass.Error.Message" = "При додаванні картки до Wallet сталася помилка. Спробуйте знову пізніше.";
