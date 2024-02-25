@@ -170,6 +170,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var text: String = "This is a test"
     var buttonLabel: String?
     var experiment: String?
+    var actionParams: [String: String] = [:]
 }
 
 // MARK: - MockStyleDataProtocol

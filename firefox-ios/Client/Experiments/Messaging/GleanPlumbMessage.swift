@@ -11,6 +11,7 @@ protocol MessageDataProtocol {
     var text: String { get }
     var buttonLabel: String? { get }
     var experiment: String? { get }
+    var actionParams: [String: String] { get }
 }
 
 extension MessageData: MessageDataProtocol {}

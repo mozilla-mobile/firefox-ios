@@ -60,6 +60,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let messagingFeature: FeatureHolder<Messaging>
     private let applicationHelper: ApplicationHelper
+    private let deepLinkScheme: String
 
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
 
@@ -74,13 +75,15 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         messagingUtility: NimbusMessagingEvaluationUtility = NimbusMessagingEvaluationUtility(),
         messagingStore: GleanPlumbMessageStoreProtocol = GleanPlumbMessageStore(),
         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
-        messagingFeature: FeatureHolder<Messaging> = FxNimbusMessaging.shared.features.messaging
+        messagingFeature: FeatureHolder<Messaging> = FxNimbusMessaging.shared.features.messaging,
+        deepLinkScheme: String = URL.mozInternalScheme
     ) {
         self.createMessagingHelper = createMessagingHelper
         self.evaluationUtility = messagingUtility
         self.messagingStore = messagingStore
         self.applicationHelper = applicationHelper
         self.messagingFeature = messagingFeature
+        self.deepLinkScheme = deepLinkScheme
 
         onStartup()
     }
@@ -188,36 +191,56 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         guard let helper = createMessagingHelper.createNimbusMessagingHelper() else { return }
 
-        // Make substitutions where they're needed.
-        let template = message.action
-        let uuid = helper.getUuid(template: template)
-        let action = helper.stringFormat(template: template, uuid: uuid)
-
-        // Create the message action URL.
-        let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
-        guard let url = URL(string: urlString, invalidCharacters: false) else {
+        guard let (uuid, urlToOpen) = try? self.generateUuidAndFormatAction(for: message, with: helper) else {
             self.onMalformedMessage(id: message.id, surface: message.surface)
             return
-        }
-
-        var urlToOpen = url
-
-        // We open webpages using our internal URL scheme
-        if url.isWebPage(), var components = URLComponents(string: "\(URL.mozInternalScheme)://open-url") {
-            components.queryItems = [URLQueryItem(name: "url", value: url.absoluteString)]
-            urlToOpen = components.url ?? url
         }
 
         // With our well-formed URL, we can handle the action here.
         applicationHelper.open(urlToOpen)
 
         var extras = baseTelemetryExtras(using: message)
-        extras[MessagingKey.actionUUID.rawValue] = uuid ?? "nil"
+        if let uuid = uuid {
+            extras[MessagingKey.actionUUID.rawValue] = uuid
+        }
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .messaging,
                                      value: .messageInteracted,
                                      extras: extras)
+    }
+
+    private func generateUuidAndFormatAction(for message: GleanPlumbMessage,
+                                             with helper: NimbusMessagingHelperProtocol) throws -> (String?, URL) {
+        // Make substitutions where they're needed.
+        let actionTemplate = message.action
+        var uuid = helper.getUuid(template: actionTemplate)
+        let action = helper.stringFormat(template: actionTemplate, uuid: uuid)
+        let actionParams = message.data.actionParams
+
+        let urlString: String = action.hasPrefix("://") ? deepLinkScheme + action : action
+        guard var components = URLComponents(string: urlString) else {
+            throw NimbusError.UrlParsingError(message: "\(urlString) is not a valid URL")
+        }
+        var queryItems = components.queryItems ?? []
+
+        for (key, valueTemplate) in actionParams {
+            if uuid == nil {
+                uuid = helper.getUuid(template: valueTemplate)
+            }
+            let value = helper.stringFormat(template: valueTemplate, uuid: uuid)
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+
+        if !queryItems.isEmpty {
+            components.queryItems = queryItems
+        }
+
+        guard let url = components.url else {
+            throw NimbusError.UrlParsingError(message: "Cannot create URL from action-params \(actionParams)")
+        }
+
+        return (uuid, url)
     }
 
     /// For now, we will assume all dismissed messages should become expired right away. The
