@@ -111,7 +111,7 @@ class QRCodeViewController: UIViewController {
         navigationItem.leftBarButtonItem?.tintColor = UIColor.white
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(named: ImageIdentifiers.qrCodeLight),
+            image: UIImage(named: StandardImageIdentifiers.Large.lightning),
             style: .plain,
             target: self,
             action: #selector(openLight))
@@ -260,7 +260,7 @@ class QRCodeViewController: UIViewController {
                 try captureDevice.lockForConfiguration()
                 captureDevice.torchMode = AVCaptureDevice.TorchMode.off
                 captureDevice.unlockForConfiguration()
-                navigationItem.rightBarButtonItem?.image = UIImage(named: ImageIdentifiers.qrCodeLight)
+                navigationItem.rightBarButtonItem?.image = UIImage(named: StandardImageIdentifiers.Large.lightning)
                 navigationItem.rightBarButtonItem?.tintColor = .white
             } catch {}
         } else {
@@ -268,7 +268,7 @@ class QRCodeViewController: UIViewController {
                 try captureDevice.lockForConfiguration()
                 captureDevice.torchMode = AVCaptureDevice.TorchMode.on
                 captureDevice.unlockForConfiguration()
-                navigationItem.rightBarButtonItem?.image = UIImage(named: ImageIdentifiers.qrCodeLightTurnedOn)
+                navigationItem.rightBarButtonItem?.image = UIImage(named: StandardImageIdentifiers.Large.lightningFill)
                 navigationItem.rightBarButtonItem?.tintColor = UX.isLightingNavigationItemColor
             } catch {}
         }

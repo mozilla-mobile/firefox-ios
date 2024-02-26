@@ -37,8 +37,6 @@ public struct ImageIdentifiers {
     public static let onboardingSetToDock = "onboardingDock"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
-    public static let qrCodeLight = "qrcode-light"
-    public static let qrCodeLightTurnedOn = "qrcode-isLighting"
     public static let privateModeBadge = "privateModeBadge"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
     public static let shoppingOptInCardImage = "shoppingOptInCardImage"
