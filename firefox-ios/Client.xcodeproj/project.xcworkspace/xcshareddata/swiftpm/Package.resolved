@@ -95,8 +95,13 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
+<<<<<<< HEAD
         "revision" : "d386bc7a055af9a1f24c70184ee988bceb642b48",
         "version" : "124.0.0"
+=======
+        "revision" : "bd033893e2602ad0f6d0a3b93c6491a176afe527",
+        "version" : "125.0.20240226160923"
+>>>>>>> 033cc1687 (Refactor FXIOS-8428 [v125] Use single name field for addresses & update SPM with latest rust-component 125.0.20240226160923 (#18690))
       }
     },
     {
