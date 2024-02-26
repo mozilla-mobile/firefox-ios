@@ -1866,6 +1866,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
     }
 
+    private func autofillLoginNimbusFeatureFlag() -> Bool {
+        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
+    }
+
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -2249,7 +2253,7 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
         // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate {
+        if !tab.isPrivate, autofillLoginNimbusFeatureFlag() {
             let logins = LoginsHelper(
                 tab: tab,
                 profile: profile,
@@ -2329,8 +2333,6 @@ extension BrowserViewController: LegacyTabDelegate {
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
-                // Note: Since we are injecting card info, we pass on the frame
-                // for special iframe cases
                 self.navigationHandler?.showSavedLoginAutofill()
             case .deviceOwnerFailed:
                 break // Keep showing bvc

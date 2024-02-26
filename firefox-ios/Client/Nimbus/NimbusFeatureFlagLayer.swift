@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
+        case .loginAutofill:
+            return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
@@ -169,6 +172,17 @@ final class NimbusFeatureFlagLayer {
 
             switch featureID {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
+            default: return false
+            }
+    }
+
+    public func checkNimbusForLoginAutofill(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.loginAutofill.value()
+
+            switch featureID {
+            case .loginAutofill: return config.loginAutofillStatus
             default: return false
             }
     }

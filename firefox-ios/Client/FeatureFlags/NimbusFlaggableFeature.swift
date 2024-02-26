@@ -26,6 +26,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case inactiveTabs
     case isToolbarCFREnabled
     case jumpBackIn
+    case loginAutofill
     case nightMode
     case preferSwitchToOpenTabOverDuplicate
     case reduxSearchSettings
@@ -73,6 +74,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotFeature,
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
+                .loginAutofill,
                 .nightMode,
                 .preferSwitchToOpenTabOverDuplicate,
                 .reduxSearchSettings,
