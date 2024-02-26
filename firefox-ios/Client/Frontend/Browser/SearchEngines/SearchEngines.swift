@@ -43,9 +43,18 @@ class SearchEngines {
 
     init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
         self.prefs = prefs
-        // By default, show search suggestions
+
         self.shouldShowSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showSearchSuggestions
+        ) ?? true
+        shouldShowBrowsingHistorySuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions
+        ) ?? true
+        shouldShowBookmarksSuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions
+        ) ?? true
+        shouldShowSyncedTabsSuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions
         ) ?? true
         shouldShowFirefoxSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions
@@ -117,6 +126,33 @@ class SearchEngines {
         }
     }
 
+    var shouldShowBrowsingHistorySuggestions: Bool {
+        didSet {
+            prefs.setBool(
+                shouldShowBrowsingHistorySuggestions,
+                forKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions
+            )
+        }
+    }
+
+    var shouldShowBookmarksSuggestions: Bool {
+        didSet {
+            prefs.setBool(
+                shouldShowBookmarksSuggestions,
+                forKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions
+            )
+        }
+    }
+
+    var shouldShowSyncedTabsSuggestions: Bool {
+        didSet {
+            prefs.setBool(
+                shouldShowSyncedTabsSuggestions,
+                forKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions
+            )
+        }
+    }
+
     var shouldShowFirefoxSuggestions: Bool {
         didSet {
             prefs.setBool(
@@ -151,6 +187,14 @@ class SearchEngines {
                 forKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
             )
         }
+    }
+
+    var isPrivateModeSettingEnabled: Bool {
+        return shouldShowPrivateModeSearchSuggestions ||
+               shouldShowPrivateModeFirefoxSuggestions ||
+               shouldShowBookmarksSuggestions ||
+               shouldShowSyncedTabsSuggestions ||
+               shouldShowBrowsingHistorySuggestions
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {

@@ -50,6 +50,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private enum FirefoxSuggestItem: Int, CaseIterable {
+        case browsingHistory
+        case bookmarks
+        case syncedTabs
         case nonSponsored
         case sponsored
         case privateSuggestions
@@ -229,6 +232,63 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
         case .firefoxSuggestSettings:
             switch indexPath.item {
+            case FirefoxSuggestItem.browsingHistory.rawValue:
+                let setting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.currentTheme,
+                    prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
+                    defaultValue: model.shouldShowBrowsingHistorySuggestions,
+                    titleText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.SearchBrowsingHistory
+                    )
+                )
+                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+                setting.control.switchView.addTarget(
+                    self,
+                    action: #selector(didToggleBrowsingHistorySuggestions),
+                    for: .valueChanged
+                )
+                cell.editingAccessoryView = setting.control
+                cell.selectionStyle = .none
+
+            case FirefoxSuggestItem.bookmarks.rawValue:
+                let setting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.currentTheme,
+                    prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
+                    defaultValue: model.shouldShowBookmarksSuggestions,
+                    titleText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.SearchBookmarks
+                    )
+                )
+                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+                setting.control.switchView.addTarget(
+                    self,
+                    action: #selector(didToggleBookmarksSuggestions),
+                    for: .valueChanged
+                )
+                cell.editingAccessoryView = setting.control
+                cell.selectionStyle = .none
+
+            case FirefoxSuggestItem.syncedTabs.rawValue:
+                let setting = BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.currentTheme,
+                    prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
+                    defaultValue: model.shouldShowSyncedTabsSuggestions,
+                    titleText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.SearchSyncedTabs
+                    )
+                )
+                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+                setting.control.switchView.addTarget(
+                    self,
+                    action: #selector(didToggleSyncedTabsSuggestions),
+                    for: .valueChanged
+                )
+                cell.editingAccessoryView = setting.control
+                cell.selectionStyle = .none
+
             case FirefoxSuggestItem.nonSponsored.rawValue:
                 let setting = BoolSetting(
                     prefs: profile.prefs,
@@ -579,6 +639,21 @@ extension SearchSettingsTableViewController {
     @objc
     func didToggleShowFirefoxSuggestionsInPrivateMode(_ toggle: ThemedSwitch) {
         model.shouldShowPrivateModeFirefoxSuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleBrowsingHistorySuggestions(_ toggle: ThemedSwitch) {
+        model.shouldShowBrowsingHistorySuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleBookmarksSuggestions(_ toggle: ThemedSwitch) {
+        model.shouldShowBookmarksSuggestions = toggle.isOn
+    }
+
+    @objc
+    func didToggleSyncedTabsSuggestions(_ toggle: ThemedSwitch) {
+        model.shouldShowSyncedTabsSuggestions = toggle.isOn
     }
 
     @objc
