@@ -83,7 +83,6 @@ class AddressListViewModel: ObservableObject {
         /// Handles the selection of an address.
         /// - Parameter address: The selected address.
         func handleAddressSelection(_ address: Address) {
-            // Perform actions with the selected address
             addressSelectionCallback?(fromAddress(address))
         }
 }
