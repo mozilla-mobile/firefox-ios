@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 // This class contains the Firefox iOS type styles as part of our design system
-public struct FXFontStylez {
+public struct FXFontStyles {
     public struct Regular {
         public static let largeTitle = TextStyling(for: .largeTitle, size: 34, weight: .regular)
         public static let title1 = TextStyling(for: .title1, size: 28, weight: .regular)

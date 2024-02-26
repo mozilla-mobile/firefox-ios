@@ -51,7 +51,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         // swiftlint:enable line_length
             var container = incoming
             container.foregroundColor = self?.foregroundColor
-            container.font = FXFontStylez.Bold.callout.scaledFont()
+            container.font = FXFontStyles.Bold.callout.scaledFont()
             return container
         }
 
