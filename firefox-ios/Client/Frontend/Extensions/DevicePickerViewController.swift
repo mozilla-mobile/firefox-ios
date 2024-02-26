@@ -23,8 +23,8 @@ private enum LoadingState {
 }
 
 public enum ClientType: String {
-    case Desktop = "deviceDesktopLarge"
-    case Mobile = "deviceMobileLarge"
+    case Desktop = "deviceTypeDesktop"
+    case Mobile = "deviceTypeMobile"
     case Tablet = "deviceTypeTablet"
     case VR = "deviceTypeVR"
     case TV = "deviceTypeTV"
@@ -43,6 +43,19 @@ public enum ClientType: String {
             return ClientType.TV
         default:
             return ClientType.Mobile
+        }
+    }
+    
+    var imageName: String {
+        switch self {
+        case .Desktop:
+            return StandardImageIdentifiers.Large.deviceDesktop
+        case .Mobile:
+            return StandardImageIdentifiers.Large.deviceMobile
+        case .Tablet:
+            return StandardImageIdentifiers.Large.deviceTablet
+        default:
+            return StandardImageIdentifiers.Large.deviceMobile
         }
     }
 }
