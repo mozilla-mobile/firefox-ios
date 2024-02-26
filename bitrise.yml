@@ -4,10 +4,14 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     stages:
-    - pre_configuration: {}
-    - build_applications: {}
-    - run_tests: {}
+    - l10n_screenshots: {}
+    # - pre_configuration: {}
+    # - build_applications: {}
+    # - run_tests: {}
 stages:
+  l10n_screenshots:
+    workflows:
+    - L10nBuild: {}
   pre_configuration:
     workflows:
     - determine_apps_affected: {}
