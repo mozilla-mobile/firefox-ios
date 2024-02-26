@@ -46,7 +46,6 @@ class AddressAutofillCoordinator: BaseCoordinator {
     /// - Parameter frame: The WKFrameInfo object representing the web view frame.
     func showAddressAutofill(frame: WKFrameInfo?) {
         let bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
-//        bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let viewModel = AddressListViewModel(profile: profile) // Initialize your view model
 
