@@ -57,7 +57,7 @@ class AddressListViewModel: ObservableObject {
                 } else if let error = error {
                     self.logger.log("Error fetching addresses",
                                     level: .warning,
-                                    category: .address,
+                                    category: .autofill,
                                     description: "Error fetching addresses: \(error.localizedDescription)")
                 }
             }

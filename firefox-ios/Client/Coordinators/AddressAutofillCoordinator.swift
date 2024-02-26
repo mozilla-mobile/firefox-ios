@@ -66,7 +66,7 @@ class AddressAutofillCoordinator: BaseCoordinator {
                 }
                 self.logger.log("Address bottom sheet injection \(error)",
                                 level: .debug,
-                                category: .webview)
+                                category: .autofill)
                 self.parentCoordinator?.didFinish(from: self)
             }
         }

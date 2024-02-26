@@ -190,13 +190,13 @@ class FormAutofillHelper: TabContentScript {
             webView.evaluateJavascriptInDefaultContentWorld(fillAddressInfoCallback, frame) { _, error in
                 if let error = error {
                     completion(error)
-                    logger.log("Address script error \(error)", level: .debug, category: .webview)
+                    logger.log("Address script error \(error)", level: .debug, category: .autofill)
                 } else {
                     completion(nil)
                 }
             }
         } catch let error as NSError {
-            logger.log("Address script error \(error)", level: .debug, category: .webview)
+            logger.log("Address script error \(error)", level: .debug, category: .autofill)
         }
     }
 
