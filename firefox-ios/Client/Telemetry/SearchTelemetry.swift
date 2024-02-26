@@ -61,6 +61,19 @@ enum SearchTelemetryValues {
         case persistedSearchTermsRefined = "persisted_search_terms_refined"
     }
 
+    enum Provider: String {
+        case iOS_app
+    }
+
+    enum EngagementType: String {
+        case tap
+        case enter
+        case dropGo = "drop_go"
+        case pasteGo = "paste_go"
+        case dismiss
+        case help
+    }
+
     enum Groups: String {
         case heuristic
         case adaptiveHistory = "adaptive_history"
@@ -90,6 +103,24 @@ enum SearchTelemetryValues {
         case suggestSponsor = "suggest_sponsor"
         case suggestNonSponsor = "suggest_non_sponsor"
     }
+
+    enum SelectedResult: String {
+        case unknown
+        case bookmark
+        case history
+        case keyword
+        case searchEngine = "search_engine"
+        case searchSuggest = "search_suggest"
+        case searchHistory = "search_history"
+        case url
+        case action
+        case tab
+        case remoteTab = "remote_tab"
+        case tabToSearch = "tab_to_search"
+        case topSite = "top_site"
+        case suggestSponsor = "suggest_sponsor"
+        case suggestNonSponsor = "suggest_non_sponsor"
+    }
 }
 
 class SearchTelemetry {
@@ -100,6 +131,8 @@ class SearchTelemetry {
     private var tabManager: TabManager
 
     var interactionType: SearchTelemetryValues.Interaction = .typed
+    var selectedResult: SearchTelemetryValues.SelectedResult = .unknown
+    var engagementType: SearchTelemetryValues.EngagementType = .tap
     var impressionTelemetryTimer: Timer?
 
     var remoteClientTabs = [ClientTabsSearchWrapper]()
@@ -232,19 +265,82 @@ class SearchTelemetry {
         let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
         let results = listResultTypes()
 
-        let extraDetails = [reasonKey: reason,
-                               sapKey: sap,
-                       interactionKey: interaction,
-                        searchModeKey: searchMode,
-                            nCharsKey: nChars,
-                            nWordsKey: nWords,
-                          nResultsKey: nResults,
-                            groupsKey: groups,
-                           resultsKey: results] as [String: Any]
+        let extraDetails = [
+            reasonKey: reason,
+            sapKey: sap,
+            interactionKey: interaction,
+            searchModeKey: searchMode,
+            nCharsKey: nChars,
+            nWordsKey: nWords,
+            nResultsKey: nResults,
+            groupsKey: groups,
+            resultsKey: results]
+        as [String: Any]
 
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .urlbarImpression,
+                                     extras: extraDetails)
+    }
+
+    // MARK: Engagement Telemetry
+    func recordURLBarSearchEngagementTelemetryEvent() {
+        guard let tab = tabManager.selectedTab else { return }
+
+        let sapKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.sap.rawValue
+        let sap = checkSAP(for: tab).rawValue
+
+        let interactionKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.interaction.rawValue
+        let interaction = interactionType.rawValue
+
+        let searchModeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.searchMode.rawValue
+        let searchMode = SearchTelemetryValues.SearchMode.tabs.rawValue
+
+        let nCharsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nChars.rawValue
+        let nChars = Int32(searchQuery.count)
+
+        let nWordsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nWords.rawValue
+        let nWords = numberOfWords(in: searchQuery)
+
+        let nResultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.nResults.rawValue
+        let nResults = Int32(numberOfSearchResults())
+
+        let selectedResultKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResult.rawValue
+        let selectedResult = selectedResult.rawValue
+
+        let selectedResultSubtypeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.selectedResultSubtype.rawValue
+        let selectedResultSubtype = selectedResult
+
+        let providerKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.provider.rawValue
+        let provider = tab.getProviderForUrl().rawValue
+
+        let engagementTypeKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.engagementType.rawValue
+        let engagementType = engagementType.rawValue
+
+        let groupsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.groups.rawValue
+        let groups = listGroupTypes()
+
+        let resultsKey = TelemetryWrapper.EventExtraKey.UrlbarTelemetry.results.rawValue
+        let results = listResultTypes()
+
+        let extraDetails = [
+            sapKey: sap,
+            interactionKey: interaction,
+            searchModeKey: searchMode,
+            nCharsKey: nChars,
+            nWordsKey: nWords,
+            nResultsKey: nResults,
+            selectedResultKey: selectedResult,
+            selectedResultSubtypeKey: selectedResultSubtype,
+            providerKey: provider,
+            engagementTypeKey: engagementType,
+            groupsKey: groups,
+            resultsKey: results
+        ] as [String: Any]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .urlbarEngagement,
                                      extras: extraDetails)
     }
 

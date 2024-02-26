@@ -22,8 +22,8 @@ struct AutofillHeaderView: View {
     @Environment(\.themeType)
     var theme
 
-    private var title: String
-    private var subtitle: String?
+    var title: String
+    var subtitle: String?
 
     init(title: String, subtitle: String? = nil) {
         self.title = title
@@ -73,11 +73,13 @@ struct AutofillHeaderView: View {
     }
 }
 
-#Preview {
-    AutofillHeaderView(
-        title: "Use this login?",
-        subtitle: "You’ll sign into cnn.com"
-    )
-    .previewLayout(.sizeThatFits)
-    .padding()
+struct AutofillHeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        AutofillHeaderView(
+                title: "Use this login?",
+                subtitle: "You’ll sign into cnn.com"
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
 }

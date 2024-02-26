@@ -11,5 +11,6 @@ You have to check all boxes before merging
 - [ ] Updated the PR name to follow our [PR naming guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
 - [ ] Wrote unit tests and/or ensured the tests suite is passing
 - [ ] When working on UI, I checked and implemented accessibility (minimum Dynamic Text and VoiceOver)
-- [ ] If needed I updated documentation / comments for complex code and public methods
+- [ ] If needed, I updated documentation / comments for complex code and public methods
+- [ ] If needed, added a backport comment (example `@Mergifyio backport release/v120`)
 

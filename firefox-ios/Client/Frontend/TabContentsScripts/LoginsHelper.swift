@@ -127,7 +127,7 @@ class LoginsHelper: TabContentScript {
               let type = res["type"] as? String
         else { return }
 
-        //NOTE: FXIOS-3856 will further enhance the logs into actual callback
+        // NOTE: FXIOS-3856 will further enhance the logs into actual callback
         if let parsedMessage = parseFieldFocusMessage(from: res) {
             logger.log("Parsed message \(String(describing: parsedMessage))",
                        level: .debug,

@@ -90,14 +90,14 @@ class SearchViewControllerTest: XCTestCase {
           FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: false, .wikipedia: false])
        })
 
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        engines.shouldShowFirefoxSuggestions = false
+        engines.shouldShowSponsoredSuggestions = false
         await searchViewController.loadFirefoxSuggestions()?.value
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
 
         // Providers set to false, so regardless of the prefs, we shouldn't see anything
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = true
         await searchViewController.loadFirefoxSuggestions()?.value
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
@@ -107,8 +107,8 @@ class SearchViewControllerTest: XCTestCase {
           FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: true, .wikipedia: true])
        })
 
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        engines.shouldShowFirefoxSuggestions = false
+        engines.shouldShowSponsoredSuggestions = false
         await searchViewController.loadFirefoxSuggestions()?.value
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 0)
     }
@@ -118,15 +118,15 @@ class SearchViewControllerTest: XCTestCase {
           FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: true, .wikipedia: true])
        })
 
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = true
         await searchViewController.loadFirefoxSuggestions()?.value
 
         XCTAssertEqual(searchViewController.firefoxSuggestions.count, 2)
     }
 
     func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        engines.shouldShowSponsoredSuggestions = true
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
                                              Site(url: "https://example.com", title: "Test2"),
                                              Site(url: "https://example.com?a=b&c=d", title: "Test3")])
@@ -135,7 +135,7 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     func testHistoryAndBookmarksAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        engines.shouldShowSponsoredSuggestions = false
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
                                              Site(url: "https://example.com", title: "Test2"),
                                              Site(url: "https://example.com?a=b&c=d", title: "Test3")])
@@ -144,7 +144,7 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     func testSyncedTabsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        engines.shouldShowSponsoredSuggestions = true
         let remoteTab1 = RemoteTab(
             clientGUID: "1",
             URL: URL(string: "www.mozilla.org?mfadid=adm")!,
@@ -180,7 +180,7 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     func testSyncedTabsAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
-        profile.prefs.setBool(false, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
+        engines.shouldShowSponsoredSuggestions = false
 
         let remoteTab1 = RemoteTab(
             clientGUID: "1",
@@ -225,8 +225,8 @@ class SearchViewControllerTest: XCTestCase {
             tabManager: MockTabManager()
         )
 
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = true
         await searchViewController.loadFirefoxSuggestions()?.value
 
         XCTAssert(searchViewController.firefoxSuggestions.isEmpty)
@@ -241,10 +241,60 @@ class SearchViewControllerTest: XCTestCase {
             tabManager: MockTabManager()
         )
 
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowSponsoredSuggestions)
-        profile.prefs.setBool(true, forKey: PrefsKeys.FirefoxSuggestShowNonSponsoredSuggestions)
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = true
         await searchViewController.loadFirefoxSuggestions()?.value
 
-        XCTAssert(searchViewController.firefoxSuggestions.isEmpty)
+        XCTAssertTrue(searchViewController.firefoxSuggestions.isEmpty)
+    }
+
+    func testNonSponsoredAndSponsoredSuggestionsAreShownInPrivateBrowsingMode() async throws {
+        let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
+        let searchViewController = SearchViewController(
+            profile: profile,
+            viewModel: viewModel,
+            model: engines,
+            tabManager: MockTabManager()
+        )
+
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = true
+        engines.shouldShowPrivateModeFirefoxSuggestions = true
+        await searchViewController.loadFirefoxSuggestions()?.value
+
+        XCTAssertFalse(searchViewController.firefoxSuggestions.isEmpty)
+    }
+
+    func testNonSponsoredSuggestionsAreShownInPrivateBrowsingMode() async throws {
+        let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
+        let searchViewController = SearchViewController(
+            profile: profile,
+            viewModel: viewModel,
+            model: engines,
+            tabManager: MockTabManager()
+        )
+
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = false
+        engines.shouldShowPrivateModeFirefoxSuggestions = true
+        await searchViewController.loadFirefoxSuggestions()?.value
+
+        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 1)
+        XCTAssertFalse(searchViewController.firefoxSuggestions.first!.isSponsored)
+    }
+
+    func testNonSponsoredAndSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
+        let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
+        let searchViewController = SearchViewController(
+            profile: profile,
+            viewModel: viewModel,
+            model: engines,
+            tabManager: MockTabManager()
+        )
+
+        engines.shouldShowPrivateModeFirefoxSuggestions = false
+        await searchViewController.loadFirefoxSuggestions()?.value
+
+        XCTAssertTrue(searchViewController.firefoxSuggestions.isEmpty)
     }
 }
