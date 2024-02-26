@@ -821,7 +821,7 @@ workflows:
     - script@1.1:
         inputs:
         - content: |-
-            #!/usr/bin/env bashset -ex
+            #!/usr/bin/env bash
             # fail if any commands fails
             set -e
             # debug log
@@ -883,7 +883,7 @@ workflows:
     - script@1.1:
         inputs:
         - content: |-
-            #!/usr/bin/env bashset -ex
+            #!/usr/bin/env bash
             # fail if any commands fails
             set -e
             # debug log
@@ -898,7 +898,7 @@ workflows:
             export PATH=/Users/vagrant/.asdf/installs/ruby/3.2.3/bin/fastlane:$PATH
             which fastlane
             fastlane -version
-            
+
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
             mkdir -p artifacts
