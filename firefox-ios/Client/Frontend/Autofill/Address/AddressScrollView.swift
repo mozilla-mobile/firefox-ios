@@ -18,7 +18,7 @@ struct AddressScrollView: View {
     @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
     // Environment variable to access the presentation mode
-    @Environment(\.presentationMode) 
+    @Environment(\.presentationMode)
     var presentationMode
 
     var body: some View {
