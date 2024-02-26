@@ -2,7 +2,7 @@
 "Cancel" = "Скасувати";
 
 /* The button that clears private data. */
-"OK" = "Гаразд";
+"OK" = "OK";
 
 /* Description of the confirmation dialog shown when a user tries to clear their private data. */
 "This action will clear all of your private data. It cannot be undone." = "Ця дія призведе до стирання всіх ваших особистих даних. Її неможливо скасувати.";

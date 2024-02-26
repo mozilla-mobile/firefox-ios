@@ -7,6 +7,9 @@
 /* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
 "Addresses.Settings.Switch.Title.v124" = "Αποθήκευση και συμπλήρωση διευθύνσεων";
 
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "Χρήση αποθηκευμένης διεύθυνσης";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Προσθήκη κάρτας";
 
@@ -104,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Μάθετε περισσότερα για τις Προτάσεις Firefox";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "Εναλλακτικές μηχανές αναζήτησης";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Εναλλακτικές μηχανές αναζήτησης";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Αποτελέσματα από αναζητήσεις, ιστορικό, σελιδοδείκτες και άλλα";
@@ -145,8 +148,14 @@
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
 "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Αναζήτηση σελιδοδεικτών";
 
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Αναζήτηση συγχρονισμένων καρτελών";
+
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Λάβετε προτάσεις από το διαδίκτυο που σχετίζονται με την αναζήτησή σας";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Λάβετε προτάσεις από το %@ που σχετίζονται με την αναζήτησή σας";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Προτάσεις από το %@";
