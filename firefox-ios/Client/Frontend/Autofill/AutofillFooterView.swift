@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 
 struct AutofillFooterView: View {
-    // Constants for UI layout and styling adapted for LoginAutoFill feature
+    // Constants for UI layout and styling adapted for LoginAutofill feature
     private enum UX {
         static let actionButtonFontSize: CGFloat = 16
         static let actionButtonLeadingSpace: CGFloat = 0
@@ -59,13 +59,11 @@ struct AutofillFooterView: View {
     }
 }
 
-struct AutofillFooterView_Previews: PreviewProvider {
-    static var previews: some View {
-        AutofillFooterView(
-            title: "Manage Login Info",
-            primaryAction: { }
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
-    }
+#Preview {
+    AutofillFooterView(
+        title: "Manage Login Info",
+        primaryAction: { }
+    )
+    .previewLayout(.sizeThatFits)
+    .padding()
 }
