@@ -120,7 +120,7 @@ class SearchEngines {
         return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
     }
 
-    var shouldShowSearchSuggestions: Bool = true {
+    var shouldShowSearchSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowSearchSuggestions,
@@ -129,7 +129,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowBrowsingHistorySuggestions: Bool = true {
+    var shouldShowBrowsingHistorySuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowBrowsingHistorySuggestions,
@@ -138,7 +138,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowBookmarksSuggestions: Bool = true {
+    var shouldShowBookmarksSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowBookmarksSuggestions,
@@ -147,7 +147,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowSyncedTabsSuggestions: Bool = true {
+    var shouldShowSyncedTabsSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowSyncedTabsSuggestions,
@@ -156,7 +156,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowFirefoxSuggestions: Bool = true {
+    var shouldShowFirefoxSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowFirefoxSuggestions,
@@ -165,7 +165,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowSponsoredSuggestions: Bool = true {
+    var shouldShowSponsoredSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowSponsoredSuggestions,
@@ -174,7 +174,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowPrivateModeFirefoxSuggestions: Bool = false {
+    var shouldShowPrivateModeFirefoxSuggestions = false {
         didSet {
             prefs.setBool(
                 shouldShowPrivateModeFirefoxSuggestions,
@@ -183,7 +183,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowPrivateModeSearchSuggestions: Bool = false {
+    var shouldShowPrivateModeSearchSuggestions = false {
         didSet {
             prefs.setBool(
                 shouldShowPrivateModeSearchSuggestions,
