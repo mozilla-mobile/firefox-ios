@@ -47,9 +47,8 @@ class AddressAutofillCoordinator: BaseCoordinator {
     func showAddressAutofill(frame: WKFrameInfo?) {
         let bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
 
-        let viewModel = AddressListViewModel(profile: profile) // Initialize your view model
+        let viewModel = AddressListViewModel(profile: profile)
 
-        // Set the address selection callback closure
         viewModel.addressSelectionCallback = { [weak self] selectedAddress in
             // Perform actions with the selected address, such as injecting it into the form
             guard let self = self else { return }
