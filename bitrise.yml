@@ -827,9 +827,8 @@ workflows:
             # debug log
             set -x
             which fastlane
-            fastlane -version
-            gem install fastlane -v 2.216.0 --no-document --verbose
-            asdf reshim fastlane 2.216.0
+            asdf install fastlane 2.216.0
+            asdf global fastlane 2.216.0
             which fastlane
             fastlane -version
 
@@ -890,8 +889,8 @@ workflows:
             # fastlane update_fastlane
             which fastlane
             fastlane -version
-            gem install fastlane -v 2.216.0 --no-document --verbose
-            asdf reshim fastlane 2.216.0
+            asdf install fastlane 2.216.0
+            asdf global fastlane 2.216.0
             which fastlane
             fastlane -versionn
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
