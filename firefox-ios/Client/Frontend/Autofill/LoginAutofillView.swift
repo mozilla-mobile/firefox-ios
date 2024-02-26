@@ -15,7 +15,7 @@ struct LoginAutofillView: View {
         VStack {
             AutofillHeaderView(
                 title: String.PasswordAutofill.UseSavedPasswordFromHeader,
-                subtitle: String(format: String.PasswordAutofill.SignInWithSavedPassword, "cnn.com")
+                subtitle: String(format: String.PasswordAutofill.SignInWithSavedPassword, viewModel.shortDisplayString)
             )
             LoginListView(viewModel: viewModel)
             AutofillFooterView(
@@ -31,6 +31,7 @@ struct LoginAutofillView: View {
 #Preview {
     LoginAutofillView(
         viewModel: LoginListViewModel(
+            tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),
             onLoginCellTap: { _ in },

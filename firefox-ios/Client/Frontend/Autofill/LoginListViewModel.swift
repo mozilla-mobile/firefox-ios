@@ -6,20 +6,28 @@ import Common
 import SwiftUI
 import Storage
 
+@MainActor
 class LoginListViewModel: ObservableObject {
     @Published var logins: [EncryptedLogin] = []
 
+    private let tabURL: URL
     private let loginStorage: LoginStorage
     private let logger: Logger
     let onLoginCellTap: (EncryptedLogin) -> Void
     let manageLoginInfoAction: () -> Void
 
+    var shortDisplayString: String {
+        tabURL.secondLevelDomainAndTLD() ?? ""
+    }
+
     init(
+        tabURL: URL,
         loginStorage: LoginStorage,
         logger: Logger,
         onLoginCellTap: @escaping (EncryptedLogin) -> Void,
         manageLoginInfoAction: @escaping () -> Void
     ) {
+        self.tabURL = tabURL
         self.loginStorage = loginStorage
         self.logger = logger
         self.onLoginCellTap = onLoginCellTap
@@ -28,7 +36,11 @@ class LoginListViewModel: ObservableObject {
 
     func fetchLogins() async {
         do {
-            self.logins = try await loginStorage.listLogins()
+            let logins = try await loginStorage.listLogins()
+            self.logins = logins.filter { login in
+                guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+                return recordHostnameURL.isRelated(toURL: tabURL)
+            }
         } catch {
             self.logger.log("Error fetching logins",
                             level: .warning,

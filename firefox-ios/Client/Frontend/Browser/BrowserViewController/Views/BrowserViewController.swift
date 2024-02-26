@@ -2272,13 +2272,12 @@ extension BrowserViewController: LegacyTabDelegate {
                         tab.webView?.accessoryView.reloadViewFor(.login)
                         tab.webView?.reloadInputViews()
                     }
-                }
-
-                tab.webView?.accessoryView.savedLoginsClosure = {
-                    DispatchQueue.main.async { [weak self] in
-                        // Dismiss keyboard
-                        webView.resignFirstResponder()
-                        self?.authenticateSelectSavedLoginsClosureBottomSheet()
+                    tab.webView?.accessoryView.savedLoginsClosure = {
+                        Task { @MainActor [weak self] in
+                            // Dismiss keyboard
+                            webView.resignFirstResponder()
+                            self?.authenticateSelectSavedLoginsClosureBottomSheet(tabURL: tabURL)
+                        }
                     }
                 }
             }
@@ -2329,11 +2328,11 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
 
-    private func authenticateSelectSavedLoginsClosureBottomSheet() {
+    private func authenticateSelectSavedLoginsClosureBottomSheet(tabURL: URL) {
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
-                self.navigationHandler?.showSavedLoginAutofill()
+                self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:

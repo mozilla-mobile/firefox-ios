@@ -562,9 +562,10 @@ class BrowserCoordinator: BaseCoordinator,
         )
     }
 
-    func showSavedLoginAutofill() {
+    @MainActor 
+    func showSavedLoginAutofill(tabURL: URL) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showSavedLoginAutofill()
+        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL)
     }
 
     func showRequiredPassCode() {

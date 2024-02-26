@@ -54,6 +54,7 @@ struct LoginListView_Previews: PreviewProvider {
     static var previews: some View {
         LoginListView(
             viewModel: LoginListViewModel(
+                tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
                 loginStorage: MockLoginStorage(),
                 logger: MockLogger(),
                 onLoginCellTap: { _ in },

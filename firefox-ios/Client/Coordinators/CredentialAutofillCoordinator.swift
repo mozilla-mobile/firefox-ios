@@ -113,13 +113,19 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
     }
 
-    func showSavedLoginAutofill() {
+    @MainActor 
+    func showSavedLoginAutofill(tabURL: URL) {
         let viewModel = LoginListViewModel(
+            tabURL: tabURL,
             loginStorage: profile.logins,
-            logger: MockLogger(),
+            logger: logger,
             onLoginCellTap: { login in
+
             },
-            manageLoginInfoAction: {
+            manageLoginInfoAction: { [weak self] in
+                guard let self = self else { return }
+                self.parentCoordinator?.show(settings: .password)
+                self.parentCoordinator?.didFinish(from: self)
             }
         )
         let loginAutofillView = LoginAutofillView(viewModel: viewModel)
