@@ -22,48 +22,83 @@ protocol StyleDataProtocol {
 
 extension StyleData: StyleDataProtocol {}
 
-/// Message is a representation of `MessageData` from `GleanPlumb` that we can better utilize.
+/// Message is a facade object onto configuration provided by the Nimbus Messaging component
+/// and the Nimbus SDK.
 struct GleanPlumbMessage {
     /// The message Key, a unique identifier.
-    let id: String
+    ///
+    /// This is corresponds to a MessageKey string from Nimbus.
+    ///
+    public let id: String
 
-    /// An access point to MessageData from Nimbus Messaging.
-    internal let data: MessageDataProtocol
+    /// The underlying MessageData from Nimbus.
+    ///
+    /// Embedding apps should not read from this directly.
+    let data: MessageDataProtocol
 
-    /// The action to be done when a user positively engages with the message (CTA).
+    /// The action URL as resolved by the Nimbus Messaging component.
+    ///
+    /// Embedding apps should not read from this directly.
     let action: String
 
     /// The conditions that need to be satisfied for a message to be considered eligible to present.
+    ///
+    /// Embedding apps should not read from this directly.
     let triggers: [String]
 
     /// The access point to StyleData from Nimbus Messaging.
+    ///
+    /// Embedding apps should not read from this directly.
     let style: StyleDataProtocol
 
     /// The minimal data about a message that we should persist.
-    internal var metadata: GleanPlumbMessageMetaData
+    ///
+    /// Embedding apps should not read from this directly.
+    var metadata: GleanPlumbMessageMetaData
 
-    internal var isExpired: Bool {
+    /// Has the message been shown a maximal number of times?
+    ///
+    /// Embedding apps should not read from this directly.
+    var isExpired: Bool {
         metadata.isExpired || metadata.impressions >= style.maxDisplayCount
     }
 
+    /// Has the message been tapped on or dismissed.
+    ///
+    /// Embedding apps should not read from this directly.
     var isInteractedWith: Bool {
         metadata.isExpired || metadata.dismissals > 0
     }
 
-    var buttonLabel: String? {
+    /// The surface id for this message.
+    ///
+    /// Embedding apps should not read from this directly.
+    var surface: MessageSurfaceId {
+        data.surface
+    }
+}
+
+/// Public properties for this message.
+///
+/// These are the only properties needed by the message surfaces.
+extension GleanPlumbMessage {
+    /// Button label. If the button is tapped then call `messaging.onMessageClicked(message)`
+    ///
+    /// If the button label is `nil`, don't draw a button, and make the whole message surface tappable.
+    public var buttonLabel: String? {
         data.buttonLabel
     }
 
-    var text: String {
+    /// The message to be displayed
+    public var text: String {
         data.text
     }
 
-    var title: String? {
+    /// The title to be displayed above the message.
+    ///
+    /// If this is `nil` then do not display a title.
+    public var title: String? {
         data.title
-    }
-
-    var surface: MessageSurfaceId {
-        data.surface
     }
 }
 

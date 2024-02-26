@@ -121,6 +121,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
             XCTFail("Expected to retrieve message")
             return
         }
+        subject.onMessageDisplayed(observed)
         XCTAssertEqual(observed.id, expectedId)
 
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 1)

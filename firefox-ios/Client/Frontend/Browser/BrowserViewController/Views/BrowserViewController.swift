@@ -482,6 +482,8 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
+        nightModeUpdates()
+
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
@@ -495,6 +497,16 @@ class BrowserViewController: UIViewController,
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
+    }
+
+    private func nightModeUpdates() {
+        if NightModeHelper.isActivated(),
+           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+            NightModeHelper.turnOff(tabManager: tabManager)
+            themeManager.reloadTheme()
+        }
+
+        NightModeHelper.cleanNightModeDefaults()
     }
 
     private func dismissModalsIfStartAtHome() {
@@ -2274,7 +2286,7 @@ extension BrowserViewController: LegacyTabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
-        let nightModeHelper = NightModeHelper(tab: tab)
+        let nightModeHelper = NightModeHelper()
         tab.addContentScript(nightModeHelper, name: NightModeHelper.name())
 
         // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
@@ -2472,12 +2484,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
 
         case .abandoned:
+            searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break

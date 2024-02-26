@@ -416,6 +416,7 @@ class Tab: NSObject, ThemeApplicable {
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
+        self.firstCreatedTime = Date().toTimestamp()
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(

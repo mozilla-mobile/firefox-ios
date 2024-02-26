@@ -94,6 +94,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         updateCurrentTheme(to: fetchSavedThemeType())
     }
 
+    public func reloadTheme() {
+        updateCurrentTheme(to: fetchSavedThemeType())
+    }
+
     public func systemThemeChanged() {
         // Ignore if:
         // the system theme is off

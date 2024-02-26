@@ -114,8 +114,10 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
-        favicon.image = UIImage(named: StandardImageIdentifiers.Large.globe)?
-            .withRenderingMode(.alwaysTemplate)
+        let identifier = StandardImageIdentifiers.Large.globe
+        if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
+            favicon.manuallySetImage(globeFavicon)
+        }
 
         if !tabModel.isFxHomeTab, let tabURL = tabModel.url?.absoluteString {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: tabURL))

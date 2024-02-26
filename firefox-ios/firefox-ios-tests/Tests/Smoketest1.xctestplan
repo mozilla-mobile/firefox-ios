@@ -50,6 +50,7 @@
         "BookmarksTests\/testBookmarkingUI()",
         "BookmarksTests\/testDeleteBookmarkContextMenu()",
         "BookmarksTests\/testDeleteBookmarkSwiping()",
+        "BookmarksTests\/testEditBookmark()",
         "BookmarksTests\/testRecentlyBookmarked()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",
