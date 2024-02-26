@@ -44,40 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var menuBuilderHelper: MenuBuilderHelper?
     private var metricKitWrapper = MetricKitWrapper()
 
-    /// Tracking active status of the application.
-    private var isActive = false
-
-    /// Handle the `willEnterForegroundNotification` the same way Glean handles it.
-    func handleForegroundEvent() {
-        if !isActive {
-            GleanMetrics.Pings.shared.tempBaseline.submit(reason: .active)
-            GleanMetrics.BaselineValidation.startupDuration.start()
-            GleanMetrics.BaselineValidation.baselineDuration.start()
-            NSUserDefaultsPrefs(prefix: "profile").setBool(true, forKey: AppConstants.prefGleanTempDirtyFlag)
-
-            isActive = true
-        }
-    }
-
-    /// Handle the `didBecomeActiveNotification` the way Glean would handle it
-    func handleVisibleEvent() {
-        GleanMetrics.BaselineValidation.startupDuration.stop()
-        GleanMetrics.Pings.shared.tempBaseline.submit(reason: .foreground)
-        GleanMetrics.BaselineValidation.visibleDuration.start()
-    }
-
-    /// Handle the `didEnterBackgroundNotification` the same way Glean handles it.
-    func handleBackgroundEvent() {
-        if isActive {
-            GleanMetrics.BaselineValidation.baselineDuration.stop()
-            GleanMetrics.BaselineValidation.visibleDuration.stop()
-            GleanMetrics.Pings.shared.tempBaseline.submit(reason: .inactive)
-            NSUserDefaultsPrefs(prefix: "profile").setBool(false, forKey: AppConstants.prefGleanTempDirtyFlag)
-
-            isActive = false
-        }
-    }
-
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions
@@ -113,19 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
-
-        // Handle the dirty bit the same way Glean handles it
-        // and submit the right ping.
-        let prefs = NSUserDefaultsPrefs(prefix: "profile")
-        let dirtyFlag = prefs.boolForKey(AppConstants.prefGleanTempDirtyFlag) ?? false
-        prefs.setBool(true, forKey: AppConstants.prefGleanTempDirtyFlag)
-        if dirtyFlag {
-            GleanMetrics.Pings.shared.tempBaseline.submit(reason: .dirtyStartup)
-        }
-
-        // Glean does this as part of the LifecycleObserver too.
-        // `isActive` tracks active status to avoid double-triggers.
-        handleForegroundEvent()
 
         // Set up a web server that serves us static content.
         // Do this early so that it is ready when the UI is presented.
@@ -197,7 +150,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile.syncManager.applicationDidBecomeActive()
         webServerUtil?.setUpWebServer()
 
-        handleVisibleEvent()
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
         // update top sites widget
@@ -230,7 +182,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    level: .info,
                    category: .lifecycle)
 
-        handleBackgroundEvent()
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
         profile.syncManager.applicationDidEnterBackground()
@@ -252,10 +203,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                    category: .lifecycle)
     }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        handleForegroundEvent()
-    }
-
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
         profile.shutdown()
@@ -275,8 +222,7 @@ extension AppDelegate: Notifiable {
     private func addObservers() {
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
                                                           UIApplication.willResignActiveNotification,
-                                                          UIApplication.didEnterBackgroundNotification,
-                                                          UIApplication.willEnterForegroundNotification])
+                                                          UIApplication.didEnterBackgroundNotification])
     }
 
     /// When migrated to Scenes, these methods aren't called.
@@ -289,8 +235,6 @@ extension AppDelegate: Notifiable {
             applicationWillResignActive(UIApplication.shared)
         case UIApplication.didEnterBackgroundNotification:
             applicationDidEnterBackground(UIApplication.shared)
-        case UIApplication.willEnterForegroundNotification:
-            applicationWillEnterForeground(UIApplication.shared)
 
         default: break
         }
