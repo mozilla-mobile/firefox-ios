@@ -49,6 +49,7 @@ public struct StandardImageIdentifiers {
         public static let deviceDesktop = "deviceDesktopLarge"
         public static let deviceDesktopSend = "deviceDesktopSendLarge"
         public static let deviceMobile = "deviceMobileLarge"
+        public static let deviceTablet = "deviceTabletLarge"
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
         public static let folder = "folderLarge"
