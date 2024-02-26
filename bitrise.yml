@@ -831,7 +831,7 @@ workflows:
             gem install fastlane -v 2.216.0
             which fastlane
             fastlane -version
-            export PATH=/Users/vagrant/.asdf/installs/ruby/3.2.3/bin/fastlane:$PATH
+            export PATH=/Users/vagrant/.asdf/installs/ruby/3.2.3/bin/:$PATH
             which fastlane
             fastlane -version
 
@@ -895,7 +895,7 @@ workflows:
             gem install fastlane -v 2.216.0
             which fastlane
             fastlane -version
-            export PATH=/Users/vagrant/.asdf/installs/ruby/3.2.3/bin/fastlane:$PATH
+            export PATH=/Users/vagrant/.asdf/installs/ruby/3.2.3/bin/:$PATH
             which fastlane
             fastlane -version
 
