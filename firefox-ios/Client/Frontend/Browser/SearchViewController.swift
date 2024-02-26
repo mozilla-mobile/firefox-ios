@@ -146,8 +146,8 @@ class SearchViewController: SiteTableViewController,
     var hasFirefoxSuggestions: Bool {
         let dataCount = data.count
         return dataCount != 0 &&
-                (model.shouldShowBookmarksSuggestions ||
-                model.shouldShowBrowsingHistorySuggestions)
+                (model.shouldShowBookmarksSuggestions
+                || model.shouldShowBrowsingHistorySuggestions)
                 || !filteredOpenedTabs.isEmpty
                 || (!filteredRemoteClientTabs.isEmpty && model.shouldShowSyncedTabsSuggestions)
                 || !searchHighlights.isEmpty

@@ -189,42 +189,26 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .searchEnginesSuggestions:
             switch indexPath.item {
             case SearchSuggestItem.defaultSuggestions.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
                     defaultValue: model.shouldShowSearchSuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.ShowSearchSuggestions
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleSearchSuggestions)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleSearchSuggestions),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
 
             case SearchSuggestItem.privateSuggestions.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
                     defaultValue: model.shouldShowPrivateModeSearchSuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.PrivateSessionSetting
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleShowSearchSuggestionsInPrivateMode),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
                 cell.isHidden = !model.shouldShowSearchSuggestions
 
             default: break
@@ -233,66 +217,40 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case .firefoxSuggestSettings:
             switch indexPath.item {
             case FirefoxSuggestItem.browsingHistory.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions,
                     defaultValue: model.shouldShowBrowsingHistorySuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.SearchBrowsingHistory
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleBrowsingHistorySuggestions)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleBrowsingHistorySuggestions),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
 
             case FirefoxSuggestItem.bookmarks.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions,
                     defaultValue: model.shouldShowBookmarksSuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.SearchBookmarks
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleBookmarksSuggestions)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleBookmarksSuggestions),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
 
             case FirefoxSuggestItem.syncedTabs.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions,
                     defaultValue: model.shouldShowSyncedTabsSuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.SearchSyncedTabs
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleSyncedTabsSuggestions)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleSyncedTabsSuggestions),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
 
             case FirefoxSuggestItem.nonSponsored.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
                     defaultValue: model.shouldShowFirefoxSuggestions,
                     titleText: String.localizedStringWithFormat(
@@ -301,21 +259,13 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     statusText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
                         AppName.shortName.rawValue
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleEnableNonSponsoredSuggestions)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleEnableNonSponsoredSuggestions),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
 
             case FirefoxSuggestItem.sponsored.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
                     defaultValue: model.shouldShowSponsoredSuggestions,
                     titleText: String.localizedStringWithFormat(
@@ -324,39 +274,22 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     statusText: String.localizedStringWithFormat(
                         .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
                         AppName.shortName.rawValue
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleEnableSponsoredSuggestions)
                 )
-                setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleEnableSponsoredSuggestions),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
                 cell.isHidden = !model.shouldShowFirefoxSuggestions
 
             case FirefoxSuggestItem.privateSuggestions.rawValue:
-                let setting = BoolSetting(
-                    prefs: profile.prefs,
-                    theme: themeManager.currentTheme,
+                buildSettingWith(
                     prefKey: PrefsKeys.SearchSettings.showPrivateModeFirefoxSuggestions,
                     defaultValue: model.shouldShowPrivateModeFirefoxSuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.PrivateSessionSetting
-                    )
+                    ),
+                    cell: cell,
+                    selector: #selector(didToggleShowFirefoxSuggestionsInPrivateMode)
                 )
-                setting.onConfigureCell(
-                    cell,
-                    theme: themeManager.currentTheme
-                )
-                setting.control.switchView.addTarget(
-                    self,
-                    action: #selector(didToggleShowFirefoxSuggestionsInPrivateMode),
-                    for: .valueChanged
-                )
-                cell.editingAccessoryView = setting.control
-                cell.selectionStyle = .none
                 cell.isHidden = !model.shouldShowFirefoxSuggestions
 
             case FirefoxSuggestItem.suggestionLearnMore.rawValue:
@@ -590,6 +523,33 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         navigationItem.rightBarButtonItem?.action = editing ?
         #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
+    }
+
+    // MARK: - Private Methods
+    private func buildSettingWith(
+        prefKey: String,
+        defaultValue: Bool,
+        titleText: String,
+        statusText: String? = nil,
+        cell: UITableViewCell,
+        selector: Selector
+    ) {
+        let setting = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme,
+            prefKey: prefKey,
+            defaultValue: defaultValue,
+            titleText: titleText,
+            statusText: statusText
+        )
+        setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+        setting.control.switchView.addTarget(
+            self,
+            action: selector,
+            for: .valueChanged
+        )
+        cell.editingAccessoryView = setting.control
+        cell.selectionStyle = .none
     }
 
     private func updateCells(at indexPaths: [IndexPath]) {

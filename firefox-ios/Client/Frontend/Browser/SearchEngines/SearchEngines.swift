@@ -43,8 +43,20 @@ class SearchEngines {
 
     init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
         self.prefs = prefs
+        self.fileAccessor = files
+        self.engineProvider = engineProvider
+        self.orderedEngines = []
+        self.disabledEngines = getDisabledEngines()
+        initPrefBasedSuggestions()
 
-        self.shouldShowSearchSuggestions = prefs.boolForKey(
+        getOrderedEngines { orderedEngines in
+            self.orderedEngines = orderedEngines
+            self.delegate?.searchEnginesDidUpdate()
+        }
+    }
+
+    private func initPrefBasedSuggestions() {
+        shouldShowSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showSearchSuggestions
         ) ?? true
         shouldShowBrowsingHistorySuggestions = prefs.boolForKey(
@@ -65,18 +77,9 @@ class SearchEngines {
         shouldShowPrivateModeFirefoxSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeFirefoxSuggestions
         ) ?? false
-        self.shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
+        shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
         ) ?? false
-        self.fileAccessor = files
-        self.engineProvider = engineProvider
-        self.orderedEngines = []
-        self.disabledEngines = getDisabledEngines()
-
-        getOrderedEngines { orderedEngines in
-            self.orderedEngines = orderedEngines
-            self.delegate?.searchEnginesDidUpdate()
-        }
     }
 
     var defaultEngine: OpenSearchEngine? {
@@ -117,7 +120,7 @@ class SearchEngines {
         return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
     }
 
-    var shouldShowSearchSuggestions: Bool {
+    var shouldShowSearchSuggestions: Bool = true {
         didSet {
             prefs.setBool(
                 shouldShowSearchSuggestions,
@@ -126,7 +129,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowBrowsingHistorySuggestions: Bool {
+    var shouldShowBrowsingHistorySuggestions: Bool = true {
         didSet {
             prefs.setBool(
                 shouldShowBrowsingHistorySuggestions,
@@ -135,7 +138,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowBookmarksSuggestions: Bool {
+    var shouldShowBookmarksSuggestions: Bool = true {
         didSet {
             prefs.setBool(
                 shouldShowBookmarksSuggestions,
@@ -144,7 +147,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowSyncedTabsSuggestions: Bool {
+    var shouldShowSyncedTabsSuggestions: Bool = true {
         didSet {
             prefs.setBool(
                 shouldShowSyncedTabsSuggestions,
@@ -153,7 +156,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowFirefoxSuggestions: Bool {
+    var shouldShowFirefoxSuggestions: Bool = true {
         didSet {
             prefs.setBool(
                 shouldShowFirefoxSuggestions,
@@ -162,7 +165,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowSponsoredSuggestions: Bool {
+    var shouldShowSponsoredSuggestions: Bool = true {
         didSet {
             prefs.setBool(
                 shouldShowSponsoredSuggestions,
@@ -171,7 +174,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowPrivateModeFirefoxSuggestions: Bool {
+    var shouldShowPrivateModeFirefoxSuggestions: Bool = false {
         didSet {
             prefs.setBool(
                 shouldShowPrivateModeFirefoxSuggestions,
@@ -180,7 +183,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowPrivateModeSearchSuggestions: Bool {
+    var shouldShowPrivateModeSearchSuggestions: Bool = false {
         didSet {
             prefs.setBool(
                 shouldShowPrivateModeSearchSuggestions,
