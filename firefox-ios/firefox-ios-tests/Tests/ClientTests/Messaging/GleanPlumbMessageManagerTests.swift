@@ -258,14 +258,81 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
 
-    func testManagerOnMessagePressed_withWebpage() {
-        let message = createMessage(messageId: messageId, action: "https://mozilla.com")
+    func testManagerOnMessagePressed_linkWithScheme() {
+        // {uuid} works for the mock message helper, but in reality, you'd use {app_id};
+        // this test is showing that:
+        // 1. the action itself is put through the message helper string templatng
+        // 2. an existing scheme is left in place.
+        // 3. that there is no spurious question mark when there are no parameters
+        let message = createMessage(messageId: messageId, action: "itms-apps://itunes.apple.com/app/id{uuid}")
         subject.onMessagePressed(message)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
         XCTAssertNotNil(applicationHelper.lastOpenURL)
-        XCTAssertEqual(applicationHelper.lastOpenURL?.absoluteString.hasPrefix(URL.mozInternalScheme), true)
+        XCTAssertEqual(applicationHelper.lastOpenURL!.absoluteString, "itms-apps://itunes.apple.com/app/idMY-UUID")
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_linkWithEmbeddedParam() {
+        // Test shows query params can be part of the action.
+        let message = createMessage(messageId: messageId, action: "itms-apps://itunes.apple.com/app/id?utm_param=foo")
+        subject.onMessagePressed(message)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        XCTAssertNotNil(applicationHelper.lastOpenURL)
+        XCTAssertEqual(applicationHelper.lastOpenURL!.absoluteString, "itms-apps://itunes.apple.com/app/id?utm_param=foo")
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_linkWithEmbeddedParamAndOneActionParam() {
+        // Test shows query param can be part of the action or part of the action-params.
+        let message = createMessage(messageId: messageId,
+                                    action: "fennec://open-url?private=true",
+                                    actionParams: [
+                                        "url": "https://example.com"
+                                    ])
+        subject.onMessagePressed(message)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        XCTAssertNotNil(applicationHelper.lastOpenURL)
+        XCTAssertEqual(applicationHelper.lastOpenURL!.absoluteString, "fennec://open-url?private=true&url=https://example.com")
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_linkWithOneParam() {
+        // This test is showing:
+        // 1. that string templating happens in the query param values
+        // 2. that the mozInternalScheme is used if no scheme is found.
+        // 3. that query param values are URL query encoded.
+        let message = createMessage(messageId: messageId, action: "://open-url", actionParams: ["url": "https://example.com?foo={uuid}&bar=baz"])
+        subject.onMessagePressed(message)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        XCTAssertNotNil(applicationHelper.lastOpenURL)
+        XCTAssertTrue(applicationHelper.lastOpenURL!.absoluteString.hasPrefix(URL.mozInternalScheme))
+        XCTAssertEqual(applicationHelper.lastOpenURL!.absoluteString, "\(URL.mozInternalScheme)://open-url?url=https://example.com?foo%3DMY-UUID%26bar%3Dbaz")
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_linkWithTwoParams() {
+        let message = createMessage(messageId: messageId,
+                                    action: "://open-url",
+                                    actionParams: [
+                                        "url": "https://example.com",
+                                        "private": "true"
+                                    ])
+        subject.onMessagePressed(message)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        XCTAssertNotNil(applicationHelper.lastOpenURL)
+        XCTAssertTrue(applicationHelper.lastOpenURL!.absoluteString.hasPrefix(URL.mozInternalScheme))
+        XCTAssertTrue(applicationHelper.lastOpenURL!.absoluteString.contains("url=https://example.com"))
+        XCTAssertTrue(applicationHelper.lastOpenURL!.absoluteString.contains("private=true"))
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
 
@@ -294,6 +361,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     private func createMessage(messageId: String,
                                action: String = "MAKE_DEFAULT_BROWSER",
+                               actionParams: [String: String] = [:],
                                surface: MessageSurfaceId = .newTabCard,
                                trigger: [String] = ["true"],
                                experiment: String? = nil,
@@ -308,6 +376,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                                                         isExpired: false)
         let data = MessageData(
             action: action,
+            actionParams: actionParams,
             buttonLabel: "buttonLabel-\(messageId)",
             experiment: experiment,
             isControl: isControl,

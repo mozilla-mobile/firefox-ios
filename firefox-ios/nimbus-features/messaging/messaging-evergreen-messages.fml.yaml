@@ -50,4 +50,6 @@ import:
                   - NEVER
                 text: ResearchSurface/Body.Text.v112
                 button-label: ResearchSurface/PrimaryButton.Label.v112
-                action: https://www.macrumors.com
+                action: OPEN_URL
+                action-params:
+                  url: https://www.macrumors.com
