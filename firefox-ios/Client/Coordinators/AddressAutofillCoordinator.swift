@@ -11,11 +11,10 @@ import WebKit
 class AddressAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
 
-    typealias BottomSheetCardParentCoordinator = BrowserNavigationHandler & ParentCoordinatorDelegate
     private let profile: Profile
     private let themeManager: ThemeManager
     private let tabManager: TabManager
-    private weak var parentCoordinator: BottomSheetCardParentCoordinator?
+    private weak var parentCoordinator: ParentCoordinatorDelegate?
 
     // MARK: - Initializers
 
@@ -29,7 +28,7 @@ class AddressAutofillCoordinator: BaseCoordinator {
     init(
         profile: Profile,
         router: Router,
-        parentCoordinator: BottomSheetCardParentCoordinator?,
+        parentCoordinator: ParentCoordinatorDelegate?,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         tabManager: TabManager
     ) {
