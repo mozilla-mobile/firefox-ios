@@ -828,7 +828,7 @@ workflows:
             set -x
             which fastlane
             fastlane -version
-            gem install fastlane -v 2.216.0 --no-document
+            gem install fastlane -v 2.216.0 --no-document --verbose
             which fastlane
             fastlane -version
 
@@ -889,7 +889,7 @@ workflows:
             # fastlane update_fastlane
             which fastlane
             fastlane -version
-            gem install fastlane -v 2.216.0 --no-document
+            gem install fastlane -v 2.216.0 --no-document --verbose
             which fastlane
             fastlane -versionn
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
