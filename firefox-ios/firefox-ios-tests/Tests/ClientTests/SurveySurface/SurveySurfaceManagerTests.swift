@@ -126,7 +126,8 @@ extension SurveySurfaceManagerTests {
         return GleanPlumbMessage(id: "12345",
                                  data: MockSurveyMessageDataProtocol(surface: surface),
                                  action: "https://mozilla.com",
-                                 triggers: [],
+                                 triggerIfAll: [],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }

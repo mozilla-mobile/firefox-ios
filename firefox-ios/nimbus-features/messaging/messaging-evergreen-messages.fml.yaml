@@ -27,10 +27,11 @@ import:
               default-browser:
                 surface: new-tab-card
                 style: FALLBACK
-                trigger:
-                  - I_AM_NOT_DEFAULT_BROWSER
+                trigger-if-all:
                   - SUPPORTS_DEFAULT_BROWSER
                   - ON_FOURTH_LAUNCH_THIS_YEAR
+                except-if-any:
+                  - I_AM_DEFAULT_BROWSER
                 title: Default Browser/DefaultBrowserCard.Title
                 text: Default Browser/DefaultBrowserCard.Description
                 button-label: Default Browser/DefaultBrowserCard.Button.v2
@@ -45,7 +46,7 @@ import:
               survey-surface-message:
                 surface: survey
                 style: SURVEY
-                trigger:
+                trigger-if-all:
                   - NEVER
                 text: ResearchSurface/Body.Text.v112
                 button-label: ResearchSurface/PrimaryButton.Label.v112

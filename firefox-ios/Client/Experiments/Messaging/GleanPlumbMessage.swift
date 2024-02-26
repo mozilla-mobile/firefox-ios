@@ -44,7 +44,12 @@ struct GleanPlumbMessage {
     /// The conditions that need to be satisfied for a message to be considered eligible to present.
     ///
     /// Embedding apps should not read from this directly.
-    let triggers: [String]
+    let triggerIfAll: [String]
+
+    /// The conditions that need to be not satisfied for a message to be considered eligible to present.
+    ///
+    /// Embedding apps should not read from this directly.
+    let exceptIfAny: [String]
 
     /// The access point to StyleData from Nimbus Messaging.
     ///

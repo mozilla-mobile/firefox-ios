@@ -122,7 +122,8 @@ class NotificationSurfaceManagerTests: XCTestCase {
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),
                                  action: action,
-                                 triggers: [],
+                                 triggerIfAll: [],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }
@@ -136,7 +137,8 @@ class NotificationSurfaceManagerTests: XCTestCase {
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),
                                  action: "://deep-link?url=homepanel/new-tab",
-                                 triggers: ["INACTIVE_NEW_USER", "ALLOWED_TIPS_NOTIFICATIONS"],
+                                 triggerIfAll: ["INACTIVE_NEW_USER", "ALLOWED_TIPS_NOTIFICATIONS"],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }

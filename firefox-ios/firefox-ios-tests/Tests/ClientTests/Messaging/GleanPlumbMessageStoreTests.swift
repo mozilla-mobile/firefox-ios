@@ -55,7 +55,8 @@ class GleanPlumbMessageStoreTests: XCTestCase {
         return GleanPlumbMessage(id: messageId,
                                  data: MockMessageData(),
                                  action: "MAKE_DEFAULT",
-                                 triggers: ["ALWAYS"],
+                                 triggerIfAll: ["ALWAYS"],
+                                 exceptIfAny: [],
                                  style: styleData,
                                  metadata: subject.getMessageMetadata(messageId: messageId))
     }

@@ -146,7 +146,8 @@ extension HomepageMessageCardViewModelTests {
         return GleanPlumbMessage(id: "12345",
                                  data: MockMessageDataProtocol(),
                                  action: "",
-                                 triggers: [],
+                                 triggerIfAll: [],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }
