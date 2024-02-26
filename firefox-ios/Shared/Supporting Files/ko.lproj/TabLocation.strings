@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "더 많은 옵션을 보려면 두 번 탭하고 길게 누르세요.";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "연결이 안전하지 않습니다. 향상된 추적 방지 기능이 꺼져 있습니다.";
 
