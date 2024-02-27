@@ -563,7 +563,7 @@ extension LegacyGridTabViewController: UIScrollViewAccessibilityDelegate {
 
 // MARK: - SwipeAnimatorDelegate
 extension LegacyGridTabViewController: SwipeAnimatorDelegate {
-    func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
+    func swipeAnimator(_ animator: SwipeAnimator) {
         guard let tabCell = animator.animatingView as? LegacyTabCell,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
