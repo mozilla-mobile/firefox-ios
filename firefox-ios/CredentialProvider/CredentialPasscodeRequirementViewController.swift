@@ -4,12 +4,20 @@
 
 import UIKit
 import Shared
+import Common
 
 protocol CredentialPasscodeRequirementViewControllerDelegate: AnyObject {
     func credentialPasscodeRequirementViewControllerDidDismiss()
 }
 
 class CredentialPasscodeRequirementViewController: UIViewController {
+    private struct UX {
+        static let titleFontSize: CGFloat = 32
+        static let taglineFontSize: CGFloat = 20
+        static let warningFontSize: CGFloat = 18
+        static let cancelButtonFontSize: CGFloat = 17
+        static let cancelButtonCornerRadius: CGFloat = 8
+    }
     var delegate: CredentialPasscodeRequirementViewControllerDelegate?
 
     private lazy var logoImageView: UIImageView = {
@@ -22,7 +30,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTitle2
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: UX.titleFontSize, weight: .bold)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -32,7 +40,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTagline
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: UX.taglineFontSize)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -41,23 +49,22 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     private lazy var warningLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: UX.warningFontSize)
         label.text = .LoginsPasscodeRequirementWarning
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
 
-    private lazy var cancelButton: UIButton = {
-        let button = UIButton(type: .custom)
+    private lazy var cancelButton: UIButton = .build { button in
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemRed
-        button.layer.cornerRadius = 8
+        button.layer.cornerRadius = UX.cancelButtonCornerRadius
         button.setTitle(.CancelString, for: .normal)
-        button.titleLabel?.font = LegacyDynamicFontHelper().MediumSizeBoldFontAS
-        button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        return button
-    }()
+        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
+                                                                             size: UX.cancelButtonFontSize)
+        button.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
