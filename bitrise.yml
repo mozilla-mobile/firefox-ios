@@ -4,10 +4,9 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     stages:
-    - l10n_screenshots: {}
-    # - pre_configuration: {}
-    # - build_applications: {}
-    # - run_tests: {}
+    - pre_configuration: {}
+    - build_applications: {}
+    - run_tests: {}
 stages:
   l10n_screenshots:
     workflows:
@@ -2129,13 +2128,15 @@ app:
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_build_and_test
+  workflow: L10nBuild
+  #pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - push_branch: release/v125
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
-  pipeline: pipeline_build_and_test
+  workflow: L10nBuild
+  #pipeline: pipeline_build_and_test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: release/v*
