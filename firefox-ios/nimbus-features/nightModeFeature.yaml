@@ -1,0 +1,19 @@
+# The configuration for the nightModeFeature feature
+features:
+  night-mode-feature:
+    description: >
+      Describes the night mode feature's configuration
+    variables:
+      enabled:
+        description: >
+          Whether night mode is available for users or not
+        type: Boolean
+        default: true
+    defaults:
+      - channel: beta
+        value:
+          enabled: true
+      - channel: developer
+        value:
+          enabled: true
+
