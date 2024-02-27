@@ -1427,11 +1427,14 @@ class BrowserViewController: UIViewController,
                 break
             }
 
+            // Ensure we do have a URL from that observer
+            guard let url = webView.url else { return }
+
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
-            if tab.url?.origin == webView.url?.origin {
-                tab.url = webView.url
+            if tab.url?.origin == url.origin {
+                tab.url = url
 
                 if tab === tabManager.selectedTab {
                     updateUIForReaderHomeStateForTab(tab)
