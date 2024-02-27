@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "了解 Firefox Suggest 的相關資訊";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "替代搜尋引擎";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "替代搜尋引擎";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "搜尋結果、瀏覽紀錄、書籤等";

@@ -15,10 +15,6 @@ import Storage
 
 // TODO: Refactor the Address extension for global usage (FXIOS-8337)
 extension Address {
-    var fullName: String {
-        return "\(givenName) \(familyName)"
-    }
-
     var addressCityStateZipcode: String {
         return "\(addressLevel2), \(addressLevel1) \(postalCode)"
     }

@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Saiba mais sobre o Sugestões Firefox";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "Trocar mecanismo de pesquisa";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Mecanismos de pesquisa alternativos";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Resultados de pesquisas, histórico, favoritos e outros";

@@ -23,6 +23,7 @@ class FormAutofillHelper: TabContentScript {
     enum HandlerName: String {
         case addressFormMessageHandler
         case creditCardFormMessageHandler
+        case addressFormTelemetryMessageHandler
     }
 
     // MARK: - Properties
@@ -51,7 +52,9 @@ class FormAutofillHelper: TabContentScript {
     // MARK: - Script Message Handler
 
     func scriptMessageHandlerNames() -> [String]? {
-        return [HandlerName.addressFormMessageHandler.rawValue, HandlerName.creditCardFormMessageHandler.rawValue]
+        return [HandlerName.addressFormMessageHandler.rawValue,
+            HandlerName.addressFormTelemetryMessageHandler.rawValue,
+            HandlerName.creditCardFormMessageHandler.rawValue]
     }
 
     // MARK: - Deinitialization
@@ -81,6 +84,11 @@ class FormAutofillHelper: TabContentScript {
         }
 
         switch HandlerName(rawValue: message.name) {
+        case .addressFormTelemetryMessageHandler:
+            // TODO(FXIOS-7547): Implement telemetry forwarding logic
+            logger.log("Received address telemery data",
+                       level: .debug,
+                       category: .address)
         case .addressFormMessageHandler:
             // Parse message payload for address form autofill
             guard let data = getValidPayloadData(from: message),

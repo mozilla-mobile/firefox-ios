@@ -126,7 +126,8 @@ extension SurveySurfaceManagerTests {
         return GleanPlumbMessage(id: "12345",
                                  data: MockSurveyMessageDataProtocol(surface: surface),
                                  action: "https://mozilla.com",
-                                 triggers: [],
+                                 triggerIfAll: [],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }
@@ -148,6 +149,7 @@ class MockSurveyMessageDataProtocol: MessageDataProtocol {
     var text: String = "text label test"
     var buttonLabel: String? = "button label test"
     var experiment: String?
+    var actionParams: [String: String] = [:]
 
     init(surface: MessageSurfaceId = .survey) {
         self.surface = surface

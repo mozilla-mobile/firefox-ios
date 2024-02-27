@@ -16,7 +16,8 @@ class NimbusMessagingEvaluationUtility {
         _ message: GleanPlumbMessage,
         messageHelper: NimbusMessagingHelperProtocol
     ) throws -> Bool {
-        return try isNimbusElementEligible(checking: message.triggers,
+        return try isNimbusElementEligible(checking: message.triggerIfAll,
+                                           except: message.exceptIfAny,
                                            using: messageHelper)
     }
 
@@ -31,11 +32,16 @@ class NimbusMessagingEvaluationUtility {
     }
 
     private func isNimbusElementEligible(
-        checking triggers: [String],
+        checking triggerIfAll: [String],
+        except exceptIfAny: [String] = [],
         using helper: NimbusMessagingHelperProtocol
     ) throws -> Bool {
-        return try triggers.reduce(true) { accumulator, trigger in
+        let ifAll = try triggerIfAll.reduce(true) { accumulator, trigger in
             return try accumulator && (try helper.evalJexl(expression: trigger))
         }
+        let ifAny = try exceptIfAny.reduce(false) { accumulator, trigger in
+            return try accumulator || (try helper.evalJexl(expression: trigger))
+        }
+        return ifAll && !ifAny
     }
 }

@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Ďalšie informácie o Návrhoch Firefoxu";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "Alternatívne vyhľadávače";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Alternatívne vyhľadávače";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Výsledky z vyhľadávaní, histórie, záložiek a ďalších";

@@ -45,7 +45,6 @@ import Storage
 protocol TabEventHandler: AnyObject {
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
-    func tabMetadataNotAvailable(_ tab: Tab)
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
     func tabDidGainFocus(_ tab: Tab)
     func tabDidLoseFocus(_ tab: Tab)
@@ -60,7 +59,6 @@ protocol TabEventHandler: AnyObject {
 extension TabEventHandler {
     func tab(_ tab: Tab, didChangeURL url: URL) {}
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {}
-    func tabMetadataNotAvailable(_ tab: Tab) {}
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult) {}
     func tabDidGainFocus(_ tab: Tab) {}
     func tabDidLoseFocus(_ tab: Tab) {}
@@ -74,7 +72,6 @@ enum TabEventLabel: String {
     case didChangeURL
     case didLoadPageMetadata
     case didLoadReadability
-    case pageMetadataNotAvailable
     case didGainFocus
     case didLoseFocus
     case didClose
@@ -87,7 +84,6 @@ enum TabEventLabel: String {
 enum TabEvent {
     case didChangeURL(URL)
     case didLoadPageMetadata(PageMetadata)
-    case pageMetadataNotAvailable
     case didLoadReadability(ReadabilityResult)
     case didGainFocus
     case didLoseFocus
@@ -110,8 +106,6 @@ enum TabEvent {
             handler.tab(tab, didChangeURL: url)
         case .didLoadPageMetadata(let metadata):
             handler.tab(tab, didLoadPageMetadata: metadata)
-        case .pageMetadataNotAvailable:
-            handler.tabMetadataNotAvailable(tab)
         case .didLoadReadability(let result):
             handler.tab(tab, didLoadReadability: result)
         case .didGainFocus:
