@@ -43,6 +43,7 @@ class HomepageViewController:
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
     private var logger: Logger
+
     var contentType: ContentType = .homepage
 
     var themeManager: ThemeManager
@@ -95,7 +96,7 @@ class HomepageViewController:
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
-
+        updateHeaderToShowPrivateModeToggle()
         viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
@@ -188,11 +189,20 @@ class HomepageViewController:
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         applyTheme()
+        updateHeaderToShowPrivateModeToggle()
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             reloadOnRotation(newSize: view.frame.size)
         }
+    }
+
+    // Displays or hides the private mode toggle button in the header
+    // Depends on feature flag and if user is on iPhone
+    private func updateHeaderToShowPrivateModeToggle() {
+        let featureFlagOn = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let showToggle = featureFlagOn && !shouldUseiPadSetup()
+        viewModel.headerViewModel.hidePrivateModeButton = !showToggle
     }
 
     // MARK: - Layout

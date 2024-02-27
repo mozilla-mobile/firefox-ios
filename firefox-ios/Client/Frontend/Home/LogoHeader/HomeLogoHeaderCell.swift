@@ -12,8 +12,6 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
         struct Logo {
             static let iPhoneImageSize: CGFloat = 40
             static let iPadImageSize: CGFloat = 75
-            static let iPhoneTopConstant: CGFloat = 32
-            static let iPadTopConstant: CGFloat = 70
             static let bottomConstant: CGFloat = -10
         }
 
@@ -65,22 +63,18 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let logoSizeConstant = isiPad ? UX.Logo.iPadImageSize : UX.Logo.iPhoneImageSize
-        let topAnchorConstant = isiPad ? UX.Logo.iPadTopConstant : UX.Logo.iPhoneTopConstant
         let textImageWidthConstant = isiPad ? UX.TextImage.iPadWidth : UX.TextImage.iPhoneWidth
         let textImageLeadingAnchorConstant = isiPad ? UX.TextImage.iPadLeadingConstant : UX.TextImage.iPhoneLeadingConstant
 
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                               constant: topAnchorConstant),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                  constant: UX.Logo.bottomConstant),
+            containerView.heightAnchor.constraint(equalToConstant: logoSizeConstant),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             logoImage.topAnchor.constraint(equalTo: containerView.topAnchor),
             logoImage.widthAnchor.constraint(equalToConstant: logoSizeConstant),
             logoImage.heightAnchor.constraint(equalToConstant: logoSizeConstant),
             logoImage.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            logoImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                              constant: UX.Logo.bottomConstant),
 
             logoTextImage.widthAnchor.constraint(equalToConstant: textImageWidthConstant),
             logoTextImage.heightAnchor.constraint(equalTo: logoImage.heightAnchor),
