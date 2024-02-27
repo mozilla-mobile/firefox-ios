@@ -5,6 +5,7 @@
 import XCTest
 
 class L10nPermissionStringsSnapshotTests: L10nBaseSnapshotTests {
+    @MainActor
     func testNSLocationWhenInUseUsageDescription() {
         var didShowDialog = false
         expectation(
