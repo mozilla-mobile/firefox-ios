@@ -320,11 +320,7 @@ class LoginsHelper: TabContentScript {
             // verify that they were received as additional confirmation
             // that this is a valid request from LoginsHelper.js.
             request["formOrigin"] as? String != nil,
-            request["actionOrigin"] as? String != nil,
-
-            // We pass in the webview's URL and derive the origin here
-            // to workaround Bug 1194567.
-            let origin = getOrigin(url.absoluteString)
+            request["actionOrigin"] as? String != nil
         else { return }
 
         currentRequestId = requestId
