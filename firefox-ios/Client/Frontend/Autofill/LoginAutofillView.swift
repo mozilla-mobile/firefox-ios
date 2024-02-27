@@ -4,12 +4,14 @@
 
 import SwiftUI
 import Shared
+import Common
 
 struct LoginAutofillView: View {
     @Environment(\.themeType)
-    var themeVal
+    var theme
 
     @ObservedObject var viewModel: LoginListViewModel
+    @State private var backgroundColor: Color = .clear
 
     var body: some View {
         VStack {
@@ -24,7 +26,22 @@ struct LoginAutofillView: View {
             )
         }
         .padding()
-        .background(Color(themeVal.theme.colors.layer1))
+        .background(backgroundColor)
+        .onAppear {
+            applyTheme(theme: theme.theme)
+        }
+        .onChange(of: theme) { newThemeValue in
+            applyTheme(theme: newThemeValue.theme)
+        }
+    }
+
+    // MARK: - Theme Application
+
+    /// Applies the theme to the view.
+    /// - Parameter theme: The theme to be applied.
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        backgroundColor = Color(color.layer1)
     }
 }
 

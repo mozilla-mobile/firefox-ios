@@ -328,39 +328,6 @@ class LoginsHelper: TabContentScript {
         else { return }
 
         currentRequestId = requestId
-
-
-
-
-
-
-//        let protectionSpace = URLProtectionSpace.fromOrigin(origin)
-//
-//        profile.logins.getLoginsForProtectionSpace(protectionSpace).uponQueue(.main) { res in
-//            guard let cursor = res.successValue else { return }
-//
-//            let logins: [LoginItem] = cursor.compactMap { login in
-//                let rustLoginsEncryption = RustLoginEncryptionKeys()
-//                guard let login = login, let decryptLogin = rustLoginsEncryption.decryptSecureFields(login: login) else {
-//                    return nil
-//                }
-//                return LoginItem(
-//                    username: decryptLogin.secFields.username,
-//                    password: decryptLogin.secFields.password,
-//                    hostname: decryptLogin.fields.origin
-//                )
-//            }
-//
-//            let loginData = LoginInjectionData(requestId: self.currentRequestId,
-//                                               logins: logins)
-//
-//            // NOTE: FXIOS-3856 This will get disabled in future with addtion of bottom sheet
-//            guard let tab = self.tab else {
-//                return
-//            }
-//
-//            LoginsHelper.fillLoginDetails(with: tab, loginData: loginData)
-//        }
     }
 
     public static func fillLoginDetails(with tab: Tab,
