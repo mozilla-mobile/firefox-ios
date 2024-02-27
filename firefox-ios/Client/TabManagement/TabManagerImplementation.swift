@@ -260,10 +260,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                 logger.log("Tab has empty tab.URL \(logMessage)",
                            level: .debug,
                            category: .tabs)
-            } else if tab.lastKnownUrl == nil {
-                logger.log("Tab has empty tab.lastKnownURL \(logMessage)",
-                           level: .fatal,
-                           category: .tabs)
+
+                // lastKnownUrl is the fallback in case tab.url is empty. If this one is empty too then this is a problem
+                if tab.lastKnownUrl == nil {
+                    logger.log("Tab has empty tab.lastKnownURL \(logMessage)",
+                               level: .fatal,
+                               category: .tabs)
+                }
             }
 
             return TabData(id: tabId,

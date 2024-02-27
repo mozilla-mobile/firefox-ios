@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
+    var logger: Logger = DefaultLogger.shared
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -47,10 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let sceneCoordinator = SceneCoordinator(scene: scene)
         self.sceneCoordinator = sceneCoordinator
         sceneCoordinator.start()
-
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) { [weak self] in
-            self?.handle(connectionOptions: connectionOptions)
-        }
+        handle(connectionOptions: connectionOptions)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -96,9 +94,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let url = URLContexts.first?.url,
               let route = routeBuilder.makeRoute(url: url) else { return }
-        sceneCoordinator?.findAndHandle(route: route)
-
-        sessionManager.launchSessionProvider.openedFromExternalSource = true
+        handle(route: route)
     }
 
     // MARK: - Continuing User Activities
@@ -106,7 +102,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         guard let route = routeBuilder.makeRoute(userActivity: userActivity) else { return }
-        sceneCoordinator?.findAndHandle(route: route)
+        handle(route: route)
     }
 
     // MARK: - Performing Tasks
@@ -124,7 +120,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
                                                  tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
         else { return }
-        sceneCoordinator?.findAndHandle(route: route)
+        handle(route: route)
     }
 
     // MARK: - Misc. Helpers
@@ -132,18 +128,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func handle(connectionOptions: UIScene.ConnectionOptions) {
         if let context = connectionOptions.urlContexts.first,
            let route = routeBuilder.makeRoute(url: context.url) {
-            sceneCoordinator?.findAndHandle(route: route)
+            handle(route: route)
         }
 
         if let activity = connectionOptions.userActivities.first,
            let route = routeBuilder.makeRoute(userActivity: activity) {
-            sceneCoordinator?.findAndHandle(route: route)
+            handle(route: route)
         }
 
         if let shortcut = connectionOptions.shortcutItem,
            let route = routeBuilder.makeRoute(shortcutItem: shortcut,
                                               tabSetting: NewTabAccessors.getNewTabPage(profile.prefs)) {
-            sceneCoordinator?.findAndHandle(route: route)
+            handle(route: route)
         }
 
         // Check if our connection options include a user response to a push
@@ -162,7 +158,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let urlString = tab["url"] as? String,
                   let url = URL(string: urlString),
                   let route = routeBuilder.makeRoute(url: url) else { continue }
-            sceneCoordinator?.findAndHandle(route: route)
+            handle(route: route)
+        }
+    }
+
+    private func handle(route: Route) {
+        guard let sceneCoordinator = sceneCoordinator else {
+            logger.log("Scene coordinator should exist", level: .fatal, category: .coordinator)
+            return
+        }
+
+        logger.log("Scene coordinator will handle a route", level: .info, category: .coordinator)
+        sessionManager.launchSessionProvider.openedFromExternalSource = true
+
+        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(sceneCoordinator.windowUUID)]) {
+            sceneCoordinator.findAndHandle(route: route)
         }
     }
 }
