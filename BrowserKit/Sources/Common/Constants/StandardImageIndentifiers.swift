@@ -25,7 +25,7 @@ public struct StandardImageIdentifiers {
 
     // Icon size 24x24
     public struct Large {
-        public static let appendUp = "appendUpLarge"
+        public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let avatarCircle = "avatarCircleLarge"
