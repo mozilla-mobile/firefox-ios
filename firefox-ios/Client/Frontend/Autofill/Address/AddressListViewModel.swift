@@ -28,6 +28,7 @@ class AddressListViewModel: ObservableObject {
     @Published var showSection = false
     private let profile: Profile?
     private let logger: Logger
+    var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
 
     // MARK: - Initializer
 
@@ -52,10 +53,32 @@ class AddressListViewModel: ObservableObject {
                 } else if let error = error {
                     self.logger.log("Error fetching addresses",
                                     level: .warning,
-                                    category: .address,
+                                    category: .autofill,
                                     description: "Error fetching addresses: \(error.localizedDescription)")
                 }
             }
         }
     }
+
+    /// Converts an Address object to UnencryptedAddressFields.
+    /// - Parameter address: The address to be converted.
+    /// - Returns: The UnencryptedAddressFields representation of the address.
+    func fromAddress(_ address: Address) -> UnencryptedAddressFields {
+        return UnencryptedAddressFields(addressLevel1: address.addressLevel1,
+                                        organization: address.organization,
+                                        country: address.country,
+                                        addressLevel2: address.addressLevel2,
+                                        email: address.email,
+                                        streetAddress: address.streetAddress,
+                                        name: address.name,
+                                        postalCode: address.postalCode)
+    }
+
+    // MARK: - Handle Address Selection
+
+        /// Handles the selection of an address.
+        /// - Parameter address: The selected address.
+        func handleAddressSelection(_ address: Address) {
+            addressSelectionCallback?(fromAddress(address))
+        }
 }

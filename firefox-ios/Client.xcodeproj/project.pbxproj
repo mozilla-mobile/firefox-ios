@@ -947,6 +947,9 @@
 		B12DDFED2A8DE825008CE9CF /* ToolbarMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */; };
 		B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15058802AA0A878008B7382 /* OpeningScreenTests.swift */; };
 		B1664E9E2B163B7A005D4C71 /* CreditCardsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1664E9D2B163B7A005D4C71 /* CreditCardsTests.swift */; };
+		B236204B2B851FE1000B1DE7 /* AddressAutoFillBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B236204A2B851FE0000B1DE7 /* AddressAutoFillBottomSheetView.swift */; };
+		B236204D2B8673DE000B1DE7 /* AddressScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B236204C2B8673DE000B1DE7 /* AddressScrollView.swift */; };
+		B236204F2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B236204E2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift */; };
 		B26ADF852B339ED000C6E127 /* AddressAutofillSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26ADF842B339ED000C6E127 /* AddressAutofillSetting.swift */; };
 		B28BF6602B7A9E4F006357CA /* FillAddressAutofillForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28BF65F2B7A9E4F006357CA /* FillAddressAutofillForm.swift */; };
 		B28BF6622B7ACC17006357CA /* UnencryptedAddressFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28BF6612B7ACC17006357CA /* UnencryptedAddressFields.swift */; };
@@ -6317,6 +6320,9 @@
 		B1D14C77AD55FE126B7904D8 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		B1D74C6B9DE786A50986BB1A /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = "ur.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		B1F04E16A0BF365D67AD0C6F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Search.strings; sourceTree = "<group>"; };
+		B236204A2B851FE0000B1DE7 /* AddressAutoFillBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAutoFillBottomSheetView.swift; sourceTree = "<group>"; };
+		B236204C2B8673DE000B1DE7 /* AddressScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressScrollView.swift; sourceTree = "<group>"; };
+		B236204E2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressAutofillCoordinator.swift; sourceTree = "<group>"; };
 		B2474500BBF85DB3C71C329B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Today.strings; sourceTree = "<group>"; };
 		B25849AE8A390529836D27F0 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = "sq.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		B25D4E72A0116CFE5BEC29CC /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
@@ -9448,6 +9454,7 @@
 				8A83B7452A264FA0002FF9AC /* SettingsCoordinator.swift */,
 				C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */,
 				21FBB4032ADECEFF002D9AB7 /* TabTray */,
+				B236204E2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -10001,6 +10008,8 @@
 				B2FEA6902B4661BE0058E616 /* AddressAutofillToggle.swift */,
 				B2DFB7E02B619DF60004CEA5 /* AddressListView.swift */,
 				B2DFB7E22B619E2B0004CEA5 /* AddressCellView.swift */,
+				B236204A2B851FE0000B1DE7 /* AddressAutoFillBottomSheetView.swift */,
+				B236204C2B8673DE000B1DE7 /* AddressScrollView.swift */,
 			);
 			path = Address;
 			sourceTree = "<group>";
@@ -13505,6 +13514,7 @@
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
 				C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */,
 				8A93F86D29D3A131004159D9 /* DefaultRouter.swift in Sources */,
+				B236204B2B851FE1000B1DE7 /* AddressAutoFillBottomSheetView.swift in Sources */,
 				5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */,
 				8ADAE4262A33A13B007BF926 /* OpenSupportPageSetting.swift in Sources */,
 				8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */,
@@ -13735,6 +13745,7 @@
 				8A6A796D27F773550022D6C6 /* HomepageContextMenuHelper.swift in Sources */,
 				8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
+				B236204F2B86C56F000B1DE7 /* AddressAutofillCoordinator.swift in Sources */,
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				C84656012887A0F700861B4A /* WallpaperMetadataUtility.swift in Sources */,
 				E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */,
@@ -13791,6 +13802,7 @@
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
+				B236204D2B8673DE000B1DE7 /* AddressScrollView.swift in Sources */,
 				E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				C8CD80DA2A1E8C1D0097C3AE /* OnboardingTelemetryProtocol.swift in Sources */,

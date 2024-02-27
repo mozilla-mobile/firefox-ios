@@ -44,6 +44,11 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showCreditCardAutofillCalled += 1
     }
 
+    func showAddressAutofill(
+        frame: WKFrameInfo?
+    ) {
+        showCreditCardAutofillCalled += 1
+    }
     func showShareExtension(
         url: URL,
         sourceView: UIView,
