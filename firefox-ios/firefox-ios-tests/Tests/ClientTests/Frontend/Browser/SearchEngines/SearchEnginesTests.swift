@@ -168,7 +168,7 @@ class SearchEnginesTests: XCTestCase {
     func testShowSearchSuggestionSettingsInPrivateMode() {
         // Disable search suggestions by default
         XCTAssertFalse(engines.shouldShowPrivateModeSearchSuggestions)
-        XCTAssertNil(profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions))
+        XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions), false)
 
         // Turn off setting
         engines.shouldShowPrivateModeSearchSuggestions = false
