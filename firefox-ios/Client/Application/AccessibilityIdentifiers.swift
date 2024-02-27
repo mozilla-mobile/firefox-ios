@@ -353,6 +353,9 @@ public struct AccessibilityIdentifiers {
 
         struct ReadingListPanel {
             static let tableView = "Reading list"
+            static let emptyReadingList1 = "Welcome to your Reading List"
+            static let emptyReadingList2 = "Open articles in Reader View by tapping the book icon when it appears in the title bar."
+            static let emptyReadingList3 = "Save pages to your Reading List by tapping the book plus icon in the Reader View controls."
         }
 
         struct DownloadsPanel {
