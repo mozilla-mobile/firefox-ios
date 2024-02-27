@@ -25,11 +25,19 @@ class MockNimbusTargetingHelper: NimbusTargetingHelperProtocol {
 
 class MockNimbusStringHelper: NimbusStringHelperProtocol {
     func stringFormat(template: String, uuid: String?) -> String {
-        return template
+        if let uuid = uuid {
+            return template.replacingOccurrences(of: "{uuid}", with: uuid)
+        } else {
+            return template
+        }
     }
 
     func getUuid(template: String) -> String? {
-        return nil
+        if template.contains("{uuid}") {
+            return "MY-UUID"
+        } else {
+            return nil
+        }
     }
 }
 

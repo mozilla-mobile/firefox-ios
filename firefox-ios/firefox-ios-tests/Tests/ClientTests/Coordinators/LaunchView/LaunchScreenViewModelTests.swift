@@ -112,7 +112,8 @@ final class LaunchScreenViewModelTests: XCTestCase {
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),
                                  action: action,
-                                 triggers: [],
+                                 triggerIfAll: [],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }

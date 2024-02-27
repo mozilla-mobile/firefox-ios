@@ -623,7 +623,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // Screengraph will go back to main Settings screen. Manually tap on settings
             app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
-            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/18278
+            // Remove if/else after fix
+            if !isTablet {
+                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            } else {
+                app.tables.buttons["Remove Learn more about Firefox Suggest"].tap()
+            }
             app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         }
     }
@@ -1188,9 +1194,12 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add a new Tab from the New Tab option in Browser Tab Menu
-    func createNewTab() {
+    func createNewTab(isPrivate: Bool = false) {
         let app = XCUIApplication()
         self.goto(TabTray)
+        if isPrivate {
+            self.performAction(Action.TogglePrivateMode)
+        }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         self.nowAt(NewTabScreen)

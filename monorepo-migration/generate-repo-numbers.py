@@ -23,7 +23,7 @@ if not GITHUB_TOKEN:
     )
 
 ISSUES_AND_PULL_REQUESTS_URL = "https://api.github.com/repos/{repo_owner}/{repo_name}/issues?state=all&direction=asc&per_page=100&page={page}"
-REPO_NAMES = ("android-components", "fenix", "focus-android", "firefox-android")
+REPO_NAMES = ("focus-ios",)
 NUMBER_TYPES = ("pulls", "issues")
 DATA_DIR = (Path(__file__).parent / "data").absolute()
 

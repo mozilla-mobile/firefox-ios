@@ -1388,16 +1388,16 @@
 "Settings.NewTab.CustomURL" = "Adresse personnalisée";
 
 /* Option in settings to show a blank page when you open a new tab */
-"Settings.NewTab.Option.BlankPage" = "Une page vide";
+"Settings.NewTab.Option.BlankPage" = "Page vide";
 
 /* Option in settings to show your homepage when you open a new tab */
 "Settings.NewTab.Option.Custom" = "Personnalisé";
 
 /* Option in settings to show Firefox Home when you open a new tab */
-"Settings.NewTab.Option.FirefoxHome" = "La page d’accueil de Firefox";
+"Settings.NewTab.Option.FirefoxHome" = "Page d’accueil de Firefox";
 
 /* Option in settings to show your homepage when you open a new tab */
-"Settings.NewTab.Option.HomePage" = "La page d’accueil";
+"Settings.NewTab.Option.HomePage" = "Page d’accueil";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
 "Settings.NewTab.SectionName" = "Nouvel onglet";

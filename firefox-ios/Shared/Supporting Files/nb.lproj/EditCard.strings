@@ -50,7 +50,7 @@
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Lagre og fyll ut kort automatisk";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
-"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Lagre og fyll inn betalingsmetoder";
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Lagre og fyll inn betalingsmåter";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Vis kort";
