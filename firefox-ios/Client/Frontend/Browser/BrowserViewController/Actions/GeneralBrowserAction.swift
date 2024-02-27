@@ -5,15 +5,26 @@
 import Foundation
 import Redux
 
+class GeneralBrowserContext: ActionContext {
+    let selectedTabURL: URL
+    init(selectedTabURL: URL, windowUUID: WindowUUID) {
+        self.selectedTabURL = selectedTabURL
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 enum GeneralBrowserAction: Action {
     case showToast(ToastTypeContext)
     case showOverlay(KeyboardContext)
+    case updateSelectedTab(GeneralBrowserContext)
 
     var windowUUID: UUID {
         switch self {
         case .showToast(let context as ActionContext):
             return context.windowUUID
         case .showOverlay(let context as ActionContext):
+            return context.windowUUID
+        case .updateSelectedTab(let context as ActionContext):
             return context.windowUUID
         }
     }

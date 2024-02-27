@@ -13,6 +13,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var fakespotState: FakespotState
     var toast: ToastType?
     var showOverlay: Bool
+    var webviewURL: URL?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -30,7 +31,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   fakespotState: bvcState.fakespotState,
                   toast: bvcState.toast,
                   showOverlay: bvcState.showOverlay,
-                  windowUUID: bvcState.windowUUID)
+                  windowUUID: bvcState.windowUUID,
+                  webviewURL: bvcState.webviewURL)
     }
 
     init(windowUUID: WindowUUID) {
@@ -51,7 +53,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         fakespotState: FakespotState,
         toast: ToastType? = nil,
         showOverlay: Bool = false,
-        windowUUID: WindowUUID
+        windowUUID: WindowUUID,
+        webviewURL: URL? = nil
     ) {
         self.searchScreenState = searchScreenState
         self.usePrivateHomepage = usePrivateHomepage
@@ -60,6 +63,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.toast = toast
         self.windowUUID = windowUUID
         self.showOverlay = showOverlay
+        self.webviewURL = webviewURL
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -110,8 +114,24 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: state.fakespotState,
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID)
+        case GeneralBrowserAction.updateSelectedTab(let context):
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                showOverlay: state.showOverlay,
+                windowUUID: state.windowUUID,
+                webviewURL: context.selectedTabURL)
         default:
-            return state
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                usePrivateHomepage: state.usePrivateHomepage,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                showOverlay: state.showOverlay,
+                windowUUID: state.windowUUID,
+                webviewURL: nil)
         }
     }
 }

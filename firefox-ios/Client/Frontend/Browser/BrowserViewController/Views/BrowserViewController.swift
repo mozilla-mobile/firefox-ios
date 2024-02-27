@@ -553,7 +553,10 @@ class BrowserViewController: UIViewController,
             }
 
             // Update states for felt privacy
-            updateInContentHomePanel(tabManager.selectedTab?.url)
+            if state.webviewURL != nil {
+                updateInContentHomePanel(state.webviewURL)
+            }
+
             setupMiddleButtonStatus(isLoading: false)
 
             if let toast = state.toast {
