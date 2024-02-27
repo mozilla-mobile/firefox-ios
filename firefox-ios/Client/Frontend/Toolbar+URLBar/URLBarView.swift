@@ -102,6 +102,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var topTabsIsShowing = false
 
     var locationTextField: ToolbarTextField?
+    private var isActivatingLocationTextField = false
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
     /// and the Cancel button is visible (allowing the user to leave overlay mode).
@@ -551,21 +552,31 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             // Clear any existing text, focus the field, then set the actual pasted text.
             // This avoids highlighting all of the text.
             self.locationTextField?.text = ""
+            self.isActivatingLocationTextField = true
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
                 self.setLocation(locationText, search: search)
+                self.isActivatingLocationTextField = false
             }
         } else {
+            self.isActivatingLocationTextField = true
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
                 // Need to set location again so text could be immediately selected.
                 self.setLocation(locationText, search: search)
                 self.locationTextField?.selectAll(nil)
+                self.isActivatingLocationTextField = false
             }
         }
     }
 
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        // This check is a bandaid to prevent conflicts between code that might cancel overlay mode
+        // incorrectly while we are still waiting to activate the location field in the next run
+        // loop iteration (because the becomeFirstResponder call is dispatched). If we know that we
+        // are expecting the location field to be activated, skip this and return early. [FXIOS-8421]
+        guard !isActivatingLocationTextField else { return }
+
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBar(self, didLeaveOverlayModeForReason: reason)
