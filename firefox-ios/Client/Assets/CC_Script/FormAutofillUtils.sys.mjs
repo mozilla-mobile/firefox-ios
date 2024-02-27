@@ -302,20 +302,27 @@ FormAutofillUtils = {
   },
 
   /**
-   * Determines if an element is focusable
-   * and accessible via keyboard navigation or not.
+   * Determines if an element is visually hidden or not.
    *
    * @param {HTMLElement} element
-   *
-   * @returns {bool} true if the element is focusable and accessible
+   * @param {boolean} visibilityCheck true to run visiblity check against
+   *                  element.checkVisibility API. Otherwise, test by only checking
+   *                  `hidden` and `display` attributes
+   * @returns {boolean} true if the element is visible
    */
-  isFieldFocusable(element) {
-    return (
-      // The Services.focus.elementIsFocusable API considers elements with
-      // tabIndex="-1" set as focusable. But since they are not accessible
-      // via keyboard navigation we treat them as non-interactive
-      Services.focus.elementIsFocusable(element, 0) && element.tabIndex != "-1"
-    );
+  isFieldVisible(element, visibilityCheck = true) {
+    if (
+      visibilityCheck &&
+      element.checkVisibility &&
+      !FormAutofillUtils.ignoreVisibilityCheck
+    ) {
+      return element.checkVisibility({
+        checkOpacity: true,
+        checkVisibilityCSS: true,
+      });
+    }
+
+    return !element.hidden && element.style.display != "none";
   },
 
   /**
@@ -1126,4 +1133,12 @@ XPCOMUtils.defineLazyPreferenceGetter(
   "focusOnAutofill",
   "extensions.formautofill.focusOnAutofill",
   true
+);
+
+// This is only used for testing
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofillUtils,
+  "ignoreVisibilityCheck",
+  "extensions.formautofill.test.ignoreVisibilityCheck",
+  false
 );
