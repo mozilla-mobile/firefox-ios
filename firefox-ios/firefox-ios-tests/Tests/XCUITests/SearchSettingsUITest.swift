@@ -46,11 +46,7 @@ class SearchSettingsUITests: BaseTestCase {
         if !iPad() {
             mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
         } else {
-            navigator.goto(SettingsScreen)
-            navigator.goto(SearchSettings)
-            mozWaitForElementToExist(app.buttons["Edit"])
-            app.buttons["Edit"].tap()
-            mozWaitForElementToExist(app.tables.buttons["Remove \(customSearchEngine["name"]!)"])
+            app.tables.buttons["Remove Learn more about Firefox Suggest"].tap()
         }
     }
 
@@ -138,12 +134,7 @@ class SearchSettingsUITests: BaseTestCase {
         if !iPad() {
             tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
         } else {
-            navigator.goto(SettingsScreen)
-            navigator.goto(SearchSettings)
-            mozWaitForElementToExist(app.buttons["Edit"])
-            app.buttons["Edit"].tap()
-            mozWaitForElementToExist(tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"])
-            tablesQuery.buttons["Remove \(customSearchEngine["name"]!)"].tap()
+            tablesQuery.buttons["Remove Learn more about Firefox Suggest"].tap()
         }
         tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
