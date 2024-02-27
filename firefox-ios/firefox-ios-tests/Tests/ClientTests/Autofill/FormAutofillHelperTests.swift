@@ -225,7 +225,7 @@ class FormAutofillHelperTests: XCTestCase {
 
         // Assert that the handler names are not nil and contain expected values
         XCTAssertNotNil(handlerNames)
-        XCTAssertEqual(handlerNames?.count, 2) // Assuming you have two handler names
+        XCTAssertEqual(handlerNames?.count, 3) // Assuming you have three handler names
 
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue))
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue))
