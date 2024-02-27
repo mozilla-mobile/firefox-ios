@@ -569,17 +569,13 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
     }
 
-<<<<<<< HEAD
     func leaveOverlayMode(didCancel cancel: Bool) {
-=======
-    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         // This check is a bandaid to prevent conflicts between code that might cancel overlay mode
         // incorrectly while we are still waiting to activate the location field in the next run
         // loop iteration (because the becomeFirstResponder call is dispatched). If we know that we
         // are expecting the location field to be activated, skip this and return early. [FXIOS-8421]
         guard !isActivatingLocationTextField else { return }
 
->>>>>>> 28cbfd00c (Bugfix FXIOS-8421 [v125] Fix iPad keyboard dismissal when adding new tabs)
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
