@@ -11,7 +11,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     var rootA11yId: String {
         return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
     }
-    
+
     @MainActor
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
