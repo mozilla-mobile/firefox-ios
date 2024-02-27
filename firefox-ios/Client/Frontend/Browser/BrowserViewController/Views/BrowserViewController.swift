@@ -2266,7 +2266,7 @@ extension BrowserViewController: LegacyTabDelegate {
                     let logins = (try? await self?.profile.logins.listLogins()) ?? []
                     let loginsForCurrentTab = logins.filter { login in
                         guard let recordHostnameURL = URL(string: login.hostname) else { return false }
-                        return recordHostnameURL.isRelated(toURL: tabURL)
+                        return recordHostnameURL.baseDomain == tabURL.baseDomain
                     }
                     if !loginsForCurrentTab.isEmpty {
                         tab.webView?.accessoryView.reloadViewFor(.login)

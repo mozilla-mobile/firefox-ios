@@ -17,7 +17,7 @@ class LoginListViewModel: ObservableObject {
     let manageLoginInfoAction: () -> Void
 
     var shortDisplayString: String {
-        tabURL.secondLevelDomainAndTLD() ?? ""
+        tabURL.baseDomain ?? ""
     }
 
     init(
@@ -39,7 +39,7 @@ class LoginListViewModel: ObservableObject {
             let logins = try await loginStorage.listLogins()
             self.logins = logins.filter { login in
                 guard let recordHostnameURL = URL(string: login.hostname) else { return false }
-                return recordHostnameURL.isRelated(toURL: tabURL)
+                return recordHostnameURL.baseDomain == tabURL.baseDomain
             }
         } catch {
             self.logger.log("Error fetching logins",
