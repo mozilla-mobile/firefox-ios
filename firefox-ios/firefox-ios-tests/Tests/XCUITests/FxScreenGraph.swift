@@ -623,7 +623,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // Screengraph will go back to main Settings screen. Manually tap on settings
             app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
-            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/18278
+            // Remove if/else after fix
+            if !isTablet {
+                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            } else {
+                app.tables.buttons["Remove Learn more about Firefox Suggest"].tap()
+            }
             app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         }
     }
