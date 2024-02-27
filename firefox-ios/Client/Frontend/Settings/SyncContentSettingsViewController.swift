@@ -67,7 +67,7 @@ class DisconnectSetting: Setting {
             preferredStyle: UIAlertController.Style.alert)
 
         alertController.addAction(
-            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .cancel) { (action) in
+            UIAlertAction(title: .SettingsDisconnectCancelAction, style: .default) { (action) in
                 // Do nothing.
             }
         )
