@@ -100,6 +100,10 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
             logoConstraints.append(
                 containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
             )
+        } else {
+            logoConstraints.append(
+                containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            )
         }
         NSLayoutConstraint.activate(logoConstraints)
     }
