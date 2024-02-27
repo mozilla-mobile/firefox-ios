@@ -953,6 +953,19 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(sidebarContainer.updateSidebarCalled, 1)
     }
 
+    func testShowAddressAutofill_addsAddressAutofillCoordinator() {
+        // Arrange
+        let subject = createSubject()
+
+        // Act
+        subject.showAddressAutofill(frame: nil)
+        // Assert
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is AddressAutofillCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> BrowserCoordinator {

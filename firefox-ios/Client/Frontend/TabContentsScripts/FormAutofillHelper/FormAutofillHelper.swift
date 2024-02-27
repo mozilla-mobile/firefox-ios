@@ -88,7 +88,7 @@ class FormAutofillHelper: TabContentScript {
             // TODO(FXIOS-7547): Implement telemetry forwarding logic
             logger.log("Received address telemery data",
                        level: .debug,
-                       category: .address)
+                       category: .autofill)
         case .addressFormMessageHandler:
             // Parse message payload for address form autofill
             guard let data = getValidPayloadData(from: message),
@@ -173,7 +173,40 @@ class FormAutofillHelper: TabContentScript {
 
         return AutofillFieldValuePayload(fieldValue: .address, fieldData: addressPlainText)
     }
+
     // MARK: - Injection
+
+    static func injectAddressInfo(logger: Logger,
+                                  address: UnencryptedAddressFields,
+                                  tab: Tab,
+                                  frame: WKFrameInfo? = nil,
+                                  completion: @escaping (Error?) -> Void) {
+        do {
+            let jsonBuilder = FormAutofillHelper.injectionJSONBuilder(address: address)
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonBuilder)
+            guard let jsonDataVal = String(data: jsonData, encoding: .utf8) else {
+                completion(FormAutofillHelperError.injectionInvalidJSON)
+                return
+            }
+
+            guard let webView = tab.webView else {
+                completion(FormAutofillHelperError.injectionIssue)
+                return
+            }
+
+            let fillAddressInfoCallback = "__firefox__.FormAutofillHelper.fillFormFields(\(jsonDataVal))"
+            webView.evaluateJavascriptInDefaultContentWorld(fillAddressInfoCallback, frame) { _, error in
+                if let error = error {
+                    completion(error)
+                    logger.log("Address script error \(error)", level: .debug, category: .autofill)
+                } else {
+                    completion(nil)
+                }
+            }
+        } catch let error as NSError {
+            logger.log("Address script error \(error)", level: .debug, category: .autofill)
+        }
+    }
 
     static func injectCardInfo(logger: Logger,
                                card: UnencryptedCreditCardFields,
@@ -215,6 +248,29 @@ class FormAutofillHelper: TabContentScript {
         } catch let error as NSError {
             logger.log("Credit card script error \(error)", level: .debug, category: .webview)
         }
+    }
+
+    static func injectionJSONBuilder(address: UnencryptedAddressFields) -> [String: Any] {
+        let sanitizedOrganization = address.organization.htmlEntityEncodedString
+        let sanitizedStreetAddress = address.streetAddress.htmlEntityEncodedString
+        let sanitizedName = address.name.htmlEntityEncodedString
+        let sanitizedCountry = address.country.htmlEntityEncodedString
+        let sanitizedAddressLevel1 = address.addressLevel1.htmlEntityEncodedString
+        let sanitizedAddressLevel2 = address.addressLevel2.htmlEntityEncodedString
+        let sanitizedEmail = address.email.htmlEntityEncodedString
+        let sanitizedPostalCode = address.postalCode.htmlEntityEncodedString
+
+        let injectionJSON: [String: Any] = [
+            "organization": sanitizedOrganization,
+            "street-address": sanitizedStreetAddress,
+            "name": sanitizedName,
+            "country": sanitizedCountry,
+            "address-level1": sanitizedAddressLevel1,
+            "address-level2": sanitizedAddressLevel2,
+            "email": sanitizedEmail,
+            "postal-code": sanitizedPostalCode
+        ]
+        return injectionJSON
     }
 
     static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
