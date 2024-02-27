@@ -77,6 +77,9 @@ public struct PrefsKeys {
     }
 
     public struct SearchSettings {
+        public static let showFirefoxBrowsingHistorySuggestions = "FirefoxSuggestBrowsingHistorySuggestions"
+        public static let showFirefoxBookmarksSuggestions = "FirefoxSuggestBookmarksSuggestions"
+        public static let showFirefoxSyncedTabsSuggestions = "FirefoxSuggestSyncedTabsSuggestions"
         public static let showFirefoxNonSponsoredSuggestions = "FirefoxSuggestShowNonSponsoredSuggestions"
         public static let showFirefoxSponsoredSuggestions = "FirefoxSuggestShowSponsoredSuggestions"
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"

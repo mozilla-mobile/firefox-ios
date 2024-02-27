@@ -133,13 +133,25 @@ class SearchViewController: SiteTableViewController,
     var searchFeature: FeatureHolder<Search>
     static var userAgent: String?
 
+    private var bookmarkSites: [Site] {
+        data.compactMap { $0 }
+            .filter { $0.bookmarked == true }
+    }
+
+    private var historySites: [Site] {
+        data.compactMap { $0 }
+            .filter { $0.bookmarked == false }
+    }
+
     var hasFirefoxSuggestions: Bool {
         let dataCount = data.count
-        return dataCount != 0
-            || !filteredOpenedTabs.isEmpty
-            || !filteredRemoteClientTabs.isEmpty
-            || !searchHighlights.isEmpty
-            || !firefoxSuggestions.isEmpty
+        return dataCount != 0 &&
+                (model.shouldShowBookmarksSuggestions
+                || model.shouldShowBrowsingHistorySuggestions)
+                || !filteredOpenedTabs.isEmpty
+                || (!filteredRemoteClientTabs.isEmpty && model.shouldShowSyncedTabsSuggestions)
+                || !searchHighlights.isEmpty
+                || (!firefoxSuggestions.isEmpty && shouldShowNonSponsoredSuggestions)
     }
 
     init(profile: Profile,
@@ -679,11 +691,10 @@ class SearchViewController: SiteTableViewController,
         loadSearchHighlights()
         _ = loadFirefoxSuggestions()
 
-        guard shoudShowSearchEngineSuggestions else { return }
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery,
                              callback: { suggestions, error in
-            if error == nil {
+            if error == nil, self.shoudShowSearchEngineSuggestions {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: {
@@ -696,7 +707,8 @@ class SearchViewController: SiteTableViewController,
             }
 
             // If there are no suggestions, just use whatever the user typed.
-            if suggestions?.isEmpty ?? true {
+            if self.shoudShowSearchEngineSuggestions &&
+               suggestions?.isEmpty ?? true {
                 self.suggestions = [self.searchQuery]
             }
 
@@ -843,14 +855,28 @@ class SearchViewController: SiteTableViewController,
         case .openedTabs:
             return filteredOpenedTabs.count
         case .remoteTabs:
-            return filteredRemoteClientTabs.count
+            return model.shouldShowSyncedTabsSuggestions ?
+            filteredRemoteClientTabs.count : 0
         case .bookmarksAndHistory:
-            return data.count
+            return numberOfItemsFromData
         case .searchHighlights:
             return searchHighlights.count
         case .firefoxSuggestions:
             return firefoxSuggestions.count
         }
+    }
+
+    private var numberOfItemsFromData: Int {
+        if model.shouldShowBookmarksSuggestions,
+           model.shouldShowBrowsingHistorySuggestions {
+            return data.count
+        } else if model.shouldShowBookmarksSuggestions {
+            return bookmarkSites.count
+        } else if model.shouldShowBrowsingHistorySuggestions {
+            return historySites.count
+        }
+
+        return 0
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -943,7 +969,8 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .remoteTabs:
-            if self.filteredRemoteClientTabs.count > indexPath.row {
+            if model.shouldShowSyncedTabsSuggestions,
+               filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = self.filteredRemoteClientTabs[indexPath.row].client
                 twoLineCell.descriptionLabel.isHidden = false
@@ -958,24 +985,31 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
-                let isBookmark = site.bookmarked ?? false
+            if model.shouldShowBookmarksSuggestions &&
+                model.shouldShowBrowsingHistorySuggestions {
+                if let site = data[indexPath.row] {
+                    configureBookmarksAndHistoryCell(
+                        twoLineCell,
+                        site.title,
+                        site.url,
+                        site.bookmarked ?? false
+                    )
+                    cell = twoLineCell
+                }
+            } else if model.shouldShowBookmarksSuggestions {
+                let site = bookmarkSites[indexPath.row]
+                configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url, true)
                 cell = twoLineCell
-                twoLineCell.descriptionLabel.isHidden = false
-                twoLineCell.titleLabel.text = site.title
-                twoLineCell.descriptionLabel.text = site.url
-                twoLineCell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
-                twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
-                twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
-                twoLineCell.accessoryView = nil
+            } else if model.shouldShowBrowsingHistorySuggestions {
+                let site = historySites[indexPath.row]
+                configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url)
                 cell = twoLineCell
             }
+
         case .searchHighlights:
             let highlightItem = searchHighlights[indexPath.row]
             let urlString = highlightItem.urlString ?? ""
             let site = Site(url: urlString, title: highlightItem.displayTitle)
-            cell = twoLineCell
             twoLineCell.descriptionLabel.isHidden = false
             twoLineCell.titleLabel.text = highlightItem.displayTitle
             twoLineCell.descriptionLabel.text = urlString
@@ -1006,6 +1040,22 @@ class SearchViewController: SiteTableViewController,
         oneLineCell.applyTheme(theme: themeManager.currentTheme)
         twoLineCell.applyTheme(theme: themeManager.currentTheme)
         return cell
+    }
+
+    private func configureBookmarksAndHistoryCell(
+        _ cell: TwoLineImageOverlayCell,
+        _ title: String,
+        _ description: String,
+        _ isBookmark: Bool = false
+    ) {
+        cell.descriptionLabel.isHidden = false
+        cell.titleLabel.text = title
+        cell.descriptionLabel.text = description
+        cell.leftOverlayImageView.image = isBookmark ? bookmarkedBadge : nil
+        cell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+        cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: description))
+        cell.accessoryView = nil
     }
 
     private func shouldShowHeader(for section: Int) -> Bool {

@@ -2027,8 +2027,7 @@ class BrowserViewController: UIViewController,
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions ||
-        profile.searchEngines.shouldShowPrivateModeFirefoxSuggestions
+        let isSettingEnabled = profile.searchEngines.isPrivateModeSettingEnabled
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
