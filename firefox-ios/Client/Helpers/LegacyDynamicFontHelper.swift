@@ -52,17 +52,6 @@ class LegacyDynamicFontHelper: NSObject {
         return UIFont.systemFont(ofSize: deviceFontSize, weight: UIFont.Weight.medium)
     }
 
-    /*
-     Activity Stream supports dynamic fonts up to a certain point. Small fonts dont work.
-     Max out the supported font size.
-     Small = 14, medium = 18, larger = 20
-     */
-
-    var MediumSizeBoldFontAS: UIFont {
-        let size = max(deviceFontSize, 18)
-        return UIFont.boldSystemFont(ofSize: size)
-    }
-
     /**
      * Standard
      */
