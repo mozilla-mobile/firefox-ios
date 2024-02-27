@@ -12,6 +12,7 @@ stages:
   l10n_screenshots:
     workflows:
     - L10nBuild: {}
+    - L10nScreenshotsTests: {}
   pre_configuration:
     workflows:
     - determine_apps_affected: {}
@@ -888,7 +889,6 @@ workflows:
             asdf global ruby 3.1
             gem install fastlane -v 2.216.0
             fastlane -version
-
             ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
             mkdir -p artifacts
