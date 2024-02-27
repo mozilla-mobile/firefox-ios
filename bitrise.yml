@@ -12,7 +12,6 @@ stages:
   l10n_screenshots:
     workflows:
     - L10nBuild: {}
-    - L10nScreenshotsTests: {}
   pre_configuration:
     workflows:
     - determine_apps_affected: {}
