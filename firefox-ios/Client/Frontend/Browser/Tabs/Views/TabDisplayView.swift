@@ -12,6 +12,7 @@ class TabDisplayView: UIView,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
+                      SwipeAnimatorDelegate,
                       InactiveTabsSectionManagerDelegate {
     struct UX {
         static let cornerRadius: CGFloat = 6.0
@@ -32,6 +33,24 @@ class TabDisplayView: UIView,
         guard !tabsState.isPrivateMode else { return true }
 
         return tabsState.inactiveTabs.isEmpty
+    }
+
+    // Dragging on the collection view is either an 'active drag' where the item is moved, or
+    // that the item has been long pressed on (and not moved yet), and this gesture recognizer
+    // has been triggered
+    var isDragging: Bool {
+        return collectionView.hasActiveDrag || isLongPressGestureStarted
+    }
+
+    private var isLongPressGestureStarted: Bool {
+        var started = false
+        collectionView.gestureRecognizers?.forEach { recognizer in
+            if let recognizer = recognizer as? UILongPressGestureRecognizer,
+               recognizer.state == .began || recognizer.state == .changed {
+                started = true
+            }
+        }
+        return started
     }
 
     lazy var collectionView: UICollectionView = {
@@ -289,6 +308,21 @@ class TabDisplayView: UIView,
     // MARK: - TabCellDelegate
     func tabCellDidClose(for tabUUID: String) {
         store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
+    }
+
+    // MARK: - SwipeAnimatorDelegate
+    func swipeAnimator(_ animator: SwipeAnimator) {
+        guard let tabCell = animator.animatingView as? TabCell,
+              let indexPath = collectionView.indexPath(for: tabCell) else { return }
+
+        let tab = tabsState.tabs[indexPath.item]
+        store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
+        UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
+                             argument: String.TabTrayClosingTabAccessibilityMessage)
+    }
+
+    func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
+        return !isDragging
     }
 }
 
