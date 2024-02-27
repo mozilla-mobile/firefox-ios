@@ -8,14 +8,16 @@ import Common
 
 struct HomepageHeaderCellViewModel {
     var showiPadSetup: Bool
+    var showPrivateModeToggle: Bool
     var isPrivate: Bool
 
     private var action: (() -> Void)
     private var homepageTelemetry = HomepageTelemetry()
 
-    init(isPrivate: Bool, showiPadSetup: Bool, action: @escaping () -> Void) {
+    init(isPrivate: Bool, showiPadSetup: Bool, showPrivateModeToggle: Bool, action: @escaping () -> Void) {
         self.isPrivate = isPrivate
         self.showiPadSetup = showiPadSetup
+        self.showPrivateModeToggle = showPrivateModeToggle
         self.action = action
     }
 
@@ -98,7 +100,7 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         self.viewModel = viewModel
         setupView(with: viewModel.showiPadSetup)
         logoHeaderCell.configure(with: viewModel.showiPadSetup)
-        privateModeButton.isHidden = viewModel.showiPadSetup
+        privateModeButton.isHidden = !viewModel.showPrivateModeToggle
     }
 
     @objc
