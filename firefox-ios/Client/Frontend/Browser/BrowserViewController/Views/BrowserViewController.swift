@@ -2260,7 +2260,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 theme: themeManager.currentTheme
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
-            logins.foundFieldValues = { [weak self] field in
+            logins.foundFieldValues = { [weak self] field, currentRequestId in
                 Task {
                     guard let tabURL = tab.url else { return }
                     let logins = (try? await self?.profile.logins.listLogins()) ?? []
@@ -2276,7 +2276,10 @@ extension BrowserViewController: LegacyTabDelegate {
                         Task { @MainActor [weak self] in
                             // Dismiss keyboard
                             webView.resignFirstResponder()
-                            self?.authenticateSelectSavedLoginsClosureBottomSheet(tabURL: tabURL)
+                            self?.authenticateSelectSavedLoginsClosureBottomSheet(
+                                tabURL: tabURL,
+                                currentRequestId: currentRequestId
+                            )
                         }
                     }
                 }
@@ -2328,11 +2331,11 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
 
-    private func authenticateSelectSavedLoginsClosureBottomSheet(tabURL: URL) {
+    private func authenticateSelectSavedLoginsClosureBottomSheet(tabURL: URL, currentRequestId: String) {
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
-                self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL)
+                self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
             case .deviceOwnerFailed:
                 break // Keep showing bvc
             case .passCodeRequired:

@@ -113,14 +113,38 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
     }
 
-    @MainActor 
-    func showSavedLoginAutofill(tabURL: URL) {
+    @MainActor
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
         let viewModel = LoginListViewModel(
             tabURL: tabURL,
             loginStorage: profile.logins,
             logger: logger,
-            onLoginCellTap: { login in
+            onLoginCellTap: { [weak self] login in
+                guard let self = self else { return }
+                let rustLoginsEncryption = RustLoginEncryptionKeys()
 
+                guard let currentTab = self.tabManager.selectedTab,
+                      let decryptLogin = rustLoginsEncryption.decryptSecureFields(login: login)
+                else {
+                    self.router.dismiss(animated: true)
+                    self.parentCoordinator?.didFinish(from: self)
+                    return
+                }
+
+                LoginsHelper.fillLoginDetails(
+                    with: currentTab,
+                    loginData: LoginInjectionData(
+                        requestId: currentRequestId,
+                        logins: [LoginItem(
+                            username: decryptLogin.secFields.username,
+                            password: decryptLogin.secFields.password,
+                            hostname: decryptLogin.fields.origin
+                        )]
+                    )
+                )
+
+                self.router.dismiss(animated: true)
+                self.parentCoordinator?.didFinish(from: self)
             },
             manageLoginInfoAction: { [weak self] in
                 guard let self = self else { return }

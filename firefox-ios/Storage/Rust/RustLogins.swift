@@ -203,36 +203,6 @@ public extension EncryptedLogin {
         let encryptedLogin = rustLoginsEncryption.encryptSecureFields(login: login)
         self.secFields = encryptedLogin?.secFields ?? ""
     }
-
-    func toJSONDict() -> [String: Any] {
-        let rustLoginsEncryption = RustLoginEncryptionKeys()
-        let login = rustLoginsEncryption.decryptSecureFields(login: self)
-
-        var dict: [String: Any] = [
-            "id": record.id,
-            "password": login?.secFields.password ?? "",
-            "hostname": fields.origin,
-
-            "timesUsed": record.timesUsed,
-            "timeCreated": record.timeCreated,
-            "timeLastUsed": record.timeLastUsed,
-            "timePasswordChanged": record.timePasswordChanged,
-
-            "username": login?.secFields.username ?? "",
-            "passwordField": fields.passwordField,
-            "usernameField": fields.usernameField,
-        ]
-
-        if let httpRealm = fields.httpRealm {
-            dict["httpRealm"] = httpRealm
-        }
-
-        if let formSubmitUrl = fields.formActionOrigin {
-            dict["formSubmitUrl"] = formSubmitUrl
-        }
-
-        return dict
-    }
 }
 
 public class LoginEntryFlattened {
@@ -445,7 +415,7 @@ public class RustLoginEncryptionKeys {
         }
     }
 
-    func decryptSecureFields(login: EncryptedLogin) -> Login? {
+    public func decryptSecureFields(login: EncryptedLogin) -> Login? {
         guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
             return nil
         }

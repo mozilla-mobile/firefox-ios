@@ -18,23 +18,16 @@ struct FieldFocusMessage: Codable {
     let type: String
 }
 
-struct LoginInjectionData {
-    let requestId: String
-    let name: String = "RemoteLogins:loginsFound"
-    var logins: [[String: Any]]
+struct LoginInjectionData: Codable {
+    var requestId: String
+    var name: String = "RemoteLogins:loginsFound"
+    var logins: [LoginItem]
+}
 
-    func toJSONString() -> String? {
-        let dict: [String: Any] = [
-            "requestId": requestId,
-            "name": name,
-            "logins": logins
-        ]
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: dict, options: []),
-              let jsonString = String(data: jsonData, encoding: .utf8) else {
-            return nil
-        }
-        return jsonString
-    }
+struct LoginItem: Codable {
+    var username: String
+    var password: String
+    var hostname: String
 }
 
 class LoginsHelper: TabContentScript {
@@ -152,7 +145,7 @@ class LoginsHelper: TabContentScript {
         }
     }
 
-    var foundFieldValues: ((FocusFieldType) -> Void)?
+    var foundFieldValues: ((FocusFieldType, String) -> Void)?
 
     private func sendMessageType(_ message: FieldFocusMessage) {
         // NOTE: This is a partial stub / placeholder
@@ -167,7 +160,7 @@ class LoginsHelper: TabContentScript {
                        level: .debug,
                        category: .webview)
         }
-        foundFieldValues?(message.fieldType)
+        foundFieldValues?(message.fieldType, currentRequestId)
     }
 
     private func parseFieldFocusMessage(from dictionary: [String: Any]) -> FieldFocusMessage? {
@@ -336,32 +329,45 @@ class LoginsHelper: TabContentScript {
 
         currentRequestId = requestId
 
-        let protectionSpace = URLProtectionSpace.fromOrigin(origin)
 
-        profile.logins.getLoginsForProtectionSpace(protectionSpace).uponQueue(.main) { res in
-            guard let cursor = res.successValue else { return }
 
-            let logins: [[String: Any]] = cursor.compactMap { login in
-                // `requestLogins` is for webpage forms, not for HTTP Auth,
-                // and the latter has httpRealm != nil; filter those out.
-                return login?.httpRealm == nil ? login?.toJSONDict() : nil
-            }
 
-            let loginData = LoginInjectionData(requestId: self.currentRequestId,
-                                               logins: logins)
 
-            // NOTE: FXIOS-3856 This will get disabled in future with addtion of bottom sheet
-            guard let tab = self.tab else {
-                return
-            }
 
-            LoginsHelper.fillLoginDetails(with: tab, loginData: loginData)
-        }
+//        let protectionSpace = URLProtectionSpace.fromOrigin(origin)
+//
+//        profile.logins.getLoginsForProtectionSpace(protectionSpace).uponQueue(.main) { res in
+//            guard let cursor = res.successValue else { return }
+//
+//            let logins: [LoginItem] = cursor.compactMap { login in
+//                let rustLoginsEncryption = RustLoginEncryptionKeys()
+//                guard let login = login, let decryptLogin = rustLoginsEncryption.decryptSecureFields(login: login) else {
+//                    return nil
+//                }
+//                return LoginItem(
+//                    username: decryptLogin.secFields.username,
+//                    password: decryptLogin.secFields.password,
+//                    hostname: decryptLogin.fields.origin
+//                )
+//            }
+//
+//            let loginData = LoginInjectionData(requestId: self.currentRequestId,
+//                                               logins: logins)
+//
+//            // NOTE: FXIOS-3856 This will get disabled in future with addtion of bottom sheet
+//            guard let tab = self.tab else {
+//                return
+//            }
+//
+//            LoginsHelper.fillLoginDetails(with: tab, loginData: loginData)
+//        }
     }
 
     public static func fillLoginDetails(with tab: Tab,
                                         loginData: LoginInjectionData) {
-        guard let injected = loginData.toJSONString() else { return }
+        guard let data = try? JSONEncoder().encode(loginData),
+              let injected = String(data: data, encoding: .utf8)
+        else { return }
         let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
         TelemetryWrapper.recordEvent(category: .action,

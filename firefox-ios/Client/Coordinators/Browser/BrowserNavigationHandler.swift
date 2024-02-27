@@ -70,7 +70,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView)
 
-    func showSavedLoginAutofill(tabURL: URL)
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String)
 
     /// Shows authentication view controller to authorize access to sensitive data.
     func showRequiredPassCode()
