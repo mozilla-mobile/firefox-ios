@@ -312,7 +312,7 @@ extension TabDisplayView: SwipeAnimatorDelegate {
         return started
     }
 
-    func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
+    func swipeAnimator(_ animator: SwipeAnimator) {
         guard let tabCell = animator.animatingView as? TabCell,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
 
