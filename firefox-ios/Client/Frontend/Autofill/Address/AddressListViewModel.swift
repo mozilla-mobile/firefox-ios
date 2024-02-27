@@ -70,7 +70,7 @@ class AddressListViewModel: ObservableObject {
                                         addressLevel2: address.addressLevel2,
                                         email: address.email,
                                         streetAddress: address.streetAddress,
-                                        name: "\(address.givenName) \(address.additionalName) \(address.familyName)",
+                                        name: address.name,
                                         postalCode: address.postalCode)
     }
 
