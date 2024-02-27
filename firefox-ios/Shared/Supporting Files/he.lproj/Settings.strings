@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "מידע נוסף על Firefox Suggest";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "מנועי חיפוש חלופיים";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "מנועי חיפוש חלופיים";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "תוצאות מחיפושים, היסטוריה, סימניות ועוד";

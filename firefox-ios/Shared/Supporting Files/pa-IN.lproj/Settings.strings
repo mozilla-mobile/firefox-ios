@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Firefox ਸੁਝਾਅ ਬਾਰੇ ਹੋਰ ਜਾਣੋ";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "ਬਦਲਵੇਂ ਖੋਜ ਇੰਜਣ";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "ਬਦਲਵੇਂ ਖੋਜ ਇੰਜਣ";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "ਖੋਜਾਂ, ਅਤੀਤ, ਬੁੱਕਮਾਰਕਾਂ ਅਤੇ ਹੋਰਾਂ ਤੋਂ ਨਤੀਜੇ";

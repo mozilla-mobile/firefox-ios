@@ -146,7 +146,8 @@ extension HomepageMessageCardViewModelTests {
         return GleanPlumbMessage(id: "12345",
                                  data: MockMessageDataProtocol(),
                                  action: "",
-                                 triggers: [],
+                                 triggerIfAll: [],
+                                 exceptIfAny: [],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
     }
@@ -169,6 +170,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var text: String = "This is a test"
     var buttonLabel: String?
     var experiment: String?
+    var actionParams: [String: String] = [:]
 }
 
 // MARK: - MockStyleDataProtocol

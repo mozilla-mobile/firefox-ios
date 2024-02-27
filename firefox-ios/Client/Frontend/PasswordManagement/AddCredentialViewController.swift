@@ -22,6 +22,10 @@ class AddCredentialViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
+    private var isRTLLanguage: Bool {
+        UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
+    }
+
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.accessibilityIdentifier = "Add Credential"
@@ -154,6 +158,9 @@ extension AddCredentialViewController: UITableViewDataSource {
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
             usernameField = loginCell.descriptionLabel
+            if isRTLLanguage {
+                usernameField.textAlignment = .right
+            }
             return loginCell
 
         case .passwordItem:
@@ -177,6 +184,9 @@ extension AddCredentialViewController: UITableViewDataSource {
             loginCell.configure(viewModel: cellModel)
             loginCell.applyTheme(theme: themeManager.currentTheme)
             websiteField = loginCell.descriptionLabel
+            if isRTLLanguage {
+                websiteField.textAlignment = .right
+            }
             return loginCell
         }
     }
