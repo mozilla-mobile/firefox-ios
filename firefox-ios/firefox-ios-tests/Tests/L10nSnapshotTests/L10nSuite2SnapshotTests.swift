@@ -20,8 +20,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
-    @MainActor
     // From here on it is fine to load pages
+    @MainActor
     func testLongPressOnTextOptions() {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
