@@ -38,6 +38,8 @@ class LoginsHelper: TabContentScript {
     private var currentRequestId: String = ""
     private var logger: Logger = DefaultLogger.shared
 
+    public var foundFieldValues: ((FocusFieldType, String) -> Void)?
+
     // Exposed for mocking purposes
     var logins: RustLogins {
         return profile.logins
@@ -144,8 +146,6 @@ class LoginsHelper: TabContentScript {
             }
         }
     }
-
-    var foundFieldValues: ((FocusFieldType, String) -> Void)?
 
     private func sendMessageType(_ message: FieldFocusMessage) {
         // NOTE: This is a partial stub / placeholder
