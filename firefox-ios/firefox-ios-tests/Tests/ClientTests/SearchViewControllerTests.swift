@@ -87,7 +87,7 @@ class SearchViewControllerTest: XCTestCase {
 
     func testFirefoxSuggestionReturnsNoSuggestions() async throws {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
-            FirefoxSuggestFeature(availableSuggestionsTypes: 
+            FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: false, .wikipedia: false])
        })
 
