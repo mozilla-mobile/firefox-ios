@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ToolbarKitTests"
-               BuildableName = "ToolbarKitTests"
-               BlueprintName = "ToolbarKitTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "ToolbarKit"
                BuildableName = "ToolbarKit"
                BlueprintName = "ToolbarKit"
@@ -46,9 +32,9 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "WebEngine"
-            BuildableName = "WebEngine"
-            BlueprintName = "WebEngine"
+            BlueprintIdentifier = "ToolbarKit"
+            BuildableName = "ToolbarKit"
+            BlueprintName = "ToolbarKit"
             ReferencedContainer = "container:">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -82,6 +68,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "ToolbarKit"
+            BuildableName = "ToolbarKit"
+            BlueprintName = "ToolbarKit"
+            ReferencedContainer = "container:">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
