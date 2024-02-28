@@ -19,6 +19,7 @@ features:
         type: Map<SuggestionType, Boolean>
         default:
           amp: true
+          ampMobile: false
           wikipedia: true
         
     defaults:
@@ -31,6 +32,8 @@ enums:
     description: The type of a Firefox Suggest search suggestion.
     variants:
       amp:
-        description: A Firefox Suggestion from adMarketplace.
+        description: A Firefox Suggestion for desktop from adMarketplace.
+      ampMobile:
+        description: A Firefox Suggestion specifically for mobile from adMarketplace.
       wikipedia:
         description: A Firefox Suggestion for a Wikipedia page.
