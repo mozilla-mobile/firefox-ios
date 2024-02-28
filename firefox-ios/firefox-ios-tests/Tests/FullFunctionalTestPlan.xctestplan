@@ -116,6 +116,7 @@
         "ReadingListTests\/testAddToReaderListOptions()",
         "ReadingListTests\/testAddToReadingList()",
         "ReadingListTests\/testLoadReaderContent()",
+        "ReadingListTests\/testReadingList()",
         "ScreenGraphTest\/testUserStateChanges()",
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testOpenTabsInSearchSuggestions()",
