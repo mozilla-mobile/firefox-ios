@@ -148,8 +148,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             },
             manageLoginInfoAction: { [weak self] in
                 guard let self else { return }
-                self.parentCoordinator?.show(settings: .password)
-                self.parentCoordinator?.didFinish(from: self)
+                parentCoordinator?.show(settings: .password)
+                parentCoordinator?.didFinish(from: self)
             }
         )
         let loginAutofillView = LoginAutofillView(viewModel: viewModel)
