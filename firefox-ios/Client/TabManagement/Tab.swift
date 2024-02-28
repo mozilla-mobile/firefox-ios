@@ -606,10 +606,12 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     func goBack() {
+        removeAllSnackbars()
         _ = webView?.goBack()
     }
 
     func goForward() {
+        removeAllSnackbars()
         _ = webView?.goForward()
     }
 

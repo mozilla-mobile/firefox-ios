@@ -12,6 +12,8 @@ protocol AlphaDimmable {
 
 class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     var isClearBackground = false
+    var isOverlayMode = false
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -33,6 +35,11 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         axis = .vertical
         distribution = .fill
         alignment = .fill
+    }
+
+    func toggleOverlayMode(shouldEnterOverlayMode: Bool) {
+        alignment = shouldEnterOverlayMode? .center : .fill
+        isOverlayMode = shouldEnterOverlayMode
     }
 
     // MARK: - Spacer view
@@ -79,7 +86,10 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        let color = isClearBackground ? .clear : theme.colors.layer1
+        var color = isClearBackground ? .clear : theme.colors.layer1
+        if isOverlayMode {
+            color = theme.colors.layer4
+        }
         backgroundColor = color
         keyboardSpacer?.backgroundColor = color
     }

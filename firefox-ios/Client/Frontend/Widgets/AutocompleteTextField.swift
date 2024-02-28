@@ -11,6 +11,7 @@ import Common
 /// Delegate for the text field events. Since AutocompleteTextField owns the UITextFieldDelegate,
 /// callers must use this instead.
 protocol AutocompleteTextFieldDelegate: AnyObject {
+    func autocompleteTextFieldWillBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
@@ -315,6 +316,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         frame.size.height = self.frame.size.height
         label.frame = frame
         return label
+    }
+
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        autocompleteDelegate?.autocompleteTextFieldWillBeginEditing(self)
+        return true
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {

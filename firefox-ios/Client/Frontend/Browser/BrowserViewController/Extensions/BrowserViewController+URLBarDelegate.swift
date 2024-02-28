@@ -30,6 +30,10 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 }
 
 extension BrowserViewController: URLBarDelegate {
+    func urlBarWillBeginEditing(_ urlBar: URLBarView) {
+        tabManager.selectedTab?.removeAllSnackbars()
+    }
+
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(visible: false)
@@ -45,6 +49,7 @@ extension BrowserViewController: URLBarDelegate {
 
     private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                                                  focusedSegment: TabTrayPanelType? = nil) {
+        tabManager.selectedTab?.removeAllSnackbars()
         tabTrayViewController = LegacyTabTrayViewController(
             tabTrayDelegate: self,
             profile: profile,
@@ -98,6 +103,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
+        tabManager.selectedTab?.removeAllSnackbars()
         tabManager.selectedTab?.reload()
     }
 
@@ -170,6 +176,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
+        tabManager.selectedTab?.removeAllSnackbars()
         navigationHandler?.showQRCode(delegate: self)
     }
 
@@ -183,6 +190,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(_ urlBar: URLBarView) {
+        tabManager.selectedTab?.removeAllSnackbars()
         showTabTray()
     }
 
@@ -193,6 +201,7 @@ extension BrowserViewController: URLBarDelegate {
 
         switch readerMode.state {
         case .available:
+            tabManager.selectedTab?.removeAllSnackbars()
             enableReaderMode()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
         case .active:

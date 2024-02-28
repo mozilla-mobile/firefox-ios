@@ -132,7 +132,8 @@ class BrowserViewController: UIViewController,
         stackview.isClearBackground = true
     }
 
-    // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
+    // The content stack view contains the contentContainer
+    // with homepage or browser and the shopping sidebar
     var contentStackView: SidebarEnabledView = .build()
 
     // The content container contains the homepage or webview. Embeded by the coordinator.
@@ -415,6 +416,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
+        tabManager.selectedTab?.removeAllSnackbars()
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
@@ -979,6 +981,21 @@ class BrowserViewController: UIViewController,
             adjustBottomContentBottomSearchBar(remake)
         } else {
             adjustBottomContentTopSearchBar(remake)
+        }
+    }
+
+    private func setupBottomContentStackViewOverlay() {
+        guard let webView = self.tabManager.selectedTab?.webView else { return }
+        bottomContentStackView.toggleOverlayMode(shouldEnterOverlayMode: true)
+        bottomContentStackView.applyTheme(theme: themeManager.currentTheme)
+
+        bottomContentStackView.snp.remakeConstraints { remake in
+            remake.left.equalTo(view.safeArea.left)
+            remake.right.equalTo(view.safeArea.right)
+            remake.centerX.equalTo(view)
+            remake.width.equalTo(view.safeArea.width)
+            remake.top.equalTo(webView.safeArea.top)
+            remake.bottom.equalTo(webView.safeArea.bottom)
         }
     }
 
@@ -2357,13 +2374,22 @@ extension BrowserViewController: LegacyTabDelegate {
         // selected later, we will show the SnackBar at that time.
         guard tab == tabManager.selectedTab else { return }
         bar.applyTheme(theme: themeManager.currentTheme)
-        bottomContentStackView.addArrangedViewToBottom(bar, completion: {
+
+        setupBottomContentStackViewOverlay()
+        bottomContentStackView.addArrangedViewToBottom(bar, completion: nil)
+        let flexibleView = UIView()
+        bottomContentStackView.addArrangedViewToTop(flexibleView) {
             self.view.layoutIfNeeded()
-        })
+        }
     }
 
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar) {
-        bottomContentStackView.removeArrangedView(bar)
+        bottomContentStackView.removeAllArrangedViews()
+        bottomContentStackView.snp.remakeConstraints { remake in
+            adjustBottomContentStackView(remake)
+        }
+        bottomContentStackView.toggleOverlayMode(shouldEnterOverlayMode: false)
+        view.layoutIfNeeded()
     }
 }
 
