@@ -25,7 +25,10 @@ let package = Package(
             targets: ["ComponentLibrary"]),
         .library(
             name: "WebEngine",
-            targets: ["WebEngine"])
+            targets: ["WebEngine"]),
+        .library(
+            name: "ToolbarKit",
+            targets: ["ToolbarKit"])
     ],
     dependencies: [
         .package(
@@ -91,6 +94,13 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "WebEngineTests",
-            dependencies: ["WebEngine"])
+            dependencies: ["WebEngine"]),
+        .target(
+            name: "ToolbarKit",
+            dependencies: ["Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "ToolbarKitTests",
+            dependencies: ["ToolbarKit"])
     ]
 )
