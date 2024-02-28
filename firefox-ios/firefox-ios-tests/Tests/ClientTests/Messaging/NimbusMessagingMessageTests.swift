@@ -38,12 +38,14 @@ final class NimbusMessagingMessageTests: XCTestCase {
         let helper = NimbusMessagingHelperUtility().createNimbusMessagingHelper()!
 
         let messages = subject.getMessages(feature)
+        var cache = [String: Bool]()
         messages.forEach { message in
             do {
                 _ = try evaluationUtility.isMessageEligible(
                     message,
                     messageHelper: helper,
-                    jexlCache: &cache)
+                    jexlCache: &cache
+                )
             } catch {
                 XCTFail("Message \(message.id) failed with invalid JEXL triggers")
             }

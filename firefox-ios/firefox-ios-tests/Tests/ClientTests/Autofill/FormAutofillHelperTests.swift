@@ -14,7 +14,9 @@ class FormAutofillHelperTests: XCTestCase {
     var formAutofillHelper: FormAutofillHelper!
     var tab: Tab!
     var profile: MockProfile!
-    var validMockWKMessage: MockWKScriptMessage!
+    var validMockWKMessage: WKScriptMessageMock!
+    var secureWebviewMock: WKWebViewMock!
+    var secureFrameMock: WKFrameInfoMock!
     let validMockPayloadJson = """
         {
           "type" : "fill-credit-card-form",
@@ -27,7 +29,7 @@ class FormAutofillHelperTests: XCTestCase {
           }
         }
     """
-    var validPayloadCaptureMockWKMessage: MockWKScriptMessage!
+    var validPayloadCaptureMockWKMessage: WKScriptMessageMock!
     // We need the `capture-credit-card-form`
     // to know when form submission happend
     let validMockPayloadCaptureJson = """
@@ -50,24 +52,28 @@ class FormAutofillHelperTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
         formAutofillHelper = FormAutofillHelper(tab: tab)
+        secureWebviewMock = WKWebViewMock(URL(string: "https://foo.com")!)
+        secureFrameMock = WKFrameInfoMock(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
         guard let jsonData = validMockPayloadJson.data(using: .utf8),
               let dictionary = try? JSONSerialization.jsonObject(
                 with: jsonData,
                 options: []) as? [String: Any] else {
             fatalError("Unable to convert JSON to dictionary")
         }
-        validMockWKMessage = MockWKScriptMessage(
+        validMockWKMessage = WKScriptMessageMock(
             name: "creditCardFormMessageHandler",
-            body: dictionary)
+            body: dictionary,
+            frameInfo: secureFrameMock)
         guard let jsonDataCapture = validMockPayloadCaptureJson.data(using: .utf8),
               let dictionaryCapture = try? JSONSerialization.jsonObject(
                 with: jsonDataCapture,
                 options: []) as? [String: Any] else {
             fatalError("Unable to convert JSON to dictionary")
         }
-        validPayloadCaptureMockWKMessage =  MockWKScriptMessage(
+        validPayloadCaptureMockWKMessage =  WKScriptMessageMock(
             name: "validPayloadCaptureMockWKMessage",
-            body: dictionaryCapture)
+            body: dictionaryCapture,
+            frameInfo: secureFrameMock)
     }
 
     override func tearDown() {
@@ -78,6 +84,8 @@ class FormAutofillHelperTests: XCTestCase {
         formAutofillHelper = nil
         validMockWKMessage = nil
         validPayloadCaptureMockWKMessage = nil
+        secureFrameMock = nil
+        secureWebviewMock = nil
     }
 
     // MARK: Parsing
@@ -236,9 +244,10 @@ class FormAutofillHelperTests: XCTestCase {
                                                    "organization": "Mozilla",
                                                    "postal-code": "12345",
                                                    "country": "USA"]]
-        let mockAddressScriptMessage = MockWKScriptMessage(
+        let mockAddressScriptMessage = WKScriptMessageMock(
             name: FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue,
-            body: mockBody)
+            body: mockBody,
+            frameInfo: secureFrameMock)
 
         // Create an expectation for the closure to be called
         let expectation = XCTestExpectation(description: "foundFieldValues closure should be called")
@@ -268,9 +277,10 @@ class FormAutofillHelperTests: XCTestCase {
                                                    "cc-exp-month": "12",
                                                    "cc-exp": "12",
                                                    "cc-exp-year": "2023"]]
-        let mockCreditCardScriptMessage = MockWKScriptMessage(
+        let mockCreditCardScriptMessage = WKScriptMessageMock(
             name: FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue,
-            body: mockBody)
+            body: mockBody,
+            frameInfo: secureFrameMock)
 
         // Create an expectation for the closure to be called
         let expectation = XCTestExpectation(description: "foundFieldValues closure should be called")
@@ -288,24 +298,5 @@ class FormAutofillHelperTests: XCTestCase {
 
         // Wait for the expectation to be fulfilled
         wait(for: [expectation], timeout: 1.0)
-    }
-}
-
-// MARK: - MockWKScriptMessage
-class MockWKScriptMessage: WKScriptMessage {
-    var mockBody: Any
-    var mockName: String
-
-    init(name: String, body: Any) {
-        mockName = name
-        mockBody = body
-    }
-
-    override var body: Any {
-        return mockBody
-    }
-
-    override var name: String {
-        return mockName
     }
 }
