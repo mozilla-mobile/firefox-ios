@@ -72,6 +72,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     func showSavedLoginAutofill(tabURL: URL, currentRequestId: String)
 
+    /// Shows an AddressAutofill view for selecting addresses in order to autofill forms.
+    func showAddressAutofill(frame: WKFrameInfo?)
+
     /// Shows authentication view controller to authorize access to sensitive data.
     func showRequiredPassCode()
 

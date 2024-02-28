@@ -1427,11 +1427,14 @@ class BrowserViewController: UIViewController,
                 break
             }
 
+            // Ensure we do have a URL from that observer
+            guard let url = webView.url else { return }
+
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
-            if tab.url?.origin == webView.url?.origin {
-                tab.url = webView.url
+            if tab.url?.origin == url.origin {
+                tab.url = url
 
                 if tab === tabManager.selectedTab {
                     updateUIForReaderHomeStateForTab(tab)
@@ -1915,6 +1918,12 @@ class BrowserViewController: UIViewController,
                     break
                 }
 
+                tabWebView.accessoryView.savedAddressesClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        webView.resignFirstResponder()
+                        self?.navigationHandler?.showAddressAutofill(frame: frame)
+                    }
+                }
             case .creditCard:
                 guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
                       let type = type,
@@ -2031,8 +2040,7 @@ class BrowserViewController: UIViewController,
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions ||
-        profile.searchEngines.shouldShowPrivateModeFirefoxSuggestions
+        let isSettingEnabled = profile.searchEngines.isPrivateModeSettingEnabled
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }

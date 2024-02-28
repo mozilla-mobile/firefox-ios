@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import WebEngine
+import WebKit
 
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
@@ -12,6 +13,7 @@ final class WKEngineSessionTests: XCTestCase {
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
     private var findInPageDelegate: MockFindInPageHelperDelegate!
+    private var metadataFetcher: MockMetadataFetcherHelper!
 
     override func setUp() {
         super.setUp()
@@ -21,6 +23,7 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
         findInPageDelegate = MockFindInPageHelperDelegate()
+        metadataFetcher = MockMetadataFetcherHelper()
     }
 
     override func tearDown() {
@@ -31,6 +34,7 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = nil
         engineSessionDelegate = nil
         findInPageDelegate = nil
+        metadataFetcher = nil
     }
 
     // MARK: Load URL
@@ -474,6 +478,40 @@ final class WKEngineSessionTests: XCTestCase {
         prepareForTearDown(subject!)
     }
 
+    // MARK: Metadata parser
+
+    func testFetchMetadataGivenProperURLChangeThenFetchMetadata() {
+        let loadedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        subject?.sessionData.url = loadedURL
+        webViewProvider.webView.url = loadedURL
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(metadataFetcher.fetchFromSessionCalled, 1)
+        XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
+        prepareForTearDown(subject!)
+    }
+
+    func testFetchMetadataGivenDidFinishNavigationThenFetchMetadata() {
+        let loadedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.url = loadedURL
+
+        // FXIOS-8477 cannot test easily right now, need changes
+//        let navigation = WKNavigation()
+//        subject?.webView(webViewProvider.webView, didFinish: navigation)
+
+//        XCTAssertEqual(metadataFetcher.fetchFromSessionCalled, 1)
+//        XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
+        prepareForTearDown(subject!)
+    }
+
     // MARK: User script manager
 
     func testUserScriptWhenSubjectCreatedThenInjectionIntoWebviewCalled() {
@@ -534,7 +572,8 @@ final class WKEngineSessionTests: XCTestCase {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
-                                            contentScriptManager: contentScriptManager) else {
+                                            contentScriptManager: contentScriptManager,
+                                            metadataFetcher: metadataFetcher) else {
             return nil
         }
 

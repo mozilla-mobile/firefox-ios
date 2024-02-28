@@ -267,6 +267,13 @@ extension String {
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
         }
+        public struct BottomSheet {
+            public static let UseASavedAddress = MZLocalizedString(
+                key: "Addresses.BottomSheet.UseSavedAddressBottomSheet.v124",
+                tableName: "BottomSheet",
+                value: "Use a saved address?",
+                comment: "Title displayed on the bottom sheet for prompting users to use a saved address from the list.")
+        }
     }
 }
 

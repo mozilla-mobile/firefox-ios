@@ -5,21 +5,19 @@ set -ex
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 CURRENT_REPO_PATH="$(dirname -- "$SCRIPT_DIR")"
 
-REPO_NAME_TO_SYNC='fenix'
+REPO_NAME_TO_SYNC='focus-ios'
 MAIN_BRANCH_NAME='main'
 
-CURRENT_MAJOR_VERSION="$(git show "$MAIN_BRANCH_NAME":version.txt | cut -d'.' -f1)"
-CURRENT_BETA_VERSION="$(( CURRENT_MAJOR_VERSION - 1 ))"
+CURRENT_BETA_VERSION=$(grep -A 1 'BITRISE_BETA_VERSION:' bitrise.yml | awk -F ':' '{print $NF}' | tr -d "'" | tr -d ' ' | tr -d '.0')
 CURRENT_RELEASE_VERSION="$(( CURRENT_BETA_VERSION - 1 ))"
-BRANCHES_TO_SYNC_ON_CURRENT_REPO=("$MAIN_BRANCH_NAME" "releases_v$CURRENT_BETA_VERSION" "releases_v$CURRENT_RELEASE_VERSION")
-BRANCHES_TO_SYNC_ON_TMP_REPO=("$MAIN_BRANCH_NAME" "releases_v$CURRENT_BETA_VERSION.0.0" "releases_v$CURRENT_RELEASE_VERSION.0.0")
+BRANCHES_TO_SYNC_ON_CURRENT_REPO=("$MAIN_BRANCH_NAME" "release/v$CURRENT_RELEASE_VERSION")
+BRANCHES_TO_SYNC_ON_TMP_REPO=("$MAIN_BRANCH_NAME" "releases_v$CURRENT_RELEASE_VERSION")
 PREP_BRANCHES=("$REPO_NAME_TO_SYNC-prep" "$REPO_NAME_TO_SYNC-prep-$CURRENT_BETA_VERSION" "$REPO_NAME_TO_SYNC-prep-$CURRENT_RELEASE_VERSION")
 
 TMP_REPO_PATH="/tmp/git/$REPO_NAME_TO_SYNC"
-TMP_REPO_BRANCH_NAME='firefox-android'
+TMP_REPO_BRANCH_NAME='merge-to-firefox-ios'
 MERGE_COMMIT_MESSAGE=$(cat <<EOF
 Merge https://github.com/mozilla-mobile/$REPO_NAME_TO_SYNC repository
-
 The history was slightly altered before merging it:
   * All files from $REPO_NAME_TO_SYNC are now under its own subdirectory
   * All commits messages were rewritten to link issues and pull requests to the former repository
@@ -55,7 +53,7 @@ function _setup_temporary_repo() {
 
     git clone "git@github.com:mozilla-mobile/$REPO_NAME_TO_SYNC.git" "$TMP_REPO_PATH"
     cd "$TMP_REPO_PATH"
-    git fetch origin "$TMP_REPO_BRANCH_NAME"
+    #git fetch origin "$TMP_REPO_BRANCH_NAME"
 }
 
 function _update_repo_branch() {
@@ -127,7 +125,7 @@ function _update_prep_branches() {
 
 _test_prerequisites
 _setup_temporary_repo
-_update_repo_branch
+#_update_repo_branch
 _update_repo_numbers
 _rewrite_git_history
 _update_prep_branches
@@ -137,11 +135,8 @@ git checkout "${PREP_BRANCHES[0]}"
 cat <<EOF
 $REPO_NAME_TO_SYNC has been sync'd and merged to the following branches:
     ${PREP_BRANCHES[@]}
-
 You are currently on ${PREP_BRANCHES[0]}.
 You can now inspect the changes and push them once ready.
-
 If something went wrong, you still have a copy of the former branches.
 They're suffixed by '$PREP_BRANCH_BACKUP_SUFFIX'
-
 EOF

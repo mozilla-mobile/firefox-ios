@@ -53,7 +53,7 @@
 "Added page to Reading List" = "Сторінку додано до списку читання";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "Гаразд";
+"AddPass.Error.Dismiss" = "OK";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Message" = "При додаванні картки до Wallet сталася помилка. Спробуйте знову пізніше.";
@@ -206,7 +206,7 @@
 "ContextualHints.TabTray.InactiveTabs" = "Сюди переміщуються вкладки, які ви не переглядали впродовж двох тижнів.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
-"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Вимкнути у налаштуваннях";
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Вимкніть у параметрах";
 
 /* Accessibility label for action denoting closing contextual hint. */
 "ContextualHintsCloseButtonAccessibility.v105" = "Закрити";
@@ -896,7 +896,7 @@
 "No tabs" = "Немає вкладок";
 
 /* OK button */
-"OK" = "Гаразд";
+"OK" = "OK";
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Гаразд";
@@ -1007,7 +1007,7 @@
 "Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Зберігайте статті до списку читання дотиком до піктограми книги з плюсом в керуванні режимом читання.";
 
 /* OK button to dismiss the error prompt. */
-"ScanQRCode.Error.OK.Button" = "Гаразд";
+"ScanQRCode.Error.OK.Button" = "OK";
 
 /* Text for the instructions label, displayed in the QR scanner view */
 "ScanQRCode.Instructions.Label" = "Розташуйте QR-код в межах рамки для сканування";
@@ -1064,7 +1064,7 @@
 "Search.ThirdPartyEngines.FormErrorTitle" = "Невдача";
 
 /* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "Гаразд";
+"Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Надіслати звіт про збій, щоб Mozilla змогла виправити цю проблему?";
@@ -1088,7 +1088,7 @@
 "SendTo.Error.Message" = "Можна ділитися лише посиланнями HTTP та HTTPS.";
 
 /* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "Гаразд";
+"SendTo.Error.OK.Button" = "OK";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
 "SendTo.Error.Title" = "Неможливо поділитися цим посиланням.";

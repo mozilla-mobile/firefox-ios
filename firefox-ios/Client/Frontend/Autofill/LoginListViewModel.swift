@@ -44,7 +44,7 @@ class LoginListViewModel: ObservableObject {
         } catch {
             self.logger.log("Error fetching logins",
                             level: .warning,
-                            category: .address,
+                            category: .autofill,
                             description: "Error fetching addresses: \(error.localizedDescription)")
         }
     }

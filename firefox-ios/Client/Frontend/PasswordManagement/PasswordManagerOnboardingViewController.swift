@@ -37,7 +37,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
-        button.titleLabel?.font = LegacyDynamicFontHelper().MediumSizeBoldFontAS
         button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.defaultContentSize,
                                                                       leading: UX.leadingContentSize,
                                                                       bottom: UX.defaultContentSize,

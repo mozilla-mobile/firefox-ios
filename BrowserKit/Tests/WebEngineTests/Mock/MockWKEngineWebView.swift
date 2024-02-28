@@ -38,6 +38,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var removeObserverCalled = 0
     var evaluateJavaScriptCalled = 0
     var savedJavaScript: String?
+    var javascriptResult: (Result<Any, Error>)?
 
     var loadFileReadAccessURL: URL?
 
@@ -114,5 +115,9 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
                             completionHandler: ((Result<Any, Error>) -> Void)?) {
         evaluateJavaScriptCalled += 1
         savedJavaScript = javaScript
+
+        if let javascriptResult {
+            completionHandler?(javascriptResult)
+        }
     }
 }

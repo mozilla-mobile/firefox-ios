@@ -7,10 +7,12 @@ import WebKit
 @testable import WebEngine
 
 class MockWKEngineSession: WKEngineSession {
+    let webviewProvider = MockWKWebViewProvider()
+
     init() {
         super.init(userScriptManager: MockWKUserScriptManager(),
                    configurationProvider: MockWKEngineConfigurationProvider(),
-                   webViewProvider: MockWKWebViewProvider(),
+                   webViewProvider: webviewProvider,
                    contentScriptManager: MockWKContentScriptManager())!
     }
 }

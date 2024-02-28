@@ -46,9 +46,7 @@ class RustAutofillTests: XCTestCase {
 
     func addAddress(completion: @escaping (Address?, Error?) -> Void) {
         let address = UpdatableAddressFields(
-            givenName: "Jane",
-            additionalName: "",
-            familyName: "Doe",
+            name: "Jane Doe",
             organization: "",
             streetAddress: "123 Second Avenue",
             addressLevel3: "",
@@ -72,8 +70,7 @@ class RustAutofillTests: XCTestCase {
                 return
             }
 
-            XCTAssertEqual(address.givenName, "Jane")
-            XCTAssertEqual(address.familyName, "Doe")
+            XCTAssertEqual(address.name, "Jane Doe")
             XCTAssertEqual(address.streetAddress, "123 Second Avenue")
             XCTAssertEqual(address.addressLevel2, "Chicago, IL")
             XCTAssertEqual(address.country, "United States")
@@ -104,8 +101,7 @@ class RustAutofillTests: XCTestCase {
 
             // Assert on individual addresses in the list
             for address in addresses ?? [] {
-                XCTAssertEqual(address.givenName, "Jane")
-                XCTAssertEqual(address.familyName, "Doe")
+                XCTAssertEqual(address.name, "Jane Doe")
                 XCTAssertEqual(address.streetAddress, "123 Second Avenue")
                 XCTAssertEqual(address.addressLevel2, "Chicago, IL")
                 XCTAssertEqual(address.country, "United States")

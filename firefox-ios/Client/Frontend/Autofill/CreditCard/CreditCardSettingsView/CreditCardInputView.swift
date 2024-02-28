@@ -139,7 +139,7 @@ struct CreditCardInputView: View {
                         }
                         viewModel.logger?.log("Unable to update card with error: \(error)",
                                               level: .fatal,
-                                              category: .creditcard)
+                                              category: .autofill)
                         viewModel.dismiss?(.none, false)
                     }
                 } else {
@@ -151,7 +151,7 @@ struct CreditCardInputView: View {
                         }
                         viewModel.logger?.log("Unable to save credit card with error: \(error)",
                                               level: .fatal,
-                                              category: .creditcard)
+                                              category: .autofill)
                         viewModel.dismiss?(.savedCard, false)
                     }
                 }

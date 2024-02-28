@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Tìm hiểu thêm về đề xuất của Firefox";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "Công cụ tìm kiếm thay thế";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Công cụ tìm kiếm thay thế";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Kết quả từ tìm kiếm, lịch sử, dấu trang và hơn thế nữa";

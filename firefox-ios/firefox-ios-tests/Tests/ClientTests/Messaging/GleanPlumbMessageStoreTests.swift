@@ -55,7 +55,8 @@ class GleanPlumbMessageStoreTests: XCTestCase {
         return GleanPlumbMessage(id: messageId,
                                  data: MockMessageData(),
                                  action: "MAKE_DEFAULT",
-                                 triggers: ["ALWAYS"],
+                                 triggerIfAll: ["ALWAYS"],
+                                 exceptIfAny: [],
                                  style: styleData,
                                  metadata: subject.getMessageMetadata(messageId: messageId))
     }
@@ -74,19 +75,22 @@ class MockMessageData: MessageDataProtocol {
     var text: String
     var buttonLabel: String?
     var experiment: String?
+    var actionParams: [String: String]
 
     init(
         surface: MessageSurfaceId = .newTabCard,
         isControl: Bool = false,
         title: String? = "Title",
         text: String = "text",
-        buttonLabel: String? = "Tap"
+        buttonLabel: String? = "Tap",
+        actionParams: [String: String] = [:]
     ) {
         self.surface = surface
         self.isControl = isControl
         self.title = title
         self.text = text
         self.buttonLabel = buttonLabel
+        self.actionParams = actionParams
     }
 }
 
