@@ -36,7 +36,7 @@ final class NimbusMessagingMessageTests: XCTestCase {
     func testAllMessageTriggers() throws {
         let evaluationUtility = NimbusMessagingEvaluationUtility()
         let helper = NimbusMessagingHelperUtility().createNimbusMessagingHelper()!
-        
+
         let messages = subject.getMessages(feature)
         messages.forEach { message in
             do {
@@ -49,3 +49,4 @@ final class NimbusMessagingMessageTests: XCTestCase {
         }
     }
 }
+
