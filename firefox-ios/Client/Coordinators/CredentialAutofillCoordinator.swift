@@ -8,7 +8,6 @@ import Storage
 import Shared
 import WebKit
 import ComponentLibrary
-import SwiftUI
 
 class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties

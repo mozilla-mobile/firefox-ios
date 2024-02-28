@@ -2346,7 +2346,7 @@ extension BrowserViewController: LegacyTabDelegate {
                 self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
             case .deviceOwnerFailed:
                 // Keep showing bvc
-                break 
+                break
             case .passCodeRequired:
                 self.navigationHandler?.showRequiredPassCode()
             }
