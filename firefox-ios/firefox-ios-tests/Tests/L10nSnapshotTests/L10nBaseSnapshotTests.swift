@@ -20,7 +20,8 @@ class L10nBaseSnapshotTests: XCTestCase {
                 LaunchArguments.SkipContextualHints,
                 LaunchArguments.DisableAnimations]
 
-    @MainActor override func setUp() {
+    @MainActor 
+    override func setUp() {
         super.setUp()
         continueAfterFailure = false
         app = XCUIApplication()
