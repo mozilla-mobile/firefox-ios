@@ -120,7 +120,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             loginStorage: profile.logins,
             logger: logger,
             onLoginCellTap: { [weak self] login in
-                guard let self = self else { return }
+                guard let self else { return }
                 let rustLoginsEncryption = RustLoginEncryptionKeys()
 
                 guard let currentTab = self.tabManager.selectedTab,
