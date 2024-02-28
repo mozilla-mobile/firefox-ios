@@ -254,11 +254,12 @@ class SearchViewController: SiteTableViewController,
         profile.firefoxSuggest?.interruptReader()
 
         let tempSearchQuery = searchQuery
-        let providers = [.amp, .wikipedia]
+        let providers = [.amp, .ampMobile, .wikipedia]
             .filter { NimbusFirefoxSuggestFeatureLayer().isSuggestionProviderAvailable($0) }
             .filter {
                 switch $0 {
                 case .amp: includeSponsored
+                case .ampMobile: includeSponsored
                 case .wikipedia: includeNonSponsored
                 default: false
                 }

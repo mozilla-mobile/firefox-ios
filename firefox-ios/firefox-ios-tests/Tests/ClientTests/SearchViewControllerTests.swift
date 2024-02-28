@@ -17,7 +17,7 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
         providers: [SuggestionProvider]
     ) async throws -> [RustFirefoxSuggestion] {
         var suggestions = [RustFirefoxSuggestion]()
-        if providers.contains(.amp) {
+        if providers.contains(.ampMobile) {
             suggestions.append(RustFirefoxSuggestion(
                 title: "Mozilla",
                 url: URL(string: "https://mozilla.org")!,
@@ -87,7 +87,8 @@ class SearchViewControllerTest: XCTestCase {
 
     func testFirefoxSuggestionReturnsNoSuggestions() async throws {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
-          FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: false, .wikipedia: false])
+            FirefoxSuggestFeature(availableSuggestionsTypes:
+                                    [.amp: false, .ampMobile: false, .wikipedia: false])
        })
 
         engines.shouldShowFirefoxSuggestions = false
@@ -104,7 +105,8 @@ class SearchViewControllerTest: XCTestCase {
 
     func testFirefoxSuggestionReturnsNoSuggestionsWhenSuggestionSettingsFalse() async throws {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
-          FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: true, .wikipedia: true])
+            FirefoxSuggestFeature(availableSuggestionsTypes:
+                                    [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
         engines.shouldShowFirefoxSuggestions = false
@@ -115,7 +117,8 @@ class SearchViewControllerTest: XCTestCase {
 
     func testFirefoxSuggestionReturnsSponsoredAndNonSponsored() async throws {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
-          FirefoxSuggestFeature(availableSuggestionsTypes: [.amp: true, .wikipedia: true])
+            FirefoxSuggestFeature(availableSuggestionsTypes:
+                                    [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
         engines.shouldShowFirefoxSuggestions = true

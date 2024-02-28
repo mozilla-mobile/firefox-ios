@@ -26,6 +26,7 @@ class NimbusFirefoxSuggestFeatureLayer: NimbusFirefoxSuggestFeatureLayerProtocol
     func isSuggestionProviderAvailable(_ provider: SuggestionProvider) -> Bool {
         return switch provider {
         case .amp: config[.amp] ?? false
+        case .ampMobile: config[.ampMobile] ?? false
         case .wikipedia: config[.wikipedia] ?? false
         default: false
         }
