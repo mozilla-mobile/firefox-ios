@@ -238,8 +238,8 @@ class WKEngineSession: NSObject,
         // didCommitNavigation to confirm the page load.
         guard sessionData.url?.origin == webView.url?.origin else { return }
 
-        sessionData.url = webView.url
         if let url = webView.url {
+            sessionData.url = url
             delegate?.onLocationChange(url: url.absoluteString)
 
             metadataFetcher.fetch(fromSession: self, url: url)
