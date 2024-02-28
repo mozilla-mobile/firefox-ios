@@ -147,7 +147,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 self.parentCoordinator?.didFinish(from: self)
             },
             manageLoginInfoAction: { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 self.parentCoordinator?.show(settings: .password)
                 self.parentCoordinator?.didFinish(from: self)
             }
