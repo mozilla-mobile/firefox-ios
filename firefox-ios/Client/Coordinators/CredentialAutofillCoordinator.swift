@@ -126,8 +126,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 guard let currentTab = self.tabManager.selectedTab,
                       let decryptLogin = rustLoginsEncryption.decryptSecureFields(login: login)
                 else {
-                    self.router.dismiss(animated: true)
-                    self.parentCoordinator?.didFinish(from: self)
+                    router.dismiss(animated: true)
+                    parentCoordinator?.didFinish(from: self)
                     return
                 }
 
