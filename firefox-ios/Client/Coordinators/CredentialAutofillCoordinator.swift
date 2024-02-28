@@ -143,8 +143,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                     )
                 )
 
-                self.router.dismiss(animated: true)
-                self.parentCoordinator?.didFinish(from: self)
+                router.dismiss(animated: true)
+                parentCoordinator?.didFinish(from: self)
             },
             manageLoginInfoAction: { [weak self] in
                 guard let self else { return }
