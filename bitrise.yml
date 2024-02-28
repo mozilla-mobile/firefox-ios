@@ -8,9 +8,6 @@ pipelines:
     - build_applications: {}
     - run_tests: {}
 stages:
-  l10n_screenshots:
-    workflows:
-    - L10nBuild: {}
   pre_configuration:
     workflows:
     - determine_apps_affected: {}
@@ -2124,15 +2121,13 @@ app:
 
 trigger_map:
 - push_branch: main
-  workflow: L10nBuild
-  #pipeline: pipeline_build_and_test
+  pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - push_branch: release/v125
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
-  workflow: L10nBuild
-  #pipeline: pipeline_build_and_test
+  pipeline: pipeline_build_and_test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: release/v*
