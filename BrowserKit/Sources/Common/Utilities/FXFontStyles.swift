@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import UIKit
 
 // This class contains the Firefox iOS type styles as part of our design system
 public struct FXFontStyles {
@@ -33,26 +32,5 @@ public struct FXFontStyles {
         public static let footnote = TextStyling(for: .footnote, size: 13, weight: .semibold)
         public static let caption1 = TextStyling(for: .caption1, size: 12, weight: .medium)
         public static let caption2 = TextStyling(for: .caption2, size: 11, weight: .semibold)
-    }
-}
-
-// This class should only be instantiated in FXFontStyles
-public struct TextStyling {
-    private let textStyle: UIFont.TextStyle
-    private let size: CGFloat
-    private let weight: UIFont.Weight
-
-    init(for textStyle: UIFont.TextStyle, size: CGFloat, weight: UIFont.Weight) {
-        self.textStyle = textStyle
-        self.size = size
-        self.weight = weight
-    }
-
-    public func scaledFont() -> UIFont {
-        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size, weight: weight)
-    }
-
-    public func systemFont() -> UIFont {
-        return UIFont.systemFont(ofSize: size, weight: weight)
     }
 }
