@@ -37,6 +37,13 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         button.layer.borderColor = UIColor.clear.cgColor
         button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        button.configuration = .plain()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.ButtonInset,
+                                                                      leading: UX.ButtonInset,
+                                                                      bottom: UX.ButtonInset,
+                                                                      trailing: UX.ButtonInset)
+        button.configuration?.imagePadding = UX.ButtonImagePadding
+        button.configuration?.imagePlacement = .leading
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -56,12 +63,6 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         self.selectionStyle = .default
 
         contentView.addSubview(roundedButton)
-
-        roundedButton.setInsets(forContentPadding: UIEdgeInsets(top: UX.ButtonInset,
-                                                                left: UX.ButtonInset,
-                                                                bottom: UX.ButtonInset,
-                                                                right: UX.ButtonInset),
-                                imageTitlePadding: UX.ButtonImagePadding)
 
         let trailingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
         let leadingOffSet: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 100 : 23
@@ -100,6 +101,6 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         roundedButton.backgroundColor = theme.colors.layer3
         roundedButton.tintColor = theme.colors.textPrimary
         let image = UIImage(named: StandardImageIdentifiers.Large.delete)?.tinted(withColor: theme.colors.iconPrimary)
-        roundedButton.setImage(image, for: .normal)
+        roundedButton.configuration?.image = image
     }
 }

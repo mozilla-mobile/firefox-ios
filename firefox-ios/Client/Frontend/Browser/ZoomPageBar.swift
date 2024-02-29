@@ -69,7 +69,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.buttonInsets, imageTitlePadding: 0)
+        Self.setButtonInsets(button, contentInsets: UX.buttonInsets)
     }
 
     private lazy var zoomLevel: UILabel = .build { label in
@@ -88,7 +88,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityLabel: .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.buttonInsets, imageTitlePadding: 0)
+        Self.setButtonInsets(button, contentInsets: UX.buttonInsets)
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -195,6 +195,14 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     // MARK: - Helper Methods
+
+    private static func setButtonInsets(_ button: UIButton, contentInsets: UIEdgeInsets) {
+        button.configuration = .plain()
+        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: contentInsets.top,
+                                                                      leading: contentInsets.left,
+                                                                      bottom: contentInsets.bottom,
+                                                                      trailing: contentInsets.right)
+    }
 
     private func configureButton(_ button: UIButton,
                                  image: UIImage?,
