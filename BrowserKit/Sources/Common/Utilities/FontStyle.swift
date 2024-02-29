@@ -36,7 +36,7 @@ public struct FXFontStyles {
     }
 }
 
-// This class should only be instantiated in FXFontStyles, the functions are only called in
+// This class should only be instantiated in FXFontStyles
 public struct TextStyling {
     private let textStyle: UIFont.TextStyle
     private let size: CGFloat
