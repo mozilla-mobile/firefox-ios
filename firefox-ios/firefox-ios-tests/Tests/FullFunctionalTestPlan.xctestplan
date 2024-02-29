@@ -68,6 +68,7 @@
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
+        "FakespotTests\/testSettingsSectionUI()",
         "FindInPageTests\/testFindFromMenu()",
         "HistoryTests\/testClearPrivateData()",
         "HistoryTests\/testClearPrivateDataButtonDisabled()",
