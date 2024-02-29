@@ -25,6 +25,7 @@ protocol WKEngineWebView: UIView {
     var title: String? { get }
     var engineScrollView: WKScrollView! { get }
     var engineConfiguration: WKEngineConfiguration { get }
+    var hasOnlySecureContent: Bool { get }
 
     var estimatedProgress: Double { get }
     var canGoBack: Bool { get }

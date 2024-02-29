@@ -214,7 +214,13 @@ class WKEngineSession: NSObject,
             handleTitleChange(title: title)
         case .URL:
             handleURLChange()
+        case .hasOnlySecureContent:
+            handleHasOnlySecureContentChanged(webView.hasOnlySecureContent)
         }
+    }
+
+    private func handleHasOnlySecureContentChanged(_ value: Bool) {
+        delegate?.onHasOnlySecureContentChanged(secure: value)
     }
 
     private func handleTitleChange(title: String) {

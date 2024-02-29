@@ -13,6 +13,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var onNavigationStateChangeCalled = 0
     var onLoadingStateChangeCalled = 0
     var onLocationChangedCalled = 0
+    var onHasOnlySecureContentCalled = 0
     var didLoadPagemetaDataCalled = 0
     var findInPageCalled = 0
     var searchCalled = 0
@@ -22,6 +23,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedTouchPoint: CGPoint?
     var savedTitleChange: String?
     var savedURL: String?
+    var savedHasOnlySecureContent: Bool?
     var savedProgressValue: Double?
     var savedCanGoBack: Bool?
     var savedCanGoForward: Bool?
@@ -44,6 +46,11 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onTitleChange(title: String) {
         onTitleChangeCalled += 1
         savedTitleChange = title
+    }
+
+    func onHasOnlySecureContentChanged(secure: Bool) {
+        onHasOnlySecureContentCalled += 1
+        savedHasOnlySecureContent = secure
     }
 
     func onLocationChange(url: String) {
