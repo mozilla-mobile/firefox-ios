@@ -409,7 +409,7 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showEmbeddedHomepage(inline: false)
+            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         }
 
         urlBar.applyTheme(theme: themeManager.currentTheme)

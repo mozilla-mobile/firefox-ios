@@ -372,7 +372,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         tabsTelemetry.stopTabSwitchMeasurement()
         guard let url else { return }
         AppEventQueue.completed(.selectTab(url, windowUUID))
-        let context = GeneralBrowserContext(selectedTabURL: url, windowUUID: windowUUID)
+        let context = GeneralBrowserContext(selectedTabURL: url,
+                                            isPrivateBrowsing: selectedTab?.isPrivate ?? false,
+                                            windowUUID: windowUUID)
         store.dispatch(GeneralBrowserAction.updateSelectedTab(context))
     }
 

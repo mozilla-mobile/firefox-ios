@@ -7,8 +7,12 @@ import Redux
 
 class GeneralBrowserContext: ActionContext {
     let selectedTabURL: URL
-    init(selectedTabURL: URL, windowUUID: WindowUUID) {
+    let isPrivateBrowsing: Bool
+    init(selectedTabURL: URL,
+         isPrivateBrowsing: Bool,
+         windowUUID: WindowUUID) {
         self.selectedTabURL = selectedTabURL
+        self.isPrivateBrowsing = isPrivateBrowsing
         super.init(windowUUID: windowUUID)
     }
 }
