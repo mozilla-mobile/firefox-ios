@@ -24,30 +24,36 @@ extension RustLogins: LoginStorage {
 }
 
 class MockLoginStorage: LoginStorage {
+    var shouldThrowError = false
     func listLogins() async throws -> [EncryptedLogin] {
-        // Simulate a delay to fetch logins
-        try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC) // 0.5 seconds
+        if shouldThrowError {
+            struct StorageError: Error {}
+            throw StorageError()
+        } else {
+            // Simulate a delay to fetch logins
+            try await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC) // 0.5 seconds
 
-        // Return mock login data
-        let mockLogins: [EncryptedLogin] = [
-            EncryptedLogin(
-                credentials: URLCredential(
-                    user: "test",
-                    password: "doubletest",
-                    persistence: .permanent
+            // Return mock login data
+            let mockLogins: [EncryptedLogin] = [
+                EncryptedLogin(
+                    credentials: URLCredential(
+                        user: "test",
+                        password: "doubletest",
+                        persistence: .permanent
+                    ),
+                    protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
                 ),
-                protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
-            ),
-            EncryptedLogin(
-                credentials: URLCredential(
-                    user: "test",
-                    password: "doubletest",
-                    persistence: .permanent
-                ),
-                protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
-            )
-        ]
+                EncryptedLogin(
+                    credentials: URLCredential(
+                        user: "test",
+                        password: "doubletest",
+                        persistence: .permanent
+                    ),
+                    protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+                )
+            ]
 
-        return mockLogins
+            return mockLogins
+        }
     }
 }
