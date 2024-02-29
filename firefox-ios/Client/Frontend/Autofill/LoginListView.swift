@@ -40,10 +40,6 @@ struct LoginListView: View {
         }
     }
 
-    // MARK: - Theme Application
-
-    /// Applies the theme to the view.
-    /// - Parameter theme: The theme to be applied.
     func applyTheme(theme: Theme) {
         let color = theme.colors
         customLightGray = Color(color.textSecondary)
