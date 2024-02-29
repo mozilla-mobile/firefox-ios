@@ -7,7 +7,7 @@ import Common
 
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-
+    @MainActor
     func testPanelsEmptyState() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -21,6 +21,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     // From here on it is fine to load pages
+    @MainActor
     func testLongPressOnTextOptions() {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
@@ -36,6 +37,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
+    @MainActor
     func testURLBar() {
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
@@ -45,6 +47,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("URLBar-02")
     }
 
+    @MainActor
     func testURLBarContextMenu() {
         if #unavailable(iOS 16.0) {
         // Long press with nothing on the clipboard
@@ -60,6 +63,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
+    @MainActor
     func testMenuOnWebPage() {
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -74,6 +78,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         navigator.back()
     }
 
+    @MainActor
     func testPageMenuOnWebPage() {
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -82,6 +87,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("MenuOnWebPage-03")
     }
 
+    @MainActor
     func testFxASignInPage() {
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
@@ -112,6 +118,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         key.tap()
     }
 
+    @MainActor
     func testLoginDetails() {
         let key = 15
         navigator.nowAt(NewTabScreen)
@@ -158,6 +165,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         snapshot("RemoveLoginDetailedView")
     }
 
+    @MainActor
     func testFakespotAvailable() throws {
         navigator.openURL("https://www.amazon.com")
         waitUntilPageLoad()

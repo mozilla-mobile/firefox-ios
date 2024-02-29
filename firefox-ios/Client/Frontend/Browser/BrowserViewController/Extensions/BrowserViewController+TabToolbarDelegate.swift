@@ -155,11 +155,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     private func handleTabToolBarDidLongPressForwardOrBack() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        if CoordinatorFlagManager.isBackForwardListShownFromCoordaintorEnabled {
-            navigationHandler?.showBackForwardList()
-        } else {
-            showBackForwardList()
-        }
+        navigationHandler?.showBackForwardList()
     }
 
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -305,20 +301,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             modalStyle: .overCurrentContext
         )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
-    }
-
-    func showBackForwardList() {
-        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(
-                profile: profile,
-                backForwardList: backForwardList
-            )
-            backForwardViewController.tabManager = tabManager
-            backForwardViewController.browserFrameInfoProvider = self
-            backForwardViewController.modalPresentationStyle = .overCurrentContext
-            backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
-            self.present(backForwardViewController, animated: true, completion: nil)
-        }
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

@@ -12,6 +12,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
     }
 
+    @MainActor
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
         let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
@@ -26,6 +27,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         super.setUp()
     }
 
+    @MainActor
     func testIntro() {
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"], timeout: 15)
         mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"], timeout: 15)
@@ -86,6 +88,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 //        navigator.back()
     }
 
+    @MainActor
     func testWebViewAuthenticationDialog() {
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
@@ -93,6 +96,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
     }
 
+    @MainActor
     func test3ReloadButtonContextMenu() {
         navigator.openURL(loremIpsumURL)
         waitUntilPageLoad()
@@ -106,6 +110,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("ContextMenuReloadButton-02", waitForLoadingIndicator: false)
     }
 
+    @MainActor
     func testTopSitesMenu() {
         sleep(3)
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
@@ -122,6 +127,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 //        snapshot("TopSitesMenu-01")
     }
 
+    @MainActor
     func testHistoryTableContextMenu() {
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"], timeout: 5)
@@ -136,6 +142,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("HistoryTableContextMenu-01")
     }
 
+    @MainActor
     func testBookmarksTableContextMenu() {
         sleep(3)
         navigator.openURL(loremIpsumURL)
@@ -162,6 +169,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("21ReaderModeSettingsMenu-01")
     }*/
 
+    @MainActor
     func testETPperSite() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -185,6 +193,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("TrackingProtectionDisabledPerSite-03")
     }
 
+    @MainActor
     func testSettingsETP() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -205,6 +214,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("TrackingProtectionStrictMoreInfo-02")
     }
 
+    @MainActor
     func testMenuOnTopSites() {
         typealias homeTabBannerA11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
 
@@ -221,6 +231,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // snapshot("HomeDefaultBrowserLearnMore")
     }
 
+    @MainActor
     func testSettings() {
         let table = app.tables.element(boundBy: 0)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
@@ -238,6 +249,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
+    @MainActor
     func testPrivateBrowsingTabsEmptyState() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
@@ -245,6 +257,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("PrivateBrowsingTabsEmptyState-01")
     }
 
+    @MainActor
     func testTakeMarketingScreenshots() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         snapshot("00TopSites")

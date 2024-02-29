@@ -404,7 +404,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testURLChangeGivenNilURLThenDoesntCallDelegate() {
         let subject = createSubject()
-        webViewProvider.webView.title = nil
+        webViewProvider.webView.url = nil
 
         subject?.observeValue(forKeyPath: "URL",
                               of: nil,
@@ -419,7 +419,7 @@ final class WKEngineSessionTests: XCTestCase {
     func testURLChangeGivenAboutBlankWithNilURLThenDoesntCallDelegate() {
         let subject = createSubject()
         subject?.sessionData.url = URL(string: "about:blank")!
-        webViewProvider.webView.title = nil
+        webViewProvider.webView.url = nil
 
         subject?.observeValue(forKeyPath: "URL",
                               of: nil,
