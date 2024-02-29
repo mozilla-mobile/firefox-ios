@@ -36,6 +36,7 @@ public struct FXFontStyles {
     }
 }
 
+// This class should only be instantiated in FXFontStyles, the functions are only called in
 public struct TextStyling {
     private let textStyle: UIFont.TextStyle
     private let size: CGFloat
@@ -48,11 +49,11 @@ public struct TextStyling {
     }
 
     public func scaledFont() -> UIFont {
-        DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size, weight: weight)
+        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size, weight: weight)
     }
 
     public func systemFont() -> UIFont {
-        UIFont.systemFont(ofSize: size, weight: weight)
+        return UIFont.systemFont(ofSize: size, weight: weight)
     }
 }
 
