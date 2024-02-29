@@ -695,7 +695,6 @@
 		8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */; };
 		8A7653C228A2E57D00924ABF /* PocketDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */; };
 		8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */; };
-		8A76B01429F6E45600A82607 /* CoordinatorFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76B01329F6E45600A82607 /* CoordinatorFlagManager.swift */; };
 		8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76B01529F6EB3900A82607 /* ScreenshotService.swift */; };
 		8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E029D4785900EA76F1 /* MockRouter.swift */; };
 		8A7A26E329D4ACF300EA76F1 /* SceneCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */; };
@@ -5769,7 +5768,6 @@
 		8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStandardCellViewModel.swift; sourceTree = "<group>"; };
 		8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketDataAdaptorTests.swift; sourceTree = "<group>"; };
 		8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketAPI.swift; sourceTree = "<group>"; };
-		8A76B01329F6E45600A82607 /* CoordinatorFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFlagManager.swift; sourceTree = "<group>"; };
 		8A76B01529F6EB3900A82607 /* ScreenshotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotService.swift; sourceTree = "<group>"; };
 		8A7A26E029D4785900EA76F1 /* MockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRouter.swift; sourceTree = "<group>"; };
 		8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -9440,7 +9438,6 @@
 				8A1E93E92A3CDC6100DD540A /* BaseCoordinator.swift */,
 				8AF99B5029EF1BB600108DEC /* Browser */,
 				8A93F85D29D36DA9004159D9 /* Coordinator.swift */,
-				8A76B01329F6E45600A82607 /* CoordinatorFlagManager.swift */,
 				C2D80BE62AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift */,
 				F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */,
 				8A832A8E29DC96AD0025D5DD /* Launch */,
@@ -13992,7 +13989,6 @@
 				8A03309528C2653600286539 /* LegacyTabFileManager.swift in Sources */,
 				8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */,
 				E1442FD0294782D9003680B0 /* UIAlertController+Extension.swift in Sources */,
-				8A76B01429F6E45600A82607 /* CoordinatorFlagManager.swift in Sources */,
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				8C92DE932A7128DE0090BD28 /* ProductAdsResponse.swift in Sources */,
 				E1A6AB4828CA833000EBEBDD /* WallpaperBaseViewController.swift in Sources */,
