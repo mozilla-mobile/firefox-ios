@@ -5,7 +5,7 @@
 import SwiftUI
 import Common
 
-struct AutoFillHeaderView: View {
+struct AutofillHeaderView: View {
     // Constants for UI layout and styling
     private struct UX {
         static let headerElementsSpacing: CGFloat = 7.0
@@ -22,8 +22,8 @@ struct AutoFillHeaderView: View {
     @Environment(\.themeType)
     var theme
 
-    var title: String
-    var subtitle: String?
+    private var title: String
+    private var subtitle: String?
 
     init(title: String, subtitle: String? = nil) {
         self.title = title
@@ -73,13 +73,11 @@ struct AutoFillHeaderView: View {
     }
 }
 
-struct AutoFillHeaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        AutoFillHeaderView(
-                title: "Use this login?",
-                subtitle: "You’ll sign into cnn.com"
-        )
-        .previewLayout(.sizeThatFits)
-        .padding()
-    }
+#Preview {
+    AutofillHeaderView(
+        title: "Use this login?",
+        subtitle: "You’ll sign into cnn.com"
+    )
+    .previewLayout(.sizeThatFits)
+    .padding()
 }

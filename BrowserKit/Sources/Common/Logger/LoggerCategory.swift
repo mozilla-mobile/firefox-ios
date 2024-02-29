@@ -8,8 +8,8 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
-    /// Related to address autofill
-    case address
+    /// Related to autofill
+    case autofill
 
     /// Related to coordinator navigation
     case coordinator

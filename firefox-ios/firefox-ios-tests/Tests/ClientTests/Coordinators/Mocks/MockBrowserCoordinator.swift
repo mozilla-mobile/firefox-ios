@@ -11,6 +11,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showSettingsCalled = 0
     var showFakespotCalled = 0
     var showCreditCardAutofillCalled = 0
+    var showLoginAutofillCalled = 0
     var showRequiredPassCodeCalled = 0
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
@@ -42,6 +43,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         alertContainer: UIView
     ) {
         showCreditCardAutofillCalled += 1
+    }
+
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+        showLoginAutofillCalled += 1
     }
 
     func showShareExtension(
