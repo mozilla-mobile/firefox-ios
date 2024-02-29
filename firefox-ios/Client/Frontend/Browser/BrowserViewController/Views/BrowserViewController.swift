@@ -2036,9 +2036,10 @@ class BrowserViewController: UIViewController,
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
+        // swiftlint:disable line_length
         let isSettingEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) ?         profile.searchEngines.isPrivateModeSettingEnabled :
             profile.searchEngines.shouldShowPrivateModeSearchSuggestions
-
+        // swiftlint:enable line_length
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 

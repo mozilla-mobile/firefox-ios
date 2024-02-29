@@ -974,7 +974,7 @@ class SearchViewController: SiteTableViewController,
             }
         case .remoteTabs:
             if !featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                              checking: .buildAndUser)  {
+                                              checking: .buildAndUser) {
                 model.shouldShowSyncedTabsSuggestions = true
             }
             if model.shouldShowSyncedTabsSuggestions,
