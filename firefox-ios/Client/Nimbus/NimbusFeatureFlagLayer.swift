@@ -180,12 +180,11 @@ final class NimbusFeatureFlagLayer {
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
             let config = nimbus.features.loginAutofill.value()
-
             switch featureID {
             case .loginAutofill: return config.loginAutofillStatus
             default: return false
             }
-    }
+        }
 
     public func checkNimbusForShareSheet(
         for featureID: NimbusFeatureFlagID,
