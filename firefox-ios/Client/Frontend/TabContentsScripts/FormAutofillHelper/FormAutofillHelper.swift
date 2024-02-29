@@ -88,7 +88,7 @@ class FormAutofillHelper: TabContentScript {
             // TODO(FXIOS-7547): Implement telemetry forwarding logic
             logger.log("Received address telemery data",
                        level: .debug,
-                       category: .address)
+                       category: .autofill)
         case .addressFormMessageHandler:
             // Parse message payload for address form autofill
             guard let data = getValidPayloadData(from: message),
