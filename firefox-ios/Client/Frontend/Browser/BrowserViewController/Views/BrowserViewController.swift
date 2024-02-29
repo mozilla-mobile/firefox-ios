@@ -2616,6 +2616,8 @@ extension BrowserViewController: TabManagerDelegate {
                 tab.reload()
             }
 
+            tab.removeAllSnackbars()
+
             // Update Fakespot sidebar if necessary
             updateFakespot(tab: tab)
         }
