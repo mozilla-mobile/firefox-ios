@@ -206,6 +206,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.PrivateSessionSetting
                     ),
+                    statusText: String.localizedStringWithFormat(
+                        .Settings.Search.PrivateSessionDescription
+                    ),
                     cell: cell,
                     selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
                 )
@@ -286,6 +289,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     defaultValue: model.shouldShowPrivateModeFirefoxSuggestions,
                     titleText: String.localizedStringWithFormat(
                         .Settings.Search.PrivateSessionSetting
+                    ),
+                    statusText: String.localizedStringWithFormat(
+                        .Settings.Search.Suggest.PrivateSessionDescription,
+                        AppName.shortName.rawValue
                     ),
                     cell: cell,
                     selector: #selector(didToggleShowFirefoxSuggestionsInPrivateMode)
