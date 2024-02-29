@@ -1869,6 +1869,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
     }
 
+    private func autofillLoginNimbusFeatureFlag() -> Bool {
+        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
+    }
+
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -2257,13 +2261,37 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
         // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate {
+        if !tab.isPrivate, autofillLoginNimbusFeatureFlag() {
             let logins = LoginsHelper(
                 tab: tab,
                 profile: profile,
                 theme: themeManager.currentTheme
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
+            logins.foundFieldValues = { [weak self] field, currentRequestId in
+                Task {
+                    guard let tabURL = tab.url else { return }
+                    let logins = (try? await self?.profile.logins.listLogins()) ?? []
+                    let loginsForCurrentTab = logins.filter { login in
+                        guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+                        return recordHostnameURL.baseDomain == tabURL.baseDomain
+                    }
+                    if !loginsForCurrentTab.isEmpty {
+                        tab.webView?.accessoryView.reloadViewFor(.login)
+                        tab.webView?.reloadInputViews()
+                    }
+                    tab.webView?.accessoryView.savedLoginsClosure = {
+                        Task { @MainActor [weak self] in
+                            // Dismiss keyboard
+                            webView.resignFirstResponder()
+                            self?.authenticateSelectSavedLoginsClosureBottomSheet(
+                                tabURL: tabURL,
+                                currentRequestId: currentRequestId
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         // Credit card autofill setup and callback
@@ -2309,6 +2337,20 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+    }
+
+    private func authenticateSelectSavedLoginsClosureBottomSheet(tabURL: URL, currentRequestId: String) {
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
+            case .deviceOwnerFailed:
+                // Keep showing bvc
+                break
+            case .passCodeRequired:
+                self.navigationHandler?.showRequiredPassCode()
+            }
+        }
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {

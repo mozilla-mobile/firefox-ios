@@ -432,7 +432,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
           passwordField: login.passwordField
         }
       }
-      foundLogins = map(foundLogins, createLogin);
+      foundLogins = foundLogins.map(createLogin);
       var logins = foundLogins.filter(function (l) {
         var fit = (l.username.length <= maxUsernameLen &&
                    l.password.length <= maxPasswordLen);
@@ -692,35 +692,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     writable: false,
     value: Object.freeze(new LoginInjector())
   });
-
-  function map(array, callback) {
-    var T, A, k;
-
-    if (array == null) {
-      throw new TypeError("Array is null or not defined");
-    }
-
-    var O = Object(array);
-    var len = O.length >>> 0;
-    if (typeof callback !== "function") {
-      throw new TypeError(callback + " is not a function");
-    }
-    if (arguments.length > 1) {
-      T = array;
-    }
-    A = new Array(len);
-    k = 0;
-    while (k < len) {
-      var kValue, mappedValue;
-      if (k in O) {
-        kValue = O[k];
-        mappedValue = callback.call(T, kValue, k, O);
-        A[k] = mappedValue;
-      }
-      k++;
-    }
-    return A;
-  };
 
   function dispatchKeyboardEvent(element, eventName, keyCode) {
     var event = document.createEvent("KeyboardEvent");

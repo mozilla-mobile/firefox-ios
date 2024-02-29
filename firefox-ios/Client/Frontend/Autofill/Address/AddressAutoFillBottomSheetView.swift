@@ -20,7 +20,7 @@ struct AddressAutoFillBottomSheetView: View {
 
     var body: some View {
         VStack {
-            AutoFillHeaderView(title: .Addresses.BottomSheet.UseASavedAddress)
+            AutofillHeaderView(title: .Addresses.BottomSheet.UseASavedAddress)
             Spacer()
             AddressScrollView(viewModel: addressListViewModel)
             Spacer()

@@ -70,6 +70,10 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView)
 
+    /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials 
+    /// to autofill login forms on the specified web page.
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String)
+
     /// Shows an AddressAutofill view for selecting addresses in order to autofill forms.
     func showAddressAutofill(frame: WKFrameInfo?)
 

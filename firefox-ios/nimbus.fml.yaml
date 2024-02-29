@@ -15,8 +15,8 @@ channels:
 include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
+  - nimbus-features/autofillFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
-  - nimbus-features/creditCardAutofillFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml

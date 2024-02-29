@@ -5,6 +5,7 @@
 import XCTest
 import ComponentLibrary
 import Storage
+import SwiftUI
 @testable import Client
 
 final class CredentialAutofillCoordinatorTests: XCTestCase {
@@ -50,6 +51,76 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
         XCTAssertEqual(router.presentCalled, 1)
+    }
+
+    @MainActor
+    func testShowSavedLoginAutofill_PresentsLoginAutofillView() {
+        let subject = createSubject()
+
+        let testURL = URL(string: "https://example.com")!
+        let currentRequestId = "testRequestID"
+
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+
+        XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
+        XCTAssertEqual(router.presentCalled, 1)
+    }
+
+    @MainActor
+    func testShowSavedLoginAutofill_didTapManageLogins_callDidFinish() {
+        let subject = createSubject()
+
+        let testURL = URL(string: "https://example.com")!
+        let currentRequestId = "testRequestID"
+
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+
+        if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
+            bottomSheetViewController.loadViewIfNeeded()
+            if let hostingViewController = bottomSheetViewController.children.first(where: {
+                $0 is UIHostingController<LoginAutofillView>
+            }) as? UIHostingController<LoginAutofillView> {
+                hostingViewController.rootView.viewModel.manageLoginInfoAction()
+                XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+            } else {
+                XCTFail("The BottomSheetViewController has to contains a UIHostingController as child")
+            }
+        } else {
+            XCTFail("A BottomSheetViewController has to be presented")
+        }
+    }
+
+    @MainActor
+    func testShowSavedLoginAutofill_didTapLoginFill_callDidFinish() {
+        let subject = createSubject()
+
+        let testURL = URL(string: "https://example.com")!
+        let currentRequestId = "testRequestID"
+
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+
+        if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
+            bottomSheetViewController.loadViewIfNeeded()
+            if let hostingViewController = bottomSheetViewController.children.first(where: {
+                $0 is UIHostingController<LoginAutofillView>
+            }) as? UIHostingController<LoginAutofillView> {
+                hostingViewController.rootView.viewModel.onLoginCellTap(
+                    EncryptedLogin(
+                        credentials: URLCredential(
+                            user: "test",
+                            password: "doubletest",
+                            persistence: .permanent
+                        ),
+                        protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
+                    )
+                )
+                XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
+            } else {
+                XCTFail("The BottomSheetViewController has to contains a UIHostingController as child")
+            }
+        } else {
+            XCTFail("A BottomSheetViewController has to be presented")
+        }
     }
 
     func testShowCreditCardAutofill_didTapYesButton_callDidFinish() {
