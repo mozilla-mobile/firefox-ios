@@ -2036,7 +2036,8 @@ class BrowserViewController: UIViewController,
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.searchEngines.isPrivateModeSettingEnabled
+        let isSettingEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) ?         profile.searchEngines.isPrivateModeSettingEnabled :
+            profile.searchEngines.shouldShowPrivateModeSearchSuggestions
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }

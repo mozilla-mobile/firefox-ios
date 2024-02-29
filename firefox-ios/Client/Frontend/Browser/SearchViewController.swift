@@ -232,8 +232,7 @@ class SearchViewController: SiteTableViewController,
 
     /// Whether to show non-sponsored suggestions from Firefox Suggest.
     private var shouldShowNonSponsoredSuggestions: Bool {
-        viewModel.isPrivate ?
-        model.shouldShowPrivateModeFirefoxSuggestions :
+        !viewModel.isPrivate &&
         model.shouldShowFirefoxSuggestions
     }
 
@@ -856,10 +855,14 @@ class SearchViewController: SiteTableViewController,
         case .openedTabs:
             return filteredOpenedTabs.count
         case .remoteTabs:
-            return model.shouldShowSyncedTabsSuggestions ?
-            filteredRemoteClientTabs.count : 0
+            return if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                model.shouldShowSyncedTabsSuggestions ?
+                filteredRemoteClientTabs.count : 0
+            } else { filteredRemoteClientTabs.count }
         case .bookmarksAndHistory:
-            return numberOfItemsFromData
+            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) ?
+                   numberOfItemsFromData :
+                   data.count
         case .searchHighlights:
             return searchHighlights.count
         case .firefoxSuggestions:
@@ -970,6 +973,10 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .remoteTabs:
+            if !featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
+                                              checking: .buildAndUser)  {
+                model.shouldShowSyncedTabsSuggestions = true
+            }
             if model.shouldShowSyncedTabsSuggestions,
                filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
@@ -986,8 +993,28 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            if model.shouldShowBookmarksSuggestions &&
-                model.shouldShowBrowsingHistorySuggestions {
+            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                if model.shouldShowBookmarksSuggestions &&
+                    model.shouldShowBrowsingHistorySuggestions {
+                    if let site = data[indexPath.row] {
+                        configureBookmarksAndHistoryCell(
+                            twoLineCell,
+                            site.title,
+                            site.url,
+                            site.bookmarked ?? false
+                        )
+                        cell = twoLineCell
+                    }
+                } else if model.shouldShowBookmarksSuggestions {
+                    let site = bookmarkSites[indexPath.row]
+                    configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url, true)
+                    cell = twoLineCell
+                } else if model.shouldShowBrowsingHistorySuggestions {
+                    let site = historySites[indexPath.row]
+                    configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url)
+                    cell = twoLineCell
+                }
+            } else {
                 if let site = data[indexPath.row] {
                     configureBookmarksAndHistoryCell(
                         twoLineCell,
@@ -997,14 +1024,6 @@ class SearchViewController: SiteTableViewController,
                     )
                     cell = twoLineCell
                 }
-            } else if model.shouldShowBookmarksSuggestions {
-                let site = bookmarkSites[indexPath.row]
-                configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url, true)
-                cell = twoLineCell
-            } else if model.shouldShowBrowsingHistorySuggestions {
-                let site = historySites[indexPath.row]
-                configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url)
-                cell = twoLineCell
             }
 
         case .searchHighlights:
