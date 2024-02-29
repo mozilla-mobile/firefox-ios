@@ -38,7 +38,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
     }
 
     func toggleOverlayMode(shouldEnterOverlayMode: Bool) {
-        alignment = shouldEnterOverlayMode? .center : .fill
+        alignment = shouldEnterOverlayMode ? .center : .fill
         isOverlayMode = shouldEnterOverlayMode
     }
 
