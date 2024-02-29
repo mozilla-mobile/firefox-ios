@@ -56,4 +56,3 @@ public struct TextStyling {
         return UIFont.systemFont(ofSize: size, weight: weight)
     }
 }
-
