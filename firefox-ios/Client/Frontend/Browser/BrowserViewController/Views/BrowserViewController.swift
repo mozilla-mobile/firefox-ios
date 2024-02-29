@@ -2632,7 +2632,6 @@ extension BrowserViewController: TabManagerDelegate {
             selected?.reloadPage()
             return
         }
-        //updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {

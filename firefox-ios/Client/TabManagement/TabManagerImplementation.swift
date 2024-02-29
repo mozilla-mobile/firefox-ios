@@ -370,7 +370,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        guard let url else { return }
         AppEventQueue.completed(.selectTab(url, windowUUID))
         let context = GeneralBrowserContext(selectedTabURL: url,
                                             isPrivateBrowsing: selectedTab?.isPrivate ?? false,

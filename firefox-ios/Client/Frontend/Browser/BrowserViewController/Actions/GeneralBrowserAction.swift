@@ -6,9 +6,9 @@ import Foundation
 import Redux
 
 class GeneralBrowserContext: ActionContext {
-    let selectedTabURL: URL
+    let selectedTabURL: URL?
     let isPrivateBrowsing: Bool
-    init(selectedTabURL: URL,
+    init(selectedTabURL: URL?,
          isPrivateBrowsing: Bool,
          windowUUID: WindowUUID) {
         self.selectedTabURL = selectedTabURL

@@ -73,13 +73,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         switch action {
         case PrivateModeMiddlewareAction.privateModeUpdated(let privacyState):
+            var browserViewType = state.browserViewType
+            if browserViewType != .webview {
+                browserViewType = privacyState ? .privateHomepage : .normalHomepage
+            }
             return BrowserViewControllerState(
                 searchScreenState: SearchScreenState(inPrivateMode: privacyState),
                 showDataClearanceFlow: privacyState,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 reloadWebView: true,
-                browserViewType: privacyState ? .privateHomepage : .normalHomepage)
+                browserViewType: browserViewType)
         case FakespotAction.pressedShoppingButton,
             FakespotAction.show,
             FakespotAction.dismiss,
@@ -133,9 +137,14 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     static func resolveStateForUpdateSelectedTab(_ context: GeneralBrowserContext,
                                                  state: BrowserViewControllerState) -> BrowserViewControllerState {
         let isAboutHomeURL = InternalURL(context.selectedTabURL)?.isAboutHomeURL ?? false
-        let isInternal = context.selectedTabURL.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)")
+        var browserViewType = BrowserViewType.normalHomepage
 
-     //   if isAboutHomeURL
+        if isAboutHomeURL {
+            browserViewType = context.isPrivateBrowsing ? .privateHomepage : .normalHomepage
+        } else {
+            browserViewType = .webview
+        }
+
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
             showDataClearanceFlow: state.showDataClearanceFlow,
@@ -143,6 +152,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             showOverlay: state.showOverlay,
             windowUUID: state.windowUUID,
             reloadWebView: true,
-            browserViewType: .normalHomepage)
+            browserViewType: browserViewType)
     }
 }
