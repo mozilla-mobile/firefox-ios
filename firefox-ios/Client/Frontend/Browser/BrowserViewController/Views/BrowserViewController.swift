@@ -2033,13 +2033,14 @@ class BrowserViewController: UIViewController,
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let nimbusSuggestEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        // swiftlint:disable line_length
-        let isSettingEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) ?         profile.searchEngines.isPrivateModeSettingEnabled :
-            profile.searchEngines.shouldShowPrivateModeSearchSuggestions
-        // swiftlint:enable line_length
+        let engines = profile.searchEngines
+        let isSettingEnabled = nimbusSuggestEnabled ?
+        engines.isPrivateModeSettingEnabled :
+        engines.shouldShowPrivateModeSearchSuggestions
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 

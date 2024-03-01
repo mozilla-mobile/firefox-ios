@@ -232,7 +232,7 @@ class SearchViewController: SiteTableViewController,
 
     /// Whether to show non-sponsored suggestions from Firefox Suggest.
     private var shouldShowNonSponsoredSuggestions: Bool {
-        !viewModel.isPrivate &&
+        return !viewModel.isPrivate &&
         model.shouldShowFirefoxSuggestions
     }
 
@@ -856,13 +856,14 @@ class SearchViewController: SiteTableViewController,
             return filteredOpenedTabs.count
         case .remoteTabs:
             return if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                model.shouldShowSyncedTabsSuggestions ?
-                filteredRemoteClientTabs.count : 0
-            } else { filteredRemoteClientTabs.count }
+                model.shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
+            } else {
+                filteredRemoteClientTabs.count
+            }
         case .bookmarksAndHistory:
             return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) ?
-                   numberOfItemsFromData :
-                   data.count
+            numberOfItemsFromData :
+            data.count
         case .searchHighlights:
             return searchHighlights.count
         case .firefoxSuggestions:
@@ -993,29 +994,26 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                if model.shouldShowBookmarksSuggestions &&
-                    model.shouldShowBrowsingHistorySuggestions {
-                    if let site = data[indexPath.row] {
-                        configureBookmarksAndHistoryCell(
-                            twoLineCell,
-                            site.title,
-                            site.url,
-                            site.bookmarked ?? false
-                        )
-                        cell = twoLineCell
-                    }
+            let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions && 
+            model.shouldShowBrowsingHistorySuggestions
+            let shouldShowEitherSuggestion = model.shouldShowBookmarksSuggestions ||
+            model.shouldShowBrowsingHistorySuggestions
+
+            if featureFlags.isFeatureEnabled(
+                .firefoxSuggestFeature,
+                checking: .buildAndUser
+            ) && shouldShowEitherSuggestion {
+                var site: Site?
+
+                if shouldShowBothSuggestions {
+                    site = data[indexPath.row]
                 } else if model.shouldShowBookmarksSuggestions {
-                    let site = bookmarkSites[indexPath.row]
-                    configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url, true)
-                    cell = twoLineCell
+                    site = bookmarkSites[indexPath.row]
                 } else if model.shouldShowBrowsingHistorySuggestions {
-                    let site = historySites[indexPath.row]
-                    configureBookmarksAndHistoryCell(twoLineCell, site.title, site.url)
-                    cell = twoLineCell
+                    site = historySites[indexPath.row]
                 }
-            } else {
-                if let site = data[indexPath.row] {
+
+                if let site {
                     configureBookmarksAndHistoryCell(
                         twoLineCell,
                         site.title,
@@ -1024,6 +1022,14 @@ class SearchViewController: SiteTableViewController,
                     )
                     cell = twoLineCell
                 }
+            } else if let site = data[indexPath.row] {
+                configureBookmarksAndHistoryCell(
+                    twoLineCell,
+                    site.title,
+                    site.url,
+                    site.bookmarked ?? false
+                )
+                cell = twoLineCell
             }
 
         case .searchHighlights:
