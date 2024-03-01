@@ -267,7 +267,6 @@ class ReadingListTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() {
-        // Temporarily disabled until url bar redesign work FXIOS-8172
         addContentToReaderView()
         // Check that Settings layouts options are shown
         mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)

@@ -42,6 +42,7 @@
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
+        "FakespotTests\/testSettingsSectionUI()",
         "FindInPageTests",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",

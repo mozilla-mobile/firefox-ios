@@ -115,6 +115,65 @@ class FakespotTests: IphoneOnlyTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
+    // Smoketest
+    func testSettingsSectionUI() {
+        if skipPlatform { return }
+        // Navigate to a product detail page
+        reachReviewChecker()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        // Check the 'Settings' collapsible section
+        let settingsSection = app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title]
+        let expandButton = app.buttons[AccessibilityIdentifiers.Shopping.SettingsCard.expandButton]
+        mozWaitForElementToExist(settingsSection)
+        mozWaitForElementToExist(expandButton)
+        // Tap to open the section
+        expandButton.tap()
+        mozWaitForElementToExist(settingsSection)
+        // Validate expanded settings section
+        validateExpandedSettingsSection()
+        // Switch the theme from light to dark mode
+        switchThemeToDarkOrLight()
+        mozWaitForElementToExist(settingsSection)
+        // Validate expanded settings section
+        validateExpandedSettingsSection()
+        // Switch the theme from light to dark mode
+        switchThemeToDarkOrLight()
+        // Validate expanded settings section
+        validateExpandedSettingsSection()
+    }
+
+    private func switchThemeToDarkOrLight() {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(BrowserTab)
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
+        navigator.performAction(Action.SystemThemeSwitch)
+        if app.switches["SystemThemeSwitchValue"].value! as! String == "0" {
+            mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+            if app.cells.element(boundBy: 3).isSelected {
+                app.cells.staticTexts["Dark"].tap()
+            } else {
+                app.cells.staticTexts["Light"].tap()
+            }
+        }
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
+        waitForExistence(app.buttons["Done"])
+        app.buttons["Done"].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        scrollToElement(app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title])
+    }
+
+    private func validateExpandedSettingsSection() {
+        let shoppingIdentifier = AccessibilityIdentifiers.Shopping.SettingsCard.self
+        XCTAssertEqual(app.buttons[shoppingIdentifier.expandButton].label, "Collapse Settings Card")
+        XCTAssertEqual(app.buttons[shoppingIdentifier.turnOffButton].label, "Turn Off Review Checker")
+        app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
+    }
+
     private func validateHighlightsSection() {
         if app.staticTexts[AccessibilityIdentifiers.Shopping.HighlightsCard.title].exists {
             let highlights = AccessibilityIdentifiers.Shopping.HighlightsCard.self
