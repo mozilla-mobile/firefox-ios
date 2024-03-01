@@ -32,7 +32,7 @@
 			<key>Key</key>
 			<string>polyfillURL</string>
 			<key>DefaultValue</key>
-			<string>https://webxr-ios.webxrexperiments.com/dist/webxr-2.0.js</string>
+			<string>https://gist.github.com/lxfschr/20c0393c5dd6af616a08657be5d0863a.js</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>KeyboardType</key>
