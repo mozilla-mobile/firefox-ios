@@ -2863,8 +2863,6 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
             updateUIForReaderHomeStateForTab(tab)
         }
-
-        clipboardBarDisplayHandler?.didRestoreSession()
     }
 }
 

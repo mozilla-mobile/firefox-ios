@@ -45,11 +45,6 @@ protocol LegacyTabDelegate: AnyObject {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-@objc
-protocol URLChangeDelegate {
-    func tab(_ tab: Tab, urlDidChangeTo url: URL)
-}
-
 struct TabState {
     var isPrivate = false
     var url: URL?
@@ -252,7 +247,6 @@ class Tab: NSObject, ThemeApplicable {
     var userActivity: NSUserActivity?
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
-    weak var urlDidChangeDelegate: URLChangeDelegate?
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
@@ -834,10 +828,6 @@ class Tab: NSObject, ThemeApplicable {
             return assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
 
-        if let url = self.webView?.url, path == KVOConstants.URL.rawValue {
-            self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
-        }
-
         if let title = self.webView?.title, !title.isEmpty,
            path == KVOConstants.title.rawValue {
             metadataManager?.updateObservationTitle(title)
@@ -847,16 +837,6 @@ class Tab: NSObject, ThemeApplicable {
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
-    }
-
-    func observeURLChanges(delegate: URLChangeDelegate) {
-        self.urlDidChangeDelegate = delegate
-    }
-
-    func removeURLChangeObserver(delegate: URLChangeDelegate) {
-        if let existing = self.urlDidChangeDelegate, existing === delegate {
-            self.urlDidChangeDelegate = nil
-        }
     }
 
     func getProviderForUrl() -> SearchEngine {
