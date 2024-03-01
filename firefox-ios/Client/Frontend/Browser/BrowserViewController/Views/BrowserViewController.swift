@@ -162,10 +162,6 @@ class BrowserViewController: UIViewController,
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
-    /// Set to true when the user taps the home button. Used to prevent entering overlay mode.
-    /// Immediately set to false afterwards.
-    var userHasPressedHomeButton = false
-
     // Tracking navigation items to record history types.
     // TODO: weak references?
     var ignoredNavigation = Set<WKNavigation>()
@@ -552,8 +548,10 @@ class BrowserViewController: UIViewController,
                 dismissFakespotIfNeeded()
             }
 
-            // Update states for felt privacy
-            updateInContentHomePanel(tabManager.selectedTab?.url)
+            if state.reloadWebView {
+                updateContentInHomePanel(state.browserViewType)
+            }
+
             setupMiddleButtonStatus(isLoading: false)
 
             if let toast = state.toast {
@@ -1099,10 +1097,10 @@ class BrowserViewController: UIViewController,
     /// - Parameter inline: Inline is true when the homepage is created from the tab tray, a long press
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
-    func showEmbeddedHomepage(inline: Bool) {
+    func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
         resetDataClearanceCFRTimer()
 
-        guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
+        guard !isPrivate else {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
         }
@@ -1134,6 +1132,22 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Update content
 
+    func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
+        switch browserViewType {
+        case .normalHomepage:
+            showEmbeddedHomepage(inline: true, isPrivate: false)
+        case .privateHomepage:
+            showEmbeddedHomepage(inline: true, isPrivate: true)
+        case .webview:
+            showEmbeddedWebview()
+            urlBar.locationView.reloadButton.isHidden = false
+        }
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            topTabsViewController?.refreshTabs()
+        }
+    }
+
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         guard let url = url else {
@@ -1143,11 +1157,7 @@ class BrowserViewController: UIViewController,
         }
 
         if isAboutHomeURL {
-            showEmbeddedHomepage(inline: true)
-
-            if userHasPressedHomeButton {
-                userHasPressedHomeButton = false
-            }
+            showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.isHidden = false
@@ -2673,7 +2683,6 @@ extension BrowserViewController: TabManagerDelegate {
             selected?.reloadPage()
             return
         }
-        updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {

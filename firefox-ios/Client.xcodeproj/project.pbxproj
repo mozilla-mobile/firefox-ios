@@ -444,6 +444,7 @@
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		5A06135A29D6052E008F3D38 /* TabDataStore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A06135929D6052E008F3D38 /* TabDataStore */; };
+		5A1947152B8FA9E0009C7A6C /* BrowserViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */; };
 		5A271ABD2860B0D700471CE4 /* WebServerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A271ABC2860B0D700471CE4 /* WebServerUtil.swift */; };
 		5A2918CB2B522338002B197E /* GeneralBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */; };
 		5A2918CD2B522381002B197E /* ToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2918CC2B522381002B197E /* ToastType.swift */; };
@@ -5213,6 +5214,7 @@
 		59A68B1F857A8638598A63A0 /* TwoLineImageOverlayCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineImageOverlayCell.swift; sourceTree = "<group>"; };
 		5A0748769E8BD3C8FC5BFEE5 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		5A094AD58393196B3DF76119 /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/Intro.strings; sourceTree = "<group>"; };
+		5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewType.swift; sourceTree = "<group>"; };
 		5A1B494BAB7DF7D2319677F2 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Today.strings; sourceTree = "<group>"; };
 		5A1D409EB92D8E6AB8FC8813 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		5A271ABC2860B0D700471CE4 /* WebServerUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServerUtil.swift; sourceTree = "<group>"; };
@@ -9153,6 +9155,7 @@
 			children = (
 				81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */,
 				81122E202B221AC0003DD9F8 /* SearchScreenState.swift */,
+				5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -14090,6 +14093,7 @@
 				254B760A2B7B44EE00AB8526 /* NimbusFirefoxSuggestFeatureLayer.swift in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */,
+				5A1947152B8FA9E0009C7A6C /* BrowserViewType.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
 				C81AC6B626160091007800C5 /* LegacyTabTrayViewModel.swift in Sources */,
