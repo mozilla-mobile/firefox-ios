@@ -38,8 +38,8 @@ public struct InternalURL {
         return isWebServerUrl || InternalURL.scheme == url.scheme
     }
 
-    public init?(_ url: URL) {
-        guard InternalURL.isValid(url: url) else { return nil }
+    public init?(_ url: URL?) {
+        guard let url, InternalURL.isValid(url: url) else { return nil }
 
         self.url = url
     }
