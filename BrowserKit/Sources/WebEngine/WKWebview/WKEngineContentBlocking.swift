@@ -47,10 +47,9 @@ class WKContentBlocker {
     private var blockImagesRule: WKContentRuleList?
 
     init(blockImagesRule: WKContentRuleList? = nil) {
-        let blockImages = WKNoImageModeDefaults.Script
         ruleStore?.compileContentRuleList(
             forIdentifier: WKNoImageModeDefaults.ScriptName,
-            encodedContentRuleList: blockImages) { rule, error in
+            encodedContentRuleList: WKNoImageModeDefaults.Script) { rule, error in
                 guard error == nil, rule != nil else { return }
                 self.blockImagesRule = rule
             }
