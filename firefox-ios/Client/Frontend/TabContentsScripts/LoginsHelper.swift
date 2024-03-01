@@ -8,11 +8,42 @@ import Shared
 import Storage
 import WebKit
 
+enum FocusFieldType: String, Codable {
+    case username
+    case password
+}
+
+struct FieldFocusMessage: Codable {
+    let fieldType: FocusFieldType
+    let type: String
+}
+
+struct LoginInjectionData {
+    let requestId: String
+    let name: String = "RemoteLogins:loginsFound"
+    var logins: [[String: Any]]
+
+    func toJSONString() -> String? {
+        let dict: [String: Any] = [
+            "requestId": requestId,
+            "name": name,
+            "logins": logins
+        ]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: dict, options: []),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            return nil
+        }
+        return jsonString
+    }
+}
+
 class LoginsHelper: TabContentScript {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
     private var snackBar: SnackBar?
+    private var currentRequestId: String = ""
+    private var logger: Logger = DefaultLogger.shared
 
     // Exposed for mocking purposes
     var logins: RustLogins {
@@ -23,7 +54,9 @@ class LoginsHelper: TabContentScript {
         String(describing: self)
     }
 
-    required init(tab: Tab, profile: Profile, theme: Theme) {
+    required init(tab: Tab,
+                  profile: Profile,
+                  theme: Theme) {
         self.tab = tab
         self.profile = profile
         self.theme = theme
@@ -94,6 +127,14 @@ class LoginsHelper: TabContentScript {
               let type = res["type"] as? String
         else { return }
 
+        // NOTE: FXIOS-3856 will further enhance the logs into actual callback
+        if let parsedMessage = parseFieldFocusMessage(from: res) {
+            logger.log("Parsed message \(String(describing: parsedMessage))",
+                       level: .debug,
+                       category: .webview)
+            sendMessageType(parsedMessage)
+        }
+
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
         if let url = message.frameInfo.request.url {
@@ -108,6 +149,34 @@ class LoginsHelper: TabContentScript {
                     }
                 }
             }
+        }
+    }
+
+    private func sendMessageType(_ message: FieldFocusMessage) {
+        // NOTE: This is a partial stub / placeholder
+        // FXIOS-3856 will further enhance the logs into actual callback
+        switch message.fieldType {
+        case .username:
+            logger.log("Parsed message username",
+                       level: .debug,
+                       category: .webview)
+        case .password:
+            logger.log("Parsed message password",
+                       level: .debug,
+                       category: .webview)
+        }
+    }
+
+    private func parseFieldFocusMessage(from dictionary: [String: Any]) -> FieldFocusMessage? {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dictionary, options: [])
+            let message = try JSONDecoder().decode(FieldFocusMessage.self, from: data)
+            return message
+        } catch {
+            logger.log("Unable to decode message body in logins helper",
+                       level: .warning,
+                       category: .webview)
+            return nil
         }
     }
 
@@ -262,6 +331,8 @@ class LoginsHelper: TabContentScript {
             let origin = getOrigin(url.absoluteString)
         else { return }
 
+        currentRequestId = requestId
+
         let protectionSpace = URLProtectionSpace.fromOrigin(origin)
 
         profile.logins.getLoginsForProtectionSpace(protectionSpace).uponQueue(.main) { res in
@@ -273,16 +344,26 @@ class LoginsHelper: TabContentScript {
                 return login?.httpRealm == nil ? login?.toJSONDict() : nil
             }
 
-            let dict: [String: Any] = [
-                "requestId": requestId,
-                "name": "RemoteLogins:loginsFound",
-                "logins": logins
-            ]
-            guard let injected = dict.asString else { return }
-            let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
-            self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
-            self.sendLoginsAutofilledTelemetry()
+            let loginData = LoginInjectionData(requestId: self.currentRequestId,
+                                               logins: logins)
+
+            // NOTE: FXIOS-3856 This will get disabled in future with addtion of bottom sheet
+            guard let tab = self.tab else {
+                return
+            }
+
+            LoginsHelper.fillLoginDetails(with: tab, loginData: loginData)
         }
+    }
+
+    public static func fillLoginDetails(with tab: Tab,
+                                        loginData: LoginInjectionData) {
+        guard let injected = loginData.toJSONString() else { return }
+        let injectJavaScript = "window.__firefox__.logins.inject(\(injected))"
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .loginsAutofilled)
     }
 
     // MARK: Theming System
@@ -305,11 +386,5 @@ class LoginsHelper: TabContentScript {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .add,
                                      object: .loginsSaved)
-    }
-
-    private func sendLoginsAutofilledTelemetry() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .loginsAutofilled)
     }
 }

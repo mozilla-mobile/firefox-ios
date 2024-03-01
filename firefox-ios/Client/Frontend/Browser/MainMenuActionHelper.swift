@@ -229,8 +229,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             append(to: &section, action: desktopSiteAction)
         }
 
-        let nightModeAction = getNightModeAction()
-        append(to: &section, action: nightModeAction)
+        if featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+            let nightModeAction = getNightModeAction()
+            append(to: &section, action: nightModeAction)
+        }
 
         let passwordsAction = getPasswordAction(navigationController: navigationController)
         append(to: &section, action: passwordsAction)
@@ -460,9 +462,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         let nightModeEnabled = NightModeHelper.isActivated()
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
-        let nightMode = SingleActionViewModel(title: nightModeTitle,
-                                              iconString: StandardImageIdentifiers.Large.nightMode,
-                                              isEnabled: nightModeEnabled) { _ in
+        let nightMode = SingleActionViewModel(
+            title: nightModeTitle,
+            iconString: StandardImageIdentifiers.Large.nightMode,
+            isEnabled: nightModeEnabled
+        ) { _ in
             NightModeHelper.toggle(tabManager: self.tabManager)
 
             if nightModeEnabled {
@@ -471,20 +475,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(),
-               self.themeManager.currentTheme.type == .light {
-                self.themeManager.changeCurrentTheme(.dark)
-                NightModeHelper.setEnabledDarkTheme(darkTheme: true)
-            }
-
-            // If we've disabled night mode and dark theme was activated by it then disable dark theme
-            if !NightModeHelper.isActivated(),
-               NightModeHelper.hasEnabledDarkTheme(),
-               self.themeManager.currentTheme.type == .dark {
-                self.themeManager.changeCurrentTheme(.light)
-                NightModeHelper.setEnabledDarkTheme(darkTheme: false)
-            }
+            self.themeManager.reloadTheme()
         }.items
         items.append(nightMode)
 

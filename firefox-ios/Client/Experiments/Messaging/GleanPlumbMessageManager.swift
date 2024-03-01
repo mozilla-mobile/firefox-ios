@@ -133,23 +133,19 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                 return false
             }
         }
+
+        // If there are no eligible messages, we can return.
         guard let message = message else { return nil }
 
-        // 1. record an exposure event. We can tie the message directly to the experiment
-        if let slug = message.data.experiment {
-            messagingFeature.recordExperimentExposure(slug: slug)
-        } else if message.data.isControl {
-            onMalformedMessage(id: message.id, surface: surface)
-        }
-
-        // 2. handle control messages appropriately.
+        // If this isn't a control message, then we return it.
+        // The surface should call into onMessageDisplayed when it gets displayed.
         if !message.data.isControl {
             return message
         }
 
         // Control messages need to do the bookkeeping *here*, rather than from where they're displayed,
         // because they're not displayed.
-        messagingStore.onMessageDisplayed(message)
+        onMessageDisplayedInternal(message)
 
         switch messagingFeature.value().onControl {
         case .showNone:
@@ -165,13 +161,25 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// Handle impression reporting and bookkeeping.
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
-        messagingStore.onMessageDisplayed(message)
+        onMessageDisplayedInternal(message)
 
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .messaging,
                                      value: .messageImpression,
                                      extras: baseTelemetryExtras(using: message))
+    }
+
+    func onMessageDisplayedInternal(_ message: GleanPlumbMessage) {
+        // Record an exposure event. We can tie the message directly to the experiment
+        if let slug = message.data.experiment {
+            messagingFeature.recordExperimentExposure(slug: slug)
+        } else if message.data.isControl {
+            onMalformedMessage(id: message.id, surface: message.surface)
+        }
+
+        // Increment the number of times this has been displayed.
+        messagingStore.onMessageDisplayed(message)
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.

@@ -77,7 +77,6 @@ class BrowserViewController: UIViewController,
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
-    var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
@@ -483,6 +482,8 @@ class BrowserViewController: UIViewController,
         AppEventQueue.started(.browserUpdatedForAppActivation(uuid))
         defer { AppEventQueue.completed(.browserUpdatedForAppActivation(uuid)) }
 
+        nightModeUpdates()
+
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab {
             urlBar.locationView.tabDidChangeContentBlocking(tab)
@@ -496,6 +497,16 @@ class BrowserViewController: UIViewController,
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
             self?.backgroundTabLoader.loadBackgroundTabs()
         }
+    }
+
+    private func nightModeUpdates() {
+        if NightModeHelper.isActivated(),
+           !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
+            NightModeHelper.turnOff(tabManager: tabManager)
+            themeManager.reloadTheme()
+        }
+
+        NightModeHelper.cleanNightModeDefaults()
     }
 
     private func dismissModalsIfStartAtHome() {
@@ -765,6 +776,7 @@ class BrowserViewController: UIViewController,
         prepareURLOnboardingContextualHint()
 
         browserDelegate?.browserHasLoaded()
+        AppEventQueue.signal(event: .browserIsReady)
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1579,6 +1591,7 @@ class BrowserViewController: UIViewController,
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
         guard !isCrashAlertShowing else {
             urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
+            logger.log("Saving urlFromAnotherApp since crash alert is showing", level: .debug, category: .tabs)
             return
         }
         popToBVC()
@@ -1586,7 +1599,6 @@ class BrowserViewController: UIViewController,
             tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
             return
         }
-        openedUrlFromExternalSource = true
 
         if let uuid = uuid, let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
@@ -1607,6 +1619,7 @@ class BrowserViewController: UIViewController,
             request = URLRequest(url: url)
         } else {
             request = nil
+            logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
         switchToPrivacyMode(isPrivate: isPrivate)
@@ -1644,7 +1657,6 @@ class BrowserViewController: UIViewController,
             tabManager.addTab(nil, isPrivate: isPrivate)
             return
         }
-        openedUrlFromExternalSource = true
 
         let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
         freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
@@ -2015,9 +2027,8 @@ class BrowserViewController: UIViewController,
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.prefs.boolForKey(
-            PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
-        ) ?? false
+        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions ||
+        profile.searchEngines.shouldShowPrivateModeFirefoxSuggestions
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
@@ -2276,7 +2287,7 @@ extension BrowserViewController: LegacyTabDelegate {
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScriptToPage(printHelper, name: PrintHelper.name())
 
-        let nightModeHelper = NightModeHelper(tab: tab)
+        let nightModeHelper = NightModeHelper()
         tab.addContentScript(nightModeHelper, name: NightModeHelper.name())
 
         // XXX: Bug 1390200 - Disable NSUserActivity/CoreSpotlight temporarily
@@ -2474,12 +2485,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
 
         case .abandoned:
+            searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break

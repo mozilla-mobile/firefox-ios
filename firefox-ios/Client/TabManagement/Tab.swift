@@ -416,6 +416,7 @@ class Tab: NSObject, ThemeApplicable {
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
+        self.firstCreatedTime = Date().toTimestamp()
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
@@ -549,6 +550,7 @@ class Tab: NSObject, ThemeApplicable {
     deinit {
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
+        webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
         webView?.navigationDelegate = nil
 
         debugTabCount -= 1
@@ -592,6 +594,7 @@ class Tab: NSObject, ThemeApplicable {
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
+        webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
 
         if let webView = webView {
             tabDelegate?.tab(self, willDeleteWebView: webView)

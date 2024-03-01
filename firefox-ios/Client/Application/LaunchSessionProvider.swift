@@ -9,16 +9,23 @@ protocol LaunchSessionProviderProtocol {
     var openedFromExternalSource: Bool { get set }
 }
 
-class LaunchSessionProvider: LaunchSessionProviderProtocol {
-    init() {
+class LaunchSessionProvider: LaunchSessionProviderProtocol, Notifiable {
+    private var logger: Logger
+    var notificationCenter: NotificationProtocol
+    var openedFromExternalSource = false {
+        didSet {
+            guard openedFromExternalSource else { return }
+            logger.log("openedFromExternalSource was set to true", level: .debug, category: .tabs)
+        }
+    }
+
+    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared) {
+        self.notificationCenter = notificationCenter
+        self.logger = logger
         addObservers()
     }
 
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-    var openedFromExternalSource = false
-}
-
-extension LaunchSessionProvider: Notifiable {
     func addObservers() {
         setupNotifications(forObserver: self, observing: [UIApplication.willResignActiveNotification,
                                                           UIScene.willDeactivateNotification])

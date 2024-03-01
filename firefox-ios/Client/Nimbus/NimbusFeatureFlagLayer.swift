@@ -35,9 +35,6 @@ final class NimbusFeatureFlagLayer {
                 .historyHighlights:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-        case .inactiveTabs:
-            return checkTabTrayFeature(for: featureID, from: nimbus)
-
         case .fakespotFeature:
             return checkFakespotFeature(from: nimbus)
 
@@ -52,6 +49,12 @@ final class NimbusFeatureFlagLayer {
 
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
+
+        case .inactiveTabs:
+            return checkTabTrayFeature(for: featureID, from: nimbus)
+
+        case .nightMode:
+            return checkNightModeFeature(from: nimbus)
 
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
@@ -240,6 +243,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.reduxSearchSettingsFeature.value()
+        return config.enabled
+    }
+
+    private func checkNightModeFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.nightModeFeature.value()
+
         return config.enabled
     }
 }
