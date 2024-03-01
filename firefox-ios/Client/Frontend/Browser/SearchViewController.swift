@@ -994,7 +994,7 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions && 
+            let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions &&
             model.shouldShowBrowsingHistorySuggestions
             let shouldShowEitherSuggestion = model.shouldShowBookmarksSuggestions ||
             model.shouldShowBrowsingHistorySuggestions
