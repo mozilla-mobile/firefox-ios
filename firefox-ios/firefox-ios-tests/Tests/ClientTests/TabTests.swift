@@ -8,18 +8,15 @@ import WebKit
 
 class TabTests: XCTestCase {
     private var tabDelegate: MockLegacyTabDelegate!
-    private var urlDidChangeDelegate: MockUrlDidChangeDelegate!
 
     override func setUp() {
         super.setUp()
         tabDelegate = MockLegacyTabDelegate()
-        urlDidChangeDelegate = MockUrlDidChangeDelegate()
     }
 
     override func tearDown() {
         super.tearDown()
         tabDelegate = nil
-        urlDidChangeDelegate = nil
     }
 
     func testShareURL_RemovingReaderModeComponents() {
@@ -44,7 +41,6 @@ class TabTests: XCTestCase {
     func testTabDoesntLeak() {
         let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
         tab.tabDelegate = tabDelegate
-        tab.urlDidChangeDelegate = urlDidChangeDelegate
         trackForMemoryLeaks(tab)
     }
 }
@@ -62,9 +58,4 @@ class MockLegacyTabDelegate: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {}
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {}
-}
-
-// MARK: - MockUrlDidChangeDelegate
-class MockUrlDidChangeDelegate: URLChangeDelegate {
-    func tab(_ tab: Tab, urlDidChangeTo url: URL) {}
 }
