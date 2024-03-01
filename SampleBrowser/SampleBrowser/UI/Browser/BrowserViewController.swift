@@ -182,7 +182,8 @@ class BrowserViewController: UIViewController,
     }
 
     func didLoad(pageMetadata: EnginePageMetadata) {
-        // TODO: Handle page metadata [?]
+        // Page metadata can be used to fetch page favicons.
+        // We currently do not handle favicons in SampleBrowser, so this is empty.
     }
 
     // MARK: - EngineSessionDelegate Menu items
