@@ -22,8 +22,10 @@ class WKEngineSession: NSObject,
     }
 
     private(set) var webView: WKEngineWebView
-    private var logger: Logger
     var sessionData: WKEngineSessionData
+    var contentBlockingSettings: ContentBlockingSettings = []
+
+    private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper

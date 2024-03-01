@@ -81,8 +81,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         let settingType = model.settingType
 
         switch settingType {
-        case .contentBlocking:
-            break // TODO: FXIOS-8088 - Handle content blocking in WebEngine
+        case .standardContentBlocking:
+            delegate?.switchToStandardTrackingProtection()
+        case .strictContentBlocking:
+            delegate?.switchToStrictTrackingProtection()
+        case .noImageMode:
+            delegate?.toggleNoImageMode()
         case .findInPage:
             delegate?.showFindInPage()
         case .scrollingToTop:

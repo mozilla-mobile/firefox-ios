@@ -8,6 +8,7 @@ import Foundation
 public protocol EngineSession {
     var delegate: EngineSessionDelegate? { get set }
     var findInPageDelegate: FindInPageHelperDelegate? { get set }
+    var contentBlockingSettings: ContentBlockingSettings { get set }
 
     /// The engine received a request to load a URL.
     /// - Parameter url: The URL string that is requested

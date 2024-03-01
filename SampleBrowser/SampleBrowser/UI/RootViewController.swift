@@ -203,6 +203,18 @@ class RootViewController: UIViewController,
 
     // MARK: - SettingsDelegate
 
+    func switchToStrictTrackingProtection() {
+        browserVC.switchToStrictTrackingProtection()
+    }
+
+    func switchToStandardTrackingProtection() {
+        browserVC.switchToStandardTrackingProtection()
+    }
+
+    func toggleNoImageMode() {
+        browserVC.toggleNoImageMode()
+    }
+
     func scrollToTop() {
         browserVC.scrollToTop()
     }
