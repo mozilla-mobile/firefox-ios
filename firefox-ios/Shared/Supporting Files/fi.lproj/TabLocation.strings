@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Kaksoisnapauta ja pidä pohjassa nähdäksesi lisää vaihtoehtoja";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Yhteys ei ole suojattu. Tehostettu seurannan suojaus ei ole käytössä.";
 
