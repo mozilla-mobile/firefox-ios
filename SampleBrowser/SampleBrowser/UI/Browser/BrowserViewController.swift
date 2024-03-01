@@ -181,7 +181,7 @@ class BrowserViewController: UIViewController,
                                                     canGoForward: canGoForward)
     }
 
-    func didLoad(pageMetadata: WebEngine.EnginePageMetadata) {
+    func didLoad(pageMetadata: EnginePageMetadata) {
         // TODO: Handle page metadata [?]
     }
 
