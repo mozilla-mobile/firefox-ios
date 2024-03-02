@@ -547,7 +547,9 @@ export const FormAutofillHeuristics = {
    *        all sections within its field details in the form.
    */
   getFormInfo(form) {
-    let elements = this.getFormElements(form);
+    const elements = Array.from(form.elements).filter(element =>
+      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
+    );
 
     const scanner = new lazy.FieldScanner(elements, element =>
       this.inferFieldInfo(element, elements)
@@ -597,22 +599,6 @@ export const FormAutofillHeuristics = {
   },
 
   /**
-   * Get focusable form elements that are of credit card or address type
-   *
-   * @param {HTMLElement} form
-   * @returns {Array<HTMLElement>} focusable elements
-   */
-  getFormElements(form) {
-    let elements = Array.from(form.elements).filter(
-      element =>
-        lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element) &&
-        lazy.FormAutofillUtils.isFieldFocusable(element)
-    );
-
-    return elements;
-  },
-
-  /**
    * The result is an array contains the sections with its belonging field details.
    *
    * @param   {Array<FieldDetails>} fieldDetails field detail array to be classified
@@ -621,46 +607,54 @@ export const FormAutofillHeuristics = {
   _classifySections(fieldDetails) {
     let sections = [];
     for (let i = 0; i < fieldDetails.length; i++) {
-      const fieldName = fieldDetails[i].fieldName;
-      const sectionName = fieldDetails[i].sectionName;
-
+      const cur = fieldDetails[i];
       const [currentSection] = sections.slice(-1);
 
-      // The section this field might belong to
+      // The section this field might be placed into.
       let candidateSection = null;
 
-      // If the field doesn't have a section name, MAYBE put it to the previous
-      // section if exists. If the field has a section name, maybe put it to the
-      // nearest section that either has the same name or it doesn't has a name.
-      // Otherwise, create a new section.
-      if (!currentSection || !sectionName) {
+      // Use name group from autocomplete attribute (ex, section-xxx) to look for the section
+      // we might place this field into.
+      // If the field doesn't have a section name, the candidate section is the previous section.
+      if (!currentSection || !cur.sectionName) {
         candidateSection = currentSection;
-      } else if (sectionName) {
+      } else if (cur.sectionName) {
+        // If the field has a section name, the candidate section is the nearest section that
+        // either shares the same name or lacks a name.
         for (let idx = sections.length - 1; idx >= 0; idx--) {
-          if (!sections[idx].name || sections[idx].name == sectionName) {
+          if (!sections[idx].name || sections[idx].name == cur.sectionName) {
             candidateSection = sections[idx];
             break;
           }
         }
       }
 
-      // We got an candidate section to put the field to, check whether the section
-      // already has a field with the same field name. If yes, only add the field to when
-      // the type of the field might appear multiple times in a row.
       if (candidateSection) {
         let createNewSection = true;
-        if (candidateSection.fieldDetails.find(f => f.fieldName == fieldName)) {
+
+        // We might create a new section instead of placing the field in the candiate section if
+        // the section already has a field with the same field name.
+        // We also check visibility for both the fields with the same field name because we don't
+        // wanht to create a new section for an invisible field.
+        if (
+          candidateSection.fieldDetails.find(
+            f => f.fieldName == cur.fieldName && f.isVisible && cur.isVisible
+          )
+        ) {
+          // For some field type, it is common to have multiple fields in one section, for example,
+          // email. In that case, we will not create a new section even when the candidate section
+          // already has a field with the same field name.
           const [lastFieldDetail] = candidateSection.fieldDetails.slice(-1);
-          if (lastFieldDetail.fieldName == fieldName) {
-            if (MULTI_FIELD_NAMES.includes(fieldName)) {
+          if (lastFieldDetail.fieldName == cur.fieldName) {
+            if (MULTI_FIELD_NAMES.includes(cur.fieldName)) {
               createNewSection = false;
-            } else if (fieldName in MULTI_N_FIELD_NAMES) {
+            } else if (cur.fieldName in MULTI_N_FIELD_NAMES) {
               // This is the heuristic to handle special cases where we can have multiple
               // fields in one section, but only if the field has appeared N times in a row.
               // For example, websites can use 4 consecutive 4-digit `cc-number` fields
               // instead of one 16-digit `cc-number` field.
 
-              const N = MULTI_N_FIELD_NAMES[fieldName];
+              const N = MULTI_N_FIELD_NAMES[cur.fieldName];
               if (lastFieldDetail.part) {
                 // If `part` is set, we have already identified this field can be
                 // merged previously
@@ -673,7 +667,7 @@ export const FormAutofillHeuristics = {
                 N == 2 ||
                 fieldDetails
                   .slice(i + 1, i + N - 1)
-                  .every(f => f.fieldName == fieldName)
+                  .every(f => f.fieldName == cur.fieldName)
               ) {
                 lastFieldDetail.part = 1;
                 fieldDetails[i].part = 2;
