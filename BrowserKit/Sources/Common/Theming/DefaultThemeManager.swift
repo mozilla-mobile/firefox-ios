@@ -165,7 +165,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func updateCurrentTheme(to newTheme: ThemeType) {
-        currentTheme = newThemeForType(newTheme)
+        currentTheme = nightModeIsOn ? newThemeForType(.dark) : newThemeForType(newTheme)
 
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
@@ -178,7 +178,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func fetchSavedThemeType() -> ThemeType {
         if privateModeIsOn { return .privateMode }
-        if nightModeIsOn { return .dark }
 
         return getNormalSavedTheme()
     }
