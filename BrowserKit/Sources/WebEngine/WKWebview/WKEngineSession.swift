@@ -184,6 +184,21 @@ class WKEngineSession: NSObject,
         contentBlockingSettings = WKContentBlockingSettings(rawValue: settings)
     }
 
+    func updatePageZoom(_ change: ZoomChangeValue) {
+        let zoomKey = "viewScale"
+        let currentZoom = webView.value(forKey: zoomKey)
+        switch change {
+        case .increase:
+            webView.setValue(pageZoom, forKey: zoomKey)
+        case .decrease:
+            webView.setValue(pageZoom, forKey: zoomKey)
+        case .reset:
+            break
+        case .set(let value):
+            break
+        }
+    }
+
     // MARK: Observe values
 
     private func setupObservers() {

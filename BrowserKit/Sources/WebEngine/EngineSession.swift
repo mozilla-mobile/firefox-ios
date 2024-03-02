@@ -59,4 +59,7 @@ public protocol EngineSession {
 
     /// Toggle image blocking mode.
     func toggleNoImageMode()
+
+    /// Change the page zoom scale.
+    func updatePageZoom(_ change: ZoomChangeValue)
 }

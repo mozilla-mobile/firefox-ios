@@ -11,5 +11,8 @@ public enum SettingsType: String {
     case noImageMode
     case findInPage
     case scrollingToTop
-    case zoom
+    case zoomIncrease
+    case zoomDecrease
+    case zoomReset
+    case zoomSet
 }

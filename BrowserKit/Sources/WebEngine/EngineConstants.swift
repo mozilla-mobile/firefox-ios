@@ -7,3 +7,10 @@ import Foundation
 struct EngineConstants {
     static let aboutBlank = "about:blank"
 }
+
+public enum ZoomChangeValue {
+    case increase
+    case decrease
+    case reset
+    case set(CGFloat)
+}

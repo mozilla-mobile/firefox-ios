@@ -215,6 +215,10 @@ class RootViewController: UIViewController,
         browserVC.toggleNoImageMode()
     }
 
+    func increaseZoom() {
+        browserVC.increaseZoom()
+    }
+
     func scrollToTop() {
         browserVC.scrollToTop()
     }

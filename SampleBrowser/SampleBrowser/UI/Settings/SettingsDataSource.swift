@@ -11,14 +11,20 @@ class SettingsDataSource: NSObject, UITableViewDataSource {
                                   title: "Trigger find in page"),
             SettingsCellViewModel(settingType: .scrollingToTop,
                                   title: "Trigger scroll to top"),
-            SettingsCellViewModel(settingType: .zoom,
-                                  title: "Trigger zoom"),
             SettingsCellViewModel(settingType: .standardContentBlocking,
                                   title: "Trigger standard content blocking"),
             SettingsCellViewModel(settingType: .strictContentBlocking,
                                   title: "Trigger strict content blocking"),
             SettingsCellViewModel(settingType: .noImageMode,
                                   title: "Trigger No Images"),
+            SettingsCellViewModel(settingType: .zoomIncrease,
+                                  title: "Trigger zoom increase"),
+            SettingsCellViewModel(settingType: .zoomDecrease,
+                                  title: "Trigger zoom decrease"),
+            SettingsCellViewModel(settingType: .zoomReset,
+                                  title: "Trigger zoom reset"),
+            SettingsCellViewModel(settingType: .zoomSet,
+                                  title: "Trigger zoom set"),
         ]
     }
 
