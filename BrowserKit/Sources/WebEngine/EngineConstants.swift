@@ -13,4 +13,6 @@ public enum ZoomChangeValue {
     case decrease
     case reset
     case set(CGFloat)
+
+    static let defaultStepIncrease = 0.1
 }

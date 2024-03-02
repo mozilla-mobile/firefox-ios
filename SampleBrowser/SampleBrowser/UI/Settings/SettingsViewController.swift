@@ -92,13 +92,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         case .scrollingToTop:
             delegate?.scrollToTop()
         case .zoomSet:
-            break
+            // TODO: Provide a test UI to choose an explicit zoom level value
+            delegate?.setZoom(2.0)
         case .zoomReset:
-            break
+            delegate?.resetZoom()
         case .zoomIncrease:
             delegate?.increaseZoom()
         case .zoomDecrease:
-            break
+            delegate?.decreaseZoom()
         }
 
         dismiss(animated: true)

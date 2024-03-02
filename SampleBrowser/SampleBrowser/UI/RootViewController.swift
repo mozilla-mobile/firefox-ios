@@ -219,6 +219,18 @@ class RootViewController: UIViewController,
         browserVC.increaseZoom()
     }
 
+    func decreaseZoom() {
+        browserVC.decreaseZoom()
+    }
+
+    func setZoom(_ value: CGFloat) {
+        browserVC.setZoom(value)
+    }
+
+    func resetZoom() {
+        browserVC.resetZoom()
+    }
+
     func scrollToTop() {
         browserVC.scrollToTop()
     }
