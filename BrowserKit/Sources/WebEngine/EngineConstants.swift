@@ -8,6 +8,7 @@ struct EngineConstants {
     static let aboutBlank = "about:blank"
 }
 
+/// Value change type for adjusting browser page zoom.
 public enum ZoomChangeValue {
     case increase
     case decrease
