@@ -19,9 +19,6 @@ protocol NavigationDelegate: AnyObject {
 class BrowserViewController: UIViewController,
                              EngineSessionDelegate,
                              FindInPageHelperDelegate {
-    func didLoad(pageMetadata: WebEngine.EnginePageMetadata) {
-    }
-    
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
     private var engineSession: EngineSession!
