@@ -2,7 +2,7 @@
 "TodayWidget.QuickActionGalleryDescription" = "Додайте ярлик %@ на головний екран. Після додавання віджета торкніться й утримуйте, щоб змінити його та вибрати інший ярлик.";
 
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescriptionV2" = "Почніть приватний пошук у %@ за допомогою типового пошукового засобу.";
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Почніть приватний пошук у %@ за допомогою типової пошукової системи.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Швидкі дії";

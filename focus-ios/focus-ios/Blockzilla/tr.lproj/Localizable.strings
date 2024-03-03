@@ -8,7 +8,7 @@
 "About.privateBullet1" = "Doğrudan uygulamada arama yapabilir ve web’de gezinebilirsiniz";
 
 /* Label on About screen */
-"About.privateBullet2" = "Takipçileri engelleyebilirsiniz (veya belli takipçilere izin verebilirsiniz)";
+"About.privateBullet2" = "Takip kodlarını engelleyebilirsiniz (veya belli takip kodlarına izin verebilirsiniz)";
 
 /* Label on About screen */
 "About.privateBullet3" = "Tek düğmeyle çerezleri, arama ve gezinti geçmişinizi silebilirsiniz";
@@ -26,7 +26,7 @@
 "About.rowRights" = "Haklarınız";
 
 /* Label on About screen */
-"About.safariBullet1" = "Gizliliğinizi artırmak için takipçileri engelleyebilirsiniz";
+"About.safariBullet1" = "Gizliliğinizi artırmak için takip kodlarını engelleyebilirsiniz";
 
 /* Label on About screen */
 "About.safariBullet2" = "Sayfa boyutunu azaltmak için web fontlarını engelleyebilirsiniz";
@@ -266,13 +266,13 @@
 "Settings.autocompleteSection" = "Otomatik adres tamamlama";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Diğer içerik takipçilerini engellemek bazı videoları ve web sayfalarını bozabilir.";
+"Settings.blockOtherMessage" = "Diğer içerik takip kodlarını engellemek bazı videoları ve web sayfalarını bozabilir.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo2" = "İptal";
 
 /* Button label for accepting Content blocker alert */
-"Settings.blockOtherYes2" = "İçerik takipçilerini engelle";
+"Settings.blockOtherYes2" = "İçerik takip kodlarını engelle";
 
 /* Dark theme option in settings menu */
 "Settings.darkTheme" = "Koyu";
@@ -530,7 +530,7 @@
 "Tip.RequestDesktop.Title" = "Bir sitenin masaüstü sürümünü mü görmek istiyorsunuz?";
 
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
-"Tip.ShareTrackers.Description" = "Şimdiye kadar %@ takipçi engellendi";
+"Tip.ShareTrackers.Description" = "Şimdiye kadar %@ takip kodu engellendi";
 
 /* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.ShareTrackers.Title" = "Siz gezinin, %@ engellesin.";
@@ -605,10 +605,10 @@
 "trackingProtection.toggleLabel2" = "Gelişmiş izlenme koruması";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
-"trackingProtection.trackersBlockedLabel" = "%@ tarihinden beri engellenen takipçi";
+"trackingProtection.trackersBlockedLabel" = "%@ tarihinden beri engellenen takip kodu";
 
 /* Text for the header of trackers section from Tracking Protection. */
-"trackingProtection.trackersHeader" = "ENGELLENECEK TAKİPÇİLER VE BETİKLER";
+"trackingProtection.trackersHeader" = "ENGELLENECEK TAKİP KODLARI VE BETİKLER";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
 "URL.addToAutocompleteLabel" = "Bağlantıyı otomatik tamamlamaya ekle";
@@ -635,7 +635,7 @@
 "URL.searchLabel" = "%@ terimini ara";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Engellenen takipçi";
+"URL.trackersBlockedLabel" = "Engellenen takip kodu";
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Nasıl yapılacağını göster";

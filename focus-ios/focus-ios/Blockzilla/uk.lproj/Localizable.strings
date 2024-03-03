@@ -248,7 +248,7 @@
 "Save" = "Зберегти";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте замінити пошуковий запит цим: %s.";
+"SearchEngine.addEngineError" = "Це не спрацювало. Спробуйте змінити пошуковий запит цим: %s.";
 
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "Ні";
@@ -257,7 +257,7 @@
 "SearchSuggestions.promptEnable" = "Так";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Для отримання пропозицій %@ повинен відправляти введений в адресному рядку текст провайдеру пошуку.";
+"SearchSuggestions.promptMessage" = "Для отримання пропозицій %@ повинен відправляти пошуковій системі введений в адресному рядку текст.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Показувати пошукові пропозиції?";
@@ -278,7 +278,7 @@
 "Settings.darkTheme" = "Темна";
 
 /* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSearchSuggestion" = "%@ відправлятиме провайдеру пошуку текст, введений в адресному рядку.";
+"Settings.detailTextSearchSuggestion" = "%@ відправлятиме пошуковій системі текст, введений в адресному рядку.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla зобов'язується збирати лише ті дані, що необхідні для роботи та вдосконалення %@.";
@@ -308,25 +308,25 @@
 "Settings.screenTitle" = "Параметри";
 
 /* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Додати інший засіб пошуку";
+"Settings.Search.AddSearchEngineButton" = "Додати іншу пошукову систему";
 
 /* Title on add search engine settings screen */
-"Settings.Search.AddSearchEngineTitle" = "Додати засіб пошуку";
+"Settings.Search.AddSearchEngineTitle" = "Додати пошукову систему";
 
 /* Header for rows of installed search engines */
-"Settings.Search.InstalledSearchEngines" = "ВСТАНОВЛЕНІ ЗАСОБИ ПОШУКУ";
+"Settings.Search.InstalledSearchEngines" = "ВСТАНОВЛЕНІ ПОШУКОВІ СИСТЕМИ";
 
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "Назва для показу";
 
 /* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Новий засіб пошуку додано.";
+"Settings.Search.NewSearchEngineAdded" = "Нову пошукову систему додано.";
 
 /* Label for button to bring deleted default engines back */
-"Settings.Search.RestoreEngine" = "Відновити типові засоби пошуку";
+"Settings.Search.RestoreEngine" = "Відновити типові пошукові системи";
 
 /* Placeholder text for input of new search engine name */
-"Settings.Search.SearchEngineName" = "Назва засобу пошуку";
+"Settings.Search.SearchEngineName" = "Назва пошукової системи";
 
 /* Label for input of search engine template */
 "Settings.Search.SearchTemplate" = "Запит для пошуку";
@@ -338,7 +338,7 @@
 "Settings.Search.SearchTemplatePlaceholder" = "Вставте або введіть запит для пошуку. Якщо необхідно, замініть пошуковий термін на: %s.";
 
 /* Label for the search engine in the search screen */
-"Settings.searchLabel" = "Засіб пошуку";
+"Settings.searchLabel" = "Пошукова система";
 
 /* Label for the Search Suggestions toggle row */
 "Settings.searchSuggestions" = "Отримувати пошукові пропозиції";

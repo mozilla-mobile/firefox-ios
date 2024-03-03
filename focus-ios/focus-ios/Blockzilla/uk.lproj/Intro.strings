@@ -8,7 +8,7 @@
 "Intro.Slides.Next.Button" = "Далі";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Шукаєте щось інше? Оберіть інший пошуковий засіб.";
+"Intro.Slides.Search.Description" = "Шукаєте щось інше? Оберіть іншу пошукову систему.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
 "Intro.Slides.Search.Title" = "Ваш пошук, ваш шлях";
