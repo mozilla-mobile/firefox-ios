@@ -34,10 +34,7 @@ class PrivateMessageCardCell: UIView, ThemeApplicable {
     }
 
     private lazy var headerLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .headline,
-            size: UX.labelFontSize
-        )
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.title
@@ -45,20 +42,14 @@ class PrivateMessageCardCell: UIView, ThemeApplicable {
     }
 
     private lazy var bodyLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.labelFontSize
-        )
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.body
     }
 
     private lazy var linkLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.labelFontSize
-        )
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.link
