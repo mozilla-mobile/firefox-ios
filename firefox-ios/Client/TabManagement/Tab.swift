@@ -615,23 +615,29 @@ class Tab: NSObject, ThemeApplicable {
 
     @discardableResult
     func loadRequest(_ request: URLRequest) -> WKNavigation? {
+        DefaultLogger.shared.log("nb - loadRequest request -> \(request)", level: .info, category: .nblog)
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
+            DefaultLogger.shared.log("nb - loadRequest webView exists -> \(request)", level: .info, category: .nblog)
             if let url = request.url,
                let syncedReaderModeURL = url.decodeReaderModeURL,
                let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(
                 WebServer.sharedInstance.baseReaderModeURL()
                ) {
+                DefaultLogger.shared.log("nb - loadRequest url exists -> \(url)", level: .info, category: .nblog)
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
                 return webView.load(readerModeRequest)
             }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
+                DefaultLogger.shared.log("nb - loadRequest isPrivileged url exists -> \(url)", level: .info, category: .nblog)
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
+            DefaultLogger.shared.log("nb - loadRequest last reload url exists -> \(url)", level: .info, category: .nblog)
             return webView.load(request)
         }
+        DefaultLogger.shared.log("nb - loadRequest return nil val -> \(url)", level: .info, category: .nblog)
         return nil
     }
 
@@ -1086,5 +1092,9 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
             let backgroundColor = theme.colors.layer1.hexString
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
+    }
+    
+    deinit {
+        DefaultLogger.shared.log("nb - tab webview deinit with tab url \(self.url)", level: .info, category: .nblog)
     }
 }

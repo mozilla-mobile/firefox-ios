@@ -476,6 +476,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         tab.navigationDelegate = self.navDelegate
 
         if let request = request {
+            DefaultLogger.shared.log("nb - tabUUID -> \(tab.tabUUID)", level: .info, category: .nblog)
             tab.loadRequest(request)
         } else if !isPopup {
             let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)

@@ -8,6 +8,9 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
+    // TEMP category
+    case nblog
+
     /// Related to autofill
     case autofill
 

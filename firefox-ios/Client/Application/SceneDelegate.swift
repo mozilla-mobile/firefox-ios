@@ -35,6 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+        DefaultLogger.shared.log("nb - UIScene - willConnectTo first -> \(connectionOptions.urlContexts.first)", level: .info, category: .nblog)
         guard !AppConstants.isRunningUnitTest else { return }
 
         // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
@@ -92,6 +93,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
+        DefaultLogger.shared.log("nb - UIScene - URLContexts first -> \(URLContexts.first)", level: .info, category: .nblog)
         guard let url = URLContexts.first?.url,
               let route = routeBuilder.makeRoute(url: url) else { return }
         handle(route: route)

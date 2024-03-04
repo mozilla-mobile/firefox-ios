@@ -5,6 +5,7 @@
 import Foundation
 import CoreSpotlight
 import Shared
+import Common
 
 final class RouteBuilder {
     private var isPrivate = false
@@ -17,8 +18,9 @@ final class RouteBuilder {
     }
 
     func makeRoute(url: URL) -> Route? {
+        DefaultLogger.shared.log("nb - URL -> \(url)", level: .info, category: .nblog)
         guard let urlScanner = URLScanner(url: url) else { return nil }
-
+        DefaultLogger.shared.log("nb - urlScanner -> \(urlScanner)", level: .debug, category: .nblog)
         if urlScanner.isOurScheme, let host = DeeplinkInput.Host(rawValue: urlScanner.host.lowercased()) {
             let urlQuery = urlScanner.fullURLQueryItem()?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
@@ -29,6 +31,7 @@ final class RouteBuilder {
 
             switch host {
             case .deepLink:
+                DefaultLogger.shared.log("nb - deepLink - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 let deepLinkURL = urlScanner.fullURLQueryItem()?.lowercased()
                 let paths = deepLinkURL?.split(separator: "/") ?? []
                 guard let pathRaw = paths[safe: 0].flatMap(String.init),
@@ -48,6 +51,7 @@ final class RouteBuilder {
                 }
 
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
+                DefaultLogger.shared.log("nb - fxaSignIn - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 return .fxaSignIn(
                     params: FxALaunchParams(
                         entrypoint: .fxaDeepLinkNavigation,
@@ -56,6 +60,7 @@ final class RouteBuilder {
                 )
 
             case .openUrl:
+                DefaultLogger.shared.log("nb - openUrl - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // If we have a URL query, then make sure to check its a webpage
                 if urlQuery == nil || urlQuery?.isWebPage() ?? false {
                     return .search(url: urlQuery, isPrivate: isPrivate)
@@ -64,24 +69,30 @@ final class RouteBuilder {
                 }
 
             case .openText:
+                DefaultLogger.shared.log("nb - openText - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 return .searchQuery(query: urlScanner.value(query: "text") ?? "")
 
             case .glean:
+                DefaultLogger.shared.log("nb - glean - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 return .glean(url: url)
 
             case .widgetMediumTopSitesOpenUrl:
+                DefaultLogger.shared.log("nb - widgetMediumTopSitesOpenUrl - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Top sites - open url
                 return .search(url: urlQuery, isPrivate: isPrivate)
 
             case .widgetSmallQuickLinkOpenUrl:
+                DefaultLogger.shared.log("nb - widgetSmallQuickLinkOpenUrl - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Quick links - small - open url private or regular
                 return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
 
             case .widgetMediumQuickLinkOpenUrl:
+                DefaultLogger.shared.log("nb - widgetMediumQuickLinkOpenUrl - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Quick Actions - medium - open url private or regular
                 return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
+                DefaultLogger.shared.log("nb - widgetSmallQuickLinkOpenCopied - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Quick links - medium - open copied url
                 if !UIPasteboard.general.hasURLs {
                     let searchText = UIPasteboard.general.string ?? ""
@@ -92,10 +103,12 @@ final class RouteBuilder {
                 }
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
+                DefaultLogger.shared.log("nb - widgetSmallQuickLinkClosePrivateTabs - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Quick links - medium - close private tabs
                 return .action(action: .closePrivateTabs)
 
             case .widgetTabsMediumOpenUrl:
+                DefaultLogger.shared.log("nb - widgetTabsMediumOpenUrl - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Tabs Quick View - medium
                 let tabs = SimpleTab.getSimpleTabs()
                 if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
@@ -105,6 +118,7 @@ final class RouteBuilder {
                 }
 
             case .widgetTabsLargeOpenUrl:
+                DefaultLogger.shared.log("nb - widgetTabsLargeOpenUrl - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 // Widget Tabs Quick View - large
                 let tabs = SimpleTab.getSimpleTabs()
                 if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
@@ -115,14 +129,17 @@ final class RouteBuilder {
                 }
 
             case .fxaSignIn:
+                DefaultLogger.shared.log("nb - fxaSignIn - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
                 return nil
             }
         } else if urlScanner.isHTTPScheme {
+            DefaultLogger.shared.log("nb - isHTTPScheme - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
         } else {
+            DefaultLogger.shared.log("nb - ELSE - urlScanner -> \(urlScanner)", level: .info, category: .nblog)
             return nil
         }
     }
