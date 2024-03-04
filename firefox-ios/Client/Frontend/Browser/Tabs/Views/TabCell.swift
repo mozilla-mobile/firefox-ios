@@ -109,6 +109,10 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         self.tabModel = tabModel
         self.delegate = delegate
 
+        if let swipeAnimatorDelegate = delegate as? SwipeAnimatorDelegate {
+            self.animator?.delegate = swipeAnimatorDelegate
+        }
+
         titleText.text = tabModel.tabTitle
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
         isAccessibilityElement = true
