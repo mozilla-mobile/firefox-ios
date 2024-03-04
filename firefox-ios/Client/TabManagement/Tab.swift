@@ -295,6 +295,8 @@ class Tab: NSObject, ThemeApplicable {
            internalUrl.isAboutHomeURL {
             return true
         }
+        // TODO: Find a new home for this FXIOS-8527
+        // A computed variable should not be making view level changes
         ensureMainThread {
             self.setZoomLevelforDomain()
         }
