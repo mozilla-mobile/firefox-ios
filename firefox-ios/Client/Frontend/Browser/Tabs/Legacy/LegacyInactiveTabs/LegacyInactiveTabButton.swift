@@ -100,7 +100,12 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         roundedButton.setTitleColor(theme.colors.textPrimary, for: .normal)
         roundedButton.backgroundColor = theme.colors.layer3
         roundedButton.tintColor = theme.colors.textPrimary
-        let image = UIImage(named: StandardImageIdentifiers.Large.delete)?.tinted(withColor: theme.colors.iconPrimary)
+        let image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.delete)
         roundedButton.configuration?.image = image
+        let iconDisabledColor = theme.colors.iconDisabled
+        let iconPrimaryColor = theme.colors.iconPrimary
+        roundedButton.configuration?.imageColorTransformer = UIConfigurationColorTransformer({ [weak roundedButton] _ in
+            return roundedButton?.state == .highlighted ? iconDisabledColor : iconPrimaryColor
+        })
     }
 }
