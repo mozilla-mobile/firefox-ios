@@ -155,7 +155,7 @@
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "사용자 검색과 관련된 웹 제안을 받으세요";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "사용자 검색과 관련된 웹 제안을 받으세요";
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "사용자 검색과 관련된 %@의 제안을 받으세요.";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "%@의 제안";

@@ -7,6 +7,9 @@
 /* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
 "Addresses.Settings.Switch.Title.v124" = "Lagre og fyll ut adresser";
 
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "Bruk lagret adresse";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Legg til kort";
 
@@ -103,17 +106,26 @@
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Les mer om Firefox-forslag";
 
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Alternative søkemotorer";
+
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Resultater fra søk, historikk, bokmerker og mer";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Standard søkemotor";
 
+/* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
+"Settings.Search.EnginesSuggestions.Title.v124" = "Forslag fra søkemotorer";
+
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Søk";
 
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v122" = "Vis forslag i privat nettlesing";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "Vis i private økter";
 
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "Privat nettlesing";
@@ -130,11 +142,26 @@
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Les mer om Firefox-forslag";
 
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Søk i nettleserhistorikk";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Søk i bokmerker";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Søk i synkroniserte faner";
+
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Få forslag fra nettet relatert til søket ditt";
 
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Få forslag fra %@ relatert til søket ditt";
+
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Forslag fra %@";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Forslag fra nettet";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Støtt %@ med sporadiske sponsede forslag";

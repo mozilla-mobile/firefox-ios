@@ -239,7 +239,7 @@
 "Decrease text size" = "Зменшити розмір тексту";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "Типовий засіб пошуку";
+"Default Search Engine" = "Типова пошукова система";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "Закрити";
@@ -947,7 +947,7 @@
 "ProtectionStatus.Secure" = "Захищене з'єднання";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Швидкі засоби пошуку";
+"Quick-Search Engines" = "Системи швидкого пошуку";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Оцінити в App Store";
@@ -1034,25 +1034,25 @@
 "Search.SuggestSectionTitle.v102" = "Пропозиції Firefox";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Новий засіб пошуку з'явиться в панелі швидкого пошуку.";
+"Search.ThirdPartyEngines.AddMessage" = "Нова пошукова система з'явиться на панелі швидкого пошуку.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "Засіб пошуку додано!";
+"Search.ThirdPartyEngines.AddSuccess" = "Пошукову систему додано!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Додати засіб пошуку?";
+"Search.ThirdPartyEngines.AddTitle" = "Додати пошукову систему?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Скасувати";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Засіб пошуку з такою назвою чи URL-адресою вже було додано.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Пошукову систему з такою назвою чи URL-адресою вже було додано.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Не вдалося";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Не вдалося додати засіб пошуку.";
+"Search.ThirdPartyEngines.FailedMessage" = "Не вдається додати пошукову систему.";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedTitle" = "Невдача";
@@ -1139,19 +1139,19 @@
 "Settings" = "Параметри";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
-"Settings.AddCustomEngine" = "Додати засіб пошуку";
+"Settings.AddCustomEngine" = "Додати пошукову систему";
 
 /* The text on the Save button when saving a custom search engine */
 "Settings.AddCustomEngine.SaveButtonText" = "Зберегти";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Додати засіб пошуку";
+"Settings.AddCustomEngine.Title" = "Додати пошукову систему";
 
 /* The title for the field which sets the title for a custom search engine. */
 "Settings.AddCustomEngine.TitleLabel" = "Назва";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Засіб пошуку";
+"Settings.AddCustomEngine.TitlePlaceholder" = "Пошукова система";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "Адреса URL";

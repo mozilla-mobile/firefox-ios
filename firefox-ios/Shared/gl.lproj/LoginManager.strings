@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Eliminar";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Cancelar";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Retirar";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Non pode desfacer esta acción.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Isto eliminará o contrasinal de todos os seus dispositivos sincronizados.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Eliminar o contrasinal?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Desmarcar todo";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Non se atoparon identificacións";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Non se atoparon contrasinais";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Abrir e cubrir";
