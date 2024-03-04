@@ -186,7 +186,6 @@ class WKEngineSession: NSObject,
 
     func updatePageZoom(_ change: ZoomChangeValue) {
         let zoomKey = "viewScale"
-        let currentZoom = webView.value(forKey: zoomKey)
         let stepAmt = ZoomChangeValue.defaultStepIncrease
         let currentZoom = (webView.value(forKey: zoomKey) as? CGFloat) ?? 1.0
         let newZoom: CGFloat
