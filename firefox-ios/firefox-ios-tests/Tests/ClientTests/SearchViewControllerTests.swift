@@ -251,7 +251,7 @@ class SearchViewControllerTest: XCTestCase {
         XCTAssertTrue(searchViewController.firefoxSuggestions.isEmpty)
     }
 
-    func testNonSponsoredAndSponsoredSuggestionsAreShownInPrivateBrowsingMode() async throws {
+    func testNonSponsoredAndSponsoredSuggestionsInPrivateModeWithPrivateSuggestionsOn() async throws {
         let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
         let searchViewController = SearchViewController(
             profile: profile,
@@ -265,10 +265,10 @@ class SearchViewControllerTest: XCTestCase {
         engines.shouldShowPrivateModeFirefoxSuggestions = true
         await searchViewController.loadFirefoxSuggestions()?.value
 
-        XCTAssertFalse(searchViewController.firefoxSuggestions.isEmpty)
+        XCTAssertTrue(searchViewController.firefoxSuggestions.isEmpty)
     }
 
-    func testNonSponsoredSuggestionsAreShownInPrivateBrowsingMode() async throws {
+    func testNonSponsoredInPrivateModeWithPrivateSuggestionsOn() async throws {
         let viewModel = SearchViewModel(isPrivate: true, isBottomSearchBar: false)
         let searchViewController = SearchViewController(
             profile: profile,
@@ -282,8 +282,7 @@ class SearchViewControllerTest: XCTestCase {
         engines.shouldShowPrivateModeFirefoxSuggestions = true
         await searchViewController.loadFirefoxSuggestions()?.value
 
-        XCTAssertEqual(searchViewController.firefoxSuggestions.count, 1)
-        XCTAssertFalse(searchViewController.firefoxSuggestions.first!.isSponsored)
+        XCTAssertTrue(searchViewController.firefoxSuggestions.isEmpty)
     }
 
     func testNonSponsoredAndSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
