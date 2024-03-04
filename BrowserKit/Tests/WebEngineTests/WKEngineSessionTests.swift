@@ -484,6 +484,47 @@ final class WKEngineSessionTests: XCTestCase {
         prepareForTearDown(subject!)
     }
 
+    // MARK: Page Zoom
+
+    func testIncreaseZoom() {
+        let subject = createSubject()
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+        // Increase zoom
+        subject?.updatePageZoom(.increase)
+        // Assert zoom increased by expected step
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 + ZoomChangeValue.defaultStepIncrease)
+        prepareForTearDown(subject!)
+    }
+
+    func testDecreaseZoom() {
+        let subject = createSubject()
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+        // Increase zoom
+        subject?.updatePageZoom(.decrease)
+        // Assert zoom decreased by expected step
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
+        prepareForTearDown(subject!)
+    }
+
+    func testSetZoomLevelAndReset() {
+        let subject = createSubject()
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+        // Set explicit zoom level
+        subject?.updatePageZoom(.set(0.8))
+        // Assert zoom at expected level
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 0.8)
+
+        // Reset zoom level
+        subject?.updatePageZoom(.reset)
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+
+        prepareForTearDown(subject!)
+    }
+
     // MARK: Metadata parser
 
     func testFetchMetadataGivenProperURLChangeThenFetchMetadata() {

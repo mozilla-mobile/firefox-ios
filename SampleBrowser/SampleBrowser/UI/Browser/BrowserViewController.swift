@@ -126,6 +126,22 @@ class BrowserViewController: UIViewController,
         engineSession.toggleNoImageMode()
     }
 
+    func increaseZoom() {
+        engineSession.updatePageZoom(.increase)
+    }
+
+    func decreaseZoom() {
+        engineSession.updatePageZoom(.decrease)
+    }
+
+    func setZoom(_ value: CGFloat) {
+        engineSession.updatePageZoom(.set(value))
+    }
+
+    func resetZoom() {
+        engineSession.updatePageZoom(.reset)
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {

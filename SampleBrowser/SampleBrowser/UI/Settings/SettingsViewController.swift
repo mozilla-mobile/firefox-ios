@@ -91,8 +91,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
             delegate?.showFindInPage()
         case .scrollingToTop:
             delegate?.scrollToTop()
-        case .zoom:
-            break // TODO: FXIOS-8089 - Handle zoom in WebEngine
+        case .zoomSet:
+            // TODO: Provide a test UI to choose an explicit zoom level value
+            delegate?.setZoom(2.0)
+        case .zoomReset:
+            delegate?.resetZoom()
+        case .zoomIncrease:
+            delegate?.increaseZoom()
+        case .zoomDecrease:
+            delegate?.decreaseZoom()
         }
 
         dismiss(animated: true)

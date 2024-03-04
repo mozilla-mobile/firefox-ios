@@ -10,4 +10,8 @@ protocol SettingsDelegate: AnyObject {
     func switchToStrictTrackingProtection()
     func switchToStandardTrackingProtection()
     func toggleNoImageMode()
+    func increaseZoom()
+    func decreaseZoom()
+    func resetZoom()
+    func setZoom(_ value: CGFloat)
 }
