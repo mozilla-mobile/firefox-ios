@@ -101,19 +101,22 @@
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Увімкніть сповіщення";
 
 /* Accessibility label for default search engine setting. */
-"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Типовий засіб пошуку";
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "Типова пошукова система";
 
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Докладніше про Пропозиції Firefox";
+
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Альтернативні пошукові системи";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Результати на основі пошуку, історії, закладок тощо";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
-"Settings.Search.DefaultSearchEngine.Title.v121" = "Типовий засіб пошуку";
+"Settings.Search.DefaultSearchEngine.Title.v121" = "Типова пошукова система";
 
 /* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
-"Settings.Search.EnginesSuggestions.Title.v124" = "Пропозиції засобів пошуку";
+"Settings.Search.EnginesSuggestions.Title.v124" = "Пропозиції від пошукових систем";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Пошук";
@@ -128,7 +131,7 @@
 "Settings.Search.PrivateSession.Title.v122" = "Приватний перегляд";
 
 /* Title for quick-search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.QuickEnginesTitle.v121" = "Швидкі засоби пошуку";
+"Settings.Search.QuickEnginesTitle.v121" = "Системи швидкого пошуку";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "Пошукові пропозиції";
