@@ -20,7 +20,6 @@ class PrivateMessageCardCell: UIView, ThemeApplicable {
     enum UX {
         static let contentStackViewSpacing: CGFloat = 8
         static let contentStackPadding: CGFloat = 16
-        static let labelFontSize: CGFloat = 15
         static let actionButtonInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     }
 
