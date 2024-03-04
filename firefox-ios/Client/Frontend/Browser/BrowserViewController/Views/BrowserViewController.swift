@@ -1100,7 +1100,7 @@ class BrowserViewController: UIViewController,
     func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
         resetDataClearanceCFRTimer()
 
-        guard !isPrivate else {
+        if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
         }
