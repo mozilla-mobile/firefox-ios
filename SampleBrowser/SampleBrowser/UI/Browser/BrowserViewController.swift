@@ -114,23 +114,16 @@ class BrowserViewController: UIViewController,
         engineSession.findInPageDone()
     }
 
-    func switchToStrictTrackingProtection() {
-        var settings = engineSession.contentBlockingSettings
-        settings.remove(.standard)
-        settings.insert(.strict)
-        engineSession.contentBlockingSettings = settings
+    func switchToStandardTrackingProtection() {
+        engineSession.switchToStandardTrackingProtection()
     }
 
-    func switchToStandardTrackingProtection() {
-        var settings = engineSession.contentBlockingSettings
-        settings.remove(.strict)
-        settings.insert(.standard)
-        engineSession.contentBlockingSettings = settings
+    func switchToStrictTrackingProtection() {
+        engineSession.switchToStrictTrackingProtection()
     }
 
     func toggleNoImageMode() {
-        let settings = (engineSession.contentBlockingSettings.rawValue ^ ContentBlockingSettings.noImages.rawValue)
-        engineSession.contentBlockingSettings = ContentBlockingSettings(rawValue: settings)
+        engineSession.toggleNoImageMode()
     }
 
     // MARK: - Search

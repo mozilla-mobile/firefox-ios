@@ -8,7 +8,6 @@ import Foundation
 public protocol EngineSession {
     var delegate: EngineSessionDelegate? { get set }
     var findInPageDelegate: FindInPageHelperDelegate? { get set }
-    var contentBlockingSettings: ContentBlockingSettings { get set }
 
     /// The engine received a request to load a URL.
     /// - Parameter url: The URL string that is requested
@@ -51,4 +50,13 @@ public protocol EngineSession {
 
     /// Close the session. This may free underlying objects. Call this when you are finished using this session.
     func close()
+
+    /// Switch to standard tracking protection mode.
+    func switchToStandardTrackingProtection()
+
+    /// Switch to strict tracking protection mode.
+    func switchToStrictTrackingProtection()
+
+    /// Toggle image blocking mode.
+    func toggleNoImageMode()
 }

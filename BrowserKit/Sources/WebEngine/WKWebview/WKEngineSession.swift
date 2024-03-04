@@ -23,12 +23,12 @@ class WKEngineSession: NSObject,
 
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
-    var contentBlockingSettings: ContentBlockingSettings = []
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
+    private var contentBlockingSettings: ContentBlockingSettings = []
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
@@ -163,6 +163,25 @@ class WKEngineSession: NSObject,
         webView.removeFromSuperview()
 
         metadataFetcher.delegate = nil
+    }
+
+    func switchToStandardTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.insert(.standard)
+        contentBlockingSettings = settings
+    }
+
+    func switchToStrictTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.standard)
+        settings.insert(.strict)
+        contentBlockingSettings = settings
+    }
+
+    func toggleNoImageMode() {
+        let settings = (contentBlockingSettings.rawValue ^ ContentBlockingSettings.noImages.rawValue)
+        contentBlockingSettings = ContentBlockingSettings(rawValue: settings)
     }
 
     // MARK: Observe values
