@@ -18,6 +18,9 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Event to indicate the URL on the session has changed.
     func onLocationChange(url: String)
 
+    /// Event to indicate whether the page loaded all resources through encrypted connections.
+    func onHasOnlySecureContentChanged(secure: Bool)
+
     /// Event to indicate the loading progress has been updated.
     func onProgress(progress: Double)
 

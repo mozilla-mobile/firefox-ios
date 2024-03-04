@@ -7,14 +7,18 @@ import UIKit
 class SettingsDataSource: NSObject, UITableViewDataSource {
     var models: [SettingsCellViewModel] {
         return [
-            SettingsCellViewModel(settingType: .contentBlocking,
-                                  title: "Trigger content blocking"),
             SettingsCellViewModel(settingType: .findInPage,
                                   title: "Trigger find in page"),
             SettingsCellViewModel(settingType: .scrollingToTop,
                                   title: "Trigger scroll to top"),
             SettingsCellViewModel(settingType: .zoom,
-                                  title: "Trigger zoom")
+                                  title: "Trigger zoom"),
+            SettingsCellViewModel(settingType: .standardContentBlocking,
+                                  title: "Trigger standard content blocking"),
+            SettingsCellViewModel(settingType: .strictContentBlocking,
+                                  title: "Trigger strict content blocking"),
+            SettingsCellViewModel(settingType: .noImageMode,
+                                  title: "Trigger No Images"),
         ]
     }
 

@@ -269,7 +269,10 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
         let subject = createSubject()
-        XCTAssertEqual(webViewProvider.webView.addObserverCalled, 7, "There are 7 KVO Constants")
+        let expectedCount = WKEngineKVOConstants.allCases.count
+        XCTAssertEqual(webViewProvider.webView.addObserverCalled,
+                       expectedCount,
+                       "There are \(expectedCount) KVO Constants")
         prepareForTearDown(subject!)
     }
 
@@ -278,7 +281,10 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.close()
 
-        XCTAssertEqual(webViewProvider.webView.removeObserverCalled, 7, "There are 7 KVO Constants")
+        let expectedCount = WKEngineKVOConstants.allCases.count
+        XCTAssertEqual(webViewProvider.webView.removeObserverCalled,
+                       expectedCount,
+                       "There are \(expectedCount) KVO Constants")
         prepareForTearDown(subject!)
     }
 

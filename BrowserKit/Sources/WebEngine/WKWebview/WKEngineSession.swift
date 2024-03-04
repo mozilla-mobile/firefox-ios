@@ -22,11 +22,13 @@ class WKEngineSession: NSObject,
     }
 
     private(set) var webView: WKEngineWebView
-    private var logger: Logger
     var sessionData: WKEngineSessionData
+
+    private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
+    private var contentBlockingSettings: WKContentBlockingSettings = []
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
@@ -163,6 +165,25 @@ class WKEngineSession: NSObject,
         metadataFetcher.delegate = nil
     }
 
+    func switchToStandardTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.insert(.standard)
+        contentBlockingSettings = settings
+    }
+
+    func switchToStrictTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.standard)
+        settings.insert(.strict)
+        contentBlockingSettings = settings
+    }
+
+    func toggleNoImageMode() {
+        let settings = (contentBlockingSettings.rawValue ^ WKContentBlockingSettings.noImages.rawValue)
+        contentBlockingSettings = WKContentBlockingSettings(rawValue: settings)
+    }
+
     // MARK: Observe values
 
     private func setupObservers() {
@@ -214,7 +235,13 @@ class WKEngineSession: NSObject,
             handleTitleChange(title: title)
         case .URL:
             handleURLChange()
+        case .hasOnlySecureContent:
+            handleHasOnlySecureContentChanged(webView.hasOnlySecureContent)
         }
+    }
+
+    private func handleHasOnlySecureContentChanged(_ value: Bool) {
+        delegate?.onHasOnlySecureContentChanged(secure: value)
     }
 
     private func handleTitleChange(title: String) {

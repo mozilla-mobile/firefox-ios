@@ -16,6 +16,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var engineScrollView: WKScrollView! = MockEngineScrollView()
     var url: URL?
     var title: String?
+    var hasOnlySecureContent = false
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
     var isInspectable = true

@@ -13,4 +13,5 @@ enum WKEngineKVOConstants: String, CaseIterable {
     case canGoBack
     case canGoForward
     case contentSize
+    case hasOnlySecureContent
 }

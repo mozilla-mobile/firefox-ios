@@ -7,4 +7,7 @@ import Foundation
 protocol SettingsDelegate: AnyObject {
     func scrollToTop()
     func showFindInPage()
+    func switchToStrictTrackingProtection()
+    func switchToStandardTrackingProtection()
+    func toggleNoImageMode()
 }

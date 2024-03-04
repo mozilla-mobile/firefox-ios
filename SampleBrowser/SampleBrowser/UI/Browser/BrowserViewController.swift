@@ -17,7 +17,7 @@ protocol NavigationDelegate: AnyObject {
 
 // Holds different type of browser views, communicating through protocols with them
 class BrowserViewController: UIViewController,
-                                EngineSessionDelegate,
+                             EngineSessionDelegate,
                              FindInPageHelperDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
@@ -114,6 +114,18 @@ class BrowserViewController: UIViewController,
         engineSession.findInPageDone()
     }
 
+    func switchToStandardTrackingProtection() {
+        engineSession.switchToStandardTrackingProtection()
+    }
+
+    func switchToStrictTrackingProtection() {
+        engineSession.switchToStrictTrackingProtection()
+    }
+
+    func toggleNoImageMode() {
+        engineSession.toggleNoImageMode()
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
@@ -140,6 +152,10 @@ class BrowserViewController: UIViewController,
         // If the Client needs to save a title like saving it inside some tab storage then it would do it here
     }
 
+    func onHasOnlySecureContentChanged(secure: Bool) {
+        // If the client needs to show a Secure lock icon etc.
+    }
+
     func onLocationChange(url: String) {
         navigationDelegate?.onURLChange(url: url)
     }
@@ -156,6 +172,11 @@ class BrowserViewController: UIViewController,
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
                                                     canGoForward: canGoForward)
+    }
+
+    func didLoad(pageMetadata: EnginePageMetadata) {
+        // Page metadata can be used to fetch page favicons.
+        // We currently do not handle favicons in SampleBrowser, so this is empty.
     }
 
     // MARK: - EngineSessionDelegate Menu items
