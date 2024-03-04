@@ -213,7 +213,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                                                                       bottom: contentInsets.bottom,
                                                                       trailing: contentInsets.right)
     }
-    
+
     private static func setButtonHighlightColor(_ button: UIButton, color: UIColor) {
         button.configuration?.imageColorTransformer = UIConfigurationColorTransformer({ [weak button] baseColor in
             return button?.state == .highlighted ? color : baseColor
