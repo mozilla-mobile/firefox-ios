@@ -28,7 +28,7 @@ class WKEngineSession: NSObject,
     private var contentScriptManager: WKContentScriptManager
     private var securityManager: SecurityManager
     private var metadataFetcher: MetadataFetcherHelper
-    private var contentBlockingSettings: ContentBlockingSettings = []
+    private var contentBlockingSettings: WKContentBlockingSettings = []
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
@@ -180,8 +180,8 @@ class WKEngineSession: NSObject,
     }
 
     func toggleNoImageMode() {
-        let settings = (contentBlockingSettings.rawValue ^ ContentBlockingSettings.noImages.rawValue)
-        contentBlockingSettings = ContentBlockingSettings(rawValue: settings)
+        let settings = (contentBlockingSettings.rawValue ^ WKContentBlockingSettings.noImages.rawValue)
+        contentBlockingSettings = WKContentBlockingSettings(rawValue: settings)
     }
 
     // MARK: Observe values

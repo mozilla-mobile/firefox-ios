@@ -5,14 +5,14 @@
 import Foundation
 import WebKit
 
-public struct ContentBlockingSettings: OptionSet {
+public struct WKContentBlockingSettings: OptionSet {
     public let rawValue: Int
 
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
 
-    public static let standard = ContentBlockingSettings(rawValue: 1 << 0)
-    public static let strict = ContentBlockingSettings(rawValue: 1 << 1)
-    public static let noImages = ContentBlockingSettings(rawValue: 1 << 2)
+    public static let standard = WKContentBlockingSettings(rawValue: 1 << 0)
+    public static let strict = WKContentBlockingSettings(rawValue: 1 << 1)
+    public static let noImages = WKContentBlockingSettings(rawValue: 1 << 2)
 }
