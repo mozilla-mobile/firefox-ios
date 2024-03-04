@@ -14,9 +14,6 @@ protocol EmptyPrivateTabsViewDelegate: AnyObject {
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {
     struct UX {
-        static let titleSizeFont: CGFloat = 22
-        static let descriptionSizeFont: CGFloat = 17
-        static let buttonSizeFont: CGFloat = 15
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
