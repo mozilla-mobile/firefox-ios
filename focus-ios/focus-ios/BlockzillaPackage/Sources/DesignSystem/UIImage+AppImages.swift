@@ -46,4 +46,8 @@ public extension UIImage {
     static let delete = UIImage(named: "icon_delete")!
     static let hamburgerMenu = UIImage(named: "icon_hamburger_menu")!
     static let stopMenu = UIImage(named: "icon_stop_menu")!
+
+    // MARK: Find In Page
+    static let findPrevious = UIImage(named: "find_previous")!
+    static let findNext = UIImage(named: "find_next")!
 }

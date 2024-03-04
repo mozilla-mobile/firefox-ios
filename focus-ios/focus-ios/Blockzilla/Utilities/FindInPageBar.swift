@@ -77,18 +77,20 @@ class FindInPageBar: UIView {
         matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
 
-        previousButton.setImage(UIImage(named: "find_previous"), for: [])
+        previousButton.setImage(.findPrevious, for: [])
         previousButton.setTitleColor(.white, for: [])
         previousButton.accessibilityLabel = UIConstants.strings.findInPagePreviousLabel
         previousButton.addTarget(self, action: #selector(didFindPrevious), for: .touchUpInside)
         previousButton.accessibilityIdentifier = "FindInPage.find_previous"
+        previousButton.isEnabled = false
         addSubview(previousButton)
 
-        nextButton.setImage(UIImage(named: "find_next"), for: [])
+        nextButton.setImage(.findNext, for: [])
         nextButton.setTitleColor(.white, for: [])
         nextButton.accessibilityLabel = UIConstants.strings.findInPageNextLabel
         nextButton.addTarget(self, action: #selector(didFindNext), for: .touchUpInside)
         nextButton.accessibilityIdentifier = "FindInPage.find_next"
+        nextButton.isEnabled = false
         addSubview(nextButton)
 
         let closeButton = UIButton()
