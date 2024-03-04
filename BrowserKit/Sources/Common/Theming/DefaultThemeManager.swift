@@ -36,9 +36,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var sharedContainerIdentifier: String
 
     private var nightModeIsOn: Bool {
-        let status = userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
-        print("RGB - \(status)")
-        return status
+        return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
 
     private var privateModeIsOn: Bool {
