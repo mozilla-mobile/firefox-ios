@@ -521,7 +521,7 @@ final class WKEngineSessionTests: XCTestCase {
         subject?.updatePageZoom(.reset)
         // Check default zoom of 1.0
         XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
-        
+
         prepareForTearDown(subject!)
     }
 
