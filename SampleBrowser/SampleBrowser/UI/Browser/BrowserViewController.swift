@@ -122,6 +122,10 @@ class BrowserViewController: UIViewController,
         engineSession.switchToStrictTrackingProtection()
     }
 
+    func disableTrackingProtection() {
+        engineSession.disableTrackingProtection()
+    }
+
     func toggleNoImageMode() {
         engineSession.toggleNoImageMode()
     }
