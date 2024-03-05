@@ -7,7 +7,6 @@ import Foundation
 
 class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let titleFontSize: CGFloat = 17
         static let titleMinimumScaleFactor: CGFloat = 0.7
         static let verticalPadding: CGFloat = 19
         static let horizontalPadding: CGFloat = 16
