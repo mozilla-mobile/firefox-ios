@@ -19,7 +19,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private struct UX {
         static let padding: CGFloat = 20
         static let buttonPadding: CGFloat = 12
-        static let buttonInsets = UIEdgeInsets(top: 6, left: buttonPadding, bottom: 6, right: buttonPadding)
+        static let buttonInsets = NSDirectionalEdgeInsets(top: 6, leading: buttonPadding, bottom: 6, trailing: buttonPadding)
         static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
@@ -69,7 +69,8 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        Self.setButtonInsets(button, contentInsets: UX.buttonInsets)
+        button.configuration = .plain()
+        button.configuration?.contentInsets = UX.buttonInsets
     }
 
     private lazy var zoomLevel: UILabel = .build { label in
@@ -88,7 +89,8 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
                              accessibilityLabel: .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
-        Self.setButtonInsets(button, contentInsets: UX.buttonInsets)
+        button.configuration = .plain()
+        button.configuration?.contentInsets = UX.buttonInsets
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -206,20 +208,6 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
-    private static func setButtonInsets(_ button: UIButton, contentInsets: UIEdgeInsets) {
-        button.configuration = .plain()
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: contentInsets.top,
-                                                                      leading: contentInsets.left,
-                                                                      bottom: contentInsets.bottom,
-                                                                      trailing: contentInsets.right)
-    }
-
-    private static func setButtonHighlightColor(_ button: UIButton, color: UIColor) {
-        button.configuration?.imageColorTransformer = UIConfigurationColorTransformer({ [weak button] baseColor in
-            return button?.state == .highlighted ? color : baseColor
-        })
-    }
-
     private func remakeGradientViewHeightConstraint() {
         let viewPortHeight: CGFloat = (UIScreen.main.bounds.height -
                                        UIConstants.TopToolbarHeightMax -
@@ -327,9 +315,15 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         rightSeparator.backgroundColor = colors.borderPrimary
         zoomLevel.tintColor = colors.textPrimary
         zoomInButton.tintColor = colors.iconPrimary
-        Self.setButtonHighlightColor(zoomInButton, color: colors.iconDisabled)
+        let zoomInButtonImageColorTransformer = UIConfigurationColorTransformer({ [weak zoomInButton] baseColor in
+            return zoomInButton?.state == .highlighted ? colors.iconDisabled : baseColor
+        })
+        zoomInButton.configuration?.imageColorTransformer = zoomInButtonImageColorTransformer
         zoomOutButton.tintColor = colors.iconPrimary
-        Self.setButtonHighlightColor(zoomOutButton, color: colors.iconDisabled)
+        let zoomOutButtonImageColorTransformer = UIConfigurationColorTransformer({ [weak zoomOutButton] baseColor in
+            return zoomOutButton?.state == .highlighted ? colors.iconDisabled : baseColor
+        })
+        zoomOutButton.configuration?.imageColorTransformer = zoomOutButtonImageColorTransformer
         closeButton.tintColor = colors.iconPrimary
         gradient.colors = traitCollection.userInterfaceIdiom == .pad ?
         colors.layerGradientOverlay.cgColors.reversed() :
