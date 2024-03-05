@@ -2253,6 +2253,7 @@ extension BrowserViewController {
 // MARK: - LegacyTabDelegate
 extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
+        webView.frame = contentContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         KVOs.forEach {
             webView.addObserver(
