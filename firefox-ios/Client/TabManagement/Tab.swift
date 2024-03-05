@@ -1093,7 +1093,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
             evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
     }
-    
+
     deinit {
         DefaultLogger.shared.log("nb - tab webview deinit with tab url \(self.url)", level: .info, category: .nblog)
     }

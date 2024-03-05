@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import Common
 
 class WebviewViewController: UIViewController, ContentContainable, ScreenshotableView {
     private var webView: WKWebView
@@ -28,14 +29,16 @@ class WebviewViewController: UIViewController, ContentContainable, Screenshotabl
         view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: webView.topAnchor),
-            view.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
-            view.bottomAnchor.constraint(equalTo: webView.bottomAnchor),
-            view.trailingAnchor.constraint(equalTo: webView.trailingAnchor)
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        DefaultLogger.shared.log("nb - setupWebView frame webview \(webView.frame)", level: .info, category: .nblog)
     }
 
     func update(webView: WKWebView, isPrivate: Bool = false) {
+        DefaultLogger.shared.log("nb - WebviewViewController update webview with url \(webView.url)", level: .info, category: .nblog)
         self.webView = webView
         setupWebView()
     }
