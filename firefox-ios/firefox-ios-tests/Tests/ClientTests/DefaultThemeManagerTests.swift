@@ -37,13 +37,13 @@ final class DefaultThemeManagerTests: XCTestCase {
     func test_sutInitializesWithExpectedRegisteredValues() {
         _ = createSubject(with: userDefaults)
         let expectedSystemResult = true
-        let expectedNightModeResult = NSNumber(value: false)
+        let expectedNightModeResult = false
         let expectedPrivateModeResult = false
 
         XCTAssertEqual(userDefaults.registrationDictionary.count, 3)
 
         guard let systemResult = userDefaults.registrationDictionary["prefKeySystemThemeSwitchOnOff"] as? Bool,
-              let nightModeResult = userDefaults.registrationDictionary["profile.NightModeStatus"] as? NSNumber,
+              let nightModeResult = userDefaults.registrationDictionary["profile.NightModeStatus"] as? Bool,
               let privateModeResult = userDefaults.registrationDictionary["profile.PrivateModeStatus"] as? Bool
         else {
             XCTFail("Failed to fetch one or more expected keys")
