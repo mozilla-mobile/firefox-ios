@@ -354,6 +354,7 @@ class WKEngineSession: NSObject,
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
+        completionHandler(delegate?.onProvideContextualMenu(linkURL: elementInfo.linkURL))
         // TODO: FXIOS-8246 - Handle context menu in WebEngine (epic part 3)
     }
 

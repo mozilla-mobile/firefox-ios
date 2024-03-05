@@ -199,6 +199,33 @@ class BrowserViewController: UIViewController,
         // We currently do not handle favicons in SampleBrowser, so this is empty.
     }
 
+    func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
+        guard let url = linkURL else { return nil }
+
+        let previewProvider: UIContextMenuContentPreviewProvider = {
+            // TODO: Provide a web view controller to display preview of the link
+            nil
+        }
+
+        let actionProvider: UIContextMenuActionProvider = { menuElements in
+            var actions = [UIAction]()
+
+            actions.append(UIAction(
+                title: "Open Link",
+                image: nil,
+                identifier: UIAction.Identifier("linkContextMenu.openLink")
+            ) { [weak self] _ in
+                self?.engineSession.load(url: url.absoluteString)
+            })
+
+            return UIMenu(title: url.absoluteString, children: actions)
+        }
+        // This is a basic menu for testing purposes in the Sample Browser.
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: previewProvider,
+                                          actionProvider: actionProvider)
+    }
+
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {
