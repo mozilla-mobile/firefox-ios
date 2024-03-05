@@ -5,22 +5,27 @@
 import XCTest
 
 class SearchProviderTest: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707743
     func testGoogleSearchProvider() {
         searchProviderTestHelper(provider: "Google")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2512720
     func testDuckDuckGoSearchProvider() {
         searchProviderTestHelper(provider: "DuckDuckGo")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2512721
     func testWikipediaSearchProvider() {
         searchProviderTestHelper(provider: "Wikipedia")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2512722
     func testAmazonSearchProvider() {
         searchProviderTestHelper(provider: "Amazon.com")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524588
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
         dismissKeyboardFocusMenuSettings()
@@ -68,6 +73,7 @@ class SearchProviderTest: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707744
     func testAddRemoveCustomSearchProvider() {
         dismissURLBarFocused()
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
@@ -107,6 +113,7 @@ class SearchProviderTest: BaseTestCase {
         app.navigationBars.buttons["edit"].tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707745
     func testPreventionOfRemovingDefaultSearchProvider() {
         dismissURLBarFocused()
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
