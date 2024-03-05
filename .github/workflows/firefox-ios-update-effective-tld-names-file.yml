@@ -16,13 +16,13 @@ jobs:
       matrix:
         python-version: [3.9]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
         ref: ${{ github.event.inputs.branchName }}
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Compare file in repo with file upstream
@@ -53,13 +53,13 @@ jobs:
         # This step is used to determine the next version number for the PR title
         # The output includes debugging for the piped commands that generate
         # the version number and the last line is the version number itself
-        
+
         output=$(bash test-fixtures/ci/get-next-pr-version)
         echo "$output"
         next_version=$(echo "$output" | tail -n 1) # get the last line of the output
         echo "Next version is: v${next_version}"
         echo "next_version=${next_version}" >> $GITHUB_ENV
-    
+
     - name: Add Modified File to PR
       if: ${{ env.create_pr }}
       run: |-
@@ -67,7 +67,7 @@ jobs:
 
     - name: Create Pull Request
       if: ${{ env.create_pr }}
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v6
       with:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
