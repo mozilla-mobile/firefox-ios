@@ -36,11 +36,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private var sharedContainerIdentifier: String
 
     private var nightModeIsOn: Bool {
-        guard let isOn = userDefaults.object(forKey: ThemeKeys.NightMode.isOn) as? NSNumber,
-              isOn.boolValue == true
-        else { return false }
-
-        return true
+        return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
 
     private var privateModeIsOn: Bool {
@@ -74,11 +70,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
-            ThemeKeys.NightMode.isOn: NSNumber(value: false),
+            ThemeKeys.NightMode.isOn: false,
             ThemeKeys.PrivateMode.isOn: false,
         ])
 
-        changeCurrentTheme(fetchSavedThemeType())
+        updateSavedTheme(to: getNormalSavedTheme())
+        updateCurrentTheme(to: fetchSavedThemeType())
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
