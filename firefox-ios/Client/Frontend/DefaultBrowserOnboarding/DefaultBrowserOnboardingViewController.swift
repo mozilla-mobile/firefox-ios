@@ -71,33 +71,32 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     private lazy var titleLabel: UILabel = .build { [weak self] label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title1,
-                                                                size: self?.titleFontSize ?? UX.titleSize)
+        label.font = FXFontStyles.Bold.title1.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.titleLabel
     }
 
     private lazy var descriptionText: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel
     }
 
     private lazy var descriptionLabel1: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel1
     }
 
     private lazy var descriptionLabel2: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel2
     }
 
     private lazy var descriptionLabel3: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel3
     }
