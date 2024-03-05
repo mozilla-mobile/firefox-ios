@@ -57,6 +57,9 @@ public protocol EngineSession {
     /// Switch to strict tracking protection mode.
     func switchToStrictTrackingProtection()
 
+    /// Disable all tracking protection.
+    func disableTrackingProtection()
+
     /// Toggle image blocking mode.
     func toggleNoImageMode()
 

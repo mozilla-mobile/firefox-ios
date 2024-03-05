@@ -8,6 +8,7 @@ import Foundation
 public enum SettingsType: String {
     case standardContentBlocking
     case strictContentBlocking
+    case disableContentBlocking
     case noImageMode
     case findInPage
     case scrollingToTop

@@ -165,6 +165,13 @@ class WKEngineSession: NSObject,
         metadataFetcher.delegate = nil
     }
 
+    func disableTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.remove(.standard)
+        contentBlockingSettings = settings
+    }
+
     func switchToStandardTrackingProtection() {
         var settings = contentBlockingSettings
         settings.remove(.strict)

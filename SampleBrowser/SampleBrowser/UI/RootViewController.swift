@@ -211,6 +211,10 @@ class RootViewController: UIViewController,
         browserVC.switchToStandardTrackingProtection()
     }
 
+    func disableTrackingProtection() {
+        browserVC.disableTrackingProtection()
+    }
+
     func toggleNoImageMode() {
         browserVC.toggleNoImageMode()
     }

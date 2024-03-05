@@ -15,6 +15,8 @@ class SettingsDataSource: NSObject, UITableViewDataSource {
                                   title: "Trigger standard content blocking"),
             SettingsCellViewModel(settingType: .strictContentBlocking,
                                   title: "Trigger strict content blocking"),
+            SettingsCellViewModel(settingType: .disableContentBlocking,
+                                  title: "Disable content blocking"),
             SettingsCellViewModel(settingType: .noImageMode,
                                   title: "Trigger No Images"),
             SettingsCellViewModel(settingType: .zoomIncrease,

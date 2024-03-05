@@ -9,6 +9,7 @@ protocol SettingsDelegate: AnyObject {
     func showFindInPage()
     func switchToStrictTrackingProtection()
     func switchToStandardTrackingProtection()
+    func disableTrackingProtection()
     func toggleNoImageMode()
     func increaseZoom()
     func decreaseZoom()

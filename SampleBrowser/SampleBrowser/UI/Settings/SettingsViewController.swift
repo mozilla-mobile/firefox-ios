@@ -85,6 +85,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
             delegate?.switchToStandardTrackingProtection()
         case .strictContentBlocking:
             delegate?.switchToStrictTrackingProtection()
+        case .disableContentBlocking:
+            delegate?.disableTrackingProtection()
         case .noImageMode:
             delegate?.toggleNoImageMode()
         case .findInPage:
