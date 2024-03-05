@@ -12,7 +12,6 @@ class LegacyRemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable 
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
-        static let descriptionSizeFont: CGFloat = 17
         static let imageSize = CGSize(width: 90, height: 60)
     }
 
@@ -41,8 +40,7 @@ class LegacyRemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable 
 
     private let instructionsLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.descriptionSizeFont)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .center
     }
