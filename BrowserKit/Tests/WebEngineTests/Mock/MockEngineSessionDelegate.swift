@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit.UIContextMenuConfiguration
 @testable import WebEngine
 
 class MockEngineSessionDelegate: EngineSessionDelegate {
@@ -17,6 +18,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var didLoadPagemetaDataCalled = 0
     var findInPageCalled = 0
     var searchCalled = 0
+    var onProvideContextualMenuCalled = 0
 
     var savedScrollX: Int?
     var savedScrollY: Int?
@@ -87,5 +89,10 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func search(with selection: String) {
         searchCalled += 1
         savedSearchSelection = selection
+    }
+
+    func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
+        onProvideContextualMenuCalled += 1
+        return nil
     }
 }
