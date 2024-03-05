@@ -203,8 +203,10 @@ class BrowserViewController: UIViewController,
         guard let url = linkURL else { return nil }
 
         let previewProvider: UIContextMenuContentPreviewProvider = {
-            // TODO: Provide a web view controller to display preview of the link
-            nil
+            let previewEngineProvider = EngineProvider()
+            let previewVC = BrowserViewController(engineProvider: previewEngineProvider)
+            previewVC.engineSession.load(url: url.absoluteString)
+            return previewVC
         }
 
         let actionProvider: UIContextMenuActionProvider = { menuElements in
@@ -220,7 +222,7 @@ class BrowserViewController: UIViewController,
 
             return UIMenu(title: url.absoluteString, children: actions)
         }
-        // This is a basic menu for testing purposes in the Sample Browser.
+        // Basic menu for testing purposes in the Sample Browser.
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: previewProvider,
                                           actionProvider: actionProvider)
