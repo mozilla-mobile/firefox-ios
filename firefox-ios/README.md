@@ -12,7 +12,7 @@ For bug fixes and features for a specific release, use the version branch.
 
 ## Getting Involved
 
-See readme at the root of the project for [the guidelines](TODO) on how to contribute to this project.
+See readme at the root of the project for [the guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/README.md) on how to contribute to this project.
 
 ## Building the code
 
