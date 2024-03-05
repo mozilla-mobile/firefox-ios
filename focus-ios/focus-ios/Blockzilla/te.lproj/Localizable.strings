@@ -1,0 +1,264 @@
+/* Button on About screen */
+"About.learnMoreButton" = "ఇంకా తెలుసుకోండి";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozillaచే తయారుచేయబడినది. ఆరోగ్యమైన, స్వతంత్రమైన అంతర్జాలాన్ని పెంపొందించడం మా ధ్యేయం.";
+
+/* Label on About screen */
+"About.privateBullet1" = "యాప్ లోనే వెతకండి మరియు విహరించండి";
+
+/* Label on About screen */
+"About.privateBullet2" = "ట్రాకర్లని నిరోధించండి (లేదా ట్రాకర్లని అనుమతించడానికి అమరికలు నవీకరించండి)";
+
+/* Label on About screen */
+"About.privateBullet3" = "కుక్కీలతో పాటు విహరణ మరియు వెతికిన చరిత్ర తొలగించుటకు చెరపండి";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "వ్యక్తిగత బ్రౌజర్ గా వాడు:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "సహాయం";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "గోప్యతా విధానం";
+
+/* Label for row in About screen */
+"About.rowRights" = "మీ హక్కులు";
+
+/* Label on About screen */
+"About.safariBullet1" = "మెరుగైన గోప్యత కోసం ట్రాకర్లని నిరోధించండి";
+
+/* Label on About screen */
+"About.safariBullet2" = "పేజీ పరిమాణం తగ్గించుటకు వెబ్ ఫాంట్లని నిరోధించండి";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "దీనిని Safari పొడిగింతగా వాడండి:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ గురించి";
+
+/* Label on About screen */
+"About.topLabel" = "%@ మిమ్మల్ని నియంత్రణలో ఉంచును.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ లో తెరువు";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "ఇష్టానుసారమైన URLను జోడించండి";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ఉదాహరణ: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "జోడించుటకు URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL అతికించండి లేదా ఇవ్వండి";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ఇష్టానుసారమైన URLను జోడించండి";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "అచేతనం";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL ఇప్పటికే ఉంది";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "చేతనం";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "సైట్ల నిర్వహణ";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "నా సైట్లు";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "మేటి సైట్లు";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "కొత్త సెషన్";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "వెనక్కి";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL క్లిప్‌బోర్డుకి కాపీ అయ్యింది";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "కాపీచేయి";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "ముందుకు";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "తిరిగిలోడు చేయి";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "అమరికలు";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "ఆపుము";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "లొకేషన్ బార్ ఎంచుకోండి";
+
+/* Label on button to complete edits */
+"Done" = "పూర్తి";
+
+/* Label on button to allow edits */
+"Edit" = "సరిచేయు";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "మళ్ళీ ప్రయత్నించు";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "రద్దుచేయి";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "మరొక అప్లికేషన్ను తెరవడానికి %@ కోరుకుంటున్నారు";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "తెరువు";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%2$@ తెరవడానికి %1$@ కోరుకుంటున్నారు";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "రద్దుచేయి";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ఇమెయిల్";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "అలాగే, అర్ధమయ్యింది!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "ఎవరూ చూడనట్టుగా విహరణ చెయ్యండి.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "మూసివేయి";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "కంటెంట్ బ్లాకర్లను ఎంచుకోవడానికి Safariని సఫారిని నొక్కండి";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ చేతనం చేయి";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ ప్రారంభించబడలేదు.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "సెట్టింగ్‌లను తెరవండి";
+
+/* Save button label */
+"Save" = "భద్రపరుచు";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "కాదు";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "అవును";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL స్వయంపూర్తి";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "ఇతర కంటెంట్ ట్రాకర్లను నిరోధించడం వలన కొన్ని వీడియోలు మరియు వెబ్ పేజీలు విరిగిపోవచ్చు.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "ప్రతి ఒక్కరికీ %@ ను అందించడానికి మరియు మెరుగుపరచడానికి Mozilla అవసరమైనవి మాత్రమే సేకరించేందుకు కృషి చేస్తుంది.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "ఇంకా తెలుసుకోండి.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "రేటు %@";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "అమరికలు";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ప్రదర్శించడానికి పేరు";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "శోధన యంత్రం";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "శోధన";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "వెబ్ ఫాంట్లను నిరోధించండి";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "వినియోగించిన డేటాను పంపు";
+
+/* Text for a share button */
+"share" = "పంచుకోండి";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "చిరునామాను కాపీ చేయి";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "పేజీలో వెతుకు";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "క్రోమ్‌లో తెరువు";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefoxలో తెరువు";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "చేర్చు";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "సిరికి చేర్చు";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "తుడిచివేయి";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "తుడిచివేసి తెరువు";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "అభిమాన సైటును తెరవండి";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "అభిమాన సైటును తెరవండి";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "తెరవాల్సిన చిరునామా";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ట్రాకింగ్ సంరక్షణ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "అంటించి & వెళ్ళు";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ERASE";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "పేజీలో వెతకండి: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "అతికించు";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "వెతకండి లేదా చిరునామాను ఇవ్వండి";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ కోసం వెతుకు";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "నిరోధించిన ట్రాకర్లు";
+

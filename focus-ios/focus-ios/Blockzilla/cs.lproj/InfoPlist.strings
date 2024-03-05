@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Toto vám dovolí pořizovat a nahrávat fotografie.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Toto vám umožní odemknout aplikaci.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Servery, které navštěvujete, mohou chtít znát vaše umístění.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Toto vám dovolí pořizovat a nahrávat videa.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Toto vám dovolí ukládat a nahrávat fotografie.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Vymazat a otevřít";
+

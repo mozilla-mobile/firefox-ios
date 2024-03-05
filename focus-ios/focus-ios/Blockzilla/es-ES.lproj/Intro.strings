@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Limpia todo el historial de navegación de tu sesión, contraseñas y cookies en cualquier momento con tan solo un clic.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Tu historial es historia";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Siguiente";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "¿Buscas algo distinto? Elige otro motor de búsqueda.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Tus búsquedas, como tú quieras";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "SALTAR";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Lleva la navegación privada al próximo nivel. Bloquea anuncios y contenido que puedan rastrearte y disminuye el tiempo de carga de las páginas.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Refuerza tu privacidad";
+

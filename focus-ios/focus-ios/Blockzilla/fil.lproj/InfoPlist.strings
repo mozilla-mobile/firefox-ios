@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Hinahayaan ka nito na i-unlock ang app.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Maaaring hingin ng mga website na binibisita mo ang iyon lokasyon.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Maaari kang kumuha at mag-upload ng mga larawan dito.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Pinapayagan ka nito na i-save at mag-upload ng mga larawan.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Burahin at Buksan";
+

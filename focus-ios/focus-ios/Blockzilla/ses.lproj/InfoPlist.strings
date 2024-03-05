@@ -1,0 +1,12 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Woo ga naŋ war ma biyey zaa k'i zijandi.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Interneti nungey kaŋ war g'i naaru ga hin ka war gorodogoo hãa.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Woo nda war ga widewo zaa k'a zijandi.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
+

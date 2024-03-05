@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ລືບປະຫວັດເຊສຊັນການທ່ອງເວັບ, ລະຫັດຜ່ານ ແລະ ອື່ນໆທັງຫມົດຂອງທ່ານໂດຍການແຕະບາດດຽວ.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "ປະຫວັດຂອງເຈົ້າແມ່ນປະຫວັດ";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "ຕໍ່ໄປ";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "ກຳລັງຄົ້ນຫາຢ່າງອື່ນ? ເລືອກເຄື່ອງມືຄົ້ນຫາອື່ນ";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "ການຄົ້ນຫາໃນແບບຂອງທ່ານເອງ";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "ຂ້າມ";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "ນຳການທ່ອງເວັບແບບສ່ວນຕົວໄປສູ້ລະດັບຖັດໄປ ປິດກັ້ນໂຄສະນາແລະເນື້ອຫາອື່ນໆ ທີ່ສາມາດຕິດຕາມເຈົ້າລະຫວ່າງໄຊ໌ແລະຫລຸດເວລາໃນການໂຫລດຫນ້າ";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "ເພີ່ມຄວາມເປັນສ່ວນໂຕຂອງທ່ານ";
+

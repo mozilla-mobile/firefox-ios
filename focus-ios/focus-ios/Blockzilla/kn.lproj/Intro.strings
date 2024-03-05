@@ -1,0 +1,21 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ನಿಮ್ಮ ಸಂಪೂರ್ಣ ಬ್ರೌಸಿಂಗ್ ಸೆಷನ್ ಇತಿಹಾಸ, ಪಾಸ್ವರ್ಡ್ಗಳು, ಕುಕೀಸ್ ಅನ್ನು ಒಮ್ಮೆ ತಟ್ಟುವುದರಿಂದ ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ತೆರವುಗೊಳಿಸಿ.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "ನಿಮ್ಮ ಇತಿಹಾಸವು ಇತಿಹಾಸವಾಗಿದೆ";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "ಮುಂದೆ";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "ಬೇರೆಯದನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆಯೇ? ಬೇರೆ ಹುಡುಕಾಟ ಎಂಜಿನ್ ಆಯ್ಕೆಮಾಡಿ.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "ನಿಮ್ಮ ಹುಡುಕು, ನಿಮ್ಮದೇ ದಾರಿ";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "ಬಿಟ್ಟುಬಿಡು";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "ನಿಮ್ಮ ಖಾಸಗಿತನವನ್ನು ಶಕ್ತಿಯುತಗೊಳಿಸಿ";
+

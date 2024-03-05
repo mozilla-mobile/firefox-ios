@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Бер басу аша бөтен гизү тарихын, серсүзләрне һәм кукиларны теләсә кайчан бетерә аласыз.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Гизү тарихыгыз тарихтыр";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Киләсе";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Башка берәр нәрсә эзлисезме? Башка эзләү системасын сайлагыз.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Сезнең эзләү, cезнең кагыйдәләр";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Калдырып тору";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Хосусый гизүне яңа дәрәҗәгә күтәрегез. Сайтлар аша Сезне күзәтүче һәм сәхифәләрнең йөкләнү вакытын арттыручы рекламаларны һәм башка эчтәлекләрне блоклагыз.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Хосусыйлыгызны көчәйтегез";
+

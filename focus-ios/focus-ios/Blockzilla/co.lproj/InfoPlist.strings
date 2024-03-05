@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Què vi permette di piglià è d’incaricà fotò.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Què vi permette di spalancà l’appiecazione.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "I siti web chì vo visitate ponu richiede à cunnosce a vostra lucalizazione.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Què vi permette di piglià è d’incaricà video.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Què vi permette d’arregistrà è d’incaricà fotò.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Squassà è apre";
+

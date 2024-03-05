@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "በመነሻ ማያዎ ላይ የ%@ አቋራጭ ያክሉ። መግብርን ካከሉ በኋላ ለማርትዕ ይንኩ እና ይያዙ እና የተለየ አቋራጭ ይምረጡ።";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "በነባሪ የፍለጋ ፍርግምዎ በ%@ ውስጥ የግል ፍለጋ ይጀምሩ።";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "ፈጣን እርምጃዎች";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "በ%@ ውስጥ ይፈልጉ";
+
