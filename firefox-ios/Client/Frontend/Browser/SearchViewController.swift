@@ -54,7 +54,7 @@ protocol SearchViewControllerDelegate: AnyObject {
 
 // Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
 // this wrapper combines them and is helpful in showing Remote Client and Remote tab in our SearchViewController
-struct ClientTabsSearchWrapper {
+struct ClientTabsSearchWrapper: Equatable {
     var client: RemoteClient
     var tab: RemoteTab
 }
@@ -793,8 +793,6 @@ class SearchViewController: SiteTableViewController,
                 searchTerm: nil
             )
         }
-
-        searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
     }
 
     override func tableView(
@@ -845,6 +843,76 @@ class SearchViewController: SiteTableViewController,
                                  oneLineCell: oneLineTableViewCell,
                                  for: SearchListSection(rawValue: indexPath.section)!,
                                  indexPath)
+    }
+
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let section = SearchListSection(rawValue: indexPath.section) {
+            switch section {
+            case .searchSuggestions:
+                if let site = suggestions?[indexPath.row] {
+                    if searchTelemetry?.visibleSuggestions.contains(site) == false {
+                        searchTelemetry?.visibleSuggestions.append(site)
+                    }
+                }
+            case .openedTabs:
+                if self.filteredOpenedTabs.count > indexPath.row {
+                    let openedTab = self.filteredOpenedTabs[indexPath.row]
+                    if searchTelemetry?.visibleFilteredOpenedTabs.contains(openedTab) == false {
+                        searchTelemetry?.visibleFilteredOpenedTabs.append(openedTab)
+                    }
+                }
+            case .remoteTabs:
+                if filteredRemoteClientTabs.count > indexPath.row {
+                    let remoteTab = self.filteredRemoteClientTabs[indexPath.row]
+                    if searchTelemetry?.visibleFilteredRemoteClientTabs.contains(where: { $0 == remoteTab }) == false {
+                        searchTelemetry?.visibleFilteredRemoteClientTabs.append(remoteTab)
+                    }
+                }
+            case .bookmarksAndHistory:
+                let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions &&
+                model.shouldShowBrowsingHistorySuggestions
+                let shouldShowEitherSuggestion = model.shouldShowBookmarksSuggestions ||
+                model.shouldShowBrowsingHistorySuggestions
+
+                if featureFlags.isFeatureEnabled(
+                    .firefoxSuggestFeature,
+                    checking: .buildAndUser
+                ) && shouldShowEitherSuggestion {
+                    var site: Site?
+
+                    if shouldShowBothSuggestions {
+                        site = data[indexPath.row]
+                    } else if model.shouldShowBookmarksSuggestions {
+                        site = bookmarkSites[indexPath.row]
+                    } else if model.shouldShowBrowsingHistorySuggestions {
+                        site = historySites[indexPath.row]
+                    }
+
+                    if let site {
+                        if searchTelemetry?.visibleData.contains(site) == false {
+                            searchTelemetry?.visibleData.append(site)
+                        }
+                    }
+                } else if let site = data[indexPath.row] {
+                    if searchTelemetry?.visibleData.contains(site) == false {
+                        searchTelemetry?.visibleData.append(site)
+                    }
+                }
+
+            case .searchHighlights:
+                let highlightItem = searchHighlights[indexPath.row]
+                if searchTelemetry?.visibleSearchHighlights.contains(
+                    where: { $0.urlString == highlightItem.urlString }
+                ) == false {
+                    searchTelemetry?.visibleSearchHighlights.append(highlightItem)
+                }
+            case .firefoxSuggestions:
+                let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+                if searchTelemetry?.visibleFirefoxSuggestions.contains(where: { $0.url == firefoxSuggestion.url }) == false {
+                    searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
+                }
+            }
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

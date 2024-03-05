@@ -143,6 +143,15 @@ class SearchTelemetry {
     var searchHighlights = [HighlightItem]()
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
+
+    var visibleRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var visibleFilteredOpenedTabs = [Tab]()
+    var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var visibleSuggestions = [String]()
+    var visibleFirefoxSuggestions = [RustFirefoxSuggestion]()
+    var visibleSearchHighlights = [HighlightItem]()
+    var visibleData = [Site]()
+
     var searchQuery: String = ""
     var savedQuery: String = ""
 
@@ -420,35 +429,35 @@ class SearchTelemetry {
     func listResultTypes() -> String {
         var resultTypes: [String] = []
 
-        if let suggestionsCount = suggestions?.count, suggestionsCount > 0 {
+        if !visibleSuggestions.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.searchSuggest.rawValue,
-                                 count: suggestionsCount)
+                                 count: visibleSuggestions.count)
         }
 
-        if !filteredOpenedTabs.isEmpty {
+        if !visibleFilteredOpenedTabs.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.tab.rawValue,
-                                 count: filteredOpenedTabs.count)
+                                 count: visibleFilteredOpenedTabs.count)
         }
 
-        if !filteredRemoteClientTabs.isEmpty {
+        if !visibleFilteredRemoteClientTabs.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.remoteTab.rawValue,
-                                 count: filteredRemoteClientTabs.count)
+                                 count: visibleFilteredRemoteClientTabs.count)
         }
 
-        for clientTab in data {
-            if let isBookmarked = clientTab?.bookmarked {
+        for clientTab in visibleData {
+            if let isBookmarked = clientTab.bookmarked {
                 resultTypes.append(isBookmarked ?
                                    SearchTelemetryValues.Results.bookmark.rawValue :
                                     SearchTelemetryValues.Results.history.rawValue)
             }
         }
 
-        if !searchHighlights.isEmpty {
+        if !visibleSearchHighlights.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.searchHistory.rawValue,
-                                 count: searchHighlights.count)
+                                 count: visibleSearchHighlights.count)
         }
 
-        for suggestion in firefoxSuggestions {
+        for suggestion in visibleFirefoxSuggestions {
             resultTypes.append(suggestion.isSponsored ?
                                SearchTelemetryValues.Results.suggestSponsor.rawValue :
                                 SearchTelemetryValues.Results.suggestNonSponsor.rawValue)

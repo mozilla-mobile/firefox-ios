@@ -425,9 +425,6 @@ extension BrowserViewController: URLBarDelegate {
             case .cancelled: .abandoned
             }
         }
-        if reason == .finished {
-            searchController?.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
-        }
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
