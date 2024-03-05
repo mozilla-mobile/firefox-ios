@@ -50,7 +50,6 @@ class EmptyPrivateTabsView: UIView {
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
-
     }
 
     private let iconImageView: UIImageView = .build { imageView in
