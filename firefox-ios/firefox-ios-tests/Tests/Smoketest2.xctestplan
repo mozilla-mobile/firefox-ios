@@ -39,6 +39,7 @@
         "ExperimentIntegrationTests",
         "FakespotTests\/testAcceptTheRejectedOptInNotification()",
         "FakespotTests\/testFakespotAvailable()",
+        "FakespotTests\/testOptInNotificationLayout()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",

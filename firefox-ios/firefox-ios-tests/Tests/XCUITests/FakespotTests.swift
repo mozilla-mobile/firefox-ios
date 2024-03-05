@@ -144,6 +144,80 @@ class FakespotTests: IphoneOnlyTestCase {
         validateExpandedSettingsSection()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358892
+    // Smoketest
+    func testOptInNotificationLayout() {
+        if skipPlatform { return }
+        // Navigate to a product detail page on amazon.com page
+        reachReviewChecker()
+        validateOptInLayout("Amazon", "Walmart", "Best Buy")
+
+        // Navigate to a product detail page on walmart.com page
+        validateLayoutOnWalmartAndBestBuy("https://www.walmart.com", isWalmart: true, "Walmart", "Amazon", "Best Buy")
+
+        // Navigate to a product detail page on bestbuy.com page
+        validateLayoutOnWalmartAndBestBuy("https://www.bestbuy.com", isWalmart: false, "Best Buy", "Amazon", "Walmart")
+    }
+
+    private func validateLayoutOnWalmartAndBestBuy(_ website: String, isWalmart: Bool, _ currentWebsite: String,
+                                                   _ suggestedWebsite1: String, _ suggestedWebsite2: String) {
+        app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
+        mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        navigator.openURL(website)
+        waitUntilPageLoad()
+        if isWalmart {
+            let searchWalmart = app.webViews["contentView"].searchFields["Search Walmart"]
+            searchWalmart.tap()
+            searchWalmart.typeText("shoe")
+            mozWaitForElementToExist(app.webViews["contentView"].buttons["Search icon"])
+            app.webViews["contentView"].buttons["Search icon"].tap()
+            waitUntilPageLoad()
+            scrollToElement(app.links.element(boundBy: 5))
+            app.links.element(boundBy: 5).tap()
+        } else {
+            if app.links["United States"].exists {
+                app.links["United States"].tap()
+                waitUntilPageLoad()
+            }
+            let searchBestBuy = app.webViews["contentView"].textFields["Search"]
+            searchBestBuy.tap()
+            searchBestBuy.typeText("iphone")
+            mozWaitForElementToExist(app.webViews["contentView"].buttons["submit search"])
+            app.webViews["contentView"].buttons["submit search"].tap()
+            waitUntilPageLoad()
+            scrollToElement(app.webViews["contentView"].links.elementContainingText("Apple").firstMatch)
+            app.webViews["contentView"].links.elementContainingText("Apple").firstMatch.tap()
+        }
+        waitUntilPageLoad()
+        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        validateOptInLayout(currentWebsite, suggestedWebsite1, suggestedWebsite2)
+    }
+
+    private func validateOptInLayout(_ currentWebsite: String, _ suggestedWebsite1: String, _ suggestedWebsite2: String) {
+        let optInCard = AccessibilityIdentifiers.Shopping.OptInCard.self
+        let optInQueryStaticText = app.scrollViews.otherElements.staticTexts
+        let optInQueryButton = app.scrollViews.otherElements.buttons
+        let optInText1 = "See how reliable product reviews are on \(currentWebsite) before you buy."
+        let optInText2 = "Review Checker, an experimental feature from Firefox, is built right into the browser."
+        let optInText3 = "It works on \(suggestedWebsite1) and \(suggestedWebsite2), too."
+        let firstParagraph = optInText1 + " " + optInText2 + " " + optInText3
+        let optInText4 = "Using the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews."
+        let optInText5 = "Our AI model is always improving to protect you as you shop."
+        let secondParagraph = optInText4 + " " + optInText5
+        let discalimerText = "By selecting “Yes, Try It” you agree to these items:"
+        // Validate screen layout
+        mozWaitForElementToExist(app.staticTexts[optInCard.headerTitle])
+        XCTAssertEqual(optInQueryStaticText[optInCard.headerTitle].label, "Try our trusted guide to product reviews")
+        XCTAssertTrue(optInQueryStaticText.elementContainingText(firstParagraph).exists)
+        XCTAssertTrue(optInQueryStaticText.elementContainingText(secondParagraph).exists)
+        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, discalimerText)
+        XCTAssertEqual(optInQueryButton[optInCard.learnMoreButton].label, "Learn more")
+        XCTAssertEqual(optInQueryButton[optInCard.mainButton].label, "Yes, Try It")
+        XCTAssertEqual(optInQueryButton[optInCard.secondaryButton].label, "Not now")
+        XCTAssertEqual(optInQueryButton[optInCard.privacyPolicyButton].label, "Firefox’s privacy notice")
+        XCTAssertEqual(optInQueryButton[optInCard.termsOfUseButton].label, "Fakespot’s terms of use")
+    }
+
     private func switchThemeToDarkOrLight() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(BrowserTab)
@@ -207,7 +281,6 @@ class FakespotTests: IphoneOnlyTestCase {
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
-        waitUntilPageLoad()
 
         // Retry loading the page if page is not loading
         while app.webViews.staticTexts["Enter the characters you see below"].exists {
@@ -215,6 +288,7 @@ class FakespotTests: IphoneOnlyTestCase {
             waitUntilPageLoad()
         }
         // Tap the shopping cart icon
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
     }
 
