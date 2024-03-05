@@ -21,9 +21,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
     }
 
     lazy var titleLabel: UILabel = .build { titleLabel in
-        titleLabel.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .headline,
-            size: UX.titleFontSize)
+        titleLabel.font = FXFontStyles.Bold.headline.scaledFont()
         titleLabel.text = String.TabsTrayInactiveTabsSectionTitle
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerLabel
