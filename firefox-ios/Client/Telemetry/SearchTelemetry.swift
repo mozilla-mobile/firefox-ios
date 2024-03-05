@@ -472,34 +472,34 @@ class SearchTelemetry {
     func listGroupTypes() -> String {
         var groupTypes: [String] = []
 
-        if !(suggestions?.isEmpty ?? true) {
+        if !visibleSuggestions.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.searchSuggest.rawValue,
-                                count: suggestions!.count)
+                                count: visibleSuggestions.count)
         }
 
-        if !filteredOpenedTabs.isEmpty {
+        if !visibleFilteredOpenedTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.heuristic.rawValue,
-                                count: filteredOpenedTabs.count)
+                                count: visibleFilteredOpenedTabs.count)
         }
 
-        if !filteredRemoteClientTabs.isEmpty {
+        if !visibleFilteredRemoteClientTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.remoteTab.rawValue,
-                                count: filteredRemoteClientTabs.count)
+                                count: visibleFilteredRemoteClientTabs.count)
         }
 
-        if !remoteClientTabs.isEmpty {
+        if !visibleRemoteClientTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.general.rawValue,
-                                count: remoteClientTabs.count)
+                                count: visibleRemoteClientTabs.count)
         }
 
-        if !searchHighlights.isEmpty {
+        if !visibleSearchHighlights.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.searchHistory.rawValue,
-                                count: searchHighlights.count)
+                                count: visibleSearchHighlights.count)
         }
 
-        if !firefoxSuggestions.isEmpty {
+        if !visibleFirefoxSuggestions.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.suggest.rawValue,
-                                count: firefoxSuggestions.count)
+                                count: visibleFirefoxSuggestions.count)
         }
 
         return groupTypes.joined(separator: ",")
