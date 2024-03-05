@@ -469,7 +469,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         ) { _ in
             NightModeHelper.toggle(tabManager: self.tabManager)
 
-            if nightModeEnabled {
+            if NightModeHelper.isActivated() {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
             } else {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
