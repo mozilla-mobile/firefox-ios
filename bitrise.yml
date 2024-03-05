@@ -15,8 +15,8 @@ stages:
     workflows:
     - firefox_configure_build:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    # - focus_configure_build:
-    #     run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
+    - focus_configure_build:
+        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
   run_tests:
     workflows:
     - build_and_test_1_SmokeTest1:
@@ -27,6 +27,12 @@ stages:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     - build_and_test_4_SmokeTest4:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
+    - focus_ui_test:
+        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
+    - focus_unit_test:
+        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
+    - klar_unit_test:
+        run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
 workflows:
   firefox_configure_build:
     before_run:
