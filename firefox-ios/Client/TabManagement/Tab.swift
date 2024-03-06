@@ -534,12 +534,16 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
+        DefaultLogger.shared.log("nb - restore outside url \(webView.url)", level: .info, category: .nblog)
         if let url = url {
+            DefaultLogger.shared.log("nb - restore inside url \(url)", level: .info, category: .nblog)
             webView.load(PrivilegedRequest(url: url) as URLRequest)
         }
 
+        DefaultLogger.shared.log("nb - restore middle state \(webView.url)", level: .info, category: .nblog)
         if let interactionState = interactionState {
             webView.interactionState = interactionState
+            DefaultLogger.shared.log("nb - restore interaction state \(interactionState)", level: .info, category: .nblog)
         }
     }
 
@@ -646,9 +650,12 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     func reload(bypassCache: Bool = false) {
+        DefaultLogger.shared.log("nb - reload top before webview \(webView)", level: .info, category: .nblog)
+        DefaultLogger.shared.log("nb - reload top before url \(url)", level: .info, category: .nblog)
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
             webView?.replaceLocation(with: page)
+            DefaultLogger.shared.log("nb - reload 001 url \(url)", level: .info, category: .nblog)
             return
         }
 
@@ -656,19 +663,23 @@ class Tab: NSObject, ThemeApplicable {
             let reloadRequest = URLRequest(url: url,
                                            cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                            timeoutInterval: 10.0)
-
+            DefaultLogger.shared.log("nb - reload 002 loadrequest \(reloadRequest)", level: .info, category: .nblog)
             if webView?.load(reloadRequest) != nil {
                 logger.log("Reloaded the tab from originating source, ignoring local cache.",
                            level: .debug,
                            category: .tabs)
+                DefaultLogger.shared.log("nb - reload 003 reloadRequest \(reloadRequest)", level: .info, category: .nblog)
                 return
             }
         }
 
-        if webView?.reloadFromOrigin() != nil {
+        if let webView, let url = webView.url {
+            webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,
                        category: .tabs)
+            DefaultLogger.shared.log("nb - reload restore before webview \(webView)", level: .info, category: .nblog)
+            DefaultLogger.shared.log("nb - reload restore before url \(url)", level: .info, category: .nblog)
             return
         }
 
@@ -677,6 +688,9 @@ class Tab: NSObject, ThemeApplicable {
                        level: .debug,
                        category: .tabs)
             restore(webView)
+            DefaultLogger.shared.log("nb - reload restore scratch \(webView)", level: .info, category: .nblog)
+        } else {
+            DefaultLogger.shared.log("nb - reload else \(webView)", level: .info, category: .nblog)
         }
     }
 
