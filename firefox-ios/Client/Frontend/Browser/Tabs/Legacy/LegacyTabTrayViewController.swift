@@ -523,7 +523,7 @@ extension LegacyTabTrayViewController: Notifiable {
                 guard let label = self?.countLabel else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
                 self?.segmentedControlIphone.setImage(
-                    UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label),
+                    UIImage(named: StandardImageIdentifiers.Large.tab)!.overlayWith(image: label),
                     forSegmentAt: 0)
             default: break
             }

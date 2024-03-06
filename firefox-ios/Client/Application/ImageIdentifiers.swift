@@ -26,7 +26,6 @@ public struct ImageIdentifiers {
     public static let logoVisa = "logo_visa"
     public static let menuBadge = "menuBadge"
     public static let menuWarningMask = "warning-mask"
-    public static let navTabCounter = "nav-tabcounter"
     public static let onboardingWelcomev106 = "onboardingWelcome"
     public static let onboardingSyncv106 = "onboardingSync"
     public static let onboardingNotification = "onboardingNotification"

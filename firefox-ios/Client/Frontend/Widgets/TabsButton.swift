@@ -68,7 +68,7 @@ class TabsButton: UIButton, ThemeApplicable {
     }
 
     private lazy var borderView: UIImageView = .build { imageView in
-        imageView.image = UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.tab)?.withRenderingMode(.alwaysTemplate)
     }
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
