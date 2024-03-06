@@ -20,7 +20,7 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
     private lazy var bottomSeparatorView: UIView = .build { _ in }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.cellLabel
         label.textAlignment = .natural
