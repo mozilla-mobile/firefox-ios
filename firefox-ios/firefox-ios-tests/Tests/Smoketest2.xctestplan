@@ -101,6 +101,7 @@
         "TopTabsTest\/testCloseOneTab()",
         "TopTabsTest\/testOpenTabsViewCurrentTabThumbnail()",
         "TopTabsTest\/testSwitchBetweenTabs()",
+        "TopTabsTest\/testTabTrayCloseMultipleTabs()",
         "TopTabsTest\/testTabTrayContextMenuCloseTab()",
         "TopTabsTestIpad",
         "TrackingProtectionTests\/testBasicMoreInfo()",

@@ -1191,6 +1191,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab(isPrivate: Bool = false) {
         let app = XCUIApplication()
         self.goto(TabTray)
+        // Workaround for issue https://github.com/mozilla-mobile/firefox-ios/issues/18743
         if isPrivate {
             self.performAction(Action.TogglePrivateMode)
         }
