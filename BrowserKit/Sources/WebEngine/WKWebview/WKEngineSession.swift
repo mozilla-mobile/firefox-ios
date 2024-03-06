@@ -23,6 +23,7 @@ class WKEngineSession: NSObject,
 
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
+    weak var telemetryProxy: EngineTelemetryProxy?
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
@@ -385,12 +386,14 @@ class WKEngineSession: NSObject,
     func webView(_ webView: WKWebView,
                  didFail navigation: WKNavigation!,
                  withError error: Error) {
+        telemetryProxy?.handleTelemetry(event: .didFailNavigation)
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
     func webView(_ webView: WKWebView,
                  didFailProvisionalNavigation navigation: WKNavigation!,
                  withError error: Error) {
+        telemetryProxy?.handleTelemetry(event: .didFailProvisionalNavigation)
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 

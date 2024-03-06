@@ -7,6 +7,7 @@ import Foundation
 /// Protocol representing a single engine session. In browsers usually a session corresponds to a tab.
 public protocol EngineSession {
     var delegate: EngineSessionDelegate? { get set }
+    var telemetryProxy: EngineTelemetryProxy? { get set }
     var findInPageDelegate: FindInPageHelperDelegate? { get set }
 
     /// The engine received a request to load a URL.
