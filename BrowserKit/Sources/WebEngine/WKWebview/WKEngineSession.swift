@@ -23,7 +23,7 @@ class WKEngineSession: NSObject,
 
     private(set) var webView: WKEngineWebView
     var sessionData: WKEngineSessionData
-    weak var telemetryProxy: EngineTelemetryProxy?
+    var telemetryProxy: EngineTelemetryProxy?
 
     private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
