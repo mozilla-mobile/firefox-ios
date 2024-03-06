@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Մաքրում է դիտարկումների պատմությունը, գաղտնաբառերը և ավելին՝ մեկ սեղմամբ:";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Ձեր պատմությունը պատմություն է:";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Հաջորդը";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Այլ բա՞ն եք փնտրում: Ընտրեք այլ որոնիչ Կարգավորումներում:";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Ձեր որոնումը, ձեր ընտրությունը";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Բաց թողնել";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Տարեք գաղտնի դիտարկումը հաջորդ մակարդակ: Արգելափակեք գովազդները և այլ բովանդակություն, որը կարող է հետագծել ձեզ կայքերում և արագացրեք էջի բեռնումը:";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Հզորացրեք ձեր գաղտնիությունը";
+

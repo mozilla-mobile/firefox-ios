@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Adjon egy %@ ikont a kezdőképernyőhöz. A widget hozzáadása után érintse meg és tartsa lenyomva a szerkesztéshez, majd válasszon egy másik ikont.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Indítson privát keresést a %@ban az alapértelmezett keresőszolgáltatásával.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Gyors műveletek";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Keresés ebben: %@";
+

@@ -25,7 +25,12 @@ class PasswordManagerDataSourceHelper {
     // given login.
     func titleForLogin(_ login: LoginRecord) -> Character {
         // Fallback to hostname if we can't extract a base domain.
-        let titleString = domainLookup[login.id]?.baseDomain?.uppercased() ?? login.hostname
+        let titleString: String
+        if let baseDomain = domainLookup[login.id]?.baseDomain, !baseDomain.isEmpty {
+            titleString = baseDomain.uppercased()
+        } else {
+            titleString = login.hostname
+        }
         return titleString.first ?? Character("")
     }
 

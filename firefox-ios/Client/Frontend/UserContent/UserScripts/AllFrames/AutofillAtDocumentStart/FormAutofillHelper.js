@@ -37,10 +37,24 @@ const expectedCreditCardPayloadShape = {
   "cc-exp-year": "",
 };
 
-const normalizePayload = (payload) => {
+// This should be handled by normalizeFields
+// TODO(issam, FXCM-810): Revisit data representation for address and credit card as this has caused a lot of bugs
+// for now we explicitely define the data shape we expect and defaults.
+const expectedAddressPayloadShape = {
+  "address-level1": "",
+  organization: "",
+  country: "",
+  "address-level2": "",
+  email: "",
+  "street-address": "",
+  name: "",
+  postalCode: "",
+};
+
+const normalizePayload = (expectedPayloadShape) => (payload) => {
   const items = Array.isArray(payload) ? payload : [payload];
   const normalizedPaylod = {
-    ...expectedCreditCardPayloadShape,
+    ...expectedPayloadShape,
     ...(items?.[0] ?? {}),
   };
 
@@ -64,21 +78,23 @@ const addressSendMessage = sendMessage(
 // Note: We expect all values to be string based
 const sendCaptureCreditCardFormMessage = creditCardSendMessage(
   messageTypes.CAPTURE_CREDIT_CARD_FORM,
-  normalizePayload
+  normalizePayload(expectedCreditCardPayloadShape)
 );
 
 const sendFillCreditCardFormMessage = creditCardSendMessage(
   messageTypes.FILL_CREDIT_CARD_FORM,
-  normalizePayload
+  normalizePayload(expectedCreditCardPayloadShape)
 );
 
 const sendFillAddressFormMessage = addressSendMessage(
-  messageTypes.FILL_ADDRESS_FORM
+  messageTypes.FILL_ADDRESS_FORM,
+  normalizePayload(expectedAddressPayloadShape)
 );
 
 // TODO: Define this method in Address Autofill Phase 3
 const sendCaptureAddressFormMessage = addressSendMessage(
-  messageTypes.CAPTURE_ADDRESS_FORM
+  messageTypes.CAPTURE_ADDRESS_FORM,
+  normalizePayload(expectedAddressPayloadShape)
 );
 
 // Create a FormAutofillHelper object and expose it to the window object.

@@ -43,9 +43,30 @@ class SearchEngines {
 
     init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
         self.prefs = prefs
-        // By default, show search suggestions
-        self.shouldShowSearchSuggestions = prefs.boolForKey(
+        self.fileAccessor = files
+        self.engineProvider = engineProvider
+        self.orderedEngines = []
+        self.disabledEngines = getDisabledEngines()
+        initPrefBasedSuggestions()
+
+        getOrderedEngines { orderedEngines in
+            self.orderedEngines = orderedEngines
+            self.delegate?.searchEnginesDidUpdate()
+        }
+    }
+
+    private func initPrefBasedSuggestions() {
+        shouldShowSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showSearchSuggestions
+        ) ?? true
+        shouldShowBrowsingHistorySuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions
+        ) ?? true
+        shouldShowBookmarksSuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions
+        ) ?? true
+        shouldShowSyncedTabsSuggestions = prefs.boolForKey(
+            PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions
         ) ?? true
         shouldShowFirefoxSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions
@@ -56,18 +77,9 @@ class SearchEngines {
         shouldShowPrivateModeFirefoxSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeFirefoxSuggestions
         ) ?? false
-        self.shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
+        shouldShowPrivateModeSearchSuggestions = prefs.boolForKey(
             PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
         ) ?? false
-        self.fileAccessor = files
-        self.engineProvider = engineProvider
-        self.orderedEngines = []
-        self.disabledEngines = getDisabledEngines()
-
-        getOrderedEngines { orderedEngines in
-            self.orderedEngines = orderedEngines
-            self.delegate?.searchEnginesDidUpdate()
-        }
     }
 
     var defaultEngine: OpenSearchEngine? {
@@ -108,7 +120,7 @@ class SearchEngines {
         return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
     }
 
-    var shouldShowSearchSuggestions: Bool {
+    var shouldShowSearchSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowSearchSuggestions,
@@ -117,7 +129,34 @@ class SearchEngines {
         }
     }
 
-    var shouldShowFirefoxSuggestions: Bool {
+    var shouldShowBrowsingHistorySuggestions = true {
+        didSet {
+            prefs.setBool(
+                shouldShowBrowsingHistorySuggestions,
+                forKey: PrefsKeys.SearchSettings.showFirefoxBrowsingHistorySuggestions
+            )
+        }
+    }
+
+    var shouldShowBookmarksSuggestions = true {
+        didSet {
+            prefs.setBool(
+                shouldShowBookmarksSuggestions,
+                forKey: PrefsKeys.SearchSettings.showFirefoxBookmarksSuggestions
+            )
+        }
+    }
+
+    var shouldShowSyncedTabsSuggestions = true {
+        didSet {
+            prefs.setBool(
+                shouldShowSyncedTabsSuggestions,
+                forKey: PrefsKeys.SearchSettings.showFirefoxSyncedTabsSuggestions
+            )
+        }
+    }
+
+    var shouldShowFirefoxSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowFirefoxSuggestions,
@@ -126,7 +165,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowSponsoredSuggestions: Bool {
+    var shouldShowSponsoredSuggestions = true {
         didSet {
             prefs.setBool(
                 shouldShowSponsoredSuggestions,
@@ -135,7 +174,7 @@ class SearchEngines {
         }
     }
 
-    var shouldShowPrivateModeFirefoxSuggestions: Bool {
+    var shouldShowPrivateModeFirefoxSuggestions = false {
         didSet {
             prefs.setBool(
                 shouldShowPrivateModeFirefoxSuggestions,
@@ -144,13 +183,21 @@ class SearchEngines {
         }
     }
 
-    var shouldShowPrivateModeSearchSuggestions: Bool {
+    var shouldShowPrivateModeSearchSuggestions = false {
         didSet {
             prefs.setBool(
                 shouldShowPrivateModeSearchSuggestions,
                 forKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions
             )
         }
+    }
+
+    var isPrivateModeSettingEnabled: Bool {
+        return shouldShowPrivateModeSearchSuggestions ||
+               shouldShowPrivateModeFirefoxSuggestions ||
+               shouldShowBookmarksSuggestions ||
+               shouldShowSyncedTabsSuggestions ||
+               shouldShowBrowsingHistorySuggestions
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {

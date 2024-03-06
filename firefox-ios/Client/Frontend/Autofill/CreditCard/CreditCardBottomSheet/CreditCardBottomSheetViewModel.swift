@@ -111,7 +111,7 @@ class CreditCardBottomSheetViewModel {
                     }
                     self.logger.log("Unable to save credit card with error: \(error)",
                                     level: .fatal,
-                                    category: .creditcard)
+                                    category: .autofill)
                     completion(error)
                 }
             }
@@ -125,7 +125,7 @@ class CreditCardBottomSheetViewModel {
                     }
                     self.logger.log("Unable to save credit card with error: \(error)",
                                     level: .fatal,
-                                    category: .creditcard)
+                                    category: .autofill)
                     completion(error)
                 }
             }

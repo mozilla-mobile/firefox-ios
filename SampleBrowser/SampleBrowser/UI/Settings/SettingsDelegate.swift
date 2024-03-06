@@ -7,4 +7,12 @@ import Foundation
 protocol SettingsDelegate: AnyObject {
     func scrollToTop()
     func showFindInPage()
+    func switchToStrictTrackingProtection()
+    func switchToStandardTrackingProtection()
+    func disableTrackingProtection()
+    func toggleNoImageMode()
+    func increaseZoom()
+    func decreaseZoom()
+    func resetZoom()
+    func setZoom(_ value: CGFloat)
 }

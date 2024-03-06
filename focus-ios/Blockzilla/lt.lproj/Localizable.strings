@@ -1,0 +1,507 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Sužinoti daugiau";
+
+/* Label on About screen */
+"About.missionLabel" = "„%@“ yra „Mozillos“ kūrinys. Mūsų misija yra skatinti sveiką, atvirą internetą.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Ieškokite ir naršykite pačioje programoje";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokuokite stebėjimo elementus (arba atnaujinkite nuostatas, jeigu norite juos leisti)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Išvalykite, norėdami pašalinti slapukus, paieškos ir naršymo žurnalus";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Naudokite ją kaip privačią naršyklę:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Žinynas";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Privatumo pranešimas";
+
+/* Label for row in About screen */
+"About.rowRights" = "Jūsų teisės";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokuokite stebėjimo elementus vardan didesnio privatumo";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokuokite saityno šriftus, taip sumažindami tinklalapių apimtis";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Naudokite ją kaip „Safari“ priedą:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Apie „%@“";
+
+/* Label on About screen */
+"About.topLabel" = "„%@“ suteikia jums kontrolę.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Atverti naudojant „%@“";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Gerai";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Pridedant leidimą į piniginę įvyko klaida. Prašome pabandyti vėliau.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Nepavyko pridėti leidimo";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Patvirtinkite savo tapatybę, kad grįžtumėte į „%@“";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Pridėti savą adresą";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Patikrinkite įvestą URL adresą.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Pavyzdys: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Pridedamas adresas";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Įdėkite arba įveskite URL adresą";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Pridėti savą adresą";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Pridėtas naujas adresas.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Įjungus, „%@“ automatiškai adreso lauke užbaigs virš 450 populiarių URL adresų.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Išjungtas";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Toks adresas jau pridėtas";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Pasirinktinių URL adresų nėra įvesta";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Įgalintas";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Tvarkyti svetaines";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Mano svetainės";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Įjungus, „%@“ automatiškai užbaigs jūsų mėgiamus adresus.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Lankomiausios svetainės";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Naujas seansas";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Atgal";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Adresas nukopijuotas į iškarpinę";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopijuoti";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Pirmyn";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Įkelti iš naujo";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Nuostatos";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Nutraukti įkėlimą";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Pereiti į adreso lauką";
+
+/* Label on button to complete edits */
+"Done" = "Atlikta";
+
+/* Label on button to allow edits */
+"Edit" = "Keisti";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Bandyti dar kartą";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Atsisakyti";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "„%@“ bando atverti kitą programą";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Atverti";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "„%1$@“ bando atverti programą „%2$@“";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Atsisakyti";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Rašyti laišką";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Paieška tinklalapyje baigta";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Rasti tolesnį";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Rasti ankstesnį";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Gerai, supratau!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Naršykite, tarsi niekas nemato.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Užverti";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Bakstelėkite „Safari“, tada pasirinkite „Content Blockers“";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Įgalinkte „%@“";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "„%@“ neįgalinta.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Atverkite programą „Settings“";
+
+/* Save button label */
+"Save" = "Įrašyti";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Nepavyko išanalizuoti adreso. Pamėginkite pakeisti paieškos žodžius šiuo tekstu: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Ne";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Taip";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Kad gautų siūlymus, „%@“ turi persiųsti ieškyklei viską, ką rašote į adreso lauką.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Rodyti paieškos žodžių siūlymus?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatinis URL adresų užbaigimas";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokuojant kitus turinio stebėjimo elementus, gali sutrikti kai kurių vaizdo įrašų ir tinklalapių veikimas.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Atsisakyti";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokuoti turinio stebėjimo elementus";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Tamsus";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "„%@“ perduos jūsų ieškyklei tai, ką rašote adreso lauke.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "„Mozilla“ siekia rinkti tik tai, ko reikia norint pagerinti „%@“ visiems.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "„%@“ retkarčiais gali įdiegti ir vykdyti tyrimus.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Bendrosios";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Sužinoti daugiau.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Šviesus";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Įvertinti „%@“";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRACIJA SU „SAFARI“";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Nuostatos";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Pridėti kitą ieškyklę";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Ieškyklės pridėjimas";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "ĮDIEGTOS IEŠKYKLĖS";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Rodomas ieškyklės pavadinimas";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Pridėta nauja ieškyklė.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Atkurti numatytąsias ieškykles";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Ieškyklės pavadinimas";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Paieškos eilutės struktūra";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Įdėkite arba įveskite paieškos eilutę. Jeigu reikia, pakeiskite paieškos žodžius šiuo tekstu: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Ieškyklė";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Gauti paieškos žodžių siūlymus";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "PAIEŠKA";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "„MOZILLA“";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVATUMAS";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Sistemos grafinis apvalkalas";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Grafinis apvalkalas";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Grafinio apvalkalo pasirinkimas";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklaminiai";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analitikos";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokuoti saityno šriftus";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Turinio";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Socialiniai";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Naudoti veido atpažinimą programai atrakinti";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Naudojant veido atpažinimą, galima atrakinti „%@“ programą, kai joje jau yra atvertas tinklalapis";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Rodyti pradžios ekrano patarimus";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "„Safari“";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Siųsti duomenis apie naudojimąsi";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Tyrimai";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Naudoti piršto antspaudą programai atrakinti";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Naudojant jūsų piršto antspaudą, galima atrakinti „%@“ programą, kai joje jau yra atvertas tinklalapis";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Išjungta";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Įjungta";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Naudoti sistemos šviesią/tamsią veikseną";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "„SIRI“ KOMANDOS";
+
+/* Text for a share button */
+"share" = "Dalintis";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Pridėti prie leistukų";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopijuoti adresą";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Rasti tinklalapyje";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Pašalinti iš leistukų";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Prašyti ne mob. svetainės";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Prašyti mobilios svetainės";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Atverti „Chrome“ naršyklėje";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Atverti numatytojoje naršyklėje";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Atverti „Firefox“ naršyklėje";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Dalintis naudojant…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Pašalinti iš leistukų";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Pridėti";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Pridėti į „Siri“";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Įrašyti pakartotinai arba pašalinti komandą";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Valyti";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Išvalyti ir atverti";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Atverti mėgstamą svetainę";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Atverti mėgstamą svetainę";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Atvertinas URL adresas";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Užrakinti „%@“, kai svetainė atidaryta:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Įjungti „Face ID“";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Įjungti „Touch ID“";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Tinklalapio veiksmai > Prašyti ne mob. svetainės";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Norite matyti pilną kompiuterinę svetainės versiją?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Iki dabar užblokuoti stebėjimo elementai: %@";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Jūs naršote. „%@“ blokuoja.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Pasirinkite „Pridėti prie leistukų“ iš „%@“ meniu";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Sukurkite leistukus savo lankomiausioms svetainėms:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Pridėti „Siri“ leistuką";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "„Siri, išvalyk mano %@ seansą.“";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Pridėti „Siri“ leistuką";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "„Siri, atidaryk mano mėgstamiausią svetainę“.";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Pabandykite išjungti apsaugą nuo stebėjimo";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Svetainėje trūksta turinio arba ji keistai veikia?";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Ryšys nesaugus";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Ryšys saugus";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Apsauga nuo stebėjimo";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Apsaugos šiame seanse IŠJUNGTOS";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Apsaugos šiame seanse ĮJUNGTOS";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Išplėsta apsauga nuo stebėjimo";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Stebėjimo elementai, užblokuoti nuo %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Blokuojami stebėjimo elementai ir scenarijai";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Įtraukti saitą į automatinį užbaigimą";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Įdėti ir atverti";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "VALYTI";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Naršymo žurnalas išvalytas";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Ieškoti tinklalapyje: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Įdėti";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Įveskite adresą arba paieškos žodžius";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Ieškoti „%@“";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Užblokuoti sekimo elementai";
+

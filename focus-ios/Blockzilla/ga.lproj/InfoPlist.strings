@@ -1,0 +1,12 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ligeann seo duit pictiúir a thógáil agus a uaslódáil.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "D'fhéadfadh suíomhanna a dtugann tú cuairt orthu do láthair a iarraidh.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Ligeann seo duit físeáin a thógáil agus a uaslódáil.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save and upload photos.";
+

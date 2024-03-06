@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Ayagi ad ak-yeǧǧ ad teṭṭfeḍ neɣ ad tessaliḍ tiwlafin.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Ayagi ad k-yeǧǧ ad tserḥeḍ i usnas.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Ismal web aniɣer trezzuḍ zemren ad sutren adig-inek.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Ayagi ad ak-isireg asader d usali n tvidyutin.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "S waya ad teskelseḍ daɣ ad d-tessidreḍ tugniwin.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Sfeḍ sakin Ldi";
+

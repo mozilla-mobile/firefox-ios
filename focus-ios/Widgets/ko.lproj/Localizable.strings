@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "홈 화면에 %@ 바로 가기를 추가하세요. 위젯을 추가한 후, 길게 터치하여 수정 및 다른 바로 가기를 선택하세요.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "기본 검색 엔진으로 %@에서 비공개 검색을 시작하세요.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "빠른 작업";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "%@에서 검색";
+

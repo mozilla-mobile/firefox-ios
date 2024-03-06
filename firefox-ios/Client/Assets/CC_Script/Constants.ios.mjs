@@ -17,7 +17,7 @@ const IOS_DEFAULT_PREFERENCES = {
   "browser.search.region": "US",
   "extensions.formautofill.creditCards.supportedCountries": "US,CA,GB,FR,DE",
   "extensions.formautofill.addresses.enabled": true,
-  "extensions.formautofill.addresses.experiments.enabled": false, // TODO(FXCM-765): fetch this value from swift
+  "extensions.formautofill.addresses.experiments.enabled": true,
   "extensions.formautofill.addresses.capture.enabled": false,
   "extensions.formautofill.addresses.supportedCountries": "",
   "extensions.formautofill.creditCards.enabled": true,
@@ -31,6 +31,7 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.heuristics.captureOnFormRemoval": false,
   "extensions.formautofill.heuristics.captureOnPageNavigation": false,
   "extensions.formautofill.focusOnAutofill": false,
+  "extensions.formautofill.test.ignoreVisibilityCheck": false,
 };
 
 // Used Mimic the behavior of .getAutocompleteInfo()

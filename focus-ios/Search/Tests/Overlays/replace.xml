@@ -1,0 +1,7 @@
+<SearchOverlay>
+  <replace target="//search:Url[@method='POST']">
+    <Elem name="replaced">
+      <Child>Child of replaced element.</Child>
+    </Elem>
+  </replace>
+</SearchOverlay>

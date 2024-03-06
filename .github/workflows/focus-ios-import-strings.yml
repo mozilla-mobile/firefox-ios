@@ -1,0 +1,50 @@
+name: Create a PR with changes after importing strings
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  schedule:
+    # Runs at 10pm on Sunday
+    - cron: '0 22 * * 0'
+
+jobs:
+  build:
+    runs-on: macos-13
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+        xcode: ["15.0.1"]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false 
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Select Xcode ${{ matrix.xcode }}
+      run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Get the current date for PR title
+      run: echo "current_date=$(date +"%m-%d-%Y")" >> $GITHUB_ENV
+    - name: Run script to import strings
+      run: sh ./focus-ios/focus-ios-tests/tools/import-strings.sh
+    - name: Update new strings
+      run: |-
+        git diff || (git add focus-ios/Blockzilla/*/*.lproj/* focus-ios/Blockzilla/*.lproj/* focus-ios/Blockzilla.xcodeproj/project.pbxproj)
+        git restore focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: string-import-${{ env.current_date }}
+        title: "string-import-${{ env.current_date }}"
+        branch: string-import-${{ env.current_date }}
+        body: "This (automated) PR import string changes"
+        labels: Needs Landing
+        reviewers: mozilla-mobile/focus-ios-eng

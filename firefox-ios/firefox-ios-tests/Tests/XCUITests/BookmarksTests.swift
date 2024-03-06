@@ -339,4 +339,25 @@ class BookmarksTests: BaseTestCase {
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: false)
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306866
+    func testEditBookmark() {
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitForTabsButton()
+        bookmarkPageAndTapEdit()
+        app.buttons["crossLarge"].tap()
+        waitForTabsButton()
+        unbookmark()
+        bookmarkPageAndTapEdit()
+        app.buttons["Save"].tap()
+        navigator.goto(LibraryPanel_Bookmarks)
+        checkItemInBookmarkList(oneItemBookmarked: true)
+    }
+
+    private func bookmarkPageAndTapEdit() {
+        bookmark()
+        mozWaitForElementToExist(app.buttons["Edit"])
+        app.buttons["Edit"].tap()
+        mozWaitForElementToExist(app.navigationBars["Edit Bookmark"])
+    }
 }

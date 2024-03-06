@@ -17,7 +17,6 @@ class MetadataParserHelper: TabEventHandler {
         // as possible.
         guard let webView = tab.webView,
             let url = webView.url, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
-                TabEvent.post(.pageMetadataNotAvailable, for: tab)
                 tab.pageMetadata = nil
                 return
         }
@@ -25,14 +24,12 @@ class MetadataParserHelper: TabEventHandler {
             "__firefox__.metadata && __firefox__.metadata.getMetadata()"
         ) { result, error in
             guard error == nil else {
-                TabEvent.post(.pageMetadataNotAvailable, for: tab)
                 tab.pageMetadata = nil
                 return
             }
 
             guard let dict = result as? [String: Any],
                   let pageMetadata = PageMetadata.fromDictionary(dict) else {
-                TabEvent.post(.pageMetadataNotAvailable, for: tab)
                 tab.pageMetadata = nil
                 return
             }

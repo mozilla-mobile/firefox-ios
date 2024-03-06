@@ -1,0 +1,102 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Ka bay ka tonton";
+
+/* Label on About screen */
+"About.missionLabel" = "Mozilla ma %@ tee. Ir anniya ti ka interneti baanoo nda feeriyanoo sahãndi.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Ceeci nda naaru porogaramoo hunday ra";
+
+/* Label on About screen */
+"About.privateBullet2" = "Ganakey gagay (wala kayandiyaney taagandi ka ganakey noo fondo)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Tuusu ka aleewa tuusu, ceeci nda naaruyan taariki da kaa";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Goy nd'a sutura ceeciyan se:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Faaba";
+
+/* Label for row in About screen */
+"About.rowRights" = "War alhakey";
+
+/* Label on About screen */
+"About.safariBullet1" = "Ganakey gagay ka war suturaa tonton";
+
+/* Label on About screen */
+"About.safariBullet2" = "Interneti šigira gagay ka moɲoo kaccandi";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "A ka goy sanda Safari dobuyan:";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ka war noo juwaloo.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Banda";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Jine";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Dam taaga";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Kayandiyaney";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Kay";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Ceeci koyne";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Naŋ";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Bataga";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Naaru sanda boro kul šii ma guna.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari karkar, de ma gundekuna gagaykey suuba";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ tunandi";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ mana tunandi.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Kayandiyaney porogaramoo feeri";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Gundekuna tana ganakey gagayyan ga hin widewo nda interneti moo fooyaŋ kayri.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Kayandiyaney";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "SUTURA";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Interneti šigira gagay";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "TUUSU";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Ceeci wala aderesu dam";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Wa %@ ceeci";
+

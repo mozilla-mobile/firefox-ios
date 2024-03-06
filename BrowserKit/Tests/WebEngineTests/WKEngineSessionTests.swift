@@ -4,6 +4,7 @@
 
 import XCTest
 @testable import WebEngine
+import WebKit
 
 final class WKEngineSessionTests: XCTestCase {
     private var configurationProvider: MockWKEngineConfigurationProvider!
@@ -12,6 +13,7 @@ final class WKEngineSessionTests: XCTestCase {
     private var userScriptManager: MockWKUserScriptManager!
     private var engineSessionDelegate: MockEngineSessionDelegate!
     private var findInPageDelegate: MockFindInPageHelperDelegate!
+    private var metadataFetcher: MockMetadataFetcherHelper!
 
     override func setUp() {
         super.setUp()
@@ -21,6 +23,7 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = MockWKUserScriptManager()
         engineSessionDelegate = MockEngineSessionDelegate()
         findInPageDelegate = MockFindInPageHelperDelegate()
+        metadataFetcher = MockMetadataFetcherHelper()
     }
 
     override func tearDown() {
@@ -31,6 +34,7 @@ final class WKEngineSessionTests: XCTestCase {
         userScriptManager = nil
         engineSessionDelegate = nil
         findInPageDelegate = nil
+        metadataFetcher = nil
     }
 
     // MARK: Load URL
@@ -265,7 +269,10 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testAddObserversWhenCreatedSubjectThenObserversAreAdded() {
         let subject = createSubject()
-        XCTAssertEqual(webViewProvider.webView.addObserverCalled, 7, "There are 7 KVO Constants")
+        let expectedCount = WKEngineKVOConstants.allCases.count
+        XCTAssertEqual(webViewProvider.webView.addObserverCalled,
+                       expectedCount,
+                       "There are \(expectedCount) KVO Constants")
         prepareForTearDown(subject!)
     }
 
@@ -274,7 +281,10 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.close()
 
-        XCTAssertEqual(webViewProvider.webView.removeObserverCalled, 7, "There are 7 KVO Constants")
+        let expectedCount = WKEngineKVOConstants.allCases.count
+        XCTAssertEqual(webViewProvider.webView.removeObserverCalled,
+                       expectedCount,
+                       "There are \(expectedCount) KVO Constants")
         prepareForTearDown(subject!)
     }
 
@@ -400,7 +410,7 @@ final class WKEngineSessionTests: XCTestCase {
 
     func testURLChangeGivenNilURLThenDoesntCallDelegate() {
         let subject = createSubject()
-        webViewProvider.webView.title = nil
+        webViewProvider.webView.url = nil
 
         subject?.observeValue(forKeyPath: "URL",
                               of: nil,
@@ -415,7 +425,7 @@ final class WKEngineSessionTests: XCTestCase {
     func testURLChangeGivenAboutBlankWithNilURLThenDoesntCallDelegate() {
         let subject = createSubject()
         subject?.sessionData.url = URL(string: "about:blank")!
-        webViewProvider.webView.title = nil
+        webViewProvider.webView.url = nil
 
         subject?.observeValue(forKeyPath: "URL",
                               of: nil,
@@ -471,6 +481,81 @@ final class WKEngineSessionTests: XCTestCase {
 
         XCTAssertEqual(subject?.sessionData.url, loadedURL)
         XCTAssertEqual(engineSessionDelegate.onLocationChangedCalled, 1)
+        prepareForTearDown(subject!)
+    }
+
+    // MARK: Page Zoom
+
+    func testIncreaseZoom() {
+        let subject = createSubject()
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+        // Increase zoom
+        subject?.updatePageZoom(.increase)
+        // Assert zoom increased by expected step
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 + ZoomChangeValue.defaultStepIncrease)
+        prepareForTearDown(subject!)
+    }
+
+    func testDecreaseZoom() {
+        let subject = createSubject()
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+        // Increase zoom
+        subject?.updatePageZoom(.decrease)
+        // Assert zoom decreased by expected step
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0 - ZoomChangeValue.defaultStepIncrease)
+        prepareForTearDown(subject!)
+    }
+
+    func testSetZoomLevelAndReset() {
+        let subject = createSubject()
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+        // Set explicit zoom level
+        subject?.updatePageZoom(.set(0.8))
+        // Assert zoom at expected level
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 0.8)
+
+        // Reset zoom level
+        subject?.updatePageZoom(.reset)
+        // Check default zoom of 1.0
+        XCTAssertEqual(webViewProvider.webView.pageZoom, 1.0)
+
+        prepareForTearDown(subject!)
+    }
+
+    // MARK: Metadata parser
+
+    func testFetchMetadataGivenProperURLChangeThenFetchMetadata() {
+        let loadedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        subject?.sessionData.url = loadedURL
+        webViewProvider.webView.url = loadedURL
+
+        subject?.observeValue(forKeyPath: "URL",
+                              of: nil,
+                              change: nil,
+                              context: nil)
+
+        XCTAssertEqual(metadataFetcher.fetchFromSessionCalled, 1)
+        XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
+        prepareForTearDown(subject!)
+    }
+
+    func testFetchMetadataGivenDidFinishNavigationThenFetchMetadata() {
+        let loadedURL = URL(string: "www.example.com")!
+        let subject = createSubject()
+        subject?.delegate = engineSessionDelegate
+        webViewProvider.webView.url = loadedURL
+
+        // FXIOS-8477 cannot test easily right now, need changes
+//        let navigation = WKNavigation()
+//        subject?.webView(webViewProvider.webView, didFinish: navigation)
+
+//        XCTAssertEqual(metadataFetcher.fetchFromSessionCalled, 1)
+//        XCTAssertEqual(metadataFetcher.savedURL, loadedURL)
         prepareForTearDown(subject!)
     }
 
@@ -534,7 +619,8 @@ final class WKEngineSessionTests: XCTestCase {
         guard let subject = WKEngineSession(userScriptManager: userScriptManager,
                                             configurationProvider: configurationProvider,
                                             webViewProvider: webViewProvider,
-                                            contentScriptManager: contentScriptManager) else {
+                                            contentScriptManager: contentScriptManager,
+                                            metadataFetcher: metadataFetcher) else {
             return nil
         }
 

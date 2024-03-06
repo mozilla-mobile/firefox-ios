@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Kedykoľvek si vyčistite celú históriu prehliadania, heslá a cookies. Stačí vám na to jedno ťuknutie.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Vaša história je históriou";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Ďalej";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Hľadáte niečo iné? Vyberte si iný vyhľadávací modul.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Prehliadanie podľa vás";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Preskočiť";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Súkromné prehliadanie na úplne inej úrovni. Blokujte reklamy a ostatný obsah, ktorý vás môže sledovať naprieč stránkami.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Posuňte svoje súkromie na vyššiu úroveň";
+

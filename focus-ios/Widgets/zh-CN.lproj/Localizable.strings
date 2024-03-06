@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "将 %@ 快捷指令添加至主屏幕。添加后按住小组件进行编辑，可选择其他快捷指令。";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "在 %@ 上使用您的默认搜索引擎进行隐私搜索。";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "快捷操作";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "%@ · 搜索";
+

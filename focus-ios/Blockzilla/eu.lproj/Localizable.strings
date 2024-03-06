@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Argibide gehiago";
+
+/* Label on About screen */
+"About.missionLabel" = "Mozillak egina da %@. Internet osasuntsu eta irekia sustatzea da gure misioa.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Bilatu eta nabigatu aplikaziotik zuzenean";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokeatu jarraipena (edo eguneratu ezarpenak jarraipena onartzeko)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Ezabatu cookieak eta bilaketa- eta nabigatze-historia";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Erabili nabigatzaile pribatu gisa:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Laguntza";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Pribatutasun-oharra";
+
+/* Label for row in About screen */
+"About.rowRights" = "Zure eskubideak";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokeatu jarraipena pribatutasuna hobetzeko";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokeatu webeko letra-tipoak orrien pisua gutxiagotzeko";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Erabili Safariren hedapen gisa:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@(r)i buruz";
+
+/* Label on About screen */
+"About.topLabel" = "%@(e)k agintea ematen dizu.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Ireki %@ aplikazioan";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Ados";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Errorera gertatu da txartela Wallet-era gehitzean. Saiatu berriro geroago.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Txartela gehitzeak huts egin du";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Autentifikatu %@ aplikaziora itzultzeko";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Gehitu URL perstonalizatua";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Egiaztatu idatzi duzun URLa.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Adibidea: adibidea.eus";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Gehitu beharreko URLa";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Itsatsi edo idatzi URLa";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Gehitu URL perstonalizatua";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "URL pertsonalizatu berria gehitu da.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Gaituz gero, helbide-barran automatikoki osatuko ditu 450 URL ezagun baino gehiago %@(e)k.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Desgaituta";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URLa badago lehendik ere";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Bistaratu beharreko URL pertsonalizaturik ez";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Gaituta";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Kudeatu guneak";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Nire guneak";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Gaitu %@(e)k zure gogoko URLak automatikoki osatzeko.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Gune erabilienak";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Desblokeatu";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Saio berria";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Atzera";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URLa arbelera kopiatu da";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopiatu";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Aurrera";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Berritu";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Ezarpenak";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Gelditu";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Hautatu helbide-barra";
+
+/* Label on button to complete edits */
+"Done" = "Eginda";
+
+/* Label on button to allow edits */
+"Edit" = "Editatu";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Saiatu berriro";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Utzi";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ aplikazioak beste aplikazio bat ireki nahi du";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Ireki";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ aplikazioak %2$@ ireki nahi du";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Utzi";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Bidali mezu elektronikoa";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Orriko bilaketa eginda";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Bilatu hurrengoa orrian";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Bilatu aurrekoa orrian";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Ulertuta!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Nabigatu inor begira ez balego bezala.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Itxi";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Hasi erabiltzen";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Azkarra. Pribatua. Distraziorik gabea.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Hasi nabigatzen";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Saltatu";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Pribatutasun handiagorako, zure historia garbitzen dugu aplikazioa ixten duzunean.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Lehenetsi %@, irekitako lotura bakoitzarekin zure datuak babesteko.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ ez da beste nabigatzaileak bezalakoa";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ezarri nabigatzaile lehenetsi gisa";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Ezabatu zure nabigazio-historia, pasahitzak, cookieak eta eragotzi iragarkiek zure jarraipena egitea klik bakarrarekin!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Zure historiak ez du zure jarraipenik egiten";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ pribatutasunari zuzendutako nabigatzailea da, jarraipenaren babesarekin eta edukien blokeoarekin.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Ezkutukoa baino zerbait gehiago";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfiguratu ezarpenetan zenbateraino partekatu nahi duzun.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Babesa nahieran";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Eramazu nabigatze pribatua hurrengo mailara.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Ongi etorri Firefox %@(e)ra!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Sakatu Safari-n eta ondoren hautatu edukien blokeatzaileak";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Gaitu %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Hautatu Safari, gero hautatu Hedapenak";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ gaitu gabe dago.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Ireki ezarpenen aplikazioa";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Ireki gailuaren ezarpenak";
+
+/* Save button label */
+"Save" = "Gorde";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Huts egin du horrek. Saiatu bilaketa-terminoa honekin ordezkatzen: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Ez";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Bai";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Iradokizunak lortzeko, helbide-barran idazten duzuna bilaketa-motorrari bidali behar dio %@(e)k.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Erakutsi bilaketa-iradokizunak?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URLen osatze automatikoa";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Bestelako jarraipen-elementuak blokeatzean zenbait bideo eta web orri apur litezke.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Utzi";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokeatu edukiaren jarraipen-elementuak";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Iluna";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "Helbide-barran idazten duzuna bilaketa-motorrera bidaliko du %@(e)k.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "%@ denontzat eskaini eta hobetzeko beharrezkoa dena soilik biltzen ahalegintzen da Mozilla.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "Noizean behin esperimentuak instala eta exekuta litzake %@(e)k.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Orokorra";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Argibide gehiago.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Lizentziak";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Argia";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Baloratu %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRAZIOA";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Ezarpenak";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Gehitu beste bilaketa-motor bat";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Gehitu bilaketa-motorra";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALATUTAKO BILAKETA-MOTORRAK";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Bistaratzeko izena";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Bilaketa-motor berria gehitu da.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Berrezarri bilaketa-motor lehenetsiak";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Bilaketa-motorraren izena";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Erabili beharreko bilaketa-katea";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Adibidea: adibidea.eus/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Itsatsi edo idatzi bilaketa-katea. Beharrezkoa bada, ordezkatu bilaketa-terminoa ondorengoarekin: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Bilaketa-motorra";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Eskuratu bilaketa-iradokizunak";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "BILAKETA";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIBATUTASUNA";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Ezarri nabigatzaile lehenetsi gisa";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Ireki webgune, posta elektroniko eta mezuetako loturak %@(e)n automatikoki.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Sistemaren itxura";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Itxura";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Itxura hautatzekoa";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Iragarkiak";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analitikak";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokeatu webeko letra-tipoak";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Edukia";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sare sozialak";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Erabili Face ID aplikazioa desblokeatzeko";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID erabilita %@ aplikazioa desblokea daiteke aplikazioak dagoeneko URL bat irekita badu";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Erakutsi gomendioak hasierako pantailan";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Bidali erabilera-datuak";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Esperimentuak";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Erabili Touch ID aplikazioa desblokeatzeko";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID erabilita %@ aplikazioa desblokea daiteke aplikazioak dagoeneko URL bat irekita badu";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Desaktibatuta";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Aktibatuta";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Erabili sistemaren argi/ilun modua";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI LASTERBIDEAK";
+
+/* Text for a share button */
+"share" = "Partekatu";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Gehitu lasterbideetara";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Lasterbideetara gehituta";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopiatu helbidea";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Bilatu orrian";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Kendu lasterbideetatik";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Lasterbidea kenduta";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Mahaigaineko gunea";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mugikorrerako gunea";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Ireki Chromen";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Ireki nabigatzaile lehenetsian";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Ireki Firefoxen";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Ireki lotura";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Partekatu orria honekin…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Kendu lasterbideetatik";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Berrizendatu lasterbidea";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Lasterbidearen izena";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Gorde";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Utzi";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Eginda";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Mantendu sakatuta hasierako pantailan ikonoak dardarka hasten diren arte.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Bilatu %@. Gero aukeratu widgeta.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Sakatu 'gehi' ikonoan.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Gehitu %@ widgeta";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Gehitu";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Gehitu Sirin";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Grabatu berriro edo ezabatu lasterbidea";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Ezabatu";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Ezabatu eta ireki";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Ireki gogoko gunea";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Ireki gogoko gunea";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Ireki beharreko URLa";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Blokeatu %@ gune bat irekita dagoenean:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Gaitu Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Gaitu Touch ID";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Orri-ekintzak > Mahaigaineko gunea";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Gune baten mahaigaineko bertsio osoa ikusi nahi duzu?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ jarraipen-elementu blokeatu dira";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Zuk nabigatu. %@(e)k blokeatu.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Hautatu 'Gehitu lasterbideetara' %@ menutik";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Sortu lasterbideak gehien bisitatzen dituzun guneetara:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Gehitu Siri lasterbidea";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "\"Siri, ezabatu nire %@ saioa.\"";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Gehitu Siri lasterbidea";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "\"Siri, ireki gustukoen dudan gunea.\"";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Saiatu jarraipenaren babesa desgaitzen";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Guneak edukia falta du edo portaera bitxia du?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Bilatu %@ erabiliz";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Zoaz ezarpenetara pribatutasun- eta segurtasun-aukera zehatzak kudeatzeko.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Ezarpen lehenetsi hauek babes sendoa eskaintzen dute. Erraza da halere ezarpenak zure beharretara moldatzea.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Hasi zure nabigatze pribatuko saioa eta jarraipen-elementuak eta bestelako gauza kaltegarriak blokeatuko ditugu zuk nabigatzen duzun bitartean.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@(e)k gune honek zu espiatzea eragotzi du. Sakatu babesaren ikonoan blokeatu dugunaren inguruko informazioa jasotzeko.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Harrapatu dugu! Gunek honek zu espiatzea galarazi dugu. Sakatu edonoiz babesaren ikonoa ikusteko zer ari garen blokeatzen.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Sakatu edozein unetan zakarrontzia zure uneko saioaren aztarna guztiak ezabatzeko.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Sakatu hemen dena zakarrontzira botatzeko — historia, cookieak, dena — eta hasi berriro zerotik fitxa berri batean.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Babestuta zaude!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Konexioa ez da segurua";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Konexioa segurua da";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Jarraipenaren babesa";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Babesak inaktibo daude saio honetarako";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Babesak aktibo daude saio honetarako";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Jarraipenaren babes hobetua";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Blokeatutako jarraipen-elementuak %@ datatik";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Blokeatu beharreko jarraipen-elementu eta scriptak";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Gehitu automatikoki osatzeko lotura";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Itsatsi eta joan";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "EZABATU";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Nabigazio-historia garbituta";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Bilatu orrian: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Itsatsi";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Idatzi bilaketa edo helbidea";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Bilatu %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Blokeatutako elementuak";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Erakuts iezadazu nola";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Zure nabigatze pribatuaren menpe utziko dugu, baina hurrengoan azkarrago has zaitezke zure hasierako pantailan %@ widgeta erabiliz.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Nabigatze-historia garbituta! 🎉";
+

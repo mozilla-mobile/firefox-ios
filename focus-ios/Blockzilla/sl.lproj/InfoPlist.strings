@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Omogoča fotografiranje in pošiljanje fotografij.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Omogoča odklepanje aplikacije.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Spletne strani lahko zahtevajo vašo lokacijo.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Omogoča snemanje in nalaganje videa.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Omogoča shranjevanje in pošiljanje fotografij.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Izbriši in odpri";
+

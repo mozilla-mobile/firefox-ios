@@ -36,7 +36,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        userHasPressedHomeButton = true
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
         if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
@@ -155,11 +154,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     private func handleTabToolBarDidLongPressForwardOrBack() {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        if CoordinatorFlagManager.isBackForwardListShownFromCoordaintorEnabled {
-            navigationHandler?.showBackForwardList()
-        } else {
-            showBackForwardList()
-        }
+        navigationHandler?.showBackForwardList()
     }
 
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -305,20 +300,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             modalStyle: .overCurrentContext
         )
         presentSheetWith(viewModel: viewModel, on: self, from: button)
-    }
-
-    func showBackForwardList() {
-        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(
-                profile: profile,
-                backForwardList: backForwardList
-            )
-            backForwardViewController.tabManager = tabManager
-            backForwardViewController.browserFrameInfoProvider = self
-            backForwardViewController.modalPresentationStyle = .overCurrentContext
-            backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
-            self.present(backForwardViewController, animated: true, completion: nil)
-        }
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

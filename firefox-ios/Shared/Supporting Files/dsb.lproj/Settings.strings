@@ -107,7 +107,7 @@
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Zgóńśo wěcej wó Firefox Suggest";
 
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.AlternateSearchEngines.Title.v124" = "Alternatiwne pytnice";
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Alternatiwne pytnice";
 
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Wuslědki z pytanjow, historije, cytańskich znamjenjow a wěcej";

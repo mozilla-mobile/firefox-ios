@@ -81,14 +81,27 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
         let settingType = model.settingType
 
         switch settingType {
-        case .contentBlocking:
-            break // TODO: FXIOS-8088 - Handle content blocking in WebEngine
+        case .standardContentBlocking:
+            delegate?.switchToStandardTrackingProtection()
+        case .strictContentBlocking:
+            delegate?.switchToStrictTrackingProtection()
+        case .disableContentBlocking:
+            delegate?.disableTrackingProtection()
+        case .noImageMode:
+            delegate?.toggleNoImageMode()
         case .findInPage:
             delegate?.showFindInPage()
         case .scrollingToTop:
             delegate?.scrollToTop()
-        case .zoom:
-            break // TODO: FXIOS-8089 - Handle zoom in WebEngine
+        case .zoomSet:
+            // TODO: Provide a test UI to choose an explicit zoom level value
+            delegate?.setZoom(2.0)
+        case .zoomReset:
+            delegate?.resetZoom()
+        case .zoomIncrease:
+            delegate?.increaseZoom()
+        case .zoomDecrease:
+            delegate?.decreaseZoom()
         }
 
         dismiss(animated: true)

@@ -1,0 +1,183 @@
+/* Button on About screen */
+"About.learnMoreButton" = "વધુ શીખો";
+
+/* Label on About screen */
+"About.privateBullet1" = "એપ્લિકેશનમાં જ શોધો અને બ્રાઉઝ કરો";
+
+/* Label for row in About screen */
+"About.rowHelp" = "મદદ";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "ગોપનીયતા સૂચના";
+
+/* Label for row in About screen */
+"About.rowRights" = "તમારા અધિકારો";
+
+/* Label on About screen */
+"About.topLabel" = "%@ તમને નિયંત્રણમાં મૂકે છે.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ માં ખોલો";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "પોતાનું URL ઉમેરો";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL ઉમેરવુ";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ પોતાનું URL ઉમેરો";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "નિષ્ક્રિય";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "સક્રિય";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "પાછળ";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "આગળ";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "પુન:લાવો";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "સેટિંગ્સ";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "અટકાવો";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "સ્થાન બાર પસંદ કરો";
+
+/* Label on button to complete edits */
+"Done" = "પૂર્ણ થયું";
+
+/* Label on button to allow edits */
+"Edit" = "ફેરફાર";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ફરીથી પ્રયત્ન કરો";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "રદ કરો";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "ખોલો";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "રદ કરો";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ઇમેઇલ";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK, સમજાઇ ગયું!";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "બંધ કરો";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ સક્ષમ કરો";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ સક્ષમ નથી.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "સેટિંગ્સ એપ્લિકેશન ખોલો";
+
+/* Save button label */
+"Save" = "સંગ્રહો";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL સ્વતઃપૂર્ણ";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "વધુ શીખો.";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "સેટિંગ્સ";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "શોધ એન્જિન ઉમેરો";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "પ્રદર્શિત કરવા માટેનું નામ";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "નવું શોધ એંજીન ઉમેર્યું.";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "શોધ એન્જિન નામ";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "વાપરવા માટે શોધ શબ્દમાળા";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "શોધ એન્જિન";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ગોપનીય";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Text for a share button */
+"share" = "વહેંચો";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "આની સાથે પૃષ્ઠ શેર કરો…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "ઉમેરો";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri માં ઉમેરો";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "કાઢી નાંખો";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "કાઢી નાખો અને ખોલો";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "મનપસંદ સાઇટ ખોલો";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "મનપસંદ સાઇટ ખોલો";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "ખોલવા માટેની URL";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ટ્રેકિંગથી રક્ષણ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ચોંટાડો અને જાઓ";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "કાઢી નાંખો";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "પૃષ્ઠમાં શોધો: %@";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "સરનામું શોધો અથવા દાખલ કરો";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ની શોધ માં %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ટ્રેકર્સ અવરોધિત";
+

@@ -22,7 +22,6 @@ class LegacyDynamicFontHelper: NSObject {
         // swiftlint:disable line_length
         defaultStandardFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize // 14pt -> 17pt -> 23pt
         deviceFontSize = defaultStandardFontSize * (UIDevice.current.userInterfaceIdiom == .pad ? iPadFactor : iPhoneFactor)
-        defaultSmallFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption1).pointSize // 11pt -> 12pt -> 17pt
         // swiftlint:enable line_length
 
         super.init()
@@ -53,37 +52,6 @@ class LegacyDynamicFontHelper: NSObject {
         return UIFont.systemFont(ofSize: deviceFontSize, weight: UIFont.Weight.medium)
     }
 
-    /*
-     Activity Stream supports dynamic fonts up to a certain point. Small fonts dont work.
-     Max out the supported font size.
-     Small = 14, medium = 18, larger = 20
-     */
-
-    var SemiMediumRegularWeightAS: UIFont {
-        let size = max(deviceFontSize, 16.5)
-        return UIFont.systemFont(ofSize: size)
-    }
-
-    var LargeSizeRegularWeightAS: UIFont {
-        let size = max(deviceFontSize + 2, 20)
-        return UIFont.systemFont(ofSize: size)
-    }
-
-    var MediumSizeBoldFontAS: UIFont {
-        let size = max(deviceFontSize, 18)
-        return UIFont.boldSystemFont(ofSize: size)
-    }
-
-    var SmallSizeRegularWeightAS: UIFont {
-        let size = max(defaultSmallFontSize, 14)
-        return UIFont.systemFont(ofSize: size)
-    }
-
-    /**
-     * Small
-     */
-    fileprivate var defaultSmallFontSize: CGFloat
-
     /**
      * Standard
      */
@@ -105,7 +73,6 @@ class LegacyDynamicFontHelper: NSObject {
     func refreshFonts() {
         defaultStandardFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize
         deviceFontSize = defaultStandardFontSize * (UIDevice.current.userInterfaceIdiom == .pad ? iPadFactor : iPhoneFactor)
-        defaultSmallFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption2).pointSize
     }
 
     @objc

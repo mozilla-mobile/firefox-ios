@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "በአንድ ጊዜ መታ በማድረግ ሁሉንም የአሰሳ ክፍለ ጊዜ ታሪክዎን ፣ የይለፍ ቃሎችን ፣ ኩኪዎችን በማንኛውም ጊዜ ያጽዱ።";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "ታሪክዎ ታሪክ ነው";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "ቀጣይ";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "የሆነ የተለየ ነገር በመፈለግ ላይ ነዎት? ሌላ የፍለጋ-ፍርግም ይምረጡ።";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "የእርስዎ ፍለጋ ፣ የእርስዎ መንገድ";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "ዝለል";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "የግል ፍለጋን ወደ ቀጣዩ ደረጃ ያሳድጉ:: በድረ-ገፆች ውስጥ እርስዎን ሊከታተል የሚችል እና የገፅ ጭነት ጊዜዎችን የሚያደነዝዙ ማስታወቂያዎችን እና ሌላ ይዘትን አግድ።";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "ግላዊነትዎን ያስፉ";
+

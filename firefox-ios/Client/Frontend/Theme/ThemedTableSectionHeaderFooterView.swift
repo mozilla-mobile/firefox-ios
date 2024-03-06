@@ -8,7 +8,7 @@ import Shared
 
 class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let titleHorizontalPadding: CGFloat = 15
+        static let titleHorizontalPadding: CGFloat = 16
         static let titleVerticalPadding: CGFloat = 6
         static let titleVerticalLongPadding: CGFloat = 20
     }
@@ -49,7 +49,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 15)
         label.numberOfLines = 0
     }
 

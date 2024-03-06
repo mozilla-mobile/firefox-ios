@@ -7,10 +7,11 @@ import Foundation
 import WebKit
 
 class WKEngineSession: NSObject,
-                        EngineSession,
-                        WKUIDelegate,
-                        WKNavigationDelegate,
-                        WKEngineWebViewDelegate {
+                       EngineSession,
+                       WKUIDelegate,
+                       WKNavigationDelegate,
+                       WKEngineWebViewDelegate,
+                       MetadataFetcherDelegate {
     weak var delegate: EngineSessionDelegate?
     weak var findInPageDelegate: FindInPageHelperDelegate? {
         didSet {
@@ -21,10 +22,13 @@ class WKEngineSession: NSObject,
     }
 
     private(set) var webView: WKEngineWebView
-    private var logger: Logger
     var sessionData: WKEngineSessionData
+
+    private var logger: Logger
     private var contentScriptManager: WKContentScriptManager
     private var securityManager: SecurityManager
+    private var metadataFetcher: MetadataFetcherHelper
+    private var contentBlockingSettings: WKContentBlockingSettings = []
 
     init?(userScriptManager: WKUserScriptManager,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
@@ -32,7 +36,8 @@ class WKEngineSession: NSObject,
           logger: Logger = DefaultLogger.shared,
           sessionData: WKEngineSessionData = WKEngineSessionData(),
           contentScriptManager: WKContentScriptManager = DefaultContentScriptManager(),
-          securityManager: SecurityManager = DefaultSecurityManager()) {
+          securityManager: SecurityManager = DefaultSecurityManager(),
+          metadataFetcher: MetadataFetcherHelper = DefaultMetadataFetcherHelper()) {
         guard let webView = webViewProvider.createWebview(configurationProvider: configurationProvider) else {
             logger.log("WKEngineWebView creation failed on configuration",
                        level: .fatal,
@@ -45,10 +50,12 @@ class WKEngineSession: NSObject,
         self.sessionData = sessionData
         self.contentScriptManager = contentScriptManager
         self.securityManager = securityManager
+        self.metadataFetcher = metadataFetcher
         super.init()
 
         self.setupObservers()
 
+        self.metadataFetcher.delegate = self
         webView.uiDelegate = self
         webView.navigationDelegate = self
         webView.delegate = self
@@ -150,12 +157,57 @@ class WKEngineSession: NSObject,
         contentScriptManager.uninstall(session: self)
         webView.removeAllUserScripts()
         removeObservers()
-
         webView.navigationDelegate = nil
         webView.uiDelegate = nil
         webView.delegate = nil
-
         webView.removeFromSuperview()
+
+        metadataFetcher.delegate = nil
+    }
+
+    func disableTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.remove(.standard)
+        contentBlockingSettings = settings
+    }
+
+    func switchToStandardTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.strict)
+        settings.insert(.standard)
+        contentBlockingSettings = settings
+    }
+
+    func switchToStrictTrackingProtection() {
+        var settings = contentBlockingSettings
+        settings.remove(.standard)
+        settings.insert(.strict)
+        contentBlockingSettings = settings
+    }
+
+    func toggleNoImageMode() {
+        let settings = (contentBlockingSettings.rawValue ^ WKContentBlockingSettings.noImages.rawValue)
+        contentBlockingSettings = WKContentBlockingSettings(rawValue: settings)
+    }
+
+    func updatePageZoom(_ change: ZoomChangeValue) {
+        let zoomKey = "viewScale"
+        let stepAmt = ZoomChangeValue.defaultStepIncrease
+        let currentZoom = (webView.value(forKey: zoomKey) as? CGFloat) ?? 1.0
+        let newZoom: CGFloat
+
+        switch change {
+        case .increase:
+            newZoom = currentZoom + stepAmt
+        case .decrease:
+            newZoom = currentZoom - stepAmt
+        case .reset:
+            newZoom = 1.0
+        case .set(let value):
+            newZoom = value
+        }
+        webView.setValue(newZoom, forKey: zoomKey)
     }
 
     // MARK: Observe values
@@ -209,11 +261,17 @@ class WKEngineSession: NSObject,
             handleTitleChange(title: title)
         case .URL:
             handleURLChange()
+        case .hasOnlySecureContent:
+            handleHasOnlySecureContentChanged(webView.hasOnlySecureContent)
         }
     }
 
+    private func handleHasOnlySecureContentChanged(_ value: Bool) {
+        delegate?.onHasOnlySecureContentChanged(secure: value)
+    }
+
     private func handleTitleChange(title: String) {
-        // Ensure that the title actually changed to prevent repeated calls to navigateInTab(tab:).
+        // Ensure that the title actually changed to prevent repeated calls to onTitleChange
         if !title.isEmpty {
             sessionData.title = title
             delegate?.onTitleChange(title: title)
@@ -226,16 +284,18 @@ class WKEngineSession: NSObject,
     private func handleURLChange() {
         // Special case for "about:blank" popups, if the webView.url is nil, keep the sessionData url as "about:blank"
         if sessionData.url?.absoluteString == EngineConstants.aboutBlank
-                && webView.url == nil { return }
+            && webView.url == nil { return }
 
         // To prevent spoofing, only change the URL immediately if the new URL is on
         // the same origin as the current URL. Otherwise, do nothing and wait for
         // didCommitNavigation to confirm the page load.
         guard sessionData.url?.origin == webView.url?.origin else { return }
 
-        sessionData.url = webView.url
         if let url = webView.url {
+            sessionData.url = url
             delegate?.onLocationChange(url: url.absoluteString)
+
+            metadataFetcher.fetch(fromSession: self, url: url)
         }
     }
 
@@ -294,7 +354,7 @@ class WKEngineSession: NSObject,
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
-        // TODO: FXIOS-8246 - Handle context menu in WebEngine (epic part 3)
+        completionHandler(delegate?.onProvideContextualMenu(linkURL: elementInfo.linkURL))
     }
 
     @available(iOS 15, *)
@@ -316,6 +376,10 @@ class WKEngineSession: NSObject,
     func webView(_ webView: WKWebView,
                  didFinish navigation: WKNavigation!) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+
+        if let url = webView.url {
+            metadataFetcher.fetch(fromSession: self, url: url)
+        }
     }
 
     func webView(_ webView: WKWebView,
@@ -370,5 +434,11 @@ class WKEngineSession: NSObject,
 
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String) {
         delegate?.search(with: searchSelection)
+    }
+
+    // MARK: - MetadataFetcherDelegate
+
+    func didLoad(pageMetadata: EnginePageMetadata) {
+        delegate?.didLoad(pageMetadata: pageMetadata)
     }
 }

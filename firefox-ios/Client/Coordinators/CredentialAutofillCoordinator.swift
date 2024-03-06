@@ -112,6 +112,59 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
     }
 
+    @MainActor
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+        let viewModel = LoginListViewModel(
+            tabURL: tabURL,
+            loginStorage: profile.logins,
+            logger: logger,
+            onLoginCellTap: { [weak self] login in
+                guard let self else { return }
+                let rustLoginsEncryption = RustLoginEncryptionKeys()
+
+                guard let currentTab = self.tabManager.selectedTab,
+                      let decryptLogin = rustLoginsEncryption.decryptSecureFields(login: login)
+                else {
+                    router.dismiss(animated: true)
+                    parentCoordinator?.didFinish(from: self)
+                    return
+                }
+
+                LoginsHelper.fillLoginDetails(
+                    with: currentTab,
+                    loginData: LoginInjectionData(
+                        requestId: currentRequestId,
+                        logins: [LoginItem(
+                            username: decryptLogin.secFields.username,
+                            password: decryptLogin.secFields.password,
+                            hostname: decryptLogin.fields.origin
+                        )]
+                    )
+                )
+
+                router.dismiss(animated: true)
+                parentCoordinator?.didFinish(from: self)
+            },
+            manageLoginInfoAction: { [weak self] in
+                guard let self else { return }
+                parentCoordinator?.show(settings: .password)
+                parentCoordinator?.didFinish(from: self)
+            }
+        )
+        let loginAutofillView = LoginAutofillView(viewModel: viewModel)
+
+        let viewController = SelfSizingHostingController(rootView: loginAutofillView)
+
+        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        bottomSheetViewModel.shouldDismissForTapOutside = false
+
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: viewController
+        )
+        router.present(bottomSheetVC)
+    }
+
     func showPassCodeController() {
         let passwordController = DevicePasscodeRequiredViewController()
         passwordController.profile = profile

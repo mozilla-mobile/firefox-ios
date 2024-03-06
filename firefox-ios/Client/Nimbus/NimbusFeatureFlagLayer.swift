@@ -17,9 +17,6 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
-        case .backForwardListCoordinatorRefactor:
-            return checkBackForwardListCoordinatorRefactorFeature(from: nimbus)
-
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
@@ -52,6 +49,9 @@ final class NimbusFeatureFlagLayer {
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
+
+        case .loginAutofill:
+            return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
 
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
@@ -91,11 +91,6 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
-    }
-
-    private func checkBackForwardListCoordinatorRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.backForwardListCoordinatorRefactorFeature.value()
-        return config.enabled
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
@@ -172,6 +167,16 @@ final class NimbusFeatureFlagLayer {
             default: return false
             }
     }
+
+    public func checkNimbusForLoginAutofill(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.loginAutofill.value()
+            switch featureID {
+            case .loginAutofill: return config.loginAutofillStatus
+            default: return false
+            }
+        }
 
     public func checkNimbusForShareSheet(
         for featureID: NimbusFeatureFlagID,

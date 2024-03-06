@@ -260,13 +260,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                 logger.log("Tab has empty tab.URL \(logMessage)",
                            level: .debug,
                            category: .tabs)
-
-                // lastKnownUrl is the fallback in case tab.url is empty. If this one is empty too then this is a problem
-                if tab.lastKnownUrl == nil {
-                    logger.log("Tab has empty tab.lastKnownURL \(logMessage)",
-                               level: .fatal,
-                               category: .tabs)
-                }
             }
 
             return TabData(id: tabId,
@@ -370,8 +363,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
-        guard let url else { return }
         AppEventQueue.completed(.selectTab(url, windowUUID))
+        let context = GeneralBrowserContext(selectedTabURL: url,
+                                            isPrivateBrowsing: selectedTab?.isPrivate ?? false,
+                                            windowUUID: windowUUID)
+        store.dispatch(GeneralBrowserAction.updateSelectedTab(context))
     }
 
     @MainActor

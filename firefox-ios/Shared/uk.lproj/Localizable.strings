@@ -53,7 +53,7 @@
 "Added page to Reading List" = "Сторінку додано до списку читання";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "Гаразд";
+"AddPass.Error.Dismiss" = "OK";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Message" = "При додаванні картки до Wallet сталася помилка. Спробуйте знову пізніше.";
@@ -206,7 +206,7 @@
 "ContextualHints.TabTray.InactiveTabs" = "Сюди переміщуються вкладки, які ви не переглядали впродовж двох тижнів.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
-"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Вимкнути у налаштуваннях";
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Вимкніть у параметрах";
 
 /* Accessibility label for action denoting closing contextual hint. */
 "ContextualHintsCloseButtonAccessibility.v105" = "Закрити";
@@ -239,7 +239,7 @@
 "Decrease text size" = "Зменшити розмір тексту";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "Типовий засіб пошуку";
+"Default Search Engine" = "Типова пошукова система";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "Закрити";
@@ -896,7 +896,7 @@
 "No tabs" = "Немає вкладок";
 
 /* OK button */
-"OK" = "Гаразд";
+"OK" = "OK";
 
 /* Restore Tabs Affirmative Action */
 "Okay" = "Гаразд";
@@ -947,7 +947,7 @@
 "ProtectionStatus.Secure" = "Захищене з'єднання";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Швидкі засоби пошуку";
+"Quick-Search Engines" = "Системи швидкого пошуку";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Оцінити в App Store";
@@ -1007,7 +1007,7 @@
 "Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Зберігайте статті до списку читання дотиком до піктограми книги з плюсом в керуванні режимом читання.";
 
 /* OK button to dismiss the error prompt. */
-"ScanQRCode.Error.OK.Button" = "Гаразд";
+"ScanQRCode.Error.OK.Button" = "OK";
 
 /* Text for the instructions label, displayed in the QR scanner view */
 "ScanQRCode.Instructions.Label" = "Розташуйте QR-код в межах рамки для сканування";
@@ -1034,25 +1034,25 @@
 "Search.SuggestSectionTitle.v102" = "Пропозиції Firefox";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
-"Search.ThirdPartyEngines.AddMessage" = "Новий засіб пошуку з'явиться в панелі швидкого пошуку.";
+"Search.ThirdPartyEngines.AddMessage" = "Нова пошукова система з'явиться на панелі швидкого пошуку.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "Засіб пошуку додано!";
+"Search.ThirdPartyEngines.AddSuccess" = "Пошукову систему додано!";
 
 /* The title that asks the user to Add the search provider */
-"Search.ThirdPartyEngines.AddTitle" = "Додати засіб пошуку?";
+"Search.ThirdPartyEngines.AddTitle" = "Додати пошукову систему?";
 
 /* The cancel button if you do not want to add a search engine. */
 "Search.ThirdPartyEngines.Cancel" = "Скасувати";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Засіб пошуку з такою назвою чи URL-адресою вже було додано.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Пошукову систему з такою назвою чи URL-адресою вже було додано.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Не вдалося";
 
 /* A title explaining that we failed to add a search engine */
-"Search.ThirdPartyEngines.FailedMessage" = "Не вдалося додати засіб пошуку.";
+"Search.ThirdPartyEngines.FailedMessage" = "Не вдається додати пошукову систему.";
 
 /* A title explaining that we failed to add a search engine */
 "Search.ThirdPartyEngines.FailedTitle" = "Невдача";
@@ -1064,7 +1064,7 @@
 "Search.ThirdPartyEngines.FormErrorTitle" = "Невдача";
 
 /* The confirmation button */
-"Search.ThirdPartyEngines.OK" = "Гаразд";
+"Search.ThirdPartyEngines.OK" = "OK";
 
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Надіслати звіт про збій, щоб Mozilla змогла виправити цю проблему?";
@@ -1088,7 +1088,7 @@
 "SendTo.Error.Message" = "Можна ділитися лише посиланнями HTTP та HTTPS.";
 
 /* OK button to dismiss the error prompt. */
-"SendTo.Error.OK.Button" = "Гаразд";
+"SendTo.Error.OK.Button" = "OK";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
 "SendTo.Error.Title" = "Неможливо поділитися цим посиланням.";
@@ -1139,19 +1139,19 @@
 "Settings" = "Параметри";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
-"Settings.AddCustomEngine" = "Додати засіб пошуку";
+"Settings.AddCustomEngine" = "Додати пошукову систему";
 
 /* The text on the Save button when saving a custom search engine */
 "Settings.AddCustomEngine.SaveButtonText" = "Зберегти";
 
 /* The title of the  Custom Search Engine view. */
-"Settings.AddCustomEngine.Title" = "Додати засіб пошуку";
+"Settings.AddCustomEngine.Title" = "Додати пошукову систему";
 
 /* The title for the field which sets the title for a custom search engine. */
 "Settings.AddCustomEngine.TitleLabel" = "Назва";
 
 /* The placeholder for Title Field when saving a custom search engine. */
-"Settings.AddCustomEngine.TitlePlaceholder" = "Засіб пошуку";
+"Settings.AddCustomEngine.TitlePlaceholder" = "Пошукова система";
 
 /* The title for URL Field */
 "Settings.AddCustomEngine.URLLabel" = "Адреса URL";

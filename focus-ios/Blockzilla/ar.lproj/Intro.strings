@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "امسح تأريخ جلسة التصفح كله و كلمات السر و الكعكات في أي وقت بنقرة واحدة.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "تأريخك تاريخ";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "التالي";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "أتبحث عن شيء مختلف؟ اختر محرّك بحث آخر.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "تبحثُ بأسلوبك أنت";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "تخطَّ";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "انتقل بالتصفّح الخاص إلى المستوى التالي. احجب الإعلانات وغيرها من المحتويات التي تتعقبك أثناء التصفح وتأخذ من وقت تحميل الصفحات.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "حسّن خصوصيتك";
+

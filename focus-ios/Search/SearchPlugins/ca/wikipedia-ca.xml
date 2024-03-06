@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Viquipèdia (ca)</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAB70lEQVRYCe2XwY3CQAxFYUUL1EAF1EANFEAPlEALNEEl3FMDTZDlRXrImXiS3OZCpMgh9vg/ezzR7rb/XJuG119D7UH6B9C8A7vGM7hp3oHmAJv3+90fj0e+BZP7fD73+LkPh8PIv9/v+/v9Pvhut1vP75hDH7ZcS5y5BwAEXq/XKAm/FddeLpevyPP5HPm7rht8iPHsGi2CCsfcXwACqcQqHo/HJAkL9QNjcizx+LJ1+AGgS1Gc9yMAnLaSbYkCPl+v1y9ETEblp9MpXSM4BZpHOwLgZRTIqomQxLLG6sttUYS4rHr8EwBpaWetoghJPNU7VIpGi3i5ZfonADgcGCCygYpdMDaLI5fdqflTAIIdtlplsQu16gBglmqdxJ8C4GCREFTMu3jHraoBMBPkyGbJXFUAW0cCh81FWk9MbcAAq50mc1QBCPALmQlEQCDLI2aH/CIqWNpZgChSCjD5VOgQAhmTE1++i36fZwEIIgkVxmSCMaxxYCMk8fG3gqVdBKCFAHDbTqs3mQMrpIDZ8LpGuwhAEruAsMnjufadswBQ7WQorF0EIDCeeUSyb4MDa7cioGKZXQXgRM8lj12Y+/CUEKsAWERLa9WblC0iBhjfLdnVAHSBrZgbLNq+ZvIj1Pb3r9lnz5pezf8sbw7wDyZ/pR0QYc+xAAAAAElFTkSuQmCC</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://ca.wikipedia.org/w/api.php">
+  <Param name="action" value="opensearch"/>
+  <Param name="search" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="https://ca.wikipedia.org/wiki/Especial:Cerca">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<!-- Search activity -->
+<Url type="text/html" method="GET" rel="mobile" template="https://ca.m.wikipedia.org/wiki/Especial:Cerca">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<SearchForm>https://ca.wikipedia.org/wiki/Especial:Cerca</SearchForm>
+</SearchPlugin>

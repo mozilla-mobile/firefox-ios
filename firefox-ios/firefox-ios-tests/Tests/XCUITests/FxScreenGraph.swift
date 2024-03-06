@@ -1188,9 +1188,12 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add a new Tab from the New Tab option in Browser Tab Menu
-    func createNewTab() {
+    func createNewTab(isPrivate: Bool = false) {
         let app = XCUIApplication()
         self.goto(TabTray)
+        if isPrivate {
+            self.performAction(Action.TogglePrivateMode)
+        }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         self.nowAt(NewTabScreen)

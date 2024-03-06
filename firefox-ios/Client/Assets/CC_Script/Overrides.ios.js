@@ -7,7 +7,6 @@
 // This array defines overrides that webpack will use when bundling the JS on iOS
 // in order to load the right modules
 const ModuleOverrides = {
-  "AutofillTelemetry.sys.mjs": "Helpers.ios.mjs",
   "AppConstants.sys.mjs": "Helpers.ios.mjs",
   "XPCOMUtils.sys.mjs": "Helpers.ios.mjs",
   "Region.sys.mjs": "Helpers.ios.mjs",

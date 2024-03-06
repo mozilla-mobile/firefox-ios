@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Ychwanegwch llwybr byr %@ i'ch sgrin Cartref. Ar ôl ychwanegu'r teclyn, cyffwrdd a dal i'w olygu a dewis llwybr byr gwahanol.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Cychwyn chwilio preifat yn %@ gyda'ch peiriant chwilio rhagosodedig.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Gweithredoedd Cyflym";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Chwilio yn %@";
+

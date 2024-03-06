@@ -69,6 +69,7 @@ python-env/
 firefox-ios/Client/Generated
 firefox-ios/Sync/Generated
 firefox-ios/Storage/Generated
+focus-ios/Blockzilla/Generated
 .venv/
 
 firefox-ios/ThirdParty/google-breakpad
@@ -104,6 +105,9 @@ firefox-ios/Client/Assets/*.js.LICENSE.txt
 /ios-l10n-scripts
 firefox-ios/shavar-prod-lists
 /LocalizationTools
+
+# localization tools clone
+focus-ios/focus-ios-tests/tools/Localizations
 import-strings.log
 export-strings.log
 
@@ -121,3 +125,8 @@ bin/nimbus-fml.sh
 firefox-ios/nimbus-fml-configuration.local.sh
 firefox-ios/bin/nimbus-fml.sh
 firefox-ios/bin/nimbus-fml-configuration.local.sh
+
+# Lists
+Lists/disconnect-*
+focus-ios/shavar-*
+shavar-prod-lists

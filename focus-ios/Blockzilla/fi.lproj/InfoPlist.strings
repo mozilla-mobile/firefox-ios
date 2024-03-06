@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Tämä antaa sinun ottaa ja lähettää kuvia.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Tällä avaat sovelluksen lukituksen.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Sivut, joilla käyt, saattavat haluta paikantaa sinut.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Tämä antaa sinun ottaa ja lähettää videoita.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Tämä antaa sinun tallentaa ja lähettää kuvia.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Tyhjennä ja avaa";
+

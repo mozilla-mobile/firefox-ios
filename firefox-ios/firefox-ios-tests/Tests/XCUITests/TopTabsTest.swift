@@ -385,6 +385,55 @@ class TopTabsTest: BaseTestCase {
             XCTAssertEqual(tabsTrayCell.element(boundBy: 6).label, "Homepage. Currently selected tab.")
         }
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306869
+    func testTabTrayContextMenuCloseTab() {
+        // Have multiple tabs opened in the tab tray
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        addTabsAndUndoCloseTabAction(nrOfTabs: 3)
+        // Repeat steps for private browsing mode
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        addTabsAndUndoCloseTabAction(isPrivate: true, nrOfTabs: 4)
+    }
+
+    private func addTabsAndUndoCloseTabAction(isPrivate: Bool = false, nrOfTabs: Int) {
+        for _ in 1...nrOfTabs {
+            if iPad() && isPrivate {
+                navigator.createNewTab(isPrivate: true)
+            } else {
+                navigator.createNewTab()
+            }
+            if app.keyboards.element.isVisible() && !iPad() {
+                mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
+        }
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("4", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+        navigator.goto(TabTray)
+        if iPad() && isPrivate {
+            navigator.performAction(Action.TogglePrivateMode)
+        }
+        // Long press on the tab tray to open the context menu
+        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+        app.otherElements["Tabs Tray"].cells.staticTexts.element(boundBy: 3).press(forDuration: 1.6)
+        // Context menu opens
+        mozWaitForElementToExist(app.buttons["Close Tab"])
+        mozWaitForElementToExist(app.buttons["Copy URL"])
+        // Choose to close the tab
+        app.buttons["Close Tab"].tap()
+        // A toast notification is displayed with the message "Tab Closed" and the Undo option
+        mozWaitForElementToExist(app.buttons["Undo"])
+        mozWaitForElementToExist(app.staticTexts["Tab Closed"])
+        app.buttons["Undo"].tap()
+        if iPad() && isPrivate {
+            navigator.goto(TabTray)
+            navigator.performAction(Action.TogglePrivateMode)
+        }
+        // The tab closed is restored
+        XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+    }
 }
 
 fileprivate extension BaseTestCase {

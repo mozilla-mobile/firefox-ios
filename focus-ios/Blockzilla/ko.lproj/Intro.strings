@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "브라우징 세션 기록이나 비밀번호, 쿠키를 언제나 탭 한번으로 삭제합니다.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "내 기록은 중요한 기록이다";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "다음";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "뭔가 다른 것을 찾으세요? 다른 검색엔진을 선택해 보세요.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "나의 검색, 내 방식으로";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "건너뛰기";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "한 단계 높은 개인 정보 보호 브라우징을 즐겨보세요. 사이트의 경계를 넘어 개인정보를 추적하거나, 페이지 로딩 속도를 늦추는 원인이 되는 광고 및 기타 콘텐츠를 자동으로 차단해 줍니다.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "개인정보 보호 강화하기";
+

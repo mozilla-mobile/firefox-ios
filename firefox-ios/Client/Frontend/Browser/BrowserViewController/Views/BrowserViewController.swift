@@ -162,10 +162,6 @@ class BrowserViewController: UIViewController,
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
-    /// Set to true when the user taps the home button. Used to prevent entering overlay mode.
-    /// Immediately set to false afterwards.
-    var userHasPressedHomeButton = false
-
     // Tracking navigation items to record history types.
     // TODO: weak references?
     var ignoredNavigation = Set<WKNavigation>()
@@ -552,8 +548,10 @@ class BrowserViewController: UIViewController,
                 dismissFakespotIfNeeded()
             }
 
-            // Update states for felt privacy
-            updateInContentHomePanel(tabManager.selectedTab?.url)
+            if state.reloadWebView {
+                updateContentInHomePanel(state.browserViewType)
+            }
+
             setupMiddleButtonStatus(isLoading: false)
 
             if let toast = state.toast {
@@ -931,7 +929,7 @@ class BrowserViewController: UIViewController,
             topTouchArea.topAnchor.constraint(equalTo: view.topAnchor),
             topTouchArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             topTouchArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topTouchArea.heightAnchor.constraint(equalToConstant: UX.ShowHeaderTapAreaHeight)
+            topTouchArea.heightAnchor.constraint(equalToConstant: isBottomSearchBar ? 0 : UX.ShowHeaderTapAreaHeight)
         ])
 
         readerModeBar?.snp.remakeConstraints { make in
@@ -1099,10 +1097,10 @@ class BrowserViewController: UIViewController,
     /// - Parameter inline: Inline is true when the homepage is created from the tab tray, a long press
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
-    func showEmbeddedHomepage(inline: Bool) {
+    func showEmbeddedHomepage(inline: Bool, isPrivate: Bool) {
         resetDataClearanceCFRTimer()
 
-        guard let isPrivate = browserViewControllerState?.usePrivateHomepage, !isPrivate else {
+        if isPrivate && featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
             browserDelegate?.showPrivateHomepage(overlayManager: overlayManager)
             return
         }
@@ -1134,6 +1132,22 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Update content
 
+    func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
+        switch browserViewType {
+        case .normalHomepage:
+            showEmbeddedHomepage(inline: true, isPrivate: false)
+        case .privateHomepage:
+            showEmbeddedHomepage(inline: true, isPrivate: true)
+        case .webview:
+            showEmbeddedWebview()
+            urlBar.locationView.reloadButton.isHidden = false
+        }
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            topTabsViewController?.refreshTabs()
+        }
+    }
+
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         guard let url = url else {
@@ -1143,11 +1157,7 @@ class BrowserViewController: UIViewController,
         }
 
         if isAboutHomeURL {
-            showEmbeddedHomepage(inline: true)
-
-            if userHasPressedHomeButton {
-                userHasPressedHomeButton = false
-            }
+            showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.isHidden = false
@@ -1427,11 +1437,14 @@ class BrowserViewController: UIViewController,
                 break
             }
 
+            // Ensure we do have a URL from that observer
+            guard let url = webView.url else { return }
+
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
-            if tab.url?.origin == webView.url?.origin {
-                tab.url = webView.url
+            if tab.url?.origin == url.origin {
+                tab.url = url
 
                 if tab === tabManager.selectedTab {
                     updateUIForReaderHomeStateForTab(tab)
@@ -1866,6 +1879,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
     }
 
+    private func autofillLoginNimbusFeatureFlag() -> Bool {
+        return featureFlags.isFeatureEnabled(.loginAutofill, checking: .buildOnly)
+    }
+
     private func autofillCreditCardSettingsUserDefaultIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyCreditCardAutofill = PrefsKeys.KeyAutofillCreditCardStatus
@@ -1911,6 +1928,12 @@ class BrowserViewController: UIViewController,
                     break
                 }
 
+                tabWebView.accessoryView.savedAddressesClosure = {
+                    DispatchQueue.main.async { [weak self] in
+                        webView.resignFirstResponder()
+                        self?.navigationHandler?.showAddressAutofill(frame: frame)
+                    }
+                }
             case .creditCard:
                 guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
                       let type = type,
@@ -2024,12 +2047,14 @@ class BrowserViewController: UIViewController,
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let nimbusSuggestEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions ||
-        profile.searchEngines.shouldShowPrivateModeFirefoxSuggestions
-
+        let engines = profile.searchEngines
+        let isSettingEnabled = nimbusSuggestEnabled ?
+        engines.isPrivateModeSettingEnabled :
+        engines.shouldShowPrivateModeSearchSuggestions
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 
@@ -2236,6 +2261,7 @@ extension BrowserViewController {
 // MARK: - LegacyTabDelegate
 extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
+        webView.frame = contentContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         beginObserving(webView: webView)
         self.scrollController.beginObserving(scrollView: webView.scrollView)
@@ -2249,13 +2275,37 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
         // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate {
+        if !tab.isPrivate, autofillLoginNimbusFeatureFlag() {
             let logins = LoginsHelper(
                 tab: tab,
                 profile: profile,
                 theme: themeManager.currentTheme
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
+            logins.foundFieldValues = { [weak self] field, currentRequestId in
+                Task {
+                    guard let tabURL = tab.url else { return }
+                    let logins = (try? await self?.profile.logins.listLogins()) ?? []
+                    let loginsForCurrentTab = logins.filter { login in
+                        guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+                        return recordHostnameURL.baseDomain == tabURL.baseDomain
+                    }
+                    if !loginsForCurrentTab.isEmpty {
+                        tab.webView?.accessoryView.reloadViewFor(.login)
+                        tab.webView?.reloadInputViews()
+                    }
+                    tab.webView?.accessoryView.savedLoginsClosure = {
+                        Task { @MainActor [weak self] in
+                            // Dismiss keyboard
+                            webView.resignFirstResponder()
+                            self?.authenticateSelectSavedLoginsClosureBottomSheet(
+                                tabURL: tabURL,
+                                currentRequestId: currentRequestId
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         // Credit card autofill setup and callback
@@ -2301,6 +2351,20 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+    }
+
+    private func authenticateSelectSavedLoginsClosureBottomSheet(tabURL: URL, currentRequestId: String) {
+        appAuthenticator.getAuthenticationState { [unowned self] state in
+            switch state {
+            case .deviceOwnerAuthenticated:
+                self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
+            case .deviceOwnerFailed:
+                // Keep showing bvc
+                break
+            case .passCodeRequired:
+                self.navigationHandler?.showRequiredPassCode()
+            }
+        }
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
@@ -2623,7 +2687,6 @@ extension BrowserViewController: TabManagerDelegate {
             selected?.reloadPage()
             return
         }
-        updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
@@ -2804,8 +2867,6 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
             updateUIForReaderHomeStateForTab(tab)
         }
-
-        clipboardBarDisplayHandler?.didRestoreSession()
     }
 }
 

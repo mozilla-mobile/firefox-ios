@@ -497,6 +497,16 @@
                ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ToolbarKitTests"
+               BuildableName = "ToolbarKitTests"
+               BlueprintName = "ToolbarKitTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

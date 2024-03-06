@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "I-clear ang iyong buong kasaysayan ng session sa pagba-browse, mga password, cookies anumang oras na may isang solong tapikin.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Ang iyong kasaysayan ay kasaysayan";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Susunod";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Naghahanap ng ibang bagay? Pumili ng ibang search engine.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Ang iyong paghahanap, ang iyong paraan";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Skip";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Dalhin ang pribadong pag-browse sa susunod na antas. I-block ang mga ad at iba pang nilalaman na maaaring masubaybayan ka sa mga site at magawa ang mga oras ng pagkarga ng pahina.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Power up ang iyong privacy";
+

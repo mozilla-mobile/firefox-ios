@@ -17,7 +17,7 @@ protocol NavigationDelegate: AnyObject {
 
 // Holds different type of browser views, communicating through protocols with them
 class BrowserViewController: UIViewController,
-                                EngineSessionDelegate,
+                             EngineSessionDelegate,
                              FindInPageHelperDelegate {
     weak var navigationDelegate: NavigationDelegate?
     private lazy var progressView: UIProgressView = .build { _ in }
@@ -114,6 +114,38 @@ class BrowserViewController: UIViewController,
         engineSession.findInPageDone()
     }
 
+    func switchToStandardTrackingProtection() {
+        engineSession.switchToStandardTrackingProtection()
+    }
+
+    func switchToStrictTrackingProtection() {
+        engineSession.switchToStrictTrackingProtection()
+    }
+
+    func disableTrackingProtection() {
+        engineSession.disableTrackingProtection()
+    }
+
+    func toggleNoImageMode() {
+        engineSession.toggleNoImageMode()
+    }
+
+    func increaseZoom() {
+        engineSession.updatePageZoom(.increase)
+    }
+
+    func decreaseZoom() {
+        engineSession.updatePageZoom(.decrease)
+    }
+
+    func setZoom(_ value: CGFloat) {
+        engineSession.updatePageZoom(.set(value))
+    }
+
+    func resetZoom() {
+        engineSession.updatePageZoom(.reset)
+    }
+
     // MARK: - Search
 
     func loadUrlOrSearch(_ searchTerm: SearchTerm) {
@@ -140,6 +172,10 @@ class BrowserViewController: UIViewController,
         // If the Client needs to save a title like saving it inside some tab storage then it would do it here
     }
 
+    func onHasOnlySecureContentChanged(secure: Bool) {
+        // If the client needs to show a Secure lock icon etc.
+    }
+
     func onLocationChange(url: String) {
         navigationDelegate?.onURLChange(url: url)
     }
@@ -156,6 +192,40 @@ class BrowserViewController: UIViewController,
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
         navigationDelegate?.onNavigationStateChange(canGoBack: canGoBack,
                                                     canGoForward: canGoForward)
+    }
+
+    func didLoad(pageMetadata: EnginePageMetadata) {
+        // Page metadata can be used to fetch page favicons.
+        // We currently do not handle favicons in SampleBrowser, so this is empty.
+    }
+
+    func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
+        guard let url = linkURL else { return nil }
+
+        let previewProvider: UIContextMenuContentPreviewProvider = {
+            let previewEngineProvider = EngineProvider()
+            let previewVC = BrowserViewController(engineProvider: previewEngineProvider)
+            previewVC.engineSession.load(url: url.absoluteString)
+            return previewVC
+        }
+
+        let actionProvider: UIContextMenuActionProvider = { menuElements in
+            var actions = [UIAction]()
+
+            actions.append(UIAction(
+                title: "Open Link",
+                image: nil,
+                identifier: UIAction.Identifier("linkContextMenu.openLink")
+            ) { [weak self] _ in
+                self?.engineSession.load(url: url.absoluteString)
+            })
+
+            return UIMenu(title: url.absoluteString, children: actions)
+        }
+        // Basic menu for testing purposes in the Sample Browser.
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: previewProvider,
+                                          actionProvider: actionProvider)
     }
 
     // MARK: - EngineSessionDelegate Menu items

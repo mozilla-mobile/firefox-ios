@@ -234,6 +234,19 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
     }
 
+    @MainActor
+    func testShowSavedLoginAutofill_addsCredentialAutofillCoordinator() {
+        let subject = createSubject()
+        let testURL = URL(string: "https://example.com")!
+        let currentRequestId = "testRequestID"
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
     func testShowRequiredPassCode_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
@@ -951,6 +964,19 @@ final class BrowserCoordinatorTests: XCTestCase {
                                       parentViewController: viewController)
 
         XCTAssertEqual(sidebarContainer.updateSidebarCalled, 1)
+    }
+
+    func testShowAddressAutofill_addsAddressAutofillCoordinator() {
+        // Arrange
+        let subject = createSubject()
+
+        // Act
+        subject.showAddressAutofill(frame: nil)
+        // Assert
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is AddressAutofillCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
     }
 
     // MARK: - Helpers

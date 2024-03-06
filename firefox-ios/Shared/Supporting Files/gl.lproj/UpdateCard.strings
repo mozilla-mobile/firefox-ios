@@ -4,6 +4,9 @@
 /* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v115" = "Actualizar esta tarxeta?";
 
+/* This value is used as the title for the update card page */
+"CreditCard.UpdateCard.MainTitle.v122" = "Actualizar a tarxeta?";
+
 /* This value is used as the title for the Manage Cards button from the update credit card page */
 "CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "Xestionar tarxetas";
 
@@ -12,4 +15,7 @@
 
 /* This value is used as the title for the button in the update credit card page */
 "CreditCard.UpdateCard.YesButtonTitle.v115" = "Si";
+
+/* This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card. */
+"CreditCard.UpdateCard.YesButtonTitle.v122" = "Actualizar";
 

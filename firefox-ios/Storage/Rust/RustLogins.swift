@@ -203,36 +203,6 @@ public extension EncryptedLogin {
         let encryptedLogin = rustLoginsEncryption.encryptSecureFields(login: login)
         self.secFields = encryptedLogin?.secFields ?? ""
     }
-
-    func toJSONDict() -> [String: Any] {
-        let rustLoginsEncryption = RustLoginEncryptionKeys()
-        let login = rustLoginsEncryption.decryptSecureFields(login: self)
-
-        var dict: [String: Any] = [
-            "id": record.id,
-            "password": login?.secFields.password ?? "",
-            "hostname": fields.origin,
-
-            "timesUsed": record.timesUsed,
-            "timeCreated": record.timeCreated,
-            "timeLastUsed": record.timeLastUsed,
-            "timePasswordChanged": record.timePasswordChanged,
-
-            "username": login?.secFields.username ?? "",
-            "passwordField": fields.passwordField,
-            "usernameField": fields.usernameField,
-        ]
-
-        if let httpRealm = fields.httpRealm {
-            dict["httpRealm"] = httpRealm
-        }
-
-        if let formSubmitUrl = fields.formActionOrigin {
-            dict["formSubmitUrl"] = formSubmitUrl
-        }
-
-        return dict
-    }
 }
 
 public class LoginEntryFlattened {
@@ -445,7 +415,7 @@ public class RustLoginEncryptionKeys {
         }
     }
 
-    func decryptSecureFields(login: EncryptedLogin) -> Login? {
+    public func decryptSecureFields(login: EncryptedLogin) -> Login? {
         guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
             return nil
         }
@@ -526,7 +496,13 @@ public class LoginRecordError: MaybeErrorType {
     }
 }
 
-public class RustLogins {
+/// This is a protocol followed by RustLogins to provide an alternative to using `Deferred` in that code
+/// Its part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
+protocol LoginsProtocol {
+    func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+}
+
+public class RustLogins: LoginsProtocol {
     let perFieldDatabasePath: String
 
     let queue: DispatchQueue
@@ -606,6 +582,23 @@ public class RustLogins {
         }
 
         return error
+    }
+
+    public func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let record = try self.storage?.get(id: id)
+                completionHandler(.success(record))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
     }
 
     public func getLogin(id: String) -> Deferred<Maybe<EncryptedLogin?>> {

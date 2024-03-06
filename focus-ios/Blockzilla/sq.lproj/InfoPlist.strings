@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Kjo ju lejon të shkyçni aplikacionin.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Sajtet që vizitoni mund të kërkojmë të dinë vendndodhjen tuaj.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Kjo ju lejon të xhironi dhe ngarkoni video.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Kjo ju lejon të ruani dhe ngarkoni foto.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Fshije dhe Hape";
+

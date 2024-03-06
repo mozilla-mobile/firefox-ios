@@ -10,7 +10,6 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
-        static let buttonFontSize: CGFloat = 16
 
         static let contentInsets = NSDirectionalEdgeInsets(
             top: buttonVerticalInset,
@@ -52,10 +51,7 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         // swiftlint:enable line_length
             var container = incoming
             container.foregroundColor = self?.foregroundColor
-            container.font = DefaultDynamicFontHelper.preferredBoldFont(
-                withTextStyle: .callout,
-                size: UX.buttonFontSize
-            )
+            container.font = FXFontStyles.Bold.callout.scaledFont()
             return container
         }
 

@@ -16,6 +16,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var engineScrollView: WKScrollView! = MockEngineScrollView()
     var url: URL?
     var title: String?
+    var hasOnlySecureContent = false
     var allowsBackForwardNavigationGestures = true
     var allowsLinkPreview = true
     var isInspectable = true
@@ -38,6 +39,8 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
     var removeObserverCalled = 0
     var evaluateJavaScriptCalled = 0
     var savedJavaScript: String?
+    var javascriptResult: (Result<Any, Error>)?
+    var pageZoom: CGFloat = 1.0
 
     var loadFileReadAccessURL: URL?
 
@@ -114,5 +117,24 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
                             completionHandler: ((Result<Any, Error>) -> Void)?) {
         evaluateJavaScriptCalled += 1
         savedJavaScript = javaScript
+
+        if let javascriptResult {
+            completionHandler?(javascriptResult)
+        }
+    }
+
+    override func value(forKey key: String) -> Any? {
+        if key == "viewScale" {
+            return self.pageZoom
+        }
+        return super.value(forKey: key)
+    }
+
+    override func setValue(_ value: Any?, forKey key: String) {
+        if key == "viewScale", let zoomValue = value as? CGFloat {
+            self.pageZoom = zoomValue
+            return
+        }
+        super.setValue(value, forKey: key)
     }
 }

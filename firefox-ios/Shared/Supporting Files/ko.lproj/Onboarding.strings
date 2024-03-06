@@ -1,6 +1,9 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "설정으로 이동";
 
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*%@가 이미 기본값입니까?* 이 메시지를 닫고 건너뛰기를 탭하세요.";
+
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.FirstLabel.v114" = "1. *설정*으로 이동";
 

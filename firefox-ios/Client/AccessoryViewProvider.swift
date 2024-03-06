@@ -125,6 +125,8 @@ class AccessoryViewProvider: UIView, Themeable {
             })
         accessoryView.accessibilityTraits = .button
         accessoryView.accessibilityLabel = .PasswordAutofill.UseSavedPasswordFromKeyboard
+        accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Autofill.footerPrimaryAction
+        accessoryView.isAccessibilityElement = true
         return accessoryView
     }()
 

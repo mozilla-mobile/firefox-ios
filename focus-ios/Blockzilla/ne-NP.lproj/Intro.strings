@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "एक क्लिकमा नै तपाईंको सम्पुर्ण ब्राउजिङ्ग इतिहास, पासवर्डहरु, कुकिजहरु कुनैपनि समयमा खाली हुनेछ ।";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "तपाईँको इतिहास इतिहास हो";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "अर्को";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "केहि अरु खोज्दै हुनुहुन्छ ? एउटा अर्को खोज इन्जिन छान्नुहोस्।";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "तपाईंको खोजी, तपाईंको बाटो";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "छोड्नुहोस्";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "निजी ब्राउजिङ्गलाई अर्को स्तरमा पुर्याउनुहोस्। विज्ञापन र अन्य सामग्रीहरू ब्लक गर्नुहोस् जसले तपाईंलाई साइटहरूमा ट्र्याक गर्न सक्छ र पृष्ठ लोड गर्दा लाग्ने समयलाई घटाउने गर्न सक्छ।";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "आफ्नो गोपनीयताको बलियो बनाउनुहोस्";
+

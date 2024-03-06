@@ -99,6 +99,29 @@ export const FormAutofill = {
     );
   },
   /**
+   * Determines if the address autofill feature is available to use in the browser.
+   * If the feature is not available, then there are no user facing ways to enable it.
+   * Two conditions must be met for the autofill feature to be considered available:
+   *   1. Address autofill support is confirmed when:
+   *      - `extensions.formautofill.addresses.supported` is set to `on`.
+   *      - The user is located in a region supported by the feature
+   *        (`extensions.formautofill.creditCards.supportedCountries`).
+   *   2. Address autofill is enabled through a Nimbus experiment:
+   *      - The experiment pref `extensions.formautofill.addresses.experiments.enabled` is set to true.
+   *
+   * @returns {boolean} `true` if address autofill is available
+   */
+  get isAutofillAddressesAvailable() {
+    const isUserInSupportedRegion = this._isSupportedRegion(
+      FormAutofill._isAutofillAddressesAvailable,
+      FormAutofill._addressAutofillSupportedCountries
+    );
+    return (
+      isUserInSupportedRegion ||
+      FormAutofill._isAutofillAddressesAvailableInExperiment
+    );
+  },
+  /**
    * Determines if the user has enabled or disabled credit card autofill.
    *
    * @returns {boolean} `true` if credit card autofill is enabled
@@ -262,7 +285,7 @@ XPCOMUtils.defineLazyPreferenceGetter(
 
 XPCOMUtils.defineLazyPreferenceGetter(
   FormAutofill,
-  "isAutofillAddressesAvailable",
+  "_isAutofillAddressesAvailableInExperiment",
   "extensions.formautofill.addresses.experiments.enabled"
 );
 

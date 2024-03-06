@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Tyhjennä koko selaushistoriasi, salasanat ja evästeet milloin tahansa yhdellä napautuksella.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Historiasi on mennyttä";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Seuraava";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Etsitkö jotain muuta? Valitse eri hakukone.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Hakusi haluamallasi tavalla";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Ohita";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Entistä parempi yksityinen selaus. Estä mainokset ja muu seurantaa suorittava sisältö, nopeuta samalla sivujen latausaikoja.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Tehosta yksityisyyttäsi";
+

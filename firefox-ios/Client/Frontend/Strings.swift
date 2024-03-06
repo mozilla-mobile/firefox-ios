@@ -267,6 +267,13 @@ extension String {
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
         }
+        public struct BottomSheet {
+            public static let UseASavedAddress = MZLocalizedString(
+                key: "Addresses.BottomSheet.UseSavedAddressBottomSheet.v124",
+                tableName: "BottomSheet",
+                value: "Use a saved address?",
+                comment: "Title displayed on the bottom sheet for prompting users to use a saved address from the list.")
+        }
     }
 }
 
@@ -1842,7 +1849,11 @@ extension String {
                 tableName: "Settings",
                 value: "Show in Private Sessions",
                 comment: "Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu.")
-
+            public static let PrivateSessionDescription = MZLocalizedString(
+                key: "Settings.Search.PrivateSession.Description.v125",
+                tableName: "Settings",
+                value: "Show suggestions from search engines in private sessions",
+                comment: "Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu.")
             public struct AccessibilityLabels {
                 public static let DefaultSearchEngine = MZLocalizedString(
                     key: "Settings.Search.Accessibility.DefaultSearchEngine.v121",
@@ -1875,7 +1886,7 @@ extension String {
                 public static let ShowSponsoredSuggestionsTitle = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124",
                     tableName: "Settings",
-                    value: "Suggestions from sponsors",
+                    value: "Suggestions from Sponsors",
                     comment: "In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors.")
                 public static let ShowSponsoredSuggestionsDescription = MZLocalizedString(
                     key: "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124",
@@ -1897,6 +1908,11 @@ extension String {
                     tableName: "Settings",
                     value: "Search Synced Tabs",
                     comment: "In the Search page of the Settings menu, the title for the setting to enable synced tabs.")
+                public static let PrivateSessionDescription = MZLocalizedString(
+                    key: "Settings.Search.Suggest.PrivateSession.Description.v125",
+                    tableName: "Settings",
+                    value: "Show suggestions from %@ Suggest in private sessions",
+                    comment: "Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. Placeholder is for the app name - Firefox.")
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",

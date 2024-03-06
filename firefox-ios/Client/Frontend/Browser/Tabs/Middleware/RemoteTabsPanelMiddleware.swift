@@ -58,12 +58,12 @@ class RemoteTabsPanelMiddleware {
             // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
             store.dispatch(RemoteTabsPanelAction.refreshDidBegin(window.context))
 
-            getCachedRemoteTabs(window: window)
+            getRemoteTabs(window: window)
         }
     }
 
-    private func getCachedRemoteTabs(window: WindowUUID) {
-        profile.getCachedClientsAndTabs { result in
+    private func getRemoteTabs(window: WindowUUID) {
+        profile.getClientsAndTabs { result in
             guard let clientAndTabs = result else {
                 let context = RemoteTabsRefreshDidFailContext(reason: .failedToSync, windowUUID: window)
                 store.dispatch(RemoteTabsPanelAction.refreshDidFail(context))
@@ -98,7 +98,6 @@ class RemoteTabsPanelMiddleware {
             // TODO: [8188] Revisit UUID here to determine ideal handling.
             let uuid = WindowUUID.unavailable
             let context = HasSyncableAccountContext(hasSyncableAccount: hasSyncableAccount, windowUUID: uuid)
-            getCachedRemoteTabs(window: .unavailable)
             store.dispatch(TabTrayAction.firefoxAccountChanged(context))
         default: break
         }

@@ -14,9 +14,6 @@ protocol EmptyPrivateTabsViewDelegate: AnyObject {
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {
     struct UX {
-        static let titleSizeFont: CGFloat = 22
-        static let descriptionSizeFont: CGFloat = 17
-        static let buttonSizeFont: CGFloat = 15
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
@@ -36,16 +33,14 @@ class EmptyPrivateTabsView: UIView {
 
     private let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title2,
-                                                            size: UX.titleSizeFont)
+        label.font = FXFontStyles.Regular.title2.scaledFont()
         label.text =  .PrivateBrowsingTitle
         label.textAlignment = .center
     }
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.descriptionSizeFont)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = 0
         label.text = .TabTrayPrivateBrowsingDescription
@@ -54,8 +49,7 @@ class EmptyPrivateTabsView: UIView {
     let learnMoreButton: UIButton = .build { button in
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                         size: UX.buttonSizeFont)
+        button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
     }
 
     private let iconImageView: UIImageView = .build { imageView in

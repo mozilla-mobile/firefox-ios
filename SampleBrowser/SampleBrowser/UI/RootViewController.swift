@@ -203,6 +203,38 @@ class RootViewController: UIViewController,
 
     // MARK: - SettingsDelegate
 
+    func switchToStrictTrackingProtection() {
+        browserVC.switchToStrictTrackingProtection()
+    }
+
+    func switchToStandardTrackingProtection() {
+        browserVC.switchToStandardTrackingProtection()
+    }
+
+    func disableTrackingProtection() {
+        browserVC.disableTrackingProtection()
+    }
+
+    func toggleNoImageMode() {
+        browserVC.toggleNoImageMode()
+    }
+
+    func increaseZoom() {
+        browserVC.increaseZoom()
+    }
+
+    func decreaseZoom() {
+        browserVC.decreaseZoom()
+    }
+
+    func setZoom(_ value: CGFloat) {
+        browserVC.setZoom(value)
+    }
+
+    func resetZoom() {
+        browserVC.resetZoom()
+    }
+
     func scrollToTop() {
         browserVC.scrollToTop()
     }

@@ -191,6 +191,13 @@
         "identifier" : "ReduxTests",
         "name" : "ReduxTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "ToolbarKitTests",
+        "name" : "ToolbarKitTests"
+      }
     }
   ],
   "version" : 1
