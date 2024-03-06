@@ -35,10 +35,6 @@ jobs:
       run: |
         python ./test-fixtures/update-rust-component-version.py
 
-    - name: Focus - Modifing Swift Package dependencies
-      run: |
-        python ./focus-ios/focus-ios-tests/github-actions-scripts/update-rust-component-version.py
-
     - name: Get new A-S tag to be used in the PR info
       run: |
         cd test-fixtures/
