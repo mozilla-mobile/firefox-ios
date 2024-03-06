@@ -1,0 +1,420 @@
+/* Button on About screen */
+"About.learnMoreButton" = "مزید سیکھیں";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozilla کی پیداوار ھے۔ ھماری مہم ایک صحت مند کھلے انٹرنیٹ کو فروعٰ دینا ھے۔";
+
+/* Label on About screen */
+"About.privateBullet1" = "ایپلیکیشن کے اندر ہی تلاش اور برائوز کریں";
+
+/* Label on About screen */
+"About.privateBullet2" = "ٹریکررٰ کو بلاک کریں (یا سٹینگوں کی تازہ کاری کر کے ٹریکررٰ کو اجازت دیں)";
+
+/* Label on About screen */
+"About.privateBullet3" = "کوکیز کے ساتھ تلاش اور براؤزنگ سابقات کو بھی حذف کرنے کیلیے مٹائیں";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "اس کو نجی براؤزر کے طور پر استعمال کریں:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "مدد";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "رازداری کا نوٹس";
+
+/* Label for row in About screen */
+"About.rowRights" = "آپ کے حقوق";
+
+/* Label on About screen */
+"About.safariBullet1" = "بہتر رازداریکے لیئے سراغ راہ بلاک کریں";
+
+/* Label on About screen */
+"About.safariBullet2" = "صفحہ کا ماپ گھٹانے کے لیے ویب فانٹ بلاک کریں";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "اس کو Safari کی توسیعات کے طور پر استعمال کریں:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ کے بارے میں";
+
+/* Label on About screen */
+"About.topLabel" = "%@ آپ کو کنٹرول میں رکھتا ہے۔";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ میں کھولیں";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "ٹھیک ہے";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "پاس کو Wallet میں شامل کرتے وقت نقص آگیا ۔ براہ مہربانی کچھ دیر بعد کوشش کریں۔";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "پاس شامل کرنے میں ناکام رہا";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "تخصیصی URL کا اظافہ کریں";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "درج شدہ URL دو دفعہ پڑتال کریں۔";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "مثال: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL اظافہ کرنے کے لیئے";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL چسپاں یا داخل کریں";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "تخصیصی URL کا + اظافہ کریں";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "نئے تخصیصی URL کا اظافہ کر دیا گیا ہے۔";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "نااہل";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URLپہلے ہی موجود ہے";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "دکھانے کے لیے کوئی مخصوص URLs نہیں";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "اہل";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "سائٹس بندرست کریں";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "میری سائٹ";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "بہترین سائٹیں";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "نیا سیشن";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "واپس";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL تختہ تراشہ پر نقل ہو گیا";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "نقل کریں";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "آگے";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "پھر لوڈ کریں";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "سیٹنگیں";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "رکیں";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "محل وقتوع بار کا انتخاب کریں";
+
+/* Label on button to complete edits */
+"Done" = "ہوگیا";
+
+/* Label on button to allow edits */
+"Edit" = "تدوین";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "دوبارہ کوشش کریں";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "منسوخ کریں";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ ایک دوسری ایپ کو کھولنا چاہتا ہے";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "کھولیں";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ %2$@ کو کھولنا چاہتا ہے";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "منسوخ کریں";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "ای میل";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "صفحہ میں تلاش کریں ہو گیا";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "اگلے صفحہ میں ڈھونڈیں";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "پچھلے صفحہ میں تلاش کریں";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "ٹھیک ہے مجھے سمجھ آگئی ہے!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "اس طرح براؤز کریں جیسے کوئی نہیں دیکھ رہا۔";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "بند کریں";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "براؤزنگ شروع کریں";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "۔Safari کو تھپتھپائیں، پھر مواد بلاکرز کو منتخب کریں";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ اہل بنائی";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ اہل نہیں ہے۔";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "سیٹنگیں ایپلیکیشن کھولیں";
+
+/* Save button label */
+"Save" = "محفوظ کریں";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "نہیں";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ہاں";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "تلاش تجاویز دکھائیں؟";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL خودکار تکميل";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "دیگر مواد ٹریکرز کو روکنے سے کچھ ویڈیوز اور ویب صفحات ٹوٹ سکتے ہیں۔";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "منسوخ کریں";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "گہرا";
+
+/* Title for section in settings menu */
+"Settings.general" = "عمومی";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "مزید سیکھیں۔";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "ہلکا";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ کی شرح";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "سیٹنگیں";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "ایک اور تلاش انجن کا اضافہ کریں";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "تلاش انجن کا اضافہ کریں";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "دکھانے کے لیئے نام";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "نیا تلاش انجن شامل کر دیا گیا۔";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "طےشدہ تلاش انجن بحال کریں";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "تلاش انجن کا نام";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "استعمال کرنے کے لیئے اسٹرنگ تلاش کریں";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "چسپاں کر دیں یا تلاش اسٹرنگ داخل کریں ۔ اگر ضروری ہو تو، تلاش کی اصطلاح کے ساتھ بدل دیں %s۔";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "تلاش انجن";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "تلاش تجاویز حاصل کریں";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "SEARCH";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "رازداری";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "سسٹم تھیم";
+
+/* Theme section in settings menu */
+"Settings.theme" = "تھیم";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "تھیم چننے والا";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "اشتہار";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "تجزیہ";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ویب فونٹس بلاک کریں";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "مواد";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "سماجی";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "ابتدائی صفحہ کی تجاویز دکھائیں";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "استعمال شدہ کوائف ارسال کریں";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "مطالعہ";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "بند";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "چالو";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
+/* Text for a share button */
+"share" = "شیئر کریں";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "شارٹ کٹ میں شامل کریں";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "پتہ نقل کریں";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "صفحے میں ڈھونڈیں";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "شارٹ کٹ سے ہٹائیں";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "ڈیسک ٹاپ سائٹ کی درخواست کریں";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "موبائل سائٹ کی درخواست کریں";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome میں کھولیں";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox میں کھولیں";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "…کے ساتھ صفحہ شیئر کریں";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "شارٹ کٹ سے ہٹائیں";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "محفوظ کریں";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "منسوخ کریں";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "اضافہ کریں";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri میں شامل کریں";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "مٹائيں";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "مٹائیں اور کھولیں";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "پسندیدہ سائٹ کھولیں";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "پسندیدہ سائٹ کھولیں";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "کھولنے کے لیے URL";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "ٹچ آئی ڈی کو آن کریں۔";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "سائٹ کا مکمل ڈیسک ٹاپ ورژن دیکھنا چاہتے ہیں؟";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "آپ محفوظ ہیں!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "کنکشن محفوظ نہیں ہے";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "کنکشن محفوظ ہے۔";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "سراغ راہ حفاظت";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "توسيعى سراغ کاری تحفظ";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "ٹریکرز %@ سے بلاک ہیں۔";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "چسباں کریں اور چلیں";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "مٹائيں";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "براؤزنگ کی سابقات صاف ہو گئی۔";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "صفحہ میں ڈھونڈیں: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "چسپاں کریں";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "پتہ تلاش یا داخل کریں";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ کی تلاش کریں";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "بلاک کردہ ٹریکر";
+

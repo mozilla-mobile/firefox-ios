@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Więcej informacji";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ jest tworzony przez Mozillę. Naszą misją jest wspieranie zdrowego i otwartego Internetu.";
+
+/* Label on About screen */
+"About.privateBullet1" = "szukać i przeglądać prosto z aplikacji";
+
+/* Label on About screen */
+"About.privateBullet2" = "blokować elementy śledzące (można to zmienić w ustawieniach)";
+
+/* Label on About screen */
+"About.privateBullet3" = "usuwać ciasteczka i historię przeglądania";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Jako prywatna przeglądarka pozwala:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Pomoc";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Uwagi dotyczące prywatności";
+
+/* Label for row in About screen */
+"About.rowRights" = "O prawach użytkownika";
+
+/* Label on About screen */
+"About.safariBullet1" = "blokować śledzące elementy dla większej prywatności";
+
+/* Label on About screen */
+"About.safariBullet2" = "blokować czcionki sieciowe i pobierać mniej danych";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Jako rozszerzenie blokad zawartości Safari pozwala:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "O programie %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ daje większą kontrolę.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Otwórz w aplikacji %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Wystąpił błąd podczas dodawania do aplikacji Wallet. Proszę spróbować później.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Błąd dodawania do Wallet";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Uwierzytelnij się, by wrócić do %@";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Dodaj inny adres";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Sprawdź poprawność wpisanego adresu.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Przykład: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Adres do dodania";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Wklej lub wpisz adres";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Dodaj inny adres";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Dodano nowy adres.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Włącz, by %@ automatycznie uzupełniał ponad 450 popularnych adresów na pasku adresu.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Wyłączone";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Adres już istnieje";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Brak innych adresów do wyświetlenia";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Włączone";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Zarządzaj stronami";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Moje strony";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Włącz, by %@ automatycznie uzupełniał Twoje ulubione adresy.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Popularne";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Odblokuj";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Nowa sesja";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Wstecz";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Skopiowano adres do schowka";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopiuj";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Naprzód";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Odśwież";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Ustawienia";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Zatrzymaj";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Wyświetl pasek adresu";
+
+/* Label on button to complete edits */
+"Done" = "Gotowe";
+
+/* Label on button to allow edits */
+"Edit" = "Edytuj";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Spróbuj ponownie";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Anuluj";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ chce otworzyć inną aplikację";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Otwórz";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ chce otworzyć aplikację %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Anuluj";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Nowa wiadomość";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Ukończono wyszukiwanie na stronie";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Znajdź następne na stronie";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Znajdź poprzednie na stronie";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Przeglądaj, jak gdyby nikt nie patrzył";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Zamknij";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Pierwsze kroki";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Szybka. Prywatna. Skupiona na celu.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Zacznij przeglądać Internet";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Pomiń";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Usuwamy historię przeglądania po zamknięciu aplikacji, maksymalizując prywatność.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Ustaw przeglądarkę %@ jako domyślną, aby chronić swoje dane przy każdym otwieranym odnośniku.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ nie jest jak inne przeglądarki";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Ustaw jako domyślną przeglądarkę";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Usuń historię przeglądania, hasła i ciasteczka oraz uniemożliw niechcianym reklamom chodzenie za Tobą po sieci jednym kliknięciem!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Twoja historia nie chodzi za Tobą";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ to przeglądarka wyspecjalizowana w prywatności z ochroną przed śledzeniem i blokowaniem treści.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Więcej niż tylko incognito";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Skonfiguruj ustawienia, by samodzielnie zdecydować, jak dużo lub jak mało udostępniasz.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Ochrona według własnego uznania";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Osiągnij wyższy poziom prywatnego przeglądania Internetu.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Witamy w Firefox %@!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Stuknij Safari, a następnie Blokady zawartości";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Włącz %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Wybierz Safari, a następnie Rozszerzenia";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ nie został włączony.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Otwórz aplikację Ustawienia";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Otwórz ustawienia urządzenia";
+
+/* Save button label */
+"Save" = "Zachowaj";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "To nie zadziałało. Zamień wyszukiwany tekst na „%s”.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nie";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Tak";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Aby uzyskać podpowiedzi, %@ musi wysłać słowa wpisywane na pasku adresu do wyszukiwarki.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Wyświetlać podpowiedzi wyszukiwania?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Automatyczne uzupełnianie adresów";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokowanie pozostałych elementów śledzących może uniemożliwiać oglądanie niektórych filmów i stron WWW.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Anuluj";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Blokuj pozostałe śledzące";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Ciemny";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ będzie wysyłał słowa wpisywane na pasku adresu do wyszukiwarki.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla dokłada wszelkich starań, by zbierać jedynie niezbędne dane w celu dostarczania i ulepszania aplikacji %@.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ może od czasu do czasu instalować i przeprowadzać badania.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Ogólne";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Więcej informacji.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Licencje";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Jasny";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Oceń %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "Integracja z Safari";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Ustawienia";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Dodaj inną wyszukiwarkę";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Dodaj wyszukiwarkę";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "Zainstalowane wyszukiwarki";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Wyświetlana nazwa";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Dodano nową wyszukiwarkę.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Przywróć domyślne wyszukiwarki";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nazwa wyszukiwarki";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Używany ciąg wyszukiwania";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Przykład: wyszukiwarka.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Wklej lub wpisz ciąg wyszukiwania. Jeśli to potrzebne, zamień wyszukiwany tekst na „%s”.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Wyszukiwarka";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Podpowiedzi wyszukiwania";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "Wyszukiwanie";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "Mozilla";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "Prywatność";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Ustaw jako domyślną przeglądarkę";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Ustaw automatyczne otwieranie odnośników z witryn, wiadomości e-mail i SMS-ów w %@.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Motyw systemowy";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Motyw";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Wybór motywu";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklamy";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Statystyki";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blokowanie czcionek sieciowych";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Treść";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Społecznościowe";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Używaj Face ID do odblokowywania aplikacji";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID może odblokowywać %@, jeśli jakiś adres jest już otwarty w aplikacji";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Wskazówki na ekranie głównym";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Przesyłanie danych o użyciu";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Badania";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Używaj Touch ID do odblokowywania aplikacji";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID może odblokowywać %@, jeśli jakiś adres jest już otwarty w aplikacji";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Wyłączona";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Włączona";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Tryb jasny/ciemny systemu";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "Skróty Siri";
+
+/* Text for a share button */
+"share" = "Udostępnij";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Dodaj do skrótów";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Dodano do skrótów";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopiuj adres";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Znajdź na stronie";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Usuń ze skrótów";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Usunięto skrót";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Zażądaj wersji na komputery";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Zażądaj wersji na urządzenia przenośne";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Otwórz w Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Otwórz w domyślnej przeglądarce";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Otwórz w Firefoksie";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Otwórz odnośnik";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Udostępnij stronę…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Usuń ze skrótów";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Zmień nazwę skrótu";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Nazwa skrótu";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Zachowaj";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Anuluj";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Gotowe";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Przytrzymaj palec na ekranie głównym, aż ikony zaczną drżeć.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Znajdź %@. Następnie wybierz widżet.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Stuknij ikonę z plusem.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Dodaj widżet %@";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Dodaj";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Dodaj do Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Ponownie nagraj lub usuń skrót";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Usuń";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Usuń i otwórz";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Otwórz ulubioną stronę";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Otwórz ulubioną stronę";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Otwierany adres";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Zablokuj %@, kiedy strona jest otwarta:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Włącz Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Włącz Touch ID";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Interakcje → Zażądaj wersji na komputery";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Chcesz zobaczyć pełną wersję strony?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Elementy śledzące zablokowane do tej pory: %@";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Ty przeglądasz. %@ blokuje.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Wybierz „Dodaj do skrótów” z menu %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Utwórz skróty do najczęściej odwiedzanych stron:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Dodaj skrót Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "„Siri, usuń moją sesję %@.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Dodaj skrót Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "„Siri, otwórz moją ulubioną stronę.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Spróbuj wyłączyć ochronę przed śledzeniem";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Strona nie zawiera treści lub działa dziwnie?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Wyszukaj w %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Przejdź do ustawień, by zarządzać konkretnymi opcjami prywatności i bezpieczeństwa.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Domyślne ustawienia zapewniają silną ochronę, ale łatwo można dostosować je do własnych potrzeb.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Zacznij przeglądać w trybie prywatnym, a będziemy blokować elementy śledzące i inne złe rzeczy.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ uniemożliwił tej witrynie szpiegowanie Cię. Stuknij tarczę, by dowiedzieć się, co zablokowaliśmy.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Uniemożliwiliśmy tej witrynie szpiegowanie Cię. Stuknij tarczę w dowolnej chwili, by zobaczyć, co blokujemy.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Stuknij przycisk kosza w dowolnej chwili, by usunąć wszystkie ślady obecnej sesji.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Stuknij tutaj, by wyrzucić wszystko — historię, ciasteczka, wszystko — i zacząć od nowa na nowej karcie.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Ochrona jest włączona!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Połączenie nie jest zabezpieczone";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Połączenie jest zabezpieczone";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Ochrona przed śledzeniem";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Ochrona jest wyłączona w tej sesji";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Ochrona jest włączona w tej sesji";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Wzmocniona ochrona przed śledzeniem";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Elementy śledzące zablokowane od %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Elementy śledzące i skrypty do blokowania";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Dodaj odnośnik do automatycznego uzupełniania";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Wklej i przejdź";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "Usuń";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Usunięto historię przeglądania";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Znajdź na stronie: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Wklej";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Wprowadź adres lub szukaj";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Szukaj „%@”";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Zablokowane elementy śledzące:";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Pokaż, jak to zrobić";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Następnym razem możesz szybciej zacząć przeglądanie prywatne za pomocą widżetu %@ na ekranie głównym.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Usunięto historię przeglądania! 🎉";
+

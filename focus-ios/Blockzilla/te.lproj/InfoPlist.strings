@@ -1,0 +1,12 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "ఇది మీకు ఫోటోలను తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "మీరు సందర్శించే వెబ్ సైట్లు మీ స్థానాన్ని అభ్యర్థించవచ్చు.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "ఇది మీకు వీడియోలు తీసుకొని అప్లోడ్ చేయడానికి అనుమతిస్తుంది.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "ఇది ఫొటోలని భద్రపరచి ఎక్కించనిస్తుంది.";
+

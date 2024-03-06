@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Dalše informacije";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ so wot Mozilla zhotowja. Naša misija je hladanje stroweho, wotewrjeneho interneta.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Pytajće a přehladujće direktnje w nałoženju";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blokujće přesćěhowaki (abo aktualizujće nastajenja, zo byšće přesćěhowaki dowolił)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Zhašejće placki a pytansku přehladowansku historiju";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Wužiwajće jón jako priwatny wobhladowak:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Pomoc";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Zdźělenka priwatnosće";
+
+/* Label for row in About screen */
+"About.rowRights" = "Waše prawa";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blokujće přesćěhowaki za polěpšenu priwatnosć";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blokujće webpisma, zo byšće wulkosć strony redukował";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Wužiwajće jón jako rozšěrjenje za Safari:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Wo %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ da wam kontrolu.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "W %@ wočinić";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "W porjadku";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Při přidawanju pasa listowce je zmylk wustupił. Prošu spytajće pozdźišo hišće raz.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Pas njeda so přidać";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Awtentifikujće, zo by k %@ wróćił";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "SWójsku adresu přidać";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Přepruwujće zapodatu adresu.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Přikład: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Adresa, kotraž ma so přidać";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Adresu zasadźić abo zapodać";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Swójsku adresu přidać";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Nowa swójska adresa přidata.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Zmóžnić, zo by %@ wjace hač 450 woblubowanych adresow w adresowym polu wudospołnił.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Znjemóžnjeny";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL hižo eksistuje";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Njejsu swójske adresy, kotrež dadźa so pokazać";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Zmóžnjeny";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Sydła rjadować";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Moje sydła";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Zmóžnić, zo %@ waše najlubše URL awtomatisce wudospołnja.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Najhusćišo wopytane sydła";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Wotewrěć";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Nowe posedźenje";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Wróćo";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL kopěrowany do mjezyskłada";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopěrować";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Doprědka";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Znowa začitać";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Nastajenja";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Zastajić";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Adresowe polo wubrać";
+
+/* Label on button to complete edits */
+"Done" = "Dokónčeny";
+
+/* Label on button to allow edits */
+"Edit" = "Wobdźěłać";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Hišće raz spytać";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Přetorhnyć";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ chce druhe nałoženje wočinić";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Wočinić";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ chce %2$@ wočinić";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Přetorhnyć";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-mejl";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "„Na stronje pytać“ dokónčeny";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Přichodny na stronje pytać";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Předchadny na stronje pytać";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "W porjadku, sym zrozumił!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Přehladujće bjez toho, zo njeby nichtó wobkedźbował.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Začinić";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Prěnje kroki";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Spěšny. Priwatny. Žane wotwjedźenja.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Přehladowanje započeć";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Přeskočić";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Zhašamy wašu historiju, hdyž nałoženje za přidatnu priwatnosć začinjeće.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Čińće %@ k swojemu standardnemu wobhladowakej, zo byšće swoje daty z kóždym wotkazom, kotryž wočinjeće, škitał.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ kaž druhe wobhladowaki njeje";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Jako standardny wobhladowak nastajić";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Zhašejće swoju přehladowansku historiju, hesła, placki, a zadźěwajće z jednym kliknjenjom tomu, zo wam njewitane wabjenje slěduje!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Waša historija wam njeslěduje";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ je wobhladowak z funkcijemi priwatnosće ze škitom před slědowanjom a blokowanjom wobsaha.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Wjace hač jenož njespóznaty";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Konfigurujće nastajenja, zo byšće móhł rozsudźić, kelko abo kak mało přeradźeće.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Škit po swójskim dobrozdaću";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Zběhńće swój priwatny modus na přichodnu runinu.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Witajće k Firefox %@!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Podótkńće so Safari a wubjerće potom wobsahowe blokowaki";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ zmóžnić";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Wubjerće Safari a potom „Rozšěrjenja“";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ zmóžnjeny njeje.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Nałoženje nastajenjow wočinić";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Gratowe nastajenja wočinić";
+
+/* Save button label */
+"Save" = "Składować";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "To njeje fungowało. Spytajće pytanski wuraz přez tutón wuměnić: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Ně";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Haj";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Zo byšće namjety dóstał, dyrbi %@ wobsah, kotryž sće do adresoweho pola zapodał, na pytawu słać.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Pytanske namjety pokazać?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Awtomatiske wudospołnjenje URL";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blokowanje drugich přesćěhowakow móže někotrym widejam a webstronam haćić.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Přetorhnyć";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Wobsahowe přesćěhowaki blokować";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Ćmowy";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ so na wašu pytawu pósćele, štož w adresowym polu zapodaće.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla so prócuje, jenož informacije hromadźić, kotrež trjebamy, zo bychmy %@ za kóždeho poskićili a polěpšili.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ móže hdys a hdys studije instalować a přewjesć.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Powšitkowne";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Dalše informacije.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Licency";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Swětły";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ pohódnoćić";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Nastajenja";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Dalšu pytawu přidać";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Pytawu přidać";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "INSTALOWANE PYTAWY";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Pokazowanske mjeno";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Nowa pytawa je so přidała.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Standardne pytawy wobnowić";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Mjeno pytawy";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Pytanski wuraz, kotryž ma so wužiwać";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Přikład: searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Pytanski wuraz zasadźić abo zapodać. Jeli trjeba, wuměńće pytanski wuraz přez: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Pytawa";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Pytanske namjety wobstarać";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "PYTANJE";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIWATNOSĆ";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Jako standardny wobhladowak nastajić";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Nastajće wotkazy z websydłow, mejlkow a powěsćow, zo bychu so awtomatisce we %@ wočinili.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Systemowa drasta";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Drasta";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Wuběrak drastow";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Wabjenje";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analytika";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Webpisma blokować";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Wobsah";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Socialne syće";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Face ID za wotewěranje nałoženja wužiwać";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID móže %@ wotewrěć, jeli URL je hižo wočinjeny w nałoženju";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Pokiwy na startowej wobrazowce pokazać";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Wužiwanske daty pósłać";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Studije";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Touch ID za wotewěranje nałoženja wužiwać";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID móže %@ wotewrěć, jeli URL je hižo wočinjeny w nałoženju";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Znjemóžnjeny";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Zmóžnjeny";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Swětły/ćmowy systemowy modus wužiwać";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
+/* Text for a share button */
+"share" = "Dźělić";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Zwjazanjam přidać";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Zwjazanjam přidate";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Adresu kopěrować";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Na stronje pytać";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Ze zwjazanjow wotstronić";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Zwjazanje je so wotstroniło";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Desktopowe sydło požadać";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobilne sydło požadać";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "W Chrome wočinić";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "W standardnym wobhladowaku wočinić";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "We Firefox wočinić";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Wotkaz wočinić";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Stronu dźělić z…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Ze zwjazanjow wotstronić";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Zwjazanje přemjenować";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Mjeno zwjazanja";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Składować";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Přetorhnyć";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Hotowo";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Tłóčće dołho na startowu wobrazowku, doniž symbole njezapočinaja so třasć.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Pytanje za %@. Wubjerće potom asistent.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Podótkńće so plusoweho symbola.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Asistent %@ přidać";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Přidać";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri přidać";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Znowa natočić abo tastowu skrótšenku zhašeć";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Zhašeć";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Zhašeć a wočinić";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Woblubowane sydło wočinić";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Woblubowane sydło wočinić";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL, kotryž ma so wočinić";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "%@ zawrěć, hdyž sydło je wočinjene:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Face ID zmóžnić";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID zmóžnić";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Akcije strony > Desktopowe sydło požadać";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Chceće sej dospołnu desktopowu wersiju sydła wobhladać?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ přesćěhowakow dotal zablokowane";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Wy přehladujeće. %@ blokuje.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Wubjerće „Zwjazanjam přidać“ w meniju %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Wutworće zwjazanja ze sydłami, kotrež najhusćišo wopytujeće:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Zwjazanje Siri přidać";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "„Siri, zhašej moje posedźenje %@.“";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Zwjazanje Siri přidać";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "„Siri, wočiń moje najlubše sydło.“";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Spytajće slědowanski škit znjemóžnjeć";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Sydło so dźiwnje zadźeržuje abo wobsah faluje?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "W %@ pytać";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Wočińće nastajenja, zo byšće wěste nastajenja priwatnosće a wěstoty rjadował.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Tute standardne nastajenja mócny škit poskićeja. Ale je lochko, nastajenja wašim specifiskim potrjebam přměrić.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Započńće swoje priwatne přehladowanske posedźenje a my budźemy přesćěhowaki a druhe škódne elementy při tutej składnosći blokować.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ je sydłu zadźěwał was wuskušować. Podótkńće so tarče, zo byšće informacije wo tym dóstał, štož smy zablokowali.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Lepjene! Smy sydło při tym haćili was wuskušować. Podótkńće so kóždy čas tarča, zo byšće widźał, štož my blokujemy.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Podótkńće so kóždy čas papjernika, zo byšće wšě slědy swojeho posedźenja wotstronił.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Podótkńće so tu, zo byšće wšitko do papjernika přesunył – historiju, placki, wšitko – a startujće znowa na nowym rajtarku.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Sće škitany!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Zwisk wěsty njeje";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Zwisk je wěsty";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Slědowanski škit";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Škit je znjemóžnjeny za tute posedźenje";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Škit je zmóžnjeny za tute posedźenje";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Polěpšeny slědowanski škit";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Přesćěhowaki su zablokowane wot %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Přesćěhowaki a skripty, kotrež so maja blokować";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Wotkaz za awtowudospołnjenje přidać";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Zasadźić a započeć";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ZHAŠEĆ";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Přehladowanska historija je so zhašała";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Na stronje pytać: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Zasadźić";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Pytać abo adresu zapodać";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Za %@ pytać";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Přesćěhowaki zablokowane";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Pokazajće mi kak";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Přewostajamy wašemu priwatnemu modusej, ale startujće přichodny raz spěšnišo z asistentom %@ na swojej startowej wobrazowce.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Přehladowanska historija je so zhašała! 🎉";
+

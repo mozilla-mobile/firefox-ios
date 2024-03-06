@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Dysgu rhagor";
+
+/* Label on About screen */
+"About.missionLabel" = "Mae %@ yn cael ei gynhyrchu gan Mozilla. Ein amcan yw hyrwyddo Rhyngrwyd iach ac agored.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Chwilio a phori o fewn yr ap";
+
+/* Label on About screen */
+"About.privateBullet2" = "Rhwystro tracwyr (neu ddiweddaru'r gosodiadau i ganiatáu tracwyr)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Dileu er mwyn dileu cwcis yn ogystal â hanes chwilio a phori";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Ei ddefnyddio fel porwr preifat:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Cymorth";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Hysbysiad Preifatrwydd";
+
+/* Label for row in About screen */
+"About.rowRights" = "Eich Hawliau";
+
+/* Label on About screen */
+"About.safariBullet1" = "Rhwystro tracwyr ar gyfer gwell preifatrwydd";
+
+/* Label on About screen */
+"About.safariBullet2" = "Rhwystro ffontiau Gwe i leihau maint tudalen";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Ei ddefnyddio fel estyniad Safari:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Ynghylch %@";
+
+/* Label on About screen */
+"About.topLabel" = "Chi sy'n rheoli gyda %@.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Agor yn %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Iawn";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Digwyddodd gwall wrth ychwanegu'r tocyn i Wallet. Ceisiwch eto'n hwyrach.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Wedi methu Ychwanegu Pas";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Dilysu i ddychwelyd i %@";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Ychwanegu URL Cyfaddas";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Gwiriwch yr URL rydych wedi ei roi.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Esiampl: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URLau i'w hychwanegu";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Gludo neu rhoi URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Ychwanegu URL cyfaddas";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "URL Cyfaddas Newydd wedi ei Ychwanegu.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Galluogi i %@ awtogwblhau dros 450 URL poblogaidd yn y bar cyfeiriad.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Analluogwyd";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL eisoes yn bod";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Dim URLau Cyfaddas i'w harddangos";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Galluogwyd";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Rheoli gwefannau";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Fy Ngwefannau";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Galluogi i gael %@ awtogwblhau eich hoff URLau.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Hoff Wefannau";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Datgloi";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Sesiwn Newydd";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Nôl";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL Wedi ei Gopïo i'r Clipfwrdd";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copïo";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Ymlaen";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Ail-lwytho";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Gosodiadau";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Atal";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Dewiswch y Bar Lleoliad";
+
+/* Label on button to complete edits */
+"Done" = "Gorffen";
+
+/* Label on button to allow edits */
+"Edit" = "Golygu";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Ceisiwch eto";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Diddymu";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "Mae %@ eisiau agor Ap arall";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Agor";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "Mae %1$@ eisiau agor %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Diddymu";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-bost";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Canfod ar y dudalen gorffen";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Canfod nesaf ar y dudalen";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Canfod blaenorol ar y dudalen";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Iawn, Wedi deall!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Pori fel petai neb yn eich gwylio.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Cau";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Cychwyn Arni";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Cyflym. Preifat. Dim Tarfu.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Cychwyn pori";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Hepgor";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Rydyn ni'n dileu eich hanes pan fyddwch chi'n cau'r ap er mwyn preifatrwydd ychwanegol.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Gwnewch %@ eich porwr rhagosodedig i ddiogelu eich data gyda phob dolen rydych yn eu hagor.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "Nid yw %@ yn debyg i borwyr eraill";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Gosod fel y Porwr Ragosodedig";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Dilewch eich hanes pori, cyfrineiriau, cwcis, ac atal hysbysebion diangen rhag eich dilyn chi drwy un clic syml!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Nid yw eich hanes yn eich dilyn";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "Mae %@ yn borwr preifatrwydd pwrpasol gyda diogelwch tracio a rhwystro cynnwys.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Mwy nag incognito yn unig";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Ffurfweddwch osodiadau fel y gallwch chi benderfynu gymaint neu gynlleied rydych chi'n ei rannu.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Diogelwch yn ôl eich dymuniad eich hun";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Ewch â'ch pori preifat i'r lefel nesaf.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Croeso i Firefox %@!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Tapiwch Safari, yna dewis Content Blockers";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Galluogi %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Dewiswch Safari, yna dewiswch Estyniadau";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "Nid yw %@ wedi ei alluogi.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Agor Gosodiadau'r Ap";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Agor gosodiadau dyfais";
+
+/* Save button label */
+"Save" = "Cadw";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Heb weithio. Ceisiwch amnewid y gair chwilio gyda : %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Na";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Iawn";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "I gael awgrymiadau, mae %@ angen anfon yr hyn rydych chi'n ei deipio yn y bar cyfeiriad i'r peiriant chwilio.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Dangos Awgrymiadau Chwilio?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Awtogwblhau URL";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Gall rwystro tracwyr cynnwys eraill dorri rhai fideos a thudalennau Gwe.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Diddymu";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Rhwystro Tracwyr Cynnwys";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Tywyll";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "Bydd %@ yn anfon yr hyn rydych yn ei deipio yn y bar cyfeiriad i'ch peiriant chwilio.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mae Mozilla'n ceisio casglu dim ond yr hyn sydd ei angen arnom i ddarparu a gwella %@ ar gyfer pawb.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "Gall %@ osod a rhedeg astudiaethau o bryd i'w gilydd.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Cyffredinol";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Dysgu rhagor.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Trwyddedau";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Golau";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Graddio %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATION";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Gosodiadau";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Ychwanegu Peiriant Chwilio Arall";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Ychwanegu Peiriant Chwilio";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "PEIRIANNAU CHWILIO WEDI'U GOSOD";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Enw i'w ddangos";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Peiriant Chwilio Newydd Wedi'i Ychwanegu.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Adfer Peiriannau Chwilio Rhagosodedig";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Enw peiriant chwilio";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Llinyn chwilio i'w ddefnyddio";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Esampl: example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Gludwch neu gyflwyno llinyn chwilio. Os oes angen, newidiwch y termau chwilio gyda: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Peiriant Chwilio";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Derbyn Awgrymiadau Chwilio";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "CHWILIO";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PREIFATRWYDD";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Gosod fel y Porwr Ragosodedig";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Gosod dolenni o wefannau, e-byst, a negeseuon i agor yn awtomatig yn %@.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Thema System";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Thema";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Dewisydd Thema";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Hysbysebu";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Dadansoddeg";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Rhwystro ffontiau Gwe";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Cynnwys";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Cymdeithasol";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Defnyddio Face ID i ddatgloi ap";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Gall Face ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Dangos cynghorion sgrin cartref";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Anfon data defnydd";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Astudiaethau";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Defnyddio Touch ID i ddatgloi ap";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Gall Touch ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Diffodd";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Ymlaen";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Defnyddio Modd Golau/Tywyll y System";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
+/* Text for a share button */
+"share" = "Rhannu";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Ychwanegu at y Llwybrau Byr";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Ychwanegwyd at y Llwybrau Byr";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Copïo Cyfeiriad";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Canfod ar y Dudalen";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Tynnu o'r Llwybrau Byr";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Llwybr byr wedi'i dynnu";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Gofyn am Wefan Lawn";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Gofyn am Wefan Symudol";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Agor yn Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Agor yn y Porwr Rhagosodedig";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Agor yn Firefox";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Agor Dolen";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Rhannu Tudalen Gyda…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Tynnu o'r Llwybrau Byr";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Ailenwch Lwybr Byr";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Enw llwybr byr";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Cadw";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Diddymu";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Gorffen";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Pwyswch yn hir ar y sgrin Cartref nes bod yr eiconau'n dechrau crynu.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Chwiliwch am %@. Yna dewiswch declyn.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Tapiwch ar yr eicon plws.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Ychwanegwch Declyn %@";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Ychwanegu";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Ychwanegu at Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Ail Recordio neu Ddileu Llwybr Byr";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Dileu";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Dileu ac Agor";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Agor Hoff Wefan";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Agor Hoff Wefan";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL i'w agor";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Clowch %@ pan fydd gwefan ar agor:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Trowch Face ID ymlaen";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Trowch Touch ID ymlaen";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Gweithrediad Tudalen > Gofyn am Wefan Bwrdd Gwaith";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Eisiau gweld fersiwn bwrdd gwaith llawn gwefan?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ o dracwyr wedi'u rhwystro hyd yma";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Chi'n pori. %@ yn rhwystro.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Dewiswch Ychwanegu at y Llwybrau Byr o ddewislen %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Crëwch lwybrau byr i'r gwefannau rydych chi'n ymweld â nhw amlaf:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Ychwanegwch lwybr byr Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, erase my %@ session.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Ychwanegwch lwybr byr Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, open my favorite site.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Ceisiwch ddiffodd Diogelwch Rhag Tracio";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Oes yna gynnwys ar goll neu a yw'r wefan yn ymddwyn yn rhyfedd?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Chwilio yn %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ewch i'r Gosodiadau i reoli dewisiadau preifatrwydd a diogelwch penodol.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Mae’r gosodiadau rhagosodedig hyn yn cynnig diogelwch cryf. Ond mae’n hawdd newid y gosodiadau i ddiwallu’ch anghenion penodol.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Dechreuwch eich sesiwn pori breifat, a byddwn yn rhwystro tracwyr a phethau drwg eraill wrth i chi fynd yn eich blaen.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "Stopiodd %@ y wefan hon rhag ysbïo arnoch chi. Tapiwch y darian i gael gwybodaeth am yr hyn rydyn ni wedi'i rwystro.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Wedi'u dal! Rydym wedi rhwystro'r wefan hon rhag ysbïo arnoch chi. Tapiwch y darian i gael gwybodaeth am yr hyn rydyn ni'n eu rhwystro.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Tapiwch y sbwriel unrhyw bryd i ddileu holl olion eich sesiwn gyfredol.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Tapiwch yma i roi’r cyfan yn y bin sbwriel — hanes, cwcis, popeth — a dechrau o'r newydd ar dab glân.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Rydych wedi’ch diogelu!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Nid yw'r cysylltiad yn ddiogel";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Mae'r cysylltiad yn ddiogel";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Diogelwch rhag Tracio";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Mae diogelu I FFWRDD ar gyfer y sesiwn hon";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Mae diogelu YMLAEN ar gyfer y sesiwn hon";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Diogelwch Uwch Rhag Tracio";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Tracwyr wedi'u rhwystro ers %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Tracwyra sgriptiau i'w rhwystro";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Ychwanegu dolen i awtogwblhau";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Gludo a Mynd";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "DILEU";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Hanes pori wedi’i glirio";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Canfod ar dudalen: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Gludo";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Chwilio neu gyfeiriad";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Chwilio am %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Rhwystro tracwyr";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Dangos i mi sut";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Byddwn yn eich gadael chi i'ch pori preifat, ond cewch gychwyn yn gyflymach y tro nesaf gyda'r teclyn %@ ar eich sgrin Cartref.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Hanes pori wedi'i glirio! 🎉";
+

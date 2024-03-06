@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ブラウジングセッション履歴やパスワード、Cookie を、いつでもワンタップですべて消去できます。";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "あなたの履歴は歴史です";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "続ける";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "何か違ったものを探していますか？ 別の検索エンジンを選んでみましょう。";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "好きな方法で検索";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "スキップ";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "プライベートブラウジングを次のレベルへと進めましょう。サイトを越えてあなたを追跡したり、ページの読み込みを遅くしたりする可能性のある広告その他のコンテンツを自動的にブロック。";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "プライバシーを強化";
+

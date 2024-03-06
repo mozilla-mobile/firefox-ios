@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "ඔබගේ සමස්ත පිරික්සුම් වාර ඉතිහාසය, මුරපද, දත්තකඩ ඕනෑම විටෙක තනි තට්ටු කිරීමකින් මකන්න.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "ඔබගේ අතීතය ඉතිහාසයයි";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "ඊළඟ";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "වෙනස් දෙයක් සොයනවාද? වෙනත් සෙවුම් යන්ත්‍රයක් තෝරන්න.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "ඔබගේ සෙවීම, ඔබගේ මාවත";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "මඟහරින්න";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "පෞද්ගලික පිරික්සීම ඊළඟ මට්ටමට ගෙන යන්න. අඩවි හරහා ඔබව ලුහුබැඳීමට හැකි දැන්වීම් හා වෙනත් අන්තර්ගත අවහිර කර පිටු පූරණ කාලය අවම කර ගන්න.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "ඔබගේ පෞද්ගලිකත්‍වය බලගන්වන්න";
+

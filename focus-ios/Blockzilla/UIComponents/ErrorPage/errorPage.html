@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+ - License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ - You can obtain one at http://mozilla.org/MPL/2.0/.  -->
+
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <style>
+      body, html {
+        background: #FFFFFF;
+        color: #000000;
+        font: -apple-system-body;
+        font-size: 16px;
+        font-weight: 1.5;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      a {
+        color: #0A9AF4;
+      }
+
+      button {
+        width: 80%;
+        max-width: 300px;
+        border: none;
+        height: 48px;
+        background: #0a84ff;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        border-radius: 12px;
+        margin-top: 40px;
+      }
+
+      .message {
+        width: 80%;
+        max-width: 300px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="message long">%messageLong%</div>
+    <button onclick="window.location.reload()">%button%</div>
+  </body>
+</html>

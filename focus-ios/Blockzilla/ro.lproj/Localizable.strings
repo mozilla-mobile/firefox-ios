@@ -1,0 +1,369 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Află mai multe";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ este produs de Mozilla. Misiunea noastră este să promovăm un internet sănătos și deschis.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Caută și navighează direct în aplicație";
+
+/* Label on About screen */
+"About.privateBullet2" = "Blochează elementele de urmărire (sau actualizează setările pentru a permite urmăritorii)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Șterge pentru a elimina cookie-urile, precum și istoricul de căutare și navigare";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Folosește-l ca browser privat:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Ajutor";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Politică de confidențialitate";
+
+/* Label for row in About screen */
+"About.rowRights" = "Drepturile tale";
+
+/* Label on About screen */
+"About.safariBullet1" = "Blochează elementele de urmărire pentru confidențialitate crescută";
+
+/* Label on About screen */
+"About.safariBullet2" = "Blochează fonturile web pentru a reduce mărimea paginii";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Folosește-l ca extensie Safari:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Despre %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ îți oferă controlul.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Deschide în %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Autentifică-te pentru a reveni la %@";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Adaugă URL personalizat";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Reverifică URL-ul introdus.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Exemplu: exemplu.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL de adăugat";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Lipește sau introdu URL-ul";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Adaugă URL personalizat";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Nou URL personalizat adăugat.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Activează pentru ca %@ să completeze automat peste 450 de URL-uri populare în bara de adresă.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Dezactivată";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL-ul există deja";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Nu sunt URL-uri personalizate de afișat";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Activată";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Gestionează site-urile";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Site-urile mele";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Permite ca %@ să completeze automat URL-urile tale favorite.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Site-uri de top";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Sesiune nouă";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Înapoi";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL copiat în clipboard";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copiază";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Înainte";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Reîncarcă";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Setări";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Oprește";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Selectează bara adresei";
+
+/* Label on button to complete edits */
+"Done" = "Terminat";
+
+/* Label on button to allow edits */
+"Edit" = "Editează";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Încearcă din nou";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Renunță";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ vrea să deschidă o altă aplicaţie";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Deschide";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Renunță";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Trimite e-mail";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Căutarea în pagină s-a terminat";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Caută rezultatul următor în pagină";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Caută rezultatul anterior în pagină";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Ok, am înțeles!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Navighează fără grija de a fi urmărit.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Închide";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Apasă pe Safari, apoi selectează Sisteme de blocare a conținutului";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Activează %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ nu este activat.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Deschide aplicația Configurări";
+
+/* Save button label */
+"Save" = "Salvează";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Nu a funcționat. Încearcă să înlocuiești termenul de căutare cu: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nu";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Da";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Pentru a obține sugestii, %@ trebuie să trimită ce tastezi în bara de adresă la motorul de căutare.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Afișezi sugestiile de căutare?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Completare automată de URL-uri";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Blocarea altor elementele de urmărire de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ va trimite ce tastezi în bara de adresă la motorul de căutare.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți %@ pentru toți.";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Află mai multe.";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Evaluează %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRARE CU SAFARI";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Setări";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Adaugă un motor de căutare";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "MOTOARE DE CĂUTARE INSTALATE";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nume de afișat";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Motor nou de căutare adăugat.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Restaurează motoarele de căutare implicite";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Numele motorului de căutare";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Text de căutare spre utilizare";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Motor de căutare";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Obține sugestii de căutare";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "CAUTĂ";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "CONFIDENȚIALITATE";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Blochează fonturile web";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Folosește Face ID pentru a debloca aplicația";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Afișează ponturi în ecranul principal";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Trimite date privind utilizarea";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Folosește Touch ID pentru a debloca aplicația";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SCURTĂTURI SIRI";
+
+/* Text for a share button */
+"share" = "Împărtășește";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Copiază adresa";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Caută în pagină";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Cere versiune de desktop";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Cere versiunea de mobil";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Deschide în Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Deschide în Firefox";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Partajează pagina cu…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Adaugă";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Adaugă la Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Reînregistrează sau șterge scurtătura";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Șterge";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Șterge și deschide";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Deschide site-ul favorit";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Deschide site-ul favorit";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Adresa de deschis";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Protecție împotriva urmăririi";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Adaugă un link pentru completare automată";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Lipește și accesează";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ȘTERGE";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Caută în pagină: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Lipește";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Caută sau introdu adresa";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Caută %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Elemente de urmărire blocate";
+

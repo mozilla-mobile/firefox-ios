@@ -1,0 +1,795 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/2-0-0
+
+legacy.ids:
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/1740
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+      - sarentz@mozilla.com
+    expires: never
+
+app:
+  opened_as_default_browser:
+    type: counter
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3425
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3465
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+
+  keyboard_type:
+    type: string
+    description: |
+      Records the name of the keyboard (custom or default) everytime
+      the keyboard appears on the screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3526
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3572
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-10"
+
+browser:
+  total_uri_count:
+    type: counter
+    description: |
+      Records count of URIs visited by the user in the current session,
+      including page reloads.
+      It does not include background page requests and URIs from embedded pages
+      but may be incremented without user interaction by website scripts
+      that programmatically redirect to a new location.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2447
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2623
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+      - sarentz@mozilla.com
+    expires: never
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+
+  pdf_viewer_used:
+    type: counter
+    description: |
+      Counts the number of times pdf view is opened in browser.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3525
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3569
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2024-07-10"
+
+mozilla_products:
+  has_firefox_installed:
+    type: boolean
+    lifetime: application
+    description: |
+       If Firefox is installed on the users's device.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2227
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2284
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+
+settings_screen:
+  set_as_default_browser_pressed:
+    type: counter
+    description: |
+      Counts the number of times setting as default
+      browser menu option is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3328
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3344
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: never
+
+  autocomplete_domain_added:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to the autocomplete list.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2094
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2283
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+
+tracking_protection:
+  toolbar_shield_clicked:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has opened
+      the tracking protection settings panel from the toolbar.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+
+  tracking_protection_changed:
+    type: event
+    description: |
+      The user has changed the setting for enhanced tracking protection.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+    extra_keys:
+      is_enabled:
+        description: The new setting for ETP, true for ON, false for OFF
+        type: boolean
+
+  has_ever_changed_etp:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+    data_sensitivity:
+      - interaction
+    lifetime: user
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+      - sarentz@mozilla.com
+    expires: never
+
+  tracker_setting_changed:
+    type: event
+    description: |
+      The user has changed the advertising tracker protection state.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+    extra_keys:
+      source_of_change:
+        description: The source of interaction, "Panel" or "Settings"
+        type: string
+      tracker_changed:
+        description: |
+          The tracker changed, "Advertising", "Analytics", "Social", "Content"
+        type: string
+      is_enabled:
+        description: The new setting for tracker, true for ON, false for OFF
+        type: boolean
+
+  has_social_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+
+  has_advertising_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+
+  has_analytics_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+
+  has_content_blocked:
+    type: boolean
+    description: |
+      The user has changed the setting for enhanced tracking protection
+      at least once.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2093
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2265
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-17"
+
+shortcuts:
+  shortcuts_on_home_number:
+    type: quantity
+    description: |
+      The number of shortcuts the user has on home screen,
+      0, 1, 2, 3 or 4 (maximum)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-20"
+    unit: shortcut(s)
+  shortcut_opened_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has opened
+      a website from a shortcut in the home screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-20"
+  shortcut_added_counter:
+    type: counter
+    description: |
+      A counter that indicates how many times a user has added
+      a website to shortcuts.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-20"
+  shortcut_removed_counter:
+    type: labeled_counter
+    description: |
+      A counter that indicates how many times a user has removed
+      a website from shortcuts.
+      It also indicates the screen it was removed from, home or browser.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2092
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2232
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-20"
+    labels:
+      - removed_from_browser_menu
+      - removed_from_home_screen
+
+preferences:
+  user_theme:
+    type: string
+    description: >
+      A string that indicates the theme.
+      Can be one of "Light", "Dark", or "Follow device".
+      Default is "Follow device".
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2496
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/2621
+      - https://github.com/mozilla-mobile/focus-ios/pull/4023
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-07-01"
+
+browser_menu:
+  browser_menu_action:
+    type: event
+    description: The user has tapped on a browser menu item.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3004
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3015
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+    extra_keys:
+      item:
+        description: |
+          A string containing the name of the item the user tapped:
+          settings, open_in_firefox, open_in_chrome, open_in_default_browser,
+          share, copy_url, desktop_view_off, desktop_view_on, find_in_page,
+          add_to_shortcuts, remove_from_shortcuts
+        type: string
+
+show_search_suggestions:
+  enabled_from_panel:
+    type: event
+    description: The "yes" option from the suggestion panel has been tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+  disabled_from_panel:
+    type: event
+    description: The "no"" option from the suggestion panel has been tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+  changed_from_settings:
+    type: event
+    description: The enabled state has been changed from the settings screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+    extra_keys:
+      is_enabled:
+        description: The new setting value, true for ON, false for OFF
+        type: boolean
+
+search_suggestions:
+  suggestion_tapped:
+    type: event
+    description: Search suggestion selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+    extra_keys:
+      engine_name:
+        description: The name of the engine used to perform the search.
+        type: string
+  search_tapped:
+    type: event
+    description: The typed text search was selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+    extra_keys:
+      engine_name:
+        description: The name of the engine used to perform the search.
+        type: string
+  autocomplete_arrow_tapped:
+    type: event
+    description: Search suggestion selected.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3003
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3031
+      - https://github.com/mozilla-mobile/focus-ios/pull/3855
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+
+url_interaction:
+  drag_started:
+    type: event
+    description: Drag interaction started.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2999
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  drop_ended:
+    type: event
+    description: Drop interaction ended.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/2999
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  paste_and_go:
+    type: event
+    description: Paste url and navigate.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3001
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3035
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+
+siri:
+  open_favorite_site:
+    type: event
+    description: Siri request open favorite site.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  erase_and_open:
+    type: event
+    description: Siri request erase session and open.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  erase_in_background:
+    type: event
+    description: Siri request erase session.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3000
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3040
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+
+browser_search:
+  with_ads:
+    type: labeled_counter
+    description: |
+      Records counts of SERP pages with adverts displayed.
+      The key format is ‘<provider-name>’.
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3330
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3367
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+  ad_clicks:
+    type: labeled_counter
+    description: |
+      Records clicks of adverts on SERP pages.
+      The key format is ‘<provider-name>’.
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3330
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3367
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+  search_count:
+    type: labeled_counter
+    description: |
+      The labels for this counter are `<search-engine-name>.<source>`.
+      If the search engine is bundled with Focus `search-engine-name` will be
+      the name of the search engine. If it's a custom search engine (defined:
+      https://github.com/mozilla-mobile/fenix/issues/1607) the value will be
+      `custom`.
+      `source` will be: `action`, `suggestion`, `widget`, `shortcut`, `topsite`
+      (depending on the source from which the search started). Also added the
+      `other` option for the source but it should never enter on this case.
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3479
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3483
+    data_sensitivity:
+      - technical
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+  in_content:
+    type: labeled_counter
+    description: |
+      Records the type of interaction a user has on SERP pages.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3478
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3492
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+
+onboarding:
+  card_view:
+    type: event
+    description: |
+      Records when an onboarding card is shown
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / default browser / widget)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  primary_button_tap:
+    type: event
+    description: |
+      Records when the primary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / default browser / widget)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  secondary_button_tap:
+    type: event
+    description: |
+      Records when the secondary button is tap during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card (welcome / default browser / widget)
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  close_tap:
+    type: event
+    description: |
+      Records when the user closes the onboarding.
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          The card presented when the onboarding was closed
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+
+default_browser_onboarding:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser onboarding is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser onboarding is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+  skip_button_tapped:
+    type: event
+    description: The user has tapped to skip onboarding.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3487
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2024-03-05"
+    extra_keys:
+      current_item:
+        description: The curent displayed item position.
+        type: quantity
+
+search:
+  default_engine:
+    type: string
+    lifetime: application
+    description: |
+      The default search engine name if the search engine is
+      pre-loaded with Focus.  If it's a custom search engine,
+      then the value will be 'custom'.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3439
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: never
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
+
+webview:
+  fail_provisional:
+    type: event
+    description: |
+      Recorded when an error occurs on early webview navigation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3968
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
+  fail:
+    type: event
+    description: |
+      Recorded when an error occurred during navigation.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/17716
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3968
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never

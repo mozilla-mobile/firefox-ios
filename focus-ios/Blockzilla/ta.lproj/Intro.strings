@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "உங்கள் ஒட்டுமொத்த உலாவல் அமர்வு வரலாறு, கடவுச்சொற்கள், நினைவிகளை எந்நேரத்திலும் ஒரே தட்டில் துடைக்கவும்.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "உங்கள் வரலாறு";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "அடுத்து";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "வித்தியாசமாகத் தேடுகிறீர்களா? வேறொரு தேடுபொறியைத் தேர்ந்தெடுக்கவும்.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "உங்களின் தேடல் உங்கள் வழி";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "தாவு";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "தனிப்பட்ட உலாவலை அடுத்த நிலைக்கு எடுத்துச் செல்லவும். தளங்கள் எங்கும் உங்களைப் பின்தொடரக்கூடிய மற்றும் பக்க ஏற்று நேரத்தைக் கூட்டும் விளம்பரம் மற்றும் மற்ற உள்ளடக்கங்களை முடக்கு.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "தனியுரிமையைத் துரிதப்படுத்துங்கள்";
+

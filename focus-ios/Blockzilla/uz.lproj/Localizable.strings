@@ -1,0 +1,102 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Batafsil ma’lumot";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ – Mozilla tomonidan tuzilgan. Vazifamiz – internetning ochiqligi va xavfsizligini ta’minlash.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Ilova orqali to‘g‘ridan to‘g‘ri internetga kirish va izlashingiz mumkin";
+
+/* Label on About screen */
+"About.privateBullet2" = "Kuzatuvchilarni bloklang (ularga ruxsat berish uchun parametrlarni yangilang)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Kirilgan saytlar tarixi va amalga oshirilgan qidiruv ma’lumotlari hamda kukilarni o‘chirish uchun tozalab tashlang";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Undan maxfiy brauzer sifatida foydalaning:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Yordam";
+
+/* Label for row in About screen */
+"About.rowRights" = "Huquqlaringiz";
+
+/* Label on About screen */
+"About.safariBullet1" = "Maxfiylikni ta’minlash uchun kuzatuvchilarni bloklang";
+
+/* Label on About screen */
+"About.safariBullet2" = "Sahifa hajmini kichiklashtirish uchun veb-shriftlarni bloklang";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Undan Safari kengaytmasi sifatida foydalaning:";
+
+/* Label on About screen */
+"About.topLabel" = "%@ boshqarish imkonini sizga beradi.";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Orqaga";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Oldinga";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Yangilash";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Sozlamalar";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "To‘xtatish";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Yana urinib ko‘rish";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Bekor qilish";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-pochta";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Kuzatishlaridan xavotir olmasdan internetda ishlay olasiz.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari ustiga bosing, so‘ngra \"Kontentni bloklash qoidasi\"ni tanlang.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ni yoqing";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ o‘chiq";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Ilova sozlamalarini oching";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Kuzatuvchilarning boshqa kontentlarini bloklasangiz, ba’zi video va veb-sahifalar ishlamay qolishi mumkin.";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Sozlamalar";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "MAXFIYLIK";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Veb-shriftlarni bloklash";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "TOZALASH";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Izlang yoki manzilni kiriting";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Izlash: %@";
+

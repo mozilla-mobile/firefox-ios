@@ -1,0 +1,64 @@
+name: Create a PR to build the app using newest rust-component version available
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false 
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ./focus-ios/focus-ios-tests/github-actions-scripts/requirements.txt
+    - name: Modify SPM file
+      run: |
+        python ./focus-ios/focus-ios-tests/github-actions-scripts/update-rust-component-version.py
+    - name: Get new rust-component tag to be used in the PR info
+      run: |
+        cd focus-ios/focus-ios-tests/github-actions-scripts/
+        chmod u+x read-rust-component-tag.sh
+        echo "version=$(./read-rust-component-tag.sh)" >> $GITHUB_ENV
+    - name: Remove temp file created to store the tag info
+      run: |
+        cd focus-ios/focus-ios-tests/github-actions-scripts/
+        [ ! -e newest_tag.txt ] || rm newest_tag.txt
+    - name: Script to check if branch exists to not commit again
+      run: |-
+        branch=$(curl -X GET -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/mozilla-mobile/focus-ios/branches?per_page=100 | jq -r '.[].name | select(contains("update-spm-new-rust-component-tag-${{ env.version }}"))')
+        echo $branch
+        if [ -z "$branch" ]; then echo "BRANCH_CREATED=false" >> $GITHUB_ENV; else echo "BRANCH_CREATED=true"  >> $GITHUB_ENV;fi
+    - name: Update rust-component release in SPM
+      if: env.BRANCH_CREATED == 'false'
+      run: |-
+        git diff
+        git diff --quiet || (git add focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved focus-ios/Blockzilla.xcodeproj/project.pbxproj)
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      if: env.BRANCH_CREATED == 'false'
+      with:
+        commit-message: Auto update SPM with latest rust-component release ${{ env.version }}
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        title: Auto Update SPM with latest rust-component version ${{ env.version }}
+        branch: update-spm-new-rust-component-tag-${{ env.version }}
+        labels: Do Not Land
+        token: ${{ secrets.GITHUB_TOKEN }}
+        reviewers: mozilla-mobile/focus-ios-eng

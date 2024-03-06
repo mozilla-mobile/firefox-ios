@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Gant se e c'hallit kemer ha pellgas luc'hskeudennoù.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Gant se e c'hallit dibrennañ an arload.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Lec'hiennoù web a weladennit a c'hall azgoulenn ho lec'hiadur.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Gant se e c'hallit kemer ha pellgas videoioù.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Gant se e c'hallit enrollañ ha pellgas skeudennoù.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Dilemel ha digeriñ";
+

@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Toto umožňuje vytvárať a odosielať fotografie.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Toto vám umožňuje odomknúť aplikáciu.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Stránky, ktoré navštevujete, môžu požiadať o prezradenie vašej polohy.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Toto umožňuje tvoriť a nahrávať videá.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Toto umožňuje ukladať a nahrávať fotografie.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "Vymazať a otvoriť";
+

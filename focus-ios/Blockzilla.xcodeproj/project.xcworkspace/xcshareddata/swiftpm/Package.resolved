@@ -1,0 +1,52 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Fuzi",
+        "repositoryURL": "https://github.com/cezheng/Fuzi",
+        "state": {
+          "branch": null,
+          "revision": "f08c8323da21e985f3772610753bcfc652c2103f",
+          "version": "3.1.3"
+        }
+      },
+      {
+        "package": "Glean",
+        "repositoryURL": "https://github.com/mozilla/glean-swift",
+        "state": {
+          "branch": null,
+          "revision": "444f4cadb7b1b99f5c2126ca135437415eb26a5e",
+          "version": "56.1.0"
+        }
+      },
+      {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift",
+        "state": {
+          "branch": null,
+          "revision": "d386bc7a055af9a1f24c70184ee988bceb642b48",
+          "version": "124.0.0"
+        }
+      },
+      {
+        "package": "Sentry",
+        "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
+        "state": {
+          "branch": null,
+          "revision": "b847a202a517a90763e8fd0656d8028aeee7b78d",
+          "version": "8.20.0"
+        }
+      },
+      {
+        "package": "SnapKit",
+        "repositoryURL": "https://github.com/SnapKit/SnapKit",
+        "state": {
+          "branch": null,
+          "revision": "e74fe2a978d1216c3602b129447c7301573cc2d8",
+          "version": "5.7.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

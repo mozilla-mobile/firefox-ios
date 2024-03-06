@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Zhašejće swoju posedźensku historiju, swoje hesła a placki kóždy čas z jednym podótkom.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Waša historija je zańdźenosć";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Dale";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Pytaće za něčim druhim? Wubjerće druhu pytawu.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Waše pytanje kaž wy jo chceće";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Přeskočić";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Zběhńće priwatne přehladowanje na přichodnu wyšu runinu. Blokujće wabjenje a hinaši wobsah, kotryž móžeće přez sydła slědować a začitanske časy stronow podlěšić.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Zesylńće swoju priwatnosć";
+

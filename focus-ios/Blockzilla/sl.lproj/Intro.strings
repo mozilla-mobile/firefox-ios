@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Kadarkoli izbrišite celotno zgodovino brskanja, gesla in piškotke z enim dotikom.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Vaša zgodovina je zgodovina";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Naprej";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Iščete nekaj drugačnega? Izberite drug privzeti iskalnik.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Vaše iskanje, na vaš način";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Preskoči";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Zasebno brskanje na višjem nivoju. Zavračajte oglase in drugo vsebino, ki vam lahko sledi prek strani, in pohitrite svoje brskanje.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Okrepite svojo zasebnost";
+

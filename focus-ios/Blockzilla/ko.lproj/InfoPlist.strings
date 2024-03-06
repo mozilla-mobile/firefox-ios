@@ -1,0 +1,18 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "사진을 촬영하여 업로드 할 수 있습니다.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "앱의 잠금을 해제 할 수 있습니다.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "현재 웹 사이트가 여러분의 위치 정보를 요구하고 있습니다.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "동영상을 촬영하여 업로드 할 수 있습니다.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "사진을 저장하고 업로드 할 수 있게 합니다.";
+
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "지우고 열기";
+

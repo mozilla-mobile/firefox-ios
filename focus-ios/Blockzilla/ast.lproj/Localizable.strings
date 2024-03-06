@@ -1,0 +1,336 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Deprendi más";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ produzlu Mozilla. La nuesa misión ye fomentar un internet sano y abierto.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Gueta y restola na aplicación";
+
+/* Label on About screen */
+"About.privateBullet2" = "Bloquia los rastrexadores (o anueva los axustes pa permítilos)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Balera les cookies amás del to historial de restolar y gueta";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Úsalu como restolador priváu:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Ayuda";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Avisu de privacidá";
+
+/* Label for row in About screen */
+"About.rowRights" = "Los tos drechos";
+
+/* Label on About screen */
+"About.safariBullet1" = "Bloquia rastrexadores pa una privacidá ameyorada";
+
+/* Label on About screen */
+"About.safariBullet2" = "Bloquia les fontes web p'amenorgar el tamañu de la páxina";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Úsalu como estensión de Safari:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "Tocante a %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ date'l control.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Abrir en %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "D'acuerdu";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Amestar URL personalizada";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Volvi comprobar la URL qu'introduxesti.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Exemplu: exemplu.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL p'amestar";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Apega o introduz la URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Amestar URL personalizada";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Amestóse una URL nueva personalizada.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Desactivóse";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "La URL yá esiste";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Nun hai URLs personalizaes p'amosar";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Activóse";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Sesión nueva";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Atrás";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Copiar";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Avanzar";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Recargar";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Axustes";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Atrás";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Esbillar barra d'allugamientos";
+
+/* Label on button to complete edits */
+"Done" = "Fecho";
+
+/* Label on button to allow edits */
+"Edit" = "Editar";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Tentar de nueves";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Encaboxar";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ quier abrir otra aplicación";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Abrir";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ quier abrir %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Encaboxar";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Corréu";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "¡Val, entendílo!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Restola como si naide nun te viere.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Zarrar";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Comenzar a restolar";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "¡Afáyate en Firefox %@!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Calca en Safari, dempués esbilla Bloquiadores de conteníu";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Activar %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ nun s'activó.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Abrir aplicación d'axustes";
+
+/* Save button label */
+"Save" = "Guardar";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Non";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Sí";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Autocompletáu d'URLs";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Bloquiar el conteníu de los rastrexadores podría romper delles páxines web y videos.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Encaboxar";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Escuridá";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla esfuérciase en recoyer namái lo que precisa pa fornir y ameyorar %@ pa tol mundu.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Xeneral";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Deprendi más.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Claridá";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "INTEGRACIÖN CON SAFARI";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Axustes";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Amestar otru motor de gueta";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Amestar motor de gueta";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "MOTORES DE GUETA INSTALAOS";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Nome p'amosar";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Amestóse'l motor de gueta nuevu.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Reafitar motores de gueta";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Nome del motor de gueta";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Cadena de gueta pa usar";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Apega o introduz la cadena de gueta. Si ye preciso, troca'l términu de gueta con: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Motor de gueta";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "GUETA";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVACIDÁ";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Estilu del sistema";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Estilu";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Selector d'estilos";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Publicidá";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Bloquiar fontes web";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Conteníu";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Redes sociales";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Unviar datos d'usu";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Estudios";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "ATAYOS DE SIRI";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Atopar na páxina";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Pidir el sitiu pa ordenadores";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Pidir el sitiu pa móviles";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Abrir en Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Abrir nel restolador predetermináu";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Abrir en Firefox";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Guardar";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Encaboxar";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Amestar";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Bloquiáronse %@ rastrexadores hasta'l momentu";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Tu restoles, %@ bloquia.";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "La conexón nun ye segura";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "La conexón ye segura";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Proteición antirrastrexu";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Les proteiciones tán desactivaes nesta sesión";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Les proteiciones tán activaes nesta sesión";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Proteición antirrastrexu ameyorada";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Apegar y dir";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "BALERAR";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Gueta o introduz una direición";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Guetar %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Rastrexadores bloquiaos";
+

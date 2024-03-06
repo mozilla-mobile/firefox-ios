@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση %@ στην αρχική οθόνη. Αφού προσθέσετε το widget, πατήστε παρατεταμένα για επεξεργασία και επιλογή διαφορετικής συντόμευσης.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Ξεκινήστε μια ιδιωτική αναζήτηση στο %@ με την προεπιλεγμένη μηχανή αναζήτησής σας.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Γρήγορες ενέργειες";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Αναζήτηση στο %@";
+

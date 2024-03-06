@@ -1,0 +1,639 @@
+/* Button on About screen */
+"About.learnMoreButton" = "מידע נוסף";
+
+/* Label on About screen */
+"About.missionLabel" = "u200f%@ פותח על־ידי Mozilla. המשימה שלנו היא לטפח רשת אינטרנט פתוחה ובריאה.";
+
+/* Label on About screen */
+"About.privateBullet1" = "חיפוש וגלישה ישירות מהיישום";
+
+/* Label on About screen */
+"About.privateBullet2" = "חסימת רכיבי מעקב (או עדכון הגדרות לצורך אפשור רכיבי מעקב)";
+
+/* Label on About screen */
+"About.privateBullet3" = "מחיקת עוגיות כמו גם חיפוש והיסטורית גלישה";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "שימוש לגלישה פרטית:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "עזרה";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "הצהרת פרטיות";
+
+/* Label for row in About screen */
+"About.rowRights" = "הזכויות שלך";
+
+/* Label on About screen */
+"About.safariBullet1" = "חסימת רכיבי מעקב, לפרטיות מוגברת";
+
+/* Label on About screen */
+"About.safariBullet2" = "חסימת גופני רשת כדי לצמצם את משקל הדף";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "שימוש כהרחבה עבור Safari:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "על אודות %@";
+
+/* Label on About screen */
+"About.topLabel" = "u200f%@ שם אותך בשליטה.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "פתיחה ב־%@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "אישור";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "אירעה תקלה בעת הוספת הססמה לארנק. נא לנסות שוב מאוחר יותר.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "הוספת הססמה נכשלה";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "עליך לעבור אימות כדי לחזור אל %@";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "הוספת כתובת מותאמת אישית";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "נא לבדוק שוב את הכתובת שהקלדת.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "דוגמה: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "כתובת להוספה";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "נא להדביק או להקליד כתובת";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ הוספת כתובת מותאמת אישית";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "נוספה כתובת מותאמת אישית חדשה.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "יש להפעיל כדי ש־%@ ישלים אוטומטית למעלה מ־450 כתובות נפוצות בשורת הכתובת.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "מושבת";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "הכתובת כבר קיימת";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "אין כתובת בהתאמה אישית להצגה";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "פעיל";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "ניהול אתרים";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "האתרים שלי";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "יש להפעיל כדי ש־%@ ישלים אוטומטית את כתובות האתרים המועדפות עליך.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "אתרים מובילים";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "שחרור נעילה";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "הפעלה חדשה";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "אחורה";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "הכתובת הועתקה ללוח העריכה";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "העתקה";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "קדימה";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "טעינה מחדש";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "הגדרות";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "עצירה";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "בחירת סרגל מיקום";
+
+/* Label on button to complete edits */
+"Done" = "סיום";
+
+/* Label on button to allow edits */
+"Edit" = "עריכה";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "לנסות שוב";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "ביטול";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ רוצה לפתוח יישומון אחר";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "פתיחה";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ רוצה לפתוח את %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ביטול";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "דוא״ל";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "החיפוש בדף הסתיים";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "חיפוש הבא בדף";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "חיפוש הקודם בדף";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "בסדר, הבנתי!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "גלישה כאילו אף־אחד אינו צופה בך.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "סגירה";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "תחילת עבודה";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "מהיר. פרטי. ללא הסחות דעת.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "התחלת גלישה";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "דילוג";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "אנו מנקים את ההיסטוריה שלך כאשר היישומון נסגר, לפרטיות מוגברת.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "ניתן להפוך את %@ לדפדפן ברירת המחדל שלך כדי להגן על הנתונים שלך עם כל קישור שנפתח.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "‏%@ אינו דומה לדפדפנים אחרים";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "הגדרה כדפדפן ברירת המחדל";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "למחוק את היסטוריית הגלישה, הססמאות והעוגיות שלך ולמנוע מפרסומות לא רצויות לעקוב אחריך בלחיצה אחת!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "ההיסטוריה שלך לא עוקבת אחריך";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "‏%@ הוא דפדפן פרטיות ייעודי הכולל הגנת מעקב וחסימת תוכן.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "יותר מסתם גלישה בסתר";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "הגדרות אלו נועדו לאפשר לך להחליט כמה לשתף אם בכלל.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "הגנה לפי שיקולך";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "עליית מדרגה בגלישה פרטית.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "ברוכים הבאים אל Firefox %@!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "יש להקיש על Safari ולבחור בחוסמי תוכן";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "הפעלת %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "יש לבחור ב־Safari ולאחר מכן בהרחבות";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "u200f%@ לא מופעל.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "פתחו את היישום הגדרות";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "יש לפתוח את הגדרות המכשיר";
+
+/* Save button label */
+"Save" = "שמירה";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "לא";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "כן";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "כדי לקבל הצעות, על %@ לשלוח מה שמוקלד בשורת הכתובת אל מנוע החיפוש.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "להציג הצעות חיפוש?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "השלמת כתובת אוטומטית";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "חסימת רכיבי מעקב אחרים עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "ביטול";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "חסימת רכיבי מעקב של תוכן";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "כהה";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "‏%@ ישלח מה שיוקלד בשורת הכתובת אל מנוע החיפוש שלך.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla חותרת לאסוף רק מה שנדרש לצורך שיפור %@ לטובת הכלל.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "‏%@ עשוי להתקין ולהריץ מחקרים מדי פעם בפעם.";
+
+/* Title for section in settings menu */
+"Settings.general" = "כללי";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "מידע נוסף.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "רישיונות";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "בהיר";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "דירוג %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "שילוב עם Safari";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "הגדרות";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "הוספת מנוע חיפוש נוסף";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "הוספת מנוע חיפוש";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "מנועי חיפוש מותקנים";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "שם להצגה";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "נוסף מנוע חיפוש חדש.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "שחזור מנועי חיפוש ברירת מחדל";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "שם מנוע החיפוש";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "מחרוזת חיפוש לשימוש";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "דוגמה: searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "יש להדביק או להקליד מחרוזת לחיפוש. במידת הצורך, יש להחליף את הביטוי לחיפוש ב־: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "מנוע חיפוש";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "קבלת הצעות חיפוש";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "חיפוש";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "פרטיות";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "הגדרה כדפדפן ברירת המחדל";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "הגדרת קישורים מאתרים, מהודעות דוא״ל ומהודעות לפתיחה אוטומטית ב־%@.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "ערכת הנושא של המערכת";
+
+/* Theme section in settings menu */
+"Settings.theme" = "ערכת נושא";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "בחירת ערכת נושא";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "פרסום";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "ניתוח";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "חסימת גופני רשת";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "תוכן";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "רשתות חברתיות";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "שימוש ב־Face ID כדי לשחרר את נעילת היישומון";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "u200fFace ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "הצגת עצות במסך הבית";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "שליחת נתוני שימוש";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "מחקרים";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "שימוש ב־Touch ID כדי לשחרר את נעילת היישומון";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "u200fTouch ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "כבוי";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "פעיל";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "שימוש במצב כהה/בהיר של המערכת";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "קיצורי דרך ל־Siri";
+
+/* Text for a share button */
+"share" = "שיתוף";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "הוספה לקיצורי הדרך";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "נוסף לקיצורי הדרך";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "העתקת כתובת";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "חיפוש בדף";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "הסרה מקיצורי הדרך";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "קיצור הדרך הוסר";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "בקשת אתר למחשבים";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "בקשת אתר מותאם לנייד";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "פתיחה ב־Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "פתיחה בדפדפן ברירת המחדל";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "פתיחה ב־Firefox";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "פתיחת קישור";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "שיתוף הדף עם…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "הסרה מקיצורי הדרך";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "שינוי שם של קיצור הדרך";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "שם קיצור הדרך";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "שמירה";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "ביטול";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "סיום";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "יש ללחוץ לחיצה ארוכה על מסך הבית עד שהסמלים יתחילו להתנועע.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "יש לחפש אחר %@ ולבחור בוידג’ט.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "יש להקיש על הסמל הפלוס.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "הוספת וידג’ט של %@";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "הוספה";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "הוספה ל־Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "הקלטה מחדש או מחיקה של קיצור דרך";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "מחיקה";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "מחיקה ופתיחה";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "פתיחת אתר מועדף";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "פתיחת אתר מועדף";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "כתובת לפתיחה";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "לנעול את %@ כאשר אתר פתוח:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "הפעלת Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "הפעלת Touch ID";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "פעולות דף > בקשת אתר למחשבים";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "רוצה לראות את הגרסה המלאה של אתר כלשהו, כפי שהוא מופיע במחשב?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ רכיבי מעקב נחסמו עד כה";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "אתם תגלשו. %@ יחסום.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "יש לבחור בהוספה לקיצורי הדרך מהתפריט של %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "יצירת קיצורי דרך לאתרים שבהם ביקרת הכי הרבה:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "הוספת קיצור דרך ל־Siri";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "הוספת קיצור דרך ל־Siri";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "ניתן לנסות לכבות הגנת מעקב";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "חסר תוכן כלשהו באתר או שהאתר לא פועל כצפוי?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "חיפוש ב־%@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "ניתן לעבור להגדרות כדי לנהל אפשרויות פרטיות ואבטחה.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "הגדרות ברירת המחדל האלו מציעות הגנה חזקה, אבל קל לשנות את ההגדרות כדי לענות על הצרכים הספציפיים שלך.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "ניתן להתחיל בהפעלת הגלישה הפרטית שלך, ואנחנו נחסום רכיבי מעקב ושאר מרעין בישין תוך כדי.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "‏%@ מנע מאתר זה לרגל אחריך. יש ללחוץ על סמל המגן לקבלת מידע על מה שחסמנו.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "תפסנו אותם על חם! מנענו מאתר זה לרגל אחריך. יש להקיש על המגן לקבלת מידע על מה שאנחנו חוסמים.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "ניתן להקיש על סמל האשפה בכל עת כדי להסיר את כל העקבות של ההפעלה הנוכחית שלך.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "יש להקיש כאן כדי לזרוק הכל לזבל — היסטוריה, עוגיות, הכל — ולהתחיל מההתחלה בלשונית חדשה.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "אתה מוגן!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "החיבור אינו מאובטח";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "החיבור מאובטח";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "הגנת מעקב";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "ההגנות כבויות עבור הפעלה זו";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "ההגנות פעילות עבור הפעלה זו";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "הגנת מעקב מתקדמת";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "רכיבי מעקב חסומים מאז %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "רכיבי מעקב ותסריטים לחסימה";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "הוספת קישור להשלמה אוטומטית";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "הדבקה ומעבר";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "מחיקה";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "היסטוריית הגלישה נמחקה";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "חיפוש בדף: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "הדבקה";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "חיפוש או הכנסת כתובת";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "חיפוש אחר %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "רכיבי מעקב חסומים";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "הראו לי כיצד";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "ניתן לך להמשיך בגלישה הפרטית שלך, אבל אולי קודם כדאי להוסיף את היישומון של %@ למסך הבית שלך לצורך הפעלה מהירה יותר.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "היסטוריית הגלישה נמחקה! 🎉";
+

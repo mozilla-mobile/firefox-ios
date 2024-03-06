@@ -1,0 +1,9 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "පෙරනිමි සෙවුම් යන්ත්‍රය සමඟින් %@ හි පෞද්ගලික සෙවුමක් අරඹන්න.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "ඉක්මන් ක්‍රියාමාර්ග";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "%@ හි සොයන්න";
+

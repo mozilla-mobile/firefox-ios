@@ -1,0 +1,12 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Սա հնարավորություն է տալիս ստանալ և վերբեռնել լուսանկարներ:";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը:";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Սա հնարավորություն է տալիս ստանալ և վերբեռնել լուսանկարներ:";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Հնարավորություն է տալիս պահպանել և վերբեռնել լուսանկարները:";
+
