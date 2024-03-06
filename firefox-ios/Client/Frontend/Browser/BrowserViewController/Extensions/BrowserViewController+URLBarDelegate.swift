@@ -35,6 +35,10 @@ extension BrowserViewController: URLBarDelegate {
         updateFindInPageVisibility(visible: false)
 
         guard !isTabTrayRefactorEnabled else {
+            if let tab = tabManager.selectedTab {
+                screenshotHelper.takeScreenshot(tab)
+            }
+
             navigationHandler?.showTabTray(selectedPanel: focusedSegment ?? .tabs)
             return
         }
