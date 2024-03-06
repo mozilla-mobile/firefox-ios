@@ -49,6 +49,7 @@ public struct RustFirefoxSuggestion {
             _,
             iconBytes,
             _,
+            _,
             blockId,
             advertiser,
             iabCategory,
@@ -71,7 +72,7 @@ public struct RustFirefoxSuggestion {
                 impressionReportingURL: URL(string: impressionUrlString),
                 clickReportingURL: URL(string: clickUrlString)
             )
-        } else if case let .wikipedia(title, urlString, iconBytes, _) = suggestion {
+        } else if case let .wikipedia(title, urlString, iconBytes, _, _) = suggestion {
             // This use of `URL(string:)` is OK.
             guard let url = URL(string: urlString) else { return nil }
             self.title = title
