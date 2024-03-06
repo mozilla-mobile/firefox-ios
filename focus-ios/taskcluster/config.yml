@@ -1,0 +1,34 @@
+---
+trust-domain: mobile
+treeherder:
+    group-names: {}
+
+task-priority: highest
+
+taskgraph:
+    register: focusios_taskgraph:register
+    repositories:
+        mobile:
+            name: "Focus for iOS"
+    cached-task-prefix: mobile.v2.focus-ios
+
+workers:
+    aliases:
+        bitrise:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'bitrise-gcp'
+        images:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'images-gcp'
+        misc:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'b-linux-gcp'
+
+scriptworker:
+    scope-prefix: mobile:focus-ios:releng

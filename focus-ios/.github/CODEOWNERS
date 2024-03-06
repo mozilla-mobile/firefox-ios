@@ -1,0 +1,32 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This CODEOWNERS file defines individuals or teams that are responsible
+# for code in this repository. Code owners are automatically requested
+# for review when someone opens a pull request that modifies code that
+# they own. Order is important; the last matching pattern takes the most
+# precedence.
+#
+# A CODEOWNERS file uses a pattern that follows the same rules used in
+# gitignore files. The pattern is followed by one or more GitHub usernames
+# or team names using the standard @username or @org/team-name format.
+# You can also refer to a user by an email address that has been added
+# to their GitHub account, for example user@example.com.
+# https://help.github.com/articles/about-codeowners/
+
+
+# By default the Focus iOS Engineering team will be the owner for everything
+# in the repo. Unless a later match takes precedence.
+
+* @mozilla-mobile/focus-ios-eng
+
+
+# Changes to the CI configuration must be reviewed a limited group of people.
+# We narrowed this down to make sure that no changes go unnoticed.
+
+/bitrise.yml @isabelrios @jevans-mozilla @OrlaM
+
+# Changes to string files can be reviewed and approved by mergify
+
+focus-ios/Blockzilla/**/*.strings @mergify

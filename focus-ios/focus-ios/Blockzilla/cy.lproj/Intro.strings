@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Cliriwch hanes pori, cyfrineiriau, cwcis eich sesiwn unrhyw bryd gydag un cyffyrddiad.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Dyna ddiwedd eich hanes";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Nesaf";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Chwilio am rywbeth gwahanol? Dewiswch beiriant chwilio arall.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Chwilio, cynhwysfawr";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Hepgor";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Cymrwch bori preifat i'r lefel nesaf. Rhwystrwch hysbysebion a chynnwys arall sy'n gallu'ch tracio ar draws wefannau ac arafu amserau llwytho tudalennau.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Cryfhewch eich preifatrwydd";
+

@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Ouzhpennit ur verradenn %@ d’ho skramm degemer. Goude bezañ ouzhpennet ar widjed, stokit ha dalc’hit evit kemmañ ha diuzit ur verradenn all.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Loc'hañ ur c’hlask prevez e %@ gant ho keflusker enklask dre ziouer.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Oberoù prim";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Klask e %@";
+

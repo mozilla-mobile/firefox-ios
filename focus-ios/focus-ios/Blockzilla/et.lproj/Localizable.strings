@@ -1,0 +1,558 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Rohkem teavet";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ on toodetud Mozilla poolt. Meie missioon on edendada tervet ja avatud internetti.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Otsi ja lehiste otse äpis";
+
+/* Label on About screen */
+"About.privateBullet2" = "Bloki jälitajad (või uuenda sätteid, et lubada jälitajad)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Kustuta küpsised ning otsingu- ja lehitsemise ajalugu";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Kasuta seda privaatse brauserina:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Abi";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Privaatsusreeglid";
+
+/* Label for row in About screen */
+"About.rowRights" = "Sinu õigused";
+
+/* Label on About screen */
+"About.safariBullet1" = "Parema privaatsuse tagamiseks bloki jälitajad";
+
+/* Label on About screen */
+"About.safariBullet2" = "Lehe suuruse vähendamiseks bloki fondid";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Kasuta seda Safari laiendusena:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@est";
+
+/* Label on About screen */
+"About.topLabel" = "%@ annab kontrolli sulle.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Ava äpis %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Olgu";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Pääsme lisamisel Walletisse esines viga. Palun proovi hiljem uuesti.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Pääsme lisamine ebaõnnestus";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@esse naasmiseks tuleb autentida";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Lisa kohandatud URL";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Kontrolli sisestatud URLi uuesti.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Näide: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Lisatav URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Aseta või sisesta URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Lisa kohandatud URL";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Uus kohandatud URL lisatud.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "Võimaldab %@el aadressiribal automaatselt lõpetada üle 450 populaarse URLi.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Keelatud";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL on juba olemas";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Kohandatud URLe pole";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Lubatud";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Halda saite";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Minu saidid";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Võimaldab %@el automaatselt lõpetada sinu lemmik URLe.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Top saidid";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Uus seanss";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Tagasi";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL kopeeriti vahemällu";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopeeri";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "Edasi";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Laadi uuesti";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Sätted";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Peata";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Vali asukohariba";
+
+/* Label on button to complete edits */
+"Done" = "Valmis";
+
+/* Label on button to allow edits */
+"Edit" = "Muuda";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Proovi uuesti";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "Loobu";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ soovib avada teise äpi";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Ava";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ soovib avada äpi %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "Loobu";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "Saada e-kiri";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Lehelt otsimine lõpetatud";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Leia lehelt järgmine";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Leia lehelt eelmine";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Olgu, sain aru!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Lehitse veebi nii nagu keegi ei vaataks.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Sulge";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Alusta veebilehitsemist";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Kustuta lehitsemise ajalugu, paroolid ja küpsised ning väldi ühe puutega reklaamide poolt jälitamist!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Sinu ajalugu ei jälita sind";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ on spetsiaalne privaatsusbrauser, millel on jälitamisvastane kaitse ja sisu blokkimine sisse ehitatud.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Rohkem kui lihtsalt anonüümsus";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Muuda sätteid, et määrata, kui palju või vähe sa jagad.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Kaitse sinu äranägemise järgi";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Vii oma privaatne lehitsemine uuele tasemele.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Tere tulemast Firefox %@esse!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Puuduta valikut Safari, see järel vali Content Blockers";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Luba %@";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ pole lubatud.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Ava äpp Settings";
+
+/* Save button label */
+"Save" = "Salvesta";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "See ei õnnestunud. Proovi asendada sellega: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Ei";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Jah";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Soovituste saamiseks peab %@ saatma aadressiribale sisestatud teksti otsingumootorile.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Kas kuvada otsingusoovitusi?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URLide automaatne lõpetamine";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Teiste sisujälitajate blokkimine võib mõned videod ja saidid katki teha.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Loobu";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "Bloki sisu kaudu jälitajad";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Tume";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ saadab aadressiribale sisestatu sinu otsingumootorile.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla püüab koguda ainult seda, mida vajame, et teha %@ kõigi jaoks paremaks.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ võib aegajalt paigaldada ja käivitada uuringuid.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Üldine";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Rohkem teavet.";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Hele";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "Hinda %@t";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI INTEGRATSIOON";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Sätted";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Lisa veel üks otsingumootor";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Otsingumootori lisamine";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "PAIGALDATUD OTSINGUMOOTORID";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Kuvatav nimi";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Uus otsingumootor lisatud.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Lähtesta vaikeotsingumootorid";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Otsingumootori nimi";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Kasutatav otsingustring";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Näide: searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Aseta või sisesta otsingustring. Vajadusel asenda otsinguparameeter järgmisega: %s.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Otsingumootor";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Hangitakse otsingusoovitusi";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "OTSING";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "PRIVAATSUS";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Süsteemi teema";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Teema";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Teemavalija";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklaam";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analüütika";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Veebifondid blokitakse";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Sisu";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sotsiaalmeedia";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Rakenduse lahti lukustamiseks kasutatakse Face ID'd";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID aitab %@e lahti lukustada, kui URL on äpis juba avatud";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Kuvatakse avakuva näpunäiteid";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Saadetakse kasutusandmeid";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Uuringud";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Rakenduse lahti lukustamiseks kasutatakse Touch ID'd";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID aitab %@e lahti lukustada, kui URL on äpis juba avatud";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Väljas";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Sees";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Kasutatakse süsteemset hele/tume režiimi";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI OTSETEED";
+
+/* Text for a share button */
+"share" = "Jaga";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Lisa otseteedesse";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopeeri aadress";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Otsi lehelt";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Eemalda otseteede hulgast";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Töölaua versioon";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobiiliversioon";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Ava Chrome'is";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Ava vaikebrauseris";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Ava Firefoxis";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Jaga lehte…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Eemalda otseteede hulgast";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Nimeta otsetee ümber";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Otsetee nimi";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Salvesta";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Loobu";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Lisa";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Lisa Sirile";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Salvesta uuesti või kustuta otsetee";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Kustuta";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Kustuta ja ava";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Lemmiksaidi avamine";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Lemmiksaidi avamine";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Avatav URL";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "%@ lukustatakse, kui sait on avatud:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Lülita Face ID sisse";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Lülita Touch ID sisse";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Lehe tegevused -> Töölaua versioon";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Kas soovid näha saidi töölaua versiooni?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Seni on blokitud %@ jälitajat";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Sina lehitsed. %@ blokib jälitajaid.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "Vali %@e menüüst Lisa otseteedesse";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "Loo otseteed enimkülastatud saitidele:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Lisa Siri otsetee";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, erase my %@ session.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Lisa Siri otsetee";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, open my favorite site.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "Proovi jälitamisvastane kaitse välja lülitada";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Saidilt tundub sisu puudu olevat või see käitub imelikult?";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Need vaikesätted pakuvad tugevat kaitset. Kuid nende muutmine konkreetselt sinu vajadustele on lihtne.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Kõigi oma seansi jälgede kustutamiseks puuduta soovitud ajal prügikasti ikooni.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Sa oled kaitstud!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Ühendus pole turvaline";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Turvaline ühendus";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Jälitamisvastane kaitse";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Kaitsed on selle seansi ajal VÄLJAS";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Kaitsed on selle seansi ajal SEES";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Täiustatud jälitamisvastane kaitse";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "Alates %@ blokitud jälitajaid";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "Blokitavad jälitajad ja skriptid";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Lisa link automaatse täitmise nimekirja";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Aseta ja mine";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "KUSTUTA";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Lehitsemisajalugu on kustutatud";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Leia lehelt: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Aseta";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Otsi või sisesta aadress";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "Otsi fraasi %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Blokitud jälitajaid";
+

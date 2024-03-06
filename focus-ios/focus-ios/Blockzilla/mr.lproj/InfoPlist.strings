@@ -1,0 +1,15 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "याद्वारे आपण फोटो घेऊ व अपलोड करू शकता.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "हे आपल्याला अॅप अनलॉक करण्यास मदत करते.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "आपण ज्या संकेतस्थळांना भेट देता ते आपल्या स्थानाची मागणी करू शकतात.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "याद्वारे आपण व्हिडिओ घेऊ व अपलोड करू शकता.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "याद्वारे आपण फोटो साठवू व अपलोड करू शकता.";
+

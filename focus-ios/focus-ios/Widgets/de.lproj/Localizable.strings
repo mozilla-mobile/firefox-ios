@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Fügen Sie Ihrem Startbildschirm eine %@-Verknüpfung hinzu. Nachdem Sie das Widget hinzugefügt haben, berühren und halten Sie es, um es zu bearbeiten und eine andere Verknüpfung auszuwählen.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Starten Sie eine private Suche in %@ mit Ihrer Standardsuchmaschine.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Schnellaktionen";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "In %@ suchen";
+

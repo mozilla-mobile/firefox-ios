@@ -1,0 +1,12 @@
+# Definitions for jobs that run periodically.  For details on the format, see
+# `taskcluster/taskgraph/cron/schema.py`.  For documentation, see
+# `taskcluster/docs/cron.rst`.
+---
+
+jobs:
+    - name: l10-screenshots
+      job:
+          type: decision-task
+          target-tasks-method: l10n_screenshots
+          treeherder-symbol: l10-screenshots
+      when: []  # Manual trigger only

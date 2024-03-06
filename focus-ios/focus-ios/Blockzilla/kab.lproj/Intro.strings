@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Kkes amazray inek tiγimit n tuinigin, awalen inek uffiren d wayen nniḍen d ayen fessusen s waṭas.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Amazray inek d amazray";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Γer zdat";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Tettnadiḍ ayen-nniḍen? Fren amsadday-nniḍen n unadi.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Anadi-ik, abrid-ik";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Suref";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Iminig uslig ad yali deg uswir.Dayen ur tuγaleḍ ad twaliḍ adellel neγ imsfuγal i k-ṭṭafaren u saẓayen tulya n isemal web.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Rmed tabaḍnit inek";
+

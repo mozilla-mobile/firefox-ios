@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>TestPlugin</ShortName>
+    <Description>Test Plugin</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Url type="text/html" method="GET" template="https://foo.bar">
+        <Param name="src" value="test"/>
+        <Param name="query" value="{searchTerms}"/>
+    </Url>
+    <Elem name="replaced">
+      <Child>Child of replaced element.</Child>
+    </Elem>
+</SearchPlugin>

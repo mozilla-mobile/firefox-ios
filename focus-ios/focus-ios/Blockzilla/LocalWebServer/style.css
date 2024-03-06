@@ -1,0 +1,13 @@
+body, html {
+    background: #1C1C1E;
+    color: #FBFBFE;
+    font: -apple-system-body;
+    font-size: 14px;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+a {
+    color: #FF4AA2;
+    text-decoration: none;
+}

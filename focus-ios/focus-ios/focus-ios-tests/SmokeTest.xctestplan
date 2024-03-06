@@ -1,0 +1,58 @@
+{
+  "configurations" : [
+    {
+      "id" : "7F02ED3B-5CF8-409D-8257-E00D35DD0E09",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testRepetitionMode" : "retryOnFailure"
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "AsianLocaleTest",
+        "BasicBrowsing\/testLaunchExternalApp()",
+        "CollapsedURLTest",
+        "CopyTest",
+        "DragAndDropTest",
+        "FindInPageTest\/testFindInPageURLBarElement()",
+        "OpenInFocusTest\/testOpenViaSafari()",
+        "PastenGoTest\/testClipboard()",
+        "QuickAddAutocompleteURLTest",
+        "SearchProviderTest\/testAddRemoveCustomSearchProvider()",
+        "SearchProviderTest\/testAmazonSearchProvider()",
+        "SearchProviderTest\/testDuckDuckGoSearchProvider()",
+        "SearchProviderTest\/testPreventionOfRemovingDefaultSearchProvider()",
+        "SearchProviderTest\/testWikipediaSearchProvider()",
+        "SearchSuggestionsPromptTest",
+        "SettingAppearanceTest\/testAddRemoveCustomDomain()",
+        "SettingAppearanceTest\/testDisableAutocomplete()",
+        "SettingAppearanceTest\/testOpenInSafari()",
+        "TrackingProtectionMenu\/testInactiveProtectionSidebar()",
+        "TrackingProtectionSettings",
+        "UserAgentTest",
+        "WebsiteAccessTests\/testAutocompleteCustomDomain()",
+        "WebsiteAccessTests\/testDisableAutocomplete()",
+        "WebsiteMemoryTest\/testGoogleTextField()"
+      ],
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "0BA39A821DD2B8E4005F970A",
+        "name" : "XCUITest"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:Blockzilla.xcodeproj",
+        "identifier" : "D8E0155B1FCF409F00CA3B9F",
+        "name" : "ClientTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Vacua tote le chronologia, contrasignos e cookies de tu session de navigation, quando tu vole, con un sol tocco.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Tu chronologia es historia";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Sequente";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Cerca tu qualcosa differente? Elige un altere motor de recerca.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Le recerca a tu gusto";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Saltar";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Porta le navigation private al nivello superior. Bloca publicitate e altere contento que pote traciar te inter sitos e relentar le cargamento de paginas.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Reinfortia tu vita private";
+

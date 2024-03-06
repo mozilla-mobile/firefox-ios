@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Iam ajn, per nura tuŝeto, viŝi vian tutan retuman seancan historion, pasvortojn, kuketojn.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Via historio malaperas";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Antaŭen";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Ĉu vi serĉas ion alian, malsaman? Elektu alian serĉilon en la agordoj.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Via serĉo, laŭ via maniero";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Ignori";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Privata retumo pli altnivela, kun blokado de reklamoj kaj aliaj enhavoj, kiuj povas spuri vin trans retejoj kaj malrapidigi la ŝargon de paĝoj.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Plibonigu vian privatecon";
+

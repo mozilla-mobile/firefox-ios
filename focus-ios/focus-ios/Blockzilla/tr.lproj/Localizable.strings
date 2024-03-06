@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "Daha fazla bilgi alın";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ Mozilla tarafından geliştirilmiştir. Misyonumuz daha sağlıklı ve açık bir internet yaratmaktır.";
+
+/* Label on About screen */
+"About.privateBullet1" = "Doğrudan uygulamada arama yapabilir ve web’de gezinebilirsiniz";
+
+/* Label on About screen */
+"About.privateBullet2" = "Takipçileri engelleyebilirsiniz (veya belli takipçilere izin verebilirsiniz)";
+
+/* Label on About screen */
+"About.privateBullet3" = "Tek düğmeyle çerezleri, arama ve gezinti geçmişinizi silebilirsiniz";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "Onu gizlilik odaklı bir tarayıcı olarak kullanabilirsiniz:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "Yardım";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "Gizlilik bildirimi";
+
+/* Label for row in About screen */
+"About.rowRights" = "Haklarınız";
+
+/* Label on About screen */
+"About.safariBullet1" = "Gizliliğinizi artırmak için takipçileri engelleyebilirsiniz";
+
+/* Label on About screen */
+"About.safariBullet2" = "Sayfa boyutunu azaltmak için web fontlarını engelleyebilirsiniz";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Onu Safari uzantısı olarak kullanabilirsiniz:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ hakkında";
+
+/* Label on About screen */
+"About.topLabel" = "%@ kontrolü size verir.";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ ile aç";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Tamam";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Kart Wallet’a eklenirken bir hata oluştu. Lütfen daha sonra yeniden deneyin.";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "Kart eklenemedi";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@’a dönmek için kimliğinizi doğrulayın";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "Özel adres ekle";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "Yazdığınız adresi bir daha kontrol edin.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "Örnek: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "Eklenecek adres";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "Adresi yapıştırın veya yazın";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ Özel adres ekle";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "Yeni özel adres eklendi.";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "%@’un 450’den fazla popüler adresi adres çubuğunda tamamlaması için bunu etkinleştirin.";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "Devre dışı";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Adres zaten mevcut";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "Görüntülenecek hiç özel adres yok";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "Etkin";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Siteleri yönet";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Sitelerim";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "%@’un sık kullandığınız adresleri otomatik tamamlaması için etkinleştirin.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Sık kullanılanlar";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Kilidi aç";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Yeni oturum";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "Geri";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "Adres panoya kopyalandı";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Kopyala";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "İleri";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "Yenile";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "Ayarlar";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "Durdur";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "Konum çubuğunu seç";
+
+/* Label on button to complete edits */
+"Done" = "Tamam";
+
+/* Label on button to allow edits */
+"Edit" = "Düzenle";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "Yeniden dene";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "İptal";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ başka bir uygulama açmak istiyor";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "Aç";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@, %2$@ uygulamasını açmak istiyor";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "İptal";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "E-posta gönder";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "Sayfada bulmayı bitir";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "Sayfada sonrakini bul";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "Sayfada öncekini bul";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "Anladım!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "Hiç kimse izlemiyormuş gibi gez.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Kapat";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Başlayın";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Hızlı. Gizli. Sade.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Gezinmeye başla";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Atla";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Daha fazla gizlilik için uygulamayı kapattığınızda geçmişinizi temizliyoruz.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Açtığınız her bağlantıda verilerinizi korumak için %@’u saptanmış tarayıcınız yapın.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ diğer tarayıcılara benzemez";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Saptanmış tarayıcı yap";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Gezinti geçmişinizi, parolalarınızı, çerezlerinizi silin ve tek bir dokunuşla istenmeyen reklamların sizi takip etmesini önleyin!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Geçmişiniz peşinizden gelmesin";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "İzlenme koruması ve içerik engelleme özelliğiyle %@, gizlilik yanlısı tarayıcınız.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Gizli moddan daha fazlası";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Ayarları yapılandırarak ne kadar veri paylaşacağınıza kendiniz karar verin.";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Tam istediğiniz gibi koruma";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Gizli gezintiyi bir üst seviyeye taşıyın.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@’a hoş geldiniz!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari’ye dokunun ve İçerik Engelleyiciler’i seçin";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@’u etkinleştirin";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Safari’yi seçin, ardından Uzantılar’ı seçin";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ etkin değil.";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Ayarlar uygulamasını açın";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Cihaz ayarlarını açın";
+
+/* Save button label */
+"Save" = "Kaydet";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Olmadı. Arama teriminin yerine şunu yazmayı deneyin: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Hayır";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Evet";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Arama önerileri alabilmeniz için %@’un adres çubuğuna yazdığınız şeyleri seçtiğiniz arama motoruna göndermesi gerekir.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Arama önerileri gösterilsin mi?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "Otomatik adres tamamlama";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "Diğer içerik takipçilerini engellemek bazı videoları ve web sayfalarını bozabilir.";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "İptal";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "İçerik takipçilerini engelle";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Koyu";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@, adres çubuğuna yazdıklarını arama motorunuza gönderecektir.";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla, yalnızca %@’u daha da geliştirmek için ihtiyaç duyduğumuz verileri toplar.";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ zaman zaman araştırmalar yükleyip çalıştırabilir.";
+
+/* Title for section in settings menu */
+"Settings.general" = "Genel";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "Daha fazla bilgi alın.";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "Lisanslar";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Açık";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@’a puan verin";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI ENTEGRASYONU";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "Ayarlar";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "Başka bir arama motoru ekle";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "Arama Motoru Ekle";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "KAYITLI ARAMA MOTORLARI";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "Görünecek ad";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "Yeni arama motoru eklendi.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "Varsayılan arama motorlarını geri yükle";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "Arama motoru adı";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Kullanılacak arama dizgisi";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "Örnek: aramamotoru.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Arama dizgisini yapıştırın veya yazın. Gerekirse aranan terimin yerine %s yazın.";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "Arama motoru";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Arama önerilerini göster";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ARAMA";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "GİZLİLİK";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Saptanmış tarayıcı yap";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Web siteleri, e-postalar ve mesajlardaki bağlantılar otomatik olarak %@ uygulamasında açılsın.";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Sistem teması";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Tema";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Tema seçici";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "Reklam";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "Analitik";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "Web fontlarını engelle";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "İçerik";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "Sosyal";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Uygulamanın kilidini açmak için Face ID’yi kullan";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "%@’ta açık bir adres varsa Face ID, uygulamanın kilidini açabilir";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Ana ekranda ipuçlarını göster";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "Kullanım verilerini gönder";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "Araştırmalar";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Uygulamanın kilidini açmak için Touch ID’yi kullan";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "%@’ta açık bir adres varsa Touch ID, uygulamanın kilidini açabilir";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Kapalı";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Açık";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "Sistemin açık/koyu modunu kullan";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI KESTİRMELERİ";
+
+/* Text for a share button */
+"share" = "Paylaş";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "Kısayollara ekle";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Kısayollara eklendi";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Adresi kopyala";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Sayfada bul";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "Kısayollardan kaldır";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Kısayol kaldırıldı";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Masaüstü sitesini iste";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobil siteyi iste";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome’da aç";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Saptanmış tarayıcıda aç";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox’ta aç";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Bağlantıyı aç";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Sayfayı paylaş…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "Kısayollardan kaldır";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "Kısayol adını değiştir";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "Kısayol adı";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Kaydet";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "İptal";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Tamam";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Simgeler titremeye başlayana kadar ana ekrana basılı tutun.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@ uygulamasını bulun. Ardından bir araç takımı seçin.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Artı simgesine dokunun.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "%@ araç takımını ekleyin";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Ekle";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri’ye ekle";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Yeniden kaydet veya kestirmeyi sil";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Sil";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Sil ve aç";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Favori siteyi aç";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Favori siteyi aç";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Açılacak adres";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "Bir site açıkken %@ tarayıcısını kilitle:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "Face ID’yi açın";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID’yi açın";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Sayfa eylemleri > Masaüstü sitesini iste";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "Bir sitenin masaüstü sürümünü mü görmek istiyorsunuz?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "Şimdiye kadar %@ takipçi engellendi";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "Siz gezinin, %@ engellesin.";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ menüsünden “Kısayollara ekle”yi seçin";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "En çok ziyaret ettiğiniz sitelere kısayollar oluşturun:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri kestirmesi ekle";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri, %@ oturumumu sil.”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri kestirmesi ekle";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri, favori sitemi aç.”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "İzlenme korumasını kapatmayı deneyin";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "Sitenin içeriği eksik veya site çalışmıyor mu?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "%@ ile ara";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Gizlilik ve güvenlik seçeneklerini yönetmek için Ayarlar’a gidin.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Bu varsayılan ayarlar güçlü koruma sağlar ama isterseniz ayarları ihtiyaçlarınızı göre değiştirebilirsiniz.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Gizli gezinti oturumunuzu başlatın. Siz gezinirken takip kodlarını ve diğer istenmeyen içerikleri engelleyeceğiz.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ bu sitenin sizi gözetlemesini engelledi. Engellediklerimiz hakkında bilgi almak için kalkana dokunun.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Bu sitenin sizi gözetlemesini engelledik. Engellediğimiz şeyleri görmek isterseniz kalkana dokunun.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Oturumunuzun tüm izlerini kaldırmak istediğiniz zaman çöp kutusuna dokunun.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Geçmişi ve çerezleri temizleyip yeni bir sekmede yeni bir başlangıç yapmak için buraya dokunun.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Koruma altındasınız!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "Bağlantı güvenli değil";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "Bağlantı güvenli";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "İzlenme koruması";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "Bu oturumda korumalar KAPALI";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "Bu oturumda korumalar AÇIK";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "Gelişmiş izlenme koruması";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ tarihinden beri engellenen takipçi";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "ENGELLENECEK TAKİPÇİLER VE BETİKLER";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Bağlantıyı otomatik tamamlamaya ekle";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "Yapıştır ve git";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "SİL";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "Gezinti geçmişi temizlendi";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Sayfada bul: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Yapıştır";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "Arama yapın veya adres yazın";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ terimini ara";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "Engellenen takipçi";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Nasıl yapılacağını göster";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "%@ araç takımını ana ekranınıza ekleyerek gizli gezintilerinize daha hızlı bir başlangıç yapabilirsiniz.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Gezinti geçmişi temizlendi! 🎉";
+

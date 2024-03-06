@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "详细了解";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ 由 Mozilla 出品。我们的使命是促成健康、开放的互联网。";
+
+/* Label on About screen */
+"About.privateBullet1" = "直接在应用中搜索和浏览";
+
+/* Label on About screen */
+"About.privateBullet2" = "拦截跟踪器（也可调整为允许跟踪器）";
+
+/* Label on About screen */
+"About.privateBullet3" = "清除 Cookie、搜索记录和浏览历史";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "用作私密浏览器，可以：";
+
+/* Label for row in About screen */
+"About.rowHelp" = "帮助";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "隐私声明";
+
+/* Label for row in About screen */
+"About.rowRights" = "您的权利";
+
+/* Label on About screen */
+"About.safariBullet1" = "拦截跟踪器，加强隐私";
+
+/* Label on About screen */
+"About.safariBullet2" = "拦截网络字体，减少网页大小";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "用作 Safari 浏览器扩展，可以：";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "关于 %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ 让您掌控线上生活。";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "在 %@ 中打开";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "确定";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "添加密码到 Apple 钱包时出错。请稍后重试。";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "添加密码失败";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "验证身份以返回 %@";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "添加自定义网址";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "请复查您输入的网址。";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "例如：example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "要添加的网址";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "粘贴或输入网址";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ 添加自定义网址";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "已添加新的自定义网址。";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "开启之后，%@ 地址栏可以自动补全超过 450 个热门网站。";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "已禁用";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "网址已存在";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "没有自定义网址";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "已启用";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "管理网站";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "我的网站";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "开启之后，%@ 可以自动补全您喜爱的网址。";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "常用网站";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "解锁";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "新会话";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "后退";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "网址已复制到剪贴板";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "复制";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "前进";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "重新载入";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "设置";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "停止";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "选择地址栏";
+
+/* Label on button to complete edits */
+"Done" = "完成";
+
+/* Label on button to allow edits */
+"Edit" = "编辑";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "重试";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "取消";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ 想打开另一个应用";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "打开";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ 想打开 %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "取消";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "发邮件";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "查找完成";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "查找下一个";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "查找上一个";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "明白了";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "畅游网络，拒绝监视。";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "关闭";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "开始使用";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "快速，隐私，高效率。";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "开始浏览";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "跳过";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "我们会在您关闭应用时自动清除浏览历史，以增强隐私保护。";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "将 %@ 设为默认浏览器，保护您的数据安全。";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ 与其他浏览器不同";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "设为默认浏览器";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "一按即可清除您的浏览历史、密码、Cookie，并阻止被烦人的广告跟踪！";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "历史记录消失术";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ 是隐私专用浏览器，内置自动跟踪保护和内容拦截功能。";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "不止于隐身";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "调整设置，随心掌控共享数据的多寡。";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "由您自行决定保护程度";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "隐私浏览更进一步。";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "欢迎使用 Firefox %@！";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "轻点“Safari 浏览器”，然后选择“内容拦截器”";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "启用 %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "选择“Safari 浏览器”，然后选择“扩展”";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ 未启用。";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "打开“设置”应用";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "打开设备设置";
+
+/* Save button label */
+"Save" = "存储";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "网址无效。尝试用这个替换搜索关键词：%s。";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "否";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "是";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "为获取建议，%@ 需将您在地址栏中输入的内容发送至搜索引擎。";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "要显示搜索建议吗？";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "网址自动补全";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "拦截其他内容跟踪器可能对某些视频和网页有影响。";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "取消";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "拦截内容跟踪器";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "深色";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ 会将您在地址栏中输入的内容发送至您的搜索引擎。";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla 坚持仅收集用来为大众改进 %@ 所必需的数据。";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ 可能会不时地安装并运行一些研究项目。";
+
+/* Title for section in settings menu */
+"Settings.general" = "常规";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "详细了解。";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "许可证";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "浅色";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "为 %@ 打分";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "Safari 浏览器整合";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "设置";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "添加其他搜索引擎";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "添加搜索引擎";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "已安装的搜索引擎";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "显示名称";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "已添加新搜索引擎。";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "恢复默认搜索引擎";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "搜索引擎名称";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "搜索字符串";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "例如：searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "粘贴或输入搜索字符串。如果必要，用 %s 表示搜索关键词。";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "搜索引擎";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "获取搜索建议";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "搜索";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "隐私";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "设为默认浏览器";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "将网站、电子邮件及聊天工具中的链接设为在 %@ 中自动打开。";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "系统主题";
+
+/* Theme section in settings menu */
+"Settings.theme" = "主题";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "主题选择器";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "营销";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "统计";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "拦截网络字体";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "内容";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "社交";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "使用面容 ID 解锁应用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "如果已有网址在应用中打开，则可用面容 ID 解锁 %@";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "显示主屏幕提示";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari 浏览器";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "发送使用统计";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "研究";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "使用触控 ID 解锁应用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "如果已有网址在应用中打开，则可用触控 ID 解锁 %@";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "关闭";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "开启";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "使用系统浅/深色模式";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "Siri 快捷指令";
+
+/* Text for a share button */
+"share" = "分享";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "添加快捷方式";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "已添加快捷方式";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "复制地址";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "在页面中查找";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "移除快捷方式";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "快捷方式已移除";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "要求桌面版网站";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "请求移动版网站";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "在 Chrome 中打开";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "在默认浏览器中打开";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "在 Firefox 中打开";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "打开链接";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "分享页面…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "移除快捷方式";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "重命名快捷方式";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "快捷方式名称";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "存储";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "取消";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "完成";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "长按主屏幕，直到图标开始晃动。";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "搜索 %@ 然后选择小组件。";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "轻点加号（+）图标。";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "添加 %@ 小组件";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "添加";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "添加到 Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "重新录制或删除快捷指令";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "清除";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "清除并打开";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "打开最常访问网站";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "打开最常访问网站";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "要打开的网址";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "有网站打开时锁定 %@：";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "开启面容 ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "开启触控 ID";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "页面操作 > 要求桌面版网站";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "需浏览网站的完整桌面版本？";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "迄今已拦截跟踪器数量：%@";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "您安心上网，%@ 自动拦截。";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "选择 %@ 菜单中的“添加快捷方式”";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "为您最常访问的网站创建快捷方式：";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "添加 Siri 快捷指令";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri，清除我的 %@ 会话。”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "添加 Siri 快捷指令";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri，打开我最常访问的网站。”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "请尝试关闭跟踪保护";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "网站内容缺失或交互异常？";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "%@ · 搜索";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "前往“设置”管理各种隐私与安全选项。";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "默认设置已提供足够强大的保护。如您有特殊需求，也可方便地调整这些设置。";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "进入隐私浏览模式，我们会在您上网时拦截跟踪器和其他脏东西。";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ 已阻止此网站跟踪您，轻点盾牌可了解已拦截的内容。";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "抓到了！我们已阻止此网站的跟踪，您可随时轻点盾牌了解已拦截哪些内容。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "随时轻点垃圾桶，清除当前会话的全部痕迹。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "轻点此处即可删除历史记录、Cookie 等所有数据，并新建一个全新标签页。";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "保护您是我的首要职责";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "连接不安全";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "连接安全";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "跟踪保护";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "已关闭此会话的跟踪保护";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "已开启此会话的跟踪保护";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "增强型跟踪保护";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "自 %@ 起拦截的跟踪器";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "要拦截的跟踪器和脚本";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "添加自动补全的链接";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "粘贴并前往";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "清除";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "浏览历史已清除";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "在页面中查找：%@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "粘贴";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "搜索或输入网址";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "搜索 %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "跟踪器已阻止";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "告诉我怎么做";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "开始隐私浏览吧。想更快发起搜索，下次可以直接点按主屏幕上的 %@ 小组件。";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "浏览历史已清除！🎉";
+

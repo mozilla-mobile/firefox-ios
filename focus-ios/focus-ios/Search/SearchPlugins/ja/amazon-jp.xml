@@ -1,0 +1,30 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Amazon.co.jp</ShortName>
+<Description>検索エンジン - Amazon.co.jp 検索</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADvklEQVRYCb1XS0iVQRT+rHuFQnoQFlI3QoJSSnwU9qBVz01RQUKbFkm6aBEquLMgUFpEGbUvhBYpldGmjT0sKvWKUbdUgrDyQUpkqC00+Dvff5v//nPv/A+FOnDunDlzZs4355yZ+S/wlyzLWiJcJ/xR+F/RW1mYPpYov3Yrinzhf+lYlteIQPLpPEsEonkrvJGKMDQ9PY3BwUHHNCsrC3l5eTY7ymDhnZiUQwCc17D5dNrb2619+/dbkWjUyByjzTyojgACQz81NeXrOB1QfX19WAxxAgikExUV2o4XRyJaPx0A+yEj8SsQABcyOSguKbEIzCsleyUdYSgQwJmqqgwA6SFm3wQyDIBFQcXKCk+nhoYGTVVZWan159PhMbSCJriPHQGVlpZmTIlmZ2fo5mZnM3Tpiki6wtTPyclBWVmZMzQ2NobR0VG8ev3a1nV2dtot92KKmDPRIIQCwHl0evPWLbS1tSGRSBiWklvNkC6joVsZplB4EtbFYsZCMxWf0oVZO7AGent7sWPnTjdmR66tqUFs/XoUFhTg4KFDjl4JYWog8BjyvKsdqZZnf2RkRNugGnO3moFHxxeAPDgZzukgHo9ry0lBGu00I4+O7z3Q39+voqm17hPBAS87Fm4Q+QL4OjxsnM97wU13WlvdXUfu7u52ZE/BIzK2uqOjww5t+uPjvopbWlqMNkwV64cvqR/51oBXbtXiYY7m9Rs3/PxbvgA4M/0pdle5WzadFgJkIftRIACvjxF3WpgS2rlfRQIKck5ggQBoxMUZSvX20zkdVFVXZxzJxqYmW6/lfkbujPEe4W7LmtNrQr8JP1wDlsaADcc9i3ZeA79Gga6zwHg7oN7comag8FxqGe7QockBy7q7yrIeH00idgYWKHC33DkjQPlhgWW9b9YW0++B5ZuAI0PA7HegYzvw5BgwdA/4rZ/7FPwAabwLSDQCD9cCMyPAtFxsubu0SXoK1BAd9l0APl1JhS52GlhZJAvslnYzEMlR1smWc34MAJMJCflz4NuD5Eb4QbVDNhFdJmAuAgeeuef9JAD+Kdnq1jryRFxyeCqJXH2ZqVwqI+qVTtmosTVHgZJLACM70QNkCwjKKXpBAHXSv5zSGaTP94GBq7I72RmdKafKoQLAqdTl10ohn5RobaPGj6oJgH/NXgoX+1naY6zqCcnrzBcJ8dOkOb+CoiuT6VmxBVhdnpke88Iv5Atqjz0kIHKFHwj/L7otjnLpXAVRAZGyx2Fhxs5cF7blgn7eyKw+4VbZ+SO1wh8n8D7SurL3OQAAAABJRU5ErkJggg==</Image>
+<Url type="text/html" method="GET" template="https://www.amazon.co.jp/exec/obidos/external-search/">
+  <Param name="field-keywords" value="{searchTerms}"/>
+  <Param name="mode" value="blended"/>
+  <!--
+  <Param name="mode" value="books-jp"/>
+  <Param name="mode" value="books-us"/>
+  -->
+  <Param name="tag" value="mozillajapan-fx-22"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+  <!-- 
+  <Param name="sz" value="25"/>
+  <Param name="rank" value="+salesrank"/>
+  <Param name="rank" value="+pricerank"/>
+  <Param name="rank" value="+inverse-pricerank"/>
+  <Param name="rank" value="+daterank"/>
+  <Param name="rank" value="+titlerank"/>
+  <Param name="rank" value="-titlerank"/>
+  -->
+</Url>
+<SearchForm>https://www.amazon.co.jp/</SearchForm>
+</SearchPlugin>

@@ -1,0 +1,61 @@
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+*.xcscmblueprint
+.build
+
+# Swift Package Manager
+.swiftpm
+
+# OS X
+.DS_Store
+
+# Vim
+*~
+.*.sw*
+
+# IDEA
+.idea
+
+# Python
+*.pyc
+
+Lists/disconnect-*
+Carthage
+
+screenshots
+screenshots-derived-data
+
+# l10n clone for scripts
+focusios-l10n
+export-locales-env
+
+# localization tools clone
+focus-ios/focus-ios-tests/tools/Localizations
+
+# Glean
+.venv/
+focus-ios/Blockzilla/Generated
+
+import-strings.log
+export-strings.log
+
+shavar-prod-lists
+
+# Nimbus build infrastructure, derived from https://github.com/mozilla/application-services
+bin/nimbus-fml.sh
+bin/nimbus-fml-configuration.local.sh

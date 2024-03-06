@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Wulašujśo swóju póseźeńsku historiju, swóje gronidła a cookieje kuždy cas z jadnym dotyknjenim.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Waša historija jo zajźonosć";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Dalej";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Pytaśo za něcym drugim? Wubjeŕśo drugu pytnicu.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Wašo pytanje ako wy jo cośo";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Pśeskócyś";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Zwigniśo priwatne pśeglědowanje na pśiducu wušu rowninu. Blokěrujśo wabjenje a hynakše wopśimjeśe, kótarež móžośo pśez sedła slědowaś a zacyitańske case bokow pódlejšyś.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Zmocniśo swóju priwatnosć";
+

@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "เรียนรู้เพิ่มเติม";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ ถูกสร้างขึ้นโดย Mozilla ภารกิจของเราคือส่งเสริมอินเทอร์เน็ตที่สมบูรณ์และเปิดกว้าง";
+
+/* Label on About screen */
+"About.privateBullet1" = "ค้นหาและท่องเว็บจากในแอป";
+
+/* Label on About screen */
+"About.privateBullet2" = "ปิดกั้นตัวติดตาม (หรืออัปเดตการตั้งค่าเพื่ออนุญาตตัวติดตาม)";
+
+/* Label on About screen */
+"About.privateBullet3" = "ล้างเพื่อลบคุกกี้รวมทั้งประวัติการค้นหาและการท่องเว็บ";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "ใช้เป็นเบราว์เซอร์ส่วนตัว:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "ช่วยเหลือ";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "ประกาศความเป็นส่วนตัว";
+
+/* Label for row in About screen */
+"About.rowRights" = "สิทธิของคุณ";
+
+/* Label on About screen */
+"About.safariBullet1" = "ปิดกั้นตัวติดตามเพื่อความเป็นส่วนตัวที่เพิ่มขึ้น";
+
+/* Label on About screen */
+"About.safariBullet2" = "ปิดกั้นแบบอักษรเว็บเพื่อลดขนาดหน้า";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "ใช้เป็นส่วนขยาย Safari:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "เกี่ยวกับ %@";
+
+/* Label on About screen */
+"About.topLabel" = "%@ ให้คุณได้ควบคุม";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "เปิดใน %@";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "ตกลง";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "เกิดข้อผิดพลาดขณะเพิ่มบัตรผ่านไปยัง Wallet โปรดลองอีกครั้งในภายหลัง";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "ไม่สามารถเพิ่มบัตรผ่าน";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "รับรองความถูกต้องเพื่อกลับสู่ %@";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "เพิ่ม URL ที่กำหนดเอง";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "ตรวจสอบ URL ที่คุณป้อนอีกครั้ง";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ตัวอย่าง: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "URL ที่จะเพิ่ม";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "วางหรือป้อน URL";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ เพิ่ม URL ที่กำหนดเอง";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "เพิ่ม URL ที่กำหนดเองใหม่แล้ว";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "เปิดใช้งานเพื่อให้ %@ เติมมากกว่า 450 URL ยอดนิยมโดยอัตโนมัติในแถบที่อยู่";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "ปิดใช้งานอยู่";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "มี URL อยู่แล้ว";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "ไม่มี URL ที่กำหนดเองที่จะแสดงผล";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "เปิดใช้งานอยู่";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "จัดการไซต์";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "ไซต์ของฉัน";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "เปิดใช้งานเพื่อให้ %@ เติม URL โปรดของคุณโดยอัตโนมัติ";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "ไซต์เด่น";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "ปลดล็อก";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "วาระใหม่";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "ย้อนกลับ";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "คัดลอก URL ไปยังคลิปบอร์ดแล้ว";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "คัดลอก";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "เดินหน้า";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "โหลดใหม่";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "การตั้งค่า";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "หยุด";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "เลือกแถบตำแหน่งที่ตั้ง";
+
+/* Label on button to complete edits */
+"Done" = "เสร็จสิ้น";
+
+/* Label on button to allow edits */
+"Edit" = "แก้ไข";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "ลองอีกครั้ง";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "ยกเลิก";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ ต้องการเปิดแอปอื่น";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "เปิด";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ ต้องการเปิด %2$@";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "ยกเลิก";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "อีเมล";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "เสร็จสิ้นการค้นหาในหน้า";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "ค้นหาถัดไปในหน้า";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "ค้นหาก่อนหน้าในหน้า";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "ตกลง เข้าใจแล้ว!";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "ท่องเว็บเหมือนไม่มีใครเฝ้ามองอยู่";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "ปิด";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "เริ่มต้นใช้งาน";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "เร็ว ส่วนตัว ไม่มีการรบกวน";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "เริ่มการเรียกดู";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "ข้าม";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "เราล้างประวัติของคุณเมื่อคุณปิดแอพเพื่อความเป็นส่วนตัวกว่าปกติ";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "ทำให้ %@ เป็นค่าเริ่มต้นของคุณเพื่อปกป้องข้อมูลของคุณด้วยทุกลิงก์ที่คุณเปิด";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ ไม่เหมือนบราวเซอร์อื่นๆ";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "ลบประวัติการเรียกดู รหัสผ่าน คุกกี้ และป้องกันไม่ให้โฆษณาที่ไม่ต้องการติดตามคุณในคลิกเดียว!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "ประวัติของคุณไม่ได้ติดตามคุณ";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ เป็นเบราว์เซอร์ที่เน้นเรื่องความเป็นส่วนตัวโดยเฉพาะซึ่งมาพร้อมการป้องกันการติดตามและการปิดกั้นเนื้อหา";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "ทำได้มากกว่าปกปิดตัวตน";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "กำหนดการตั้งค่าเพื่อตัดสินใจว่าต้องการแบ่งปันข้อมูลมากน้อยเพียงใด";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "ปรับแต่งการป้องกันด้วยตัวคุณเอง";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "ให้คุณเรียกดูแบบส่วนตัวในขั้นที่เหนือกว่า";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "ยินดีต้อนรับสู่ Firefox %@!";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "แตะ Safari จากนั้นเลือก ตัวปิดกั้นเนื้อหา";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "เปิดใช้งาน %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "เลือก Safari จากนั้นเลือกส่วนขยาย";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "ไม่ได้เปิดใช้งาน %@";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "เปิดแอป การตั้งค่า";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "เปิดการตั้งค่าอุปกรณ์";
+
+/* Save button label */
+"Save" = "บันทึก";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "ไม่ได้ผล ลองแทนที่คำค้นหาด้วยสิ่งนี้: %s";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "ไม่";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ใช่";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "เพื่อรับข้อเสนอแนะ %@ จำเป็นต้องส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหา";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "แสดงข้อเสนอแนะการค้นหา?";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "การเติม URL อัตโนมัติ";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "การปิดกั้นตัวติดตามของเนื้อหาอื่น ๆ อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "ยกเลิก";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "ปิดกั้นตัวติดตามเนื้อหา";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "มืด";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ จะส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหาของคุณ";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง %@ สำหรับทุกคน";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ อาจติดตั้งและเรียกใช้การศึกษาเป็นครั้งคราว";
+
+/* Title for section in settings menu */
+"Settings.general" = "ทั่วไป";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "เรียนรู้เพิ่มเติม";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "สัญญาอนุญาต";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "สว่าง";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "ให้คะแนน %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "การผนวกรวม SAFARI";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "การตั้งค่า";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "เพิ่มเครื่องมือค้นหาอื่น";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "เพิ่มเครื่องมือค้นหา";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "เครื่องมือค้นหาที่ติดตั้งไว้";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ชื่อที่จะแสดงผล";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "เพิ่มเครื่องมือค้นหาใหม่แล้ว";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "เรียกคืนเครื่องมือค้นหาเริ่มต้น";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "ชื่อเครื่องมือค้นหา";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "สตริงการค้นหาที่จะใช้";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ตัวอย่าง: searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "วางหรือป้อนสตริงการค้นหา หากจำเป็นให้แทนที่คำค้นหาด้วย: %s";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "เครื่องมือค้นหา";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "รับข้อเสนอแนะการค้นหา";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "ค้นหา";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "ความเป็นส่วนตัว";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "ตั้งเป็นเบราว์เซอร์เริ่มต้น";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "ตั้งลิงก์จากเว็บไซต์ อีเมล และข้อความให้เปิดโดยอัตโนมัติใน %@";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "ชุดตกแต่งระบบ";
+
+/* Theme section in settings menu */
+"Settings.theme" = "ชุดตกแต่ง";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "ตัวเลือกชุดตกแต่ง";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "โฆษณา";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "การวิเคราะห์";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ปิดกั้นแบบอักษรเว็บ";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "เนื้อหา";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "กลุ่มสังคม";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "ใช้ Face ID เพื่อปลดล็อคแอป";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "Face ID สามารถปลดล็อค %@ หากเปิด URL อยู่แล้วในแอป";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "แสดงเคล็ดลับหน้าจอหลัก";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "ส่งข้อมูลการใช้งาน";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "การศึกษา";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "ใช้ Touch ID เพื่อปลดล็อคแอป";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Touch ID สามารถปลดล็อค %@ หากเปิด URL อยู่แล้วในแอป";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "ปิด";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "เปิด";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "ใช้โหมดสว่าง/มืดของระบบ";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "คำสั่งลัด SIRI";
+
+/* Text for a share button */
+"share" = "แบ่งปัน";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "เพิ่มไปยังคำสั่งลัด";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "เพิ่มไปยังคำสั่งลัดแล้ว";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "คัดลอกที่อยู่";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "ค้นหาในหน้า";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "ลบออกจากคำสั่งลัด";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "ทางลัดถูกเอาออกแล้ว";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "ขอไซต์สำหรับเดสก์ท็อป";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "ขอไซต์สำหรับมือถือ";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "เปิดใน Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "เปิดในเบราว์เซอร์เริ่มต้น";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "เปิดใน Firefox";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "เปิดลิงก์";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "แบ่งปันหน้าด้วย…";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "ลบออกจากคำสั่งลัด";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "เปลี่ยนชื่อคำสั่งลัด";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "ชื่อคำสั่งลัด";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "บันทึก";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "ยกเลิก";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "เสร็จสิ้น";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "กดบนหน้าจอโฮมค้างไว้จนกว่าไอคอนจะเริ่มสั่น";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "ค้นหา %@ จากนั้นเลือกวิดเจ็ต";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "แตะที่ไอคอนบวก";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "เพิ่ม %@ วิดเจ็ต";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "เพิ่ม";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "เพิ่มไปยัง Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "บันทึกใหม่หรือลบคำสั่งลัด";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "ล้าง";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "ล้างแล้วเปิด";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "เปิดไซต์โปรด";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "เปิดไซต์โปรด";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL ที่จะเปิด";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "ล็อค %@ เมื่อไซต์เปิด:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "เปิด Face ID";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "เปิด Touch ID";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "การกระทำหน้า > ขอไซต์สำหรับเดสก์ท็อป";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "ต้องการดูไซต์เวอร์ชันเดสก์ท็อปแบบเต็มหรือไม่?";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "%@ ตัวติดตามที่ถูกปิดกั้นจนถึงตอนนี้";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "คุณเรียกดู %@ การปิดกั้น";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "เลือก เพิ่มไปยังคำสั่งลัด จากเมนู %@";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "สร้างทางลัดไปยังเว็ปไซต์ที่คุณเข้าชมบ่อยที่สุด:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "เพิ่มคำสั่งลัด Siri";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri ลบวาระ %@ ของฉัน”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "เพิ่มคำสั่งลัด Siri";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri เปิดโปรดของฉัน”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "ลองปิดการป้องกันการติดตาม";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "ไซต์ไม่มีเนื้อหาหรือทำงานแปลก ๆ ?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "ค้นหาใน %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "ไปที่การตั้งค่าเพื่อจัดการตัวเลือกต่าง ๆ เกี่ยวกับความเป็นส่วนตัวและความปลอดภัย";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "การตั้งค่าเริ่มต้นเหล่านี้ให้การปกป้องที่แข็งแกร่ง แต่คุณสามารถปรับแต่งการตั้งค่าให้ตรงกับความต้องการของคุณได้อย่างง่ายดาย";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "เริ่มวาระการท่องเว็บแบบส่วนตัว แล้วเราจะปิดกั้นตัวติดตามและสิ่งไม่พึงประสงค์ในขณะที่คุณใช้งาน";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ หยุดไซต์นี้ไม่ให้สอดแนมคุณแล้ว แตะโล่เพื่อดูข้อมูลเกี่ยวกับสิ่งที่เราปิดกั้น";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "จับได้แล้ว! เราได้หยุดไซต์นี้ไม่ให้สอดแนมคุณแล้ว แตะโล่เพื่อดูข้อมูลเกี่ยวกับสิ่งที่เรากำลังปิดกั้น";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "แตะที่ถังขยะเมื่อใดก็ได้เพื่อลบร่องรอยการใช้งานทั้งหมดในวาระปัจจุบันของคุณออก";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "แตะที่นี่เพื่อทิ้งทุกอย่าง — ประวัติ คุกกี้ ทุกอย่าง — และเริ่มต้นใหม่ในแท็บใหม่";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "คุณได้รับการคุ้มครอง!";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "การเชื่อมต่อไม่ปลอดภัย";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "การเชื่อมต่อปลอดภัย";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "การป้องกันการติดตาม";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "การป้องกันถูก ปิด สำหรับวาระนี้";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "การป้องกันถูก เปิด สำหรับวาระนี้";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "การป้องกันการติดตามแบบพิเศษ";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "ตัวติดตามถูกปิดกั้นตั้งแต่ %@";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "ตัวติดตามและสคริปต์ที่จะปิดกั้น";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "เพิ่มลิงก์ไปยังการเติมอัตโนมัติ";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "วางแล้วไป";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "ล้าง";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "ล้างประวัติการท่องเว็บแล้ว";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ค้นหาในหน้า: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "วาง";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "ค้นหาหรือป้อนที่อยู่";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "ค้นหา %@";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ตัวติดตามที่ปิดกั้น";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "แสดงวิธีให้ฉันดู";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "เราจะปล่อยให้คุณท่องเว็บแบบส่วนตัว แต่เริ่มต้นในครั้งต่อไปเร็วขึ้นด้วยวิดเจ็ต %@ บนหน้าโฮมของคุณ";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "ล้างประวัติการท่องเว็บแล้ว! 🎉";
+

@@ -1,0 +1,12 @@
+# You can validate the YAML config file at http://yaml-online-parser.appspot.com
+
+github:
+  - owner: mozilla-mobile
+    name: focus-ios
+    version: 3.9
+
+rename:
+    focus-ios: Firefox Focus
+    ios_sdk: Adjust
+    sentry-cocoa: Sentry
+    telemetry-ios: Telemetry

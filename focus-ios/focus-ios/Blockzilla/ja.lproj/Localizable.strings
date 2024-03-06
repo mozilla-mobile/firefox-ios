@@ -1,0 +1,648 @@
+/* Button on About screen */
+"About.learnMoreButton" = "詳細情報";
+
+/* Label on About screen */
+"About.missionLabel" = "%@ は Mozilla による製品です。私たちの使命は、健全でオープンなインターネットを育成することです。";
+
+/* Label on About screen */
+"About.privateBullet1" = "アプリ内で検索とブラウジングをします";
+
+/* Label on About screen */
+"About.privateBullet2" = "追跡をブロックします (または設定変更により追跡を許可します)";
+
+/* Label on About screen */
+"About.privateBullet3" = "検索履歴やページの表示履歴に加えて Cookie を消去します";
+
+/* Label on About screen */
+"About.privateBulletHeader" = "プライベートブラウザーとして使用すると:";
+
+/* Label for row in About screen */
+"About.rowHelp" = "ヘルプ";
+
+/* Link to Privacy Notice in the About screen */
+"About.rowPrivacy" = "プライバシー通知";
+
+/* Label for row in About screen */
+"About.rowRights" = "あなたの権利";
+
+/* Label on About screen */
+"About.safariBullet1" = "追跡をブロックしてプライバシーを保護します";
+
+/* Label on About screen */
+"About.safariBullet2" = "ウェブフォントをブロックしてページのサイズを削減";
+
+/* Label on About screen */
+"About.safariBulletHeader" = "Safari の拡張機能として使用すると:";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ について";
+
+/* Label on About screen */
+"About.topLabel" = "%@ でプライバシー保護。";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "%@ で開く";
+
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Message of the 'Add Pass Failed' alert. */
+"AddPass.Error.Message" = "Wallet へのパスの追加中にエラーが発生しました。後で再度試してください。";
+
+/* Title of the 'Add Pass Failed' alert. */
+"AddPass.Error.Title" = "パスの追加に失敗しました";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "認証して %@ へ戻る";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "カスタム URL を追加";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "入力した URL をよく確認してください。";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "例: example.com";
+
+/* Label for the input to add a custom URL */
+"Autocomplete.addCustomUrlLabel" = "追加する URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "URL を入力するかペーストしてください";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+カスタム URL を追加";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "新しいカスタム URL を追加しました。";
+
+/* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.defaultDescriptoin" = "有効にすると、%@ のアドレスバーで 450 以上の人気の URL が自動補完されます。";
+
+/* label describing URL Autocomplete as disabled */
+"Autocomplete.disabled" = "無効";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "登録済みの URL です";
+
+/* Label for button to add a custom URL */
+"Autocomplete.emptyState" = "表示するカスタム URL はありません";
+
+/* label describing URL Autocomplete as enabled */
+"Autocomplete.enabled" = "有効";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "サイトを管理";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "マイサイト";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "%@ によるお気に入りの URL の自動補完を有効にします。";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "トップサイト";
+
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "ロック解除";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "新規セッション";
+
+/* Accessibility label for the back button */
+"Browser.backLabel" = "戻る";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL をクリップボードにコピーしました";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "コピー";
+
+/* Accessibility label for the forward button */
+"Browser.forwardLabel" = "進む";
+
+/* Accessibility label for the reload button */
+"Browser.reloadLabel" = "再読み込み";
+
+/* Accessibility label for the settings button */
+"Browser.settingsLabel" = "環境設定";
+
+/* Accessibility label for the stop button */
+"Browser.stopLabel" = "中止";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"browserShortcutDescription.selectLocationBar" = "ロケーションバーを選択";
+
+/* Label on button to complete edits */
+"Done" = "完了";
+
+/* Label on button to allow edits */
+"Edit" = "編集";
+
+/* Button label to reload the error page */
+"Error.tryAgainButton" = "再試行";
+
+/* Button label used for cancelling to open another app from Focus */
+"ExternalAppLink.cancelTitle" = "キャンセル";
+
+/* Dialog title used for opening an external app from Focus. The placeholder string is the app name of either Focus or Klar. */
+"ExternalAppLink.messageTitle" = "%@ が別のアプリを開こうとしています";
+
+/* Button label for opening another app from Focus */
+"ExternalAppLink.openTitle" = "開く";
+
+/* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
+"externalAppLinkWithAppName.messageTitle" = "%1$@ が %2$@ を開こうとしています";
+
+/* Button label in external link dialog to cancel the dialog. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.cancelButton" = "キャンセル";
+
+/* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
+"ExternalLink.emailButton" = "メール送信";
+
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "ページ内検索完了";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "ページ内で次を検索";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "ページ内で前を検索";
+
+/* Label on button to dismiss first run UI */
+"FirstRun.lastSlide.buttonLabel" = "OK";
+
+/* Message label on the first run screen */
+"FirstRun.messageLabelTagline" = "誰にも監視されないブラウジング。";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "閉じる";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "はじめる";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "高速でプライベート。気を散らすものはありません。";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "ブラウジングを始める";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "スキップ";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "プライバシー強化のため、アプリを閉じると履歴が消去されます。";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "%@ をデフォルトブラウザーに設定すれば、開いたリンク先であなたのデータが保護されます。";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ は他のブラウザーとは一味違います";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "デフォルトブラウザーに設定する";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "クリックするだけでブラウジング履歴、パスワード、Cookie を消去し、不要な広告による追跡を防ぎます。";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "あなたの足跡から追跡されません";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ は追跡防止とコンテンツブロック機能を備えたプライバシー保護ブラウザーです。";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "匿名化だけではありません";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "設定で共有する量を決められます。";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "あなたの裁量で保護できます";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "プライベートブラウジングを次のレベルへ。";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@ へようこそ！";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsContentBlockers" = "Safari をタップしてコンテンツブロッカーを選択します";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "%@ を有効にします";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Safari を選択し、拡張機能を選択します";
+
+/* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
+"Safari.instructionsNotEnabled" = "%@ を有効にしましょう。";
+
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "環境設定アプリを開きます";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "端末の設定を開きます";
+
+/* Save button label */
+"Save" = "保存";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "動作しませんでした。次の検索語に置き換えてみてください: %s";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "いいえ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "はい";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "検索候補を取得するには、アドレスバーに入力した内容を %@ が検索エンジンへ送信する必要があります。";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "検索候補を表示しますか？";
+
+/* Title for the URL Autocomplete row */
+"Settings.autocompleteSection" = "URL 自動補完";
+
+/* Alert message shown when toggling the Content blocker */
+"Settings.blockOtherMessage" = "他の追跡コンテンツをブロックすると、動画やウェブページが正常に表示されない場合があります。";
+
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "キャンセル";
+
+/* Button label for accepting Content blocker alert */
+"Settings.blockOtherYes2" = "追跡コンテンツをブロック";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Dark";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";
+
+/* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSendUsageData" = "Mozilla は皆さんに %@ を提供し改善するのに必要な情報だけを収集するよう努めています。";
+
+/* Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextStudies" = "%@ が調査をインストールして実行することがあります。";
+
+/* Title for section in settings menu */
+"Settings.general" = "一般";
+
+/* Subtitle for Send Anonymous Usage Data toggle on main screen */
+"Settings.learnMore" = "詳細情報。";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "ライセンス";
+
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Light";
+
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ の評価";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI 統合";
+
+/* Title for settings screen */
+"Settings.screenTitle" = "環境設定";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "別の検索エンジンを追加";
+
+/* Title on add search engine settings screen */
+"Settings.Search.AddSearchEngineTitle" = "検索エンジンを追加";
+
+/* Header for rows of installed search engines */
+"Settings.Search.InstalledSearchEngines" = "選択可能な検索エンジン";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "表示名";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "新規検索エンジンを追加しました。";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "デフォルト検索エンジンに戻す";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "検索エンジン名";
+
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "使用する検索語";
+
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "入力例: searchengine.example.com/search/?q=%s";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "検索 URL をペーストまたは入力してください。必要に応じて、検索語を %s で置き換えてください。";
+
+/* Label for the search engine in the search screen */
+"Settings.searchLabel" = "検索エンジン";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "検索候補を取得";
+
+/* Title for the search selection screen */
+"Settings.searchTitle2" = "検索";
+
+/* Section label for Mozilla toggles */
+"Settings.sectionMozilla" = "MOZILLA";
+
+/* Section label for privacy toggles */
+"Settings.sectionPrivacy" = "プライバシー";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "デフォルトブラウザーに設定";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "ウェブサイト、メール、メッセージのリンクを自動的に %@ で開くように設定します。";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "システムテーマ";
+
+/* Theme section in settings menu */
+"Settings.theme" = "テーマ";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "テーマ選択";
+
+/* Label for the checkbox to toggle Advertising trackers */
+"Settings.toggleBlockAds2" = "広告";
+
+/* Label for the checkbox to toggle Analytics trackers */
+"Settings.toggleBlockAnalytics2" = "解析";
+
+/* Label for toggle on main screen */
+"Settings.toggleBlockFonts" = "ウェブフォントをブロック";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "コンテンツ";
+
+/* Label for the checkbox to toggle Social trackers */
+"Settings.toggleBlockSocial2" = "ソーシャル";
+
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "アプリのロック解除に Face ID を使用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "URL をアプリ内ですでに開いていても、Face ID で %@ のロックを解除できます";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "ホーム画面にヒントを表示";
+
+/* Safari toggle label on settings screen */
+"Settings.toggleSafari" = "Safari";
+
+/* Label for Send Usage Data toggle on main screen */
+"Settings.toggleSendUsageData" = "使用状況データを送信";
+
+/* Label for Studies toggle on the settings screen */
+"Settings.toggleStudies" = "調査";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "アプリのロック解除に Touch ID を使用";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "URL をアプリ内ですでに開いていても、Touch ID で %@ のロックを解除できます";
+
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "オフ";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "オン";
+
+/* Value for theme toggle in settings menu */
+"Settings.useSystemTheme" = "システムの Light/Dark モードを使用";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI ショートカット";
+
+/* Text for a share button */
+"share" = "共有";
+
+/* Text for the share menu option when a user wants to add the site to Shortcuts */
+"ShareMenu.AddToShortcuts" = "ショートカットを追加";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "ショートカットに追加しました";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "アドレスをコピー";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "ページ内検索";
+
+/* Text for the share menu option when a user wants to remove the site from Shortcuts */
+"ShareMenu.RemoveFromShortcuts" = "ショートカットから削除";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "ショートカットを削除しました";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "デスクトップ版を見る";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "モバイル版サイトを見る";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome で開く";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "デフォルトブラウザーで開く";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox で開く";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "リンクを開く";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "ページを共有...";
+
+/* Text for the long press on a shortcut option in context menu. */
+"ShortcutView.RemoveFromShortcuts" = "ショートカットから削除";
+
+/* Text for the long press on a shortcut rename option in context menu. */
+"ShortcutView.Rename" = "ショートカットの名前を変更";
+
+/* Text for the placeholder textfield on rename shortcut alert. */
+"ShortcutView.RenameShortcutAlertPlaceholder" = "ショートカット名";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "保存";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "キャンセル";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "完了";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "アイコンが揺れ始めるまで、ホーム画面を長押ししてください。";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@ を検索し、ウィジェットを選んでください。";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "プラスアイコンをタップします。";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "%@ ウィジェットを追加";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "追加";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri に追加";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "ショートカットを再記録または削除";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "消去";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "消去して開く";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "お気に入りのサイトを開く";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "お気に入りのサイトを開く";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "開く URL";
+
+/* Text for a label that indicates the title for biometric tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.Biometric.Title" = "サイトが開いているときに %@ をロックします:";
+
+/* Text for a label that indicates the description for biometric Face ID tip. */
+"Tip.BiometricFaceId.Description" = "FaceID をオンにする";
+
+/* Text for a label that indicates the description for biometric Touch ID tip. */
+"Tip.BiometricTouchId.Description" = "Touch ID をオンにする";
+
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "ページ操作 > デスクトップ版を見る";
+
+/* Text for a label that indicates the title for request desktop tip. */
+"Tip.RequestDesktop.Title" = "ウェブサイトのデスクトップ版を開きたいですか？";
+
+/* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
+"Tip.ShareTrackers.Description" = "これまでに %@ 個のトラッカーをブロックしました";
+
+/* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.ShareTrackers.Title" = "%@ がブロックするので安心して閲覧できます。";
+
+/* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
+"Tip.Shortcuts.Description" = "%@ メニューから [ショートカットに追加] を選択します";
+
+/* Text for a label that indicates the title for shortcuts tip. */
+"Tip.Shortcuts.Title" = "よく訪れるサイトへのショートカットを作成するには:";
+
+/* Text for a label that indicates the description for siri erase tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriErase.Description" = "Siri のショートカットを追加";
+
+/* Text for a label that indicates the title for siri erase tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
+"Tip.SiriErase.Title" = "“Siri、%@ のセッションを消去してください。”";
+
+/* Text for a label that indicates the description for siri favorite tip. The shortcut in this context is the iOS Siri Shortcut, not a Focus website shortcut. */
+"Tip.SiriFavorite.Description" = "Siri のショートカットを追加";
+
+/* Text for a label that indicates the title for siri favorite tip. */
+"Tip.SiriFavorite.Title" = "“Siri、わたしのお気に入りのサイトを開いてください。”";
+
+/* Text for a label that indicates the description for sites not working tip. */
+"Tip.SitesNotWorking.Description" = "トラッキング保護機能をオフにしてみてください";
+
+/* Text for a label that indicates the title for sites not working tip. */
+"Tip.SitesNotWorking.Title" = "サイトのコンテンツが表示されなかったり動作がおかしいときは？";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "%@ で検索";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "設定を開いて特定のプライバシーとセキュリティの設定を管理します。";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "これらのデフォルト設定は強力な保護を提供します。必要に応じて、簡単に設定を調整できます。";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "プライベートブラウジングセッションを開始すると、トラッカーやその他の迷惑なものをブロックします。";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ がこのサイトによるスパイ行動を阻止しました。ブロックしたものに関する情報を見るには盾アイコンをタップしてください。";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "このサイトによるスパイ行為を阻止しました。ブロックしたものに関する情報を見るには盾アイコンをタップしてください。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "ゴミ箱をタップするだけで、いつでも現在のセッションの痕跡をすべて削除します。";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "ここをタップして、履歴、Cookie、すべて破棄し、新しいタブで新たに始めましょう。";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "保護されています";
+
+/* Text for tracking protection screen showing the connection is not secure */
+"trackingProtection.connectionNotSecureLabel" = "接続は安全ではありません";
+
+/* Text for tracking protection screen showing the connection is secure */
+"trackingProtection.connectionSecureLabel" = "接続は安全です";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "トラッキング防止";
+
+/* Text for the status off from Tracking Protection. */
+"trackingProtection.statusOff" = "このセッションでは保護が無効になっています";
+
+/* Text for the status on from Tracking Protection. */
+"trackingProtection.statusOn" = "このセッションでは保護が有効になっています";
+
+/* Text for the toggle that enables/disables tracking protection. */
+"trackingProtection.toggleLabel2" = "強化型トラッキング防止機能";
+
+/* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
+"trackingProtection.trackersBlockedLabel" = "%@ 以降トラッカーがブロックされました";
+
+/* Text for the header of trackers section from Tracking Protection. */
+"trackingProtection.trackersHeader" = "ブロックするトラッカーとスクリプト";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "自動補完にリンクを追加";
+
+/* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
+"URL.contextMenu" = "ペーストして移動";
+
+/* Erase button in the URL bar */
+"URL.eraseButtonLabel" = "消去";
+
+/* Message shown after pressing the Erase button */
+"URL.eraseMessageLabel2" = "ブラウジング履歴を消去しました";
+
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "ページ内検索: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "ペースト";
+
+/* Placeholder text shown in the URL bar before the user navigates to a page */
+"URL.placeholderText" = "検索語またはアドレスを入力";
+
+/* Label displayed for search button when typing in the URL bar */
+"URL.searchLabel" = "%@ を検索";
+
+/* Text for the URL bar showing the number of trackers blocked on a webpage. */
+"URL.trackersBlockedLabel" = "ブロックした追跡";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "使い方を見る";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "プライベート ブラウジングはお任せしますが、次回はホーム画面の %@ ウィジェットですばやく開始できます。";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "ブラウジング履歴を消去しました🎉";
+

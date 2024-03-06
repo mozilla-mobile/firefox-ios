@@ -1,0 +1,15 @@
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Bu, şəkilləri çəkmə və yükləməyinizə imkan verir.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Bu tətbiqin kilidini açmağınıza kömək edir.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Ziyarət etdiyiniz saytlar mövqeyinizi istəyə bilər.";
+
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "Bu, videoları çəkməyinizə və yükləməyinizə imkan verir.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Bu, şəkilləri saxlama və yükləməyinizə imkan verir.";
+

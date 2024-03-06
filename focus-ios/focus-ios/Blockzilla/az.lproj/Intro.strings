@@ -1,0 +1,24 @@
+/* Description for the 'History' panel in the First Run tour. */
+"Intro.Slides.History.Description" = "Tək bir toxunuşla istədiyiniz vaxt səyahət sessiyanızın tarixçəsini, parolları və çərəzləri təmizləyin.";
+
+/* Title for the third  panel 'History' in the First Run tour. */
+"Intro.Slides.History.Title" = "Tarixçəniz tarixdir";
+
+/* Button to go to the next card in Focus onboarding. */
+"Intro.Slides.Next.Button" = "Sonrakı";
+
+/* Description for the 'Favorite Search Engine' panel in the First Run tour. */
+"Intro.Slides.Search.Description" = "Fərqli şeylər axtarırsız? Fərqli axtarış mühərriyini seçin.";
+
+/* Title for the second  panel 'Search' in the First Run tour. */
+"Intro.Slides.Search.Title" = "Sizin axtarış, sizin qaydalar";
+
+/* Button to skip onboarding in Focus */
+"Intro.Slides.Skip.Button" = "Keç";
+
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Məxfi səyahəti fərqli səviyyəyə götürün. Saytlar üzərindən sizə izləyə biləcək reklam və digər məzmunları bloklayın və yüklənmə sürətini artırın.";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title" = "Məxfiliyinizi gücləndirin";
+
