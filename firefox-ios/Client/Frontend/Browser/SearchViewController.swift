@@ -219,7 +219,6 @@ class SearchViewController: SiteTableViewController,
             resultCount: 3) { results in
             guard let results = results else { return }
             self.searchHighlights = results
-            self.searchTelemetry?.searchHighlights = results
             self.tableView.reloadData()
         }
     }
@@ -271,7 +270,6 @@ class SearchViewController: SiteTableViewController,
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
                 self.firefoxSuggestions = suggestions
-                self.searchTelemetry?.firefoxSuggestions = suggestions
                 self.tableView.reloadData()
             }
         }
@@ -602,7 +600,6 @@ class SearchViewController: SiteTableViewController,
                         self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
                     }
                 }
-                self.searchTelemetry?.remoteClientTabs = self.remoteClientTabs
             }
         }
     }
@@ -642,7 +639,6 @@ class SearchViewController: SiteTableViewController,
             let text = lines.joined(separator: "\n")
             return find(in: text)
         }
-        searchTelemetry?.filteredOpenedTabs = filteredOpenedTabs
     }
 
     func searchRemoteTabs(for searchString: String) {
@@ -674,8 +670,6 @@ class SearchViewController: SiteTableViewController,
 
             return false
         }
-
-        searchTelemetry?.filteredRemoteClientTabs = filteredRemoteClientTabs
     }
 
     private func querySuggestClient() {
@@ -704,6 +698,7 @@ class SearchViewController: SiteTableViewController,
                 })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
+                self.searchTelemetry?.clearVisibleResults()
             }
 
             // If there are no suggestions, just use whatever the user typed.
@@ -712,7 +707,6 @@ class SearchViewController: SiteTableViewController,
                 self.suggestions = [self.searchQuery]
             }
 
-            self.searchTelemetry?.suggestions = self.suggestions
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
@@ -729,7 +723,6 @@ class SearchViewController: SiteTableViewController,
             data
         }
 
-        searchTelemetry?.data = data
         tableView.reloadData()
     }
 

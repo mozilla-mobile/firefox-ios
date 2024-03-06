@@ -135,15 +135,6 @@ class SearchTelemetry {
     var engagementType: SearchTelemetryValues.EngagementType = .tap
     var impressionTelemetryTimer: Timer?
 
-    var remoteClientTabs = [ClientTabsSearchWrapper]()
-    var filteredOpenedTabs = [Tab]()
-    var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
-    var suggestions: [String]? = []
-    var firefoxSuggestions = [RustFirefoxSuggestion]()
-    var searchHighlights = [HighlightItem]()
-
-    var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
-
     var visibleRemoteClientTabs = [ClientTabsSearchWrapper]()
     var visibleFilteredOpenedTabs = [Tab]()
     var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
@@ -420,9 +411,18 @@ class SearchTelemetry {
     }
 
     func numberOfSearchResults() -> Int {
-        return suggestions?.count ?? 0 + data.count + searchHighlights.count
-        + filteredOpenedTabs.count + firefoxSuggestions.count
-        + filteredRemoteClientTabs.count
+        return visibleSuggestions.count + visibleData.count + visibleSearchHighlights.count
+        + visibleFilteredOpenedTabs.count + visibleFirefoxSuggestions.count
+        + visibleFilteredRemoteClientTabs.count
+    }
+
+    func clearVisibleResults() {
+        visibleSuggestions.removeAll()
+        visibleData.removeAll()
+        visibleSearchHighlights.removeAll()
+        visibleFilteredOpenedTabs.removeAll()
+        visibleFirefoxSuggestions.removeAll()
+        visibleFilteredRemoteClientTabs.removeAll()
     }
 
     // Comma separated list of result types in order.

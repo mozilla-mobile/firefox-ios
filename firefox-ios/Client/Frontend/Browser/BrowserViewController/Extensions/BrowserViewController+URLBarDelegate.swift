@@ -328,6 +328,7 @@ extension BrowserViewController: URLBarDelegate {
         )
         searchController?.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
+        searchController?.searchTelemetry?.clearVisibleResults()
         searchLoader?.query = text
         searchController?.searchTelemetry?.determineInteractionType()
     }
