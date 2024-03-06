@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
 		8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0687602B6D9F990031427A /* SettingsDelegate.swift */; };
 		8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F446A2B56EDC900438589 /* EngineProvider.swift */; };
 		8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A0F446D2B56EF1A00438589 /* WebEngine */; };
@@ -47,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHandler.swift; sourceTree = "<group>"; };
 		8A0687602B6D9F990031427A /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
 		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A0F446A2B56EDC900438589 /* EngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProvider.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				8A0F44882B5704C100438589 /* Model */,
 				8A0F44892B57050200438589 /* Networking */,
 				8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */,
+				1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */,
 				8A4602142B0FE40E00FFD17F /* UI */,
 			);
 			path = SampleBrowser;
@@ -358,6 +361,7 @@
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
+				1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */,
 				8A0F447F2B56FDAD00438589 /* BrowserError.swift in Sources */,
 				8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */,
 				8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */,

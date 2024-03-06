@@ -6,7 +6,7 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var engineProvider = EngineProvider()
+    var engineProvider = EngineProvider(telemetryProxy: SampleTelemetryHandler())
 
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,

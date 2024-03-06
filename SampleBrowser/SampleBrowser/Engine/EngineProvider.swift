@@ -10,7 +10,8 @@ struct EngineProvider {
     let session: EngineSession?
     let view: EngineView
 
-    init(engine: Engine = WKEngine.factory()) {
+    init(engine: Engine = WKEngine.factory(),
+         telemetryProxy: EngineTelemetryProxy) {
         do {
             session = try engine.createSession()
         } catch {
