@@ -31,9 +31,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r ./test-fixtures/requirements.txt
 
-    - name: Modifing Swift Package dependencies
+    - name: Firefox-ios - Modifing Swift Package dependencies
       run: |
         python ./test-fixtures/update-rust-component-version.py
+
+    - name: Focus - Modifing Swift Package dependencies
+      run: |
+        python ./focus-ios/focus-ios-tests/github-actions-scripts/update-rust-component-version.py
 
     - name: Get new A-S tag to be used in the PR info
       run: |
@@ -69,7 +73,7 @@ jobs:
       if: env.BRANCH_CREATED == 'false'
       run: |-
         git diff
-        git diff --quiet || (git add firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved firefox-ios/Client.xcodeproj/project.pbxproj)
+        git diff --quiet || (git add firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved firefox-ios/Client.xcodeproj/project.pbxproj focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved focus-ios/Blockzilla.xcodeproj/project.pbxproj)
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3

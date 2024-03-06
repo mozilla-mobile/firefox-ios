@@ -7,8 +7,10 @@ from pbxproj import XcodeProject
 
 # Constants
 GITHUB_REPO = "mozilla/rust-components-swift"
-SPM_PACKAGE = "firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+FIREFOX_SPM_PACKAGE = "firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
 FIREFOX_PROJECT = "firefox-ios/Client.xcodeproj/project.pbxproj"
+FOCUS_SPM_PACKAGE = "focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+FOCUS_PROJECT = "focus-ios/Blockzilla.xcodeproj/project.pbxproj"
 RUST_COMPONENTS_ID = "433F87D62788F34500693368"
 
 
@@ -29,9 +31,9 @@ def get_newest_rust_components_version(GITHUB_REPO):
 
 
 # Read the current version and commit of the Rust components from the SPM package file
-def read_rust_components_tag_version(SPM_PACKAGE):
+def read_rust_components_tag_version(FIREFOX_SPM_PACKAGE):
     try:
-        with open(SPM_PACKAGE) as f:
+        with open(FIREFOX_SPM_PACKAGE) as f:
             data = json.load(f)
             for i in data["pins"]:
                 if i["identity"] == "rust-components-swift":
@@ -42,6 +44,45 @@ def read_rust_components_tag_version(SPM_PACKAGE):
         logging.info(f"Unexpected error: {e}")
     return None, None
 
+def focus_read_rust_components_tag_version():
+    # Read Package file to find the current rust-component version
+    f = open(FOCUS_SPM_PACKAGE)
+    data = json.load(f)
+    pin = data["object"]
+
+    for i in pin["pins"]:
+        if i["package"] == "MozillaRustComponentsSwift":
+            # return the json with the RustComponent info
+            json_new_version = i["state"]
+    f.close()
+
+    # Return the current version and commit
+    return json_new_version["version"], json_new_version["revision"]
+
+def focus_read_project_min_version():
+    line_number = 0
+    list_of_results = []
+    string_to_search = 'https://github.com/mozilla/rust-components-swift'
+
+    with open(FOCUS_PROJECT) as f:
+        #if 'https://github.com/mozilla/rust-components-swift' in f.read():
+        line_read = 0
+        for line in f:
+            # For each line, check if line contains the string
+            line_number += 1
+            if string_to_search in line:
+                # If yes, then look for the field we are interested in: minimumVersion
+                for i in range(3):
+                    minimumVersion = next(f, '').strip()
+
+                version_found = minimumVersion.find("=")
+                last_line_position = minimumVersion.find(";")
+                current_tag_version = ''
+                # version format: XX.Y.Z
+                for i in range(version_found+2 , last_line_position):
+                    current_tag_version+= minimumVersion[i]
+                # Return the current rust-component version in project
+                return current_tag_version
 
 # Read the minimum required version of the Rust components from the Firefox project file
 def read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID):
@@ -82,16 +123,22 @@ def main():
     _init_logging()
 
     rust_component_repo_tag, rust_component_repo_commit = get_newest_rust_components_version(GITHUB_REPO)
-    current_tag, current_commit = read_rust_components_tag_version(SPM_PACKAGE)
-    current_min_version = read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID)
+    firefox_current_tag, firefox_current_commit = read_rust_components_tag_version(FIREFOX_SPM_PACKAGE)
+    firefox_current_min_version = read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID)
 
-    if current_min_version and compare_versions(current_tag, rust_component_repo_tag):
-        update_file(current_tag, current_commit, rust_component_repo_tag, rust_component_repo_commit, SPM_PACKAGE)
-        update_file(current_min_version, None, rust_component_repo_tag, None, FIREFOX_PROJECT)
+    focus_current_tag, focus_current_commit = focus_read_rust_components_tag_version()
+    focus_current_min_version = focus_read_project_min_version()
+
+    if firefox_current_min_version and compare_versions(firefox_current_tag, rust_component_repo_tag):
+        update_file(firefox_current_tag, firefox_current_commit, rust_component_repo_tag, rust_component_repo_commit, FIREFOX_SPM_PACKAGE)
+        update_file(firefox_current_min_version, None, rust_component_repo_tag, None, FIREFOX_PROJECT)
 
         with open("test-fixtures/newest_tag.txt", "w+") as f:
             f.write(rust_component_repo_tag + "\n")
 
+    if compare_versions(focus_current_tag, rust_component_repo_tag):
+        update_file(focus_current_tag, focus_current_commit, rust_component_repo_tag, rust_component_repo_commit, FOCUS_SPM_PACKAGE)
+        update_file(focus_current_min_version, None, rust_component_repo_tag, None, FOCUS_PROJECT)
 
 if __name__ == '__main__':
     main()
