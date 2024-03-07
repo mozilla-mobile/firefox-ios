@@ -537,7 +537,7 @@ class Tab: NSObject, ThemeApplicable {
         DefaultLogger.shared.log("nb - restore outside url \(webView.url)", level: .info, category: .nblog)
         if let url = url {
             DefaultLogger.shared.log("nb - restore inside url \(url)", level: .info, category: .nblog)
-            webView.load(PrivilegedRequest(url: url) as URLRequest)
+            webView.load(URLRequest(url: url))
         }
 
         DefaultLogger.shared.log("nb - restore middle state \(webView.url)", level: .info, category: .nblog)
