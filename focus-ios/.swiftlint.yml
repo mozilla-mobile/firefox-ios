@@ -92,16 +92,16 @@ only_rules: # Only enforce these rules, ignore all others
   # - prohibited_super_call
   # - protocol_property_accessors_order
 
-line_length:
-  warning: 125
-  ignores_urls: true
-  ignores_interpolated_strings: true
+# line_length:
+#   warning: 125
+#   ignores_urls: true
+#   ignores_interpolated_strings: true
 
-file_header:
-  required_string: |
-                    // This Source Code Form is subject to the terms of the Mozilla Public
-                    // License, v. 2.0. If a copy of the MPL was not distributed with this
-                    // file, You can obtain one at http://mozilla.org/MPL/2.0/
+# file_header:
+#   required_string: |
+#                     // This Source Code Form is subject to the terms of the Mozilla Public
+#                     // License, v. 2.0. If a copy of the MPL was not distributed with this
+#                     // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
