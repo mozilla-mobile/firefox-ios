@@ -11,7 +11,7 @@ public protocol EngineSession {
 
     /// Proxy object for handling telemetry events.
     var telemetryProxy: EngineTelemetryProxy? { get set }
-    
+
     /// Find in page delegate.
     var findInPageDelegate: FindInPageHelperDelegate? { get set }
 
