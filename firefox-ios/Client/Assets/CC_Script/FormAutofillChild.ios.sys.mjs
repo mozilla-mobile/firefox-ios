@@ -77,7 +77,7 @@ export class FormAutofillChild {
     this._doIdentifyAutofillFields(element);
   }
 
-  onSubmit(evt) {
+  onSubmit(_event) {
     if (!this.fieldDetailsManager.activeHandler) {
       return;
     }

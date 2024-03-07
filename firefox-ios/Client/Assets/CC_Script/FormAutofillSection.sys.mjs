@@ -79,40 +79,40 @@ export class FormAutofillSection {
    * Examine the section is createable for storing the profile. This method
    * must be overrided.
    *
-   * @param {Object} record The record for examining createable
+   * @param {Object} _record The record for examining createable
    * @returns {boolean} True for the record is createable, otherwise false
    *
    */
-  isRecordCreatable(record) {
+  isRecordCreatable(_record) {
     throw new TypeError("isRecordCreatable method must be overridden");
   }
 
   /**
    * Override this method if the profile is needed to apply some transformers.
    *
-   * @param {object} profile
+   * @param {object} _profile
    *        A profile should be converted based on the specific requirement.
    */
-  applyTransformers(profile) {}
+  applyTransformers(_profile) {}
 
   /**
    * Override this method if the profile is needed to be customized for
    * previewing values.
    *
-   * @param {object} profile
+   * @param {object} _profile
    *        A profile for pre-processing before previewing values.
    */
-  preparePreviewProfile(profile) {}
+  preparePreviewProfile(_profile) {}
 
   /**
    * Override this method if the profile is needed to be customized for filling
    * values.
    *
-   * @param {object} profile
+   * @param {object} _profile
    *        A profile for pre-processing before filling values.
    * @returns {boolean} Whether the profile should be filled.
    */
-  async prepareFillingProfile(profile) {
+  async prepareFillingProfile(_profile) {
     return true;
   }
 
@@ -884,7 +884,7 @@ export class FormAutofillCreditCardSection extends FormAutofillSection {
     }
   }
 
-  _handlePageHide(event) {
+  _handlePageHide(_event) {
     this.handler.window.removeEventListener(
       "pagehide",
       this._handlePageHide.bind(this)

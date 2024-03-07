@@ -182,7 +182,7 @@ export const FormAutofillHeuristics = {
    *          Return true if there is any field can be recognized in the parser,
    *          otherwise false.
    */
-  _parsePhoneFields(scanner, detail) {
+  _parsePhoneFields(scanner, _fieldDetail) {
     let matchingResult;
     const GRAMMARS = this.PHONE_FIELD_GRAMMARS;
 
@@ -277,7 +277,7 @@ export const FormAutofillHeuristics = {
    *          Return true if there is any field can be recognized in the parser,
    *          otherwise false.
    */
-  _parseStreetAddressFields(scanner, fieldDetail) {
+  _parseStreetAddressFields(scanner, _fieldDetail) {
     const INTERESTED_FIELDS = [
       "street-address",
       "address-line1",
