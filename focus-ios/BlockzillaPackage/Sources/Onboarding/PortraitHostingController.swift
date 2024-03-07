@@ -4,9 +4,8 @@
 
 import SwiftUI
 
-public class PortraitHostingController<Content>: UIHostingController<Content> where Content : View {
+public class PortraitHostingController<Content>: UIHostingController<Content> where Content: View {
+    override public var shouldAutorotate: Bool { return false }
 
-    public override var shouldAutorotate: Bool { return false }
-
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask { return .portrait }
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask { return .portrait }
 }

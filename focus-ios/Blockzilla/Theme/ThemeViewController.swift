@@ -6,7 +6,6 @@ import UIKit
 import UIHelpers
 
 class ThemeViewController: UIViewController {
-
     enum ThemeSection {
         case systemTheme
         case themePicker
@@ -41,7 +40,7 @@ class ThemeViewController: UIViewController {
         return tableView
     }()
 
-    lazy private var tableViewConstraints = [
+    private lazy var tableViewConstraints = [
         tableView.topAnchor.constraint(equalTo: view.topAnchor),
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -114,7 +113,6 @@ class ThemeViewController: UIViewController {
 }
 
 extension ThemeViewController: UITableViewDataSource {
-
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
@@ -129,7 +127,6 @@ extension ThemeViewController: UITableViewDataSource {
 }
 
 extension ThemeViewController: UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return  30
     }
@@ -139,7 +136,6 @@ extension ThemeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         switch indexPath.section {
         case 1:
             configureStyle(for: indexPath.row == 0 ? .light : .dark)
@@ -149,7 +145,6 @@ extension ThemeViewController: UITableViewDelegate {
         }
         tableView.reloadData()
     }
-
 }
 
 extension ThemeViewController: SystemThemeDelegate {

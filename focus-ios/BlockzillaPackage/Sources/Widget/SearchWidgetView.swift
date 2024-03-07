@@ -25,7 +25,7 @@ public struct SearchWidgetView: View {
                     .foregroundColor(.white)
 
                 Spacer()
-                
+
                 Image.magnifyingGlass
                     .foregroundColor(.white)
                     .frame(height: .magnifyingGlassHeight)

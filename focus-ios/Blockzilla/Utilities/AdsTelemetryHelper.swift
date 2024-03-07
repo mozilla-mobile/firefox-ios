@@ -74,7 +74,6 @@ extension SearchProviderModel {
 }
 
 class AdsTelemetryHelper {
-
     var getURL: (() -> URL?)!
     var adsTelemetryUrlList: [String] = [String]() {
         didSet {

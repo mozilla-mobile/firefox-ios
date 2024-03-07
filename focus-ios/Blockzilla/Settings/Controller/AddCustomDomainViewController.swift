@@ -10,7 +10,6 @@ protocol AddCustomDomainViewControllerDelegate: AnyObject {
 }
 
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
-
     private lazy var inputLabel: SmartLabel = {
         let inputLabel = SmartLabel()
         inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel

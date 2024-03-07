@@ -7,7 +7,6 @@ import Intents
 import IntentsUI
 
 class SiriFavoriteViewController: UIViewController {
-
     private lazy var cancelButton: UIBarButtonItem = {
         let cancelButton = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
         cancelButton.tintColor = .accent
@@ -98,7 +97,7 @@ class SiriFavoriteViewController: UIViewController {
         return bottomBorder
     }()
 
-    private var addedToSiri: Bool = false {
+    private var addedToSiri = false {
         didSet {
             editView.isHidden = !addedToSiri
             setUpRightBarButton()
@@ -136,7 +135,7 @@ class SiriFavoriteViewController: UIViewController {
             inputLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             inputLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemOffset),
 
-            textInput.heightAnchor.constraint(equalToConstant:  UIConstants.layout.settingsSectionHeight),
+            textInput.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsSectionHeight),
             textInput.topAnchor.constraint(equalTo: inputLabel.bottomAnchor, constant: UIConstants.layout.settingsTextPadding),
             textInput.leadingAnchor.constraint(equalTo: inputLabel.leadingAnchor, constant: -UIConstants.layout.settingsTextPadding),
             textInput.trailingAnchor.constraint(equalTo: inputLabel.trailingAnchor, constant: -UIConstants.layout.settingsTextPadding),
@@ -147,7 +146,6 @@ class SiriFavoriteViewController: UIViewController {
     }
 
     private func setUpEditUI() {
-
         view.addSubview(editView)
         editView.addSubview(topBorder)
         editView.addSubview(editLabel)

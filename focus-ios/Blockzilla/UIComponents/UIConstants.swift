@@ -5,7 +5,6 @@
 import UIKit
 
 struct UIConstants {
-
     struct layout {
         static let browserToolbarDisabledOpacity: CGFloat = 0.4
         static let browserToolbarHeight: CGFloat = 44

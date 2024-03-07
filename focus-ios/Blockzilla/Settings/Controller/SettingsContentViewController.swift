@@ -17,7 +17,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     var url: URL
     var timer: Timer?
 
-    var isLoaded: Bool = false {
+    var isLoaded = false {
         didSet {
             if isLoaded {
                 // Add a small delay to allow the stylesheets to load and avoid flicker.
@@ -35,7 +35,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
-    private var isError: Bool = false {
+    private var isError = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
@@ -142,7 +142,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
             interstitialSpinnerView.bottomAnchor.constraint(equalTo: interstitialView.bottomAnchor),
             interstitialSpinnerView.leadingAnchor.constraint(equalTo: interstitialView.leadingAnchor),
             interstitialSpinnerView.trailingAnchor.constraint(equalTo: interstitialView.trailingAnchor)
-
         ])
 
         startLoading()

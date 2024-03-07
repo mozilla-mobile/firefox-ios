@@ -1,7 +1,6 @@
 import UIKit
 
 struct SectionItem {
-
     let id = UUID()
 
     let configureCell: (UITableView, IndexPath) -> UITableViewCell

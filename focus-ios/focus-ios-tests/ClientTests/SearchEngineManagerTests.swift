@@ -21,11 +21,6 @@ class SearchEngineManagerTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
     func testAddEngine() {
         let manager = SearchEngineManager(prefs: mockUserDefaults)
         let engine = manager.addEngine(name: CUSTOM_ENGINE_NAME, template: CUSTOM_ENGINE_TEMPLATE)
@@ -108,7 +103,7 @@ class SearchEngineManagerTests: XCTestCase {
         manager.removeEngine(engine: engineToRemove)
         XCTAssertFalse(manager.isValidSearchEngineName(engineToRemove.name))
     }
-    
+
     func testQueryFromSearchURLGoogle() {
         let manager = SearchEngineManager(prefs: mockUserDefaults)
         let url = URL(string: "https://www.google.com/search?q=ps5&source=hp&ei=yDybY7_iBMSH9u8P-fWwkAs&iflsig=AJiK0e8AAAAAY5tK2K2eVYMzMJI3G8qcqgmnGdrC6UVp&ved=0ahUKEwi_5s_h9_v7AhXEg_0HHfk6DLIQ4dUDCAg&uact=5&oq=ps5&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIICAAQgAQQyQMyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEOgsILhCABBDHARDRAzoFCC4QgAQ6CAguEIAEENQCUIoEWOwGYKIJaAFwAHgAgAFLiAHcAZIBATOYAQCgAQGwAQA&sclient=gws-wiz")
@@ -138,7 +133,6 @@ class SearchEngineManagerTests: XCTestCase {
         }
         XCTAssertEqual(manager.queryForSearchURL(url), "ps5")
     }
-    
 }
 
 private class MockUserDefaults: UserDefaults {

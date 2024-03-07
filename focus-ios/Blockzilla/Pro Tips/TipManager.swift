@@ -6,7 +6,6 @@ import Foundation
 import LocalAuthentication
 
 class TipManager {
-
     @UserDefault(key: TipKey.releaseTip, defaultValue: true)
     static var releaseTip: Bool
 
@@ -191,13 +190,11 @@ class TipManager {
     }
 
     var numberOfTips: Int { availableTips.count }
-
 }
 
 // MARK: - Home Screen Tips Strings
 
 fileprivate extension String {
-
     static let shortcutsTipTitle = NSLocalizedString("Tip.Shortcuts.Title", value: "Create shortcuts to the sites you visit most:", comment: "Text for a label that indicates the title for shortcuts tip.")
     static let shortcutsTipDescription = NSLocalizedString("Tip.Shortcuts.Description", value: "Select Add to Shortcuts from the %@ menu", comment: "Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar).")
     static let sitesNotWorkingTipTitle = NSLocalizedString("Tip.SitesNotWorking.Title", value: "Site missing content or acting strange?", comment: "Text for a label that indicates the title for sites not working tip.")

@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
-
     enum AboutSection: CaseIterable {
         case aboutHeader
         case aboutCategories
@@ -267,7 +266,6 @@ private class AboutHeaderView: UIView {
     }
 
     private func configureConstraints() {
-
         let learnMoreButtonTopConstraint = learnMoreButton.topAnchor.constraint(greaterThanOrEqualTo: aboutParagraph.bottomAnchor)
         learnMoreButtonTopConstraint.priority = .required
         let learnMoreButtonBottomConstraint = learnMoreButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -UIConstants.layout.settingsViewOffset)
@@ -282,7 +280,7 @@ private class AboutHeaderView: UIView {
 
             aboutParagraph.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             aboutParagraph.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
-            aboutParagraph.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, constant:  -UIConstants.layout.settingsHorizontalOffset),
+            aboutParagraph.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, constant: -UIConstants.layout.settingsHorizontalOffset),
             aboutParagraph.widthAnchor.constraint(lessThanOrEqualToConstant: UIConstants.layout.settingsAboutViewWidth),
 
             learnMoreButton.leadingAnchor.constraint(equalTo: aboutParagraph.leadingAnchor),
