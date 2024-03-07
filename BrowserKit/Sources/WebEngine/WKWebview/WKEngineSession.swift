@@ -386,14 +386,14 @@ class WKEngineSession: NSObject,
     func webView(_ webView: WKWebView,
                  didFail navigation: WKNavigation!,
                  withError error: Error) {
-        telemetryProxy?.handleTelemetry(event: .didFailNavigation)
+        telemetryProxy?.handleTelemetry(session: self, event: .didFailNavigation)
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
     func webView(_ webView: WKWebView,
                  didFailProvisionalNavigation navigation: WKNavigation!,
                  withError error: Error) {
-        telemetryProxy?.handleTelemetry(event: .didFailProvisionalNavigation)
+        telemetryProxy?.handleTelemetry(session: self, event: .didFailProvisionalNavigation)
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 

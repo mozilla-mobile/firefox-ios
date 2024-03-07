@@ -6,7 +6,7 @@ import Foundation
 import WebEngine
 
 final class TelemetryHandler: EngineTelemetryProxy {
-    func handleTelemetry(event: EngineTelemetryEvent) {
+    func handleTelemetry(session: EngineSession, event: EngineTelemetryEvent) {
         switch event {
         case .didFailNavigation:
             print("Telemetry event triggered: Did fail navigation")
