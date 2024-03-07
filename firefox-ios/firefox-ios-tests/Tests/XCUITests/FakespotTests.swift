@@ -167,6 +167,7 @@ class FakespotTests: IphoneOnlyTestCase {
         waitUntilPageLoad()
         if isWalmart {
             let searchWalmart = app.webViews["contentView"].searchFields["Search Walmart"]
+            mozWaitForElementToExist(searchWalmart)
             searchWalmart.tap()
             searchWalmart.typeText("shoe")
             mozWaitForElementToExist(app.webViews["contentView"].buttons["Search icon"])
@@ -180,6 +181,7 @@ class FakespotTests: IphoneOnlyTestCase {
                 waitUntilPageLoad()
             }
             let searchBestBuy = app.webViews["contentView"].textFields["Search"]
+            mozWaitForElementToExist(searchBestBuy)
             searchBestBuy.tap()
             searchBestBuy.typeText("iphone")
             mozWaitForElementToExist(app.webViews["contentView"].buttons["submit search"])
