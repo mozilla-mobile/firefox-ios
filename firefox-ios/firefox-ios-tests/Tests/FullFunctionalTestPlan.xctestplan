@@ -65,6 +65,7 @@
         "DragAndDropTests\/testRearrangeTabsTabTray()",
         "ExperimentIntegrationTests",
         "FakespotTests\/testAcceptTheRejectedOptInNotification()",
+        "FakespotTests\/testOptInNotificationLayout()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
