@@ -82,6 +82,7 @@
         "ExperimentIntegrationTests",
         "FakespotTests\/testAcceptTheRejectedOptInNotification()",
         "FakespotTests\/testFakespotAvailable()",
+        "FakespotTests\/testOptInNotificationLayout()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
