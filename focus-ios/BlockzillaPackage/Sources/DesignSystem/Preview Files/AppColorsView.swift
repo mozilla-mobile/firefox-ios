@@ -10,7 +10,8 @@ struct AppColorsView: View {
             ForEach(AppColor.allCases, id: \.self) { color in
                 HStack {
                     Text(color.rawValue)
-                    Spacer()Color(color.color)
+                    Spacer()
+                    Color(color.color)
                         .frame(width: 44, height: 44)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .overlay(
