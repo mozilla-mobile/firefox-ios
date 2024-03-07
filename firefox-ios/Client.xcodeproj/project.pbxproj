@@ -21362,7 +21362,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
 				kind = exactVersion;
-				version = 8.20.0;
+				version = 8.21.0;
 			};
 		};
 		8AB30EC62B6C038600BD9A9B /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
