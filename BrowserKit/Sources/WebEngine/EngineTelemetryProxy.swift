@@ -15,6 +15,15 @@ public enum EngineTelemetryEvent {
 
     // An error page was shown on the page. Includes error code.
     case showErrorPage(Int)
+
+    // A page load started.
+    case pageLoadStarted
+
+    // A page load was cancelled.
+    case pageLoadCancelled
+
+    // A page load was completed.
+    case pageLoadFinished
 }
 
 /// Protocol for handling WebEngine telemetry events. These can be custom-handled

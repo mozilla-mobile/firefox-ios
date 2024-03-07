@@ -372,6 +372,7 @@ class WKEngineSession: NSObject,
     func webView(_ webView: WKWebView,
                  didCommit navigation: WKNavigation!) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
+        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadStarted)
     }
 
     func webView(_ webView: WKWebView,
@@ -381,12 +382,14 @@ class WKEngineSession: NSObject,
         if let url = webView.url {
             metadataFetcher.fetch(fromSession: self, url: url)
         }
+        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadFinished)
     }
 
     func webView(_ webView: WKWebView,
                  didFail navigation: WKNavigation!,
                  withError error: Error) {
         telemetryProxy?.handleTelemetry(session: self, event: .didFailNavigation)
+        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
@@ -394,6 +397,7 @@ class WKEngineSession: NSObject,
                  didFailProvisionalNavigation navigation: WKNavigation!,
                  withError error: Error) {
         telemetryProxy?.handleTelemetry(session: self, event: .didFailProvisionalNavigation)
+        telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
