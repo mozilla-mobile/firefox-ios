@@ -7,7 +7,6 @@ import Foundation
 
 class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let titleFontSize: CGFloat = 17
         static let titleMinimumScaleFactor: CGFloat = 0.7
         static let verticalPadding: CGFloat = 19
         static let horizontalPadding: CGFloat = 16
@@ -21,9 +20,7 @@ class InactiveTabsHeaderView: UICollectionReusableView, ReusableCell, ThemeAppli
     }
 
     lazy var titleLabel: UILabel = .build { titleLabel in
-        titleLabel.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .headline,
-            size: UX.titleFontSize)
+        titleLabel.font = FXFontStyles.Bold.headline.scaledFont()
         titleLabel.text = String.TabsTrayInactiveTabsSectionTitle
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.headerLabel

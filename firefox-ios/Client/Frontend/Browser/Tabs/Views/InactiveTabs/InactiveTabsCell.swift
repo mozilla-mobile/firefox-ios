@@ -10,7 +10,6 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
     struct UX {
         static let imageSize: CGFloat = 28
         static let labelTopBottomMargin: CGFloat = 11
-        static let titleFontSize: CGFloat = 14
         static let imageViewLeadingConstant: CGFloat = 16
         static let separatorHeight: CGFloat = 0.5
         static let faviconCornerRadius: CGFloat = 5
@@ -21,9 +20,7 @@ class InactiveTabsCell: UICollectionViewListCell, ReusableCell, ThemeApplicable 
     private lazy var bottomSeparatorView: UIView = .build { _ in }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .caption1,
-            size: UX.titleFontSize)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.cellLabel
         label.textAlignment = .natural
