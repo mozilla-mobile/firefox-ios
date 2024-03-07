@@ -14,6 +14,12 @@ final class TelemetryHandler: EngineTelemetryProxy {
             print("Telemetry event triggered: Did fail provisional navigation")
         case .showErrorPage(let errorCode):
             print("Telemetry event triggered: Show error page. Error code \(errorCode)")
+        case .pageLoadStarted:
+            print("Telemetry event triggered: Page load started.")
+        case .pageLoadFinished:
+            print("Telemetry event triggered: Page load finished.")
+        case .pageLoadCancelled:
+            print("Telemetry event triggered: Page load cancelled.")
         }
     }
 }
