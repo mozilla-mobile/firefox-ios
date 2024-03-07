@@ -41,13 +41,14 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     private let profile: Profile
     private let model: SearchEngines
 
-    // Item from `defaultEngine` section.
-    private let ItemDefaultEngine = 0
-
-    private enum SearchSuggestItem: Int, CaseIterable {
+    private enum DefaultSearchItem: Int, CaseIterable {
+        case defaultEngine
         case defaultSuggestions
-        case privateSuggestions
     }
+
+    // Suggestions from `Suggestions for Search Engines` section.
+    // ItemDefaultOrPrivateSearchSuggestions: for `Firefox Suggest` or `Felt Privacy` feature.
+    private let ItemDefaultOrPrivateSearchSuggestions = 0
 
     private enum FirefoxSuggestItem: Int, CaseIterable {
         case browsingHistory
@@ -145,15 +146,31 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
         switch section {
         case .defaultEngine:
-            engine = model.defaultEngine
-            cell.editingAccessoryType = .disclosureIndicator
-            cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
-            cell.accessibilityValue = engine.shortName
-            cell.textLabel?.text = engine.shortName
-            cell.imageView?.image = engine.image.createScaled(IconSize)
-            cell.imageView?.layer.cornerRadius = 4
-            cell.imageView?.layer.masksToBounds = true
-            cell.applyTheme(theme: themeManager.currentTheme)
+            switch indexPath.item {
+            case DefaultSearchItem.defaultEngine.rawValue:
+                engine = model.defaultEngine
+                cell.editingAccessoryType = .disclosureIndicator
+                cell.accessibilityLabel = .Settings.Search.AccessibilityLabels.DefaultSearchEngine
+                cell.accessibilityValue = engine.shortName
+                cell.textLabel?.text = engine.shortName
+                cell.imageView?.image = engine.image.createScaled(IconSize)
+                cell.imageView?.layer.cornerRadius = 4
+                cell.imageView?.layer.masksToBounds = true
+                cell.applyTheme(theme: themeManager.currentTheme)
+            case DefaultSearchItem.defaultSuggestions.rawValue:
+                if !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
+                        defaultValue: model.shouldShowSearchSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.ShowSearchSuggestions
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleSearchSuggestions)
+                    )
+                }
+            default: break
+            }
         case .alternateEngines:
             // The default engine is not an alternate search engine.
             let index = indexPath.item + 1
@@ -188,31 +205,31 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
         case .searchEnginesSuggestions:
             switch indexPath.item {
-            case SearchSuggestItem.defaultSuggestions.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
-                    defaultValue: model.shouldShowSearchSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.ShowSearchSuggestions
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleSearchSuggestions)
-                )
-
-            case SearchSuggestItem.privateSuggestions.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                    defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.PrivateSessionSetting
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.PrivateSessionDescription
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-                )
-                cell.isHidden = !model.shouldShowSearchSuggestions
+            case ItemDefaultOrPrivateSearchSuggestions:
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showSearchSuggestions,
+                        defaultValue: model.shouldShowSearchSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.ShowSearchSuggestions
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleSearchSuggestions)
+                    )
+                } else {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
+                        defaultValue: model.shouldShowPrivateModeSearchSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.PrivateSessionSetting
+                        ),
+                        statusText: String.localizedStringWithFormat(
+                            .Settings.Search.PrivateSessionDescription
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
+                    )
+                }
 
             default: break
             }
@@ -297,7 +314,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     cell: cell,
                     selector: #selector(didToggleShowFirefoxSuggestionsInPrivateMode)
                 )
-                cell.isHidden = !model.shouldShowFirefoxSuggestions
+                cell.isHidden = model.shouldHidePrivateModeFirefoxSuggestSetting
 
             case FirefoxSuggestItem.suggestionLearnMore.rawValue:
                 cell.accessibilityLabel = String.localizedStringWithFormat(
@@ -326,10 +343,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         sectionsToDisplay = [Section.defaultEngine, Section.alternateEngines]
-        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly),
+           !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
             sectionsToDisplay.append(.searchEnginesSuggestions)
         }
         if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+            sectionsToDisplay.append(.searchEnginesSuggestions)
             sectionsToDisplay.append(.firefoxSuggestSettings)
         }
         return sectionsToDisplay.count
@@ -339,13 +358,16 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         let section = Section(rawValue: sectionsToDisplay[section].rawValue) ?? .defaultEngine
         switch section {
         case .defaultEngine:
-            return 1
+            return featureFlags.isFeatureEnabled(
+                .firefoxSuggestFeature,
+                checking: .buildAndUser
+            ) ? 1 : DefaultSearchItem.allCases.count
         case .alternateEngines:
             // The first engine -- the default engine -- is not shown in the alternate search engines list.
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
         case .searchEnginesSuggestions:
-            return SearchSuggestItem.allCases.count
+            return 1
         case .firefoxSuggestSettings:
             return FirefoxSuggestItem.allCases.count
         }
@@ -356,7 +378,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
         switch section {
         case .defaultEngine:
-            guard indexPath.item == ItemDefaultEngine else { return nil }
+            guard indexPath.item == DefaultSearchItem.defaultEngine.rawValue else { return nil }
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
@@ -418,16 +440,13 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath {
         case IndexPath(
-                row: SearchSuggestItem.privateSuggestions.rawValue,
-                section: Section.searchEnginesSuggestions.rawValue):
-            if !model.shouldShowSearchSuggestions { return 0 }
-        case IndexPath(
                 row: FirefoxSuggestItem.sponsored.rawValue,
-                section: Section.firefoxSuggestSettings.rawValue),
-            IndexPath(
-                row: FirefoxSuggestItem.privateSuggestions.rawValue,
                 section: Section.firefoxSuggestSettings.rawValue):
             if  !model.shouldShowFirefoxSuggestions { return 0 }
+        case IndexPath(
+                row: FirefoxSuggestItem.privateSuggestions.rawValue,
+                section: Section.firefoxSuggestSettings.rawValue):
+            if model.shouldHidePrivateModeFirefoxSuggestSetting { return 0 }
         default: return UITableView.automaticDimension
         }
         return UITableView.automaticDimension
@@ -559,6 +578,48 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         cell.selectionStyle = .none
     }
 
+    private func didToggleFirefoxSuggestions(
+        _ toggle: ThemedSwitch,
+        suggestionType: FirefoxSuggestItem
+    ) {
+        var shouldShowSuggestions = false
+        switch suggestionType {
+        case .browsingHistory:
+            model.shouldShowBrowsingHistorySuggestions = toggle.isOn
+            shouldShowSuggestions = model.shouldShowBrowsingHistorySuggestions &&
+            !model.shouldShowBookmarksSuggestions &&
+            !model.shouldShowSyncedTabsSuggestions
+        case .bookmarks:
+            model.shouldShowBookmarksSuggestions = toggle.isOn
+            shouldShowSuggestions = model.shouldShowBookmarksSuggestions &&
+            !model.shouldShowBrowsingHistorySuggestions &&
+            !model.shouldShowSyncedTabsSuggestions
+        case .syncedTabs:
+            model.shouldShowSyncedTabsSuggestions = toggle.isOn
+            shouldShowSuggestions = model.shouldShowSyncedTabsSuggestions &&
+            !model.shouldShowBrowsingHistorySuggestions &&
+            !model.shouldShowBookmarksSuggestions
+        default: break
+        }
+
+        if shouldShowSuggestions {
+            updateCells(
+                at: [IndexPath(
+                    row: FirefoxSuggestItem.privateSuggestions.rawValue,
+                    section: Section.firefoxSuggestSettings.rawValue
+                )]
+            )
+        } else if model.shouldHidePrivateModeFirefoxSuggestSetting {
+            model.shouldShowPrivateModeFirefoxSuggestions = false
+            updateCells(
+                at: [IndexPath(
+                    row: FirefoxSuggestItem.privateSuggestions.rawValue,
+                    section: Section.firefoxSuggestSettings.rawValue
+                )]
+            )
+        }
+    }
+
     private func updateCells(at indexPaths: [IndexPath]) {
         tableView.reloadRows(at: indexPaths, with: .automatic)
     }
@@ -586,16 +647,6 @@ extension SearchSettingsTableViewController {
     func didToggleSearchSuggestions(_ toggle: ThemedSwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestions = toggle.isOn
-        model.shouldShowPrivateModeSearchSuggestions = model.shouldShowSearchSuggestions
-        ? model.shouldShowPrivateModeSearchSuggestions
-        : false
-
-        updateCells(
-            at: [IndexPath(
-                row: SearchSuggestItem.privateSuggestions.rawValue,
-                section: Section.searchEnginesSuggestions.rawValue
-            )]
-        )
     }
 
     @objc
@@ -610,33 +661,27 @@ extension SearchSettingsTableViewController {
 
     @objc
     func didToggleBrowsingHistorySuggestions(_ toggle: ThemedSwitch) {
-        model.shouldShowBrowsingHistorySuggestions = toggle.isOn
+        didToggleFirefoxSuggestions(toggle, suggestionType: .browsingHistory)
     }
 
     @objc
     func didToggleBookmarksSuggestions(_ toggle: ThemedSwitch) {
-        model.shouldShowBookmarksSuggestions = toggle.isOn
+        didToggleFirefoxSuggestions(toggle, suggestionType: .bookmarks)
     }
 
     @objc
     func didToggleSyncedTabsSuggestions(_ toggle: ThemedSwitch) {
-        model.shouldShowSyncedTabsSuggestions = toggle.isOn
+        didToggleFirefoxSuggestions(toggle, suggestionType: .syncedTabs)
     }
 
     @objc
     func didToggleEnableNonSponsoredSuggestions(_ toggle: ThemedSwitch) {
         model.shouldShowFirefoxSuggestions = toggle.isOn
         model.shouldShowSponsoredSuggestions = toggle.isOn
-        model.shouldShowPrivateModeFirefoxSuggestions = model.shouldShowFirefoxSuggestions
-        ? model.shouldShowPrivateModeFirefoxSuggestions
-        : false
 
         updateCells(
             at: [IndexPath(
                 row: FirefoxSuggestItem.sponsored.rawValue,
-                section: Section.firefoxSuggestSettings.rawValue
-            ), IndexPath(
-                row: FirefoxSuggestItem.privateSuggestions.rawValue,
                 section: Section.firefoxSuggestSettings.rawValue
             )]
         )

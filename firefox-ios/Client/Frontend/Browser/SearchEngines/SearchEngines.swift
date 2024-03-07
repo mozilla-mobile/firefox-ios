@@ -192,12 +192,15 @@ class SearchEngines {
         }
     }
 
+    var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
+        return !shouldShowBookmarksSuggestions &&
+        !shouldShowSyncedTabsSuggestions &&
+        !shouldShowBrowsingHistorySuggestions
+    }
+
     var isPrivateModeSettingEnabled: Bool {
-        return shouldShowPrivateModeSearchSuggestions ||
-               shouldShowPrivateModeFirefoxSuggestions ||
-               shouldShowBookmarksSuggestions ||
-               shouldShowSyncedTabsSuggestions ||
-               shouldShowBrowsingHistorySuggestions
+        return shouldShowPrivateModeFirefoxSuggestions ||
+               shouldShowSearchSuggestions
     }
 
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
