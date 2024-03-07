@@ -353,10 +353,6 @@ class HomepageViewController:
         scrollViewDidScroll(collectionView)
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        dismissKeyboard()
-    }
-
     @objc
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
