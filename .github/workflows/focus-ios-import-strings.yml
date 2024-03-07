@@ -1,4 +1,4 @@
-name: Create a PR with changes after importing strings
+name: "Focus: import translations"
 
 permissions:
   contents: write
@@ -6,8 +6,7 @@ permissions:
 
 on:
   schedule:
-    # Runs at 10pm on Sunday
-    - cron: '0 22 * * 0'
+    - cron: '0 10 * * 1'
 
 jobs:
   build:
@@ -18,14 +17,14 @@ jobs:
         python-version: [3.9]
         xcode: ["15.0.1"]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
-        persist-credentials: false 
+        persist-credentials: false
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Get the current date for PR title
@@ -37,7 +36,7 @@ jobs:
         git diff || (git add focus-ios/Blockzilla/*/*.lproj/* focus-ios/Blockzilla/*.lproj/* focus-ios/Blockzilla.xcodeproj/project.pbxproj)
         git restore focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v6
       with:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>

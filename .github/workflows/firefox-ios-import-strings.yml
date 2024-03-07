@@ -1,4 +1,4 @@
-name: Create a PR with changes after importing strings
+name: "Firefox: import translations"
 on:
   schedule:
     - cron: '0 11 * * 1'
@@ -15,7 +15,7 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.9]
-        xcode: ["14.3.1"]
+        xcode: ["15.0.1"]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -43,7 +43,7 @@ jobs:
         next_version=$(echo "$output" | tail -n 1) # get the last line of the output
         echo "Next version is: v${next_version}"
         echo "next_version=${next_version}" >> $GITHUB_ENV
-  
+
     - name: Get PR info
       run: |
         current_date=$(date +"%Y-%m-%d")
@@ -71,7 +71,7 @@ jobs:
         git restore firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v5
+      uses: peter-evans/create-pull-request@v6
       with:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>

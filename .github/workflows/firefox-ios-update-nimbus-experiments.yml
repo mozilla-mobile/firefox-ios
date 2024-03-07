@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Main Branch"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: firefox-ios
           ref: main
@@ -31,7 +31,7 @@ jobs:
           branch: automation/update-nimbus-experiments
       - name: Create Pull Request
         id: create-pull-request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch >= 1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -43,9 +43,6 @@ jobs:
           delete-branch: true
           labels: Needs Code Review
       - name: Enable Pull Request Automerge
-        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
-          merge-method: squash
+        run: gh pr merge --merge --auto --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
