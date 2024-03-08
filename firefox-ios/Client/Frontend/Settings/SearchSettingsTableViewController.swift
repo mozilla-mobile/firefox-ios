@@ -198,19 +198,21 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case SearchSuggestItem.privateSuggestions.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                    defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.PrivateSessionSetting
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.PrivateSessionDescription
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-                )
-
+                if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly),
+                   !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
+                        defaultValue: model.shouldShowPrivateModeSearchSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.PrivateSessionSetting
+                        ),
+                        statusText: String.localizedStringWithFormat(
+                            .Settings.Search.PrivateSessionDescription
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
+                    )
+                }
             default: break
             }
 
@@ -324,8 +326,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     override func numberOfSections(in tableView: UITableView) -> Int {
         sectionsToDisplay = [.defaultEngine, .alternateEngines, .searchEnginesSuggestions]
 
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser),
-           !featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
             sectionsToDisplay.append(.firefoxSuggestSettings)
         }
         return sectionsToDisplay.count
@@ -341,10 +342,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
         case .searchEnginesSuggestions:
-            return featureFlags.isFeatureEnabled(
-                .feltPrivacyFeltDeletion,
-                checking: .buildAndUser
-            ) ? SearchSuggestItem.allCases.count : 1
+            return featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildAndUser) &&
+            !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            ? SearchSuggestItem.allCases.count : 1
         case .firefoxSuggestSettings:
             return FirefoxSuggestItem.allCases.count
         }
