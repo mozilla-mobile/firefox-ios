@@ -26,6 +26,6 @@ public enum EngineInputAccessoryView {
     /// Do not show an accessory view. This overrides any engine or webview default.
     case none
 
-    /// Use a custom view (provided). Not currently needed but may be useful in the future.
+    // Use a custom view (provided). Not currently needed but may be useful in the future.
     // case custom(UIView)
 }
