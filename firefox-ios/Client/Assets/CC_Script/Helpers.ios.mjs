@@ -173,8 +173,8 @@ export const Services = withNotImplementedError({
       // eslint-disable-next-line no-undef
       webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage({
         type: "scalar",
-        name: scalarName,
         value: scalarValue,
+        object: scalarName,
       });
     },
     recordEvent: (category, method, object, value, extra) => {
