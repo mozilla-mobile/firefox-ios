@@ -143,15 +143,30 @@ class SearchViewController: SiteTableViewController,
             .filter { $0.bookmarked == false }
     }
 
+    private var hasBookmarksSuggestions: Bool {
+        return !bookmarkSites.isEmpty &&
+        shouldShowBookmarksSuggestions
+    }
+
+    private var hasHistorySuggestions: Bool {
+        return !historySites.isEmpty &&
+        shouldShowBrowsingHistorySuggestions
+    }
+
+    private var hasHistoryAndBookmarksSuggestions: Bool {
+        return data.count != 0 &&
+        shouldShowBookmarksSuggestions &&
+        shouldShowBrowsingHistorySuggestions
+    }
+
     var hasFirefoxSuggestions: Bool {
-        let dataCount = data.count
-        return dataCount != 0 &&
-                (shouldShowBookmarksSuggestions
-                || shouldShowBrowsingHistorySuggestions)
-                || !filteredOpenedTabs.isEmpty
-                || (!filteredRemoteClientTabs.isEmpty && shouldShowSyncedTabsSuggestions)
-                || !searchHighlights.isEmpty
-                || (!firefoxSuggestions.isEmpty && shouldShowNonSponsoredSuggestions)
+        return hasBookmarksSuggestions
+               || hasHistorySuggestions
+               || hasHistoryAndBookmarksSuggestions
+               || !filteredOpenedTabs.isEmpty
+               || (!filteredRemoteClientTabs.isEmpty && model.shouldShowSyncedTabsSuggestions)
+               || !searchHighlights.isEmpty
+               || (!firefoxSuggestions.isEmpty && shouldShowNonSponsoredSuggestions)
     }
 
     init(profile: Profile,
