@@ -133,7 +133,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Package.swift
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
   # Temporary for Focus
-  - Blockzilla/Generated
+  - Blockzilla/Generated/
+  - /Users/vagrant/git/DerivedData/
 
 included:
   - /Users/vagrant/git
