@@ -164,7 +164,7 @@ class SearchViewController: SiteTableViewController,
                || hasHistorySuggestions
                || hasHistoryAndBookmarksSuggestions
                || !filteredOpenedTabs.isEmpty
-               || (!filteredRemoteClientTabs.isEmpty && model.shouldShowSyncedTabsSuggestions)
+               || (!filteredRemoteClientTabs.isEmpty && shouldShowSyncedTabsSuggestions)
                || !searchHighlights.isEmpty
                || (!firefoxSuggestions.isEmpty && shouldShowNonSponsoredSuggestions)
     }
