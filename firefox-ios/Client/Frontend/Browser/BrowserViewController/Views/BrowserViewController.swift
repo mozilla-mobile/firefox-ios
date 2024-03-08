@@ -2536,7 +2536,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
+<<<<<<< HEAD
 
+=======
+            searchViewController.searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
+>>>>>>> 404f8ab82 (Bugfix FXIOS-8550 - Adjust the urlbar.abandonment and urlbar.engagement events (#19009))
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
