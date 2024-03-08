@@ -663,7 +663,8 @@ class Tab: NSObject, ThemeApplicable {
             }
         }
 
-        if webView?.reloadFromOrigin() != nil {
+        if let webView, webView.url != nil {
+            webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,
                        category: .tabs)
