@@ -378,6 +378,8 @@ class WKEngineSession: NSObject,
                  didCommit navigation: WKNavigation!) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
         telemetryProxy?.handleTelemetry(session: self, event: .pageLoadStarted)
+
+        // TODO: Revisit possible duplicate delegate callbacks when navigating to URL in same origin [PR #19083] [FXIOS-8351]
         commitURLChange()
     }
 
