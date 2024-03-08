@@ -107,6 +107,7 @@ analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
+  # Firefox specific
   - build/
   - .build/
   - firefox-ios/Client/Assets/Search/get_supported_locales.swift
@@ -134,6 +135,9 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
   # Temporarly ignore focus-ios folder
   - focus-ios/
+  # Focus specific
+  - focus-ios/Blockzilla/Generated
+
 
 included:
   - /Users/vagrant/git
