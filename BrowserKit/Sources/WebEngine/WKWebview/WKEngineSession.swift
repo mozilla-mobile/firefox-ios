@@ -291,7 +291,7 @@ class WKEngineSession: NSObject,
         // the same origin as the current URL. Otherwise, do nothing and wait for
         // didCommitNavigation to confirm the page load.
         guard sessionData.url?.origin == webView.url?.origin else { return }
-        
+
         // Update session data, inform delegate, fetch metadata
         commitURLChange()
     }
