@@ -73,6 +73,9 @@ class AddressAutofillCoordinator: BaseCoordinator {
         let hostingController = SelfSizingHostingController(rootView: bottomSheetView)
         let bottomSheetVC = BottomSheetViewController(viewModel: bottomSheetViewModel,
                                                       childViewController: hostingController)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .detected,
+                                     object: .addressFormPopupShow)
         router.present(bottomSheetVC)
     }
 }

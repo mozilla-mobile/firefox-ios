@@ -276,6 +276,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 extension TelemetryWrapper {
     public enum EventCategory: String {
         case action = "action"
+        case address = "address"
         case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
         case enrollment = "enrollment"
@@ -293,13 +294,18 @@ extension TelemetryWrapper {
         case closeAll = "close-all"
         case delete = "delete"
         case deleteAll = "deleteAll"
+        case detected = "detected"
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
+        case filled = "filled"
+        case filledModified = "filled_modified"
+        case quantity = "quantity"
         case swipe = "swipe"
         case navigate = "navigate"
         case open = "open"
         case press = "press"
+        case popupShown = "popup_shown"
         case pull = "pull"
         case scan = "scan"
         case share = "share"
@@ -409,6 +415,15 @@ extension TelemetryWrapper {
         case loginsDeleted = "logins-deleted"
         case loginsModified = "logins-modified"
         case loginsSyncEnabled = "logins-sync-enabled"
+        // MARK: Address
+        case addressForm = "address_form"
+        case addressFormPopupShow = "address_form_popup_shown"
+        case addressFormFilled = "address_form_filled"
+        case addressFormFilledModified = "address_form_filled_modified"
+        case addressFormExtDetected = "address_form_ext_detected"
+        case addressFormExtFilled = "address_form_ext_filled"
+        case addressDetectedSectionsCount = "formautofill.addresses.detected_sections_count"
+
         // MARK: Credit Card
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case creditCardFormDetected = "creditCardFormDetected"
@@ -757,6 +772,18 @@ extension TelemetryWrapper {
             case groups
             case results
         }
+
+        public enum AddressTelemetry: String {
+            case addressLevel1 = "address_level1"
+            case addressLevel2 = "address_level2"
+            case addressLine1 = "address_line1"
+            case addressLine2 = "address_line2"
+            case addressLine3 = "address_line3"
+            case country = "country"
+            case fieldName = "field_name"
+            case postalCode = "postal_code"
+            case streetAddress = "street_address"
+        }
     }
 
     func recordEvent(category: EventCategory,
@@ -937,8 +964,55 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
-
-        // MARK: Credit Card
+        // MARK: Address
+        case(.action, .quantity, .addressDetectedSectionsCount, _, _):
+            GleanMetrics.Address.detectedSectionsCount.record()
+        case(.action, .filled, .addressFormExtFilled, _, _):
+            GleanMetrics.Address.addressFormExtFilled.record()
+        case(.action, .detected, .addressFormExtDetected, _, _):
+            GleanMetrics.Address.addressFormExtDetected.record()
+        case(.action, .filledModified, .addressFormFilledModified, _, _):
+            GleanMetrics.Address.addressFormFilledModified.record()
+        case(.action, .filled, .addressFormFilled, _, _):
+            GleanMetrics.Address.addressFormFilled.record()
+        case(.action, .popupShown, .addressFormPopupShow, _, _):
+            GleanMetrics.Address.addressFormPopupShown.record()
+        case(.action, .detected, .addressForm, _, let extras):
+            GleanMetrics.Address.formDetected.record()
+            if let addressLevel1 = extras?[EventExtraKey.AddressTelemetry.addressLevel1.rawValue] as? String,
+               let addressLevel2 = extras?[EventExtraKey.AddressTelemetry.addressLevel2.rawValue] as? String,
+               let addressLine1 = extras?[EventExtraKey.AddressTelemetry.addressLine1.rawValue] as? String,
+               let addressLine2 = extras?[EventExtraKey.AddressTelemetry.addressLine2.rawValue] as? String,
+               let addressLine3 = extras?[EventExtraKey.AddressTelemetry.addressLine3.rawValue] as? String,
+               let country = extras?[EventExtraKey.AddressTelemetry.country.rawValue] as? String,
+               let fieldName = extras?[EventExtraKey.AddressTelemetry.fieldName.rawValue] as? String,
+               let postalCode = extras?[EventExtraKey.AddressTelemetry.postalCode.rawValue] as? String,
+               let streetAddress = extras?[EventExtraKey.AddressTelemetry.streetAddress.rawValue] as? String {
+                let extraDetails = GleanMetrics.Address.FormDetectedExtra(addressLevel1: addressLevel1,
+                                                                          addressLevel2: addressLevel2,
+                                                                          addressLine1: addressLine1,
+                                                                          addressLine2: addressLine2,
+                                                                          addressLine3: addressLine3,
+                                                                          country: country,
+                                                                          fieldName: fieldName,
+                                                                          postalCode: postalCode,
+                                                                          streetAddress: streetAddress)
+                GleanMetrics.Address.formDetected.record(extraDetails)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+            recordUninstrumentedMetrics(
+                category: category,
+                method: method,
+                object: object,
+                value: value,
+                extras: extras)
+            // MARK: Credit Card
         case(.action, .tap, .creditCardAutofillSettings, _, _):
             GleanMetrics.CreditCard.autofillSettingsTapped.record()
         case(.action, .tap, .creditCardFormDetected, _, _):

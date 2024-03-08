@@ -4848,7 +4848,125 @@ places_history_migration:
       - teshaq@mozilla.com
       - sync-team@mozilla.com
     expires: "2024-06-01"
-
+# Address autofill
+address:
+  address_form_filled:
+    type: event
+    description: |
+      Recorded when a form is autofiled. Possible values are `filled`, `not_filled`, `user_filled` or `unavailable
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  address_form_filled_modified:
+    type: event
+    description: |
+      Recorded when a field is autofilled and then modified by the user. Using field_name to record the field that triggers this event.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  address_form_ext_detected:
+    type: event
+    description: |
+      Recorded when a form is recognized as an adress form.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  address_form_ext_filled:
+    type: event
+    description: |
+      Recorded when a form is autofiled. Possible values are `filled`, `not_filled`, `user_filled` or `unavailable`
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  detected_sections_count:
+    type: event
+    description: |
+      Count at detection time number of address form sections. A single form can contain more than one address form section.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  form_detected:
+    type: event
+    description: |
+      Recorded when a form is recognized as a address form.
+    extra_keys:
+        street_address:
+          type: string
+          description: |
+            street address result, filled when method is `detected`, `filled`, or `filled_modified`
+        address_line1:
+          type: string
+          description: |
+            address_line1 result, filled when method is `detected`, `filled`, or `filled_modified`.
+        address_line2:
+          type: string
+          description: |
+            address_line2 result, filled when method is `detected`, `filled`, or `filled_modified`.
+        address_line3:
+          type: string
+          description: |
+            address_line3 result, filled when method is `detected`, `filled`, or `filled_modified`.
+        address_level1:
+          type: string
+          description: |
+           address_level1 result, filled when method is `detected`, `filled`, or `filled_modified`.
+        address_level2:
+          type: string
+          description: |
+            address_level2 result, filled when method is `detected`, `filled`, or `filled_modified`.
+        postal_code:
+          type: string
+          description: |
+           postal_code result, filled when method is `detected`, `filled`, or `filled_modified`.
+        country:
+          type: string
+          description: |
+           country result, filled when method is `detected`, `filled`, or `filled_modified`.
+        field_name:
+          type: string
+          description: |
+            Name of the field being affected by the method, filled when method is `popup_shown` or `filled_modified`.
+    description: |
+        Recorded when a form is recognized as a address form.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  address_form_popup_shown:
+    type: event
+    description: |
+      Recorded when autofill popup is shown, indicating which field triggered this event.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/todo
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/todo
+      - https://github.com/mozilla-mobile/firefox-ios/pull/todo
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
 # Credit card autofill
 credit_card:
   autofill_settings_tapped:

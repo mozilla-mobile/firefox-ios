@@ -53,8 +53,8 @@ class FormAutofillHelper: TabContentScript {
 
     func scriptMessageHandlerNames() -> [String]? {
         return [HandlerName.addressFormMessageHandler.rawValue,
-            HandlerName.addressFormTelemetryMessageHandler.rawValue,
-            HandlerName.creditCardFormMessageHandler.rawValue]
+                HandlerName.addressFormTelemetryMessageHandler.rawValue,
+                HandlerName.creditCardFormMessageHandler.rawValue]
     }
 
     // MARK: - Deinitialization
@@ -85,11 +85,47 @@ class FormAutofillHelper: TabContentScript {
 
         switch HandlerName(rawValue: message.name) {
         case .addressFormTelemetryMessageHandler:
-            // TODO(FXIOS-7547): Implement telemetry forwarding logic
+            let addressLine1Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLine1.rawValue
+            let addressLine1 = ""
+            let addressLine2Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLine2.rawValue
+            let addressLine2 = ""
+            let addressLine3Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLine3.rawValue
+            let addressLine3 = ""
+            let addressLevel1Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLevel1.rawValue
+            let addressLevel1 = ""
+            let addressLevel2Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLevel2.rawValue
+            let addressLevel2 = ""
+            let countryKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.country.rawValue
+            let country = ""
+            let fieldNameKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.fieldName.rawValue
+            let fieldName = ""
+            let postalCodeKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.postalCode.rawValue
+            let postalCode = ""
+            let streetAddressKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.streetAddress.rawValue
+            let streetAddress = ""
+
+            let extraDetails = [
+                addressLine1Key: addressLine1,
+                addressLine2Key: addressLine2,
+                addressLine3Key: addressLine3,
+                addressLevel1Key: addressLevel1,
+                addressLevel2Key: addressLevel2,
+                countryKey: country,
+                fieldNameKey: fieldName,
+                postalCodeKey: postalCode,
+                streetAddressKey: streetAddress]
+            as [String: Any]
+
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .detected,
+                                         object: .addressForm,
+                                         extras: extraDetails)
+
             logger.log("Received address telemery data",
                        level: .debug,
                        category: .autofill)
         case .addressFormMessageHandler:
+            TelemetryWrapper.recordEvent(category: .action, method: .detected, object: .addressFormExtDetected)
             // Parse message payload for address form autofill
             guard let data = getValidPayloadData(from: message),
                   let fieldValues = parseFieldType(messageBody: data, formType: FillAddressAutofillForm.self),
@@ -197,9 +233,11 @@ class FormAutofillHelper: TabContentScript {
             let fillAddressInfoCallback = "__firefox__.FormAutofillHelper.fillFormFields(\(jsonDataVal))"
             webView.evaluateJavascriptInDefaultContentWorld(fillAddressInfoCallback, frame) { _, error in
                 if let error = error {
+                    TelemetryWrapper.recordEvent(category: .action, method: .filled, object: .addressFormFilled)
                     completion(error)
                     logger.log("Address script error \(error)", level: .debug, category: .autofill)
                 } else {
+                    TelemetryWrapper.recordEvent(category: .action, method: .filled, object: .addressFormFilled)
                     completion(nil)
                 }
             }
