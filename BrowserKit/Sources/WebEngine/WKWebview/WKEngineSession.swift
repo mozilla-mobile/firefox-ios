@@ -292,12 +292,17 @@ class WKEngineSession: NSObject,
         // didCommitNavigation to confirm the page load.
         guard sessionData.url?.origin == webView.url?.origin else { return }
 
-        if let url = webView.url {
-            sessionData.url = url
-            delegate?.onLocationChange(url: url.absoluteString)
+        // Update session data, inform delegate, fetch metadata
+        commitURLChange()
+    }
 
-            metadataFetcher.fetch(fromSession: self, url: url)
-        }
+    private func commitURLChange() {
+        guard let url = webView.url else { return }
+
+        sessionData.url = url
+        delegate?.onLocationChange(url: url.absoluteString)
+
+        metadataFetcher.fetch(fromSession: self, url: url)
     }
 
     // MARK: - Content scripts
@@ -373,6 +378,9 @@ class WKEngineSession: NSObject,
                  didCommit navigation: WKNavigation!) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
         telemetryProxy?.handleTelemetry(session: self, event: .pageLoadStarted)
+
+        // TODO: Revisit possible duplicate delegate callbacks when navigating to URL in same origin [PR #19083] [FXIOS-8351]
+        commitURLChange()
     }
 
     func webView(_ webView: WKWebView,
