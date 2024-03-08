@@ -154,7 +154,8 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var hasHistoryAndBookmarksSuggestions: Bool {
-        return data.count != 0 &&
+        let dataCount = data.count
+        return dataCount != 0 &&
         shouldShowBookmarksSuggestions &&
         shouldShowBrowsingHistorySuggestions
     }
