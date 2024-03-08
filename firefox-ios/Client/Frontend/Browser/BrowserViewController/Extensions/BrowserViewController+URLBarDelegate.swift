@@ -332,6 +332,7 @@ extension BrowserViewController: URLBarDelegate {
         )
         searchController?.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
+        searchController?.searchTelemetry?.clearVisibleResults()
         searchLoader?.query = text
         searchController?.searchTelemetry?.determineInteractionType()
     }
@@ -428,9 +429,6 @@ extension BrowserViewController: URLBarDelegate {
             case .finished: .engaged
             case .cancelled: .abandoned
             }
-        }
-        if reason == .finished {
-            searchController?.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         }
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)

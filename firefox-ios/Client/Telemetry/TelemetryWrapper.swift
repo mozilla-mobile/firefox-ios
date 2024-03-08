@@ -1864,6 +1864,10 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.shareButtonTapped.record()
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
+        case (.action, .engagement, .locationBar, _, _):
+            GleanMetrics.Awesomebar.engagement.record()
+        case (.action, .abandonment, .locationBar, _, _):
+            GleanMetrics.Awesomebar.abandonment.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
