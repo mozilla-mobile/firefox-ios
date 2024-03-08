@@ -20,5 +20,5 @@ features:
           maximum_duration_ms: 0
       - channel: developer
         value:
-          enabled: true
+          enabled: false
           maximum_duration_ms: 6000
