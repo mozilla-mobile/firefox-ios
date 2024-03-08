@@ -315,8 +315,8 @@ final class EventQueueTests: XCTestCase {
     // a dependent event during processing (by moving it from .complete to .inProgress etc.)
     // This is generally not a supported scenario, however if it happens we should respect
     // the original state of the events as they were when the enqueued action was peformed.
-    func testChangingAnEventAsPartOfAnActionDoesNotBreakThings() {
-        let expectation = XCTestExpectation(description: "Nested action expectation.")
+    func testChangingAnEventAsPartOfAnActionStillRemovesTheActionAfterPerformingIt() {
+        let expectation = XCTestExpectation(description: "Action block cleaned up.")
         var actionsPerformed = 0
         queue.wait(for: [.startingEvent, .activityEvent], then: {
             actionsPerformed += 1
