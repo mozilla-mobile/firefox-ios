@@ -51,6 +51,7 @@
         "BookmarksTests\/testDeleteBookmarkContextMenu()",
         "BookmarksTests\/testDeleteBookmarkSwiping()",
         "BookmarksTests\/testEditBookmark()",
+        "BookmarksTests\/testLongTapRecentlySavedLink()",
         "BookmarksTests\/testRecentlyBookmarked()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",
