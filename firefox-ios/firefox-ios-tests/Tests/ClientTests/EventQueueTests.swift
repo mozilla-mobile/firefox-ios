@@ -310,4 +310,34 @@ final class EventQueueTests: XCTestCase {
         // overhead of the event queue.
         wait(for: [expectation], timeout: 0.5)
     }
+
+    // This tests a specific bug where enqueued actions potentially change the state of
+    // a dependent event during processing (by moving it from .complete to .inProgress etc.)
+    // This is generally not a supported scenario, however if it happens we should respect
+    // the original state of the events as they were when the enqueued action was peformed.
+    func testChangingAnEventAsPartOfAnActionStillRemovesTheActionAfterPerformingIt() {
+        let expectation = XCTestExpectation(description: "Action block cleaned up.")
+        var actionsPerformed = 0
+        queue.wait(for: [.startingEvent, .activityEvent], then: {
+            actionsPerformed += 1
+            // As part of the enqueued action block, change the state of our dependent event out of .completed:
+            self.queue.started(.activityEvent)
+            DispatchQueue.main.async {
+                self.queue.completed(.activityEvent)
+                if actionsPerformed > 1 {
+                    // Action block was not cleaned up and was run repeatedly due
+                    // to dependent event being moved out of .completed state by
+                    // the action itself. This is a bug.
+                    XCTFail("Action block was not cleaned up correctly.")
+                } else {
+                    expectation.fulfill()
+                }
+            }
+        })
+        queue.signal(event: .startingEvent)
+        queue.started(.activityEvent)
+        queue.completed(.activityEvent)
+
+        wait(for: [expectation], timeout: 0.5)
+    }
 }
