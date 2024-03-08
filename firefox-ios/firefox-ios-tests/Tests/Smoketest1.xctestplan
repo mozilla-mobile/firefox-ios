@@ -59,6 +59,7 @@
         "CreditCardsTests\/testDeleteButtonFromEditCard()",
         "CreditCardsTests\/testEditSavedCardsUI()",
         "CreditCardsTests\/testManageCreditCardsOption()",
+        "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",
         "CronTabsPerformanceTest",
         "DataManagementTests\/testWebSiteDataOptions()",
         "DatabaseFixtureTest",
