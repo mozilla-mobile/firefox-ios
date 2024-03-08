@@ -2046,22 +2046,14 @@ class BrowserViewController: UIViewController,
     // MARK: Overlay View
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
-        let feltPrivacyFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let firefoxSuggestFlagEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+        let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
 
-        let isSettingEnabled = if firefoxSuggestFlagEnabled {
-            !profile.searchEngines.isPrivateModeSettingEnabled &&
-            tabManager.selectedTab?.isPrivate == true
-        } else {
-            feltPrivacyFlagEnabled &&
-            !alwaysShowSearchSuggestionsView &&
-            !profile.searchEngines.shouldShowPrivateModeSearchSuggestions
-        }
+        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions
 
-        return isSettingEnabled
+        return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 
     // Configure dimming view to show for private mode
