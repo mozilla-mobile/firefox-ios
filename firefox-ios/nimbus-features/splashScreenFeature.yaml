@@ -1,0 +1,24 @@
+features:
+  splash-screen:
+    description: >
+        A feature that extends splash screen duration, allowing additional data fetching time for the app's initial run.
+    variables:
+      enabled:
+        description: >
+          If true, the feature is active.
+        type: Boolean
+        default: false
+      maximum_duration_ms:
+        description: >
+          The maximum amount of time in milliseconds the splashscreen will be visible while waiting for initialization calls to complete.
+        type: Int
+        default: 0
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+          maximum_duration_ms: 0
+      - channel: developer
+        value:
+          enabled: true
+          maximum_duration_ms: 6000

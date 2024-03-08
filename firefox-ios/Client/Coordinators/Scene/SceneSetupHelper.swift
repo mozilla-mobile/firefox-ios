@@ -26,10 +26,16 @@ struct SceneSetupHelper {
     }
 
     func createNavigationController() -> UINavigationController {
-        let navigationController = UINavigationController()
+        let navigationController = RootNavigationController()
         navigationController.isNavigationBarHidden = true
         navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
 
         return navigationController
+    }
+}
+
+class RootNavigationController: UINavigationController {
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }

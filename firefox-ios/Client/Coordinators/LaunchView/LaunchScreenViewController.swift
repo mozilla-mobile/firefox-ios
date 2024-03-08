@@ -5,11 +5,14 @@
 import Common
 import Foundation
 
-class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate {
+class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate, FeatureFlaggable {
     private lazy var launchScreen = LaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
     private var mainQueue: DispatchQueueInterface
+
+    private lazy var splashScreenAnimation = SplashScreenAnimation()
+    private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
     init(coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
@@ -33,18 +36,20 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+
         Task {
+            try await delayStart()
             await startLoading()
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupLayout()
+        setupLaunchScreen()
     }
 
     // MARK: - Loading
-
     func startLoading() async {
         await viewModel.startLoading()
     }
@@ -74,6 +79,22 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     func launchBrowser() {
         mainQueue.async {
             self.coordinator?.launchBrowser()
+        }
+    }
+
+    // MARK: - Splash Screen
+
+    private func delayStart() async throws {
+        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
+        let position: Int = nimbusSplashScreenFeatureLayer.maximumDurationMs
+        try await Task.sleep(nanoseconds: UInt64(position * 1_000_000))
+    }
+
+    private func setupLaunchScreen() {
+        setupLayout()
+        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
+        if !UIAccessibility.isReduceMotionEnabled {
+            splashScreenAnimation.configureAnimation(with: launchScreen)
         }
     }
 }
