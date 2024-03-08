@@ -541,7 +541,7 @@ class Tab: NSObject, ThemeApplicable {
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(PrivilegedRequest(url: url) as URLRequest)
+            webView.load(URLRequest(url: url))
         }
 
         if let interactionState = interactionState {
