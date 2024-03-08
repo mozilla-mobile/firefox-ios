@@ -451,6 +451,10 @@ class WKEngineSession: NSObject,
         delegate?.search(with: searchSelection)
     }
 
+    func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView {
+        return delegate?.onWillDisplayAccessoryView() ?? .default
+    }
+
     // MARK: - MetadataFetcherDelegate
 
     func didLoad(pageMetadata: EnginePageMetadata) {
