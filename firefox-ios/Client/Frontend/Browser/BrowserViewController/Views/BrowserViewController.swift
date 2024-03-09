@@ -1276,23 +1276,21 @@ class BrowserViewController: UIViewController,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        showBookmarksToast()
+        showBookmarkToast(for: .add)
     }
-
-    private func showBookmarksToast() {
-        let viewModel = ButtonToastViewModel(labelText: .AppMenu.AddBookmarkConfirmMessage,
-                                             buttonText: .BookmarksEdit,
-                                             textAlignment: .left)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme) { isButtonTapped in
-            isButtonTapped ? self.openBookmarkEditPanel() : nil
-        }
-        self.show(toast: toast)
-    }
-
+    
     func removeBookmark(url: String) {
         profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
+            self.showBookmarkToast(for: .remove)
+        }
+    }
+    
+    private func showBookmarkToast(for action: BookmarkAction) {
+        switch action {
+        case .add:
+            self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+        case .remove:
             self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
@@ -1301,7 +1299,7 @@ class BrowserViewController: UIViewController,
     /// Library Panel - Bookmarks section. In order to get the correct information, it needs
     /// to fetch the last added bookmark in the mobile folder, which is the default
     /// location for all bookmarks added on mobile.
-    private func openBookmarkEditPanel() {
+    internal func openBookmarkEditPanel() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .change,
@@ -2485,6 +2483,10 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         navigationHandler?.show(settings: settingsPage)
+    }
+        
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
+        showBookmarkToast(for: action)
     }
 }
 

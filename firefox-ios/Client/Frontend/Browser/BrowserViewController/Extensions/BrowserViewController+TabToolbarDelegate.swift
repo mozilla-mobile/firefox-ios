@@ -319,6 +319,15 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
 
     func showToast(message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
+        case .bookmarkPage:
+            let viewModel = ButtonToastViewModel(labelText: message,
+                                                 buttonText: .BookmarksEdit,
+                                                 textAlignment: .left)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.currentTheme) { isButtonTapped in
+                isButtonTapped ? self.openBookmarkEditPanel() : nil
+            }
+            self.show(toast: toast)
         case .removeBookmark:
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString,
