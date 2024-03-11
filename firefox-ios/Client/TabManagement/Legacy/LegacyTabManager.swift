@@ -120,8 +120,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         // sort the tabs chronologically
         eligibleTabs = eligibleTabs.sorted {
-            let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0
-            let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? $0.firstCreatedTime ?? 0
+            let firstTab = $0.lastExecutedTime ?? $0.firstCreatedTime ?? 0
+            let secondTab = $1.lastExecutedTime ?? $0.firstCreatedTime ?? 0
             return firstTab > secondTab
         }
 
@@ -236,13 +236,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         for tab in tabs {
             if let webViewUrl = tab.webView?.url,
                url.isEqual(webViewUrl) {
-                return tab
-            }
-
-            // Also look for tabs that haven't been restored yet.
-            if let sessionData = tab.sessionData,
-               0..<sessionData.urls.count ~= sessionData.currentPage,
-               sessionData.urls[sessionData.currentPage] == url {
                 return tab
             }
         }
@@ -971,12 +964,7 @@ extension LegacyTabManager: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
         if let url = webView.url {
-            if let internalUrl = InternalURL(url), internalUrl.isSessionRestore {
-                return
-            }
-
             if let title = webView.title, selectedTab?.webView == webView {
                 selectedTab?.lastTitle = title
             }

@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 
+private let apostropheEncoded = "%27"
 extension WKWebView {
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
@@ -35,6 +36,12 @@ extension WKWebView {
                 completion(nil, error)
             }
         }
+    }
+
+    // Use JS to redirect the page without adding a history entry
+    public func replaceLocation(with url: URL) {
+        let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: apostropheEncoded)
+        evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
     }
 }
 

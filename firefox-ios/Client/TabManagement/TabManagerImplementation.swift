@@ -153,9 +153,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             newTab.screenshotUUID = tabData.id
             newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
             newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
-            newTab.sessionData = LegacySessionData(currentPage: 0,
-                                                   urls: [],
-                                                   lastUsedTime: tabData.lastUsedTime.toTimestamp())
             let groupData = LegacyTabGroupData(
                 searchTerm: tabData.tabGroupData?.searchTerm ?? "",
                 searchUrl: tabData.tabGroupData?.searchUrl ?? "",

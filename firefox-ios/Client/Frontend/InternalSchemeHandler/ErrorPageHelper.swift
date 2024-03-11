@@ -49,7 +49,6 @@ private func certFromErrorURL(_ url: URL) -> SecCertificate? {
 
     // Fallback case when the error url is nested, this happens when restoring an error url,
     // it will be inside a 'sessionrestore' url.
-    // TODO: Investigate if we can restore directly as an error url and avoid the 'sessionrestore?url=' wrapping.
     if let internalUrl = InternalURL(url), let url = internalUrl.extractedUrlParam {
         return getCert(url)
     }
@@ -291,7 +290,6 @@ class ErrorPageHelper {
             )
 
             if let internalUrl = InternalURL(webViewUrl),
-               internalUrl.isSessionRestore,
                let page = InternalURL.authorize(url: urlWithQuery) {
                 // A session restore page is already on the history stack, so don't load another
                 // page on the history stack.

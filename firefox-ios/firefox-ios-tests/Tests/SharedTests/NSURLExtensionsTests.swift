@@ -86,12 +86,10 @@ class NSURLExtensionsTests: XCTestCase {
 
     func testisAboutHomeURL() {
         let goodurls = [
-            "\(InternalURL.baseUrl)/sessionrestore?url=\(InternalURL.baseUrl)/about/home%23panel%3D1",
             "\(InternalURL.baseUrl)/about/home#panel=0"
         ]
         let badurls = [
             "http://google.com",
-            "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
         ]
@@ -109,7 +107,6 @@ class NSURLExtensionsTests: XCTestCase {
 
         let badurls = [
             "http://google.com",
-            "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
         ]
@@ -125,7 +122,6 @@ class NSURLExtensionsTests: XCTestCase {
             ]
         let badurls = [
             "http://google.com",
-            "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:1234/about/home/#panel=0"
         ]
 
@@ -155,7 +151,6 @@ class NSURLExtensionsTests: XCTestCase {
             ]
         let badurls = [
             "http://google.com",
-            "http://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "http://localhost:1234/about/home/#panel=0"
         ]
 
@@ -186,7 +181,6 @@ class NSURLExtensionsTests: XCTestCase {
             ]
         let badurls = [
             "blah://google.com",
-            "hax://localhost:\(AppInfo.webserverPort)/sessionrestore.html",
             "leet://codes.com"
         ]
 

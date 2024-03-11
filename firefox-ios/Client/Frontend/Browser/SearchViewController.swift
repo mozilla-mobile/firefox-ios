@@ -665,8 +665,7 @@ class SearchViewController: SiteTableViewController,
             && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
-            guard let url = tab.url ?? tab.sessionData?.urls.last,
-                  !InternalURL.isValid(url: url) else {
+            guard let url = tab.url, !InternalURL.isValid(url: url) else {
                 return false
             }
             let lines = [

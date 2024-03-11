@@ -88,7 +88,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
                 siteUrl: savedTab.url?.absoluteString ?? "",
                 faviconURL: savedTab.faviconURL,
                 isPrivate: savedTab.isPrivate,
-                lastUsedTime: Date.fromTimestamp(savedTab.sessionData?.lastUsedTime ?? Date().toTimestamp()),
+                lastUsedTime: Date.fromTimestamp(Date().toTimestamp()),
                 createdAtTime: Date.fromTimestamp(savedTab.createdAt ?? Date().toTimestamp()),
                 tabGroupData: tabGroupData
             )
