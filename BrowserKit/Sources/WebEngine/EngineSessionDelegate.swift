@@ -48,4 +48,8 @@ public protocol EngineSessionDelegate: AnyObject {
     /// - Parameter linkURL: the link (if any) associatd with the event.
     /// - Returns: a menu configuration, or nil (will not show a menu)
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration?
+
+    /// Allows delegates to participate in whether or not a keyboard accessory view is shown
+    /// for the current engine session.
+    func onWillDisplayAccessoryView() -> EngineInputAccessoryView
 }

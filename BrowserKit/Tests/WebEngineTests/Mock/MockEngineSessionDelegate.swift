@@ -19,6 +19,7 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var findInPageCalled = 0
     var searchCalled = 0
     var onProvideContextualMenuCalled = 0
+    var onWillDisplayAcccessoryViewCalled = 0
 
     var savedScrollX: Int?
     var savedScrollY: Int?
@@ -94,5 +95,10 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration? {
         onProvideContextualMenuCalled += 1
         return nil
+    }
+
+    func onWillDisplayAccessoryView() -> WebEngine.EngineInputAccessoryView {
+        onWillDisplayAcccessoryViewCalled += 1
+        return .default
     }
 }
