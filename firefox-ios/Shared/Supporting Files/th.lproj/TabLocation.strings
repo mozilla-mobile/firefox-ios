@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "แตะสองครั้งค้างไว้เพื่อดูตัวเลือกเพิ่ม";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "การเชื่อมต่อไม่ปลอดภัย การป้องกันการติดตามแบบพิเศษถูกปิดแล้ว";
 
