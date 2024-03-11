@@ -41,6 +41,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     private let profile: Profile
     private let model: SearchEngines
 
+    var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
+        return !model.shouldShowBookmarksSuggestions &&
+        !model.shouldShowSyncedTabsSuggestions &&
+        !model.shouldShowBrowsingHistorySuggestions
+    }
+
     private enum SearchSuggestItem: Int, CaseIterable {
         case defaultSuggestions
         case privateSuggestions
@@ -296,7 +302,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     cell: cell,
                     selector: #selector(didToggleShowFirefoxSuggestionsInPrivateMode)
                 )
-                cell.isHidden = model.shouldHidePrivateModeFirefoxSuggestSetting
+                cell.isHidden = shouldHidePrivateModeFirefoxSuggestSetting
 
             case FirefoxSuggestItem.suggestionLearnMore.rawValue:
                 cell.accessibilityLabel = String.localizedStringWithFormat(
@@ -342,7 +348,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             // But the option to add a Search Engine is.
             return model.orderedEngines.count
         case .searchEnginesSuggestions:
-            return featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildAndUser) &&
+            return featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) &&
             !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
             ? SearchSuggestItem.allCases.count : 1
         case .firefoxSuggestSettings:
@@ -423,7 +429,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case IndexPath(
                 row: FirefoxSuggestItem.privateSuggestions.rawValue,
                 section: Section.firefoxSuggestSettings.rawValue):
-            if model.shouldHidePrivateModeFirefoxSuggestSetting { return 0 }
+            if shouldHidePrivateModeFirefoxSuggestSetting { return 0 }
         default: return UITableView.automaticDimension
         }
         return UITableView.automaticDimension
@@ -559,34 +565,34 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         _ toggle: ThemedSwitch,
         suggestionType: FirefoxSuggestItem
     ) {
-        var shouldShowSuggestions = false
+        var shouldShowPrivateSuggestionsSetting = false
         switch suggestionType {
         case .browsingHistory:
             model.shouldShowBrowsingHistorySuggestions = toggle.isOn
-            shouldShowSuggestions = model.shouldShowBrowsingHistorySuggestions &&
+            shouldShowPrivateSuggestionsSetting = model.shouldShowBrowsingHistorySuggestions &&
             !model.shouldShowBookmarksSuggestions &&
             !model.shouldShowSyncedTabsSuggestions
         case .bookmarks:
             model.shouldShowBookmarksSuggestions = toggle.isOn
-            shouldShowSuggestions = model.shouldShowBookmarksSuggestions &&
+            shouldShowPrivateSuggestionsSetting = model.shouldShowBookmarksSuggestions &&
             !model.shouldShowBrowsingHistorySuggestions &&
             !model.shouldShowSyncedTabsSuggestions
         case .syncedTabs:
             model.shouldShowSyncedTabsSuggestions = toggle.isOn
-            shouldShowSuggestions = model.shouldShowSyncedTabsSuggestions &&
+            shouldShowPrivateSuggestionsSetting = model.shouldShowSyncedTabsSuggestions &&
             !model.shouldShowBrowsingHistorySuggestions &&
             !model.shouldShowBookmarksSuggestions
         default: break
         }
 
-        if shouldShowSuggestions {
+        if shouldShowPrivateSuggestionsSetting {
             updateCells(
                 at: [IndexPath(
                     row: FirefoxSuggestItem.privateSuggestions.rawValue,
                     section: Section.firefoxSuggestSettings.rawValue
                 )]
             )
-        } else if model.shouldHidePrivateModeFirefoxSuggestSetting {
+        } else if shouldHidePrivateModeFirefoxSuggestSetting {
             model.shouldShowPrivateModeFirefoxSuggestions = false
             updateCells(
                 at: [IndexPath(

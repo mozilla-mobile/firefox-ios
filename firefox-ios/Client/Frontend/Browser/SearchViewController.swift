@@ -253,7 +253,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     /// Whether to show suggestions from the search engine.
-    private var shoudShowSearchEngineSuggestions: Bool {
+    private var shouldShowSearchEngineSuggestions: Bool {
         return searchEngines?.shouldShowSearchSuggestions ?? false
     }
 
@@ -734,7 +734,7 @@ class SearchViewController: SiteTableViewController,
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery,
                              callback: { suggestions, error in
-            if error == nil, self.shoudShowSearchEngineSuggestions {
+            if error == nil, self.shouldShowSearchEngineSuggestions {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: {
@@ -747,7 +747,7 @@ class SearchViewController: SiteTableViewController,
             }
 
             // If there are no suggestions, just use whatever the user typed.
-            if self.shoudShowSearchEngineSuggestions &&
+            if self.shouldShowSearchEngineSuggestions &&
                suggestions?.isEmpty ?? true {
                 self.suggestions = [self.searchQuery]
             }
@@ -1130,7 +1130,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
-            return shoudShowSearchEngineSuggestions
+            return shouldShowSearchEngineSuggestions
         default:
             return false
         }

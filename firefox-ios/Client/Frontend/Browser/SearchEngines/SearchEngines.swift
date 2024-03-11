@@ -192,17 +192,6 @@ class SearchEngines {
         }
     }
 
-    var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
-        return !shouldShowBookmarksSuggestions &&
-        !shouldShowSyncedTabsSuggestions &&
-        !shouldShowBrowsingHistorySuggestions
-    }
-
-    var isPrivateModeSettingEnabled: Bool {
-        return shouldShowPrivateModeFirefoxSuggestions ||
-               shouldShowSearchSuggestions
-    }
-
     func isEngineEnabled(_ engine: OpenSearchEngine) -> Bool {
         return disabledEngines.index(forKey: engine.shortName) == nil
     }
