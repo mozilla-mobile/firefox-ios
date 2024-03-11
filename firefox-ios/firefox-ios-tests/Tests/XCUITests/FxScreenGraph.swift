@@ -854,11 +854,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.onEnter { userState in
-            if isTablet {
-                userState.numTabs = Int(app.collectionViews["Top Tabs View"].cells.count)
-            } else {
-                userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
-            }
+            userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
         }
     }
 
