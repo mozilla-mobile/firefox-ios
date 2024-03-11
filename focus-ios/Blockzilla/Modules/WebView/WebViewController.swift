@@ -547,6 +547,7 @@ extension WebViewController: WKUIDelegate {
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        // FXIOS-8090 - #19152 ⁃ Integrate EngineSession ads handler in Focus iOS
         if message.name == "adsMessageHandler" {
             adsTelemetryHelper.trackAds(message: message)
         }
@@ -574,6 +575,7 @@ extension WebViewController: WKScriptMessageHandler {
         components.scheme = "http"
         guard let url = components.url else { return }
 
+        // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
         let enabled = Utils.getEnabledLists().compactMap { BlocklistName(rawValue: $0) }
         TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledLists: enabled).uponQueue(.main) { [unowned self] listItem in
             if let listItem = listItem {
