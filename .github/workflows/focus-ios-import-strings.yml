@@ -41,9 +41,8 @@ jobs:
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit-message: string-import-${{ env.current_date }}
-        title: "string-import-${{ env.current_date }}"
-        branch: string-import-${{ env.current_date }}
+        commit-message: focus-string-import-${{ env.current_date }}
+        title: "focus-string-import-${{ env.current_date }}"
+        branch: focus-string-import-${{ env.current_date }}
         body: "This (automated) PR import string changes"
         labels: Needs Landing
-        reviewers: mozilla-mobile/focus-ios-eng
