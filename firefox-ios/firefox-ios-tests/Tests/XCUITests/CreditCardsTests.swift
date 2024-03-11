@@ -175,6 +175,68 @@ class CreditCardsTests: BaseTestCase {
         XCTAssertEqual(contentView["ZIP"].value! as! String, "ZIP")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306976
+    func testVerifyThatTheEditedCreditCardIsSaved() {
+        // Go to a saved credit card and change the name on card
+        let cardNr: XCUIElement
+        let nameOnCard: XCUIElement
+        let updatedName = "Firefox"
+        addCardAndReachViewCardPage()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        if iPad() {
+            nameOnCard = app.otherElements.textFields.element(boundBy: 0)
+        } else {
+            nameOnCard = app.otherElements.textFields.element(boundBy: 1)
+        }
+        nameOnCard.tap()
+        app.keyboards.keys["delete"].press(forDuration: 1.5)
+        nameOnCard.typeText(updatedName)
+        app.buttons["Save"].tap()
+        // The name of the card is saved without issues
+        XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts[updatedName].exists, "\(updatedName) does not exists")
+        // Go to an saved credit card and change the credit card number
+        app.tables.cells.element(boundBy: 1).tap()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        if iPad() {
+            cardNr = app.otherElements.textFields.element(boundBy: 1)
+        } else {
+            cardNr = app.otherElements.textFields.element(boundBy: 2)
+        }
+        cardNr.tap()
+        if iPad() {
+            app.keyboards.keys["delete"].press(forDuration: 2.2)
+        } else {
+            app.keyboards.keys["Delete"].press(forDuration: 2.2)
+        }
+        cardNr.typeText("4111111111111111")
+        app.buttons["Save"].tap()
+        // The credit card number is saved without issues
+        XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1111").exists)
+        // Reach autofill website
+        navigator.goto(NewTabScreen)
+        navigator.openURL("https://checkout.stripe.dev/preview")
+        waitUntilPageLoad()
+        app.swipeUp()
+        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+        mozWaitForElementToExist(cardNumber)
+        cardNumber.tapOnApp()
+        if !app.buttons[useSavedCard].exists {
+            cardNumber.tapOnApp()
+        }
+        mozWaitForElementToExist(app.buttons[useSavedCard])
+        app.buttons[useSavedCard].tap()
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts["Use saved card"])
+        app.scrollViews.otherElements.tables.cells.firstMatch.tap()
+        // The credit card's number and name are imported correctly on the designated fields
+        let contentView = app.webViews["contentView"].webViews.textFields
+        XCTAssertEqual(contentView["Card number"].value! as! String, "4111 1111 1111 1111")
+        XCTAssertEqual(contentView["Expiration"].value! as! String, "05 / 40")
+        XCTAssertEqual(contentView["Full name on card"].value! as! String, updatedName)
+        XCTAssertEqual(contentView["CVC"].value! as! String, "CVC")
+        XCTAssertEqual(contentView["ZIP"].value! as! String, "ZIP")
+    }
+
     private func addCreditCardAndReachAutofillWebsite() {
         // Access any website with a credit card form and tap on the credit card number/ credit card name
         navigator.nowAt(NewTabScreen)
@@ -267,17 +329,13 @@ class CreditCardsTests: BaseTestCase {
 
     private func retryOnCardNumber(cardNr: XCUIElement, expiration: XCUIElement, cardNumber: String) {
         cardNr.tap()
-        while !cardNr.placeholderValue!.isEmpty {
-            app.keyboards.keys["Delete"].tap()
-        }
+        app.keyboards.keys["Delete"].press(forDuration: 2.2)
         cardNr.typeText(cardNumber)
         expiration.tap()
     }
 
     private func retryExpirationNumber(expiration: XCUIElement, expirationDate: String) {
-        while !expiration.placeholderValue!.isEmpty {
-            app.keyboards.keys["Delete"].tap()
-        }
+        app.keyboards.keys["Delete"].press(forDuration: 1.5)
         expiration.typeText(expirationDate)
     }
 }
