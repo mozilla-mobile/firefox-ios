@@ -204,19 +204,6 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case SearchSuggestItem.privateSuggestions.rawValue:
-<<<<<<< HEAD
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions,
-                    defaultValue: model.shouldShowPrivateModeSearchSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.PrivateSessionSetting
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
-                )
-                cell.isHidden = !model.shouldShowSearchSuggestions
-
-=======
                 if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly),
                    !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
                     buildSettingWith(
@@ -225,14 +212,10 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                         titleText: String.localizedStringWithFormat(
                             .Settings.Search.PrivateSessionSetting
                         ),
-                        statusText: String.localizedStringWithFormat(
-                            .Settings.Search.PrivateSessionDescription
-                        ),
                         cell: cell,
                         selector: #selector(didToggleShowSearchSuggestionsInPrivateMode)
                     )
                 }
->>>>>>> 11f5e6262 (Refactor FXIOS-8560 [v124] Missing original "Show Search Suggestions" on Search Settings (#19072))
             default: break
             }
 
