@@ -167,7 +167,7 @@ class SearchViewController: SiteTableViewController,
                || !filteredOpenedTabs.isEmpty
                || (!filteredRemoteClientTabs.isEmpty && shouldShowSyncedTabsSuggestions)
                || !searchHighlights.isEmpty
-               || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions 
+               || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions
                                                    || shouldShowSponsoredSuggestions))
     }
 
