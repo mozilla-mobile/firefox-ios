@@ -261,15 +261,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let startAtHomeOption = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption)
     }
-
-    @objc
-    func uploadError(notification: NSNotification) {
-        guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
-        logger.log("Upload Error",
-                   level: .info,
-                   category: .telemetry,
-                   description: error.debugDescription)
-    }
 }
 
 // Enums for Event telemetry.
@@ -2073,7 +2064,7 @@ extension TelemetryWrapper {
     ) {
         DefaultLogger.shared.log("Uninstrumented metric recorded",
                                  level: .info,
-                                 category: .telemetry,
+                                 category: .lifecycle,
                                  description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }

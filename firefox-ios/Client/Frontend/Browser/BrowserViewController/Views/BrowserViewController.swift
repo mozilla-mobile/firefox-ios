@@ -1419,7 +1419,7 @@ class BrowserViewController: UIViewController,
         else {
             logger.log("BVC observeValue webpage unhandled KVO",
                        level: .info,
-                       category: .unlabeled,
+                       category: .webview,
                        description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }

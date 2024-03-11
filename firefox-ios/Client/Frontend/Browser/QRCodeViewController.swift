@@ -337,9 +337,6 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                       let qrCodeDelegate = self.qrCodeDelegate,
                       let text = metaData.stringValue
                 else {
-                    self.logger.log("Unable to scan QR code",
-                                    level: .debug,
-                                    category: .unlabeled)
                     return
                 }
 
