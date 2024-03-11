@@ -13,7 +13,7 @@ public protocol RustFirefoxSuggestActor: Actor {
     func query(
         _ keyword: String,
         providers: [SuggestionProvider],
-        limit: Int32?
+        limit: Int32
     ) async throws -> [RustFirefoxSuggestion]
 
     /// Interrupts any ongoing queries for suggestions.
@@ -48,12 +48,12 @@ public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
     public func query(
         _ keyword: String,
         providers: [SuggestionProvider],
-        limit: Int32?
+        limit: Int32
     ) async throws -> [RustFirefoxSuggestion] {
         return try store.query(query: SuggestionQuery(
             keyword: keyword,
             providers: providers,
-            limit: limit ?? 1
+            limit: limit
         )).compactMap(RustFirefoxSuggestion.init)
     }
 
