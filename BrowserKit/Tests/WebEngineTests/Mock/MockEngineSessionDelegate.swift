@@ -7,8 +7,6 @@ import UIKit.UIContextMenuConfiguration
 @testable import WebEngine
 
 class MockEngineSessionDelegate: EngineSessionDelegate {
-    var onScrollChangeCalled = 0
-    var onLongPressCalled = 0
     var onTitleChangeCalled = 0
     var onProgressCalled = 0
     var onNavigationStateChangeCalled = 0
@@ -20,9 +18,6 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var searchCalled = 0
     var onProvideContextualMenuCalled = 0
 
-    var savedScrollX: Int?
-    var savedScrollY: Int?
-    var savedTouchPoint: CGPoint?
     var savedTitleChange: String?
     var savedURL: String?
     var savedHasOnlySecureContent: Bool?
@@ -33,17 +28,6 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
     var savedPagemetaData: EnginePageMetadata?
     var savedFindInPageSelection: String?
     var savedSearchSelection: String?
-
-    func onScrollChange(scrollX: Int, scrollY: Int) {
-        onScrollChangeCalled += 1
-        savedScrollX = scrollX
-        savedScrollY = scrollY
-    }
-
-    func onLongPress(touchPoint: CGPoint) {
-        onLongPressCalled += 1
-        savedTouchPoint = touchPoint
-    }
 
     func onTitleChange(title: String) {
         onTitleChangeCalled += 1
