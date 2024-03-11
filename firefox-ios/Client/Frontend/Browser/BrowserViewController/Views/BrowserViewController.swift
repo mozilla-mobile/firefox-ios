@@ -1122,12 +1122,20 @@ class BrowserViewController: UIViewController,
         // Make sure reload button is working when showing webview
         urlBar.locationView.reloadButton.reloadButtonState = .reload
 
-        guard let webview = tabManager.selectedTab?.webView else {
+        guard let selectedTab = tabManager.selectedTab,
+              let webView = selectedTab.webView else {
             logger.log("Webview of selected tab was not available", level: .debug, category: .lifecycle)
             return
         }
 
-        browserDelegate?.show(webView: webview)
+        if webView.url == nil {
+            // The web view can go gray if it was zombified due to memory pressure.
+            // When this happens, the URL is nil, so try restoring the page upon selection.
+            logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
+            selectedTab.reload()
+        }
+
+        browserDelegate?.show(webView: webView)
     }
 
     // MARK: - Update content
