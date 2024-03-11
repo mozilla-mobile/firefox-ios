@@ -7,12 +7,6 @@ import UIKit.UIContextMenuConfiguration
 
 /// Delegate used by the class that want to observe an engine session
 public protocol EngineSessionDelegate: AnyObject {
-    /// Event to indicate the scroll position of the content has changed.
-    func onScrollChange(scrollX: Int, scrollY: Int)
-
-    /// Event to indicate that this session has had a long press.
-    func onLongPress(touchPoint: CGPoint)
-
     /// Event to indicate the title on the session has changed.
     func onTitleChange(title: String)
 
