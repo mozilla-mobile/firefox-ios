@@ -167,7 +167,8 @@ class SearchViewController: SiteTableViewController,
                || !filteredOpenedTabs.isEmpty
                || (!filteredRemoteClientTabs.isEmpty && shouldShowSyncedTabsSuggestions)
                || !searchHighlights.isEmpty
-               || (!firefoxSuggestions.isEmpty && shouldShowNonSponsoredSuggestions)
+               || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions
+                                                   || shouldShowSponsoredSuggestions))
     }
 
     init(profile: Profile,
@@ -241,7 +242,7 @@ class SearchViewController: SiteTableViewController,
 
     /// Whether to show sponsored suggestions from Firefox Suggest.
     private var shouldShowSponsoredSuggestions: Bool {
-        shouldShowNonSponsoredSuggestions &&
+        return !viewModel.isPrivate &&
         model.shouldShowSponsoredSuggestions
     }
 
