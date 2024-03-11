@@ -106,8 +106,8 @@ firefox-ios/Client/Assets/*.js.LICENSE.txt
 firefox-ios/shavar-prod-lists
 /LocalizationTools
 
-# localization tools clone
 focus-ios/focus-ios-tests/tools/Localizations
+focus-ios/focusios-l10n
 import-strings.log
 export-strings.log
 
