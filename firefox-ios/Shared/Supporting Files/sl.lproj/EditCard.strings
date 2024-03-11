@@ -50,7 +50,7 @@
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Shranjuj in samodejno izpolnjuj kartice";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
-"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Shranjuj in izpolnjuj načine plačila";
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Shranjuj in izpolnjuj plačilna sredstva";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Prikaži kartico";

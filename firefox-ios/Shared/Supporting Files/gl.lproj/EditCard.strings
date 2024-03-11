@@ -1,6 +1,9 @@
 /* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v113" = "Engadir unha tarxeta de crédito";
 
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "Engadir tarxeta";
+
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Cancelar";
 
@@ -45,6 +48,9 @@
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Gardar e encher automaticamente as tarxetas";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Gardar e cubrir os métodos de pago";
 
 /* Title label for the view where user can view their credit card info */
 "CreditCard.EditCard.ViewCreditCardTitle.v116" = "Ver tarxeta";
