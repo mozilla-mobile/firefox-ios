@@ -135,10 +135,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   # Temporary for Focus
   - Blockzilla/Generated/
   - /Users/vagrant/git/DerivedData/
-
-included:
-  - /Users/vagrant/git
-  - .
+  - /Users/vagrant/git/firefox-ios/
 
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
