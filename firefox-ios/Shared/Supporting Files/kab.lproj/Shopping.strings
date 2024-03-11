@@ -154,6 +154,9 @@
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Senfel takarḍa n yiɣewwaren";
 
+/* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, taqeffalt n ubeddel, %2$@.";
+
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.SettingsCard.Footer.Action.v120" = "Amsenqad n tamawt yella-d s lmendad n %1$@ s %2$@.";
 

@@ -1,3 +1,6 @@
 /* This value is used as the title for the select a credit card from list of available cards. */
 "CreditCard.SelectCreditCard.MainTitle.v116" = "Usar unha tarxeta gardada?";
 
+/* This value is used as the title for the select a credit card from list of available cards. */
+"CreditCard.SelectCreditCard.MainTitle.v122" = "Usar unha tarxeta gardada";
+

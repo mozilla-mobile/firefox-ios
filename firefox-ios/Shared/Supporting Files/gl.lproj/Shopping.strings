@@ -10,6 +10,15 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Son fiables estas recensións? Comprobe agora para ver unha valoración axustada.";
 
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "Anuncio de %@";
+
+/* Title label for the Fakespot Ad card. This is displayed above a product image, suggested as an alternative to the product reviewed. */
+"Shopping.AdCard.Title.v121" = "Máis a considerar";
+
+/* Description adjusted of the rating card displayed in the shopping review quality bottom sheet. */
+"Shopping.AdjustedRating.Description.v121" = "Baseado en recensións fiables";
+
 /* Accessibility label, associated to adjusted rating stars. %@ is a decimal value from 0 to 5 that will only use a tenth (example: 3.5). */
 "Shopping.AdjustedRating.StarsAccessibilityLabel.v120" = "%@ de 5 estrelas";
 
@@ -52,6 +61,12 @@
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Non podemos comprobar estas recensións";
 
+/* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
+"Shopping.InfoCard.InfoComingSoon.Description.v121" = "Deberíamos ter información sobre as recensións deste produto nun prazo de 24 horas. Volva a comprobalo máis tarde.";
+
+/* Title for an information card that is displayed in the review checker section when certain details about a product or feature are not currently available but are expected to be provided soon. The message should imply that the user can look forward to receiving more information shortly. */
+"Shopping.InfoCard.InfoComingSoon.Title.v121" = "Información dispoñible en breve";
+
 /* Primary action title for info card when the product needs analysis */
 "Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "Comprobar agora";
 
@@ -70,11 +85,23 @@
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Aínda non hai suficientes recensións";
 
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Se ve que este produto está de novo en stock, infórmeo e traballaremos en comprobar as recensións.";
+
+/* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Informar que o produto está en stock";
+
+/* Title for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This title is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Title.v121" = "O produto non está dispoñible";
+
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Isto pode levar uns 60 segundos.";
 
 /* Title for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Comprobando a calidade da recensión";
+
+/* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
+"Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Comprobando a calidade da recensión (%@)";
 
 /* This description appears beneath the confirmation title on the information card to inform the user that their report regarding the product stock status has been received and is being processed. It serves to set the expectation that the review information will be updated within 24 hours and invites the user to revisit the product page for updates. */
 "Shopping.InfoCard.ReportSubmittedByCurrentUser.Description.v121" = "Deberíamos ter información sobre as recensións deste produto nun prazo de 24 horas. Volva a comprobalo máis tarde.";
@@ -91,6 +118,15 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Aínda non hai información sobre estas recensións";
 
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v120" = "Ao seleccionar «Si, probalo», acepta o seguinte de %@:";
+
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "Ao seleccionar «Si, probalo», acepta estes elementos:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Consulte a fiabilidade das revisións de produtos en %1$@ antes de comprar. Review Checker, unha función experimental de %2$@, está integrada directamente no navegador.";
+
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
 "Shopping.OptInCard.FirstParagraph.Description.v120" = "Consultar a fiabilidade das recensións de produtos en %1$@ antes de comprar. A verificación de recensións, unha función experimental de %2$@, está integrada directamente no navegador. Tamén funciona en %3$@ e %4$@.";
 
@@ -106,6 +142,9 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Política de privacidade";
 
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Política de privacidade de %@";
+
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Agora non";
 
@@ -114,6 +153,9 @@
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Temos de uso";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Temos de uso de %@";
 
 /* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Calidade %@";
@@ -169,6 +211,12 @@
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Expanda a tarxeta de configuración";
 
+/* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Toque dúas veces para cambiar a configuración.";
+
+/* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, botón de cambio, %2$@.";
+
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.SettingsCard.Footer.Action.v120" = "O comprobador de recensións está impulsado por %1$@ de %2$@";
 
@@ -178,11 +226,20 @@
 /* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
 "Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Mostrar produtos recomendados por %@";
 
+/* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "Desactivado";
+
+/* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Activado";
+
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.TurnOffButton.Title.v120" = "Desactivar o verificador de recensións";
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BETA";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Pechar o verificador de recensións";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "Verificador de recensións";
