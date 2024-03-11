@@ -286,7 +286,6 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     cell: cell,
                     selector: #selector(didToggleEnableSponsoredSuggestions)
                 )
-                cell.isHidden = !model.shouldShowFirefoxSuggestions
 
             case FirefoxSuggestItem.privateSuggestions.rawValue:
                 buildSettingWith(
@@ -422,10 +421,6 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath {
-        case IndexPath(
-                row: FirefoxSuggestItem.sponsored.rawValue,
-                section: Section.firefoxSuggestSettings.rawValue):
-            if  !model.shouldShowFirefoxSuggestions { return 0 }
         case IndexPath(
                 row: FirefoxSuggestItem.privateSuggestions.rawValue,
                 section: Section.firefoxSuggestSettings.rawValue):
@@ -660,14 +655,6 @@ extension SearchSettingsTableViewController {
     @objc
     func didToggleEnableNonSponsoredSuggestions(_ toggle: ThemedSwitch) {
         model.shouldShowFirefoxSuggestions = toggle.isOn
-        model.shouldShowSponsoredSuggestions = toggle.isOn
-
-        updateCells(
-            at: [IndexPath(
-                row: FirefoxSuggestItem.sponsored.rawValue,
-                section: Section.firefoxSuggestSettings.rawValue
-            )]
-        )
     }
 
     @objc
