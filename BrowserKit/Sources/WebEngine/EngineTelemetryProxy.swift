@@ -24,6 +24,12 @@ public enum EngineTelemetryEvent {
 
     // A page load was completed.
     case pageLoadFinished
+
+    /// Sends an event for ads found on the page. Includes the provider name and ad URLs.
+    case trackAdsFoundOnPage(String, [String])
+
+    /// Sends an event for ads clicked on the page. Includes the provider name.
+    case trackAdsClickedOnPage(String)
 }
 
 /// Protocol for handling WebEngine telemetry events. These can be custom-handled

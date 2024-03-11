@@ -3,10 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import WebEngine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var engineProvider = EngineProvider(telemetryProxy: TelemetryHandler())
+    var engineProvider: EngineProvider = {
+        let dependencies = EngineSessionDependencies(telemetryProxy: TelemetryHandler())
+        return EngineProvider(sessionDependencies: dependencies)
+    }()
 
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
