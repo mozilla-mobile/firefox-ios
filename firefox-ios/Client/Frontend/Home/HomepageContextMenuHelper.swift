@@ -199,7 +199,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             self.viewModel.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                 site.setBookmarked(false)
             }
-            
+
             self.delegate?.homePanelDidRequestBookmarkToast(for: .remove)
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
@@ -226,9 +226,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
             site.setBookmarked(true)
-            
+
             self.delegate?.homePanelDidRequestBookmarkToast(for: .add)
-            
+
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
     }

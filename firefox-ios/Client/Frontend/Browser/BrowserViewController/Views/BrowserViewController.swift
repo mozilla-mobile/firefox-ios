@@ -1278,14 +1278,14 @@ class BrowserViewController: UIViewController,
 
         showBookmarkToast(for: .add)
     }
-    
+
     func removeBookmark(url: String) {
         profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
             self.showBookmarkToast(for: .remove)
         }
     }
-    
+
     private func showBookmarkToast(for action: BookmarkAction) {
         switch action {
         case .add:
@@ -2484,7 +2484,7 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         navigationHandler?.show(settings: settingsPage)
     }
-        
+
     func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
         showBookmarkToast(for: action)
     }
