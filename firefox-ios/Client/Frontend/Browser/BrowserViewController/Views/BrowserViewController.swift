@@ -2281,7 +2281,7 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
         // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate, autofillLoginNimbusFeatureFlag() {
+        if !tab.isPrivate {
             let logins = LoginsHelper(
                 tab: tab,
                 profile: profile,
@@ -2290,6 +2290,7 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
             logins.foundFieldValues = { [weak self] field, currentRequestId in
                 Task {
+                    guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                     guard let tabURL = tab.url else { return }
                     let logins = (try? await self?.profile.logins.listLogins()) ?? []
                     let loginsForCurrentTab = logins.filter { login in
