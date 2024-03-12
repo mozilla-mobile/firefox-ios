@@ -198,6 +198,13 @@
         "identifier" : "ToolbarKitTests",
         "name" : "ToolbarKitTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "ContentBlockingGeneratorTests",
+        "name" : "ContentBlockingGeneratorTests"
+      }
     }
   ],
   "version" : 1

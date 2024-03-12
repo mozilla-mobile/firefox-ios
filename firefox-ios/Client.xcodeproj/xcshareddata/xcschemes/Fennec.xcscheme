@@ -471,6 +471,16 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ContentBlockingGeneratorTests"
+               BuildableName = "ContentBlockingGeneratorTests"
+               BlueprintName = "ContentBlockingGeneratorTests"
+               ReferencedContainer = "container:../BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "TabDataStoreTests"
                BuildableName = "TabDataStoreTests"
                BlueprintName = "TabDataStoreTests"

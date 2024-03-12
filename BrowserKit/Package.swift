@@ -28,7 +28,10 @@ let package = Package(
             targets: ["WebEngine"]),
         .library(
             name: "ToolbarKit",
-            targets: ["ToolbarKit"])
+            targets: ["ToolbarKit"]),
+        .library(
+            name: "ContentBlockingGenerator",
+            targets: ["ContentBlockingGenerator"])
     ],
     dependencies: [
         .package(
@@ -101,6 +104,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"])
+            dependencies: ["ToolbarKit"]),
+        .target(
+            name: "ContentBlockingGenerator",
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "ContentBlockingGeneratorTests",
+            dependencies: ["ContentBlockingGenerator"])
     ]
 )
