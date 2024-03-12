@@ -29,10 +29,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private struct UX {
         static let textOffset: CGFloat = 20
         static let textOffsetSmall: CGFloat = 13
-        static let titleSize: CGFloat = 28
-        static let titleSizeSmall: CGFloat = 24
-        static let titleSizeLarge: CGFloat = 34
-        static let ctaButtonCornerRadius: CGFloat = 10
         static let ctaButtonWidth: CGFloat = 350
         static let ctaButtonWidthSmall: CGFloat = 300
         static let ctaButtonBottomSpace: CGFloat = 60
