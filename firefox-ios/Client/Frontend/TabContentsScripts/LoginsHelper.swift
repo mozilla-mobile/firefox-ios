@@ -203,7 +203,7 @@ class LoginsHelper: TabContentScript {
     }
 
     func setCredentials(_ login: LoginEntry) {
-        if login.password.isEmpty {
+        if login.password.isEmpty || login.username.isEmpty {
             return
         }
 
