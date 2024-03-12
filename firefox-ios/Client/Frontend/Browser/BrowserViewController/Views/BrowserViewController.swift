@@ -2324,10 +2324,6 @@ extension BrowserViewController: LegacyTabDelegate {
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
         tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
 
-        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
-        sessionRestoreHelper.delegate = self
-        tab.addContentScriptToPage(sessionRestoreHelper, name: SessionRestoreHelper.name())
-
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
         tab.addContentScript(findInPageHelper, name: FindInPageHelper.name())
@@ -2867,14 +2863,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
-        }
-    }
-}
-
-extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        if let tab = tabManager.selectedTab, tab.webView === tab.webView {
-            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }
