@@ -49,12 +49,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
 
-    // Private vars
-    private var titleFontSize: CGFloat {
-        return screenSize.height > 1000 ? UX.titleSizeLarge :
-               screenSize.height > 640 ? UX.titleSize : UX.titleSizeSmall
-    }
-
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
 
