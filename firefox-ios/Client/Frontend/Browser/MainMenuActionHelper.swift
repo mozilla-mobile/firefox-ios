@@ -20,12 +20,18 @@ protocol ToolBarActionMenuDelegate: AnyObject {
 
     func showLibrary(panel: LibraryPanelType)
     func showViewController(viewController: UIViewController)
-    func showToast(message: String, toastAction: MenuButtonToastAction)
+    func showToast(_ bookmarkURL: URL?, _ title: String?, message: String, toastAction: MenuButtonToastAction)
     func showFindInPage()
     func showCustomizeHomePage()
     func showZoomPage(tab: Tab)
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
+}
+
+extension ToolBarActionMenuDelegate {
+    func showToast(_ bookmarkURL: URL? = nil, _ title: String? = nil, message: String, toastAction: MenuButtonToastAction) {
+        showToast(bookmarkURL, title, message: message, toastAction: toastAction)
+    }
 }
 
 enum MenuButtonToastAction {

@@ -1280,10 +1280,10 @@ class BrowserViewController: UIViewController,
         self.show(toast: toast)
     }
 
-    func removeBookmark(url: String) {
-        profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+    func removeBookmark(url: URL, title: String?) {
+        profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(url, title, message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
 
