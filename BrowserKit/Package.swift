@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "BrowserKit",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v15),
+        .macOS(.v10_14)
     ],
     products: [
         .library(
@@ -31,7 +32,10 @@ let package = Package(
             targets: ["ToolbarKit"]),
         .library(
             name: "ContentBlockingGenerator",
-            targets: ["ContentBlockingGenerator"])
+            targets: ["ContentBlockingGenerator"]),
+        .executable(
+            name: "ExecutableContentBlockingGenerator",
+            targets: ["ExecutableContentBlockingGenerator"]),
     ],
     dependencies: [
         .package(
@@ -110,6 +114,9 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
-            dependencies: ["ContentBlockingGenerator"])
+            dependencies: ["ContentBlockingGenerator"]),
+        .executableTarget(
+            name: "ExecutableContentBlockingGenerator",
+            dependencies: ["ContentBlockingGenerator"]),
     ]
 )
