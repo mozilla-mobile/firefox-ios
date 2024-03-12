@@ -17,10 +17,10 @@ taskgraph:
 workers:
     aliases:
         bitrise:
-            provisioner: 'mobile-{level}'
-            implementation: docker-worker
-            os: linux
-            worker-type: 'bitrise-gcp'
+            provisioner: scriptworker-k8s
+            implementation: scriptworker-bitrise
+            os: scriptworker
+            worker-type: mobile-{level}-bitrise
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
@@ -33,4 +33,4 @@ workers:
             worker-type: 'b-linux-gcp'
 
 scriptworker:
-    scope-prefix: mobile:firefox-ios:releng
+    scope-prefix: project:mobile:firefox-ios:releng
