@@ -4,7 +4,7 @@
 
 import Foundation
 
-// Temporary so package is not empty
-struct Temp {
-    var foo = 1
+struct Entity {
+    var properties: [String]
+    var resources: [String]
 }
