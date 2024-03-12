@@ -469,10 +469,10 @@ class WKEngineSession: NSObject,
     // MARK: - AdsTelemetryScriptDelegate
 
     func trackAdsClickedOnPage(providerName: String) {
-        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsClickedOnPage(providerName))
+        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsClickedOnPage(providerName: providerName))
     }
 
     func trackAdsFoundOnPage(providerName: String, urls: [String]) {
-        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsFoundOnPage(providerName, urls))
+        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
     }
 }

@@ -139,7 +139,7 @@ class AdsTelemetryContentScript: WKContentScript {
         return nil
     }
 
-    // Tracking
+    // MARK: - Tracking
 
     private func trackAdsFoundOnPage(providerName: String, urls: [String]) {
         delegate?.trackAdsFoundOnPage(providerName: providerName, urls: urls)
