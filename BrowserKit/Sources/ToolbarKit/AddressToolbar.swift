@@ -6,5 +6,5 @@ import Foundation
 
 /// Protocol representing an address toolbar.
 public protocol AddressToolbar {
-    func configure(_ state: AddressToolbarState)
+    func configure(state: AddressToolbarState)
 }
