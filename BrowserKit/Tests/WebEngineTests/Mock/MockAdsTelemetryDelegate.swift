@@ -9,8 +9,13 @@ class MockAdsTelemetryDelegate: AdsTelemetryScriptDelegate {
     var trackAdsFoundOnPageCalled = 0
     var trackAdsClickedOnPageCalled = 0
 
+    var savedTrackAdsOnPageProviderName: String?
+    var savedTrackAdsOnPageURLs: [String]?
+
     func trackAdsFoundOnPage(providerName: String, urls: [String]) {
         trackAdsFoundOnPageCalled += 1
+        savedTrackAdsOnPageURLs = urls
+        savedTrackAdsOnPageProviderName = providerName
     }
     
     func trackAdsClickedOnPage(providerName: String) {
@@ -33,6 +38,7 @@ struct MockAdsTelemetrySearchProvider {
                 followOnParams: ["oq", "ved", "ei"],
                 extraAdServersRegexps: [
                     #"^https?:\/\/www\.mocksearch(?:adservices)?\.com\/(?:pagead\/)?aclk"#,
+                    #"^https?:\/\/www\.mocksearch(?:adservices)?\.com\/(?:pagead\/)?bclk"#,
                 ]
             )]
     }
