@@ -88,6 +88,8 @@ class AdsTelemetryContentScript: WKContentScript {
         }
     }
 
+    // MARK: - Utility
+
     private func getProviderForMessage(message: Any) -> EngineSearchProviderModel? {
         guard let searchProviderModels = delegate?.searchProviderModels() else { return nil }
         guard let body = message as? [String: Any], let url = body["url"] as? String else { return nil }
@@ -106,6 +108,7 @@ class AdsTelemetryContentScript: WKContentScript {
     }
 
     private func trackAdsClickedOnPage(providerName: String) {
+        // TODO: [FXIOS-8629] This will require some client-side integration and hooks. Will revisit soon.
         delegate?.trackAdsClickedOnPage(providerName: providerName)
     }
 }
