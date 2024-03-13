@@ -223,7 +223,8 @@ class SearchViewController: SiteTableViewController,
         ])
 
         setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
-                                                          .SearchSettingsChanged])
+                                                          .SearchSettingsChanged,
+                                                          .SponsoredAndNonSponsoredSuggestionsChanged])
     }
 
     private func loadSearchHighlights() {
@@ -287,8 +288,13 @@ class SearchViewController: SiteTableViewController,
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
-                && (includeNonSponsored || includeSponsored)
-        else { return nil }
+                && (includeNonSponsored || includeSponsored) else {
+            if !firefoxSuggestions.isEmpty {
+                firefoxSuggestions = []
+                tableView.reloadData()
+            }
+            return nil
+        }
 
         profile.firefoxSuggest?.interruptReader()
 
@@ -1228,6 +1234,9 @@ class SearchViewController: SiteTableViewController,
             dynamicFontChanged(notification)
         case .SearchSettingsChanged:
             reloadSearchEngines()
+        case .SponsoredAndNonSponsoredSuggestionsChanged:
+            guard !searchQuery.isEmpty else { return }
+            _ = loadFirefoxSuggestions()
         default:
             break
         }

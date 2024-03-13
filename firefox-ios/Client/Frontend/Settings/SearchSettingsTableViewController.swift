@@ -654,11 +654,13 @@ extension SearchSettingsTableViewController {
     @objc
     func didToggleEnableNonSponsoredSuggestions(_ toggle: ThemedSwitch) {
         model.shouldShowFirefoxSuggestions = toggle.isOn
+        notificationCenter.post(name: .SponsoredAndNonSponsoredSuggestionsChanged)
     }
 
     @objc
     func didToggleEnableSponsoredSuggestions(_ toggle: ThemedSwitch) {
         model.shouldShowSponsoredSuggestions = toggle.isOn
+        notificationCenter.post(name: .SponsoredAndNonSponsoredSuggestionsChanged)
     }
 
     func cancel() {
