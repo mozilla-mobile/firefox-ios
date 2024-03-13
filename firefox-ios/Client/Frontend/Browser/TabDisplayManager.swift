@@ -812,7 +812,7 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
-        self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
+        self.tabManager.reorderTabs(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
 
         if let indexToRemove = filteredTabs.firstIndex(of: tab) {
             filteredTabs.remove(at: indexToRemove)

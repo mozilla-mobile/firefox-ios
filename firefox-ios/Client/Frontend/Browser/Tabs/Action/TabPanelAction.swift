@@ -58,9 +58,11 @@ class TabUUIDContext: ActionContext {
 class MoveTabContext: ActionContext {
     let originIndex: Int
     let destinationIndex: Int
-    init(originIndex: Int, destinationIndex: Int, windowUUID: WindowUUID) {
+    let isPrivate: Bool
+    init(originIndex: Int, destinationIndex: Int, isPrivate: Bool, windowUUID: WindowUUID) {
         self.originIndex = originIndex
         self.destinationIndex = destinationIndex
+        self.isPrivate = isPrivate
         super.init(windowUUID: windowUUID)
     }
 }
