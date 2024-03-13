@@ -20,12 +20,12 @@ class BrowserViewController: UIViewController {
         isTrackingEnabled: {
             Settings.getToggle(.trackingProtection)
         })
-    private lazy var webViewController: WebViewController = {
+    private lazy var webViewController: LegacyWebViewController = {
         var menuAction = WebMenuAction.live
         menuAction.openLink = { url in
             self.submit(url: url, source: .action)
         }
-        return WebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
+        return LegacyWebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
     }()
     private let webViewContainer = UIView()
 
@@ -1637,14 +1637,14 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
     }
 }
 
-extension BrowserViewController: WebControllerDelegate {
+extension BrowserViewController: LegacyWebControllerDelegate {
 
-    func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
+    func webControllerDidStartProvisionalNavigation(_ controller: LegacyWebController) {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
     }
 
-    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
+    func webController(_ controller: LegacyWebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
         if let total = totalResults {
             findInPageBar?.totalResults = total
         }
@@ -1654,11 +1654,11 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
-    func webControllerDidReload(_ controller: WebController) {
+    func webControllerDidReload(_ controller: LegacyWebController) {
         SearchHistoryUtils.isReload = true
     }
 
-    func webControllerDidStartNavigation(_ controller: WebController) {
+    func webControllerDidStartNavigation(_ controller: LegacyWebController) {
         if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating && !SearchHistoryUtils.isReload {
             SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
@@ -1670,7 +1670,7 @@ extension BrowserViewController: WebControllerDelegate {
         updateURLBar()
     }
 
-    func webControllerDidFinishNavigation(_ controller: WebController) {
+    func webControllerDidFinishNavigation(_ controller: LegacyWebController) {
         updateURLBar()
         urlBarViewModel.isLoading = false
         urlBarViewModel.loadingProgres = 1
@@ -1690,11 +1690,11 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
-    func webControllerURLDidChange(_ controller: WebController, url: URL) {
+    func webControllerURLDidChange(_ controller: LegacyWebController, url: URL) {
         showToolbars()
     }
 
-    func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
+    func webController(_ controller: LegacyWebController, didFailNavigationWithError error: Error) {
         // FXIOS-8637 - #19160 - Integrate onTitleChange, onLocationChange in Focus iOS
         urlBar.url = webViewController.url
         toggleURLBarBackground(isBright: true)
@@ -1702,16 +1702,16 @@ extension BrowserViewController: WebControllerDelegate {
         urlBarViewModel.loadingProgres = 1
     }
 
-    func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
+    func webController(_ controller: LegacyWebController, didUpdateCanGoBack canGoBack: Bool) {
         urlBarViewModel.canGoBack = canGoBack
     }
 
-    func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool) {
+    func webController(_ controller: LegacyWebController, didUpdateCanGoForward canGoForward: Bool) {
         urlBarViewModel.canGoForward = canGoForward
     }
 
     // FXIOS-8636 - #19159 - Integrate onProgress and onNavigationStateChange in Focus iOS
-    func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
+    func webController(_ controller: LegacyWebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
@@ -1721,18 +1721,18 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
+    func webController(_ controller: LegacyWebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
         lastScrollOffset = scrollView.contentOffset
         lastScrollTranslation = scrollView.panGestureRecognizer.translation(in: scrollView)
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView) {
+    func webController(_ controller: LegacyWebController, scrollViewDidEndDragging scrollView: UIScrollView) {
         snapToolbars(scrollView: scrollView)
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView) {
+    func webController(_ controller: LegacyWebController, scrollViewDidScroll scrollView: UIScrollView) {
         let translation = scrollView.panGestureRecognizer.translation(in: scrollView)
         let isDragging = scrollView.panGestureRecognizer.state != .possible
 
@@ -1792,7 +1792,7 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webControllerShouldScrollToTop(_ controller: WebController) -> Bool {
+    func webControllerShouldScrollToTop(_ controller: LegacyWebController) -> Bool {
         guard scrollBarOffsetAlpha == 0 else {
             showToolbars()
             return false
@@ -1801,11 +1801,11 @@ extension BrowserViewController: WebControllerDelegate {
         return true
     }
 
-    func webControllerDidNavigateBack(_ controller: WebController) {
+    func webControllerDidNavigateBack(_ controller: LegacyWebController) {
         handleNavigationBack()
     }
 
-    func webControllerDidNavigateForward(_ controller: WebController) {
+    func webControllerDidNavigateForward(_ controller: LegacyWebController) {
         handleNavigationForward()
     }
 
@@ -1836,7 +1836,7 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
-    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus) {
+    func webController(_ controller: LegacyWebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
         if case .on(let info) = trackingStatus,
            case .on(let oldInfo) = oldTrackingProtectionStatus {
