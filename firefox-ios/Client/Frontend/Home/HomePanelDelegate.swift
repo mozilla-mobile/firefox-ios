@@ -11,6 +11,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayPanelType?)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction)
 }
 
 extension HomePanelDelegate {

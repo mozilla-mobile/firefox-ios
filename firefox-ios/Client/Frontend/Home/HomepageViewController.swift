@@ -772,6 +772,10 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
+
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(for: action)
+    }
 }
 
 // MARK: - Status Bar Background
