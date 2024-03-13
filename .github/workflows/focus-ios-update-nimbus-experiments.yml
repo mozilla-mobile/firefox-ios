@@ -25,7 +25,7 @@ jobs:
         uses: mozilla-mobile/update-experiments@v3
         with:
           repo-path: focus-ios
-          output-path: Blockzilla/Nimbus/initial_experiments.json
+          output-path: focus-ios/Blockzilla/Nimbus/initial_experiments.json
           experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/
           app-name: focus_ios
           branch: automation/update-nimbus-experiments
@@ -43,6 +43,7 @@ jobs:
           delete-branch: true
           labels: Needs Code Review
       - name: Enable Pull Request Automerge
-        run: gh pr merge --merge --auto --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
+        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+        run: gh pr merge --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

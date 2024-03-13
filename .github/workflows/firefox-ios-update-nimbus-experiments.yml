@@ -43,6 +43,7 @@ jobs:
           delete-branch: true
           labels: Needs Code Review
       - name: Enable Pull Request Automerge
-        run: gh pr merge --merge --auto --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
+        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+        run: gh pr merge --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
