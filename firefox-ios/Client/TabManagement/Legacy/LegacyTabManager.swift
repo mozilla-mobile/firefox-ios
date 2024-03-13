@@ -507,7 +507,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     // MARK: - Move tabs
-    func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
+    func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
         let currentTabs = privateMode ? privateTabs : normalTabs
 
         guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else { return }
