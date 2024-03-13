@@ -17,7 +17,7 @@ class MockAdsTelemetryDelegate: AdsTelemetryScriptDelegate {
         savedTrackAdsOnPageURLs = urls
         savedTrackAdsOnPageProviderName = providerName
     }
-    
+ 
     func trackAdsClickedOnPage(providerName: String) {
         trackAdsClickedOnPageCalled += 1
     }
