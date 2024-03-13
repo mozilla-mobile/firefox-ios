@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */; };
+		1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */; };
 		8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0687602B6D9F990031427A /* SettingsDelegate.swift */; };
 		8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F446A2B56EDC900438589 /* EngineProvider.swift */; };
 		8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A0F446D2B56EF1A00438589 /* WebEngine */; };
@@ -49,6 +50,7 @@
 
 /* Begin PBXFileReference section */
 		1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryHandler.swift; sourceTree = "<group>"; };
+		1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAdsTrackerDefinitions.swift; sourceTree = "<group>"; };
 		8A0687602B6D9F990031427A /* SettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDelegate.swift; sourceTree = "<group>"; };
 		8A0F44682B56ECBF00438589 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
 		8A0F446A2B56EDC900438589 /* EngineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngineProvider.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				8A0F447E2B56FDAD00438589 /* BrowserError.swift */,
 				8A0F447C2B56FD9600438589 /* SearchModel.swift */,
 				8A0F44742B56FD5300438589 /* SearchViewModel.swift */,
+				1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				8A4601E52B0FE20500FFD17F /* AppDelegate.swift in Sources */,
 				8A0F447D2B56FD9600438589 /* SearchModel.swift in Sources */,
 				8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */,
+				1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */,
 				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
 				8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */,

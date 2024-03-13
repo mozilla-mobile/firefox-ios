@@ -475,4 +475,8 @@ class WKEngineSession: NSObject,
     func trackAdsFoundOnPage(providerName: String, urls: [String]) {
         telemetryProxy?.handleTelemetry(session: self, event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
     }
+
+    func searchProviderModels() -> [EngineSearchProviderModel] {
+        return delegate?.adsSearchProviderModels() ?? []
+    }
 }

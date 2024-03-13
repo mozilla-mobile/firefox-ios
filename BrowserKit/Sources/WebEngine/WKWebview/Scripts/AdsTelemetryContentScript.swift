@@ -6,13 +6,6 @@ import Common
 import Foundation
 import WebKit
 
-public enum EngineBasicSearchProvider: String {
-    case google
-    case duckduckgo
-    case yahoo
-    case bing
-}
-
 public struct EngineSearchProviderModel {
     typealias Predicate = (String) -> Bool
     let name: String
@@ -23,56 +16,21 @@ public struct EngineSearchProviderModel {
     let followOnParams: [String]
     let extraAdServersRegexps: [String]
 
-    public static let searchProviderList = [
-        EngineSearchProviderModel(
-            name: EngineBasicSearchProvider.google.rawValue,
-            regexp: #"^https:\/\/www\.google\.(?:.+)\/search"#,
-            queryParam: "q",
-            codeParam: "client",
-            codePrefixes: ["firefox"],
-            followOnParams: ["oq", "ved", "ei"],
-            extraAdServersRegexps: [
-                #"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#,
-                #"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#
-            ]
-        ),
-        EngineSearchProviderModel(
-            name: EngineBasicSearchProvider.duckduckgo.rawValue,
-            regexp: #"^https:\/\/duckduckgo\.com\/"#,
-            queryParam: "q",
-            codeParam: "t",
-            codePrefixes: ["f"],
-            followOnParams: [],
-            extraAdServersRegexps: [
-                #"^https:\/\/duckduckgo.com\/y\.js"#,
-                #"^https:\/\/www\.amazon\.(?:[a-z.]{2,24}).*(?:tag=duckduckgo-)"#
-            ]
-        ),
-        // Note: Yahoo shows ads from bing and google
-        EngineSearchProviderModel(
-            name: EngineBasicSearchProvider.yahoo.rawValue,
-            regexp: #"^https:\/\/(?:.*)search\.yahoo\.com\/search"#,
-            queryParam: "p",
-            codeParam: "",
-            codePrefixes: [],
-            followOnParams: [],
-            extraAdServersRegexps: [#"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#,
-                                    #"^https:\/\/www\.bing\.com\/acli?c?k"#,
-                                    #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#]
-        ),
-        EngineSearchProviderModel(
-            name: EngineBasicSearchProvider.bing.rawValue,
-            regexp: #"^https:\/\/www\.bing\.com\/search"#,
-            queryParam: "q",
-            codeParam: "pc",
-            codePrefixes: ["MOZ", "MZ"],
-            followOnParams: ["oq"],
-            extraAdServersRegexps: [
-                #"^https:\/\/www\.bing\.com\/acli?c?k"#,
-                #"^https:\/\/www\.bing\.com\/fd\/ls\/GLinkPingPost\.aspx.*acli?c?k"#
-            ]
-        ),
-    ]
+    public init(name: String,
+                regexp: String,
+                queryParam: String,
+                codeParam: String,
+                codePrefixes: [String],
+                followOnParams: [String],
+                extraAdServersRegexps: [String]) {
+        self.name = name
+        self.regexp = regexp
+        self.queryParam = queryParam
+        self.codeParam = codeParam
+        self.codePrefixes = codePrefixes
+        self.followOnParams = followOnParams
+        self.extraAdServersRegexps = extraAdServersRegexps
+    }
 }
 
 extension EngineSearchProviderModel {
@@ -98,6 +56,7 @@ extension EngineSearchProviderModel {
 protocol AdsTelemetryScriptDelegate: AnyObject {
     func trackAdsFoundOnPage(providerName: String, urls: [String])
     func trackAdsClickedOnPage(providerName: String)
+    func searchProviderModels() -> [EngineSearchProviderModel]
 }
 
 class AdsTelemetryContentScript: WKContentScript {
@@ -130,8 +89,9 @@ class AdsTelemetryContentScript: WKContentScript {
     }
 
     private func getProviderForMessage(message: Any) -> EngineSearchProviderModel? {
+        guard let searchProviderModels = delegate?.searchProviderModels() else { return nil }
         guard let body = message as? [String: Any], let url = body["url"] as? String else { return nil }
-        for provider in EngineSearchProviderModel.searchProviderList {
+        for provider in searchProviderModels {
             guard url.range(of: provider.regexp, options: .regularExpression) != nil else { continue }
             return provider
         }
