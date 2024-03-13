@@ -19,13 +19,13 @@ class DefaultSearchPrefsTests: XCTestCase {
         let usa = (
             lang: ["en-US", "en"],
             region: "US",
-            resultList: ["google-b-1-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"],
+            resultList: ["google-b-1-m", "bing", "ddg", "ebay", "wikipedia"],
             resultDefault: "Google"
         )
         let england = (
             lang: ["en-GB", "en"],
             region: "GB",
-            resultList: ["google-b-m", "amazon-co-uk", "bing", "ddg", "ebay-co-uk", "qwant", "wikipedia"],
+            resultList: ["google-b-m", "bing", "ddg", "ebay-co-uk", "qwant", "wikipedia"],
             resultDefault: "Google"
         )
         let france = (
@@ -43,7 +43,7 @@ class DefaultSearchPrefsTests: XCTestCase {
         let canada = (
             lang: ["en-CA", "en"],
             region: "CA",
-            resultList: ["google-b-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"],
+            resultList: ["google-b-m", "bing", "ddg", "ebay", "wikipedia"],
             resultDefault: "Google"
         )
         let russia = (
@@ -67,13 +67,13 @@ class DefaultSearchPrefsTests: XCTestCase {
         let germany = (
             lang: ["de-DE", "de"],
             region: "DE",
-            resultList: ["google-b-m", "amazon-de", "bing", "ddg", "ebay-de", "ecosia", "qwant", "wikipedia-de"],
+            resultList: ["google-b-m", "bing", "ddg", "ebay-de", "ecosia", "qwant", "wikipedia-de"],
             resultDefault: "Google"
         )
         let southAfrica = (
             lang: ["en-SA", "en"],
             region: "SA",
-            resultList: ["google-b-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"],
+            resultList: ["google-b-m", "bing", "ddg", "ebay", "wikipedia"],
             resultDefault: "Google"
         )
         let testLocales = [
@@ -109,7 +109,7 @@ class DefaultSearchPrefsTests: XCTestCase {
         let us = (
             lang: ["en-US", "en"],
             region: "US",
-            resultList: ["google-b-1-m", "amazondotcom", "bing", "ddg", "ebay", "wikipedia"],
+            resultList: ["google-b-1-m", "bing", "ddg", "ebay", "wikipedia"],
             resultDefault: "google-b-m"
         )
 
