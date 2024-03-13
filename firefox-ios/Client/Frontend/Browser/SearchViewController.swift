@@ -171,6 +171,8 @@ class SearchViewController: SiteTableViewController,
                                                    || shouldShowSponsoredSuggestions))
     }
 
+    private let maxNumOfFirefoxSuggestions: Int32 = 1
+
     init(profile: Profile,
          viewModel: SearchViewModel,
          model: SearchEngines,
@@ -310,9 +312,11 @@ class SearchViewController: SiteTableViewController,
                 }
             }
         return Task { [weak self] in
-            guard let suggestions = try? await self?.profile.firefoxSuggest?.query(
-                tempSearchQuery,
-                providers: providers
+            guard let limit = self?.maxNumOfFirefoxSuggestions,
+                  let suggestions = try? await self?.profile.firefoxSuggest?.query(
+                    tempSearchQuery,
+                    providers: providers,
+                    limit: limit
             ) else { return }
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
