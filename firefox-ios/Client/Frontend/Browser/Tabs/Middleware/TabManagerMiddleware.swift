@@ -233,7 +233,7 @@ class TabManagerMiddleware {
                                      method: .drop,
                                      object: .tab,
                                      value: .tabTray)
-        tabManager.reorderTabsInArray(isPrivate: isPrivate, fromIndex: originIndex, toIndex: destinationIndex)
+        tabManager.reorderTabs(isPrivate: isPrivate, fromIndex: originIndex, toIndex: destinationIndex)
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false, uuid: uuid)
         let context = RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)
