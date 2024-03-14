@@ -1158,7 +1158,7 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-        guard let url = url else {
+        guard url != nil else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
             return
