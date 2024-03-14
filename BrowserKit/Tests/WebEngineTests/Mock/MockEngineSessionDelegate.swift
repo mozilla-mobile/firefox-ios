@@ -81,8 +81,12 @@ class MockEngineSessionDelegate: EngineSessionDelegate {
         return nil
     }
 
-    func onWillDisplayAccessoryView() -> WebEngine.EngineInputAccessoryView {
+    func onWillDisplayAccessoryView() -> EngineInputAccessoryView {
         onWillDisplayAcccessoryViewCalled += 1
         return .default
+    }
+
+    func adsSearchProviderModels() -> [EngineSearchProviderModel] {
+        return MockAdsTelemetrySearchProvider.mockSearchProviderModels()
     }
 }
