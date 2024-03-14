@@ -77,6 +77,6 @@ jobs:
         committer: GitHub <noreply@github.com>
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: ${{ env.pr_title }}
-        title: "Localize [v${{ env.next_version }}] String import ${{ env.current_date }}"
+        title: "Firefox Localize [v${{ env.next_version }}] String import ${{ env.current_date }}"
         branch: ${{ env.branch_name }}
         body: ${{ env.pr_body }}

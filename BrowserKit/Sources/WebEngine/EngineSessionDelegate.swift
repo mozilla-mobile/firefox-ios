@@ -7,12 +7,6 @@ import UIKit.UIContextMenuConfiguration
 
 /// Delegate used by the class that want to observe an engine session
 public protocol EngineSessionDelegate: AnyObject {
-    /// Event to indicate the scroll position of the content has changed.
-    func onScrollChange(scrollX: Int, scrollY: Int)
-
-    /// Event to indicate that this session has had a long press.
-    func onLongPress(touchPoint: CGPoint)
-
     /// Event to indicate the title on the session has changed.
     func onTitleChange(title: String)
 
@@ -48,4 +42,8 @@ public protocol EngineSessionDelegate: AnyObject {
     /// - Parameter linkURL: the link (if any) associatd with the event.
     /// - Returns: a menu configuration, or nil (will not show a menu)
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration?
+
+    /// Allows delegates to participate in whether or not a keyboard accessory view is shown
+    /// for the current engine session.
+    func onWillDisplayAccessoryView() -> EngineInputAccessoryView
 }

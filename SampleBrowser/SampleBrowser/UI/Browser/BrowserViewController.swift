@@ -228,6 +228,10 @@ class BrowserViewController: UIViewController,
                                           actionProvider: actionProvider)
     }
 
+    func onWillDisplayAccessoryView() -> EngineInputAccessoryView {
+        return .default
+    }
+
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {

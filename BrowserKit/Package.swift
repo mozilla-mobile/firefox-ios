@@ -28,7 +28,10 @@ let package = Package(
             targets: ["WebEngine"]),
         .library(
             name: "ToolbarKit",
-            targets: ["ToolbarKit"])
+            targets: ["ToolbarKit"]),
+        .library(
+            name: "ContentBlockingGenerator",
+            targets: ["ContentBlockingGenerator"])
     ],
     dependencies: [
         .package(
@@ -36,7 +39,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.10.2"),
+            exact: "7.11.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -101,6 +104,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"])
+            dependencies: ["ToolbarKit"]),
+        .target(
+            name: "ContentBlockingGenerator",
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "ContentBlockingGeneratorTests",
+            dependencies: ["ContentBlockingGenerator"])
     ]
 )

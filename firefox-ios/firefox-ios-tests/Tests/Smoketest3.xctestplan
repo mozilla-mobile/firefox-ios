@@ -24,6 +24,8 @@
         "CreditCardsTests\/testAutofillCreditCardsToggleOnOoff()",
         "CreditCardsTests\/testCreditCardsAutofill()",
         "CreditCardsTests\/testManageCreditCardsOption()",
+        "CreditCardsTests\/testVerifyThatMultipleCardsCanBeAdded()",
+        "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",
         "DataManagementTests",
         "DatabaseFixtureTest",
         "DesktopModeTestsIpad",

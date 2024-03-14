@@ -108,7 +108,7 @@ struct QuickActionsImplementation: QuickActions {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
         default:
-            logger.log("Cannot add static shortcut item of type \(type)", level: .warning, category: .unlabeled)
+            break
         }
         application.shortcutItems = dynamicShortcutItems
     }

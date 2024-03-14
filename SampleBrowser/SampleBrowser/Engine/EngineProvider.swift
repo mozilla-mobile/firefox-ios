@@ -7,16 +7,18 @@ import WebEngine
 
 struct EngineProvider {
     // We only have one session in the SampleBrowser
-    let session: EngineSession?
+    private(set) var session: EngineSession?
     let view: EngineView
 
-    init(engine: Engine = WKEngine.factory()) {
+    init(engine: Engine = WKEngine.factory(),
+         telemetryProxy: EngineTelemetryProxy? = nil) {
         do {
             session = try engine.createSession()
         } catch {
             session = nil
         }
 
+        session?.telemetryProxy = telemetryProxy
         view = engine.createView()
     }
 }

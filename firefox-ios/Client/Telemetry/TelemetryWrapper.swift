@@ -261,15 +261,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let startAtHomeOption = prefs.stringForKey(PrefsKeys.UserFeatureFlagPrefs.StartAtHome) ?? StartAtHomeSetting.afterFourHours.rawValue
         GleanMetrics.Preferences.openingScreen.set(startAtHomeOption)
     }
-
-    @objc
-    func uploadError(notification: NSNotification) {
-        guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
-        logger.log("Upload Error",
-                   level: .info,
-                   category: .telemetry,
-                   description: error.debugDescription)
-    }
 }
 
 // Enums for Event telemetry.
@@ -1938,6 +1929,10 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.shareButtonTapped.record()
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
+        case (.action, .engagement, .locationBar, _, _):
+            GleanMetrics.Awesomebar.engagement.record()
+        case (.action, .abandonment, .locationBar, _, _):
+            GleanMetrics.Awesomebar.abandonment.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
@@ -2143,7 +2138,7 @@ extension TelemetryWrapper {
     ) {
         DefaultLogger.shared.log("Uninstrumented metric recorded",
                                  level: .info,
-                                 category: .telemetry,
+                                 category: .lifecycle,
                                  description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }

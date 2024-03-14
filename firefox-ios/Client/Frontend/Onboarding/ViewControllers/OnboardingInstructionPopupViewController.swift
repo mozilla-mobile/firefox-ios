@@ -12,10 +12,6 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
         static let contentStackViewSpacing: CGFloat = 40
         static let textStackViewSpacing: CGFloat = 24
 
-        static let titleFontSize: CGFloat = 20
-        static let numeratedTextFontSize: CGFloat = 15
-        static let buttonFontSize: CGFloat = 16
-
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
@@ -49,7 +45,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private lazy var titleLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title3, size: UX.titleFontSize)
+        label.font = FXFontStyles.Bold.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.TitleLabel"
     }
@@ -212,16 +208,12 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     private func createLabels(from descriptionTexts: [String]) {
         numeratedLabels.removeAll()
         let attributedStrings = viewModel.getAttributedStrings(
-            with: DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .subheadline,
-                size: UX.numeratedTextFontSize))
+            with: FXFontStyles.Regular.subheadline.scaledFont())
         attributedStrings.forEach { attributedText in
             let index = attributedStrings.firstIndex(of: attributedText)! as Int
             let label: UILabel = .build { label in
                 label.textAlignment = .left
-                label.font = DefaultDynamicFontHelper.preferredFont(
-                    withTextStyle: .subheadline,
-                    size: UX.numeratedTextFontSize)
+                label.font = FXFontStyles.Regular.subheadline.scaledFont()
                 label.adjustsFontForContentSizeCategory = true
                 label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot).DefaultBrowserSettings.NumeratedLabel\(index)"
                 label.attributedText = attributedText
