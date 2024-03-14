@@ -186,7 +186,16 @@ class BrowserViewController: UIViewController {
             make.top.bottom.leading.width.equalToSuperview()
         }
 
-        // FXIOS-8617 - #19118 ⁃ Integrate EngineSession in Focus iOS
+        if WebEngineFlagManager.isWebEngineEnabled {
+            // FXIOS-8617 - #19118 ⁃ Integrate EngineSession in Focus iOS
+        } else {
+            // Legacy UI and related configuration
+            // TODO: [FXIOS-8616] Portions of this configuration will eventually be shared also by WebEngine.
+            configureLegacyUI()
+        }
+    }
+
+    private func configureLegacyUI() {
         webViewController.delegate = self
 
         setupBackgroundImage()
