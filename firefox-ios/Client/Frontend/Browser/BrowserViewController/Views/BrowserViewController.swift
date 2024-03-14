@@ -1166,7 +1166,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+        } else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.isHidden = false
         }

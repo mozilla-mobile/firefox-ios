@@ -97,9 +97,8 @@ class LegacyTabMetadataManager {
     private func updateObservationForKey(key: HistoryMetadataKey,
                                          observation: HistoryMetadataObservation,
                                          completion: (() -> Void)?) {
-        // If URL is empty or a session restore URL, do not record in metadata observation
-        let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)"
-        guard !key.url.isEmpty, !key.url.contains(sessionRestoreURL) else {
+        // If URL is empty do not record in metadata observation
+        guard !key.url.isEmpty else {
             completion?()
             return
         }
