@@ -27,7 +27,7 @@ class BrowserViewController: UIViewController {
         }
         return LegacyWebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
     }()
-    private let webViewContainer = UIView()
+    private let legacyWebViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
     private var keyboardState: KeyboardState?
@@ -204,8 +204,8 @@ class BrowserViewController: UIViewController {
 
         mainContainerView.addSubview(homeViewContainer)
 
-        webViewContainer.isHidden = true
-        mainContainerView.addSubview(webViewContainer)
+        legacyWebViewContainer.isHidden = true
+        mainContainerView.addSubview(legacyWebViewContainer)
 
         urlBarContainer.alpha = 0
         mainContainerView.addSubview(urlBarContainer)
@@ -246,7 +246,7 @@ class BrowserViewController: UIViewController {
 
         addWebViewConstraints()
 
-        webViewContainer.snp.makeConstraints { make in
+        legacyWebViewContainer.snp.makeConstraints { make in
             browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
             if !showsToolsetInURLBar {
                 browserBottomConstraint.activate()
@@ -629,11 +629,11 @@ class BrowserViewController: UIViewController {
     // FXIOS-8617 - #19118 ⁃ Integrate EngineSession in Focus iOS
     private func containWebView() {
         addChild(webViewController)
-        webViewContainer.addSubview(webViewController.view)
+        legacyWebViewContainer.addSubview(webViewController.view)
         webViewController.didMove(toParent: self)
 
         webViewController.view.snp.makeConstraints { make in
-            make.edges.equalTo(webViewContainer.snp.edges)
+            make.edges.equalTo(legacyWebViewContainer.snp.edges)
         }
     }
 
@@ -714,12 +714,12 @@ class BrowserViewController: UIViewController {
     }
 
     private func addWebViewConstraints() {
-        let topConstraint = webViewContainer.topAnchor.constraint(equalTo: urlBarContainer.bottomAnchor)
+        let topConstraint = legacyWebViewContainer.topAnchor.constraint(equalTo: urlBarContainer.bottomAnchor)
         topConstraint.priority = .defaultLow
-        let bottomConstraint = webViewContainer.bottomAnchor.constraint(equalTo: mainContainerView.bottomAnchor)
+        let bottomConstraint = legacyWebViewContainer.bottomAnchor.constraint(equalTo: mainContainerView.bottomAnchor)
         bottomConstraint.priority = .defaultLow
-        let leadingConstraint = webViewContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let trailingConstraint = webViewContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let leadingConstraint = legacyWebViewContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let trailingConstraint = legacyWebViewContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         NSLayoutConstraint.activate([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
     }
 
@@ -837,7 +837,7 @@ class BrowserViewController: UIViewController {
         overlayView.currentURL = ""
         // FXIOS-8639 - #19162 - Handle reset webview in Focus iOS
         webViewController.reset()
-        webViewContainer.isHidden = true
+        legacyWebViewContainer.isHidden = true
         browserToolbar.isHidden = true
         urlBarViewModel.canGoBack = false
         urlBarViewModel.canGoForward = false
@@ -950,8 +950,8 @@ class BrowserViewController: UIViewController {
             }
         }
 
-        if webViewContainer.isHidden {
-            webViewContainer.isHidden = false
+        if legacyWebViewContainer.isHidden {
+            legacyWebViewContainer.isHidden = false
             homeViewController.view.isHidden = true
             urlBar.inBrowsingMode = true
 

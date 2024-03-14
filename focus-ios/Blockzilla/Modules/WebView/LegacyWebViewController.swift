@@ -8,7 +8,7 @@ import PassKit
 import Combine
 import Glean
 
-protocol BrowserState {
+protocol LegacyBrowserState {
     var url: URL? { get }
     var isLoading: Bool { get }
     var canGoBack: Bool { get }
@@ -519,7 +519,7 @@ extension LegacyWebViewController: WKNavigationDelegate {
     }
 }
 
-extension LegacyWebViewController: BrowserState {
+extension LegacyWebViewController: LegacyBrowserState {
     var canGoBack: Bool { return browserView.canGoBack }
     var canGoForward: Bool { return browserView.canGoForward }
     var estimatedProgress: Double { return browserView.estimatedProgress }
