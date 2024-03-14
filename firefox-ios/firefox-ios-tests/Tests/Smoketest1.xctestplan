@@ -59,6 +59,7 @@
         "CreditCardsTests\/testCreditCardsAutofill()",
         "CreditCardsTests\/testDeleteButtonFromEditCard()",
         "CreditCardsTests\/testEditSavedCardsUI()",
+        "CreditCardsTests\/testErrorStatesCreditCards()",
         "CreditCardsTests\/testManageCreditCardsOption()",
         "CreditCardsTests\/testVerifyThatMultipleCardsCanBeAdded()",
         "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",

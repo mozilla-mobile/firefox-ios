@@ -179,14 +179,11 @@ class CreditCardsTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306976
     func testVerifyThatTheEditedCreditCardIsSaved() {
         // Go to a saved credit card and change the name on card
-        let cardNr: XCUIElement
-        let nameOnCard: XCUIElement
         let updatedName = "Firefox"
         addCardAndReachViewCardPage()
         app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
-        if iPad() {
-            nameOnCard = app.otherElements.textFields.element(boundBy: 0)
-        } else {
+        var nameOnCard = app.otherElements.textFields.element(boundBy: 0)
+        if !iPad() {
             nameOnCard = app.otherElements.textFields.element(boundBy: 1)
         }
         nameOnCard.tap()
@@ -198,17 +195,12 @@ class CreditCardsTests: BaseTestCase {
         // Go to an saved credit card and change the credit card number
         app.tables.cells.element(boundBy: 1).tap()
         app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
-        if iPad() {
-            cardNr = app.otherElements.textFields.element(boundBy: 1)
-        } else {
+        var cardNr = app.otherElements.textFields.element(boundBy: 1)
+        if !iPad() {
             cardNr = app.otherElements.textFields.element(boundBy: 2)
         }
         cardNr.tap()
-        if iPad() {
-            app.keyboards.keys["delete"].press(forDuration: 2.2)
-        } else {
-            app.keyboards.keys["Delete"].press(forDuration: 2.2)
-        }
+        pressDelete()
         cardNr.typeText(cards[1])
         app.buttons["Save"].tap()
         // The credit card number is saved without issues
@@ -280,6 +272,73 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Use saved card"])
         app.scrollViews.otherElements.tables.cells.element(boundBy: 2).tap()
         validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306977
+    func testErrorStatesCreditCards() {
+        // Go to a saved credit card and delete the name
+        addCardAndReachViewCardPage()
+        app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
+        let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
+        var nameOnCard = app.otherElements.textFields.element(boundBy: 0)
+        var cardNr = app.otherElements.textFields.element(boundBy: 1)
+        var expiration = app.otherElements.textFields.element(boundBy: 2)
+        if !iPad() {
+            nameOnCard = app.otherElements.textFields.element(boundBy: 1)
+            cardNr = app.otherElements.textFields.element(boundBy: 2)
+            expiration = app.otherElements.textFields.element(boundBy: 3)
+        }
+        nameOnCard.tap()
+        app.keyboards.keys["delete"].press(forDuration: 1.5)
+        cardNr.tap()
+        // Error message is displayed
+        mozWaitForElementToExist(app.otherElements.staticTexts["Add a name"])
+        XCTAssertFalse(saveButton.isEnabled)
+        // Fill in the name on card, and delete the credit card number
+        nameOnCard.tap()
+        nameOnCard.typeText("Test")
+        cardNr.tap()
+        mozWaitForElementToNotExist(app.otherElements.staticTexts["Add a name"])
+        XCTAssertTrue(saveButton.isEnabled)
+        pressDelete()
+        nameOnCard.tap()
+        // Error message is displayed
+        mozWaitForElementToExist(app.otherElements.staticTexts["Enter a valid card number"])
+        XCTAssertFalse(saveButton.isEnabled)
+        // Fill in the name on the card and the credit card number, delete the Expiration date
+        cardNr.tap()
+        cardNr.typeText(cards[0])
+        expiration.tap()
+        mozWaitForElementToNotExist(app.otherElements.staticTexts["Enter a valid card number"])
+        XCTAssertTrue(saveButton.isEnabled)
+        pressDelete()
+        cardNr.tap()
+        // Error message is displayed
+        mozWaitForElementToExist(app.otherElements.staticTexts["Enter a valid expiration date"])
+        XCTAssertFalse(saveButton.isEnabled)
+        // Add the credit card number back and save it
+        expiration.tap()
+        expiration.typeText("0540")
+        cardNr.tap()
+        mozWaitForElementToNotExist(app.otherElements.staticTexts["Enter a valid expiration date"])
+        XCTAssertTrue(saveButton.isEnabled)
+        saveButton.tap()
+        // The credit card is saved
+        let cardsInfo = ["Test", "5/40"]
+        XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252").exists,
+                      "1252 info is not displayed")
+        for i in cardsInfo {
+            XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts[i].exists,
+                          "\(i) info is not displayed")
+        }
+    }
+
+    private func pressDelete() {
+        if iPad() {
+            app.keyboards.keys["delete"].press(forDuration: 2.2)
+        } else {
+            app.keyboards.keys["Delete"].press(forDuration: 2.2)
+        }
     }
 
     private func validateAutofillCardInfo(cardNr: String, expirationNr: String, name: String) {
@@ -357,14 +416,10 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func addCreditCard(name: String, cardNumber: String, expirationDate: String) {
-        let nameOnCard: XCUIElement
-        let cardNr: XCUIElement
-        let expiration: XCUIElement
-        if iPad() {
-            nameOnCard = app.otherElements.textFields.element(boundBy: 0)
-            cardNr = app.otherElements.textFields.element(boundBy: 1)
-            expiration = app.otherElements.textFields.element(boundBy: 2)
-        } else {
+        var nameOnCard = app.otherElements.textFields.element(boundBy: 0)
+        var cardNr = app.otherElements.textFields.element(boundBy: 1)
+        var expiration = app.otherElements.textFields.element(boundBy: 2)
+        if !iPad() {
             nameOnCard = app.otherElements.textFields.element(boundBy: 1)
             cardNr = app.otherElements.textFields.element(boundBy: 2)
             expiration = app.otherElements.textFields.element(boundBy: 3)
@@ -396,7 +451,7 @@ class CreditCardsTests: BaseTestCase {
             mozWaitForElementToExist(saveButton)
         }
         XCTAssertTrue(saveButton.isEnabled, "Save button is disabled")
-        app.buttons[creditCardsStaticTexts.AddCreditCard.save].tap()
+        saveButton.tap()
     }
 
     private func retryOnCardNumber(cardNr: XCUIElement, expiration: XCUIElement, cardNumber: String) {
