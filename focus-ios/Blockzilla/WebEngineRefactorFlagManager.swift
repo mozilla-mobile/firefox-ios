@@ -8,6 +8,6 @@ struct WebEngineFlagManager {
     /// Whether the refactor for using the new WebEngine as the active browser engine for the client
     /// is enabled. If `true` the WebEngine will be used rather than the legacy browser code.
     ///
-    /// TODO: currently this is hardcoded; eventually this will be updated to a Nimbus feature flag.
+    /// TODO [FXIOS-8655]: currently this is hardcoded; eventually this will be updated to a Nimbus feature flag.
     static let isWebEngineEnabled = false
 }
