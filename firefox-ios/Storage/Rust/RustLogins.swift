@@ -500,7 +500,7 @@ public class LoginRecordError: MaybeErrorType {
 /// Its part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
 protocol LoginsProtocol {
     func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
-    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<Void, Error>) -> Void)
+    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping () -> Void)
 }
 
 public class RustLogins: LoginsProtocol {
@@ -787,11 +787,11 @@ public class RustLogins: LoginsProtocol {
         return deferred
     }
 
-    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<Void, Error>) -> Void) {
+    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping () -> Void) {
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                completionHandler(.failure(error))
+                _ = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler()
                 return
             }
 
@@ -800,12 +800,12 @@ public class RustLogins: LoginsProtocol {
                 case .success(let key):
                     do {
                         _ = try self.storage?.update(id: id, login: login, encryptionKey: key)
-                        completionHandler(.success(()))
-                    } catch let err as NSError {
-                        completionHandler(.failure(err))
+                        completionHandler()
+                    } catch _ as NSError {
+                        completionHandler()
                     }
-                case .failure(let err):
-                    completionHandler(.failure(err))
+                case .failure:
+                    completionHandler()
                 }
             }
         }
