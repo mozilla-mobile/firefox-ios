@@ -47,7 +47,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.caption2.scaledFont()
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.text = .FirefoxHomepage.Pocket.Sponsored
     }
 
