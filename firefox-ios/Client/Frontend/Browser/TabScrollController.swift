@@ -121,12 +121,28 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 
     deinit {
+        logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         super.init()
+        setupNotifications()
+    }
+
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillTerminate(_:)),
+                                               name: UIApplication.willTerminateNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func applicationWillTerminate(_ notification: Notification) {
+        // Ensures that we immediately de-register KVO observations for content size changes in
+        // webviews if the app is about to terminate.
+        observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
     @objc
