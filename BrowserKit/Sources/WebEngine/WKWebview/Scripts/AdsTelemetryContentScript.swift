@@ -31,9 +31,7 @@ public struct EngineSearchProviderModel {
         self.followOnParams = followOnParams
         self.extraAdServersRegexps = extraAdServersRegexps
     }
-}
 
-extension EngineSearchProviderModel {
     func listAdUrls(urls: [String]) -> [String] {
         let predicates: [Predicate] = extraAdServersRegexps.map { regex in
             return { url in
@@ -53,12 +51,15 @@ extension EngineSearchProviderModel {
     }
 }
 
+/// Delegate protocol for AdsTelemetryContentSccript. Provides callbacks to delegates for ad tracking detection
+/// and allows the delegate to provide the search engine definitions and regexes. (See: `EngineSearchProviderModel`)
 protocol AdsTelemetryScriptDelegate: AnyObject {
     func trackAdsFoundOnPage(providerName: String, urls: [String])
     func trackAdsClickedOnPage(providerName: String)
     func searchProviderModels() -> [EngineSearchProviderModel]
 }
 
+/// Script utility to handle tracking of ads on pages, based on provided search engine regexes. (See `searchProviderModels`)
 class AdsTelemetryContentScript: WKContentScript {
     private var logger: Logger
     private weak var delegate: AdsTelemetryScriptDelegate?
