@@ -33,6 +33,7 @@
 		1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */; };
 		1D3FEEA120C0A73D00FFAA8C /* RequestDesktopTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */; };
 		1D47758820C1E66000C074AE /* CopyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D47758720C1E66000C074AE /* CopyTest.swift */; };
+		1D96A2D92BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D96A2D82BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift */; };
 		1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */; };
 		1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE903CD20C751D7002E53ED /* FindInPageTest.swift */; };
 		24433101219DA46F00778D02 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24433100219DA46F00778D02 /* Debouncer.swift */; };
@@ -74,7 +75,7 @@
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
-		B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */; };
+		B3AFC2BC1F7C0B9F001AEF38 /* LegacyWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AFC2BB1F7C0B9F001AEF38 /* LegacyWebViewController.swift */; };
 		B3CD41C91FD1027000AEBD58 /* InsetTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */; };
 		B3CD41CC1FD1CAF000AEBD58 /* PaddedSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */; };
 		B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */ = {isa = PBXBuildFile; fileRef = B3D23BEE1FA3A9E500D9C50F /* postload.js */; };
@@ -369,6 +370,7 @@
 		1D3BEDFA20C5E76A0019B722 /* FindInPageBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindInPageBar.swift; sourceTree = "<group>"; };
 		1D3FEEA020C0A73D00FFAA8C /* RequestDesktopTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDesktopTest.swift; sourceTree = "<group>"; };
 		1D47758720C1E66000C074AE /* CopyTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyTest.swift; sourceTree = "<group>"; };
+		1D96A2D82BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebEngineRefactorFlagManager.swift; sourceTree = "<group>"; };
 		1DD317E020BF1B3000DFA44E /* OnboardingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTest.swift; sourceTree = "<group>"; };
 		1DE903CD20C751D7002E53ED /* FindInPageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPageTest.swift; sourceTree = "<group>"; };
 		24433100219DA46F00778D02 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
@@ -677,7 +679,7 @@
 		AAB8E622E994545108473554 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLValidationTest.swift; sourceTree = "<group>"; };
 		B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteCustomUrlViewController.swift; sourceTree = "<group>"; };
-		B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		B3AFC2BB1F7C0B9F001AEF38 /* LegacyWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWebViewController.swift; sourceTree = "<group>"; };
 		B3CD41C81FD1027000AEBD58 /* InsetTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetTextField.swift; sourceTree = "<group>"; };
 		B3CD41CB1FD1CAF000AEBD58 /* PaddedSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedSwitch.swift; sourceTree = "<group>"; };
 		B3D23BEE1FA3A9E500D9C50F /* postload.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = postload.js; sourceTree = "<group>"; };
@@ -1382,7 +1384,7 @@
 		B3AFC2BA1F7C0B92001AEF38 /* WebView */ = {
 			isa = PBXGroup;
 			children = (
-				B3AFC2BB1F7C0B9F001AEF38 /* WebViewController.swift */,
+				B3AFC2BB1F7C0B9F001AEF38 /* LegacyWebViewController.swift */,
 			);
 			path = WebView;
 			sourceTree = "<group>";
@@ -1909,6 +1911,7 @@
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
 				C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */,
 				1215EC0828D316B500AECC75 /* NavigationPath.swift */,
+				1D96A2D82BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -2601,7 +2604,7 @@
 				C8337DFD2710898800093D42 /* ImageCell.swift in Sources */,
 				D34E70351DA874AA00BABDCC /* StringExtensions.swift in Sources */,
 				D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */,
-				B3AFC2BC1F7C0B9F001AEF38 /* WebViewController.swift in Sources */,
+				B3AFC2BC1F7C0B9F001AEF38 /* LegacyWebViewController.swift in Sources */,
 				D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */,
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
 				122D19F728E1B29000B884E7 /* SearchInContentTelemetry.swift in Sources */,
@@ -2619,6 +2622,7 @@
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */,
+				1D96A2D92BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift in Sources */,
 				840057582735309500E48144 /* SettingsTableViewToggleCell.swift in Sources */,
 				16D7169C2114EF76000C8A66 /* BlockerToggle.swift in Sources */,
 				C817A35822CE73B4002529FF /* ReadWriteLock.swift in Sources */,
