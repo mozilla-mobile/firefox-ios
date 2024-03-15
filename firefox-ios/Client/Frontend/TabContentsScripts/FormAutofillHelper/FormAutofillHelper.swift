@@ -165,10 +165,12 @@ class FormAutofillHelper: TabContentScript {
             organization: payload.organization,
             country: payload.country,
             addressLevel2: payload.addressLevel2,
+            addressLevel3: payload.addressLevel3,
             email: payload.email,
             streetAddress: payload.streetAddress,
             name: payload.name,
-            postalCode: payload.postalCode
+            postalCode: payload.postalCode,
+            tel: payload.tel
         )
 
         return AutofillFieldValuePayload(fieldValue: .address, fieldData: addressPlainText)
@@ -217,6 +219,36 @@ class FormAutofillHelper: TabContentScript {
         }
     }
 
+<<<<<<< HEAD
+=======
+    static func injectionJSONBuilder(address: UnencryptedAddressFields) -> [String: Any] {
+        let sanitizedOrganization = address.organization.htmlEntityEncodedString
+        let sanitizedStreetAddress = address.streetAddress.htmlEntityEncodedString
+        let sanitizedName = address.name.htmlEntityEncodedString
+        let sanitizedCountry = address.country.htmlEntityEncodedString
+        let sanitizedAddressLevel1 = address.addressLevel1.htmlEntityEncodedString
+        let sanitizedAddressLevel2 = address.addressLevel2.htmlEntityEncodedString
+        let sanitizedAddressLevel3 = address.addressLevel3.htmlEntityEncodedString
+        let sanitizedEmail = address.email.htmlEntityEncodedString
+        let sanitizedPostalCode = address.postalCode.htmlEntityEncodedString
+        let sanitizedTel = address.tel.htmlEntityEncodedString
+
+        let injectionJSON: [String: Any] = [
+            "organization": sanitizedOrganization,
+            "street-address": sanitizedStreetAddress,
+            "name": sanitizedName,
+            "country": sanitizedCountry,
+            "address-level1": sanitizedAddressLevel1,
+            "address-level2": sanitizedAddressLevel2,
+            "address-level3": sanitizedAddressLevel3,
+            "email": sanitizedEmail,
+            "postal-code": sanitizedPostalCode,
+            "tel": sanitizedTel
+        ]
+        return injectionJSON
+    }
+
+>>>>>>> ff1ffba68 (Add FXIOS-8660 missing address fields ( `tel` and `addressLevel3`) (#19223))
     static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
         let sanitizedName = card.ccName.htmlEntityEncodedString
         let sanitizedNumber = card.ccNumber.htmlEntityEncodedString
