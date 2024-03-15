@@ -33,7 +33,9 @@ extension BrowserViewController {
             .isActive = true
         zoomPageBar.applyTheme(theme: themeManager.currentTheme)
 
-        updateViewConstraints()
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            updateViewConstraints()
+        }
     }
 
     private func removeZoomPageBar(_ zoomPageBar: ZoomPageBar) {

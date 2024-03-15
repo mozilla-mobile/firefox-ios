@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Sit snat n tikkal syen teǧǧeḍ aḍad-ik i wakken ad d-banent ugar n textiṛiyin";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Tuqqna d taraɣellsant. Ammesten mgal aḍfar yensa.";
 

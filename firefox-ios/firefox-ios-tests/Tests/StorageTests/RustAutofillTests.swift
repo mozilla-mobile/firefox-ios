@@ -202,7 +202,10 @@ class RustAutofillTests: XCTestCase {
                                                                     ccType: creditCard!.ccType)
                 self.autofill.updateCreditCard(id: creditCard!.guid,
                                                creditCard: updatedCreditCard) { success, err in
-                    XCTAssert(success)
+                    XCTAssertNotNil(success)
+                    if let updated = success {
+                        XCTAssert(updated)
+                    }
                     XCTAssertNil(err)
                     expectationUpdateCard.fulfill()
 

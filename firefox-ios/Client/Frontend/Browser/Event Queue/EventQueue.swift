@@ -238,10 +238,13 @@ public final class EventQueue<QueueEventType: Hashable> {
         isProcessingActions = true
         defer { isProcessingActions = false }
 
-        for enqueued in actions where allDependenciesSatisified(enqueued) {
-            enqueued.action()
+        actions = actions.filter { enqueued in
+            let dependenciesSatisfied = allDependenciesSatisified(enqueued)
+            if dependenciesSatisfied {
+                enqueued.action()
+            }
+            return !dependenciesSatisfied
         }
-        actions = actions.filter { !allDependenciesSatisified($0) }
     }
 
     private func allDependenciesSatisified(_ action: EnqueuedAction) -> Bool {

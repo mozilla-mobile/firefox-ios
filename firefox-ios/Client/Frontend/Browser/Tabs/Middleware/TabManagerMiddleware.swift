@@ -45,7 +45,8 @@ class TabManagerMiddleware {
         case TabPanelAction.moveTab(let context):
             let originIndex = context.originIndex
             let destinationIndex = context.destinationIndex
-            self.moveTab(state: state, from: originIndex, to: destinationIndex, uuid: uuid)
+            let isPrivate = context.isPrivate
+            self.moveTab(state: state, from: originIndex, to: destinationIndex, isPrivate: isPrivate, uuid: uuid)
 
         case TabPanelAction.closeTab(let context):
             guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
@@ -223,6 +224,7 @@ class TabManagerMiddleware {
     private func moveTab(state: AppState,
                          from originIndex: Int,
                          to destinationIndex: Int,
+                         isPrivate: Bool,
                          uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: nil) else { return }
 
@@ -231,7 +233,7 @@ class TabManagerMiddleware {
                                      method: .drop,
                                      object: .tab,
                                      value: .tabTray)
-        tabManager.moveTab(isPrivate: false, fromIndex: originIndex, toIndex: destinationIndex)
+        tabManager.reorderTabs(isPrivate: isPrivate, fromIndex: originIndex, toIndex: destinationIndex)
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false, uuid: uuid)
         let context = RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)

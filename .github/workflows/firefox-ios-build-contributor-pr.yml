@@ -10,16 +10,16 @@ jobs:
       matrix:
         python-version: [3.9]
         xcode: ["13.1"]
-        run-config: 
+        run-config:
         - { scheme: 'Fennec_Enterprise_XCUITests', destination: 'platform=iOS Simulator,OS=latest,name=iPhone 11', testplan: 'Smoketest1' }
     name: Run UI Smoketests
     steps:
         - name: Checkout repository
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
         - name: Select Xcode ${{ matrix.xcode }}
           run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
         - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v2
+          uses: actions/setup-python@v5
           with:
             python-version: ${{ matrix.python-version }}
         - name: Run Boostrap
@@ -31,7 +31,7 @@ jobs:
         - name: Archive Results
           if: ${{ always() }}
           run: zip -r results.zip TestResults.xcresult
-        - uses: actions/upload-artifact@v2
+        - uses: actions/upload-artifact@v4
           name: Upload XCResult
           if: ${{ always() }}
           with:

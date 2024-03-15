@@ -354,6 +354,25 @@ class BookmarksTests: BaseTestCase {
         checkItemInBookmarkList(oneItemBookmarked: true)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2445808
+    func testLongTapRecentlySavedLink() {
+        // Go to "Recently saved" section and long tap on one of the links
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitForTabsButton()
+        bookmark()
+        navigator.performAction(Action.GoToHomePage)
+        mozWaitForElementToExist(app.staticTexts["Recently Saved"])
+        mozWaitForElementToExist(app.cells["RecentlySavedCell"])
+        app.cells["RecentlySavedCell"].press(forDuration: 1.5)
+        // The context menu opens, having the correct options
+        let ContextMenuTable = app.tables["Context Menu"]
+        mozWaitForElementToExist(ContextMenuTable)
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.shareApple])
+    }
+
     private func bookmarkPageAndTapEdit() {
         bookmark()
         mozWaitForElementToExist(app.buttons["Edit"])

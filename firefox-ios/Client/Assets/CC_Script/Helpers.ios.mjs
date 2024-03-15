@@ -47,7 +47,7 @@ HTMLElement.prototype.getAutocompleteInfo = function () {
 
 // Bug 1835024. Webkit doesn't support `checkVisibility` API
 // https://drafts.csswg.org/cssom-view-1/#dom-element-checkvisibility
-HTMLElement.prototype.checkVisibility = function (options) {
+HTMLElement.prototype.checkVisibility = function (_options) {
   throw new Error(`Not implemented: WebKit doesn't support checkVisibility `);
 };
 
@@ -171,11 +171,13 @@ export const Services = withNotImplementedError({
       }
 
       // eslint-disable-next-line no-undef
-      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage({
-        type: "scalar",
-        name: scalarName,
-        value: scalarValue,
-      });
+      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage(
+        JSON.stringify({
+          type: "scalar",
+          object: scalarName,
+          value: scalarValue,
+        })
+      );
     },
     recordEvent: (category, method, object, value, extra) => {
       // For now, we only care about the address form telemetry
@@ -194,14 +196,16 @@ export const Services = withNotImplementedError({
       }
 
       // eslint-disable-next-line no-undef
-      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage({
-        type: "event",
-        category,
-        method,
-        object,
-        value,
-        extra,
-      });
+      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage(
+        JSON.stringify({
+          type: "event",
+          category,
+          method,
+          object,
+          value,
+          extra,
+        })
+      );
     },
   }),
   // TODO(FXCM-936): we should use crypto.randomUUID() instead of Services.uuid.generateUUID() in our codebase

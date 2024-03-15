@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox uporablja vašo kamero za skeniranje QR-kod, fotografiranje in snemanje.";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox za dostop do shranjenih gesel in šifriranih kartic zahteva Face ID.";
+"NSFaceIDUsageDescription" = "Firefox za dostop do shranjenih gesel in plačilnih sredstev zahteva Face ID.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Spletne strani lahko zahtevajo vašo lokacijo.";
