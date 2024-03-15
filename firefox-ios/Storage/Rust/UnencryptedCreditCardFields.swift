@@ -29,17 +29,6 @@ public struct UnencryptedCreditCardFields {
         self.ccType = ccType
     }
 
-    func toUpdatableCreditCardFields() -> UpdatableCreditCardFields {
-        let rustKeys = RustAutofillEncryptionKeys()
-        let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: self.ccNumber)
-        return UpdatableCreditCardFields(ccName: self.ccName,
-                                         ccNumberEnc: ccNumberEnc ?? "",
-                                         ccNumberLast4: self.ccNumberLast4,
-                                         ccExpMonth: self.ccExpMonth,
-                                         ccExpYear: self.ccExpYear,
-                                         ccType: self.ccType)
-    }
-
     public func convertToTempCreditCard() -> CreditCard {
         let convertedCreditCard = CreditCard(guid: "",
                                              ccName: self.ccName,

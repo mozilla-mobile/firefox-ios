@@ -1,5 +1,5 @@
 /*
-DO NOT TOUCH fathom.jsm DIRECTLY. See the README for instructions.
+DO NOT TOUCH fathom.mjs DIRECTLY. See the README for instructions.
 */
 
 /* This Source Code Form is subject to the terms of the Mozilla Public

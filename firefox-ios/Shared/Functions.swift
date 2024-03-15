@@ -115,11 +115,6 @@ public func chunkCollection<E, X, T: Collection>(
     f: ([E]) -> [X]
 ) -> [X] where T.Iterator.Element == E {
     guard by >= 0 else {
-        DefaultLogger.shared.log(
-            "Chunking must be done with a non-negative value.",
-            level: .warning,
-            category: .unlabeled
-        )
         return []
     }
 

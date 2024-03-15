@@ -1,6 +1,6 @@
 name: Bitrise Xcode Check and Update
 
-on: 
+on:
   schedule:
     - cron: '0 */6 * * *'
 
@@ -12,16 +12,16 @@ jobs:
       matrix:
         python-version: [3.7]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r ./test-fixtures/requirements.txt
-    - name: Modify bitrise.yml 
+    - name: Modify bitrise.yml
       run: |
         python ./test-fixtures/update.py
     - name: Commit and push if bitrise.yml changed
@@ -31,7 +31,7 @@ jobs:
         git config --global user.name "Firefox Test Engineering"
         git diff --quiet || (git add bitrise.yml)
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v6
       with:
         commit-message: Auto Update Bitrise.YML
         author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
