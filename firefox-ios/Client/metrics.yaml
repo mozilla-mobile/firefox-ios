@@ -4889,7 +4889,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4900,7 +4900,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4911,7 +4911,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4922,7 +4922,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4933,7 +4933,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4944,7 +4944,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4955,7 +4955,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -4966,7 +4966,7 @@ addresses:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/18980
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19228
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
