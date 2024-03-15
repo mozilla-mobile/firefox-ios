@@ -4,14 +4,9 @@
 
 import Foundation
 
-@main
 public struct ContentBlockerGenerator {
-    static let shared = ContentBlockerGenerator()
-
-    // Static main needs to be used for executable, providing a shared instance so we can
-    // call it from the terminal, while also keeping the init() for unit tests.
-    public static func main() {
-        shared.generateLists()
+    public static func factory() -> ContentBlockerGenerator {
+        return ContentBlockerGenerator()
     }
 
     private let fileManager: ContentBlockerFileManager
@@ -26,7 +21,7 @@ public struct ContentBlockerGenerator {
         parser.parseEntityList(entityList)
     }
 
-    func generateLists() {
+    public func generateLists() {
         // Block lists
         generate(actionType: .blockAll,
                  categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting, .content])

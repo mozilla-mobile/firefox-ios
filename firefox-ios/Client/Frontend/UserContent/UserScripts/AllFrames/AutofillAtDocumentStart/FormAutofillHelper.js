@@ -45,10 +45,12 @@ const expectedAddressPayloadShape = {
   organization: "",
   country: "",
   "address-level2": "",
+  "address-level3": "",
   email: "",
   "street-address": "",
   name: "",
   postalCode: "",
+  tel: "",
 };
 
 const normalizePayload = (expectedPayloadShape) => (payload) => {

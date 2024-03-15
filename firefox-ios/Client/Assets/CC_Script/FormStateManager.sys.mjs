@@ -150,7 +150,7 @@ export class FormStateManager {
   }
 
   didDestroy() {
-    this._activeItems = null;
+    this._activeItems = {};
   }
 }
 

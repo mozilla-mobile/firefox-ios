@@ -973,7 +973,7 @@ extension LegacyTabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
         if let url = webView.url {
-            if let internalUrl = InternalURL(url), internalUrl.isSessionRestore {
+            if InternalURL(url) != nil {
                 return
             }
 

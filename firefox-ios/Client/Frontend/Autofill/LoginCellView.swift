@@ -45,7 +45,7 @@ struct LoginCellView: View {
                     .foregroundColor(iconPrimary)
                     .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
                 VStack(alignment: .leading) {
-                    Text(login.decryptedUsername)
+                    Text(login.decryptedUsername.isEmpty ? login.hostname : login.decryptedUsername)
                         .font(.body)
                         .foregroundColor(textColor)
                         .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }

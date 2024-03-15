@@ -138,23 +138,6 @@ class TabMetadataManagerTests: XCTestCase {
             XCTAssertNil(self.metadataObserver.key)
         }
     }
-
-    func testNotUpdateObservationTitle_ForSessionRestoreUrl() throws {
-        let stringUrl = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=https://www.mozilla.org/"
-        let referralURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=https://www.mozilla.org/"
-        let title = "Session restore title"
-
-        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
-                                                  searchUrl: stringUrl,
-                                                  nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.tabSwitched.rawValue)
-
-        // Title should not be updated for this state
-        manager.updateObservationTitle(title) {
-            XCTAssertNil(self.metadataObserver.observation)
-            XCTAssertNil(self.metadataObserver.key)
-        }
-    }
 }
 
 class HistoryMetadataObserverMock: HistoryMetadataObserver {

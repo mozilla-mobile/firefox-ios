@@ -28,8 +28,8 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
 
         let execIsFromCorrectDir = fileManager.fileExists(atPath: fileManager.currentDirectoryPath + "/Package.swift")
         self.rootDirectory = execIsFromCorrectDir ? fileManager.currentDirectoryPath : fallbackRootDirectoryPath
-        self.outputDirectory = URL(fileURLWithPath: "\(rootDirectory)/../Lists")
-        self.inputDirectory = "\(rootDirectory)/../../../shavar-prod-lists"
+        self.outputDirectory = URL(fileURLWithPath: "\(rootDirectory)/../ContentBlockingLists")
+        self.inputDirectory = "\(rootDirectory)/../shavar-prod-lists"
 
         createDirectory()
     }

@@ -9,19 +9,23 @@ struct AddressAutofillPayload: Codable {
     let organization: String
     let country: String
     let addressLevel2: String
+    let addressLevel3: String
     let email: String
     let streetAddress: String
     let name: String
     let postalCode: String
+    let tel: String
 
     enum CodingKeys: String, CodingKey, CaseIterable {
         case addressLevel1 = "address-level1"
         case organization = "organization"
         case country = "country"
         case addressLevel2 = "address-level2"
+        case addressLevel3 = "address-level3"
         case email = "email"
         case streetAddress = "street-address"
         case name = "name"
         case postalCode = "postal-code"
+        case tel = "tel"
     }
 }

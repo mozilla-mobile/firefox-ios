@@ -232,6 +232,12 @@ class BrowserViewController: UIViewController,
         return .default
     }
 
+    // MARK: - Ads Handling
+
+    func adsSearchProviderModels() -> [WebEngine.EngineSearchProviderModel] {
+        return DefaultAdsTrackerDefinitions.searchProviders
+    }
+
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {
