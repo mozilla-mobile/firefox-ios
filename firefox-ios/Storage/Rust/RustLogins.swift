@@ -656,15 +656,15 @@ public class RustLogins: LoginsProtocol {
                 let records = logins
 
                 guard let query = query?.lowercased(), !query.isEmpty else {
-                    completionHandler(.success(records.first))
+                    completionHandler(.success(records?.first))
                     return
                 }
 
-                let filteredRecords = records.filter {
+                let filteredRecords = records?.filter {
                     let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
                     return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
                 }
-                if let firstFilteredRecord = filteredRecords.first {
+                if let firstFilteredRecord = filteredRecords?.first {
                     completionHandler(.success(firstFilteredRecord))
                 } else {
                     completionHandler(.success(nil))
@@ -739,11 +739,7 @@ public class RustLogins: LoginsProtocol {
         return deferred
     }
 
-<<<<<<< HEAD
-    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
-=======
     public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void) {
->>>>>>> main
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
@@ -753,11 +749,7 @@ public class RustLogins: LoginsProtocol {
 
             do {
                 let records = try self.storage?.list()
-<<<<<<< HEAD
-                completionHandler(.success(records ?? []))
-=======
                 completionHandler(.success(records))
->>>>>>> main
             } catch let err as NSError {
                 completionHandler(.failure(err))
             }
