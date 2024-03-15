@@ -32,12 +32,16 @@ class DragAndDropTests: BaseTestCase {
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
-        dragAndDrop(
-            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-        )
-        mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
+        if #available(iOS 17, *) {
+            dragAndDrop(
+                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+            )
+            mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
+            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2390210

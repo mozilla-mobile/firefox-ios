@@ -114,7 +114,8 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        let saveAndFillPaymentMethodsSwitch = app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards]
+        let saveAndFillPaymentMethodsSwitch =
+            app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards].switches.firstMatch
         if saveAndFillPaymentMethodsSwitch.value! as! String == "1" {
             saveAndFillPaymentMethodsSwitch.tap()
         }
