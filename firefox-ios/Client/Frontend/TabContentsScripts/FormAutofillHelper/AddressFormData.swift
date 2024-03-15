@@ -23,7 +23,13 @@ struct AddressFormData: Codable {
             } else if let intValue = try? container.decode(Int.self) {
                 self = .int(intValue)
             } else {
-                throw DecodingError.typeMismatch(Value.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected to decode String or Int for PostalCode"))
+                throw DecodingError.typeMismatch(
+                    Value.self,
+                    DecodingError.Context(
+                        codingPath: decoder.codingPath,
+                        debugDescription: "Expected to decode String or Int for Value"
+                    )
+                )
             }
         }
 
