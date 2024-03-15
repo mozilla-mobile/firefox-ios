@@ -1986,6 +1986,14 @@ class BrowserViewController: UIViewController,
     private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listAllAddresses(completion: { addresses, error in
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
+
+            TelemetryWrapper.recordEvent(
+                category: .information,
+                method: .detected,
+                object: .addressAutofillSettings,
+                extras: [TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue: addresses.count]
+            )
+
             TelemetryWrapper.recordEvent(
                 category: .action,
                 method: .view,
