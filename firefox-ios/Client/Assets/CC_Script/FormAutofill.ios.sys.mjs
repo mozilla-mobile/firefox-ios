@@ -4,7 +4,7 @@
 
 import { FormAutofill } from "resource://autofill/FormAutofill.sys.mjs";
 
-FormAutofill.defineLogGetter = (scope, logPrefix) => ({
+FormAutofill.defineLogGetter = (_scope, _logPrefix) => ({
   // TODO: Bug 1828405. Explore how logging should be handled.
   // Maybe it makes more sense to do it on swift side and have JS just send messages.
   info: () => {},

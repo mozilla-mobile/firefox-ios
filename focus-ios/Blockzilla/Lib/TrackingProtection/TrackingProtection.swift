@@ -32,10 +32,10 @@ extension TrackingProtectionStatus: Equatable {
 }
 
 enum BlocklistName: String {
-    case advertising = "disconnect-advertising"
-    case analytics = "disconnect-analytics"
-    case content = "disconnect-content"
-    case social = "disconnect-social"
+    case advertising = "disconnect-block-advertising"
+    case analytics = "disconnect-block-analytics"
+    case content = "disconnect-block-content"
+    case social = "disconnect-block-social"
 
     var filename: String { return self.rawValue }
 

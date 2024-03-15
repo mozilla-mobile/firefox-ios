@@ -7,9 +7,12 @@ from pbxproj import XcodeProject
 
 # Constants
 GITHUB_REPO = "mozilla/rust-components-swift"
-SPM_PACKAGE = "firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+FIREFOX_SPM_PACKAGE = "firefox-ios/Client.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
 FIREFOX_PROJECT = "firefox-ios/Client.xcodeproj/project.pbxproj"
-RUST_COMPONENTS_ID = "433F87D62788F34500693368"
+FOCUS_SPM_PACKAGE = "focus-ios/Blockzilla.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+FOCUS_PROJECT = "focus-ios/Blockzilla.xcodeproj/project.pbxproj"
+FIREFOX_RUST_COMPONENTS_ID = "433F87D62788F34500693368"
+FOCUS_RUST_COMPONENTS_ID = "45E8FFE52828DE4A0027A8F5"
 
 
 def _init_logging():
@@ -33,20 +36,27 @@ def read_rust_components_tag_version(SPM_PACKAGE):
     try:
         with open(SPM_PACKAGE) as f:
             data = json.load(f)
+            if SPM_PACKAGE == FOCUS_SPM_PACKAGE:
+                data = data["object"]
             for i in data["pins"]:
-                if i["identity"] == "rust-components-swift":
-                    return i["state"]["version"], i["state"]["revision"]
+                if SPM_PACKAGE == FOCUS_SPM_PACKAGE:
+                    if i["package"] == "MozillaRustComponentsSwift":
+                        state_values = i["state"]["version"], i["state"]["revision"]
+                else:
+                    if i["identity"] == "rust-components-swift":
+                        state_values = i["state"]["version"], i["state"]["revision"]
+            return state_values
+
     except (FileNotFoundError, json.JSONDecodeError) as e:
         logging.info(f"Error reading rust component tag: {e}")
     except Exception as e:
         logging.info(f"Unexpected error: {e}")
     return None, None
 
-
 # Read the minimum required version of the Rust components from the Firefox project file
-def read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID):
+def read_project_min_version(PROJECT, RUST_COMPONENTS_ID):
     try:
-        project = XcodeProject.load(FIREFOX_PROJECT)
+        project = XcodeProject.load(PROJECT)
         return project.get_object(RUST_COMPONENTS_ID).requirement.version
     except Exception as e:
         logging.info(f"Error reading project minimum version: {e}")
@@ -82,16 +92,22 @@ def main():
     _init_logging()
 
     rust_component_repo_tag, rust_component_repo_commit = get_newest_rust_components_version(GITHUB_REPO)
-    current_tag, current_commit = read_rust_components_tag_version(SPM_PACKAGE)
-    current_min_version = read_project_min_version(FIREFOX_PROJECT, RUST_COMPONENTS_ID)
+    firefox_current_tag, firefox_current_commit = read_rust_components_tag_version(FIREFOX_SPM_PACKAGE)
+    firefox_current_min_version = read_project_min_version(FIREFOX_PROJECT, FIREFOX_RUST_COMPONENTS_ID)
 
-    if current_min_version and compare_versions(current_tag, rust_component_repo_tag):
-        update_file(current_tag, current_commit, rust_component_repo_tag, rust_component_repo_commit, SPM_PACKAGE)
-        update_file(current_min_version, None, rust_component_repo_tag, None, FIREFOX_PROJECT)
+    focus_current_tag, focus_current_commit = read_rust_components_tag_version(FOCUS_SPM_PACKAGE)
+    focus_current_min_version = read_project_min_version(FOCUS_PROJECT, FOCUS_RUST_COMPONENTS_ID)
+
+    if firefox_current_min_version and compare_versions(firefox_current_tag, rust_component_repo_tag):
+        update_file(firefox_current_tag, firefox_current_commit, rust_component_repo_tag, rust_component_repo_commit, FIREFOX_SPM_PACKAGE)
+        update_file(firefox_current_min_version, None, rust_component_repo_tag, None, FIREFOX_PROJECT)
 
         with open("test-fixtures/newest_tag.txt", "w+") as f:
             f.write(rust_component_repo_tag + "\n")
 
+    if compare_versions(focus_current_tag, rust_component_repo_tag) and compare_versions(focus_current_tag, rust_component_repo_tag):
+        update_file(focus_current_tag, focus_current_commit, rust_component_repo_tag, rust_component_repo_commit, FOCUS_SPM_PACKAGE)
+        update_file(focus_current_min_version, None, rust_component_repo_tag, None, FOCUS_PROJECT)
 
 if __name__ == '__main__':
     main()

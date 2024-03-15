@@ -440,7 +440,7 @@
 "LoginsHelper.PromptSaveLogin.Title" = "Запазване на данните за вход за %1$@ в %2$@?";
 
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Запази парола за %@?";
+"LoginsHelper.PromptSavePassword.Title" = "Запазване на паролата за %@?";
 
 /* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Обновяване на данните за вход за %@?";
@@ -554,7 +554,7 @@
 "Privacy" = "Лични данни";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Политика за личните данни";
+"Privacy Policy" = "Политика на поверителност";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Други търсещи машини";

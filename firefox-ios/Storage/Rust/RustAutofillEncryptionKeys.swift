@@ -35,12 +35,14 @@ public class RustAutofillEncryptionKeys {
             let secret = try createAutofillKey()
             let canary = try self.createCanary(text: canaryPhrase, key: secret)
 
-            keychain.set(secret,
-                         forKey: ccKeychainKey,
-                         withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            keychain.set(canary,
-                         forKey: ccCanaryPhraseKey,
-                         withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            DispatchQueue.global(qos: .background).sync {
+                keychain.set(secret,
+                             forKey: ccKeychainKey,
+                             withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                keychain.set(canary,
+                             forKey: ccCanaryPhraseKey,
+                             withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+            }
 
             return secret
         } catch let err as NSError {
@@ -85,26 +87,6 @@ public class RustAutofillEncryptionKeys {
                      text: String,
                      key: String) throws -> Bool {
         return try decryptString(key: key, ciphertext: canary) == text
-    }
-
-    func encryptCreditCardNum(creditCardNum: String) -> String? {
-        guard let key = self.keychain.string(forKey: self.ccKeychainKey) else { return nil }
-
-        do {
-            return try encryptString(key: key, cleartext: creditCardNum)
-        } catch let err as NSError {
-            if let autofillStoreError = err as? AutofillApiError {
-                logAutofillStoreError(err: autofillStoreError,
-                                      errorDomain: err.domain,
-                                      errorMessage: "Error while encrypting credit card")
-            } else {
-                logger.log("Unknown error while encrypting credit card",
-                           level: .warning,
-                           category: .storage,
-                           description: err.localizedDescription)
-            }
-        }
-        return nil
     }
 
     private func createCanary(text: String,

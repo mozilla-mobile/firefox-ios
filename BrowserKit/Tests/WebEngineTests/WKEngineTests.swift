@@ -26,7 +26,7 @@ final class WKEngineTests: XCTestCase {
     func testCreateSessionThenCreatesSession() throws {
         let subject = createSubject()
 
-        let session = try XCTUnwrap(subject.createSession())
+        let session = try XCTUnwrap(subject.createSession(dependencies: nil))
         XCTAssertNotNil(session)
     }
 

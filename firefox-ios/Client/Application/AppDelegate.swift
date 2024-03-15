@@ -178,9 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        logger.log("applicationDidEnterBackground start",
-                   level: .info,
-                   category: .lifecycle)
+        logger.log("applicationDidEnterBackground start", level: .info, category: .lifecycle)
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
@@ -198,13 +196,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer = singleShotTimer
         backgroundWorkUtility?.scheduleOnAppBackground()
 
-        logger.log("applicationDidEnterBackground end",
-                   level: .info,
-                   category: .lifecycle)
+        logger.log("applicationDidEnterBackground end", level: .info, category: .lifecycle)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
+        logger.log("applicationWillTerminate", level: .info, category: .lifecycle)
         profile.shutdown()
     }
 

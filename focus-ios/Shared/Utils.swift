@@ -16,10 +16,10 @@ class Utils {
     }
 
     private static let lists: [SettingsToggle: String] = [
-        .blockAds: "disconnect-advertising",
-        .blockAnalytics: "disconnect-analytics",
-        .blockSocial: "disconnect-social",
-        .blockOther: "disconnect-content",
+        .blockAds: "disconnect-block-advertising",
+        .blockAnalytics: "disconnect-block-analytics",
+        .blockSocial: "disconnect-block-social",
+        .blockOther: "disconnect-block-content",
         .blockFonts: "web-fonts"
     ]
 
