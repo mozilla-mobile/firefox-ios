@@ -500,6 +500,8 @@ public class LoginRecordError: MaybeErrorType {
 /// Its part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
 protocol LoginsProtocol {
     func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
+    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
 }
 
 public class RustLogins: LoginsProtocol {
@@ -645,6 +647,33 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
+    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        let rustKeys = RustLoginEncryptionKeys()
+        listLogins { result in
+            switch result {
+            case .success(let logins):
+                let records = logins
+
+                guard let query = query?.lowercased(), !query.isEmpty else {
+                    completionHandler(.success(records.first))
+                    return
+                }
+
+                let filteredRecords = records.filter {
+                    let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
+                    return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
+                }
+                if let firstFilteredRecord = filteredRecords.first {
+                    completionHandler(.success(firstFilteredRecord))
+                } else {
+                    completionHandler(.success(nil))
+                }
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
+
     public func getLoginsForProtectionSpace(
         _ protectionSpace: URLProtectionSpace,
         withUsername username: String? = nil
@@ -707,6 +736,23 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let records = try self.storage?.list()
+                completionHandler(.success(records ?? []))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
     }
 
     public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
