@@ -183,7 +183,7 @@ class FakespotTests: IphoneOnlyTestCase {
             let searchBestBuy = app.webViews["contentView"].textFields["Search"]
             mozWaitForElementToExist(searchBestBuy)
             searchBestBuy.tap()
-            searchBestBuy.typeText("iphone")
+            searchBestBuy.typeText("macbook air")
             mozWaitForElementToExist(app.webViews["contentView"].buttons["submit search"])
             app.webViews["contentView"].buttons["submit search"].tap()
             waitUntilPageLoad()
