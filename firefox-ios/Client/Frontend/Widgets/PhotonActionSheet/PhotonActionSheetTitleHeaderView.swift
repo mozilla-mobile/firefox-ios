@@ -13,7 +13,7 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1, size: 12)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 1
     }
 
