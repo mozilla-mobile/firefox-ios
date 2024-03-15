@@ -325,6 +325,7 @@ class HistoryTests: BaseTestCase {
         closeFirstTabByX()
 
         // On private mode, the "Recently Closed Tabs List" is empty
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
         closeKeyboard()
