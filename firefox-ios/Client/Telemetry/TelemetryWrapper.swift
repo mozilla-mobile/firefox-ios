@@ -408,13 +408,12 @@ extension TelemetryWrapper {
         case loginsSyncEnabled = "logins-sync-enabled"
         // MARK: Address
         case addressForm = "address-form"
+        case addressFormFilled = "address-form-filled"
+        case addressFormFilledModified = "address-form-filled-modified"
         case addressAutofillSettings = "address-autofill-settings"
         case addressAutofillPromptShown = "address-autofill-popup-shown"
         case addressAutofillPromptExpanded = "address-autofill-popup-expanded"
         case addressAutofillPromptDismissed = "address-autofill-popup-dismissed"
-        case addressFormFilled = "address-form-filled"
-        case addressFormFilledModified = "address-form-filled-modified"
-//        case addressDetectedSectionsCount = "formautofill.addresses.detected_sections_count"
 
         // MARK: Credit Card
         case creditCardAutofillSettings = "creditCardAutofillSettings"

@@ -7,10 +7,36 @@ import Foundation
 struct AddressFormData: Codable {
     let type: EventType
     let object: String?
-    let value: String?
+    let value: Value?
     let category: String?
     let method: Method?
     let extra: Extra?
+
+    enum Value: Codable {
+        case string(String)
+        case int(Int)
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            if let stringValue = try? container.decode(String.self) {
+                self = .string(stringValue)
+            } else if let intValue = try? container.decode(Int.self) {
+                self = .int(intValue)
+            } else {
+                throw DecodingError.typeMismatch(Value.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected to decode String or Int for PostalCode"))
+            }
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch self {
+            case .string(let stringValue):
+                try container.encode(stringValue)
+            case .int(let intValue):
+                try container.encode(intValue)
+            }
+        }
+    }
 
     enum Method: String, Codable {
         case detected

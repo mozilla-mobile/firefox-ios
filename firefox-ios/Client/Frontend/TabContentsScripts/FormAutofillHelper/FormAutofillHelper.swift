@@ -18,6 +18,17 @@ struct AutofillFieldValuePayload {
     let fieldData: Any?
 }
 
+extension WKScriptMessage {
+    func decodeBody<T: Decodable>(as type: T.Type) -> T? {
+        guard 
+            let dict = (body as? [String: Any]),
+            let data = try? JSONSerialization.data(withJSONObject: dict, options: []) else {
+            return nil
+        }
+        return try? JSONDecoder().decode(type, from: data)
+    }
+}
+
 class FormAutofillHelper: TabContentScript {
     // MARK: - Handler Names Enum
     enum HandlerName: String {
@@ -85,10 +96,7 @@ class FormAutofillHelper: TabContentScript {
 
         switch HandlerName(rawValue: message.name) {
         case .addressFormTelemetryMessageHandler:
-            print(message.body)
-            let addressValues = (message.body as? String)?
-                .data(using: .utf8)
-                .flatMap { try? JSONDecoder().decode(AddressFormData.self, from: $0) }
+            let addressValues = message.decodeBody(as: AddressFormData.self)
             if addressValues?.object == "address_form" {
                 switch addressValues?.method {
                 case .detected:
@@ -102,26 +110,19 @@ class FormAutofillHelper: TabContentScript {
                 }
             }
         case .addressFormMessageHandler:
-            print(message.body)
-//            TelemetryWrapper.recordEvent(category: .action, method: .detected, object: .addressFormExtDetected)
-            // Parse message payload for address form autofill
-            guard let data = getValidPayloadData(from: message),
-                  let fieldValues = parseFieldType(messageBody: data, formType: FillAddressAutofillForm.self),
-                  let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
-            else {
+            guard let fieldValues = message.decodeBody(as: FillAddressAutofillForm.self) else {
                 // Log a warning if payload parsing fails
                 logger.log("Unable to find the payloadType for the address form JS input",
                            level: .warning,
                            category: .webview)
                 return
             }
-            let payloadData = fieldValues.addressPayload
-            foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
+
+            foundFieldValues?(getFieldTypeValues(payload: fieldValues.payload), fieldValues.type, frame)
 
         case .creditCardFormMessageHandler:
             // Parse message payload for credit card form autofill
-            guard let data = getValidPayloadData(from: message),
-                  let fieldValues = parseFieldType(messageBody: data, formType: FillCreditCardForm.self),
+            guard let fieldValues = message.decodeBody(as: FillCreditCardForm.self),
                   let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
             else {
                 // Log a warning if payload parsing fails
@@ -140,33 +141,6 @@ class FormAutofillHelper: TabContentScript {
         }
     }
 
-    // MARK: - Payload Data Handling
-
-    func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
-        return message.body as? [String: Any]
-    }
-
-    func parseFieldType<T: Decodable>(messageBody: [String: Any], formType: T.Type) -> T? {
-        let decoder = JSONDecoder()
-
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: messageBody, options: .prettyPrinted)
-
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                print(jsonString)
-            } else {
-                print("Failed to convert JSON data to string")
-            }
-
-            let formData = try decoder.decode(formType, from: jsonData)
-            return formData
-        } catch let error {
-            logger.log("Unable to parse field type, \(error)", level: .warning, category: .webview)
-        }
-
-        return nil
-    }
-
     func getFieldTypeValues(payload: CreditCardPayload) -> AutofillFieldValuePayload {
         var ccPlainText = UnencryptedCreditCardFields()
         let creditCardValidator = CreditCardValidator()
@@ -180,7 +154,7 @@ class FormAutofillHelper: TabContentScript {
         return AutofillFieldValuePayload(fieldValue: .creditCard, fieldData: ccPlainText)
     }
 
-    func getFieldTypeValues(payload: AddressAutofillPayload) -> AutofillFieldValuePayload {
+    func getFieldTypeValues(payload: FillAddressAutofillForm.AddressAutofillPayload) -> AutofillFieldValuePayload {
         let addressPlainText = UnencryptedAddressFields(
             addressLevel1: payload.addressLevel1,
             organization: payload.organization,
@@ -218,11 +192,9 @@ class FormAutofillHelper: TabContentScript {
             let fillAddressInfoCallback = "__firefox__.FormAutofillHelper.fillFormFields(\(jsonDataVal))"
             webView.evaluateJavascriptInDefaultContentWorld(fillAddressInfoCallback, frame) { _, error in
                 if let error = error {
-                    TelemetryWrapper.recordEvent(category: .action, method: .filled, object: .addressFormFilled)
                     completion(error)
                     logger.log("Address script error \(error)", level: .debug, category: .autofill)
                 } else {
-                    TelemetryWrapper.recordEvent(category: .action, method: .filled, object: .addressFormFilled)
                     completion(nil)
                 }
             }
