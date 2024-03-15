@@ -601,7 +601,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     /// - Parameters:
     ///   - tab: the tab to remove
     ///   - flushToDisk: Will store changes if true, and update selected index
-    private func removeTab(_ tab: Tab, flushToDisk: Bool) {
+    func removeTab(_ tab: Tab, flushToDisk: Bool) {
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
             logger.log("Could not find index of tab to remove",
                        level: .warning,
