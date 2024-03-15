@@ -246,6 +246,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
+        logger.log("BVC deallocating", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
         observedWebViews.forEach({ stopObserving(webView: $0) })
     }
@@ -1158,7 +1159,7 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-        guard let url = url else {
+        guard url != nil else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
             return
@@ -1166,7 +1167,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+        } else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.isHidden = false
         }
@@ -2327,10 +2328,6 @@ extension BrowserViewController: LegacyTabDelegate {
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
         tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
 
-        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
-        sessionRestoreHelper.delegate = self
-        tab.addContentScriptToPage(sessionRestoreHelper, name: SessionRestoreHelper.name())
-
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
         tab.addContentScript(findInPageHelper, name: FindInPageHelper.name())
@@ -2874,14 +2871,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
-        }
-    }
-}
-
-extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        if let tab = tabManager.selectedTab, tab.webView === tab.webView {
-            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }

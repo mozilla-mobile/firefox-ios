@@ -11,7 +11,6 @@ import WebKit
 
 class SponsoredContentFilterUtilityTests: XCTestCase {
     private static let sponsoredStandardURL = "www.test.com/?parameter&mfadid=adm"
-    private let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=https://www.mozilla.org/"
     private let normalURL = "www.test.com/?parameter&parameter"
 
     private var profile: MockProfile!

@@ -20,14 +20,14 @@ class BrowserViewController: UIViewController {
         isTrackingEnabled: {
             Settings.getToggle(.trackingProtection)
         })
-    private lazy var webViewController: WebViewController = {
+    private lazy var webViewController: LegacyWebViewController = {
         var menuAction = WebMenuAction.live
         menuAction.openLink = { url in
             self.submit(url: url, source: .action)
         }
-        return WebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
+        return LegacyWebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
     }()
-    private let webViewContainer = UIView()
+    private let legacyWebViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
     private var keyboardState: KeyboardState?
@@ -186,7 +186,16 @@ class BrowserViewController: UIViewController {
             make.top.bottom.leading.width.equalToSuperview()
         }
 
-        // FXIOS-8617 - #19118 ⁃ Integrate EngineSession in Focus iOS
+        if WebEngineFlagManager.isWebEngineEnabled {
+            // FXIOS-8617 - #19118 ⁃ Integrate EngineSession in Focus iOS
+        } else {
+            // Legacy UI and related configuration
+            // TODO: [FXIOS-8616] Portions of this configuration will eventually be shared also by WebEngine.
+            configureLegacyUI()
+        }
+    }
+
+    private func configureLegacyUI() {
         webViewController.delegate = self
 
         setupBackgroundImage()
@@ -195,8 +204,8 @@ class BrowserViewController: UIViewController {
 
         mainContainerView.addSubview(homeViewContainer)
 
-        webViewContainer.isHidden = true
-        mainContainerView.addSubview(webViewContainer)
+        legacyWebViewContainer.isHidden = true
+        mainContainerView.addSubview(legacyWebViewContainer)
 
         urlBarContainer.alpha = 0
         mainContainerView.addSubview(urlBarContainer)
@@ -237,7 +246,7 @@ class BrowserViewController: UIViewController {
 
         addWebViewConstraints()
 
-        webViewContainer.snp.makeConstraints { make in
+        legacyWebViewContainer.snp.makeConstraints { make in
             browserBottomConstraint = make.bottom.equalTo(browserToolbar.snp.top).priority(1000).constraint
             if !showsToolsetInURLBar {
                 browserBottomConstraint.activate()
@@ -620,11 +629,11 @@ class BrowserViewController: UIViewController {
     // FXIOS-8617 - #19118 ⁃ Integrate EngineSession in Focus iOS
     private func containWebView() {
         addChild(webViewController)
-        webViewContainer.addSubview(webViewController.view)
+        legacyWebViewContainer.addSubview(webViewController.view)
         webViewController.didMove(toParent: self)
 
         webViewController.view.snp.makeConstraints { make in
-            make.edges.equalTo(webViewContainer.snp.edges)
+            make.edges.equalTo(legacyWebViewContainer.snp.edges)
         }
     }
 
@@ -705,12 +714,12 @@ class BrowserViewController: UIViewController {
     }
 
     private func addWebViewConstraints() {
-        let topConstraint = webViewContainer.topAnchor.constraint(equalTo: urlBarContainer.bottomAnchor)
+        let topConstraint = legacyWebViewContainer.topAnchor.constraint(equalTo: urlBarContainer.bottomAnchor)
         topConstraint.priority = .defaultLow
-        let bottomConstraint = webViewContainer.bottomAnchor.constraint(equalTo: mainContainerView.bottomAnchor)
+        let bottomConstraint = legacyWebViewContainer.bottomAnchor.constraint(equalTo: mainContainerView.bottomAnchor)
         bottomConstraint.priority = .defaultLow
-        let leadingConstraint = webViewContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
-        let trailingConstraint = webViewContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        let leadingConstraint = legacyWebViewContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        let trailingConstraint = legacyWebViewContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         NSLayoutConstraint.activate([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
     }
 
@@ -828,7 +837,7 @@ class BrowserViewController: UIViewController {
         overlayView.currentURL = ""
         // FXIOS-8639 - #19162 - Handle reset webview in Focus iOS
         webViewController.reset()
-        webViewContainer.isHidden = true
+        legacyWebViewContainer.isHidden = true
         browserToolbar.isHidden = true
         urlBarViewModel.canGoBack = false
         urlBarViewModel.canGoForward = false
@@ -941,8 +950,8 @@ class BrowserViewController: UIViewController {
             }
         }
 
-        if webViewContainer.isHidden {
-            webViewContainer.isHidden = false
+        if legacyWebViewContainer.isHidden {
+            legacyWebViewContainer.isHidden = false
             homeViewController.view.isHidden = true
             urlBar.inBrowsingMode = true
 
@@ -1637,14 +1646,14 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
     }
 }
 
-extension BrowserViewController: WebControllerDelegate {
+extension BrowserViewController: LegacyWebControllerDelegate {
 
-    func webControllerDidStartProvisionalNavigation(_ controller: WebController) {
+    func webControllerDidStartProvisionalNavigation(_ controller: LegacyWebController) {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
     }
 
-    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
+    func webController(_ controller: LegacyWebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
         if let total = totalResults {
             findInPageBar?.totalResults = total
         }
@@ -1654,11 +1663,11 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
-    func webControllerDidReload(_ controller: WebController) {
+    func webControllerDidReload(_ controller: LegacyWebController) {
         SearchHistoryUtils.isReload = true
     }
 
-    func webControllerDidStartNavigation(_ controller: WebController) {
+    func webControllerDidStartNavigation(_ controller: LegacyWebController) {
         if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating && !SearchHistoryUtils.isReload {
             SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
@@ -1670,7 +1679,7 @@ extension BrowserViewController: WebControllerDelegate {
         updateURLBar()
     }
 
-    func webControllerDidFinishNavigation(_ controller: WebController) {
+    func webControllerDidFinishNavigation(_ controller: LegacyWebController) {
         updateURLBar()
         urlBarViewModel.isLoading = false
         urlBarViewModel.loadingProgres = 1
@@ -1690,11 +1699,11 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
-    func webControllerURLDidChange(_ controller: WebController, url: URL) {
+    func webControllerURLDidChange(_ controller: LegacyWebController, url: URL) {
         showToolbars()
     }
 
-    func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
+    func webController(_ controller: LegacyWebController, didFailNavigationWithError error: Error) {
         // FXIOS-8637 - #19160 - Integrate onTitleChange, onLocationChange in Focus iOS
         urlBar.url = webViewController.url
         toggleURLBarBackground(isBright: true)
@@ -1702,16 +1711,16 @@ extension BrowserViewController: WebControllerDelegate {
         urlBarViewModel.loadingProgres = 1
     }
 
-    func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
+    func webController(_ controller: LegacyWebController, didUpdateCanGoBack canGoBack: Bool) {
         urlBarViewModel.canGoBack = canGoBack
     }
 
-    func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool) {
+    func webController(_ controller: LegacyWebController, didUpdateCanGoForward canGoForward: Bool) {
         urlBarViewModel.canGoForward = canGoForward
     }
 
     // FXIOS-8636 - #19159 - Integrate onProgress and onNavigationStateChange in Focus iOS
-    func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
+    func webController(_ controller: LegacyWebController, didUpdateEstimatedProgress estimatedProgress: Double) {
         // Don't update progress if the home view is visible. This prevents the centered URL bar
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
@@ -1721,18 +1730,18 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
+    func webController(_ controller: LegacyWebController, scrollViewWillBeginDragging scrollView: UIScrollView) {
         lastScrollOffset = scrollView.contentOffset
         lastScrollTranslation = scrollView.panGestureRecognizer.translation(in: scrollView)
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView) {
+    func webController(_ controller: LegacyWebController, scrollViewDidEndDragging scrollView: UIScrollView) {
         snapToolbars(scrollView: scrollView)
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView) {
+    func webController(_ controller: LegacyWebController, scrollViewDidScroll scrollView: UIScrollView) {
         let translation = scrollView.panGestureRecognizer.translation(in: scrollView)
         let isDragging = scrollView.panGestureRecognizer.state != .possible
 
@@ -1792,7 +1801,7 @@ extension BrowserViewController: WebControllerDelegate {
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
-    func webControllerShouldScrollToTop(_ controller: WebController) -> Bool {
+    func webControllerShouldScrollToTop(_ controller: LegacyWebController) -> Bool {
         guard scrollBarOffsetAlpha == 0 else {
             showToolbars()
             return false
@@ -1801,11 +1810,11 @@ extension BrowserViewController: WebControllerDelegate {
         return true
     }
 
-    func webControllerDidNavigateBack(_ controller: WebController) {
+    func webControllerDidNavigateBack(_ controller: LegacyWebController) {
         handleNavigationBack()
     }
 
-    func webControllerDidNavigateForward(_ controller: WebController) {
+    func webControllerDidNavigateForward(_ controller: LegacyWebController) {
         handleNavigationForward()
     }
 
@@ -1836,7 +1845,7 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
-    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus) {
+    func webController(_ controller: LegacyWebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus) {
         // Calculate the number of trackers blocked and add that to lifetime total
         if case .on(let info) = trackingStatus,
            case .on(let oldInfo) = oldTrackingProtectionStatus {

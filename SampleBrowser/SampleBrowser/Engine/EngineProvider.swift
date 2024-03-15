@@ -11,14 +11,13 @@ struct EngineProvider {
     let view: EngineView
 
     init(engine: Engine = WKEngine.factory(),
-         telemetryProxy: EngineTelemetryProxy? = nil) {
+         sessionDependencies: EngineSessionDependencies? = nil) {
         do {
-            session = try engine.createSession()
+            session = try engine.createSession(dependencies: sessionDependencies)
         } catch {
             session = nil
         }
 
-        session?.telemetryProxy = telemetryProxy
         view = engine.createView()
     }
 }
