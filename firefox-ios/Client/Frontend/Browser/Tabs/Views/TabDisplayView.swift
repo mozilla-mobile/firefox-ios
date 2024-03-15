@@ -358,6 +358,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         let end = IndexPath(row: destinationIndexPath.item, section: section)
         store.dispatch(TabPanelAction.moveTab(MoveTabContext(originIndex: start.row,
                                                              destinationIndex: end.row,
+                                                             isPrivate: tabsState.isPrivateMode,
                                                              windowUUID: windowUUID)))
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 

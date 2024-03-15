@@ -34,7 +34,7 @@ class Logic {
 
   /**
    * Test whether associated labels of the element have the keyword.
-   * This is a simplified rule of hasLabelMatchingRegex in NewPasswordModel.jsm
+   * This is a simplified rule of hasLabelMatchingRegex in NewPasswordModel.sys.mjs
    */
   static hasLabelMatchingRegex(element, regex) {
     return regex.test(element.labels?.[0]?.textContent);

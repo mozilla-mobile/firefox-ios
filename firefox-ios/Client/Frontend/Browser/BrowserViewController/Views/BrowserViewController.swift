@@ -246,6 +246,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
+        logger.log("BVC deallocating", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
         observedWebViews.forEach({ stopObserving(webView: $0) })
     }
@@ -1158,7 +1159,7 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-        guard let url = url else {
+        guard url != nil else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
             return
@@ -1166,7 +1167,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+        } else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.isHidden = false
         }
@@ -1284,23 +1285,21 @@ class BrowserViewController: UIViewController,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        showBookmarksToast()
-    }
-
-    private func showBookmarksToast() {
-        let viewModel = ButtonToastViewModel(labelText: .AppMenu.AddBookmarkConfirmMessage,
-                                             buttonText: .BookmarksEdit,
-                                             textAlignment: .left)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme) { isButtonTapped in
-            isButtonTapped ? self.openBookmarkEditPanel() : nil
-        }
-        self.show(toast: toast)
+        showBookmarkToast(for: .add)
     }
 
     func removeBookmark(url: String) {
         profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
+            self.showBookmarkToast(for: .remove)
+        }
+    }
+
+    private func showBookmarkToast(for action: BookmarkAction) {
+        switch action {
+        case .add:
+            self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+        case .remove:
             self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
@@ -1309,7 +1308,7 @@ class BrowserViewController: UIViewController,
     /// Library Panel - Bookmarks section. In order to get the correct information, it needs
     /// to fetch the last added bookmark in the mobile folder, which is the default
     /// location for all bookmarks added on mobile.
-    private func openBookmarkEditPanel() {
+    internal func openBookmarkEditPanel() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .change,
@@ -2273,9 +2272,6 @@ extension BrowserViewController: LegacyTabDelegate {
         self.scrollController.beginObserving(scrollView: webView.scrollView)
         webView.uiDelegate = self
 
-        let formPostHelper = FormPostHelper(tab: tab)
-        tab.addContentScript(formPostHelper, name: FormPostHelper.name())
-
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
@@ -2323,10 +2319,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
         tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
-
-        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
-        sessionRestoreHelper.delegate = self
-        tab.addContentScriptToPage(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
@@ -2492,6 +2484,10 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         navigationHandler?.show(settings: settingsPage)
+    }
+
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
+        showBookmarkToast(for: action)
     }
 }
 
@@ -2867,14 +2863,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
-        }
-    }
-}
-
-extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        if let tab = tabManager.selectedTab, tab.webView === tab.webView {
-            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }

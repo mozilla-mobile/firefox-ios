@@ -501,6 +501,7 @@ public class LoginRecordError: MaybeErrorType {
 protocol LoginsProtocol {
     func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void)
 }
 
 public class RustLogins: LoginsProtocol {
@@ -708,6 +709,23 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let records = try self.storage?.list()
+                completionHandler(.success(records))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
     }
 
     public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
@@ -952,7 +970,7 @@ public class RustLogins: LoginsProtocol {
 
                     if hasLogins {
                         // Since the key data isn't present and we have login records in
-                        // the database, we both clear the databbase and the reset the key.
+                        // the database, we both clear the database and reset the key.
                         GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
                         self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
                     } else {

@@ -23,6 +23,7 @@
         "ClipBoardTests",
         "CreditCardsTests\/testAutofillCreditCardsToggleOnOoff()",
         "CreditCardsTests\/testCreditCardsAutofill()",
+        "CreditCardsTests\/testErrorStatesCreditCards()",
         "CreditCardsTests\/testManageCreditCardsOption()",
         "CreditCardsTests\/testVerifyThatMultipleCardsCanBeAdded()",
         "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",

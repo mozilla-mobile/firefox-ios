@@ -8,7 +8,7 @@ import PassKit
 import Combine
 import Glean
 
-protocol BrowserState {
+protocol LegacyBrowserState {
     var url: URL? { get }
     var isLoading: Bool { get }
     var canGoBack: Bool { get }
@@ -16,35 +16,35 @@ protocol BrowserState {
     var estimatedProgress: Double { get }
 }
 
-protocol WebController {
-    var delegate: WebControllerDelegate? { get set }
+protocol LegacyWebController {
+    var delegate: LegacyWebControllerDelegate? { get set }
     var canGoBack: Bool { get }
     var canGoForward: Bool { get }
 
     func load(_ request: URLRequest)
 }
 
-protocol WebControllerDelegate: AnyObject {
-    func webControllerDidStartProvisionalNavigation(_ controller: WebController)
-    func webControllerDidStartNavigation(_ controller: WebController)
-    func webControllerDidFinishNavigation(_ controller: WebController)
-    func webControllerDidNavigateBack(_ controller: WebController)
-    func webControllerDidNavigateForward(_ controller: WebController)
-    func webControllerDidReload(_ controller: WebController)
-    func webControllerURLDidChange(_ controller: WebController, url: URL)
-    func webController(_ controller: WebController, didFailNavigationWithError error: Error)
-    func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
-    func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool)
-    func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double)
-    func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView)
-    func webController(_ controller: WebController, scrollViewDidEndDragging scrollView: UIScrollView)
-    func webController(_ controller: WebController, scrollViewDidScroll scrollView: UIScrollView)
-    func webControllerShouldScrollToTop(_ controller: WebController) -> Bool
-    func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus)
-    func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
+protocol LegacyWebControllerDelegate: AnyObject {
+    func webControllerDidStartProvisionalNavigation(_ controller: LegacyWebController)
+    func webControllerDidStartNavigation(_ controller: LegacyWebController)
+    func webControllerDidFinishNavigation(_ controller: LegacyWebController)
+    func webControllerDidNavigateBack(_ controller: LegacyWebController)
+    func webControllerDidNavigateForward(_ controller: LegacyWebController)
+    func webControllerDidReload(_ controller: LegacyWebController)
+    func webControllerURLDidChange(_ controller: LegacyWebController, url: URL)
+    func webController(_ controller: LegacyWebController, didFailNavigationWithError error: Error)
+    func webController(_ controller: LegacyWebController, didUpdateCanGoBack canGoBack: Bool)
+    func webController(_ controller: LegacyWebController, didUpdateCanGoForward canGoForward: Bool)
+    func webController(_ controller: LegacyWebController, didUpdateEstimatedProgress estimatedProgress: Double)
+    func webController(_ controller: LegacyWebController, scrollViewWillBeginDragging scrollView: UIScrollView)
+    func webController(_ controller: LegacyWebController, scrollViewDidEndDragging scrollView: UIScrollView)
+    func webController(_ controller: LegacyWebController, scrollViewDidScroll scrollView: UIScrollView)
+    func webControllerShouldScrollToTop(_ controller: LegacyWebController) -> Bool
+    func webController(_ controller: LegacyWebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus)
+    func webController(_ controller: LegacyWebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?)
 }
 
-class WebViewController: UIViewController, WebController {
+class LegacyWebViewController: UIViewController, LegacyWebController {
     private enum ScriptHandlers: String, CaseIterable {
         case focusTrackingProtection
         case focusTrackingProtectionPostLoad
@@ -60,10 +60,12 @@ class WebViewController: UIViewController, WebController {
         case canGoForward = "canGoForward"
     }
 
-    weak var delegate: WebControllerDelegate?
+    weak var delegate: LegacyWebControllerDelegate?
 
     var browserView: WKWebView! {
-        didSet { configureRefreshControl() }
+        didSet {
+            configureRefreshControl()
+        }
     }
 
     private var progressObserver: NSKeyValueObservation?
@@ -359,7 +361,7 @@ class WebViewController: UIViewController, WebController {
     }
 }
 
-extension WebViewController: UIScrollViewDelegate {
+extension LegacyWebViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.webController(self, scrollViewDidScroll: scrollView)
     }
@@ -377,7 +379,7 @@ extension WebViewController: UIScrollViewDelegate {
     }
 }
 
-extension WebViewController: WKNavigationDelegate {
+extension LegacyWebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         // validate the URL using URIFixup
         guard let urlString = webView.url?.absoluteString,
@@ -517,7 +519,7 @@ extension WebViewController: WKNavigationDelegate {
     }
 }
 
-extension WebViewController: BrowserState {
+extension LegacyWebViewController: LegacyBrowserState {
     var canGoBack: Bool { return browserView.canGoBack }
     var canGoForward: Bool { return browserView.canGoForward }
     var estimatedProgress: Double { return browserView.estimatedProgress }
@@ -525,7 +527,7 @@ extension WebViewController: BrowserState {
     var url: URL? { return browserView.url }
 }
 
-extension WebViewController: WKUIDelegate {
+extension LegacyWebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         // check if this is a new frame / window
         guard navigationAction.targetFrame == nil else { return nil }
@@ -545,7 +547,7 @@ extension WebViewController: WKUIDelegate {
     }
 }
 
-extension WebViewController: WKScriptMessageHandler {
+extension LegacyWebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         // FXIOS-8090 - #19152 ⁃ Integrate EngineSession ads handler in Focus iOS
         if message.name == "adsMessageHandler" {
@@ -586,7 +588,7 @@ extension WebViewController: WKScriptMessageHandler {
     }
 }
 
-extension WebViewController {
+extension LegacyWebViewController {
     func webView(_ webView: WKWebView, contextMenuConfigurationFor elementInfo: WKContextMenuElementInfo) async -> UIContextMenuConfiguration? {
         guard let url = elementInfo.linkURL else { return nil }
 

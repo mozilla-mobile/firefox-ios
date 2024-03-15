@@ -654,8 +654,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
-            app.secureTextFields.element(boundBy: 0).tap()
-            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 1).tap()
+            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
