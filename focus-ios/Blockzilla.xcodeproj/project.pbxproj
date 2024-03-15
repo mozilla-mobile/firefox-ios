@@ -72,6 +72,16 @@
 		8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */; };
 		846A23182668CC4500DB3C37 /* FullScreen.js in Resources */ = {isa = PBXBuildFile; fileRef = 846A23172668CC4500DB3C37 /* FullScreen.js */; };
 		8A0E7F2E2BA0F0EE006BC6B6 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 8A0E7F2D2BA0F0EE006BC6B6 /* Fuzi */; };
+		8A6445852BA38B8600759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
+		8A64458A2BA3904100759319 /* disconnect-block-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445862BA3904100759319 /* disconnect-block-analytics.json */; };
+		8A64458B2BA3904100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
+		8A64458C2BA3904100759319 /* disconnect-block-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445882BA3904100759319 /* disconnect-block-advertising.json */; };
+		8A64458D2BA3904100759319 /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445892BA3904100759319 /* disconnect-block-content.json */; };
+		8A64458E2BA3905100759319 /* disconnect-block-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445882BA3904100759319 /* disconnect-block-advertising.json */; };
+		8A64458F2BA3905100759319 /* disconnect-block-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445862BA3904100759319 /* disconnect-block-analytics.json */; };
+		8A6445902BA3905100759319 /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445892BA3904100759319 /* disconnect-block-content.json */; };
+		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
+		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -143,10 +153,6 @@
 		D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179C21BCC6F65009AD388 /* AboutViewController.swift */; };
 		D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */; };
 		D30DF93E1DC1634F0064736C /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF93D1DC1634F0064736C /* Toast.swift */; };
-		D32817221BD0689800185845 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171E1BD0689800185845 /* disconnect-advertising.json */; };
-		D32817231BD0689800185845 /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171F1BD0689800185845 /* disconnect-analytics.json */; };
-		D32817241BD0689800185845 /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817201BD0689800185845 /* disconnect-content.json */; };
-		D32817251BD0689800185845 /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
 		D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */; };
 		D33E9B241E1D93DD00A39A44 /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33E9B231E1D93DD00A39A44 /* RequestHandler.swift */; };
 		D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */; };
@@ -165,7 +171,6 @@
 		D392887F1BC5E47E0016A9A0 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		D3A6605A1DAF08FA002BA72A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251F81DAF064B005918DC /* Utils.swift */; };
 		D3A6605B1DAF0904002BA72A /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
-		D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
 		D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */ = {isa = PBXBuildFile; fileRef = D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */; };
 		D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */; };
 		D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DA77841DC2C307009C114E /* ErrorPage.swift */; };
@@ -176,11 +181,6 @@
 		D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
 		D3E2C8EA1D9F0E6200DEBE3D /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C8E91D9F0E6200DEBE3D /* BrowserViewController.swift */; };
 		D3E2C8FA1D9F170200DEBE3D /* LocalContentBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C8F91D9F170200DEBE3D /* LocalContentBlocker.swift */; };
-		D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171E1BD0689800185845 /* disconnect-advertising.json */; };
-		D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171F1BD0689800185845 /* disconnect-analytics.json */; };
-		D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817201BD0689800185845 /* disconnect-content.json */; };
-		D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */ = {isa = PBXBuildFile; fileRef = D32817211BD0689800185845 /* disconnect-social.json */; };
-		D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */; };
 		D3E2C9611DA2F7C600DEBE3D /* URLBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */; };
 		D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C9681DA3024800DEBE3D /* InsetButton.swift */; };
 		D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E2C96A1DA3069000DEBE3D /* URIFixup.swift */; };
@@ -662,6 +662,11 @@
 		8400575927353B1800E48144 /* UIPasteBoardExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPasteBoardExtensions.swift; sourceTree = "<group>"; };
 		846A23172668CC4500DB3C37 /* FullScreen.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FullScreen.js; sourceTree = "<group>"; };
 		8A0E7F2B2BA0F0C2006BC6B6 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = BrowserKit; path = ../BrowserKit; sourceTree = "<group>"; };
+		8A6445842BA38B8600759319 /* web-fonts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "web-fonts.json"; sourceTree = "<group>"; };
+		8A6445862BA3904100759319 /* disconnect-block-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-analytics.json"; path = "../../ContentBlockingLists/disconnect-block-analytics.json"; sourceTree = "<group>"; };
+		8A6445872BA3904100759319 /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
+		8A6445882BA3904100759319 /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
+		8A6445892BA3904100759319 /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
 		A847EEFA289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -741,10 +746,6 @@
 		D30179C21BCC6F65009AD388 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		D30DF93D1DC1634F0064736C /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
-		D328171E1BD0689800185845 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-advertising.json"; path = "Lists/disconnect-advertising.json"; sourceTree = SOURCE_ROOT; };
-		D328171F1BD0689800185845 /* disconnect-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-analytics.json"; path = "Lists/disconnect-analytics.json"; sourceTree = SOURCE_ROOT; };
-		D32817201BD0689800185845 /* disconnect-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-content.json"; path = "Lists/disconnect-content.json"; sourceTree = SOURCE_ROOT; };
-		D32817211BD0689800185845 /* disconnect-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-social.json"; path = "Lists/disconnect-social.json"; sourceTree = SOURCE_ROOT; };
 		D33A1AB01BC48FAC0003D929 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		D33E9B231E1D93DD00A39A44 /* RequestHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestHandler.swift; sourceTree = "<group>"; };
 		D3426AE81DB7F4060016DA5A /* KeyboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
@@ -761,7 +762,6 @@
 		D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUtils.swift; sourceTree = "<group>"; };
 		D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D392887E1BC5E47E0016A9A0 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
-		D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "web-fonts.json"; path = "Lists/web-fonts.json"; sourceTree = SOURCE_ROOT; };
 		D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "enabled-detector.json"; sourceTree = "<group>"; };
 		D3C047BC1DCBD8ED00402FFB /* SearchEngines.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = SearchEngines.plist; path = Search/SearchEngines.plist; sourceTree = SOURCE_ROOT; };
 		D3C70C671DDE795300CEE458 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1734,18 +1734,6 @@
 			name = Shared;
 			sourceTree = "<group>";
 		};
-		D3E2C9001D9F17C600DEBE3D /* Blocklists */ = {
-			isa = PBXGroup;
-			children = (
-				D328171E1BD0689800185845 /* disconnect-advertising.json */,
-				D328171F1BD0689800185845 /* disconnect-analytics.json */,
-				D32817201BD0689800185845 /* disconnect-content.json */,
-				D32817211BD0689800185845 /* disconnect-social.json */,
-				D3B323511BD1A7EE00B0EEE4 /* web-fonts.json */,
-			);
-			name = Blocklists;
-			sourceTree = "<group>";
-		};
 		D446C1802AF3B6EE00A230DF /* focus-ios-tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1841,7 +1829,6 @@
 				D446C1802AF3B6EE00A230DF /* focus-ios-tests */,
 				C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */,
 				C817A35222CE73B4002529FF /* Deferred */,
-				D3E2C9001D9F17C600DEBE3D /* Blocklists */,
 				E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */,
 				E4BF2DED1BACE92400DA9D68 /* ContentBlocker */,
 				745DC5DB1F39221100661635 /* OpenInFocus */,
@@ -1919,6 +1906,11 @@
 		E4BF2DED1BACE92400DA9D68 /* ContentBlocker */ = {
 			isa = PBXGroup;
 			children = (
+				8A6445882BA3904100759319 /* disconnect-block-advertising.json */,
+				8A6445862BA3904100759319 /* disconnect-block-analytics.json */,
+				8A6445892BA3904100759319 /* disconnect-block-content.json */,
+				8A6445872BA3904100759319 /* disconnect-block-social.json */,
+				8A6445842BA38B8600759319 /* web-fonts.json */,
 				E4BC84FD1E2A862700833B45 /* InfoPlist.strings */,
 				D3BBC9EC1D7F81CB00D1751B /* enabled-detector.json */,
 				E4BF2DF21BACE92400DA9D68 /* Info.plist */,
@@ -2352,12 +2344,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A64458E2BA3905100759319 /* disconnect-block-advertising.json in Resources */,
+				8A64458F2BA3905100759319 /* disconnect-block-analytics.json in Resources */,
+				8A6445902BA3905100759319 /* disconnect-block-content.json in Resources */,
+				8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */,
+				8A6445922BA3905100759319 /* web-fonts.json in Resources */,
 				1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */,
 				C83FB7D2273AA13300B78CC5 /* MetadataHelper.js in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				B3F4A3171FA136E70029A6F2 /* preload.js in Resources */,
 				D3C047BD1DCBD8ED00402FFB /* SearchEngines.plist in Resources */,
-				D3E2C8FE1D9F17AC00DEBE3D /* disconnect-social.json in Resources */,
 				74F94FF21FD9CA070047E629 /* Intro.strings in Resources */,
 				846A23182668CC4500DB3C37 /* FullScreen.js in Resources */,
 				D3DA778C1DC2C60E009C114E /* errorPage.html in Resources */,
@@ -2366,9 +2362,6 @@
 				F8324CE5264EA223007E4BFA /* licenses.html in Resources */,
 				D343DCC21C44356500D7EEE8 /* Localizable.strings in Resources */,
 				EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */,
-				D3E2C8FB1D9F17AC00DEBE3D /* disconnect-advertising.json in Resources */,
-				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
-				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
 				D5D067FB252F945D00C35227 /* metrics.yaml in Resources */,
 				74ACC3D2289CF85C00A9AC3E /* Ads.js in Resources */,
 				F8324CE6264EA223007E4BFA /* style.css in Resources */,
@@ -2377,7 +2370,6 @@
 				398E40882906BFC00077F5BD /* initial_experiments.json in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
-				D3E2C8FF1D9F17AC00DEBE3D /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2385,13 +2377,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D32817251BD0689800185845 /* disconnect-social.json in Resources */,
+				8A64458C2BA3904100759319 /* disconnect-block-advertising.json in Resources */,
 				E4BC84FB1E2A862700833B45 /* InfoPlist.strings in Resources */,
-				D32817231BD0689800185845 /* disconnect-analytics.json in Resources */,
 				D3BBC9ED1D7F81CB00D1751B /* enabled-detector.json in Resources */,
-				D32817221BD0689800185845 /* disconnect-advertising.json in Resources */,
-				D32817241BD0689800185845 /* disconnect-content.json in Resources */,
-				D3B323521BD1A7EE00B0EEE4 /* web-fonts.json in Resources */,
+				8A64458A2BA3904100759319 /* disconnect-block-analytics.json in Resources */,
+				8A64458B2BA3904100759319 /* disconnect-block-social.json in Resources */,
+				8A64458D2BA3904100759319 /* disconnect-block-content.json in Resources */,
+				8A6445852BA38B8600759319 /* web-fonts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

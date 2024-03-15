@@ -2272,9 +2272,6 @@ extension BrowserViewController: LegacyTabDelegate {
         self.scrollController.beginObserving(scrollView: webView.scrollView)
         webView.uiDelegate = self
 
-        let formPostHelper = FormPostHelper(tab: tab)
-        tab.addContentScript(formPostHelper, name: FormPostHelper.name())
-
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
