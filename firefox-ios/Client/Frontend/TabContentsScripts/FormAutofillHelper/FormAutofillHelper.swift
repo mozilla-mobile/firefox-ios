@@ -100,11 +100,11 @@ class FormAutofillHelper: TabContentScript {
             if addressValues?.object == "address_form" {
                 switch addressValues?.method {
                 case .detected:
-                    TelemetryWrapper.recordEvent(category: .action, method: .detected, object: .addressForm)
+                    TelemetryWrapper.recordEvent(category: .action, method: .detect, object: .addressForm)
                 case .filled:
-                    TelemetryWrapper.recordEvent(category: .action, method: .filled, object: .addressForm)
+                    TelemetryWrapper.recordEvent(category: .action, method: .detect, object: .addressFormFilled)
                 case .filledModified:
-                    TelemetryWrapper.recordEvent(category: .action, method: .filledModified, object: .addressForm)
+                    TelemetryWrapper.recordEvent(category: .action, method: .change, object: .addressFormFilledModified)
                 case .none:
                     return
                 }

@@ -267,7 +267,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 extension TelemetryWrapper {
     public enum EventCategory: String {
         case action = "action"
-        case address = "address"
         case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
         case enrollment = "enrollment"
@@ -285,18 +284,14 @@ extension TelemetryWrapper {
         case closeAll = "close-all"
         case delete = "delete"
         case deleteAll = "deleteAll"
-        case detected = "detected"
+        case detect = "detect"
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
-        case filled = "filled"
-        case filledModified = "filled_modified"
-        case quantity = "quantity"
         case swipe = "swipe"
         case navigate = "navigate"
         case open = "open"
         case press = "press"
-        case popupShown = "popup_shown"
         case pull = "pull"
         case scan = "scan"
         case share = "share"
@@ -765,15 +760,6 @@ extension TelemetryWrapper {
         }
 
         public enum AddressTelemetry: String {
-            case addressLevel1 = "address_level1"
-            case addressLevel2 = "address_level2"
-            case addressLine1 = "address_line1"
-            case addressLine2 = "address_line2"
-            case addressLine3 = "address_line3"
-            case country = "country"
-            case fieldName = "field_name"
-            case postalCode = "postal_code"
-            case streetAddress = "street_address"
             case count
         }
     }
@@ -957,7 +943,7 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         // MARK: Address
-        case(.information, .detected, .addressAutofillSettings, _, let extras):
+        case(.information, .view, .addressAutofillSettings, _, let extras):
             if let count = extras?[EventExtraKey.AddressTelemetry.count.rawValue] as? Int32 {
                 GleanMetrics.Addresses.savedAll.add(count)
             }
@@ -969,11 +955,11 @@ extension TelemetryWrapper {
             GleanMetrics.Addresses.autofillPromptExpanded.record()
         case(.action, .close, .addressAutofillPromptDismissed, _, _):
             GleanMetrics.Addresses.autofillPromptDismissed.record()
-        case(.action, .filledModified, .addressFormFilledModified, _, _):
+        case(.action, .change, .addressFormFilledModified, _, _):
             GleanMetrics.Addresses.modified.record()
-        case(.action, .filled, .addressFormFilled, _, _):
+        case(.action, .detect, .addressFormFilled, _, _):
             GleanMetrics.Addresses.autofilled.record()
-        case(.action, .detected, .addressForm, _, let extras):
+        case(.action, .detect, .addressForm, _, _):
             GleanMetrics.Addresses.formDetected.record()
 
         // MARK: Credit Card

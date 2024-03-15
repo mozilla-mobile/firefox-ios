@@ -1989,7 +1989,7 @@ class BrowserViewController: UIViewController,
 
             TelemetryWrapper.recordEvent(
                 category: .information,
-                method: .detected,
+                method: .view,
                 object: .addressAutofillSettings,
                 extras: [TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue: addresses.count]
             )
