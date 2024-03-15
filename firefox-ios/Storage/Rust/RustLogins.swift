@@ -500,6 +500,7 @@ public class LoginRecordError: MaybeErrorType {
 /// Its part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
 protocol LoginsProtocol {
     func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void)
 }
 
@@ -753,6 +754,30 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            self.getStoredKey { result in
+                switch result {
+                case .success(let key):
+                    do {
+                        let login = try self.storage?.add(login: login, encryptionKey: key)
+                        completionHandler(.success(login))
+                    } catch let err as NSError {
+                        completionHandler(.failure(err))
+                    }
+                case .failure(let err):
+                    completionHandler(.failure(err))
+                }
+            }
+        }
     }
 
     public func use(login: EncryptedLogin) -> Success {
