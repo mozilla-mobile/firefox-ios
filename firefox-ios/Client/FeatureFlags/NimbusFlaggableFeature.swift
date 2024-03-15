@@ -33,6 +33,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case searchHighlights
     case shareSheetChanges
     case shareToolbarChanges
+    case splashScreen
     case tabTrayRefactor
     case zoomFeature
 }
@@ -82,6 +83,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchHighlights,
                 .shareSheetChanges,
                 .shareToolbarChanges,
+                .splashScreen,
                 .tabTrayRefactor,
                 .zoomFeature:
             return nil
@@ -127,7 +129,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
-
+        case .splashScreen:
+            return nimbusSearchBar.getDefaultPosition().rawValue
         default: return nil
         }
     }

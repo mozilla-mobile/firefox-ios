@@ -535,7 +535,7 @@ class Tab: NSObject, ThemeApplicable {
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(PrivilegedRequest(url: url) as URLRequest)
+            webView.load(URLRequest(url: url))
         }
 
         if let interactionState = interactionState {
@@ -659,7 +659,8 @@ class Tab: NSObject, ThemeApplicable {
             }
         }
 
-        if webView?.reloadFromOrigin() != nil {
+        if let webView, webView.url != nil {
+            webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,
                        category: .tabs)

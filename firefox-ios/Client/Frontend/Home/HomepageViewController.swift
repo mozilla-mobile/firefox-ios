@@ -353,10 +353,6 @@ class HomepageViewController:
         scrollViewDidScroll(collectionView)
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        dismissKeyboard()
-    }
-
     @objc
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
@@ -775,6 +771,10 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
+    }
+
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(for: action)
     }
 }
 

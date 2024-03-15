@@ -17,3 +17,15 @@ public enum ZoomChangeValue {
 
     static let defaultStepIncrease = 0.1
 }
+
+/// Describes the accessory view that should be shown above the keyboard for a given webview.
+public enum EngineInputAccessoryView {
+    /// Use the default accessory view (depends on currently presented web content).
+    case `default`
+
+    /// Do not show an accessory view. This overrides any engine or webview default.
+    case none
+
+    // Use a custom view (provided). Not currently needed but may be useful in the future.
+    // case custom(UIView)
+}

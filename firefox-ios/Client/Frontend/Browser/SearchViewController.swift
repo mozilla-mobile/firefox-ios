@@ -54,7 +54,7 @@ protocol SearchViewControllerDelegate: AnyObject {
 
 // Note: ClientAndTabs data structure contains all tabs under a remote client. To make traversal and search easier
 // this wrapper combines them and is helpful in showing Remote Client and Remote tab in our SearchViewController
-struct ClientTabsSearchWrapper {
+struct ClientTabsSearchWrapper: Equatable {
     var client: RemoteClient
     var tab: RemoteTab
 }
@@ -143,16 +143,35 @@ class SearchViewController: SiteTableViewController,
             .filter { $0.bookmarked == false }
     }
 
-    var hasFirefoxSuggestions: Bool {
+    private var hasBookmarksSuggestions: Bool {
+        return !bookmarkSites.isEmpty &&
+        shouldShowBookmarksSuggestions
+    }
+
+    private var hasHistorySuggestions: Bool {
+        return !historySites.isEmpty &&
+        shouldShowBrowsingHistorySuggestions
+    }
+
+    private var hasHistoryAndBookmarksSuggestions: Bool {
         let dataCount = data.count
         return dataCount != 0 &&
-                (model.shouldShowBookmarksSuggestions
-                || model.shouldShowBrowsingHistorySuggestions)
-                || !filteredOpenedTabs.isEmpty
-                || (!filteredRemoteClientTabs.isEmpty && model.shouldShowSyncedTabsSuggestions)
-                || !searchHighlights.isEmpty
-                || (!firefoxSuggestions.isEmpty && shouldShowNonSponsoredSuggestions)
+        shouldShowBookmarksSuggestions &&
+        shouldShowBrowsingHistorySuggestions
     }
+
+    var hasFirefoxSuggestions: Bool {
+        return hasBookmarksSuggestions
+               || hasHistorySuggestions
+               || hasHistoryAndBookmarksSuggestions
+               || !filteredOpenedTabs.isEmpty
+               || (!filteredRemoteClientTabs.isEmpty && shouldShowSyncedTabsSuggestions)
+               || !searchHighlights.isEmpty
+               || (!firefoxSuggestions.isEmpty && (shouldShowNonSponsoredSuggestions
+                                                   || shouldShowSponsoredSuggestions))
+    }
+
+    private let maxNumOfFirefoxSuggestions: Int32 = 1
 
     init(profile: Profile,
          viewModel: SearchViewModel,
@@ -206,7 +225,8 @@ class SearchViewController: SiteTableViewController,
         ])
 
         setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
-                                                          .SearchSettingsChanged])
+                                                          .SearchSettingsChanged,
+                                                          .SponsoredAndNonSponsoredSuggestionsChanged])
     }
 
     private func loadSearchHighlights() {
@@ -219,14 +239,13 @@ class SearchViewController: SiteTableViewController,
             resultCount: 3) { results in
             guard let results = results else { return }
             self.searchHighlights = results
-            self.searchTelemetry?.searchHighlights = results
             self.tableView.reloadData()
         }
     }
 
     /// Whether to show sponsored suggestions from Firefox Suggest.
     private var shouldShowSponsoredSuggestions: Bool {
-        shouldShowNonSponsoredSuggestions &&
+        return !viewModel.isPrivate &&
         model.shouldShowSponsoredSuggestions
     }
 
@@ -237,18 +256,47 @@ class SearchViewController: SiteTableViewController,
     }
 
     /// Whether to show suggestions from the search engine.
-    private var shoudShowSearchEngineSuggestions: Bool {
+    private var shouldShowSearchEngineSuggestions: Bool {
+        return searchEngines?.shouldShowSearchSuggestions ?? false
+    }
+
+    /// Determines if a suggestion should be shown based on the view model's privacy mode and
+    /// the specific suggestion's status.
+    private func shouldShowFirefoxSuggestions(_ suggestion: Bool) -> Bool {
         return viewModel.isPrivate ?
-        (searchEngines?.shouldShowPrivateModeSearchSuggestions ?? false) :
-        (searchEngines?.shouldShowSearchSuggestions ?? false)
+        (suggestion && model.shouldShowPrivateModeFirefoxSuggestions) :
+        suggestion
+    }
+
+    private var shouldShowSyncedTabsSuggestions: Bool {
+        return shouldShowFirefoxSuggestions(
+            model.shouldShowSyncedTabsSuggestions
+        )
+    }
+
+    private var shouldShowBookmarksSuggestions: Bool {
+        return shouldShowFirefoxSuggestions(
+            model.shouldShowBookmarksSuggestions
+        )
+    }
+
+    private var shouldShowBrowsingHistorySuggestions: Bool {
+        return shouldShowFirefoxSuggestions(
+            model.shouldShowBrowsingHistorySuggestions
+        )
     }
 
     func loadFirefoxSuggestions() -> Task<(), Never>? {
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
-                && (includeNonSponsored || includeSponsored)
-        else { return nil }
+                && (includeNonSponsored || includeSponsored) else {
+            if !firefoxSuggestions.isEmpty {
+                firefoxSuggestions = []
+                tableView.reloadData()
+            }
+            return nil
+        }
 
         profile.firefoxSuggest?.interruptReader()
 
@@ -264,14 +312,15 @@ class SearchViewController: SiteTableViewController,
                 }
             }
         return Task { [weak self] in
-            guard let suggestions = try? await self?.profile.firefoxSuggest?.query(
-                tempSearchQuery,
-                providers: providers
+            guard let limit = self?.maxNumOfFirefoxSuggestions,
+                  let suggestions = try? await self?.profile.firefoxSuggest?.query(
+                    tempSearchQuery,
+                    providers: providers,
+                    limit: limit
             ) else { return }
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
                 self.firefoxSuggestions = suggestions
-                self.searchTelemetry?.firefoxSuggestions = suggestions
                 self.tableView.reloadData()
             }
         }
@@ -602,7 +651,6 @@ class SearchViewController: SiteTableViewController,
                         self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
                     }
                 }
-                self.searchTelemetry?.remoteClientTabs = self.remoteClientTabs
             }
         }
     }
@@ -642,7 +690,6 @@ class SearchViewController: SiteTableViewController,
             let text = lines.joined(separator: "\n")
             return find(in: text)
         }
-        searchTelemetry?.filteredOpenedTabs = filteredOpenedTabs
     }
 
     func searchRemoteTabs(for searchString: String) {
@@ -674,8 +721,6 @@ class SearchViewController: SiteTableViewController,
 
             return false
         }
-
-        searchTelemetry?.filteredRemoteClientTabs = filteredRemoteClientTabs
     }
 
     private func querySuggestClient() {
@@ -694,7 +739,7 @@ class SearchViewController: SiteTableViewController,
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery,
                              callback: { suggestions, error in
-            if error == nil, self.shoudShowSearchEngineSuggestions {
+            if error == nil, self.shouldShowSearchEngineSuggestions {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: {
@@ -704,15 +749,15 @@ class SearchViewController: SiteTableViewController,
                 })
                 // First suggestion should be what the user is searching
                 self.suggestions?.insert(self.searchQuery, at: 0)
+                self.searchTelemetry?.clearVisibleResults()
             }
 
             // If there are no suggestions, just use whatever the user typed.
-            if self.shoudShowSearchEngineSuggestions &&
+            if self.shouldShowSearchEngineSuggestions &&
                suggestions?.isEmpty ?? true {
                 self.suggestions = [self.searchQuery]
             }
 
-            self.searchTelemetry?.suggestions = self.suggestions
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
@@ -729,7 +774,6 @@ class SearchViewController: SiteTableViewController,
             data
         }
 
-        searchTelemetry?.data = data
         tableView.reloadData()
     }
 
@@ -793,8 +837,6 @@ class SearchViewController: SiteTableViewController,
                 searchTerm: nil
             )
         }
-
-        searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
     }
 
     override func tableView(
@@ -847,6 +889,76 @@ class SearchViewController: SiteTableViewController,
                                  indexPath)
     }
 
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let section = SearchListSection(rawValue: indexPath.section) {
+            switch section {
+            case .searchSuggestions:
+                if let site = suggestions?[indexPath.row] {
+                    if searchTelemetry?.visibleSuggestions.contains(site) == false {
+                        searchTelemetry?.visibleSuggestions.append(site)
+                    }
+                }
+            case .openedTabs:
+                if self.filteredOpenedTabs.count > indexPath.row {
+                    let openedTab = self.filteredOpenedTabs[indexPath.row]
+                    if searchTelemetry?.visibleFilteredOpenedTabs.contains(openedTab) == false {
+                        searchTelemetry?.visibleFilteredOpenedTabs.append(openedTab)
+                    }
+                }
+            case .remoteTabs:
+                if filteredRemoteClientTabs.count > indexPath.row {
+                    let remoteTab = self.filteredRemoteClientTabs[indexPath.row]
+                    if searchTelemetry?.visibleFilteredRemoteClientTabs.contains(where: { $0 == remoteTab }) == false {
+                        searchTelemetry?.visibleFilteredRemoteClientTabs.append(remoteTab)
+                    }
+                }
+            case .bookmarksAndHistory:
+                let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions &&
+                model.shouldShowBrowsingHistorySuggestions
+                let shouldShowEitherSuggestion = model.shouldShowBookmarksSuggestions ||
+                model.shouldShowBrowsingHistorySuggestions
+
+                if featureFlags.isFeatureEnabled(
+                    .firefoxSuggestFeature,
+                    checking: .buildAndUser
+                ) && shouldShowEitherSuggestion {
+                    var site: Site?
+
+                    if shouldShowBothSuggestions {
+                        site = data[indexPath.row]
+                    } else if model.shouldShowBookmarksSuggestions {
+                        site = bookmarkSites[indexPath.row]
+                    } else if model.shouldShowBrowsingHistorySuggestions {
+                        site = historySites[indexPath.row]
+                    }
+
+                    if let site {
+                        if searchTelemetry?.visibleData.contains(site) == false {
+                            searchTelemetry?.visibleData.append(site)
+                        }
+                    }
+                } else if let site = data[indexPath.row] {
+                    if searchTelemetry?.visibleData.contains(site) == false {
+                        searchTelemetry?.visibleData.append(site)
+                    }
+                }
+
+            case .searchHighlights:
+                let highlightItem = searchHighlights[indexPath.row]
+                if searchTelemetry?.visibleSearchHighlights.contains(
+                    where: { $0.urlString == highlightItem.urlString }
+                ) == false {
+                    searchTelemetry?.visibleSearchHighlights.append(highlightItem)
+                }
+            case .firefoxSuggestions:
+                let firefoxSuggestion = firefoxSuggestions[indexPath.row]
+                if searchTelemetry?.visibleFirefoxSuggestions.contains(where: { $0.url == firefoxSuggestion.url }) == false {
+                    searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
+                }
+            }
+        }
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .searchSuggestions:
@@ -856,7 +968,7 @@ class SearchViewController: SiteTableViewController,
             return filteredOpenedTabs.count
         case .remoteTabs:
             return if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                model.shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
+                shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
             } else {
                 filteredRemoteClientTabs.count
             }
@@ -872,12 +984,12 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var numberOfItemsFromData: Int {
-        if model.shouldShowBookmarksSuggestions,
-           model.shouldShowBrowsingHistorySuggestions {
+        if shouldShowBookmarksSuggestions,
+           shouldShowBrowsingHistorySuggestions {
             return data.count
-        } else if model.shouldShowBookmarksSuggestions {
+        } else if shouldShowBookmarksSuggestions {
             return bookmarkSites.count
-        } else if model.shouldShowBrowsingHistorySuggestions {
+        } else if shouldShowBrowsingHistorySuggestions {
             return historySites.count
         }
 
@@ -977,8 +1089,9 @@ class SearchViewController: SiteTableViewController,
             if !featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
                                               checking: .buildAndUser) {
                 model.shouldShowSyncedTabsSuggestions = true
+                model.shouldShowPrivateModeFirefoxSuggestions = true
             }
-            if model.shouldShowSyncedTabsSuggestions,
+            if shouldShowSyncedTabsSuggestions,
                filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
                 let remoteClient = self.filteredRemoteClientTabs[indexPath.row].client
@@ -994,10 +1107,10 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .bookmarksAndHistory:
-            let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions &&
-            model.shouldShowBrowsingHistorySuggestions
-            let shouldShowEitherSuggestion = model.shouldShowBookmarksSuggestions ||
-            model.shouldShowBrowsingHistorySuggestions
+            let shouldShowBothSuggestions = shouldShowBookmarksSuggestions &&
+            shouldShowBrowsingHistorySuggestions
+            let shouldShowEitherSuggestion = shouldShowBookmarksSuggestions ||
+            shouldShowBrowsingHistorySuggestions
 
             if featureFlags.isFeatureEnabled(
                 .firefoxSuggestFeature,
@@ -1007,9 +1120,9 @@ class SearchViewController: SiteTableViewController,
 
                 if shouldShowBothSuggestions {
                     site = data[indexPath.row]
-                } else if model.shouldShowBookmarksSuggestions {
+                } else if shouldShowBookmarksSuggestions {
                     site = bookmarkSites[indexPath.row]
-                } else if model.shouldShowBrowsingHistorySuggestions {
+                } else if shouldShowBrowsingHistorySuggestions {
                     site = historySites[indexPath.row]
                 }
 
@@ -1089,9 +1202,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
-            return viewModel.isPrivate ?
-            model.shouldShowPrivateModeSearchSuggestions :
-            model.shouldShowSearchSuggestions
+            return shouldShowSearchEngineSuggestions
         default:
             return false
         }
@@ -1127,6 +1238,9 @@ class SearchViewController: SiteTableViewController,
             dynamicFontChanged(notification)
         case .SearchSettingsChanged:
             reloadSearchEngines()
+        case .SponsoredAndNonSponsoredSuggestionsChanged:
+            guard !searchQuery.isEmpty else { return }
+            _ = loadFirefoxSuggestions()
         default:
             break
         }

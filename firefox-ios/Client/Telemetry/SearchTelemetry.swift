@@ -135,14 +135,14 @@ class SearchTelemetry {
     var engagementType: SearchTelemetryValues.EngagementType = .tap
     var impressionTelemetryTimer: Timer?
 
-    var remoteClientTabs = [ClientTabsSearchWrapper]()
-    var filteredOpenedTabs = [Tab]()
-    var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
-    var suggestions: [String]? = []
-    var firefoxSuggestions = [RustFirefoxSuggestion]()
-    var searchHighlights = [HighlightItem]()
+    var visibleRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var visibleFilteredOpenedTabs = [Tab]()
+    var visibleFilteredRemoteClientTabs = [ClientTabsSearchWrapper]()
+    var visibleSuggestions = [String]()
+    var visibleFirefoxSuggestions = [RustFirefoxSuggestion]()
+    var visibleSearchHighlights = [HighlightItem]()
+    var visibleData = [Site]()
 
-    var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     var searchQuery: String = ""
     var savedQuery: String = ""
 
@@ -411,44 +411,53 @@ class SearchTelemetry {
     }
 
     func numberOfSearchResults() -> Int {
-        return suggestions?.count ?? 0 + data.count + searchHighlights.count
-        + filteredOpenedTabs.count + firefoxSuggestions.count
-        + filteredRemoteClientTabs.count
+        return visibleSuggestions.count + visibleData.count + visibleSearchHighlights.count
+        + visibleFilteredOpenedTabs.count + visibleFirefoxSuggestions.count
+        + visibleFilteredRemoteClientTabs.count
+    }
+
+    func clearVisibleResults() {
+        visibleSuggestions.removeAll()
+        visibleData.removeAll()
+        visibleSearchHighlights.removeAll()
+        visibleFilteredOpenedTabs.removeAll()
+        visibleFirefoxSuggestions.removeAll()
+        visibleFilteredRemoteClientTabs.removeAll()
     }
 
     // Comma separated list of result types in order.
     func listResultTypes() -> String {
         var resultTypes: [String] = []
 
-        if let suggestionsCount = suggestions?.count, suggestionsCount > 0 {
+        if !visibleSuggestions.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.searchSuggest.rawValue,
-                                 count: suggestionsCount)
+                                 count: visibleSuggestions.count)
         }
 
-        if !filteredOpenedTabs.isEmpty {
+        if !visibleFilteredOpenedTabs.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.tab.rawValue,
-                                 count: filteredOpenedTabs.count)
+                                 count: visibleFilteredOpenedTabs.count)
         }
 
-        if !filteredRemoteClientTabs.isEmpty {
+        if !visibleFilteredRemoteClientTabs.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.remoteTab.rawValue,
-                                 count: filteredRemoteClientTabs.count)
+                                 count: visibleFilteredRemoteClientTabs.count)
         }
 
-        for clientTab in data {
-            if let isBookmarked = clientTab?.bookmarked {
+        for clientTab in visibleData {
+            if let isBookmarked = clientTab.bookmarked {
                 resultTypes.append(isBookmarked ?
                                    SearchTelemetryValues.Results.bookmark.rawValue :
                                     SearchTelemetryValues.Results.history.rawValue)
             }
         }
 
-        if !searchHighlights.isEmpty {
+        if !visibleSearchHighlights.isEmpty {
             resultTypes += Array(repeating: SearchTelemetryValues.Results.searchHistory.rawValue,
-                                 count: searchHighlights.count)
+                                 count: visibleSearchHighlights.count)
         }
 
-        for suggestion in firefoxSuggestions {
+        for suggestion in visibleFirefoxSuggestions {
             resultTypes.append(suggestion.isSponsored ?
                                SearchTelemetryValues.Results.suggestSponsor.rawValue :
                                 SearchTelemetryValues.Results.suggestNonSponsor.rawValue)
@@ -463,34 +472,34 @@ class SearchTelemetry {
     func listGroupTypes() -> String {
         var groupTypes: [String] = []
 
-        if !(suggestions?.isEmpty ?? true) {
+        if !visibleSuggestions.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.searchSuggest.rawValue,
-                                count: suggestions!.count)
+                                count: visibleSuggestions.count)
         }
 
-        if !filteredOpenedTabs.isEmpty {
+        if !visibleFilteredOpenedTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.heuristic.rawValue,
-                                count: filteredOpenedTabs.count)
+                                count: visibleFilteredOpenedTabs.count)
         }
 
-        if !filteredRemoteClientTabs.isEmpty {
+        if !visibleFilteredRemoteClientTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.remoteTab.rawValue,
-                                count: filteredRemoteClientTabs.count)
+                                count: visibleFilteredRemoteClientTabs.count)
         }
 
-        if !remoteClientTabs.isEmpty {
+        if !visibleRemoteClientTabs.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.general.rawValue,
-                                count: remoteClientTabs.count)
+                                count: visibleRemoteClientTabs.count)
         }
 
-        if !searchHighlights.isEmpty {
+        if !visibleSearchHighlights.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.searchHistory.rawValue,
-                                count: searchHighlights.count)
+                                count: visibleSearchHighlights.count)
         }
 
-        if !firefoxSuggestions.isEmpty {
+        if !visibleFirefoxSuggestions.isEmpty {
             groupTypes += Array(repeating: SearchTelemetryValues.Groups.suggest.rawValue,
-                                count: firefoxSuggestions.count)
+                                count: visibleFirefoxSuggestions.count)
         }
 
         return groupTypes.joined(separator: ",")

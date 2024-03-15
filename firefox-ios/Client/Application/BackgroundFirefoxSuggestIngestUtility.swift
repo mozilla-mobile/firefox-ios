@@ -15,6 +15,7 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureF
 
     let firefoxSuggest: RustFirefoxSuggestActor
     let logger: Logger
+    private var didRegisterTaskHandler = false
 
     init(firefoxSuggest: RustFirefoxSuggestActor, logger: Logger = DefaultLogger.shared) {
         self.firefoxSuggest = firefoxSuggest
@@ -40,6 +41,7 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureF
 
     /// Submits a request to schedule the background ingestion task.
     private func submitBackgroundTaskRequest() throws {
+        guard didRegisterTaskHandler else { return }
         let request = BGProcessingTaskRequest(identifier: Self.taskIdentifier)
         request.requiresNetworkConnectivity = true
         request.requiresExternalPower = true
@@ -88,5 +90,6 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureF
                 task.setTaskCompleted(success: success)
             }
         }
+        didRegisterTaskHandler = true
     }
 }

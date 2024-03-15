@@ -228,6 +228,16 @@ class BrowserViewController: UIViewController,
                                           actionProvider: actionProvider)
     }
 
+    func onWillDisplayAccessoryView() -> EngineInputAccessoryView {
+        return .default
+    }
+
+    // MARK: - Ads Handling
+
+    func adsSearchProviderModels() -> [WebEngine.EngineSearchProviderModel] {
+        return DefaultAdsTrackerDefinitions.searchProviders
+    }
+
     // MARK: - EngineSessionDelegate Menu items
 
     func findInPage(with selection: String) {

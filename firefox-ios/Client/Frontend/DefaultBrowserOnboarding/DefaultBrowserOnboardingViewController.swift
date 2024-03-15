@@ -29,10 +29,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private struct UX {
         static let textOffset: CGFloat = 20
         static let textOffsetSmall: CGFloat = 13
-        static let titleSize: CGFloat = 28
-        static let titleSizeSmall: CGFloat = 24
-        static let titleSizeLarge: CGFloat = 34
-        static let ctaButtonCornerRadius: CGFloat = 10
         static let ctaButtonWidth: CGFloat = 350
         static let ctaButtonWidthSmall: CGFloat = 300
         static let ctaButtonBottomSpace: CGFloat = 60
@@ -48,12 +44,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
-
-    // Private vars
-    private var titleFontSize: CGFloat {
-        return screenSize.height > 1000 ? UX.titleSizeLarge :
-               screenSize.height > 640 ? UX.titleSize : UX.titleSizeSmall
-    }
 
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -71,33 +61,32 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     private lazy var titleLabel: UILabel = .build { [weak self] label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title1,
-                                                                size: self?.titleFontSize ?? UX.titleSize)
+        label.font = FXFontStyles.Bold.title1.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.titleLabel
     }
 
     private lazy var descriptionText: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel
     }
 
     private lazy var descriptionLabel1: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel1
     }
 
     private lazy var descriptionLabel2: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel2
     }
 
     private lazy var descriptionLabel3: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel3
     }

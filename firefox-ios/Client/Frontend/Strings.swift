@@ -1911,8 +1911,8 @@ extension String {
                 public static let PrivateSessionDescription = MZLocalizedString(
                     key: "Settings.Search.Suggest.PrivateSession.Description.v125",
                     tableName: "Settings",
-                    value: "Show suggestions from %@ Suggest in private sessions",
-                    comment: "Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. Placeholder is for the app name - Firefox.")
+                    value: "Show suggestions from Firefox Suggest in private sessions",
+                    comment: "Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu.")
                 public static let LearnAboutSuggestions = MZLocalizedString(
                     key: "Settings.Search.Suggest.LearnAboutSuggestions.v124",
                     tableName: "Settings",

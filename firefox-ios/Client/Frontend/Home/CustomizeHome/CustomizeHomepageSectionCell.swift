@@ -11,7 +11,6 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private struct UX {
-        static let buttonTrailingSpace: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 11
         static let buttonCornerRadius: CGFloat = 4
     }
@@ -42,10 +41,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
                 goToSettingsButton.topAnchor.constraint(equalTo: contentView.topAnchor),
                 goToSettingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
                 goToSettingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                goToSettingsButton.trailingAnchor.constraint(
-                    equalTo: contentView.trailingAnchor,
-                    constant: -UX.buttonTrailingSpace
-                )
+                goToSettingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
             ]
         )
 

@@ -9,6 +9,7 @@ import WebKit
 protocol WKEngineWebViewDelegate: AnyObject {
     func tabWebView(_ webView: WKEngineWebView, findInPageSelection: String)
     func tabWebView(_ webView: WKEngineWebView, searchSelection: String)
+    func tabWebViewInputAccessoryView(_ webView: WKEngineWebView) -> EngineInputAccessoryView
 }
 
 /// Abstraction on top of the `WKWebView`
@@ -134,6 +135,16 @@ class DefaultWKEngineWebView: WKWebView, WKEngineWebView, MenuHelperWebViewInter
     var engineScrollView: WKScrollView!
     var engineConfiguration: WKEngineConfiguration
     weak var delegate: WKEngineWebViewDelegate?
+
+    override var inputAccessoryView: UIView? {
+        if let delegatePreference = delegate?.tabWebViewInputAccessoryView(self) {
+            switch delegatePreference {
+            case .default: break
+            case .none: return nil
+            }
+        }
+        return super.inputAccessoryView
+    }
 
     required init?(frame: CGRect, configurationProvider: WKEngineConfigurationProvider) {
         let configuration = configurationProvider.createConfiguration()
