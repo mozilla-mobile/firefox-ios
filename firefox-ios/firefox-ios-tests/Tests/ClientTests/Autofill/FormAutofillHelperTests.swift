@@ -116,7 +116,7 @@ class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["address-level3"] as? String, "Suburb")
         XCTAssertEqual(json["email"] as? String, "mozilla@mozilla.com")
         XCTAssertEqual(json["postal-code"] as? String, "12345")
-        XCTAssertEqual(json["postal-code"] as? String, "+16509030800")
+        XCTAssertEqual(json["tel"] as? String, "+16509030800")
     }
 
     func testUserContentControllerDidReceiveScriptMessage_withAddressHandler() {
