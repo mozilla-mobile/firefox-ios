@@ -145,7 +145,6 @@ class FakespotTests: IphoneOnlyTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358892
-    // Smoketest
     func testOptInNotificationLayout() {
         if skipPlatform { return }
         // Navigate to a product detail page on amazon.com page
