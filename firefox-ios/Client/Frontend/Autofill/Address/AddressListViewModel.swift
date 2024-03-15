@@ -50,6 +50,12 @@ class AddressListViewModel: ObservableObject {
                 if let addresses = storedAddresses {
                     self.addresses = addresses
                     self.showSection = !addresses.isEmpty
+                    TelemetryWrapper.recordEvent(
+                        category: .information,
+                        method: .detected,
+                        object: .addressAutofillSettings,
+                        extras: [TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue: addresses.count]
+                    )
                 } else if let error = error {
                     self.logger.log("Error fetching addresses",
                                     level: .warning,

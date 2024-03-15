@@ -236,6 +236,11 @@ class SettingsCoordinator: BaseCoordinator,
         let viewModel = AddressAutofillSettingsViewModel(profile: profile)
         let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel)
         router.push(viewController)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .addressAutofillSettings
+        )
     }
 
     func pressedCreditCard() {

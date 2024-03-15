@@ -8,17 +8,25 @@ import WebKit
 import Common
 import Storage
 
-
 struct AddressFormData: Codable {
-    let type: String
-    let category: String?
-    let method: String?
+    let type: EventType
     let object: String?
-    let value: String
-    let name: String?
-    let extra: ExtraData?
+    let value: String?
+    let category: String?
+    let method: Method?
+    let extra: Extra?
 
-    struct ExtraData: Codable {
+    enum Method: String, Codable {
+        case detected
+        case filled
+        case filledModified = "filled_modified"
+    }
+    enum EventType: String, Codable {
+        case scalar
+        case event
+    }
+
+    struct Extra: Codable {
         let streetAddress: String?
         let addressLine1: String?
         let addressLine2: String?
@@ -27,13 +35,14 @@ struct AddressFormData: Codable {
         let addressLevel2: String?
         let postalCode: String?
         let country: String?
-        let familyName: String?
-        let organization: String?
-        let email: String?
-        let givenName: String?
-        let tel: String?
         let name: String?
+        let givenName: String?
         let additionalName: String?
+        let familyName: String?
+        let email: String?
+        let organization: String?
+        let tel: String?
+        let fieldName: String?
 
         enum CodingKeys: String, CodingKey {
             case streetAddress = "street_address"
@@ -44,13 +53,14 @@ struct AddressFormData: Codable {
             case addressLevel2 = "address_level2"
             case postalCode = "postal_code"
             case country
-            case familyName = "family_name"
-            case organization
-            case email
-            case givenName = "given_name"
-            case tel
             case name
+            case givenName = "given_name"
             case additionalName = "additional_name"
+            case familyName = "family_name"
+            case email
+            case organization
+            case tel
+            case fieldName = "field_name"
         }
     }
 }
@@ -173,70 +183,25 @@ class FormAutofillHelper: TabContentScript {
 
         switch HandlerName(rawValue: message.name) {
         case .addressFormTelemetryMessageHandler:
-
-
-            print("message.body")
             print(message.body)
-            print("message.name")
-            print(message.name)
-
-            guard let data = getValidPayloadData(from: message),
-                  let addressValues = parseFieldType(messageBody: data, formType: AddressFormData.self)
-            else {
-                return
+            let addressValues = (message.body as? String)?
+                .data(using: .utf8)
+                .flatMap { try? JSONDecoder().decode(AddressFormData.self, from: $0) }
+            if addressValues?.object == "address_form" {
+                switch addressValues?.method {
+                case .detected:
+                    TelemetryWrapper.recordEvent(category: .action, method: .detected, object: .addressForm)
+                case .filled:
+                    TelemetryWrapper.recordEvent(category: .action, method: .filled, object: .addressForm)
+                case .filledModified:
+                    TelemetryWrapper.recordEvent(category: .action, method: .filledModified, object: .addressForm)
+                case .none:
+                    return
+                }
             }
-            print(addressValues)
-            switch(TelemetryHandlerName(rawValue: addressValues.object)) {
-            case .formautofill:
-                
-            case .address_form:
-            case .address_form_ext:
-            default:
-            }
-            let addressLine1Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLine1.rawValue
-            let addressLine1 = addressValues.extra?.addressLine1
-            let addressLine2Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLine2.rawValue
-            let addressLine2 = addressValues.extra?.addressLine2
-            let addressLine3Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLine3.rawValue
-            let addressLine3 = addressValues.extra?.addressLine3
-            let addressLevel1Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLevel1.rawValue
-            let addressLevel1 = addressValues.extra?.addressLevel1
-            let addressLevel2Key = TelemetryWrapper.EventExtraKey.AddressTelemetry.addressLevel2.rawValue
-            let addressLevel2 = addressValues.extra?.addressLevel2
-            let countryKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.country.rawValue
-            let country = addressValues.extra?.country
-            let fieldNameKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.fieldName.rawValue
-            let fieldName = addressValues.extra?.name
-            let postalCodeKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.postalCode.rawValue
-            let postalCode = addressValues.extra?.postalCode
-            let streetAddressKey = TelemetryWrapper.EventExtraKey.AddressTelemetry.streetAddress.rawValue
-            let streetAddress = addressValues.extra?.streetAddress
-            let extraDetails = [
-                addressLine1Key: addressLine1,
-                addressLine2Key: addressLine2,
-                addressLine3Key: addressLine3,
-                addressLevel1Key: addressLevel1,
-                addressLevel2Key: addressLevel2,
-                countryKey: country,
-                fieldNameKey: fieldName ?? "",
-                postalCodeKey: postalCode,
-                streetAddressKey: streetAddress]
-            as [String: Any]
-
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .detected,
-                                         object: .addressForm,
-                                         extras: extraDetails)
-
-            logger.log("Received address telemery data",
-                       level: .debug,
-                       category: .autofill)
         case .addressFormMessageHandler:
-            print("message.body addressFormMessageHandler")
             print(message.body)
-            print("message.name addressFormMessageHandler")
-            print(message.name)
-            TelemetryWrapper.recordEvent(category: .action, method: .detected, object: .addressFormExtDetected)
+//            TelemetryWrapper.recordEvent(category: .action, method: .detected, object: .addressFormExtDetected)
             // Parse message payload for address form autofill
             guard let data = getValidPayloadData(from: message),
                   let fieldValues = parseFieldType(messageBody: data, formType: FillAddressAutofillForm.self),

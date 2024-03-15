@@ -407,13 +407,14 @@ extension TelemetryWrapper {
         case loginsModified = "logins-modified"
         case loginsSyncEnabled = "logins-sync-enabled"
         // MARK: Address
-        case addressForm = "address_form"
-        case addressFormPopupShow = "address_form_popup_shown"
-        case addressFormFilled = "address_form_filled"
-        case addressFormFilledModified = "address_form_filled_modified"
-        case addressFormExtDetected = "address_form_ext_detected"
-        case addressFormExtFilled = "address_form_ext_filled"
-        case addressDetectedSectionsCount = "formautofill.addresses.detected_sections_count"
+        case addressForm = "address-form"
+        case addressAutofillSettings = "address-autofill-settings"
+        case addressAutofillPromptShown = "address-autofill-popup-shown"
+        case addressAutofillPromptExpanded = "address-autofill-popup-expanded"
+        case addressAutofillPromptDismissed = "address-autofill-popup-dismissed"
+        case addressFormFilled = "address-form-filled"
+        case addressFormFilledModified = "address-form-filled-modified"
+//        case addressDetectedSectionsCount = "formautofill.addresses.detected_sections_count"
 
         // MARK: Credit Card
         case creditCardAutofillSettings = "creditCardAutofillSettings"
@@ -774,6 +775,7 @@ extension TelemetryWrapper {
             case fieldName = "field_name"
             case postalCode = "postal_code"
             case streetAddress = "street_address"
+            case count
         }
     }
 
@@ -956,54 +958,26 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         // MARK: Address
-        case(.action, .quantity, .addressDetectedSectionsCount, _, _):
-            GleanMetrics.Address.detectedSectionsCount.record()
-        case(.action, .filled, .addressFormExtFilled, _, _):
-            GleanMetrics.Address.addressFormExtFilled.record()
-        case(.action, .detected, .addressFormExtDetected, _, _):
-            GleanMetrics.Address.addressFormExtDetected.record()
-        case(.action, .filledModified, .addressFormFilledModified, _, _):
-            GleanMetrics.Address.addressFormFilledModified.record()
-        case(.action, .filled, .addressFormFilled, _, _):
-            GleanMetrics.Address.addressFormFilled.record()
-        case(.action, .popupShown, .addressFormPopupShow, _, _):
-            GleanMetrics.Address.addressFormPopupShown.record()
-        case(.action, .detected, .addressForm, _, let extras):
-            GleanMetrics.Address.formDetected.record()
-            if let addressLevel1 = extras?[EventExtraKey.AddressTelemetry.addressLevel1.rawValue] as? String,
-               let addressLevel2 = extras?[EventExtraKey.AddressTelemetry.addressLevel2.rawValue] as? String,
-               let addressLine1 = extras?[EventExtraKey.AddressTelemetry.addressLine1.rawValue] as? String,
-               let addressLine2 = extras?[EventExtraKey.AddressTelemetry.addressLine2.rawValue] as? String,
-               let addressLine3 = extras?[EventExtraKey.AddressTelemetry.addressLine3.rawValue] as? String,
-               let country = extras?[EventExtraKey.AddressTelemetry.country.rawValue] as? String,
-               let fieldName = extras?[EventExtraKey.AddressTelemetry.fieldName.rawValue] as? String,
-               let postalCode = extras?[EventExtraKey.AddressTelemetry.postalCode.rawValue] as? String,
-               let streetAddress = extras?[EventExtraKey.AddressTelemetry.streetAddress.rawValue] as? String {
-                let extraDetails = GleanMetrics.Address.FormDetectedExtra(addressLevel1: addressLevel1,
-                                                                          addressLevel2: addressLevel2,
-                                                                          addressLine1: addressLine1,
-                                                                          addressLine2: addressLine2,
-                                                                          addressLine3: addressLine3,
-                                                                          country: country,
-                                                                          fieldName: fieldName,
-                                                                          postalCode: postalCode,
-                                                                          streetAddress: streetAddress)
-                GleanMetrics.Address.formDetected.record(extraDetails)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
+        case(.information, .detected, .addressAutofillSettings, _, let extras):
+            if let count = extras?[EventExtraKey.AddressTelemetry.count.rawValue] as? Int32 {
+                GleanMetrics.Addresses.savedAll.add(count)
             }
-            recordUninstrumentedMetrics(
-                category: category,
-                method: method,
-                object: object,
-                value: value,
-                extras: extras)
-            // MARK: Credit Card
+        case(.action, .tap, .addressAutofillSettings, _, _):
+            GleanMetrics.Addresses.settingsAutofill.record()
+        case(.action, .view, .addressAutofillPromptShown, _, _):
+            GleanMetrics.Addresses.autofillPromptShown.record()
+        case(.action, .tap, .addressAutofillPromptExpanded, _, _):
+            GleanMetrics.Addresses.autofillPromptExpanded.record()
+        case(.action, .close, .addressAutofillPromptDismissed, _, _):
+            GleanMetrics.Addresses.autofillPromptDismissed.record()
+        case(.action, .filledModified, .addressFormFilledModified, _, _):
+            GleanMetrics.Addresses.modified.record()
+        case(.action, .filled, .addressFormFilled, _, _):
+            GleanMetrics.Addresses.autofilled.record()
+        case(.action, .detected, .addressForm, _, let extras):
+            GleanMetrics.Addresses.formDetected.record()
+
+        // MARK: Credit Card
         case(.action, .tap, .creditCardAutofillSettings, _, _):
             GleanMetrics.CreditCard.autofillSettingsTapped.record()
         case(.action, .tap, .creditCardFormDetected, _, _):
