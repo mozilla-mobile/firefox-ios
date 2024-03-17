@@ -503,6 +503,7 @@ protocol LoginsProtocol {
     func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void)
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
 }
 
 public class RustLogins: LoginsProtocol {
@@ -800,6 +801,23 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                try self.storage?.touch(id: login.record.id)
+                completionHandler(.success(login))
+            } catch let error as NSError {
+                completionHandler(.failure(error))
+            }
+        }
     }
 
     public func updateLogin(id: String, login: LoginEntry) -> Success {
