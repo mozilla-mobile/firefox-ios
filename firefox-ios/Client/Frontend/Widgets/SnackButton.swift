@@ -38,7 +38,7 @@ class SnackButton: UIButton, ThemeApplicable {
         if bold {
             titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
         } else {
-            titleLabel?.font = FXFontStyles.Regular.body.systemFont()
+            titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)
