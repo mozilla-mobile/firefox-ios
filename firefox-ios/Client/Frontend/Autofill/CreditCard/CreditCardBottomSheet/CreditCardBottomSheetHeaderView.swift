@@ -51,7 +51,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.lineBreakMode = .byWordWrapping
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.text = String(format: String.CreditCard.RememberCreditCard.Header, AppName.shortName.rawValue)
-        label.font = FXFontStyles.Regular.subheadline.systemFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityTraits = .staticText
     }
