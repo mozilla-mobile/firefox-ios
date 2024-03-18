@@ -180,7 +180,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
             self.delegate?.webController(self, didUpdateEstimatedProgress: webView.estimatedProgress)
         }
 
-        if case .on(_) = trackingProtectionManager.trackingProtectionStatus {
+        if case .on = trackingProtectionManager.trackingProtectionStatus {
             setupBlockLists()
             setupTrackingProtectionScripts()
         }
@@ -417,7 +417,6 @@ extension LegacyWebViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
-
         if let redirectedURL = navigationAction.request.url {
             adsTelemetryHelper.trackClickedAds(with: redirectedURL)
         }

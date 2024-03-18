@@ -5,7 +5,6 @@
 import UIKit
 
 class InstructionsView: UIView {
-
     private lazy var settingsInstructionView: InstructionView = {
         let settingsIcon = UIImage(named: "instructions-cog")!
         let instructionView = InstructionView(text: UIConstants.strings.instructionToOpenSafari, image: settingsIcon)
@@ -47,7 +46,6 @@ class InstructionsView: UIView {
             enableInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             enableInstructionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             enableInstructionView.topAnchor.constraint(equalTo: safariInstructionView.bottomAnchor, constant: UIConstants.layout.settingsViewOffset)
-
         ])
     }
 
@@ -57,7 +55,6 @@ class InstructionsView: UIView {
 }
 
 private class InstructionView: UIView {
-
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit

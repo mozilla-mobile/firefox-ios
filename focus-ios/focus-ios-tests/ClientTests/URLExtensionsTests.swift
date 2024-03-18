@@ -6,7 +6,6 @@ import XCTest
 import Foundation
 
 class URLExtensionsTests: XCTestCase {
-
     private let validURLwithIPv4Address = [
         "http://0.0.0.0",
         "http://255.255.255.255",

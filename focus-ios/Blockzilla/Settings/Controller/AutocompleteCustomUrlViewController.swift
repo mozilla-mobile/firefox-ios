@@ -5,7 +5,6 @@
 import UIKit
 
 class AutocompleteCustomUrlViewController: UIViewController {
-
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
@@ -57,7 +56,6 @@ class AutocompleteCustomUrlViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-
         title = UIConstants.strings.autocompleteManageSitesLabel
 
         tableView.dataSource = self

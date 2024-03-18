@@ -64,12 +64,12 @@ class SiriShortcuts {
                 // First, check for userActivity, which is for shortcuts that work in the foreground
                 var foundShortcut = voiceShortcuts.filter { (attempt) in
                     attempt.shortcut.userActivity?.activityType == type.rawValue
-                    }.first
+                }.first
                 // Next, check for intent, which is used for shortcuts that work in the background
                 if type == SiriShortcuts.activityType.erase && foundShortcut == nil {
                     foundShortcut = voiceShortcuts.filter { (attempt) in
                         attempt.shortcut.intent as? EraseIntent != nil
-                        }.first
+                    }.first
                 }
                 completion(foundShortcut != nil)
             }
@@ -104,11 +104,11 @@ class SiriShortcuts {
                 guard let voiceShortcuts = voiceShortcuts else { return }
                 var foundShortcut = voiceShortcuts.filter { (attempt) in
                     attempt.shortcut.userActivity?.activityType == activityType.rawValue
-                    }.first
+                }.first
                 if activityType == SiriShortcuts.activityType.erase && foundShortcut == nil {
                     foundShortcut = voiceShortcuts.filter { (attempt) in
                         attempt.shortcut.intent as? EraseIntent != nil
-                        }.first
+                    }.first
                 }
                 if let foundShortcut = foundShortcut {
                     self.displayEditSiri(for: foundShortcut, in: viewController)

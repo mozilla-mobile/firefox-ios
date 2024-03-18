@@ -11,7 +11,6 @@ import XCTest
 #endif
 
 class URIFixupTests: XCTestCase {
-    
     private let customSchemeURLs = ["firefox://",
                                     "dns://192.168.1.1/ftp.example.org?type=A",
                                     "feed://example.com/rss.xml",
@@ -19,7 +18,7 @@ class URIFixupTests: XCTestCase {
                                     "mailto:jsmith@example.com",
                                     "smb://workgroup;user:password@server/share/folder/file.txt",
                                     "view-source:http://en.wikipedia.org/wiki/URI_scheme"]
-    
+
     private let httpSchemeURLs = ["http://mozilla.org//fire_fire",
                                   "http://mozilla.org//fire_fire/",
                                   "http://mozilla.org//fire_fire_(firefox)",
@@ -52,7 +51,7 @@ class URIFixupTests: XCTestCase {
                                   "http://f.i-r.ef",
                                   "http://266.315.245.345",
                                   "http://266.315.245.345:100"]
-    
+
     private let invalidURLs = ["http://mozilla",
                                "http:// shouldfail.com",
                                "http://0123456789",
@@ -63,26 +62,25 @@ class URIFixupTests: XCTestCase {
                                "http://[2001:db8:85a3::8a2e:370:7334]",
                                ":/#?&@%+~" // test failing on iOS 17
                               ]
-    
+
     func testValidURLsForHttpAndHttpsSchemes() {
         httpSchemeURLs.forEach {
             XCTAssertNotNil(URIFixup.getURL(entry: $0), "\($0) is not a valid URL")
-            
+
             let httpsSchemeURL = $0.replacingOccurrences(of: "http", with: "https")
             XCTAssertNotNil(URIFixup.getURL(entry: httpsSchemeURL), "\(httpsSchemeURL) is not a valid URL")
         }
     }
-    
+
     func testCustomSchemes() {
         customSchemeURLs.forEach {
             XCTAssertNotNil(URIFixup.getURL(entry: $0), "\($0) is not a valid URL")
         }
     }
-    
+
     func testInvalidURLs() {
         invalidURLs.forEach {
             XCTAssertNil(URIFixup.getURL(entry: $0), "\($0) is a valid URL")
         }
     }
-    
 }

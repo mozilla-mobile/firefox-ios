@@ -12,7 +12,6 @@ protocol HomeViewControllerDelegate: AnyObject {
 }
 
 class HomeViewController: UIViewController {
-
     weak var delegate: HomeViewControllerDelegate?
     private lazy var tipView: UIView = {
         let tipView = UIView()
@@ -167,7 +166,7 @@ class HomeViewController: UIViewController {
     }
 
     private func didTap(tip: TipManager.Tip) {
-        delegate?.homeViewControllerDidTapTip(self, tip : tip)
+        delegate?.homeViewControllerDidTapTip(self, tip: tip)
     }
 
     private func dismissKeyboard() {

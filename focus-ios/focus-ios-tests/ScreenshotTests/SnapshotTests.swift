@@ -5,7 +5,6 @@
 import XCTest
 
 class SnapshotTests: BaseTestCaseL10n {
-
     func test01FirstRunScreens() {
         waitForExistence(app.collectionViews.cells.images["icon_background"], timeout: 10)
         snapshot("00FirstRun")
@@ -47,7 +46,7 @@ class SnapshotTests: BaseTestCaseL10n {
         app.textFields["urlInput"].typeText("mozilla\n")
         snapshot("AddedCustomURL")
     }
-    
+
     func test03About() {
         dismissURLBarFocused()
         openSettings()

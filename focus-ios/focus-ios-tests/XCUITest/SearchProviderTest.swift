@@ -35,13 +35,12 @@ class SearchProviderTest: BaseTestCase {
     }
 
     private func dismissKeyboardFocusMenuSettings() {
-        if !app.buttons["HomeView.settingsButton"].isHittable
-        {
+        if !app.buttons["HomeView.settingsButton"].isHittable {
             dismissURLBarFocused()
         }
     }
 
-    func searchProviderTestHelper(provider:String) {
+    func searchProviderTestHelper(provider: String) {
         changeSearchProvider(provider: provider)
         doSearch(searchWord: "mozilla", provider: provider)
         waitForWebPageLoad()
