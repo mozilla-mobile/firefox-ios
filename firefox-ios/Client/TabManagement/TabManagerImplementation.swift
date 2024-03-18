@@ -480,6 +480,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         backupCloseTabs = [Tab]()
     }
 
+    override func clearAllTabsHistory() {
+        super.clearAllTabsHistory()
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
+        }
+    }
+
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
