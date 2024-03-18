@@ -130,6 +130,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
         await generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
+        cleanUpTabSessionData()
 
         await MainActor.run {
             for delegate in delegates {
@@ -447,6 +448,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         let savedUUIDsCopy = savedUUIDs
         Task {
             try? await imageStore?.clearAllScreenshotsExcluding(savedUUIDsCopy)
+        }
+    }
+
+    private func cleanUpTabSessionData() {
+        let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
         }
     }
 
