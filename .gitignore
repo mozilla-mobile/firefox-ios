@@ -126,7 +126,7 @@ firefox-ios/bin/nimbus-fml.sh
 firefox-ios/bin/nimbus-fml-configuration.local.sh
 
 # ContentBlocking
-BrowserKit/ContentBlockingLists/disconnect-*
+ContentBlockingLists/disconnect-*
 focus-ios/shavar-*
 firefox-ios/shavar-*
 shavar-*
