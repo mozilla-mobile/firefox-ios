@@ -399,7 +399,7 @@ class LegacyGridTabViewController: UIViewController,
             return
         }
 
-        presentUndoToast(toastType: .singleTab) { [weak self] undoButtonPressed in
+        presentUndoToast(toastType: .closedSingleTab) { [weak self] undoButtonPressed in
             guard let self,
                   undoButtonPressed,
                   let closedTab = self.tabManager.backupCloseTab else { return }
@@ -760,12 +760,12 @@ extension LegacyGridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        presentUndoToast(toastType: .allInactiveTabs(count: tabsCount),
+        presentUndoToast(toastType: .closedAllInactiveTabs(count: tabsCount),
                          completion: completion)
     }
 
     func presentUndoSingleToast(completion: @escaping (Bool) -> Void) {
-        presentUndoToast(toastType: .singleTab, completion: completion)
+        presentUndoToast(toastType: .closedSingleTab, completion: completion)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {

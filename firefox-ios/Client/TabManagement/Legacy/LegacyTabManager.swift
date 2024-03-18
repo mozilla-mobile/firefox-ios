@@ -662,7 +662,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         guard !backupCloseTabs.isEmpty else { return }
         tabs = backupCloseTabs
         storeChanges()
-        backupCloseTabs = [Tab]()
+        backupCloseTabs.removeAll(keepingCapacity: true)
         if backupCloseTab != nil {
             selectTab(backupCloseTab?.tab)
             backupCloseTab = nil
