@@ -121,6 +121,9 @@
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "搜尋";
 
+/* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Description.v125" = "於隱私瀏覽階段中顯示搜尋引擎的建議內容";
+
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v122" = "在隱私瀏覽模式中顯示搜尋建議";
 
@@ -141,6 +144,9 @@
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "了解 Firefox Suggest 的相關資訊";
+
+/* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "於隱私瀏覽階段中顯示 Firefox Suggest 的建議內容";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "顯示瀏覽紀錄";
@@ -165,4 +171,7 @@
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "允許贊助商偶爾顯示廣告，支持 %@ 的發展";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "來自贊助商的建議";
 
