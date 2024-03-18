@@ -44,6 +44,5 @@ public struct ImageIdentifiers {
     public static let starEmpty = "starEmpty"
     public static let starFill = "starFill"
     public static let starHalf = "starHalf"
-    public static let subtract = "subtract"
     public static let syncOpenTab = "sync_open_tab"
 }
