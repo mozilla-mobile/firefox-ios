@@ -1,3 +1,6 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Dvojitým klepnutím a podržením získáte další možnosti";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "Spojení není zabezpečeno. Rozšířená ochrana proti sledování je vypnuta.";
 
