@@ -150,13 +150,6 @@ extension UserActivityHandler {
         }
         do {
             try await searchableIndex.indexSearchableItems([item])
-            logger.log("Spotlight: Search item successfully indexed!",
-                       level: .debug,
-                       category: .unlabeled)
-        } catch {
-            logger.log("Spotlight: Indexing error: \(error.localizedDescription)",
-                       level: .warning,
-                       category: .unlabeled)
-        }
+        } catch {}
     }
 }

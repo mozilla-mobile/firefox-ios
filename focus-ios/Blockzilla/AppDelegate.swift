@@ -372,12 +372,8 @@ extension AppDelegate {
     }
 
     func setupExperimentation() {
-        do {
-            // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
-            try NimbusWrapper.shared.initialize()
-        } catch {
-            NSLog("Failed to setup experimentation: \(error)")
-        }
+        // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
+        NimbusWrapper.shared.initialize()
     }
 }
 

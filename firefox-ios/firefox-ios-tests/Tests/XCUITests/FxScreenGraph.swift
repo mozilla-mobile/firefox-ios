@@ -654,8 +654,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
-            app.secureTextFields.element(boundBy: 0).tap()
-            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 1).tap()
+            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
@@ -854,11 +854,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.onEnter { userState in
-            if isTablet {
-                userState.numTabs = Int(app.collectionViews["Top Tabs View"].cells.count)
-            } else {
-                userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
-            }
+            userState.numTabs = Int(app.otherElements["Tabs Tray"].cells.count)
         }
     }
 
@@ -1191,6 +1187,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab(isPrivate: Bool = false) {
         let app = XCUIApplication()
         self.goto(TabTray)
+        // Workaround for issue https://github.com/mozilla-mobile/firefox-ios/issues/18743
         if isPrivate {
             self.performAction(Action.TogglePrivateMode)
         }

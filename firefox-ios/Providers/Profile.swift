@@ -61,9 +61,6 @@ class ProfileFileAccessor: FileAccessor {
         ) {
             rootPath = url.path
         } else {
-            logger.log("Unable to find the shared container. Defaulting profile location to ~/Documents instead.",
-                       level: .warning,
-                       category: .unlabeled)
             rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         }
 
@@ -633,13 +630,16 @@ open class BrowserProfile: Profile {
 
     lazy var firefoxSuggest: RustFirefoxSuggestActor? = {
         do {
-            let databaseFileURL = try FileManager.default.url(
+            let cacheFileURL = try FileManager.default.url(
                 for: .cachesDirectory,
                 in: .userDomainMask,
                 appropriateFor: nil,
                 create: true
             ).appendingPathComponent("suggest.db", isDirectory: false)
-            return try RustFirefoxSuggest(databasePath: databaseFileURL.path)
+            return try RustFirefoxSuggest(
+                dataPath: URL(fileURLWithPath: directory, isDirectory: true).appendingPathComponent("suggest-data.db").path,
+                cachePath: cacheFileURL.path
+            )
         } catch {
             logger.log("Failed to open Firefox Suggest database: \(error.localizedDescription)",
                        level: .warning,

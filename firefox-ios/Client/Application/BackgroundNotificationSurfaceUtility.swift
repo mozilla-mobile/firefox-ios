@@ -41,7 +41,7 @@ class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
         } catch {
             logger.log("Could not schedule app refresh: \(error)",
                        level: .debug,
-                       category: .unlabeled)
+                       category: .lifecycle)
         }
     }
 

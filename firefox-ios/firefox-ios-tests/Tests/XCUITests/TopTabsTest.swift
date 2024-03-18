@@ -397,6 +397,80 @@ class TopTabsTest: BaseTestCase {
         addTabsAndUndoCloseTabAction(isPrivate: true, nrOfTabs: 4)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306868
+    func testTabTrayCloseMultipleTabs() {
+        navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            validateToastWhenClosingMultipleTabs(fromIndex: 6, toIndex: 2, isPrivate: false)
+        } else {
+            validateToastWhenClosingMultipleTabs(fromIndex: 4, toIndex: 0, isPrivate: false)
+        }
+        // Disabling due to crash https://github.com/mozilla-mobile/firefox-ios/issues/19037
+//        app.collectionViews.buttons["crossLarge"].tap()
+//        // Choose to undo the action
+//        app.buttons["Undo"].tap()
+//        waitUntilPageLoad()
+//        // Only the latest tab closed is restored
+//        navigator.nowAt(BrowserTab)
+//        waitForTabsButton()
+//        navigator.goto(TabTray)
+//        let numTab = app.buttons["Show Tabs"].value as? String
+//        let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+//        XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+//        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+        // Repeat for private browsing mode
+        navigator.performAction(Action.TogglePrivateMode)
+        validateToastWhenClosingMultipleTabs(fromIndex: 4, toIndex: 0, isPrivate: true)
+        app.collectionViews.buttons["crossLarge"].tap()
+        // Choose to undo the action
+        app.buttons["Undo"].tap()
+        // Only the latest tab closed is restored
+        if !iPad() {
+            let numTab = app.buttons["Show Tabs"].value as? String
+            let tabsTrayCell = app.otherElements["Tabs Tray"].cells
+            XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
+        }
+        mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
+    }
+
+    private func validateToastWhenClosingMultipleTabs(fromIndex: Int, toIndex: Int, isPrivate: Bool) {
+        // Have multiple tabs opened in the tab tray
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        for _ in 1...4 {
+            if iPad() && isPrivate {
+                navigator.createNewTab(isPrivate: true)
+            } else {
+                navigator.createNewTab()
+            }
+            if app.keyboards.element.isVisible() && !iPad() {
+                mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
+        }
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        // Workaround to bypass issue https://github.com/mozilla-mobile/firefox-ios/issues/18728
+        if iPad() && isPrivate {
+            navigator.performAction(Action.TogglePrivateMode)
+        }
+        // Close multiple tabs by pressing X button
+        for index in stride(from: fromIndex, to: toIndex, by: -1) {
+            app.collectionViews.buttons.element(boundBy: index).tap()
+            // A toast notification is displayed with the message "Tab Closed" and the Undo option
+            mozWaitForElementToExist(app.buttons["Undo"])
+            mozWaitForElementToExist(app.staticTexts["Tab Closed"])
+            // Workaround to bypass issue https://github.com/mozilla-mobile/firefox-ios/issues/18728
+            if isPrivate {
+                navigator.nowAt(BrowserTab)
+                navigator.goto(TabTray)
+                if iPad() {
+                    navigator.performAction(Action.TogglePrivateMode)
+                }
+            }
+        }
+    }
+
     private func addTabsAndUndoCloseTabAction(isPrivate: Bool = false, nrOfTabs: Int) {
         for _ in 1...nrOfTabs {
             if iPad() && isPrivate {

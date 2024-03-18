@@ -246,6 +246,7 @@ class BrowserViewController: UIViewController,
     }
 
     deinit {
+        logger.log("BVC deallocating", level: .info, category: .lifecycle)
         unsubscribeFromRedux()
         observedWebViews.forEach({ stopObserving(webView: $0) })
     }
@@ -1122,12 +1123,20 @@ class BrowserViewController: UIViewController,
         // Make sure reload button is working when showing webview
         urlBar.locationView.reloadButton.reloadButtonState = .reload
 
-        guard let webview = tabManager.selectedTab?.webView else {
+        guard let selectedTab = tabManager.selectedTab,
+              let webView = selectedTab.webView else {
             logger.log("Webview of selected tab was not available", level: .debug, category: .lifecycle)
             return
         }
 
-        browserDelegate?.show(webView: webview)
+        if webView.url == nil {
+            // The web view can go gray if it was zombified due to memory pressure.
+            // When this happens, the URL is nil, so try restoring the page upon selection.
+            logger.log("Webview was zombified, reloading before showing", level: .debug, category: .lifecycle)
+            selectedTab.reload()
+        }
+
+        browserDelegate?.show(webView: webView)
     }
 
     // MARK: - Update content
@@ -1150,7 +1159,7 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-        guard let url = url else {
+        guard url != nil else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
             return
@@ -1158,7 +1167,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+        } else {
             showEmbeddedWebview()
             urlBar.locationView.reloadButton.isHidden = false
         }
@@ -1276,23 +1285,21 @@ class BrowserViewController: UIViewController,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        showBookmarksToast()
-    }
-
-    private func showBookmarksToast() {
-        let viewModel = ButtonToastViewModel(labelText: .AppMenu.AddBookmarkConfirmMessage,
-                                             buttonText: .BookmarksEdit,
-                                             textAlignment: .left)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme) { isButtonTapped in
-            isButtonTapped ? self.openBookmarkEditPanel() : nil
-        }
-        self.show(toast: toast)
+        showBookmarkToast(for: .add)
     }
 
     func removeBookmark(url: String) {
         profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
             guard result.isSuccess else { return }
+            self.showBookmarkToast(for: .remove)
+        }
+    }
+
+    private func showBookmarkToast(for action: BookmarkAction) {
+        switch action {
+        case .add:
+            self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+        case .remove:
             self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
@@ -1301,7 +1308,7 @@ class BrowserViewController: UIViewController,
     /// Library Panel - Bookmarks section. In order to get the correct information, it needs
     /// to fetch the last added bookmark in the mobile folder, which is the default
     /// location for all bookmarks added on mobile.
-    private func openBookmarkEditPanel() {
+    internal func openBookmarkEditPanel() {
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .change,
@@ -1411,7 +1418,7 @@ class BrowserViewController: UIViewController,
         else {
             logger.log("BVC observeValue webpage unhandled KVO",
                        level: .info,
-                       category: .unlabeled,
+                       category: .webview,
                        description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
@@ -1635,9 +1642,9 @@ class BrowserViewController: UIViewController,
             logger.log("No request for openURLInNewTab", level: .debug, category: .tabs)
         }
 
-        switchToPrivacyMode(isPrivate: isPrivate)
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
         tabManager.selectTab(tab)
+        switchToPrivacyMode(isPrivate: isPrivate)
         return tab
     }
 
@@ -1977,7 +1984,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
-        profile.autofill.listCreditCards(completion: { addresses, error in
+        profile.autofill.listAllAddresses(completion: { addresses, error in
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
             DispatchQueue.main.async {
                 tabWebView.accessoryView.reloadViewFor(AccessoryType.address)
@@ -2047,14 +2054,12 @@ class BrowserViewController: UIViewController,
     // Disable search suggests view only if user is in private mode and setting is enabled
     private var shouldDisableSearchSuggestsForPrivateMode: Bool {
         let featureFlagEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let nimbusSuggestEnabled = featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
         let alwaysShowSearchSuggestionsView = browserViewControllerState?
             .searchScreenState
             .showSearchSugestionsView ?? false
-        let engines = profile.searchEngines
-        let isSettingEnabled = nimbusSuggestEnabled ?
-        engines.isPrivateModeSettingEnabled :
-        engines.shouldShowPrivateModeSearchSuggestions
+
+        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions
+
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }
 
@@ -2267,15 +2272,12 @@ extension BrowserViewController: LegacyTabDelegate {
         self.scrollController.beginObserving(scrollView: webView.scrollView)
         webView.uiDelegate = self
 
-        let formPostHelper = FormPostHelper(tab: tab)
-        tab.addContentScript(formPostHelper, name: FormPostHelper.name())
-
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
         // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate, autofillLoginNimbusFeatureFlag() {
+        if !tab.isPrivate {
             let logins = LoginsHelper(
                 tab: tab,
                 profile: profile,
@@ -2284,6 +2286,7 @@ extension BrowserViewController: LegacyTabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
             logins.foundFieldValues = { [weak self] field, currentRequestId in
                 Task {
+                    guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                     guard let tabURL = tab.url else { return }
                     let logins = (try? await self?.profile.logins.listLogins()) ?? []
                     let loginsForCurrentTab = logins.filter { login in
@@ -2316,10 +2319,6 @@ extension BrowserViewController: LegacyTabDelegate {
 
         let errorHelper = ErrorPageHelper(certStore: profile.certStore)
         tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
-
-        let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
-        sessionRestoreHelper.delegate = self
-        tab.addContentScriptToPage(sessionRestoreHelper, name: SessionRestoreHelper.name())
 
         let findInPageHelper = FindInPageHelper(tab: tab)
         findInPageHelper.delegate = self
@@ -2486,6 +2485,10 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection) {
         navigationHandler?.show(settings: settingsPage)
     }
+
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
+        showBookmarkToast(for: action)
+    }
 }
 
 // MARK: - SearchViewController
@@ -2549,11 +2552,13 @@ extension BrowserViewController: SearchViewControllerDelegate {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
+            searchViewController.searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
@@ -2858,14 +2863,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
-        }
-    }
-}
-
-extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
-        if let tab = tabManager.selectedTab, tab.webView === tab.webView {
-            updateUIForReaderHomeStateForTab(tab)
         }
     }
 }

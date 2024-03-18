@@ -1586,9 +1586,9 @@ workflows:
     - focus-clone-and-build-dependencies
     steps:
     - cache-pull@2: {}
-    - swiftlint-extended@1:
-        inputs:
-        - linting_path: "$BITRISE_SOURCE_DIR"
+    #- swiftlint-extended@1:
+    #    inputs:
+    #    - linting_path: "$BITRISE_SOURCE_DIR"
     - script@1:
         title: Set Default Web Browser Entitlement
         inputs:

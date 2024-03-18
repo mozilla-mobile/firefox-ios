@@ -4462,6 +4462,38 @@ awesomebar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  engagement:
+    type: event
+    description: |
+      Recorded when the user completes their search session by
+      tapping a search result, or entering a URL or a search term.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8550
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19009
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
+  abandonment:
+    type: event
+    description: |
+      Recorded when the user dismisses the awesomebar without completing their
+      search.
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-8550
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19009
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2024-06-01"
 
 # Share sheet specific metrics
 

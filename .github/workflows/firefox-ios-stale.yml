@@ -15,7 +15,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v7.0.0
+      - uses: actions/stale@v9
         with:
           ### GENERAL ###
           # Max number of operations per run

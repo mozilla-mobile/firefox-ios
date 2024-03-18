@@ -16,9 +16,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
-        static let titleFontSize: CGFloat = 15
-        static let sponsoredFontSize: CGFloat = 12
-        static let siteFontSize: CGFloat = 12
         static let horizontalMargin: CGFloat = 16
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let sponsoredIconSize = CGSize(width: 12, height: 12)
@@ -30,8 +27,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { title in
         title.adjustsFontForContentSizeCategory = true
-        title.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.titleFontSize)
+        title.font = FXFontStyles.Regular.subheadline.scaledFont()
         title.numberOfLines = 2
     }
 
@@ -51,8 +47,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption2,
-                                                            size: UX.sponsoredFontSize)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.text = .FirefoxHomepage.Pocket.Sponsored
     }
 
@@ -62,9 +57,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .caption1,
-            size: UX.siteFontSize)
+        label.font = FXFontStyles.Bold.caption1.scaledFont()
     }
 
     // MARK: - Variables
@@ -104,10 +97,8 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = viewModel.shouldHideSponsor
         descriptionLabel.font = viewModel.shouldHideSponsor
-        ? DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
-                                                 size: UX.siteFontSize)
-        : DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                     size: UX.siteFontSize)
+        ? FXFontStyles.Regular.caption1.scaledFont()
+        : FXFontStyles.Bold.caption1.scaledFont()
 
         sponsoredStack.isHidden  = viewModel.shouldHideSponsor
 

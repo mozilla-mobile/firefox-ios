@@ -12,7 +12,8 @@ public protocol RustFirefoxSuggestActor: Actor {
     /// Searches the store for matching suggestions.
     func query(
         _ keyword: String,
-        providers: [SuggestionProvider]
+        providers: [SuggestionProvider],
+        limit: Int32
     ) async throws -> [RustFirefoxSuggestion]
 
     /// Interrupts any ongoing queries for suggestions.
@@ -24,8 +25,16 @@ public protocol RustFirefoxSuggestActor: Actor {
 public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
     private let store: SuggestStore
 
-    public init(databasePath: String, remoteSettingsConfig: RemoteSettingsConfig? = nil) throws {
-        store = try SuggestStore(path: databasePath, settingsConfig: remoteSettingsConfig)
+    public init(dataPath: String, cachePath: String, remoteSettingsConfig: RemoteSettingsConfig? = nil) throws {
+        var builder = SuggestStoreBuilder()
+            .dataPath(path: dataPath)
+            .cachePath(path: cachePath)
+
+        if let remoteSettingsConfig {
+            builder = builder.remoteSettingsConfig(config: remoteSettingsConfig)
+        }
+
+        store = try builder.build()
     }
 
     public func ingest() async throws {
@@ -38,11 +47,13 @@ public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
 
     public func query(
         _ keyword: String,
-        providers: [SuggestionProvider]
+        providers: [SuggestionProvider],
+        limit: Int32
     ) async throws -> [RustFirefoxSuggestion] {
         return try store.query(query: SuggestionQuery(
             keyword: keyword,
-            providers: providers
+            providers: providers,
+            limit: limit
         )).compactMap(RustFirefoxSuggestion.init)
     }
 

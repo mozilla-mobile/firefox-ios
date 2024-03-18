@@ -11,6 +11,7 @@ import Storage
 protocol HomepageContextMenuHelperDelegate: UIViewController {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -18,6 +19,11 @@ extension HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
         homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
+}
+
+enum BookmarkAction {
+    case add
+    case remove
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
@@ -194,6 +200,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 site.setBookmarked(false)
             }
 
+            self.delegate?.homePanelDidRequestBookmarkToast(for: .remove)
+
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
         })
     }
@@ -218,6 +226,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
             site.setBookmarked(true)
+
+            self.delegate?.homePanelDidRequestBookmarkToast(for: .add)
+
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
     }
