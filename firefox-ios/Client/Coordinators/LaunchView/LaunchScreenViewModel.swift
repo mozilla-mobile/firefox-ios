@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import MozillaAppServices
 
 protocol LaunchFinishedLoadingDelegate: AnyObject {
     func launchWith(launchType: LaunchType)
@@ -15,6 +16,7 @@ class LaunchScreenViewModel: FeatureFlaggable {
     private var introScreenManager: IntroScreenManager
     private var updateViewModel: UpdateViewModel
     private var surveySurfaceManager: SurveySurfaceManager
+    private var notificationCenter: NotificationProtocol
 
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
     private var splashScreenTask: Task<Void, Never>?
@@ -24,7 +26,8 @@ class LaunchScreenViewModel: FeatureFlaggable {
 
     init(profile: Profile = AppContainer.shared.resolve(),
          messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
-         onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
+         onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
@@ -32,21 +35,23 @@ class LaunchScreenViewModel: FeatureFlaggable {
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
+        self.notificationCenter = notificationCenter
 
         if featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) {
-            Task {
-                await fetchNimbusExperiments()
-            }
+            fetchNimbusExperiments()
         }
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
     func startLoading(appVersion: String = AppInfo.appVersion) async {
         await loadLaunchType(appVersion: appVersion)
     }
 
-    /// Delay start up and continue to show splash screen up to a maximum duration to ensure Nimbus 
-    /// experiments are loaded on first launch. Skip the delay start if experiments are already successfully
-    /// loaded at this point.
+    /// Delay start up and continue to show splash screen up to a maximum duration or if Nimbus experiments are fetched.
+    /// Skip the delay start if experiments are already successfully loaded at this point.
     func startSplashScreenExperiment() async {
         guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly), !hasExperimentsLoaded else { return }
         await delayStart()
@@ -61,17 +66,21 @@ class LaunchScreenViewModel: FeatureFlaggable {
         await splashScreenTask?.value
     }
 
-    private func fetchNimbusExperiments() async {
+    private func fetchNimbusExperiments() {
         Experiments.intialize()
 
-        NotificationCenter.default.addObserver(
-            forName: .nimbusExperimentsFetched,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.splashScreenTask?.cancel()
-            self?.hasExperimentsLoaded = true
-        }
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(stopSplashScreenExperiment),
+            name: .nimbusExperimentsFetched,
+            object: nil
+        )
+    }
+
+    @objc
+    private func stopSplashScreenExperiment() {
+        splashScreenTask?.cancel()
+        hasExperimentsLoaded = true
     }
 
     private func loadLaunchType(appVersion: String) async {
