@@ -413,20 +413,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                   forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
-    // MARK: - Closing Tabs
-
-    override func removeTab(_ tab: Tab, flushToDisk: Bool) {
-        let uuid = tab.tabUUID
-
-        super.removeTab(tab, flushToDisk: flushToDisk)
-
-        if let tabUUID = UUID(uuidString: uuid) {
-            Task {
-                await tabSessionStore.deleteTabSession(tabID: tabUUID)
-            }
-        }
-    }
-
     // MARK: - Screenshots
 
     override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {

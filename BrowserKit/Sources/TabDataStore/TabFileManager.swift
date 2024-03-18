@@ -35,10 +35,6 @@ public protocol TabFileManager {
     /// - Parameter pathURL: the location of the file to check
     /// - Returns: returns true if a file exists at this location
     func fileExists(atPath pathURL: URL) -> Bool
-    
-    /// Removes a file at the given location (if it exists and can be deleted).
-    /// - Parameter path: location of the file to remove.
-    func removeFile(at path: URL)
 
     /// Creates a directory at the given location
     /// - Parameter path: the location to create the directory
@@ -105,7 +101,7 @@ public struct DefaultTabFileManager: TabFileManager {
         try fileManager.copyItem(at: sourceURL, to: destinationURL)
     }
 
-    public func removeFile(at path: URL) {
+    private func removeFileAt(path: URL) {
         do {
             try fileManager.removeItem(at: path)
             return
@@ -119,7 +115,7 @@ public struct DefaultTabFileManager: TabFileManager {
     public func removeAllFilesAt(directory: URL) {
         let fileURLs = contentsOfDirectory(at: directory)
         for fileURL in fileURLs {
-            removeFile(at: fileURL)
+            removeFileAt(path: fileURL)
         }
     }
 

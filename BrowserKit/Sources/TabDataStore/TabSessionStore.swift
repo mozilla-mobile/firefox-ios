@@ -16,10 +16,6 @@ public protocol TabSessionStore {
     /// - Parameter tabID: an ID that uniquely identifies the tab
     /// - Returns: the data associated with a session, encoded as a Data object
     func fetchTabSession(tabID: UUID) async -> Data?
-
-    /// Deletes the tab session data for the given tab
-    /// - Parameter tabID: the ID of the tab to delete.
-    func deleteTabSession(tabID: UUID) async
 }
 
 public actor DefaultTabSessionStore: TabSessionStore {
@@ -48,14 +44,6 @@ public actor DefaultTabSessionStore: TabSessionStore {
                        level: .debug,
                        category: .tabs)
         }
-    }
-
-    public func deleteTabSession(tabID: UUID) async {
-        guard let directory = fileManager.tabSessionDataDirectory() else { return }
-        guard fileManager.fileExists(atPath: directory) else { return }
-
-        let path = directory.appendingPathComponent(filePrefix + tabID.uuidString)
-        fileManager.removeFile(at: path)
     }
 
     public func fetchTabSession(tabID: UUID) async -> Data? {
