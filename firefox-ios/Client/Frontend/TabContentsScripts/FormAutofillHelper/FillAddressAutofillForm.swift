@@ -11,6 +11,7 @@ struct FillAddressAutofillForm: Codable {
     struct Payload: Codable {
         var addressLevel1: String
         var addressLevel2: String
+        var addressLevel3: String
         var addressLine1: String
         var country: String
         var email: String
@@ -20,10 +21,12 @@ struct FillAddressAutofillForm: Codable {
         var organization: String
         var postalCode: String
         var streetAddress: String
+        var tel: String
 
         enum CodingKeys: String, CodingKey {
             case addressLevel1 = "address-level1"
             case addressLevel2 = "address-level2"
+            case addressLevel3 = "address-level3"
             case addressLine1 = "address-line1"
             case country
             case email
@@ -33,6 +36,7 @@ struct FillAddressAutofillForm: Codable {
             case organization
             case postalCode = "postal-code"
             case streetAddress = "street-address"
+            case tel = "tel"
         }
     }
 }
