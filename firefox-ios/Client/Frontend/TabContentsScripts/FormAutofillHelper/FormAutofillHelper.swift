@@ -20,7 +20,7 @@ struct AutofillFieldValuePayload {
 
 extension WKScriptMessage {
     func decodeBody<T: Decodable>(as type: T.Type) -> T? {
-        guard 
+        guard
             let dict = (body as? [String: Any]),
             let data = try? JSONSerialization.data(withJSONObject: dict, options: []) else {
             return nil
@@ -154,7 +154,7 @@ class FormAutofillHelper: TabContentScript {
         return AutofillFieldValuePayload(fieldValue: .creditCard, fieldData: ccPlainText)
     }
 
-    func getFieldTypeValues(payload: FillAddressAutofillForm.AddressAutofillPayload) -> AutofillFieldValuePayload {
+    func getFieldTypeValues(payload: FillAddressAutofillForm.Payload) -> AutofillFieldValuePayload {
         let addressPlainText = UnencryptedAddressFields(
             addressLevel1: payload.addressLevel1,
             organization: payload.organization,

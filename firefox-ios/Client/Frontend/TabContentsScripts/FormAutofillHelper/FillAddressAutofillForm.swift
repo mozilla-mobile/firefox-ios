@@ -5,10 +5,10 @@
 import Foundation
 
 struct FillAddressAutofillForm: Codable {
-    let payload: AddressAutofillPayload
+    let payload: Payload
     let type: FormAutofillPayloadType
 
-    struct AddressAutofillPayload: Codable {
+    struct Payload: Codable {
         var addressLevel1: String
         var addressLevel2: String
         var addressLine1: String
