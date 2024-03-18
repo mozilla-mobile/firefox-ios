@@ -12,7 +12,6 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private var mainQueue: DispatchQueueInterface
 
     private lazy var splashScreenAnimation = SplashScreenAnimation()
-    private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
     init(coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
@@ -39,7 +38,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         view.backgroundColor = .systemBackground
 
         Task {
-            try await delayStart()
+            await startSplashScreenExperiment()
             await startLoading()
         }
     }
@@ -83,11 +82,8 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     }
 
     // MARK: - Splash Screen
-
-    private func delayStart() async throws {
-        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
-        let position: Int = nimbusSplashScreenFeatureLayer.maximumDurationMs
-        try await Task.sleep(nanoseconds: UInt64(position * 1_000_000))
+    func startSplashScreenExperiment() async {
+        await viewModel.startSplashScreenExperiment()
     }
 
     private func setupLaunchScreen() {

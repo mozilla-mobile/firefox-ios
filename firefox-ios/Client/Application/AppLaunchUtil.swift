@@ -55,8 +55,10 @@ class AppLaunchUtil {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         // Start initializing the Nimbus SDK. This should be done after Glean
-        // has been started.
-        initializeExperiments()
+        // has been started. For splashscreen experiment, the initialization has been moved to launch screen.
+        if !LegacyFeatureFlagsManager.shared.isFeatureEnabled(.splashScreen, checking: .buildOnly) {
+            initializeExperiments()
+        }
 
         // We migrate history from browser db to places if it hasn't already
         DispatchQueue.global().async {
