@@ -11,8 +11,6 @@ import Shared
 class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     // MARK: UX
     struct UX {
-        static let titleLabelFontSize: CGFloat = 17
-        static let headerLabelFontSize: CGFloat = 15
         static let headerElementsSpacing: CGFloat = 7.0
         static let mainContainerElementsSpacing: CGFloat = 7.0
         static let bottomSpacing: CGFloat = 24.0
@@ -42,9 +40,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = .CreditCard.RememberCreditCard.MainTitle
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .headline,
-            size: UX.titleLabelFontSize)
+        label.font = FXFontStyles.Bold.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityTraits = .header
     }
@@ -55,10 +51,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.lineBreakMode = .byWordWrapping
         label.setContentHuggingPriority(.defaultHigh, for: .vertical)
         label.text = String(format: String.CreditCard.RememberCreditCard.Header, AppName.shortName.rawValue)
-
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.headerLabelFontSize)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityTraits = .staticText
     }
