@@ -19,6 +19,7 @@ public struct StandardImageIdentifiers {
     // Icon size 20x20
     public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
+        public static let crossCircleFill = "crossCircleFillMedium"
         public static let cross = "crossMedium"
         public static let nightMode = "nightModeMedium"
         public static let sun = "sunMedium"
