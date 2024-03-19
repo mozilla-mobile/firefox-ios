@@ -61,6 +61,7 @@
         "CreditCardsTests\/testEditSavedCardsUI()",
         "CreditCardsTests\/testErrorStatesCreditCards()",
         "CreditCardsTests\/testManageCreditCardsOption()",
+        "CreditCardsTests\/testSaveThisCardPrompt()",
         "CreditCardsTests\/testVerifyThatMultipleCardsCanBeAdded()",
         "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",
         "CronTabsPerformanceTest",
