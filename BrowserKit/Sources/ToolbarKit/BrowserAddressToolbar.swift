@@ -52,6 +52,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
+        locationContainer.backgroundColor = theme.colors.layer3
+        locationDividerView.backgroundColor = theme.colors.layer1
     }
 
     // MARK: - Private
