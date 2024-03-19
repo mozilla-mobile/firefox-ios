@@ -648,7 +648,7 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
-    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+    public func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
         let rustKeys = RustLoginEncryptionKeys()
         listLogins { result in
             switch result {
