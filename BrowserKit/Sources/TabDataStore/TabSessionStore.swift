@@ -74,6 +74,7 @@ public actor DefaultTabSessionStore: TabSessionStore {
         // since this will be performed off the main thread, and it will only be operating
         // on files for dead tabs that won't be accessed by any other code.
         for fileURL in contents {
+            guard fileURL.lastPathComponent.hasPrefix(filePrefix) else { continue }
             let tabID = String(fileURL.lastPathComponent.dropFirst(filePrefix.count))
             guard !liveTabs.contains(tabID) else { continue }
             fileManager.removeFileAt(path: fileURL)
