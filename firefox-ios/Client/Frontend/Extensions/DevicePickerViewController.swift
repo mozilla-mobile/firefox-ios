@@ -45,7 +45,7 @@ public enum ClientType: String {
             return ClientType.Mobile
         }
     }
-    
+
     var imageName: String {
         switch self {
         case .Desktop:
