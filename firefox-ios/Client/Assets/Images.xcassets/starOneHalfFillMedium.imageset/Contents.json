@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "star-fill-20.pdf",
+      "filename" : "starOneHalfFillMediumLight.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "star-fill-20 1.pdf",
+      "filename" : "starOneHalfFillMediumDark.pdf",
       "idiom" : "universal"
     }
   ],

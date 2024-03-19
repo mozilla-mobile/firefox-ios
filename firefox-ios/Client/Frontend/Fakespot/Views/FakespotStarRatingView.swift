@@ -3,17 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
-class FakespotStarRatingView: UIView {
+class FakespotStarRatingView: UIView, ThemeApplicable {
     enum UX {
         static let starCount = 5
     }
 
-    var rating: Double = 0.0 {
-        didSet {
-            updateStarImages()
-        }
-    }
+    var rating: Double = 0.0
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -29,6 +26,10 @@ class FakespotStarRatingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func applyTheme(theme: Common.Theme) {
+        updateStarImages(theme: theme)
+    }
+
     private func setupLayout() {
         addSubview(stackView)
         NSLayoutConstraint.activate([
@@ -37,16 +38,14 @@ class FakespotStarRatingView: UIView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-        updateStarImages()
     }
 
-    private func updateStarImages() {
-        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+    private func updateStarImages(theme: Common.Theme) {
+        stackView.removeAllArrangedViews()
 
         for index in 1...UX.starCount {
             let starImageView = UIImageView(
-                image: UIImage(named: starImageName(for: index))
+                image: starImageName(for: index, theme: theme)
             )
             stackView.addArrangedSubview(starImageView)
             NSLayoutConstraint.activate([
@@ -56,13 +55,20 @@ class FakespotStarRatingView: UIView {
         }
     }
 
-    private func starImageName(for index: Int) -> String {
+    private func starImageName(for index: Int, theme: Common.Theme) -> UIImage? {
         if Double(index) <= rating {
-            return ImageIdentifiers.starFill
+            // filled star
+            let imageName = StandardImageIdentifiers.Medium.starFill
+            let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            return image?.tinted(withColor: theme.colors.iconPrimary)
         } else if Double(index - 1) < rating {
-            return ImageIdentifiers.starHalf
+            // half star
+            return UIImage(named: StandardImageIdentifiers.Medium.starOneHalfFill)
         } else {
-            return ImageIdentifiers.starEmpty
+            // empty star
+            let imageName = StandardImageIdentifiers.Medium.starFill
+            let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+            return image?.tinted(withColor: theme.colors.iconRatingNeutral)
         }
     }
 }
