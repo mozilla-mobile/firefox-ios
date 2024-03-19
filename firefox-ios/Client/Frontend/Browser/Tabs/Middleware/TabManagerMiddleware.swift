@@ -312,8 +312,9 @@ class TabManagerMiddleware {
                                                                              windowUUID: uuid)))
                 } else {
                     store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                    store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .closedAllTabs(count: normalCount),
-                                                                                   windowUUID: uuid)))
+                    let context = ToastTypeContext(toastType: .closedAllTabs(count: normalCount),
+                                                   windowUUID: uuid)
+                    store.dispatch(GeneralBrowserAction.showToast(context))
                 }
             }
         }

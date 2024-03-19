@@ -16,7 +16,7 @@ public protocol TabSessionStore {
     /// - Parameter tabID: an ID that uniquely identifies the tab
     /// - Returns: the data associated with a session, encoded as a Data object
     func fetchTabSession(tabID: UUID) async -> Data?
-    
+
     /// Cleans up any tab session data files for tabs that are no longer open.
     func deleteUnusedTabSessionData(keeping: [UUID]) async
 }
