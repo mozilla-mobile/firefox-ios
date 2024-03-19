@@ -505,7 +505,7 @@ protocol LoginsProtocol {
         withUsername username: String?,
         completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
     func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
-    func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void)
+    func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
 }
@@ -762,23 +762,6 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
-    }
-
-    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin]?, Error>) -> Void) {
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                completionHandler(.failure(error))
-                return
-            }
-
-            do {
-                let records = try self.storage?.list()
-                completionHandler(.success(records))
-            } catch let err as NSError {
-                completionHandler(.failure(err))
-            }
-        }
     }
 
     public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
