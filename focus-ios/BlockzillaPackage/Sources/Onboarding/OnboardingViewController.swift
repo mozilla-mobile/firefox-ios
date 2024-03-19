@@ -7,7 +7,6 @@ import SnapKit
 import DesignSystem
 
 public class OnboardingViewController: UIViewController {
-
     public init(
         config: OnboardingText,
         dismissOnboardingScreen: @escaping (() -> Void)
@@ -173,7 +172,7 @@ public class OnboardingViewController: UIViewController {
         return view
     }()
 
-    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -187,15 +186,14 @@ public class OnboardingViewController: UIViewController {
         updateStartButtonConstraints(for: size)
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
     }
 
-    public override func viewWillAppear(_ animated: Bool) {
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateStartButtonConstraints(for: view.frame.size)
-
     }
 
     func addSubViews() {
@@ -252,11 +250,11 @@ public class OnboardingViewController: UIViewController {
         dismissOnboardingScreen()
     }
 
-    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+    override public var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return (UIDevice.current.userInterfaceIdiom == .phone) ? .portrait : .allButUpsideDown
     }
 
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
+    override public var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }
@@ -294,7 +292,6 @@ public struct OnboardingText {
         self.instructions = instructions
         self.onboardingButtonTitle = onboardingButtonTitle
     }
-
 }
 
 public class Instruction {

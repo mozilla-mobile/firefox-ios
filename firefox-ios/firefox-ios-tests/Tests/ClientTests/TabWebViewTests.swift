@@ -59,8 +59,6 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     func testTabWebView_withLegacySessionData_doesntLeak() {
         let tab = Tab(profile: MockProfile(), configuration: configuration)
         tab.url = URL(string: "http://yahoo.com/")!
-        let sessionData = LegacySessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
-        tab.sessionData = sessionData
         tab.createWebview()
 
         trackForMemoryLeaks(tab)

@@ -5,7 +5,6 @@
 import UIKit
 
 public extension UIFont {
-
     static let footnote12 = UIFont.systemFont(ofSize: 12)
     static let footnote12Semibold = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let footnote14 = UIFont.systemFont(ofSize: 14)
@@ -25,5 +24,4 @@ public extension UIFont {
 
     static let title20 = UIFont.systemFont(ofSize: 20)
     static let title20Bold = UIFont.systemFont(ofSize: 20, weight: .bold)
-
 }

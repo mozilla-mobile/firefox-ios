@@ -7,7 +7,6 @@ import SnapKit
 import UIHelpers
 
 class PhotonActionSheetCell: UITableViewCell {
-
     var actionSheet: PhotonActionSheet?
     static let reuseIdentifier = "PhotonActionSheetCell"
 

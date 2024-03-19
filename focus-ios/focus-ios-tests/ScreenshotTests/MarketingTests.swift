@@ -4,11 +4,9 @@
 
 import XCTest
 
-
 class MarketingTests: BaseTestCaseL10n {
-
     func testSettingsView() {
-        if iPad () {
+        if iPad() {
             app.windows.element(boundBy: 0).tap()
         } else {
             waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
@@ -37,7 +35,7 @@ class MarketingTests: BaseTestCaseL10n {
     }
 
     func testVisitSite() {
-        if iPad () {
+        if iPad() {
             app.windows.element(boundBy: 0).tap()
         } else {
             waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)
@@ -49,8 +47,8 @@ class MarketingTests: BaseTestCaseL10n {
         snapshot("Website-Focus")
     }
 
-    func testPinTopSites(){
-        if iPad () {
+    func testPinTopSites() {
+        if iPad() {
             app.windows.element(boundBy: 0).tap()
         } else {
             waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 15)

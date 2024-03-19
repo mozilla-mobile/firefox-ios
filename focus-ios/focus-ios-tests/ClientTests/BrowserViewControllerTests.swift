@@ -14,15 +14,14 @@ import AppShortcuts
 
 class BrowserViewControllerTests: XCTestCase {
     private let mockUserDefaults = MockUserDefaults()
-    
+
     private lazy var onboardingEventsHandler = OnboardingEventsHandlerV1(
         getShownTips: {
             return []
         }, setShownTips: { _ in
-            
         }
     )
-    
+
     private lazy var themeManager = ThemeManager()
 
     func testRequestReviewThreshold() {

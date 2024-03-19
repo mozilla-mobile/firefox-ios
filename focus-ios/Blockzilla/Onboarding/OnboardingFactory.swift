@@ -7,7 +7,7 @@ import Onboarding
 import SwiftUI
 
 class TestOnboarding: OnboardingEventsHandling {
-    @Published var route: Onboarding.ToolTipRoute? = nil
+    @Published var route: Onboarding.ToolTipRoute?
     var routePublisher: Published<Onboarding.ToolTipRoute?>.Publisher { $route }
     func send(_ action: Onboarding.Action) {}
 }

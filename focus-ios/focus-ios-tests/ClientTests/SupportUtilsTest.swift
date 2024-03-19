@@ -5,7 +5,6 @@
 import XCTest
 
 class SupportUtilsTest: XCTestCase {
-    
     // Try to create a URL for every support topic and make sure that none of them
     // fall back to the default URL we use in case of failure during URL building.
     func testSupportTopics() throws {
@@ -13,5 +12,4 @@ class SupportUtilsTest: XCTestCase {
             XCTAssertNotEqual(URL(forSupportTopic: topic), URL(string: SupportTopic.fallbackURL)!)
         }
     }
-    
 }

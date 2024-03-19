@@ -48,7 +48,6 @@ struct GetStartedOnboardingView: View {
                             .background(Color.actionButton)
                             .cornerRadius(Constants.navigationLinkViewCornerRadius)
                             .padding(Constants.buttonPadding)
-
                     }
                     .simultaneousGesture(TapGesture().onEnded({ _ in
                         viewModel.send(.getStartedButtonTapped)

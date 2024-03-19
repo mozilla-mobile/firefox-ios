@@ -7,13 +7,13 @@ import UIKit
 class SearchEngine: NSObject, NSCoding {
     let name: String
     let image: UIImage?
-    var isCustom: Bool = false
+    var isCustom = false
 
     private let searchTemplate: String
     private let suggestionsTemplate: String?
     private let SearchTermComponent = "{searchTerms}"
     private let LocaleTermComponent = "{moz:locale}"
-    fileprivate var suggestTemplate: String? = nil
+    fileprivate var suggestTemplate: String?
 
     fileprivate lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
 

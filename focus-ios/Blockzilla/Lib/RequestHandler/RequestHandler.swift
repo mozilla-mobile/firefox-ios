@@ -72,7 +72,7 @@ class RequestHandler {
         }
     }
 
-    static private func makeAlert(title: String, action: String, forURL url: URL) -> UIAlertController {
+    private static func makeAlert(title: String, action: String, forURL url: URL) -> UIAlertController {
         let openAction = UIAlertAction(title: action, style: .default) { _ in
             UIApplication.shared.open(url, options: [:])
         }

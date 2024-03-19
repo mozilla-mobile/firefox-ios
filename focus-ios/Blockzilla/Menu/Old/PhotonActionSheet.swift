@@ -27,7 +27,7 @@ public struct PhotonActionSheetItem {
     public var isEnabled: Bool
     public private(set) var accessory: PhotonActionSheetCellAccessoryType
     public private(set) var accessoryText: String?
-    public private(set) var bold: Bool = false
+    public private(set) var bold = false
     public private(set) var handler: ((PhotonActionSheetItem) -> Void)?
 
     init(title: String, text: String? = nil, textStyle: TextStyle = .normal, iconString: String? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
@@ -313,7 +313,6 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
 }
 
 private class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
-
     private let separatorLineView = UIView()
 
     override init(reuseIdentifier: String?) {

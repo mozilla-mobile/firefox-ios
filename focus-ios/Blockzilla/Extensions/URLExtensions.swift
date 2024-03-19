@@ -9,8 +9,8 @@ private struct ETLDEntry: CustomStringConvertible {
     let entry: String
 
     var isNormal: Bool { return isWild || !isException }
-    var isWild: Bool = false
-    var isException: Bool = false
+    var isWild = false
+    var isException = false
 
     init(entry: String) {
         self.entry = entry
@@ -108,7 +108,6 @@ extension URL {
 private let permanentURISchemes = ["aaa", "aaas", "about", "acap", "acct", "cap", "cid", "coap", "coaps", "crid", "data", "dav", "dict", "dns", "example", "file", "ftp", "geo", "go", "gopher", "h323", "http", "https", "iax", "icap", "im", "imap", "info", "ipp", "ipps", "iris", "iris.beep", "iris.lwz", "iris.xpc", "iris.xpcs", "jabber", "ldap", "mailto", "mid", "msrp", "msrps", "mtqp", "mupdate", "news", "nfs", "ni", "nih", "nntp", "opaquelocktoken", "pkcs11", "pop", "pres", "reload", "rtsp", "rtsps", "rtspu", "service", "session", "shttp", "sieve", "sip", "sips", "sms", "snmp", "soap.beep", "soap.beeps", "stun", "stuns", "tag", "tel", "telnet", "tftp", "thismessage", "tip", "tn3270", "turn", "turns", "tv", "urn", "vemmi", "vnc", "ws", "wss", "xcon", "xcon-userid", "xmlrpc.beep", "xmlrpc.beeps", "xmpp", "z39.50r", "z39.50s"]
 
 extension URL {
-
     public func withQueryParams(_ params: [URLQueryItem]) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
         var items = (components.queryItems ?? [])
@@ -396,7 +395,7 @@ private extension URL {
         let tokens = host.components(separatedBy: ".")
         let tokenCount = tokens.count
         var suffix: String?
-        var previousDomain: String? = nil
+        var previousDomain: String?
         var currentDomain: String = host
 
         for offset in 0..<tokenCount {

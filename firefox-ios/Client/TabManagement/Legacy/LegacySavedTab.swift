@@ -10,7 +10,6 @@ class LegacySavedTab: Codable {
     var title: String?
     var url: URL?
     var isPrivate: Bool
-    var sessionData: LegacySessionData?
     var screenshotUUID: UUID?
     var faviconURL: String?
     var UUID: String?
@@ -23,7 +22,6 @@ class LegacySavedTab: Codable {
         case title
         case url
         case isPrivate
-        case sessionData
         case screenshotUUID
         case faviconURL
         case UUID
@@ -39,7 +37,6 @@ class LegacySavedTab: Codable {
         isPrivate: Bool,
         faviconURL: String?,
         url: URL?,
-        sessionData: LegacySessionData?,
         uuid: String,
         tabGroupData: LegacyTabGroupData?,
         createdAt: Timestamp?,
@@ -51,7 +48,6 @@ class LegacySavedTab: Codable {
         self.isPrivate = isPrivate
         self.faviconURL = faviconURL
         self.url = url
-        self.sessionData = sessionData
         self.UUID = uuid
         self.tabGroupData = tabGroupData
         self.createdAt = createdAt

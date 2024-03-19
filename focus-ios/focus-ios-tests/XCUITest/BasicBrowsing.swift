@@ -6,7 +6,6 @@ import Foundation
 import XCTest
 
 class BasicBrowsing: BaseTestCase {
-
     // Smoke test
     func testLaunchExternalApp() {
         // Load URL

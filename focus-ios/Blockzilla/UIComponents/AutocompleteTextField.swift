@@ -24,7 +24,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
-    private var hideCursor: Bool = false
+    private var hideCursor = false
 
     private let copyShortcutKey = "c"
 
@@ -41,14 +41,14 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
     fileprivate var notifyTextChanged: (() -> Void)?
     private var lastReplacement: String?
 
-    public override var text: String? {
+    override public var text: String? {
         didSet {
             super.text = text
             self.textDidChange(self)
         }
     }
 
-    public override var accessibilityValue: String? {
+    override public var accessibilityValue: String? {
         get {
             return (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         }
@@ -78,7 +78,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         })
     }
 
-    public override var keyCommands: [UIKeyCommand]? {
+    override public var keyCommands: [UIKeyCommand]? {
         let commands = [
             UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
         ]
@@ -157,7 +157,6 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     /// Commits the completion by setting the text and removing the highlight.
     fileprivate func applyCompletion() {
-
         // Clear the current completion, then set the text without the attributed style.
         let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()
@@ -234,7 +233,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
-    public override func caretRect(for position: UITextPosition) -> CGRect {
+    override public func caretRect(for position: UITextPosition) -> CGRect {
         return hideCursor ? CGRect.zero : super.caretRect(for: position)
     }
 
@@ -274,7 +273,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return autocompleteDelegate?.autocompleteTextFieldShouldClear(self) ?? true
     }
 
-    public override func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
+    override public func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
         // Clear the autocompletion if any provisionally inserted text has been
         // entered (e.g., a partial composition from a Japanese keyboard).
         removeCompletion()
@@ -307,7 +306,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
     }
 
-    public override func deleteBackward() {
+    override public func deleteBackward() {
         lastReplacement = ""
         hideCursor = false
         if isSelectionActive {
@@ -318,7 +317,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         applyCompletion()
         super.touchesBegan(touches, with: event)
     }
@@ -330,7 +329,7 @@ public class AutocompleteTextField: UITextField, UITextFieldDelegate {
  * Taken from http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call
  * Allows creating a block that will fire after a delay. Resets the timer if called again before the delay expires.
  **/
-public func debounce(_ delay: TimeInterval, action:@escaping () -> Void) -> () -> Void {
+public func debounce(_ delay: TimeInterval, action: @escaping () -> Void) -> () -> Void {
     let callback = Callback(handler: action)
     var timer: Timer?
 
@@ -346,9 +345,9 @@ public func debounce(_ delay: TimeInterval, action:@escaping () -> Void) -> () -
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
 private class Callback {
-    private let handler:() -> Void
+    private let handler: () -> Void
 
-    init(handler:@escaping () -> Void) {
+    init(handler: @escaping () -> Void) {
         self.handler = handler
     }
 

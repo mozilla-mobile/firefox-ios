@@ -6,6 +6,7 @@
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormStateManager } from "resource://gre/modules/shared/FormStateManager.sys.mjs";
 import { CreditCardRecord } from "resource://gre/modules/shared/CreditCardRecord.sys.mjs";
+import { AddressRecord } from "resource://gre/modules/shared/AddressRecord.sys.mjs";
 
 export class FormAutofillChild {
   /**
@@ -100,6 +101,17 @@ export class FormAutofillChild {
   }
 
   fillFormFields(payload) {
+    // In iOS, we have access only to valid fields (https://github.com/mozilla/application-services/blob/9054db4bb5031881550ceab3448665ef6499a706/components/autofill/src/autofill.udl#L59-L76) for an address;
+    // all additional data must be computed. On Desktop, computed fields are handled in FormAutofillStorageBase.sys.mjs at the time of saving. Ideally, we should centralize
+    // all transformations, computations, and normalization processes within AddressRecord.sys.mjs to maintain a unified implementation across both platforms.
+    // This will be addressed in FXCM-810, aiming to simplify our data representation for both credit cards and addresses.
+    if (
+      FormAutofillUtils.isAddressField(
+        this.fieldDetailsManager.activeFieldDetail?.fieldName
+      )
+    ) {
+      AddressRecord.computeFields(payload);
+    }
     this.fieldDetailsManager.activeHandler.autofillFormFields(payload);
   }
 }

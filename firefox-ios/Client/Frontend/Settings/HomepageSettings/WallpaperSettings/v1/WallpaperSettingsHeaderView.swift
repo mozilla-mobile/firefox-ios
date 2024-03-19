@@ -35,13 +35,13 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline, size: 12.0, weight: .medium)
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12.0)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
@@ -145,7 +145,7 @@ extension WallpaperSettingsHeaderView: ThemeApplicable {
         // in iOS 13 the title color set is not used for the attributed text color so we have to set it via attributes
         guard let buttonTitle = viewModel?.buttonTitle else { return }
         let labelAttributes: [NSAttributedString.Key: Any] = [
-            .font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12.0),
+            .font: FXFontStyles.Regular.body.scaledFont(),
             .foregroundColor: color,
             .underlineStyle: NSUnderlineStyle.single.rawValue
         ]

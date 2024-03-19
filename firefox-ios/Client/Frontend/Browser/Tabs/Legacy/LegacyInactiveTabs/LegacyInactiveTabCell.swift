@@ -316,8 +316,6 @@ extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     }
 
     func getTabDomainUrl(tab: Tab) -> URL? {
-        guard tab.url != nil else { return tab.sessionData?.urls.last?.domainURL }
-
         return tab.url?.domainURL
     }
 }

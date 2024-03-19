@@ -13,7 +13,6 @@ import Licenses
 import DesignSystem
 
 class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
     enum Section: String {
         case defaultBrowser, general, privacy, usageData, studies, search, siri, integration, mozilla, secret
 
@@ -90,7 +89,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return themeName
     }
 
-    lazy private var tableViewConstraints = [
+    private lazy var tableViewConstraints = [
         tableView.topAnchor.constraint(equalTo: view.topAnchor),
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -143,7 +142,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         authenticationManager: AuthenticationManager,
         onboardingEventsHandler: OnboardingEventsHandling,
         themeManager: ThemeManager,
-        dismissScreenCompletion:  @escaping (() -> Void),
+        dismissScreenCompletion: @escaping (() -> Void),
         shouldScrollToSiri: Bool = false
     ) {
         self.searchEngineManager = searchEngineManager
@@ -162,12 +161,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
-
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
         navigationBar.isTranslucent = false
-        navigationBar.setBackgroundImage(UIImage(), for:.default)
+        navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationBar.shadowImage = UIImage()
         navigationBar.layoutIfNeeded()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.primaryText]
@@ -205,7 +203,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             tableView.scrollToRow(at: siriIndexPath, at: .none, animated: false)
             shouldScrollToSiri = false
         }
-
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -290,7 +287,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     UIConstants.strings.settingsTrackingProtectionOn :
                     UIConstants.strings.settingsTrackingProtectionOff
                 cell = trackingCell
-
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)
             }
@@ -302,7 +298,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row < 2 {
                 let searchCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
                 let autocompleteLabel = Settings.getToggle(.enableDomainAutocomplete) || Settings.getToggle(.enableCustomDomainAutocomplete) ? UIConstants.strings.autocompleteCustomEnabled : UIConstants.strings.autocompleteCustomDisabled
-                let labels : (label: String, accessoryLabel: String, identifier: String) = indexPath.row == 0 ?
+                let labels: (label: String, accessoryLabel: String, identifier: String) = indexPath.row == 0 ?
                     (UIConstants.strings.settingsSearchLabel, searchEngineManager.activeEngine.name, "SettingsViewController.searchCell")
                     :(UIConstants.strings.settingsAutocompleteSection, autocompleteLabel, "SettingsViewController.autocompleteCell")
                 searchCell.accessoryLabelText = labels.accessoryLabel
@@ -527,7 +523,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
-        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != []}[0].values.filter { $0.toggle == sender }[0]
+        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != [] }[0].values.filter { $0.toggle == sender }[0]
 
         func updateSetting() {
             Settings.set(sender.isOn, forToggle: toggle.setting)
