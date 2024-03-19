@@ -655,15 +655,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            print(app.secureTextFields.element(boundBy: 0).debugDescription)
-            print(app.secureTextFields.element(boundBy: 1).debugDescription)
-            print(app.secureTextFields.element(boundBy: 2).debugDescription)
             app.secureTextFields.element(boundBy: 1).tap()
             app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
-            print(app.secureTextFields.element(boundBy: 0).debugDescription)
-            print(app.secureTextFields.element(boundBy: 1).debugDescription)
             app.secureTextFields.element(boundBy: 0).tap()
             app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         }
