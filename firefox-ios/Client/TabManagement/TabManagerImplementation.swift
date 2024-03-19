@@ -42,8 +42,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             self.inactiveTabsManager = inactiveTabsManager
             super.init(profile: profile, uuid: uuid)
 
-            setupNotifications(forObserver: self,
-                               observing: [UIApplication.willResignActiveNotification])
+        setupNotifications(forObserver: self,
+                           observing: [UIApplication.willResignActiveNotification,
+                                       .TabMimeTypeDidSet])
     }
 
     // MARK: - Restore tabs
@@ -341,6 +342,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             }
 
             didSelectTab(url)
+            updateMenuItemsForSelectedTab()
         }
     }
 
@@ -472,12 +474,43 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         backupCloseTabs = [Tab]()
     }
 
+    private func updateMenuItemsForSelectedTab() {
+        guard let selectedTab,
+              var menuItems = UIMenuController.shared.menuItems else { return }
+
+        if selectedTab.mimeType == MIMEType.PDF {
+            // Iterate in reverse order to avoid index out of range errors when removing items
+            for index in stride(from: menuItems.count - 1, through: 0, by: -1) {
+                if menuItems[index].action == MenuHelperWebViewModel.selectorSearchWith ||
+                    menuItems[index].action == MenuHelperWebViewModel.selectorFindInPage {
+                    menuItems.remove(at: index)
+                }
+            }
+        } else if !menuItems.contains(where: {
+            $0.title == .MenuHelperSearchWithFirefox ||
+            $0.title == .MenuHelperFindInPage
+        }) {
+            let searchItem = UIMenuItem(
+                title: .MenuHelperSearchWithFirefox,
+                action: MenuHelperWebViewModel.selectorSearchWith
+            )
+            let findInPageItem = UIMenuItem(
+                title: .MenuHelperFindInPage,
+                action: MenuHelperWebViewModel.selectorFindInPage
+            )
+            menuItems.append(contentsOf: [searchItem, findInPageItem])
+        }
+        UIMenuController.shared.menuItems = menuItems
+    }
+
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.willResignActiveNotification:
             saveAllTabData()
+        case .TabMimeTypeDidSet:
+            updateMenuItemsForSelectedTab()
         default:
             break
         }
