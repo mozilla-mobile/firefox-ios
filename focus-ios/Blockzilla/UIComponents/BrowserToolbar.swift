@@ -140,7 +140,6 @@ public class BrowserToolbar: UIView {
                 self.viewModel.viewActionSubject.send(.contextMenuTap(anchor: self.contextMenuButton))
             }
             .store(in: &cancellables)
-
     }
 
     private func bindViewModelEvents() {

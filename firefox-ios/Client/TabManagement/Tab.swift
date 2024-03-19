@@ -201,13 +201,6 @@ class Tab: NSObject, ThemeApplicable {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
-        // Here's another check to see if we're at the Home URL, using sessionData.
-        // lets double check the sessionData in case this is a non-restored new tab
-        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1,
-           InternalURL(firstURL)?.isAboutHomeURL ?? false {
-            return .AppMenu.AppMenuOpenHomePageTitleString
-        }
-
         // Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
         if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
             return shownUrl
@@ -224,7 +217,7 @@ class Tab: NSObject, ThemeApplicable {
 
     /// Use the display title unless it's an empty string, then use the base domain from the url
     func getTabTrayTitle() -> String {
-        let baseDomain = sessionData?.urls.last?.baseDomain ?? url?.baseDomain
+        let baseDomain = url?.baseDomain
         var backUpName: String = "" // In case display title is empty
 
         if let baseDomain = baseDomain {
@@ -250,7 +243,6 @@ class Tab: NSObject, ThemeApplicable {
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
-    var sessionData: LegacySessionData?
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
@@ -269,12 +261,11 @@ class Tab: NSObject, ThemeApplicable {
             }
         }
     }
+
     var lastKnownUrl: URL? {
-        // Tab url can be nil when user cold starts the app
-        // thus we check session data for last known url
-        guard self.url != nil else {
-            return self.sessionData?.urls.last
-        }
+        // Historically, there was a check for the tab session data beforehand here.
+        // Since session data doesn't exist anymore since we use WKWebview interaction state
+        // Tab.lastKnownUrl is in fact the Tab.url.
         return self.url
     }
 
@@ -440,19 +431,6 @@ class Tab: NSObject, ThemeApplicable {
                 icon: icon,
                 inactive: inactive
             )
-        } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
-            let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
-            if let displayURL = history.first {
-                return RemoteTab(
-                    clientGUID: nil,
-                    URL: displayURL,
-                    title: tab.title ?? tab.displayTitle,
-                    history: history,
-                    lastUsed: sessionData.lastUsedTime,
-                    icon: icon,
-                    inactive: inactive
-                )
-            }
         }
 
         return nil
@@ -574,12 +552,6 @@ class Tab: NSObject, ThemeApplicable {
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        sessionData = LegacySessionData(
-            currentPage: 0,
-            urls: [currentlyOpenUrl],
-            lastUsedTime: Date.now()
-        )
-
         close()
     }
 

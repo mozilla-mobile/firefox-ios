@@ -6,7 +6,6 @@ import UIKit
 import UIHelpers
 
 public class AsyncImageView: UIView {
-
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill

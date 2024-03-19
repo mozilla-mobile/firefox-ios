@@ -272,7 +272,7 @@ extension String {
                 key: "Addresses.BottomSheet.UseSavedAddressBottomSheet.v124",
                 tableName: "BottomSheet",
                 value: "Use a saved address?",
-                comment: "Title displayed on the bottom sheet for prompting users to use a saved address from the list.")
+                comment: "When a user is in the process of entering an address, a screen pops up prompting the user if they want to use a saved address. This string is used as the title label of the screen.")
         }
     }
 }

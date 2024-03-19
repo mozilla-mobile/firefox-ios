@@ -64,5 +64,4 @@ class OnboardingTest: XCTestCase {
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 2 of 2")
         waitForExistence(app.staticTexts["Focus isn’t like other browsers"], timeout: 15)
     }
-
 }

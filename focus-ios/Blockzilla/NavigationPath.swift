@@ -48,11 +48,9 @@ enum NavigationPath {
         if isHttpScheme {
             GleanMetrics.App.openedAsDefaultBrowser.add()
             self = .url(url)
-        }
-        else if host == "widget" {
+        } else if host == "widget" {
             self = .widget
-        }
-        else if host == "open-url" {
+        } else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
             guard let url = URL(string: urlString, invalidCharacters: false) else { return nil }
             if let validUrl = URIFixup.getURL(entry: url.absoluteString) {
@@ -81,8 +79,7 @@ enum NavigationPath {
     private static func handleURL(_ application: UIApplication, url: URL, with browserViewController: BrowserViewController) -> URL? {
         if application.applicationState == .active {
             browserViewController.submit(url: url, source: .action)
-        }
-        else { return url }
+        } else { return url }
         return nil
     }
 
@@ -93,8 +90,7 @@ enum NavigationPath {
             } else {
                 browserViewController.submit(text: text, source: .action)
             }
-        }
-        else { return text }
+        } else { return text }
         return nil
     }
 

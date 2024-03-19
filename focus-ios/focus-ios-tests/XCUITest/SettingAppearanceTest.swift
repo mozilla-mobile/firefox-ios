@@ -5,7 +5,6 @@
 import XCTest
 
 class SettingAppearanceTest: BaseTestCase {
-
     let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 
     // Smoketest

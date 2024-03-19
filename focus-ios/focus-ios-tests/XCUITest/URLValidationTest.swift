@@ -20,7 +20,7 @@ class URLValidationTest: BaseTestCase {
         for i in urlTypes {
             loadAndValidateURL(URL: i)
         }
-        
+
         for i in urlHttpTypes {
             loadAndValidateHttpURLs(URL: i)
         }
@@ -35,7 +35,7 @@ class URLValidationTest: BaseTestCase {
         }
         XCTAssertEqual(app.textFields["URLBar.urlText"].value as? String, "www.mozilla.org")
     }
-    
+
     private func loadAndValidateHttpURLs(URL: String) {
         loadWebPage(URL)
         waitForWebPageLoad()

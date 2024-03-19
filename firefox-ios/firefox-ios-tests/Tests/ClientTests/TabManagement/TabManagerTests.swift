@@ -168,11 +168,10 @@ class TabManagerTests: XCTestCase {
         // Set createdAt date for all tabs to be distant past (inactive by default)
         subject.tabs.forEach { $0.firstCreatedTime = Timestamp(0) }
 
-        // Override session data lastUsedTime of 1st tab to indicate tab active
+        // Override lastExecutedTime of 1st tab to indicate tab active
         let tab1 = subject.tabs[0]
-        tab1.sessionData = LegacySessionData(currentPage: 0,
-                                             urls: [],
-                                             lastUsedTime: Date.now.toTimestamp())
+        let lastExecutedDate = Calendar.current.add(numberOfDays: 1, to: Date())
+        tab1.lastExecutedTime = lastExecutedDate?.toTimestamp()
 
         let inactiveTabs = subject.getInactiveTabs()
         let expectedInactiveTabs = 2

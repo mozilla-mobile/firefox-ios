@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-
 import XCTest
 
 #if FOCUS
@@ -18,23 +17,23 @@ class DomainCompletionTests: XCTestCase {
     private let WWWW_DOMAIN = "https://www.example.com"
     private let TEST_NO_PERIOD = "example"
     private let TEST_CASE_INSENSITIVE = "https://www.EXAMPLE.com"
-    
+
     func testAddCustomDomain() {
         addADomain(domain: SIMPLE_DOMAIN)
     }
-    
+
     func testAddCustomDomainWithHttp() {
         addADomain(domain: HTTP_DOMAIN)
     }
-    
+
     func testAddCustomDomainWithHttps() {
         addADomain(domain: HTTPS_DOMAIN)
     }
-    
+
     func testAddCustomDomainWithWWW() {
         addADomain(domain: WWWW_DOMAIN)
     }
-    
+
     func testAddCustomDomainDuplicate() {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
         [WWWW_DOMAIN, TEST_CASE_INSENSITIVE].forEach {
@@ -51,7 +50,7 @@ class DomainCompletionTests: XCTestCase {
             }
         }
     }
-    
+
     func testRemoveCustomDomain() {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
         let sut = CustomCompletionSource(
@@ -66,7 +65,7 @@ class DomainCompletionTests: XCTestCase {
                 XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
         }
     }
-    
+
     func testAddCustomDomainWithoutPeriod() {
         Settings.setCustomDomainSetting(domains: [])
         let sut = CustomCompletionSource(

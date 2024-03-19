@@ -83,9 +83,6 @@ class TabMigrationUtilityTests: XCTestCase {
             let isSelectedTab = index == 0
             let tabUUID = index == 0 ? selectedTabUUID : UUID()
 
-            let sessionData = LegacySessionData(currentPage: 0,
-                                                urls: [URL(string: "https://test.com")!],
-                                                lastUsedTime: Date.now())
             let tabGroupData = LegacyTabGroupData(searchTerm: "searchTerm",
                                                   searchUrl: "searchUrl",
                                                   nextReferralUrl: "nextReferralUrl")
@@ -96,7 +93,6 @@ class TabMigrationUtilityTests: XCTestCase {
                                          isPrivate: false,
                                          faviconURL: "https://test.com",
                                          url: URL(string: "https://test.com"),
-                                         sessionData: sessionData,
                                          uuid: UUID().uuidString,
                                          tabGroupData: tabGroupData,
                                          createdAt: Date().toTimestamp(),

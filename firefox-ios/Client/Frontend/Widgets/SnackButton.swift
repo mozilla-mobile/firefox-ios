@@ -14,7 +14,6 @@ typealias SnackBarCallback = (_ bar: SnackBar) -> Void
 class SnackButton: UIButton, ThemeApplicable {
     private struct UX {
         static let borderWidth: CGFloat = 0.5
-        static let fontSize: CGFloat = 17
     }
 
     let callback: SnackBarCallback?
@@ -37,9 +36,9 @@ class SnackButton: UIButton, ThemeApplicable {
         super.init(frame: .zero)
 
         if bold {
-            titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: UX.fontSize)
+            titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
         } else {
-            titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
+            titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         }
         titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)

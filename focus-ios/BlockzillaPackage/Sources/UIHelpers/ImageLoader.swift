@@ -19,7 +19,6 @@ public extension ImageLoader {
 
     @discardableResult
     func loadImage(_ url: URL, _ completion: @escaping (Swift.Result<UIImage, Swift.Error>) -> Void) -> UUID? {
-
         if let image = cachedImages.object(forKey: url as NSURL) {
             completion(.success(image))
             return nil
@@ -41,7 +40,6 @@ public extension ImageLoader {
                 httpResponse.statusCode == 200,
                 let data = data,
                 let image = UIImage(data: data) {
-
                 self.cachedImages.setObject(image, forKey: url as NSURL)
                 completion(.success(image))
                 return
