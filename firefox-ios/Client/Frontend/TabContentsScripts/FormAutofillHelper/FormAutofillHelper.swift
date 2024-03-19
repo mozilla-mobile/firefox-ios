@@ -145,16 +145,16 @@ class FormAutofillHelper: TabContentScript {
 
     func getFieldTypeValues(payload: FillAddressAutofillForm.Payload) -> AutofillFieldValuePayload {
         let addressPlainText = UnencryptedAddressFields(
-            addressLevel1: payload.addressLevel1,
-            organization: payload.organization,
-            country: payload.country,
-            addressLevel2: payload.addressLevel2,
-            addressLevel3: payload.addressLevel3,
-            email: payload.email,
-            streetAddress: payload.streetAddress,
-            name: payload.name,
-            postalCode: payload.postalCode,
-            tel: payload.tel
+            addressLevel1: payload.addressLevel1 ?? "",
+            organization: payload.organization ?? "",
+            country: payload.country ?? "",
+            addressLevel2: payload.addressLevel2 ?? "",
+            addressLevel3: payload.addressLevel3 ?? "",
+            email: payload.email ?? "",
+            streetAddress: payload.streetAddress ?? "",
+            name: payload.name ?? "",
+            postalCode: payload.postalCode ?? "",
+            tel: payload.tel ?? ""
         )
 
         return AutofillFieldValuePayload(fieldValue: .address, fieldData: addressPlainText)

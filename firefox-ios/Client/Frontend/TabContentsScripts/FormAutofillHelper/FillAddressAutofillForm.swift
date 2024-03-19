@@ -9,19 +9,19 @@ struct FillAddressAutofillForm: Codable {
     let type: FormAutofillPayloadType
 
     struct Payload: Codable {
-        var addressLevel1: String
-        var addressLevel2: String
-        var addressLevel3: String
-        var addressLine1: String
-        var country: String
-        var email: String
-        var familyName: String
-        var givenName: String
-        var name: String
-        var organization: String
-        var postalCode: String
-        var streetAddress: String
-        var tel: String
+        var addressLevel1: String?
+        var addressLevel2: String?
+        var addressLevel3: String?
+        var addressLine1: String?
+        var country: String?
+        var email: String?
+        var familyName: String?
+        var givenName: String?
+        var name: String?
+        var organization: String?
+        var postalCode: String?
+        var streetAddress: String?
+        var tel: String?
 
         enum CodingKeys: String, CodingKey {
             case addressLevel1 = "address-level1"
