@@ -29,14 +29,12 @@
 		<string>google</string>
 		<string>be.wikipedia.org</string>
 		<string>duckduckgo</string>
-		<string>tut.by</string>
 	</array>
 	<key>be-BY</key>
 	<array>
 		<string>google-com-nocodes</string>
 		<string>be.wikipedia.org</string>
 		<string>duckduckgo</string>
-		<string>tut.by</string>
 	</array>
 	<key>be-KZ</key>
 	<array>
@@ -64,7 +62,6 @@
 		<string>google</string>
 		<string>amazondotcom</string>
 		<string>duckduckgo</string>
-		<string>rediff</string>
 		<string>wikipedia-bn</string>
 	</array>
 	<key>br</key>
@@ -77,14 +74,12 @@
 	<array>
 		<string>google</string>
 		<string>wikipedia-ca</string>
-		<string>diec2</string>
 		<string>duckduckgo</string>
 	</array>
 	<key>cs</key>
 	<array>
 		<string>google</string>
 		<string>duckduckgo</string>
-		<string>heureka-cz</string>
 		<string>mapy-cz</string>
 		<string>seznam-cz</string>
 		<string>wikipedia-cz</string>
@@ -129,7 +124,6 @@
 	<array>
 		<string>google</string>
 		<string>duckduckgo</string>
-		<string>skroutz</string>
 		<string>wikipedia-el</string>
 	</array>
 	<key>en-CA</key>
@@ -184,7 +178,6 @@
 	<array>
 		<string>google</string>
 		<string>duckduckgo</string>
-		<string>reta-vortaro</string>
 		<string>wikipedia-eo</string>
 	</array>
 	<key>es-AR</key>
@@ -197,7 +190,6 @@
 	<key>es-CL</key>
 	<array>
 		<string>google</string>
-		<string>drae</string>
 		<string>duckduckgo</string>
 		<string>mercadolibre-cl</string>
 		<string>wikipedia-es</string>
@@ -227,7 +219,6 @@
 	<array>
 		<string>google</string>
 		<string>duckduckgo</string>
-		<string>elebila</string>
 		<string>wikipedia-eu</string>
 	</array>
 	<key>fa</key>
@@ -261,7 +252,6 @@
 	<array>
 		<string>google</string>
 		<string>wikipedia-fy-NL</string>
-		<string>bolcom-fy-NL</string>
 		<string>duckduckgo</string>
 	</array>
 	<key>ga-IE</key>
@@ -269,7 +259,6 @@
 		<string>google</string>
 		<string>amazon-en-GB</string>
 		<string>duckduckgo</string>
-		<string>tearma</string>
 		<string>wikipedia-ga-IE</string>
 	</array>
 	<key>gd</key>
@@ -323,7 +312,6 @@
 	<key>hu</key>
 	<array>
 		<string>google</string>
-		<string>sztaki-en-hu</string>
 		<string>vatera</string>
 		<string>duckduckgo</string>
 		<string>wikipedia-hu</string>
@@ -333,7 +321,6 @@
 		<string>google</string>
 		<string>amazondotcom</string>
 		<string>duckduckgo</string>
-		<string>list-am</string>
 		<string>wikipedia-hy-AM</string>
 	</array>
 	<key>id</key>
@@ -347,7 +334,6 @@
 		<string>google</string>
 		<string>amazondotcom</string>
 		<string>duckduckgo</string>
-		<string>leit-is</string>
 		<string>wikipedia-is</string>
 	</array>
 	<key>it</key>
@@ -412,7 +398,6 @@
 	<key>ko</key>
 	<array>
 		<string>google</string>
-		<string>danawa-kr</string>
 		<string>daum-kr</string>
 		<string>duckduckgo</string>
 		<string>naver-kr</string>
@@ -434,7 +419,6 @@
 		<string>google</string>
 		<string>duckduckgo</string>
 		<string>salidzinilv</string>
-		<string>sslv</string>
 		<string>wikipedia-lv</string>
 	</array>
 	<key>ml</key>
@@ -476,7 +460,6 @@
 	<array>
 		<string>google</string>
 		<string>wikipedia-nl</string>
-		<string>bolcom-nl</string>
 		<string>duckduckgo</string>
 	</array>
 	<key>nn-NO</key>
@@ -517,7 +500,6 @@
 		<string>google</string>
 		<string>duckduckgo</string>
 		<string>leo_ende_de</string>
-		<string>pledarigrond</string>
 		<string>wikipedia-rm</string>
 	</array>
 	<key>ro</key>
@@ -565,9 +547,7 @@
 	<key>sk</key>
 	<array>
 		<string>google</string>
-		<string>azet-sk</string>
 		<string>duckduckgo</string>
-		<string>slovnik-sk</string>
 		<string>wikipedia-sk</string>
 	</array>
 	<key>sl</key>
@@ -705,7 +685,6 @@
 		<string>baidu</string>
 		<string>google-nocodes</string>
 		<string>duckduckgo</string>
-		<string>taobao</string>
 		<string>wikipedia-zh-CN</string>
 	</array>
 	<key>zh-HK</key>
