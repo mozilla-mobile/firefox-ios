@@ -59,8 +59,8 @@ class IntegrationTests: BaseTestCase {
             timeout: TIMEOUT_LONG
         )
         mozWaitForElementToExist(app.staticTexts["Continue to your Mozilla account"], timeout: TIMEOUT_LONG)
-        userState.fxaUsername = "pytest-5aa7b0f5be@restmail.net" // ProcessInfo.processInfo.environment["FXA_EMAIL"]!
-        userState.fxaPassword = "d1695b9a5bc31ddf8bdf511ea577e9676a61dd7ed00375195a6b4a0f7b0cf61a" // ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
+        userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
+        userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
         navigator.performAction(Action.FxATypePasswordExistingAccount)
