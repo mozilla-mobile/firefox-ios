@@ -93,6 +93,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var iconAccentPink: UIColor = FXColors.Pink60
     var iconAccentGreen: UIColor = FXColors.Green60
     var iconAccentYellow: UIColor = FXColors.Yellow60
+    var iconRatingNeutral: UIColor = FXColors.LightGrey40
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.LightGrey30
