@@ -2123,7 +2123,6 @@
 					};
 					166E4BFF21347D150029E2A5 = {
 						CreatedOnToolsVersion = 10.0;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 1300;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -3852,7 +3851,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

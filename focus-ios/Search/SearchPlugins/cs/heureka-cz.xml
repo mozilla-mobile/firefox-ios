@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Heuréka</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,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</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://www.heureka.cz/direct/firefox/autocompleter.php">
+	<Param name="query" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="http://www.heureka.cz/" resultdomain="heureka.cz">
+	<Param name="h[fraze]" value="{searchTerms}"/>
+	<Param name="utm_source" value="firefox-search"/>
+</Url>
+<SearchForm>http://www.heureka.cz/</SearchForm>
+</SearchPlugin>
