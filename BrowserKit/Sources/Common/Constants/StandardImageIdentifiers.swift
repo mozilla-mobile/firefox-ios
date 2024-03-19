@@ -13,6 +13,7 @@ public struct StandardImageIdentifiers {
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
         public static let pinBadgeFill = "pinBadgeFillSmall"
+        public static let sponsoredStar = "sponsoredStarSmall"
     }
 
     // Icon size 20x20
