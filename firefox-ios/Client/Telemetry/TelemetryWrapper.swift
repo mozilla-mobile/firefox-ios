@@ -943,9 +943,11 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         // MARK: Address
-        case(.information, .view, .addressAutofillSettings, _, let extras):
-            if let count = extras?[EventExtraKey.AddressTelemetry.count.rawValue] as? Int32 {
-                GleanMetrics.Addresses.savedAll.add(count)
+        case(.information, .foreground, .addressAutofillSettings, _, let extras):
+            if let quantity = extras?[TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue] as? Int64 {
+                GleanMetrics.Addresses.savedAll.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
         case(.action, .tap, .addressAutofillSettings, _, _):
             GleanMetrics.Addresses.settingsAutofill.record()

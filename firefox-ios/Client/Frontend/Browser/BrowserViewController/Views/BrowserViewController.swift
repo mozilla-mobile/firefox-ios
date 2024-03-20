@@ -1988,13 +1988,6 @@ class BrowserViewController: UIViewController,
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
 
             TelemetryWrapper.recordEvent(
-                category: .information,
-                method: .view,
-                object: .addressAutofillSettings,
-                extras: [TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue: addresses.count]
-            )
-
-            TelemetryWrapper.recordEvent(
                 category: .action,
                 method: .view,
                 object: .addressAutofillPromptShown

@@ -4960,7 +4960,7 @@ addresses:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
   saved_all:
-    type: counter
+    type: quantity
     description: |
       A counter of the number of all addresses that are currently saved by the user.
     bugs:
@@ -4970,6 +4970,7 @@ addresses:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
+    unit: quantity of addresses.saved_all
 # Credit card autofill
 credit_card:
   autofill_settings_tapped:
