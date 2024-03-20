@@ -204,7 +204,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
             exampleLabel.topAnchor.constraint(equalTo: templateInput.bottomAnchor, constant: UIConstants.layout.addSearchEngineExampleLabelOffset),
             exampleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: leftMargin),
             exampleLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -leftMargin)
-
         ])
     }
 
@@ -257,7 +256,6 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private func presentRetryError() {
         let controller = UIAlertController(title: UIConstants.strings.addSearchEngineError, message: nil, preferredStyle: .alert)
         controller.addAction(UIAlertAction(title: UIConstants.strings.errorTryAgain, style: .default, handler: { _ in
-
         }))
         self.present(controller, animated: true, completion: nil)
     }
@@ -310,7 +308,6 @@ extension AddSearchEngineViewController: UITextFieldDelegate {
 }
 
 extension AddSearchEngineViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         self.updateViewConstraints()
         UIView.animate(withDuration: state.animationDuration) {
@@ -334,5 +331,4 @@ extension AddSearchEngineViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) { }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
-
 }

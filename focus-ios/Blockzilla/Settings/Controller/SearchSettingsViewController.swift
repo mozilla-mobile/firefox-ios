@@ -68,7 +68,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         } else {
             return 2
         }
-
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -214,7 +213,6 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
 
         navigationItem.hidesBackButton = tableView.isEditing
     }
-
 }
 
 extension SearchSettingsViewController: AddSearchEngineDelegate {

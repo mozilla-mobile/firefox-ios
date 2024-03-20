@@ -24,10 +24,10 @@ public enum ShieldIconStatus: Equatable {
 }
 
 public class URLBarViewModel {
-    @Published public var canGoBack: Bool = false
-    @Published public var canGoForward: Bool = false
-    @Published public var canDelete: Bool = false
-    @Published public var isLoading: Bool = false
+    @Published public var canGoBack = false
+    @Published public var canGoForward = false
+    @Published public var canDelete = false
+    @Published public var isLoading = false
     @Published public var connectionState: ShieldIconStatus = .on
     @Published public var loadingProgres: Double = 0
 

@@ -67,7 +67,6 @@ class TipsPageViewController: UIViewController {
             emptyController = controller
             install(controller, on: self.view)
         }
-
     }
 }
 

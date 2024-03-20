@@ -5,7 +5,6 @@
 import UIKit
 
 class ActionFooterView: UIView {
-
     lazy var textLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
@@ -41,7 +40,6 @@ class ActionFooterView: UIView {
             stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -UIConstants.layout.settingsVerticalOffset),
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: UIConstants.layout.settingsHorizontalOffset),
             stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UIConstants.layout.settingsHorizontalOffset)
-
         ])
     }
 

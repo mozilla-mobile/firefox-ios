@@ -145,7 +145,6 @@ class FakespotTests: IphoneOnlyTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358892
-    // Smoketest
     func testOptInNotificationLayout() {
         if skipPlatform { return }
         // Navigate to a product detail page on amazon.com page
@@ -183,7 +182,7 @@ class FakespotTests: IphoneOnlyTestCase {
             let searchBestBuy = app.webViews["contentView"].textFields["Search"]
             mozWaitForElementToExist(searchBestBuy)
             searchBestBuy.tap()
-            searchBestBuy.typeText("iphone")
+            searchBestBuy.typeText("macbook air")
             mozWaitForElementToExist(app.webViews["contentView"].buttons["submit search"])
             app.webViews["contentView"].buttons["submit search"].tap()
             waitUntilPageLoad()

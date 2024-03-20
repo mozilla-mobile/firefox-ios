@@ -40,7 +40,6 @@ extension WebMenuAction {
 extension WebMenuAction {
     static let live = WebMenuAction(openInDefaultBrowser: { url in
         UIApplication.shared.open(url, options: [:])
-
     }, showCopy: { url in
         UIPasteboard.general.string = url.absoluteString
         Toast(text: UIConstants.strings.copyURLToast).show()

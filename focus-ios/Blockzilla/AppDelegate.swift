@@ -126,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             let backItemAppearance = UIBarButtonItemAppearance()
-            backItemAppearance.normal.titleTextAttributes = [.foregroundColor : UIColor.accent]
+            backItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.accent]
             let image = UIImage(systemName: "chevron.backward")?.withTintColor(.accent, renderingMode: .alwaysOriginal) // fix indicator color
             appearance.setBackIndicatorImage(image, transitionMaskImage: image)
             appearance.backButtonAppearance = backItemAppearance
@@ -178,8 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if case .text = navigation {
             queuedString = navigationHandler as? String
-        }
-        else if case .url = navigation {
+        } else if case .url = navigation {
             queuedUrl = navigationHandler as? URL
         }
 
@@ -187,7 +186,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
-
         completionHandler(handleShortcut(shortcutItem: shortcutItem))
     }
 
@@ -339,7 +337,6 @@ extension AppDelegate {
 
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
-
     func setupTelemetry() {
         let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
