@@ -650,32 +650,34 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
-    public func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
-        let rustKeys = RustLoginEncryptionKeys()
-        listLogins { result in
-            switch result {
-            case .success(let logins):
-                let records = logins
+    public func searchLoginsWithQuery(
+        _ query: String?,
+        completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+            let rustKeys = RustLoginEncryptionKeys()
+            listLogins { result in
+                switch result {
+                case .success(let logins):
+                    let records = logins
 
-                guard let query = query?.lowercased(), !query.isEmpty else {
-                    completionHandler(.success(records?.first))
-                    return
-                }
+                    guard let query = query?.lowercased(), !query.isEmpty else {
+                        completionHandler(.success(records?.first))
+                        return
+                    }
 
-                let filteredRecords = records?.filter {
-                    let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
-                    return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
+                    let filteredRecords = records?.filter {
+                        let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
+                        return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
+                    }
+                    if let firstFilteredRecord = filteredRecords?.first {
+                        completionHandler(.success(firstFilteredRecord))
+                    } else {
+                        completionHandler(.success(nil))
+                    }
+                case .failure(let error):
+                    completionHandler(.failure(error))
                 }
-                if let firstFilteredRecord = filteredRecords?.first {
-                    completionHandler(.success(firstFilteredRecord))
-                } else {
-                    completionHandler(.success(nil))
-                }
-            case .failure(let error):
-                completionHandler(.failure(error))
             }
         }
-    }
 
     public func getLoginsForProtectionSpace(
         _ protectionSpace: URLProtectionSpace,
@@ -876,7 +878,11 @@ public class RustLogins: LoginsProtocol {
         return deferred
     }
 
-    public func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+    public func updateLogin(
+        id: String,
+        login: LoginEntry,
+        completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void
+    ) {
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
