@@ -130,6 +130,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
         await generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
+        cleanUpTabSessionData()
 
         await MainActor.run {
             for delegate in delegates {
@@ -447,6 +448,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
     }
 
+    private func cleanUpTabSessionData() {
+        let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
+        }
+    }
+
     // MARK: - Inactive tabs
     override func getInactiveTabs() -> [Tab] {
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
@@ -467,6 +475,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         tabs.append(contentsOf: backupCloseTabs)
         storeChanges()
         backupCloseTabs = [Tab]()
+    }
+
+    override func clearAllTabsHistory() {
+        super.clearAllTabsHistory()
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
+        }
     }
 
     // MARK: - Notifiable
