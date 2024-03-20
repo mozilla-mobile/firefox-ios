@@ -122,7 +122,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         updateActionSpacing()
     }
 
-    //MARK: - Private
+    // MARK: - Private
     private func updateActionSpacing() {
         // Browser action spacing
         let hasBrowserActions = !browserActionStack.arrangedSubviews.isEmpty
