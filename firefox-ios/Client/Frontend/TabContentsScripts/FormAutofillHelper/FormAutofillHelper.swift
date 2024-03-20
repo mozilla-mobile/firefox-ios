@@ -53,8 +53,8 @@ class FormAutofillHelper: TabContentScript {
 
     func scriptMessageHandlerNames() -> [String]? {
         return [HandlerName.addressFormMessageHandler.rawValue,
-            HandlerName.addressFormTelemetryMessageHandler.rawValue,
-            HandlerName.creditCardFormMessageHandler.rawValue]
+                HandlerName.addressFormTelemetryMessageHandler.rawValue,
+                HandlerName.creditCardFormMessageHandler.rawValue]
     }
 
     // MARK: - Deinitialization
@@ -85,29 +85,33 @@ class FormAutofillHelper: TabContentScript {
 
         switch HandlerName(rawValue: message.name) {
         case .addressFormTelemetryMessageHandler:
-            // TODO(FXIOS-7547): Implement telemetry forwarding logic
-            logger.log("Received address telemery data",
-                       level: .debug,
-                       category: .autofill)
+            let addressValues = message.decodeBody(as: AddressFormData.self)
+            if addressValues?.object == "address_form" {
+                switch addressValues?.method {
+                case .detected:
+                    TelemetryWrapper.recordEvent(category: .action, method: .detect, object: .addressForm)
+                case .filled:
+                    TelemetryWrapper.recordEvent(category: .action, method: .detect, object: .addressFormFilled)
+                case .filledModified:
+                    TelemetryWrapper.recordEvent(category: .action, method: .change, object: .addressFormFilledModified)
+                case .none:
+                    return
+                }
+            }
         case .addressFormMessageHandler:
-            // Parse message payload for address form autofill
-            guard let data = getValidPayloadData(from: message),
-                  let fieldValues = parseFieldType(messageBody: data, formType: FillAddressAutofillForm.self),
-                  let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
-            else {
+            guard let fieldValues = message.decodeBody(as: FillAddressAutofillForm.self) else {
                 // Log a warning if payload parsing fails
                 logger.log("Unable to find the payloadType for the address form JS input",
                            level: .warning,
                            category: .webview)
                 return
             }
-            let payloadData = fieldValues.addressPayload
-            foundFieldValues?(getFieldTypeValues(payload: payloadData), payloadType, frame)
+
+            foundFieldValues?(getFieldTypeValues(payload: fieldValues.payload), fieldValues.type, frame)
 
         case .creditCardFormMessageHandler:
             // Parse message payload for credit card form autofill
-            guard let data = getValidPayloadData(from: message),
-                  let fieldValues = parseFieldType(messageBody: data, formType: FillCreditCardForm.self),
+            guard let fieldValues = message.decodeBody(as: FillCreditCardForm.self),
                   let payloadType = FormAutofillPayloadType(rawValue: fieldValues.type)
             else {
                 // Log a warning if payload parsing fails
@@ -126,26 +130,6 @@ class FormAutofillHelper: TabContentScript {
         }
     }
 
-    // MARK: - Payload Data Handling
-
-    func getValidPayloadData(from message: WKScriptMessage) -> [String: Any]? {
-        return message.body as? [String: Any]
-    }
-
-    func parseFieldType<T: Decodable>(messageBody: [String: Any], formType: T.Type) -> T? {
-        let decoder = JSONDecoder()
-
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: messageBody, options: .prettyPrinted)
-            let formData = try decoder.decode(formType, from: jsonData)
-            return formData
-        } catch let error {
-            logger.log("Unable to parse field type, \(error)", level: .warning, category: .webview)
-        }
-
-        return nil
-    }
-
     func getFieldTypeValues(payload: CreditCardPayload) -> AutofillFieldValuePayload {
         var ccPlainText = UnencryptedCreditCardFields()
         let creditCardValidator = CreditCardValidator()
@@ -159,18 +143,18 @@ class FormAutofillHelper: TabContentScript {
         return AutofillFieldValuePayload(fieldValue: .creditCard, fieldData: ccPlainText)
     }
 
-    func getFieldTypeValues(payload: AddressAutofillPayload) -> AutofillFieldValuePayload {
+    func getFieldTypeValues(payload: FillAddressAutofillForm.Payload) -> AutofillFieldValuePayload {
         let addressPlainText = UnencryptedAddressFields(
-            addressLevel1: payload.addressLevel1,
-            organization: payload.organization,
-            country: payload.country,
-            addressLevel2: payload.addressLevel2,
-            addressLevel3: payload.addressLevel3,
-            email: payload.email,
-            streetAddress: payload.streetAddress,
-            name: payload.name,
-            postalCode: payload.postalCode,
-            tel: payload.tel
+            addressLevel1: payload.addressLevel1 ?? "",
+            organization: payload.organization ?? "",
+            country: payload.country ?? "",
+            addressLevel2: payload.addressLevel2 ?? "",
+            addressLevel3: payload.addressLevel3 ?? "",
+            email: payload.email ?? "",
+            streetAddress: payload.streetAddress ?? "",
+            name: payload.name ?? "",
+            postalCode: payload.postalCode ?? "",
+            tel: payload.tel ?? ""
         )
 
         return AutofillFieldValuePayload(fieldValue: .address, fieldData: addressPlainText)

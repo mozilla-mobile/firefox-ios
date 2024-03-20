@@ -1986,6 +1986,12 @@ class BrowserViewController: UIViewController,
     private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listAllAddresses(completion: { addresses, error in
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
+
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .view,
+                object: .addressAutofillPromptShown
+            )
             DispatchQueue.main.async {
                 tabWebView.accessoryView.reloadViewFor(AccessoryType.address)
                 tabWebView.reloadInputViews()

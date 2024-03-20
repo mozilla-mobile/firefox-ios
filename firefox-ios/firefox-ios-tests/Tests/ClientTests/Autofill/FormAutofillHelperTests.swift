@@ -235,15 +235,8 @@ class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
-    func test_getValidPayloadData() {
-        XCTAssertNotNil(formAutofillHelper.getValidPayloadData(from: validMockWKMessage))
-        XCTAssertNotNil(formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage))
-    }
-
     func test_parseFieldType_valid() {
-        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
-                                                                                   formType: FillCreditCardForm.self)
+        let messageFields = validMockWKMessage.decodeBody(as: FillCreditCardForm.self)
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formInput.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -253,9 +246,8 @@ class FormAutofillHelperTests: XCTestCase {
     }
 
     func test_parseFieldCaptureJsonType_valid() {
-        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage)
-        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
-                                                                                   formType: FillCreditCardForm.self)
+        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formSubmit.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -267,9 +259,7 @@ class FormAutofillHelperTests: XCTestCase {
     // MARK: Retrieval
 
     func test_getFieldTypeValues() {
-        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
-                                                                                   formType: FillCreditCardForm.self)
+        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
 
         XCTAssertNotNil(messageFields)
         if let fieldValues = formAutofillHelper.getFieldTypeValues(

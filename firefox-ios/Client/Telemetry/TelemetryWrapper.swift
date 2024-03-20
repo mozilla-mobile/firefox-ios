@@ -284,6 +284,7 @@ extension TelemetryWrapper {
         case closeAll = "close-all"
         case delete = "delete"
         case deleteAll = "deleteAll"
+        case detect = "detect"
         case drag = "drag"
         case drop = "drop"
         case foreground = "foreground"
@@ -400,6 +401,15 @@ extension TelemetryWrapper {
         case loginsDeleted = "logins-deleted"
         case loginsModified = "logins-modified"
         case loginsSyncEnabled = "logins-sync-enabled"
+        // MARK: Address
+        case addressForm = "address-form"
+        case addressFormFilled = "address-form-filled"
+        case addressFormFilledModified = "address-form-filled-modified"
+        case addressAutofillSettings = "address-autofill-settings"
+        case addressAutofillPromptShown = "address-autofill-popup-shown"
+        case addressAutofillPromptExpanded = "address-autofill-popup-expanded"
+        case addressAutofillPromptDismissed = "address-autofill-popup-dismissed"
+
         // MARK: Credit Card
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case creditCardFormDetected = "creditCardFormDetected"
@@ -748,6 +758,10 @@ extension TelemetryWrapper {
             case groups
             case results
         }
+
+        public enum AddressTelemetry: String {
+            case count
+        }
     }
 
     func recordEvent(category: EventCategory,
@@ -928,6 +942,27 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+        // MARK: Address
+        case(.information, .foreground, .addressAutofillSettings, _, let extras):
+            if let quantity = extras?[TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue] as? Int64 {
+                GleanMetrics.Addresses.savedAll.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case(.action, .tap, .addressAutofillSettings, _, _):
+            GleanMetrics.Addresses.settingsAutofill.record()
+        case(.action, .view, .addressAutofillPromptShown, _, _):
+            GleanMetrics.Addresses.autofillPromptShown.record()
+        case(.action, .tap, .addressAutofillPromptExpanded, _, _):
+            GleanMetrics.Addresses.autofillPromptExpanded.record()
+        case(.action, .close, .addressAutofillPromptDismissed, _, _):
+            GleanMetrics.Addresses.autofillPromptDismissed.record()
+        case(.action, .change, .addressFormFilledModified, _, _):
+            GleanMetrics.Addresses.modified.record()
+        case(.action, .detect, .addressFormFilled, _, _):
+            GleanMetrics.Addresses.autofilled.record()
+        case(.action, .detect, .addressForm, _, _):
+            GleanMetrics.Addresses.formDetected.record()
 
         // MARK: Credit Card
         case(.action, .tap, .creditCardAutofillSettings, _, _):
