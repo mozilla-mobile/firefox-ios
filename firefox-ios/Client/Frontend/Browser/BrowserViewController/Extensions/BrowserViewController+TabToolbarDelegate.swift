@@ -328,7 +328,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: themeManager.currentTheme) { [weak self] isButtonTapped in
-                guard let strongSelf = self, let currentTab = strongSelf.tabManager.selectedTab else { return }
+                guard let self, let currentTab = tabManager.selectedTab else { return }
                 isButtonTapped ? strongSelf.addBookmark(
                     url: bookmarkURLString,
                     title: title ?? currentTab.title
