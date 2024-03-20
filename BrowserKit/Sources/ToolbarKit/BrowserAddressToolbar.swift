@@ -35,6 +35,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
 
     private var leadingBrowserActionConstraint: NSLayoutConstraint?
     private var leadingLocationContainerConstraint: NSLayoutConstraint?
+    private var dividerWidthConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -46,12 +47,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
     }
 
     public func configure(state: AddressToolbarState) {
-        updateBrowserActionSpacing()
-        updateNavigationActionSpacing()
+        updateActionSpacing()
     }
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer1
         locationContainer.backgroundColor = theme.colors.layer3
         locationDividerView.backgroundColor = theme.colors.layer1
     }
@@ -77,14 +78,28 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
             constant: UX.horizontalSpace)
         leadingBrowserActionConstraint?.isActive = true
 
+        dividerWidthConstraint = locationDividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth)
+        dividerWidthConstraint?.isActive = true
+
+        let navigationActionWidthAnchor = navigationActionStack.widthAnchor.constraint(equalToConstant: 0)
+        navigationActionWidthAnchor.isActive = true
+        navigationActionWidthAnchor.priority = .defaultHigh
+
+        let pageActionWidthAnchor = pageActionStack.widthAnchor.constraint(equalToConstant: 0)
+        pageActionWidthAnchor.isActive = true
+        pageActionWidthAnchor.priority = .defaultHigh
+
+        let browserActionWidthAnchor = browserActionStack.widthAnchor.constraint(equalToConstant: 0)
+        browserActionWidthAnchor.isActive = true
+        browserActionWidthAnchor.priority = .defaultHigh
+
         NSLayoutConstraint.activate([
-            navigationActionStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+            navigationActionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
             navigationActionStack.topAnchor.constraint(equalTo: topAnchor),
             navigationActionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             locationContainer.topAnchor.constraint(equalTo: topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
-            locationContainer.heightAnchor.constraint(equalToConstant: 40),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -94,31 +109,31 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
             locationDividerView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
             locationDividerView.trailingAnchor.constraint(equalTo: pageActionStack.leadingAnchor),
             locationDividerView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
-            locationDividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth),
 
             pageActionStack.topAnchor.constraint(equalTo: locationContainer.topAnchor),
             pageActionStack.trailingAnchor.constraint(equalTo: locationContainer.trailingAnchor),
             pageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             browserActionStack.topAnchor.constraint(equalTo: topAnchor),
-            browserActionStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+            browserActionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
             browserActionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        navigationActionStack.setContentHuggingPriority(.required, for: .horizontal)
-        locationContainer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        browserActionStack.setContentHuggingPriority(.required, for: .horizontal)
-        updateNavigationActionSpacing()
-        updateBrowserActionSpacing()
+        updateActionSpacing()
     }
 
-    private func updateBrowserActionSpacing() {
-        let hasActions = !browserActionStack.arrangedSubviews.isEmpty
-        leadingBrowserActionConstraint?.constant = hasActions ? UX.horizontalSpace : 0
-    }
+    //MARK: - Private
+    private func updateActionSpacing() {
+        // Browser action spacing
+        let hasBrowserActions = !browserActionStack.arrangedSubviews.isEmpty
+        leadingBrowserActionConstraint?.constant = hasBrowserActions ? UX.horizontalSpace : 0
 
-    private func updateNavigationActionSpacing() {
-        let hasActions = !navigationActionStack.arrangedSubviews.isEmpty
-        leadingLocationContainerConstraint?.constant = hasActions ? -UX.horizontalSpace : 0
+        // Navigation action spacing
+        let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
+        leadingLocationContainerConstraint?.constant = hasNavigationActions ? -UX.horizontalSpace : 0
+
+        // Page action spacing
+        let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty
+        dividerWidthConstraint?.constant = hasPageActions ? UX.dividerWidth : 0
     }
 }
