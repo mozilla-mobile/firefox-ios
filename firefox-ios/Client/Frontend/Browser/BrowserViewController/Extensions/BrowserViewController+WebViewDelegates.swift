@@ -33,6 +33,11 @@ extension BrowserViewController: WKUIDelegate {
             screenshotHelper.takeScreenshot(currentTab)
         }
 
+        if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
+            UIApplication.shared.open(url)
+            return nil
+        }
+
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
         // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
         // the request here manually leads to incorrect results!!
@@ -1081,5 +1086,15 @@ extension WKNavigationAction {
         } else {
             return false
         }
+    }
+
+    var canOpenExternalApp: Bool {
+        guard let urlShortDomain = request.url?.shortDomain else { return false }
+
+        if let url = URL(string: "\(urlShortDomain)://"), UIApplication.shared.canOpenURL(url) {
+            return true
+        }
+
+        return false
     }
 }
