@@ -160,6 +160,11 @@ objects:
             title: Onboarding/Onboarding.Sync.Skip.Action.v114
             action: next-card
           secondary: null
+      multiple-choice-buttons:
+        type: List<NimbusOnboardingMultipleChoiceButton>
+        description: >
+          A list of multiple choice buttons that the card will display
+        default: []
       instructions-popup:
         type: Option<NimbusOnboardingInstructionPopup>
         description: >
@@ -237,6 +242,29 @@ objects:
           The action the button should take.
           The default for this will be "next-card"
         default: next-card
+  NimbusOnboardingMultipleChoiceButton:
+    description: >
+      A group of properties describing the attributes of a
+      multiple choice button on a card
+    fields:
+      title:
+        type: Text
+        description: >
+          The text of the button title.
+          This should never be defaulted.
+        default: ""
+      image:
+        type: NimbusOnboardingMultipleChoiceButtonImage
+        description: >
+          The text of the button title.
+          This should never be defaulted.
+        default: theme-system
+      action:
+        type: OnboardingMultipleChoiceAction
+        description: >
+          The action the button should take.
+          The default for this will be "theme-system-default"
+        default: theme-system-default
   NimbusOnboardingInstructionPopup:
     description: >
       The object outlining the content of the instruction card.
@@ -342,3 +370,30 @@ enums:
         description: >
           Corresponding to onboarding cards that are for users
           who have updated
+  OnboardingMultipleChoiceAction:
+    description: >
+      The identifiers for the different actions available for cards in onboarding
+    variants:
+      theme-system-default:
+        description: >
+          Will set the theme to use the system theme
+      theme-dark:
+        description: >
+          Will will set the theme to dark mode
+      theme-light:
+        description: >
+          Will set the theme to light mode
+      toolbar-top:
+        description: >
+          Will set the toolbar on the top
+      toolbar-bottom:
+        description: >
+          Will set the toolbar on the bottom
+  NimbusOnboardingMultipleChoiceButtonImage:
+    description: >
+      The identifiers for the different images available
+      for multiple choice buttons in onboarding
+    variants:
+      theme-system:
+        description: >
+          Corresponding to the system theme

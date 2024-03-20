@@ -57,6 +57,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 body: card.body,
                 link: card.link,
                 buttons: card.buttons,
+                multipleChoiceButtons: card.multipleChoiceButtons,
                 type: card.type,
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
@@ -90,9 +91,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                         AppName.shortName.rawValue),
                     link: getOnboardingLink(from: cardData.link),
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
+                    multipleChoiceButtons: getOnboardingMultipleChoiceButtons(from: cardData.multipleChoiceButtons),
                     type: cardData.type,
                     a11yIdRoot: cardData.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
-                    imageID: getOnboardingImageID(from: cardData.image),
+                    imageID: getOnboardingHeaderImageID(from: cardData.image),
                     instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,
                         withA11yID: "")
@@ -160,6 +162,18 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             })
     }
 
+    private func getOnboardingMultipleChoiceButtons(
+        from cardButtons: [NimbusOnboardingMultipleChoiceButton]
+    ) -> [OnboardingMultipleChoiceButtonModel] {
+        return cardButtons.map { button in
+            return OnboardingMultipleChoiceButtonModel(
+                title: button.title,
+                action: button.action,
+                imageID: getOnboardingMultipleChoiceButtonImageID(from: button.image)
+            )
+        }
+    }
+
     private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url, invalidCharacters: false)
@@ -168,7 +182,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    private func getOnboardingImageID(from identifier: NimbusOnboardingHeaderImage) -> String {
+    private func getOnboardingHeaderImageID(from identifier: NimbusOnboardingHeaderImage) -> String {
         switch identifier {
         case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
         case .syncDevices: return ImageIdentifiers.onboardingSyncv106
@@ -178,6 +192,14 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .syncDevicesCtd: return ImageIdentifiers.onboardingSyncCTD
         case .setToDock: return ImageIdentifiers.onboardingSetToDock
         case .searchWidget: return ImageIdentifiers.onboardingSearchWidget
+        }
+    }
+
+    private func getOnboardingMultipleChoiceButtonImageID(
+        from identifier: NimbusOnboardingMultipleChoiceButtonImage
+    ) -> String {
+        switch identifier {
+        case .themeSystem: return "test"
         }
     }
 
