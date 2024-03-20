@@ -9,8 +9,8 @@ struct FakespotState: ScreenState, Equatable {
     var isOpen: Bool
     var sidebarOpenForiPadLandscape: Bool
     var currentTabUUID: String
-    var expandState: [String: ExpandState] // tabUUID as key
-    var telemetryState: [String: TelemetryState] // tabUUID as key
+    var expandState: [TabUUID: ExpandState]
+    var telemetryState: [TabUUID: TelemetryState]
     var sendSurfaceDisplayedTelemetryEvent = true
     var windowUUID: WindowUUID
 
@@ -59,7 +59,7 @@ struct FakespotState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         isOpen: Bool,
         sidebarOpenForiPadLandscape: Bool,
-        currentTabUUID: String,
+        currentTabUUID: TabUUID,
         expandState: [String: FakespotState.ExpandState] = [:],
         telemetryState: [String: TelemetryState] = [:]
     ) {

@@ -60,6 +60,8 @@ enum TabUrlType: String {
     case googleTopSiteFollowOn
 }
 
+typealias TabUUID = String
+
 class Tab: NSObject, ThemeApplicable {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
@@ -98,7 +100,7 @@ class Tab: NSObject, ThemeApplicable {
 
     // Setting default page as topsites
     var newTabPageType: NewTabPage = .topSites
-    var tabUUID: String = UUID().uuidString
+    var tabUUID: TabUUID = UUID().uuidString
     private var screenshotUUIDString: String?
 
     var screenshotUUID: UUID? {

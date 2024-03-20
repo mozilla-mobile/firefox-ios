@@ -5,7 +5,7 @@
 import Foundation
 
 struct TabModel: Equatable {
-    let tabUUID: String
+    let tabUUID: TabUUID
     let isSelected: Bool
     let isPrivate: Bool
     let isFxHomeTab: Bool
@@ -15,7 +15,7 @@ struct TabModel: Equatable {
     let screenshot: UIImage?
     let hasHomeScreenshot: Bool
 
-    static func emptyTabState(tabUUID: String, title: String) -> TabModel {
+    static func emptyTabState(tabUUID: TabUUID, title: String) -> TabModel {
         return TabModel(
             tabUUID: tabUUID,
             isSelected: false,
