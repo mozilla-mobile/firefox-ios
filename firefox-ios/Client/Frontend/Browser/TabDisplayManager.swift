@@ -59,7 +59,7 @@ enum TabDisplayType {
 // Regular tab order persistence for TabDisplayManager
 struct TabDisplayOrder: Codable {
     static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-    var regularTabUUID: [String] = []
+    var regularTabUUID: [TabUUID] = []
 }
 
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {

@@ -48,8 +48,8 @@ class URLContext: ActionContext {
 }
 
 class TabUUIDContext: ActionContext {
-    let tabUUID: String
-    init(tabUUID: String, windowUUID: WindowUUID) {
+    let tabUUID: TabUUID
+    init(tabUUID: TabUUID, windowUUID: WindowUUID) {
         self.tabUUID = tabUUID
         super.init(windowUUID: windowUUID)
     }
