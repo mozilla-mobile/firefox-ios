@@ -78,12 +78,12 @@ class SyncUITests: BaseTestCase {
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
-        navigator.performAction(Action.FxATypePassword)
+        navigator.performAction(Action.FxATypePasswordNewAccount)
         mozWaitForElementToExist(app.webViews.staticTexts["At least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
-        navigator.performAction(Action.FxATypePassword)
+        navigator.performAction(Action.FxATypePasswordNewAccount)
         mozWaitForElementToExist(app.webViews.staticTexts["Repeat password"], timeout: 10)
     }
 
@@ -119,8 +119,8 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnContinueButton)
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
-        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
-        navigator.performAction(Action.FxATypePassword)
+        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 1))
+        navigator.performAction(Action.FxATypePasswordNewAccount)
         let passMessage = "Your password is currently hidden."
         mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown

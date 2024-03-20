@@ -262,12 +262,13 @@ class TabManagerMiddleware {
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 store.dispatch(TabPanelAction.tabPanelDidLoad(BoolValueContext(boolValue: true, windowUUID: uuid)))
-                store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
+                store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)))
             } else if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
+                let toastContext = ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)
+                store.dispatch(GeneralBrowserAction.showToast(toastContext))
             } else {
-                store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .singleTab, windowUUID: uuid)))
+                store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)))
             }
         }
     }
@@ -307,12 +308,13 @@ class TabManagerMiddleware {
                 let context = RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)
                 store.dispatch(TabPanelAction.refreshTab(context))
                 if tabsState.isPrivateMode {
-                    store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .allTabs(count: privateCount),
+                    store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .closedAllTabs(count: privateCount),
                                                                              windowUUID: uuid)))
                 } else {
                     store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                    store.dispatch(GeneralBrowserAction.showToast(ToastTypeContext(toastType: .allTabs(count: normalCount),
-                                                                                   windowUUID: uuid)))
+                    let context = ToastTypeContext(toastType: .closedAllTabs(count: normalCount),
+                                                   windowUUID: uuid)
+                    store.dispatch(GeneralBrowserAction.showToast(context))
                 }
             }
         }
@@ -338,7 +340,7 @@ class TabManagerMiddleware {
             await tabManager.removeAllInactiveTabs()
             let context = RefreshInactiveTabsContext(tabModels: [InactiveTabsModel](), windowUUID: uuid)
             store.dispatch(TabPanelAction.refreshInactiveTabs(context))
-            let toastContext = ToastTypeContext(toastType: .allInactiveTabs(count: tabsState.inactiveTabs.count),
+            let toastContext = ToastTypeContext(toastType: .closedAllTabs(count: tabsState.inactiveTabs.count),
                                                 windowUUID: uuid)
             store.dispatch(TabPanelAction.showToast(toastContext))
         }
@@ -368,7 +370,7 @@ class TabManagerMiddleware {
             let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
             let context = RefreshInactiveTabsContext(tabModels: inactiveTabs, windowUUID: uuid)
             store.dispatch(TabPanelAction.refreshInactiveTabs(context))
-            let toastContext = ToastTypeContext(toastType: .singleInactiveTabs, windowUUID: uuid)
+            let toastContext = ToastTypeContext(toastType: .closedSingleInactiveTab, windowUUID: uuid)
             store.dispatch(TabPanelAction.showToast(toastContext))
         }
     }
@@ -485,7 +487,7 @@ class TabManagerMiddleware {
 
     private func tabPeekCloseTab(with tabID: String, uuid: WindowUUID, isPrivate: Bool) {
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
-        let context = ToastTypeContext(toastType: .singleTab, windowUUID: uuid)
+        let context = ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)
         store.dispatch(TabPanelAction.showToast(context))
     }
 

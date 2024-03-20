@@ -673,6 +673,9 @@ extension BrowserViewController: WKNavigationDelegate {
         let response = navigationResponse.response
         let responseURL = response.url
 
+        tabManager[webView]?.mimeType = response.mimeType
+        notificationCenter.post(name: .TabMimeTypeDidSet)
+
         var request: URLRequest?
         if let url = responseURL {
             request = pendingRequests.removeValue(forKey: url.absoluteString)
