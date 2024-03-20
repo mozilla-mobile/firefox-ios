@@ -664,7 +664,7 @@ class BrowserCoordinator: BaseCoordinator,
         present(backForwardListVC)
     }
 
-    private func present(_ viewController: UIViewController, 
+    private func present(_ viewController: UIViewController,
                          animated: Bool = true,
                          completion: (() -> Void)? = nil) {
         browserViewController.willNavigateAway()

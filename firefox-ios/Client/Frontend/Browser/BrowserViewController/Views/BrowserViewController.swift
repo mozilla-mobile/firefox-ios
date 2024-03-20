@@ -1763,14 +1763,8 @@ class BrowserViewController: UIViewController,
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        // Represents WebView observation or delegate update that called this function
-
         if webViewStatus == .finishedNavigation {
-            // A delay of 500 milliseconds is added when we take screenshot
-            // as we don't know exactly when wkwebview is rendered
-            let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
-
-            if tab !== tabManager.selectedTab, let webView = tab.webView {
+            if let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
                 webView.frame = contentContainer.frame
