@@ -321,6 +321,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     func showToast(_ bookmarkURL: URL? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
         case .removeBookmark:
+            guard let bookmarkURLString = bookmarkURL?.absoluteString else { return }
+
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
