@@ -168,7 +168,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    private func getOnboardingImageID(from identifier: NimbusOnboardingImages) -> String {
+    private func getOnboardingImageID(from identifier: NimbusOnboardingHeaderImage) -> String {
         switch identifier {
         case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
         case .syncDevices: return ImageIdentifiers.onboardingSyncv106
@@ -182,7 +182,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     }
 
     private func getPopupInfoModel(
-        from data: NimbusInstructionPopup?,
+        from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
     ) -> OnboardingInstructionsPopupInfoModel? {
         guard let data else { return nil }

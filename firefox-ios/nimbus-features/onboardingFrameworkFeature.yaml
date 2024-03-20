@@ -141,7 +141,7 @@ objects:
           This should never be defaulted.
         default: ""
       image:
-        type: NimbusOnboardingImages
+        type: NimbusOnboardingHeaderImage
         description: >
           The image that should be dispalyed on the card.
         default: welcome-globe
@@ -161,7 +161,7 @@ objects:
             action: next-card
           secondary: null
       instructions-popup:
-        type: Option<NimbusInstructionPopup>
+        type: Option<NimbusOnboardingInstructionPopup>
         description: >
           The object describing the specific instruction popup
           button for a card.
@@ -237,7 +237,7 @@ objects:
           The action the button should take.
           The default for this will be "next-card"
         default: next-card
-  NimbusInstructionPopup:
+  NimbusOnboardingInstructionPopup:
     description: >
       The object outlining the content of the instruction card.
     fields:
@@ -303,7 +303,7 @@ enums:
       dismiss:
         description: >
           Will dismiss the popup
-  NimbusOnboardingImages:
+  NimbusOnboardingHeaderImage:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:

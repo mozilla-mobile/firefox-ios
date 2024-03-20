@@ -55,7 +55,7 @@ struct NimbusOnboardingTestingConfigUtility {
 
     // MARK: - Custom setups
     func setupNimbusWith(
-        image: NimbusOnboardingImages = .welcomeGlobe,
+        image: NimbusOnboardingHeaderImage = .welcomeGlobe,
         type: OnboardingType = .freshInstall,
         dismissable: Bool = true,
         shouldAddLink: Bool = false,
@@ -84,7 +84,7 @@ struct NimbusOnboardingTestingConfigUtility {
     // MARK: - Private helpers
     private func createCards(
         numbering numberOfCards: Int,
-        image: NimbusOnboardingImages,
+        image: NimbusOnboardingHeaderImage,
         type: OnboardingType,
         shouldAddLink: Bool,
         withSecondaryButton: Bool,
@@ -119,7 +119,7 @@ struct NimbusOnboardingTestingConfigUtility {
     ) -> NimbusOnboardingCardData {
         let shouldAddLink: [CardOrder] = [.welcome, .updateWelcome]
         let isUpdate: [CardOrder] = [.updateWelcome, .updateSync]
-        let image: NimbusOnboardingImages = {
+        let image: NimbusOnboardingHeaderImage = {
             switch id {
             case .notifications: return .notifications
             case .welcome, .updateWelcome: return .welcomeGlobe
@@ -195,8 +195,8 @@ struct NimbusOnboardingTestingConfigUtility {
             url: "\(CardElementNames.linkURL)")
     }
 
-    private func buildInfoPopup() -> NimbusInstructionPopup {
-        return NimbusInstructionPopup(
+    private func buildInfoPopup() -> NimbusOnboardingInstructionPopup {
+        return NimbusOnboardingInstructionPopup(
             buttonAction: .dismiss,
             buttonTitle: CardElementNames.popupButtonTitle,
             instructions: [
