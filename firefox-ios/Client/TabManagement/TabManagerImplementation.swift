@@ -42,8 +42,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             self.inactiveTabsManager = inactiveTabsManager
             super.init(profile: profile, uuid: uuid)
 
-        setupNotifications(forObserver: self,
-                           observing: [UIApplication.willResignActiveNotification, .TabMimeTypeDidSet])
+            setupNotifications(forObserver: self,
+                               observing: [UIApplication.willResignActiveNotification,
+                                           .TabMimeTypeDidSet])
     }
 
     // MARK: - Restore tabs
@@ -476,6 +477,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         tabs.append(contentsOf: backupCloseTabs)
         storeChanges()
         backupCloseTabs = [Tab]()
+    }
+
+    override func clearAllTabsHistory() {
+        super.clearAllTabsHistory()
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: [])
+        }
     }
 
     // MARK: - Update Menu Items
