@@ -13,11 +13,9 @@ pytest = "*"
 requests = "*"
 xcrun = "*"
 isim = "*"
-black = "*"
 pytest-html = "==3.2.0"
 pytest-variables = "*"
 pyyaml = "*"
 typing_extensions = "*"
-
 
 [dev-packages]
