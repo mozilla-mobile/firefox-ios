@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIPasteboard {
-
     //
     // As of iOS 11: macOS/iOS's Universal Clipboard feature causes UIPasteboard to block.
     //

@@ -11,7 +11,7 @@ struct AppColorsView: View {
                 HStack {
                     Text(color.rawValue)
                     Spacer()
-                    Color.init(color.color)
+                    Color(color.color)
                         .frame(width: 44, height: 44)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .overlay(

@@ -43,8 +43,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             super.init(profile: profile, uuid: uuid)
 
         setupNotifications(forObserver: self,
-                           observing: [UIApplication.willResignActiveNotification,
-                                       .TabMimeTypeDidSet])
+                           observing: [UIApplication.willResignActiveNotification, .TabMimeTypeDidSet])
     }
 
     // MARK: - Restore tabs
@@ -131,6 +130,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
         await generateTabs(from: windowData)
         cleanUpUnusedScreenshots()
+        cleanUpTabSessionData()
 
         await MainActor.run {
             for delegate in delegates {
@@ -154,9 +154,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             newTab.screenshotUUID = tabData.id
             newTab.firstCreatedTime = tabData.createdAtTime.toTimestamp()
             newTab.lastExecutedTime = tabData.lastUsedTime.toTimestamp()
-            newTab.sessionData = LegacySessionData(currentPage: 0,
-                                                   urls: [],
-                                                   lastUsedTime: tabData.lastUsedTime.toTimestamp())
             let groupData = LegacyTabGroupData(
                 searchTerm: tabData.tabGroupData?.searchTerm ?? "",
                 searchUrl: tabData.tabGroupData?.searchUrl ?? "",
@@ -452,6 +449,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         }
     }
 
+    private func cleanUpTabSessionData() {
+        let liveTabs = tabs.compactMap { UUID(uuidString: $0.tabUUID) }
+        Task {
+            await tabSessionStore.deleteUnusedTabSessionData(keeping: liveTabs)
+        }
+    }
+
     // MARK: - Inactive tabs
     override func getInactiveTabs() -> [Tab] {
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
@@ -474,9 +478,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         backupCloseTabs = [Tab]()
     }
 
+    // MARK: - Update Menu Items
     private func updateMenuItemsForSelectedTab() {
         guard let selectedTab,
-              var menuItems = UIMenuController.shared.menuItems else { return }
+              var menuItems = UIMenuController.shared.menuItems
+        else { return }
 
         if selectedTab.mimeType == MIMEType.PDF {
             // Iterate in reverse order to avoid index out of range errors when removing items

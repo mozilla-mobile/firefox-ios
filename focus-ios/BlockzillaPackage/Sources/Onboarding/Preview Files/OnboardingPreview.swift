@@ -29,12 +29,11 @@ struct ViewControllerContainerView<Controller: UIViewController>: UIViewControll
     }
 
     func updateUIViewController(_ uiViewController: Controller, context: Context) {
-
     }
 }
 
 fileprivate extension OnboardingText {
-    static let demo = OnboardingText.init(
+    static let demo = OnboardingText(
         onboardingTitle: "Welcome to Firefox",
         onboardingSubtitle: "Take your private browsing to the next level.",
         instructions:

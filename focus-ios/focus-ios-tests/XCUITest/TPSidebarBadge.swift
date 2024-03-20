@@ -5,7 +5,6 @@
 import XCTest
 
 class TrackingProtectionMenu: BaseTestCase {
-
     // Smoketest
     func testProtectionSidebar() {
         // Visit https://www.mozilla.org

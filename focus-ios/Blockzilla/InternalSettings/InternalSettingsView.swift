@@ -5,7 +5,6 @@
 import SwiftUI
 
 struct InternalSettingsView: View {
-
     var body: some View {
         Form {
             SwiftUI.Section {

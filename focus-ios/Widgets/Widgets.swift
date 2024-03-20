@@ -27,7 +27,7 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
 }
 
-struct FocusWidgetsEntryView : View {
+struct FocusWidgetsEntryView: View {
     var entry: Provider.Entry
 
     var body: some View {
@@ -105,7 +105,7 @@ fileprivate extension Bool {
 }
 
 fileprivate extension URL {
-    static let deepLinkURL: URL = URL(string: "firefox-focus://widget")!
+    static let deepLinkURL = URL(string: "firefox-focus://widget")!
 }
 
 fileprivate extension View {

@@ -5,19 +5,19 @@
 import Foundation
 
 enum ToastType: Equatable {
-    case singleTab
-    case allTabs(count: Int)
-    case singleInactiveTabs
-    case allInactiveTabs(count: Int)
+    case closedSingleTab
+    case closedSingleInactiveTab
+    case closedAllTabs(count: Int)
+    case closedAllInactiveTabs(count: Int)
     case copyURL
     case addBookmark
 
     var title: String {
         switch self {
-        case .singleTab, .singleInactiveTabs:
+        case .closedSingleTab, .closedSingleInactiveTab:
             return .TabsTray.CloseTabsToast.SingleTabTitle
-        case let .allInactiveTabs(tabsCount),
-            let .allTabs(count: tabsCount):
+        case let .closedAllInactiveTabs(tabsCount),
+            let .closedAllTabs(count: tabsCount):
             return String.localizedStringWithFormat(
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
@@ -34,10 +34,10 @@ enum ToastType: Equatable {
 
     func reduxAction(for uuid: WindowUUID) -> TabPanelAction? {
         switch self {
-        case .singleTab: return .undoClose(uuid.context)
-        case .singleInactiveTabs: return .undoCloseInactiveTab(uuid.context)
-        case .allTabs: return .undoCloseAllTabs(uuid.context)
-        case .allInactiveTabs: return .undoCloseAllInactiveTabs(uuid.context)
+        case .closedSingleTab: return .undoClose(uuid.context)
+        case .closedSingleInactiveTab: return .undoCloseInactiveTab(uuid.context)
+        case .closedAllTabs: return .undoCloseAllTabs(uuid.context)
+        case .closedAllInactiveTabs: return .undoCloseAllInactiveTabs(uuid.context)
         case .copyURL, .addBookmark: return nil
         }
     }

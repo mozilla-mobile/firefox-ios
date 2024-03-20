@@ -5,7 +5,6 @@
 import UIKit
 
 public extension UIView {
-
     /// Animate the opacity of the view, updating its hidden state on completion.
     func animateHidden(_ hidden: Bool, duration: TimeInterval, completion: (() -> Void)? = nil) {
         self.isHidden = false

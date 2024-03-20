@@ -24,11 +24,11 @@ class BaseTestCase: XCTestCase {
         let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
         let onboardingUI = XCUIApplication().buttons["Skip"]
 
-        if (firstRunUI.exists) {
+        if firstRunUI.exists {
             firstRunUI.tap()
         }
 
-        if (onboardingUI.exists) {
+        if onboardingUI.exists {
             onboardingUI.tap()
         }
     }
