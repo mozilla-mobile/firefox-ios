@@ -508,7 +508,7 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         if tabManager.startAtHomeCheck() {
-            store.dispatch(FakespotAction.setAppearanceTo(false))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             guard presentedViewController != nil else { return }
             dismissVC()
         }
@@ -725,7 +725,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        urlBar = URLBarView(profile: profile)
+        urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -1803,17 +1803,17 @@ class BrowserViewController: UIViewController,
               let url = webView.url
         else {
             // We're on homepage or a blank tab
-            store.dispatch(FakespotAction.setAppearanceTo(false))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             return
         }
 
-        store.dispatch(FakespotAction.tabDidChange(tabUIDD: tab.tabUUID))
+        store.dispatch(FakespotAction.tabDidChange(FakespotTabContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
         let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
         let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
-            store.dispatch(FakespotAction.setAppearanceTo(false))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
 
             // Quick fix: make sure to sidebar is hidden when opened from deep-link
             // Relates to FXIOS-7844
@@ -1822,7 +1822,8 @@ class BrowserViewController: UIViewController,
         }
 
         if isReload, let productId = product.product?.id {
-           store.dispatch(FakespotAction.tabDidReload(tabUIDD: tab.tabUUID, productId: productId))
+            let context = FakespotProductContext(productId: productId, tabUUID: tab.tabUUID, windowUUID: windowUUID)
+           store.dispatch(FakespotAction.tabDidReload(context))
         }
 
         // Do not update Fakespot when we are not on a selected tab
@@ -1842,7 +1843,7 @@ class BrowserViewController: UIViewController,
                   fakespotState.sidebarOpenForiPadLandscape,
                   UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
-            store.dispatch(FakespotAction.setAppearanceTo(true))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: true, windowUUID: windowUUID)))
         }
     }
 

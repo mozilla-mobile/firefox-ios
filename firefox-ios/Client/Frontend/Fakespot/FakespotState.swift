@@ -72,23 +72,30 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
+        // Only process actions for the current window
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+
         switch action {
-        case FakespotAction.settingsStateDidChange(let isExpanded):
+        case FakespotAction.settingsStateDidChange(let context):
+            let isExpanded = context.isExpanded
             var state = state
             state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded = isExpanded
             return state
 
-        case FakespotAction.reviewQualityDidChange(let isExpanded):
+        case FakespotAction.reviewQualityDidChange(let context):
+            let isExpanded = context.isExpanded
             var state = state
             state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded = isExpanded
             return state
 
-        case FakespotAction.highlightsDidChange(let isExpanded):
+        case FakespotAction.highlightsDidChange(let context):
+            let isExpanded = context.isExpanded
             var state = state
             state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
             return state
 
-        case FakespotAction.tabDidChange(let tabUUID):
+        case FakespotAction.tabDidChange(let context):
+            guard let tabUUID = context.tabUUID else { return state }
             var state = state
             if state.telemetryState[tabUUID] == nil {
                 state.telemetryState[tabUUID] = TelemetryState()
@@ -97,8 +104,9 @@ struct FakespotState: ScreenState, Equatable {
 
             return state
 
-        case FakespotAction.tabDidReload(let tabUUID, let productId):
-            guard state.currentTabUUID == tabUUID else { return state }
+        case FakespotAction.tabDidReload(let context):
+            guard let tabUUID = context.tabUUID, state.currentTabUUID == tabUUID else { return state }
+            let productId = context.productId
 
             var state = state
             state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
@@ -126,7 +134,8 @@ struct FakespotState: ScreenState, Equatable {
             state.sendSurfaceDisplayedTelemetryEvent = true
             return state
 
-        case FakespotAction.setAppearanceTo(let isEnabled):
+        case FakespotAction.setAppearanceTo(let context):
+            let isEnabled = context.boolValue
             var state = state
             state.isOpen = isEnabled
             state.sendSurfaceDisplayedTelemetryEvent = !isEnabled
@@ -137,7 +146,8 @@ struct FakespotState: ScreenState, Equatable {
             state.sendSurfaceDisplayedTelemetryEvent = false
             return state
 
-        case FakespotAction.adsImpressionEventSendFor(let productId):
+        case FakespotAction.adsImpressionEventSendFor(let context):
+            let productId = context.productId
             var state = state
             if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
                 state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
@@ -145,7 +155,8 @@ struct FakespotState: ScreenState, Equatable {
             state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent = false
             return state
 
-        case FakespotAction.adsExposureEventSendFor(let productId):
+        case FakespotAction.adsExposureEventSendFor(let context):
+            let productId = context.productId
             var state = state
             if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
                 state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()

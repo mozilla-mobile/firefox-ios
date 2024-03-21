@@ -154,6 +154,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     private func configureShoppingContextVC(at sourceView: UIView) {
+        let windowUUID = windowUUID
         shoppingContextHintVC.configure(
             anchor: sourceView,
             withArrowDirection: isBottomSearchBar ? .down : .up,
@@ -168,7 +169,7 @@ extension BrowserViewController: URLBarDelegate {
                 )
             },
             andActionForButton: {
-                store.dispatch(FakespotAction.show)
+                store.dispatch(FakespotAction.show(windowUUID.context))
             },
             overlayState: overlayManager)
     }
