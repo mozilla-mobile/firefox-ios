@@ -72,7 +72,9 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // TODO: [8188] Check window UUID before reducing? Need to double-check on handling for this.
+        // Only process actions for the current window
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        
         switch action {
         case FakespotAction.settingsStateDidChange(let context):
             let isExpanded = context.isExpanded
