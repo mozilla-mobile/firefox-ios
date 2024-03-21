@@ -23,7 +23,7 @@ class FakespotTabContext: ActionContext {
 
 class FakespotProductContext: FakespotTabContext {
     let productId: String
-    init(productId: String, tabUUID: TabUUID, windowUUID: WindowUUID) {
+    init(productId: String, tabUUID: TabUUID?, windowUUID: WindowUUID) {
         self.productId = productId
         super.init(tabUUID: tabUUID, windowUUID: windowUUID)
     }

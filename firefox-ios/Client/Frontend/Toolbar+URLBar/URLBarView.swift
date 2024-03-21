@@ -109,7 +109,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var inOverlayMode = false
 
     lazy var locationView: TabLocationView = {
-        let locationView = TabLocationView()
+        let locationView = TabLocationView(windowUUID: windowUUID)
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.delegate = self
@@ -222,6 +222,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     var profile: Profile
+    let windowUUID: WindowUUID
 
     fileprivate lazy var privateModeBadge = BadgeWithBackdrop(
         imageName: ImageIdentifiers.privateModeBadge,
@@ -233,8 +234,9 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         imageMask: ImageIdentifiers.menuWarningMask
     )
 
-    init(profile: Profile) {
+    init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
         commonInit()
