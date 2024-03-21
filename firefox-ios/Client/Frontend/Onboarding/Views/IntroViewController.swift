@@ -226,7 +226,7 @@ class IntroViewController: UIViewController,
         view.backgroundColor = theme.colors.layer2
 
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
-        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
+        pageControl.pageIndicatorTintColor = theme.colors.formSurfaceOff
 
         viewModel.availableCards.forEach { $0.applyTheme() }
     }
