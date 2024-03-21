@@ -173,6 +173,7 @@
         "ReadingListTests\/testRemoveFromReadingList()",
         "ReadingListTests\/testRemoveFromReadingView()",
         "ReadingListTests\/testRemoveSavedForReadingLongPress()",
+        "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests",
