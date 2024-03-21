@@ -5957,6 +5957,7 @@
 		8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
 		8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncHandlerTests.swift; sourceTree = "<group>"; };
 		8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThrottlerTests.swift; sourceTree = "<group>"; };
+		8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandButtonState.swift; sourceTree = "<group>"; };
 		8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsTelemetry.swift; sourceTree = "<group>"; };
 		8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsTelemetryTests.swift; sourceTree = "<group>"; };
@@ -11667,7 +11668,6 @@
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				39F99FC71E3A6DB700F353B4 /* Push */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
-				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				E4E0BB141AFBC9E4008D6260 /* Shared */,
 				7B3632E71C29879300D12AF9 /* Snapshot */,
 				962C6C3B297054EC00354BE8 /* Sources */,
@@ -11675,6 +11675,8 @@
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
+				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
+				8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */,
 			);
 			sourceTree = "<group>";
 		};
