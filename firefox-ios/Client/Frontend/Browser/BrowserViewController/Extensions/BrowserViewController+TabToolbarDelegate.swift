@@ -329,8 +329,6 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             }
             self.show(toast: toast)
         case .removeBookmark:
-            guard let bookmarkURLString = bookmarkURL?.absoluteString else { return }
-
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
@@ -338,7 +336,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                     theme: themeManager.currentTheme) { [weak self] isButtonTapped in
                 guard let self, let currentTab = tabManager.selectedTab else { return }
                 isButtonTapped ? self.addBookmark(
-                    url: bookmarkURLString,
+                    url: bookmarkURL?.absoluteString ?? currentTab.url?.absoluteString ?? "",
                     title: title ?? currentTab.title
                 ) : nil
             }
