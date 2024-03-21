@@ -32,7 +32,6 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         self.sceneContainer = sceneContainer
         self.windowManager = windowManager
 
-
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
         super.init(router: router)
