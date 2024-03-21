@@ -26,8 +26,8 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Properties
     var bookmarksHandler: BookmarksHandler
-    weak var libraryPanelDelegate: LibraryPanelDelegate?
-    weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
+    private weak var libraryPanelDelegate: LibraryPanelDelegate?
+    private weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
     private var logger: Logger
@@ -541,6 +541,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                          extras: ["gesture": "long-press"])
         }).items
         actions.append(removeAction)
+        actions.append(getShareAction(site: site, sourceView: self.view, coordinator: bookmarkCoordinatorDelegate))
 
         return actions
     }

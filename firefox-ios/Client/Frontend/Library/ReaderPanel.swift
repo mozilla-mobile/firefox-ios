@@ -600,6 +600,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
         }).items
 
         actions.append(removeAction)
+        actions.append(getShareAction(site: site, sourceView: self.view, coordinator: navigationHandler))
         return actions
     }
 }

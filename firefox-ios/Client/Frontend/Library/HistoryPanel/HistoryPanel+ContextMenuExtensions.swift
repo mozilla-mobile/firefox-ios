@@ -41,6 +41,7 @@ extension HistoryPanel: LibraryPanelContextMenu {
 
         actions.append(PhotonRowActions(pinTopSite))
         actions.append(PhotonRowActions(removeAction))
+        actions.append(getShareAction(site: site, sourceView: self.view, coordinator: historyCoordinatorDelegate))
         return actions
     }
 }
