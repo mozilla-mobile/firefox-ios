@@ -9,7 +9,6 @@ import Shared
 class SnackBar: UIView, ThemeApplicable {
     private struct UX {
         static let borderWidth: CGFloat = 0.5
-        static let fontSize: CGFloat = 17
     }
 
     let snackbarClassIdentifier: String
