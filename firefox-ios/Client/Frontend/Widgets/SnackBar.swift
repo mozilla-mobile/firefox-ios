@@ -38,7 +38,7 @@ class SnackBar: UIView, ThemeApplicable {
     }
 
     private lazy var textLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.backgroundColor = UIColor.clear
