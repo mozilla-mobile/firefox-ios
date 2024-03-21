@@ -46,7 +46,7 @@ features:
                   action: open-instructions-popup
                 secondary:
                   title: Onboarding/Onboarding.Welcome.Skip.v114
-                  action: next-card
+                  action: forward-one-card
               instructions-popup:
                 title: Onboarding/DefaultBrowserPopup.Title.v114
                 button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
@@ -69,7 +69,7 @@ features:
                   action: request-notifications
                 secondary:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v115
-                  action: next-card
+                  action: forward-one-card
               type: fresh-install
               prerequisites:
                 - ALWAYS
@@ -84,7 +84,7 @@ features:
                   action: sync-sign-in
                 secondary:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
-                  action: next-card
+                  action: forward-one-card
               type: fresh-install
               prerequisites:
                 - ALWAYS
@@ -96,7 +96,7 @@ features:
               buttons:
                 primary:
                   title: Upgrade/Upgrade.Welcome.Action.v114
-                  action: next-card
+                  action: forward-one-card
               type: upgrade
               prerequisites:
                 - NEVER
@@ -111,7 +111,7 @@ features:
                   action: sync-sign-in
                 secondary:
                   title: Onboarding/Onboarding.LaterAction.v114
-                  action: next-card
+                  action: forward-one-card
               type: upgrade
               prerequisites:
                 - NEVER
@@ -158,7 +158,7 @@ objects:
         default:
           primary:
             title: Onboarding/Onboarding.Sync.Skip.Action.v114
-            action: next-card
+            action: forward-one-card
           secondary: null
       multiple-choice-buttons:
         type: List<NimbusOnboardingMultipleChoiceButton>
@@ -220,7 +220,7 @@ objects:
           The primary button for the card. This must exist.
         default:
           title: "Primary Button"
-          action: next-card
+          action: forward-one-card
       secondary:
         type: Option<NimbusOnboardingButton>
         description: >
@@ -240,8 +240,8 @@ objects:
         type: OnboardingActions
         description: >
           The action the button should take.
-          The default for this will be "next-card"
-        default: next-card
+          The default for this will be "forward-one-card"
+        default: forward-one-card
   NimbusOnboardingMultipleChoiceButton:
     description: >
       A group of properties describing the attributes of a
@@ -298,7 +298,13 @@ enums:
     description: >
       The identifiers for the different actions available for cards in onboarding
     variants:
-      next-card:
+      forward-one-card:
+        description: >
+          Will take the user to the next card
+      forward-two-card:
+        description: >
+          Will take the user to the next card
+      forward-three-card:
         description: >
           Will take the user to the next card
       sync-sign-in:
