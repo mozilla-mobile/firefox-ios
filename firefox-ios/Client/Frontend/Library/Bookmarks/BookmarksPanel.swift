@@ -26,8 +26,8 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Properties
     var bookmarksHandler: BookmarksHandler
-    private weak var libraryPanelDelegate: LibraryPanelDelegate?
-    private weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
+    weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
     private var logger: Logger
