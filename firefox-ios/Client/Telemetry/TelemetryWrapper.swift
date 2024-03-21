@@ -224,10 +224,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.TrackingProtection.strength.set("basic")
         }
 
-        // System theme enabled
-        let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-        GleanMetrics.Theme.useSystemTheme.set(themeManager.systemThemeIsOn)
-
         // Installed Mozilla applications
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
