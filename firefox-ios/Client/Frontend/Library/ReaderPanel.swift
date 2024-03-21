@@ -600,7 +600,9 @@ extension ReadingListPanel: LibraryPanelContextMenu {
         }).items
 
         actions.append(removeAction)
-        actions.append(getShareAction(site: site, sourceView: self.view, coordinator: navigationHandler))
+
+        let cell = tableView.cellForRow(at: indexPath)
+        actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: navigationHandler))
         return actions
     }
 }

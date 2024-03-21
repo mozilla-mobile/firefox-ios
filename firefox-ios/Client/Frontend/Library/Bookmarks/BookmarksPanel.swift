@@ -541,7 +541,9 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                          extras: ["gesture": "long-press"])
         }).items
         actions.append(removeAction)
-        actions.append(getShareAction(site: site, sourceView: self.view, coordinator: bookmarkCoordinatorDelegate))
+        
+        let cell = tableView.cellForRow(at: indexPath)
+        actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: bookmarkCoordinatorDelegate))
 
         return actions
     }

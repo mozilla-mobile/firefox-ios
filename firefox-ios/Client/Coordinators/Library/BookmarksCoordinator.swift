@@ -37,8 +37,8 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
     // MARK: - Properties
 
     private let profile: Profile
-    weak var parentCoordinator: LibraryCoordinatorDelegate?
-    weak var navigationHandler: LibraryNavigationHandler?
+    private weak var parentCoordinator: LibraryCoordinatorDelegate?
+    private weak var navigationHandler: LibraryNavigationHandler?
     private let windowUUID: WindowUUID
 
     // MARK: - Initializers
