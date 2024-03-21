@@ -158,6 +158,54 @@ class FakespotTests: IphoneOnlyTestCase {
         validateLayoutOnWalmartAndBestBuy("https://www.bestbuy.com", isWalmart: false, "Best Buy", "Amazon", "Walmart")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358878
+    func testLearnMoreAboutFakespotHyperlink() {
+        if skipPlatform { return }
+        // Navigate to a product detail page
+        reachReviewChecker()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        // Expand the "How we determine review quality" section
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
+                app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].tap()
+        // Tap the "Learn more about how Fakespot determines review quality" hyperlink
+        let linkText = "Learn more about how Fakespot determines review quality"
+        let learnMoreLink = app.scrollViews.otherElements.staticTexts[linkText]
+        mozWaitForElementToExist(learnMoreLink)
+        scrollToElement(learnMoreLink)
+        learnMoreLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.staticTexts["Review Checker for Firefox Mobile"])
+        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTab, "2")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358864
+    func testTurnOffAndOnTheReviewQualityCheck() {
+        if skipPlatform { return }
+        // Navigate to a product detail page
+        reachReviewChecker()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        // Navigate to the 'Settings' section and tap the "turn off review quality check" button
+        let shoppingIdentifier = AccessibilityIdentifiers.Shopping.SettingsCard.self
+        mozWaitForElementToExist(app.buttons[shoppingIdentifier.expandButton])
+        app.buttons[shoppingIdentifier.expandButton].tap()
+        mozWaitForElementToExist(app.buttons[shoppingIdentifier.turnOffButton])
+        app.buttons[shoppingIdentifier.turnOffButton].tap()
+        // The 'Review quality check' bottom sheet/sidebar closes
+        mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        mozWaitForValueContains(app.textFields["url"], value: "www.amazon.com")
+        // In a new tab, navigate to a product detail page on amazon.com
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        reachReviewChecker()
+        // Opt-in card is displayed
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+    }
+
     private func validateLayoutOnWalmartAndBestBuy(_ website: String, isWalmart: Bool, _ currentWebsite: String,
                                                    _ suggestedWebsite1: String, _ suggestedWebsite2: String) {
         app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
