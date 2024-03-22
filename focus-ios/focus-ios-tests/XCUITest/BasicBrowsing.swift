@@ -7,6 +7,7 @@ import XCTest
 
 class BasicBrowsing: BaseTestCase {
     // Smoke test
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544057
     func testLaunchExternalApp() {
         // Load URL
         loadWebPage("https://www.example.com")
@@ -36,6 +37,7 @@ class BasicBrowsing: BaseTestCase {
     }
 
     // Smoke test
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569890
     func testAdBlocking() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
@@ -47,6 +49,7 @@ class BasicBrowsing: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544058
     func testNavigationToolbar() {
         loadWebPage("example.com")
         waitForWebPageLoad()

@@ -5,6 +5,7 @@
 import XCTest
 
 class TrackingProtectionSettings: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544056
     func testInactiveSettings() {
         // Go to in-app settings
         // Check the new options in TP Settings menu
