@@ -415,6 +415,9 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -764,8 +767,6 @@ class BrowserViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        screenshotHelper.viewIsVisible = true
-
         if let toast = self.pendingToast {
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
@@ -799,9 +800,10 @@ class BrowserViewController: UIViewController,
         UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        screenshotHelper.viewIsVisible = false
-        super.viewWillDisappear(animated)
+    func willNavigateAway() {
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -1631,9 +1633,6 @@ class BrowserViewController: UIViewController,
 
     @discardableResult
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) -> Tab {
-        if let selectedTab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(selectedTab)
-        }
         let request: URLRequest?
         if let url = url {
             request = URLRequest(url: url)
@@ -1764,13 +1763,7 @@ class BrowserViewController: UIViewController,
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        // Represents WebView observation or delegate update that called this function
-
         if webViewStatus == .finishedNavigation {
-            // A delay of 500 milliseconds is added when we take screenshot
-            // as we don't know exactly when wkwebview is rendered
-            let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
-
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -1779,21 +1772,6 @@ class BrowserViewController: UIViewController,
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
                 webView.resignFirstResponder()
-
-                // We need a better way of identifying when webviews are finished rendering
-                // There are cases in which the page will still show a loading animation or nothing
-                // when the screenshot is being taken, depending on internet connection
-                // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
-                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                    if webView.superview == self.view {
-                        webView.removeFromSuperview()
-                    }
-                }
-            } else if tab.webView != nil {
-                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                }
             }
         }
     }

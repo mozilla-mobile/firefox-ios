@@ -35,10 +35,6 @@ extension BrowserViewController: URLBarDelegate {
         updateFindInPageVisibility(visible: false)
 
         guard !isTabTrayRefactorEnabled else {
-            if let tab = tabManager.selectedTab {
-                screenshotHelper.takeScreenshot(tab)
-            }
-
             navigationHandler?.showTabTray(selectedPanel: focusedSegment ?? .tabs)
             return
         }
@@ -92,9 +88,6 @@ extension BrowserViewController: URLBarDelegate {
 
         self.present(navigationController, animated: true, completion: nil)
 
-        if let tab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(tab)
-        }
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
 
         // App store review in-app prompt

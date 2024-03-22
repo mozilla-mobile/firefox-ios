@@ -29,10 +29,6 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        if let currentTab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(currentTab)
-        }
-
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
