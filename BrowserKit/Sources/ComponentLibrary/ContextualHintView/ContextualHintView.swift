@@ -37,7 +37,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.descriptionTextSize)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .left
         label.numberOfLines = 0
     }
@@ -156,7 +156,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
         if viewModel.isActionType {
             let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.actionButtonTextSize),
+                .font: FXFontStyles.Bold.body.scaledFont(),
                 .foregroundColor: theme.colors.textOnDark,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
