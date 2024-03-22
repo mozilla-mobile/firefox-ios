@@ -21,7 +21,7 @@ class BasicBrowsing: BaseTestCase {
         // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
         let shareButton: XCUIElement
         if #available(iOS 14, *) {
-            shareButton = app.cells.buttons["Share Page With..."]
+            shareButton = app.cells.buttons["Share Page With…"]
         } else {
             shareButton = app.cells["Share Page With..."]
         }
