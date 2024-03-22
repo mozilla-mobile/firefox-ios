@@ -18,7 +18,7 @@ class BasicBrowsing: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         // Tap Share button
-
+        // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
         let shareButton: XCUIElement
         if #available(iOS 14, *) {
             shareButton = app.cells.buttons["Share Page With..."]
@@ -49,7 +49,7 @@ class BasicBrowsing: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544058
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569889
     func testNavigationToolbar() {
         loadWebPage("example.com")
         waitForWebPageLoad()

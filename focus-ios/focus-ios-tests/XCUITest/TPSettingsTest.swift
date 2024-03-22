@@ -4,7 +4,7 @@
 
 import XCTest
 
-class TrackingProtectionSettings: BaseTestCase {
+class TrackingProtection: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2544056
     func testInactiveSettings() {
         // Go to in-app settings
@@ -31,5 +31,32 @@ class TrackingProtectionSettings: BaseTestCase {
         XCTAssertEqual(switchAnalyticsValue as! String, "1")
         XCTAssertEqual(switchSocialValue as! String, "1")
         XCTAssertEqual(switchOtherValue as! String, "0")
+    }
+
+    // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
+    func testProtectionSidebar() {
+        // Visit https://www.mozilla.org
+        loadWebPage("mozilla.org")
+
+        // Check the correct site is reached
+        waitForWebPageLoad()
+
+        // Open the tracking protection sidebar
+        app.buttons["URLBar.trackingProtectionIcon"].tap()
+
+        // Disable tracking protection
+        waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
+        app.switches["BlockerToggle.TrackingProtection"].tap()
+
+        // Reopen the tracking protection sidebar
+        if !iPad() {
+            app.buttons["closeSheetButton"].tap()
+            app.buttons["URLBar.trackingProtectionIcon"].tap()
+        }
+
+        // Wait for the sidebar to open
+        let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
+        XCTAssertLessThan(switchValue as! String, "2")
     }
 }
