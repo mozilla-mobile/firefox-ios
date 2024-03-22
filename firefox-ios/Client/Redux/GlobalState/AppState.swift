@@ -65,7 +65,6 @@ extension WindowUUID {
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
                   middlewares: [
-                    /* TODO: [8188] Audit all middlewares for multi-window compatibility.*/
                     FeltPrivacyMiddleware().privacyManagerProvider,
                     ThemeManagerMiddleware().themeManagerProvider,
                     TabManagerMiddleware().tabsPanelProvider,
