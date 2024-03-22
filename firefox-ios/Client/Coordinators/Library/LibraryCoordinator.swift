@@ -13,9 +13,10 @@ protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyCl
 
 protocol LibraryNavigationHandler: AnyObject {
     func start(panelType: LibraryPanelType, navigationController: UINavigationController)
+    func shareLibraryItem(url: URL, sourceView: UIView)
 }
 
-class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigationHandler {
+class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigationHandler, ParentCoordinatorDelegate {
     private let profile: Profile
     private let tabManager: TabManager
     private var libraryViewController: LibraryViewController!
@@ -75,6 +76,12 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         }
     }
 
+    func shareLibraryItem(url: URL, sourceView: UIView) {
+        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
+        let coordinator = makeShareExtensionCoordinator()
+        coordinator.start(url: url, sourceView: sourceView)
+    }
+
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
         guard !childCoordinators.contains(where: { $0 is BookmarksCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
@@ -82,7 +89,8 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
             router: router,
             profile: profile,
             windowUUID: windowUUID,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            navigationHandler: self
         )
         add(child: bookmarksCoordinator)
         (navigationController.topViewController as? BookmarksPanel)?.bookmarkCoordinatorDelegate = bookmarksCoordinator
@@ -95,7 +103,8 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
             profile: profile,
             windowUUID: windowUUID,
             router: router,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            navigationHandler: self
         )
         add(child: historyCoordinator)
         (navigationController.topViewController as? HistoryPanel)?.historyCoordinatorDelegate = historyCoordinator
@@ -119,10 +128,29 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         let router = DefaultRouter(navigationController: navigationController)
         let readingListCoordinator = ReadingListCoordinator(
             parentCoordinator: parentCoordinator,
+            navigationHandler: self,
             router: router
         )
         add(child: readingListCoordinator)
         (navigationController.topViewController as? ReadingListPanel)?.navigationHandler = readingListCoordinator
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func didFinish(from childCoordinator: any Coordinator) {
+        remove(child: childCoordinator)
+    }
+
+    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
+        let coordinator = ShareExtensionCoordinator(
+            alertContainer: UIView(),
+            router: router,
+            profile: profile,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
+        add(child: coordinator)
+        return coordinator
     }
 
     // MARK: - LibraryPanelDelegate
