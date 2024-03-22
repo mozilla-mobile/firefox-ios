@@ -154,7 +154,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
         if viewModel.isActionType {
             let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: FXFontStyles.Bold.body.scaledFont(),
+                .font: FXFontStyles.Regular.body.scaledFont(),
                 .foregroundColor: theme.colors.textOnDark,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
