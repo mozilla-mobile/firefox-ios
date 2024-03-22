@@ -403,3 +403,15 @@ enums:
       theme-system:
         description: >
           Corresponding to the system theme
+      theme-dark:
+        description: >
+          Corresponding to the dark theme
+      theme-light:
+        description: >
+          Corresponding to the light theme
+      toolbar-top:
+        description: >
+          Corresponding to the toolbar on top
+      toolbar-bottom:
+        description: >
+          Corresponding to the toolbar on the bottom

@@ -152,7 +152,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
-    private func getOnboardingCardButtons(from cardButtons: NimbusOnboardingButtons) -> OnboardingButtons {
+    private func getOnboardingCardButtons(
+        from cardButtons: NimbusOnboardingButtons
+    ) -> OnboardingButtons {
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
                 title: cardButtons.primary.title,
@@ -174,7 +176,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         }
     }
 
-    private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfoModel? {
+    private func getOnboardingLink(
+        from cardLink: NimbusOnboardingLink?
+    ) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url, invalidCharacters: false)
         else { return nil }
@@ -182,7 +186,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    private func getOnboardingHeaderImageID(from identifier: NimbusOnboardingHeaderImage) -> String {
+    private func getOnboardingHeaderImageID(
+        from identifier: NimbusOnboardingHeaderImage
+    ) -> String {
         switch identifier {
         case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
         case .syncDevices: return ImageIdentifiers.onboardingSyncv106
@@ -199,7 +205,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from identifier: NimbusOnboardingMultipleChoiceButtonImage
     ) -> String {
         switch identifier {
-        case .themeSystem: return "test"
+        case .themeSystem: return ""
+        case .themeDark: return ""
+        case .themeLight: return ""
+        case .toolbarTop: return ""
+        case .toolbarBottom: return ""
         }
     }
 
