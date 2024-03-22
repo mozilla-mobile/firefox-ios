@@ -59,4 +59,16 @@ class TrackingProtection: BaseTestCase {
         let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
         XCTAssertLessThan(switchValue as! String, "2")
     }
+    
+    // Smoke test
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569890
+    func testAdBlocking() {
+        // Load URL
+        loadWebPage("https://blockads.fivefilters.org/")
+        waitForWebPageLoad()
+
+        // Check ad blocking is enabled
+        let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
+        XCTAssertTrue(TrackingProtection.exists)
+    }
 }

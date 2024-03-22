@@ -7,7 +7,7 @@ import XCTest
 
 class BasicBrowsing: BaseTestCase {
     // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544057
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
     func testLaunchExternalApp() {
         // Load URL
         loadWebPage("https://www.example.com")
@@ -34,18 +34,6 @@ class BasicBrowsing: BaseTestCase {
         RemindersApp.tap()
         waitForExistence(app.buttons["Add"], timeout: 10)
         XCTAssertTrue(app.buttons["Add"].exists)
-    }
-
-    // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569890
-    func testAdBlocking() {
-        // Load URL
-        loadWebPage("https://blockads.fivefilters.org/")
-        waitForWebPageLoad()
-
-        // Check ad blocking is enabled
-        let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
-        XCTAssertTrue(TrackingProtection.exists)
     }
 
     // Smoketest
