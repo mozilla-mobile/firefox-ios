@@ -11,8 +11,6 @@ import Common
  * Handles screenshots for a given tab, including pages with non-webview content.
  */
 class ScreenshotHelper {
-    var viewIsVisible = false
-
     fileprivate weak var controller: BrowserViewController?
     private let logger: Logger
 

@@ -345,7 +345,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.onViewDismissed = { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
         }
-        router.present(navigationController)
+        present(navigationController)
     }
 
     private func showLibrary(with homepanelSection: Route.HomepanelSection) {
@@ -365,7 +365,7 @@ class BrowserCoordinator: BaseCoordinator,
             add(child: libraryCoordinator)
             libraryCoordinator.start(with: homepanelSection)
 
-            router.present(navigationController)
+            present(navigationController)
         }
     }
 
@@ -636,7 +636,6 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is TabTrayCoordinator }) else {
             return // flow is already handled
         }
-
         let navigationController = DismissableNavigationViewController()
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
@@ -652,7 +651,7 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
-        router.present(navigationController)
+        present(navigationController)
     }
 
     func showBackForwardList() {
@@ -662,7 +661,14 @@ class BrowserCoordinator: BaseCoordinator,
         backForwardListVC.browserFrameInfoProvider = browserViewController
         backForwardListVC.tabManager = tabManager
         backForwardListVC.modalPresentationStyle = .overCurrentContext
-        router.present(backForwardListVC)
+        present(backForwardListVC)
+    }
+
+    private func present(_ viewController: UIViewController,
+                         animated: Bool = true,
+                         completion: (() -> Void)? = nil) {
+        browserViewController.willNavigateAway()
+        router.present(viewController)
     }
 
     // MARK: - ParentCoordinatorDelegate
