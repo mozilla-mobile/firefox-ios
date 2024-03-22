@@ -108,6 +108,7 @@
         "PrivateBrowsingTest\/testTabCountShowsOnlyNormalOrPrivateTabCount()",
         "PrivateBrowsingTestIpad",
         "ReadingListTests",
+        "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
         "SearchTests\/testCopyPasteComplete()",

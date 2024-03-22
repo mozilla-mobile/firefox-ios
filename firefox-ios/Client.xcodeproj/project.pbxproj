@@ -1468,6 +1468,8 @@
 		E1AFBAF9292EA0330065E35E /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
 		E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1B18C782B5FFFA9009CD968 /* UIView+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B18C772B5FFFA9009CD968 /* UIView+extension.swift */; };
+		E1BDAC812B9F5DE40063E6BF /* ReportSiteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1BDAC802B9F5DE40063E6BF /* ReportSiteTests.swift */; };
+		E1BDAC832B9F65780063E6BF /* reportSiteIssueOff.json in Resources */ = {isa = PBXBuildFile; fileRef = E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */; };
 		E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */; };
 		E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
 		E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
@@ -7473,6 +7475,8 @@
 		E1B04A9C28E20A8300670E54 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		E1B18C772B5FFFA9009CD968 /* UIView+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+extension.swift"; sourceTree = "<group>"; };
 		E1B8412CB5BD748F7D81B41E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		E1BDAC802B9F5DE40063E6BF /* ReportSiteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportSiteTests.swift; sourceTree = "<group>"; };
+		E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reportSiteIssueOff.json; sourceTree = "<group>"; };
 		E1BE455FA65078F46476F88F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E1C437A22A96343A00D188CB /* FakespotFadeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotFadeLabel.swift; sourceTree = "<group>"; };
 		E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewCell.swift; sourceTree = "<group>"; };
@@ -8803,6 +8807,7 @@
 				2CEA6F781E93E3A600D4100E /* SearchSettingsUITest.swift */,
 				2CA16FDD1E5F089100332277 /* SearchTest.swift */,
 				2C3406C71E719F00000FD889 /* SettingsTests.swift */,
+				E1BDAC802B9F5DE40063E6BF /* ReportSiteTests.swift */,
 				0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */,
 				2CEDADA120207EC400223A89 /* SyncFAUITests.swift */,
 				4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */,
@@ -11171,6 +11176,7 @@
 			isa = PBXGroup;
 			children = (
 				E1AF27432A17BCF700CE5991 /* engagementNotificationWithoutConditions.json */,
+				E1BDAC822B9F65780063E6BF /* reportSiteIssueOff.json */,
 			);
 			path = TestData;
 			sourceTree = "<group>";
@@ -12878,6 +12884,7 @@
 				23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */,
 				3BC659591E5BA505006D560F /* bundle_sites.json in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
+				E1BDAC832B9F65780063E6BF /* reportSiteIssueOff.json in Resources */,
 				E1AF3563286DE5F800960045 /* FullFunctionalTestPlan.xctestplan in Resources */,
 				8A3345642BA499B7008C52AB /* disconnect-block-analytics.json in Resources */,
 				E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */,
@@ -13441,6 +13448,7 @@
 				2C8C07771E7800EA00DC1237 /* FindInPageTests.swift in Sources */,
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
 				B10997432A97251D00CC8860 /* UrlBarTests.swift in Sources */,
+				E1BDAC812B9F5DE40063E6BF /* ReportSiteTests.swift in Sources */,
 				2C3406C81E719F00000FD889 /* SettingsTests.swift in Sources */,
 				2CF21D0920A4A163000D08B7 /* PocketTests.swift in Sources */,
 			);
