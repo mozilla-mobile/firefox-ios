@@ -283,7 +283,7 @@ extension BrowserViewController: WKUIDelegate {
                         image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                         identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                     ) { _ in
-                        self.removeBookmark(url: url.absoluteString)
+                        self.removeBookmark(url: url, title: elements.title)
                         TelemetryWrapper.recordEvent(category: .action,
                                                      method: .delete,
                                                      object: .bookmark,
