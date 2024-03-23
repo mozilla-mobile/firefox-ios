@@ -67,6 +67,7 @@ class IntroViewControllerTests: XCTestCase {
 
         XCTAssertEqual(subject.pageControl.currentPage, 0)
         subject.advance(
+            numberOfPages: 1,
             from: subject.viewModel.availableCards[subject.pageControl.currentPage].viewModel.name,
             completionIfLastCard: nil)
         XCTAssertEqual(subject.pageControl.currentPage, 1)
