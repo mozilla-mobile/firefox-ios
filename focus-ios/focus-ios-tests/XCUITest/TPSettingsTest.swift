@@ -35,6 +35,7 @@ class TrackingProtectionTest: BaseTestCase {
 
     // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394999
     func testProtectionSidebar() {
         // Visit https://www.mozilla.org
         loadWebPage("mozilla.org")
