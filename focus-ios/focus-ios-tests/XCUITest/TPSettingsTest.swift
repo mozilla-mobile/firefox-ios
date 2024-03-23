@@ -4,7 +4,7 @@
 
 import XCTest
 
-class TrackingProtection: BaseTestCase {
+class TrackingProtectionTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2544056
     func testInactiveSettings() {
         // Go to in-app settings
