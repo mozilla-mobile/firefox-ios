@@ -190,14 +190,15 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from identifier: NimbusOnboardingHeaderImage
     ) -> String {
         switch identifier {
-        case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
-        case .syncDevices: return ImageIdentifiers.onboardingSyncv106
-        case .notifications: return ImageIdentifiers.onboardingNotification
-        case .notificationsCtd: return ImageIdentifiers.onboardingNotificationsCTD
-        case .welcomeCtd: return ImageIdentifiers.onboardingWelcomeCTD
-        case .syncDevicesCtd: return ImageIdentifiers.onboardingSyncCTD
-        case .setToDock: return ImageIdentifiers.onboardingSetToDock
-        case .searchWidget: return ImageIdentifiers.onboardingSearchWidget
+        case .welcomeGlobe: return ImageIdentifiers.Onboarding.HeaderImages.welcomev106
+        case .syncDevices: return ImageIdentifiers.Onboarding.HeaderImages.syncv106
+        case .notifications: return ImageIdentifiers.Onboarding.HeaderImages.notification
+        case .setToDock: return ImageIdentifiers.Onboarding.HeaderImages.setToDock
+        case .searchWidget: return ImageIdentifiers.Onboarding.HeaderImages.searchWidget
+        // Challenge the Default experiment
+        case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
+        case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome
+        case .syncDevicesCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.sync
         }
     }
 
@@ -205,11 +206,11 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         from identifier: NimbusOnboardingMultipleChoiceButtonImage
     ) -> String {
         switch identifier {
-        case .themeSystem: return ""
-        case .themeDark: return ""
-        case .themeLight: return ""
-        case .toolbarTop: return ""
-        case .toolbarBottom: return ""
+        case .themeSystem: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeSystem
+        case .themeDark: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeDark
+        case .themeLight: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeLight
+        case .toolbarTop: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarTop
+        case .toolbarBottom: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarBottom
         }
     }
 

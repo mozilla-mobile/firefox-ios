@@ -206,7 +206,15 @@ extension UpdateViewController: OnboardingCardDelegate {
             and: isPrimaryButton)
 
         switch action {
-        case .nextCard:
+        case .forwardOneCard:
+            showNextPage(from: cardName) {
+                self.didFinishFlow?()
+            }
+        case .forwardTwoCard:
+            showNextPage(from: cardName) {
+                self.didFinishFlow?()
+            }
+        case .forwardThreeCard:
             showNextPage(from: cardName) {
                 self.didFinishFlow?()
             }

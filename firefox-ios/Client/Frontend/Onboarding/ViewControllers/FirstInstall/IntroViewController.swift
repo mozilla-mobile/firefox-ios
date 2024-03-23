@@ -237,7 +237,15 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.chosenOptions.insert(.askForNotificationPermission)
             introViewModel.updateOnboardingUserActivationEvent()
             askForNotificationPermission(from: cardName)
-        case .nextCard:
+        case .forwardOneCard:
+            showNextPage(from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
+        case .forwardTwoCard:
+            showNextPage(from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
+        case .forwardThreeCard:
             showNextPage(from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }

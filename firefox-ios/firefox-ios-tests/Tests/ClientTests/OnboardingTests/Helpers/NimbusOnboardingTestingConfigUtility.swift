@@ -60,7 +60,7 @@ struct NimbusOnboardingTestingConfigUtility {
         dismissable: Bool = true,
         shouldAddLink: Bool = false,
         withSecondaryButton: Bool = false,
-        withPrimaryButtonAction primaryAction: [OnboardingActions] = [.nextCard],
+        withPrimaryButtonAction primaryAction: [OnboardingActions] = [.forwardOneCard],
         prerequisites: [String] = ["ALWAYS"],
         disqualifiers: [String] = []
     ) {
@@ -150,7 +150,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     action: primaryAction,
                     title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)")
             )
         }
@@ -168,7 +168,7 @@ struct NimbusOnboardingTestingConfigUtility {
         case .welcome, .updateWelcome:
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.primaryButtonTitle)"))
         case .notifications:
             return NimbusOnboardingButtons(
@@ -176,7 +176,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     action: .requestNotifications,
                     title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)"))
         case .sync, .updateSync:
             return NimbusOnboardingButtons(
@@ -184,7 +184,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     action: .syncSignIn,
                     title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)"))
         }
     }
