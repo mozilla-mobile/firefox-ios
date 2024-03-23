@@ -175,7 +175,8 @@ class IntroViewController: UIViewController,
                 || currentViewModel.buttons.secondary?.action == .setDefaultBrowser
         else { return }
 
-        showNextPage(
+        advance(
+            numberOfPages: 1,
             from: currentViewModel.name,
             completionIfLastCard: { self.showNextPageCompletionForLastCard() })
     }
@@ -203,7 +204,12 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         else { return nil }
 
         pageControl.currentPage = index
-        return getNextOnboardingCard(index: index, goForward: false)
+
+        return getNextOnboardingCard(
+            currentIndex: index,
+            numberOfCardsToMove: 1,
+            goForward: false
+        )
     }
 
     func pageViewController(
@@ -215,7 +221,12 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         else { return nil }
 
         pageControl.currentPage = index
-        return getNextOnboardingCard(index: index, goForward: true)
+
+        return getNextOnboardingCard(
+            currentIndex: index,
+            numberOfCardsToMove: 1,
+            goForward: true
+        )
     }
 }
 
@@ -238,15 +249,15 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.updateOnboardingUserActivationEvent()
             askForNotificationPermission(from: cardName)
         case .forwardOneCard:
-            showNextPage(from: cardName) {
+            advance(numberOfPages: 1, from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .forwardTwoCard:
-            showNextPage(from: cardName) {
+            advance(numberOfPages: 2, from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .forwardThreeCard:
-            showNextPage(from: cardName) {
+            advance(numberOfPages: 3, from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
@@ -257,7 +268,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 with: fxaPrams,
                 selector: #selector(dismissSignInViewController),
                 completion: {
-                    self.showNextPage(from: cardName) {
+                    self.advance(numberOfPages: 1, from: cardName) {
                         self.showNextPageCompletionForLastCard()
                     }
                 },
@@ -306,7 +317,7 @@ extension IntroViewController: OnboardingCardDelegate {
 
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
-                self.showNextPage(from: cardName) {
+                self.advance(numberOfPages: 1, from: cardName) {
                     self.showNextPageCompletionForLastCard()
                 }
             }
