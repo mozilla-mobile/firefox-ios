@@ -1,5 +1,5 @@
 ---
-name: "🎁 Feature request"
+name: BenP Feature request"
 about: Suggest an idea for this project
 labels: "Feature-Request"
 
