@@ -72,7 +72,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let siteDomainLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.largeTitle.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -96,7 +96,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.largeTitle.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -118,7 +118,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private let toggleView: UIView = ETPSectionView(frame: .zero)
 
     private let toggleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.largeTitle.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -128,7 +128,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let toggleStatusLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.largeTitle.scaledFont()
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -138,7 +138,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     private var protectionButton: UIButton = .build { button in
         button.setTitle(.TPProtectionSettings, for: .normal)
-        button.titleLabel?.font = FXFontStyles.Regular.largeTitle.scaledFont()
+        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         button.contentHorizontalAlignment = .left
         button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
