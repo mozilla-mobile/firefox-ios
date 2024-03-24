@@ -13,7 +13,6 @@ public extension UIColor {
 }
 
 public extension UIColor {
-
     static let above = UIColor(named: "Above")!
     static let accent = UIColor(named: "Accent")!
     static let defaultFont = UIColor(named: "DefaultFont")!
@@ -63,7 +62,6 @@ public extension UIColor {
             blue: CGFloat((rgb & 0x0000FF) >> 0)  / 255.0,
             alpha: CGFloat(alpha))
     }
-
 }
 
 public extension Color {

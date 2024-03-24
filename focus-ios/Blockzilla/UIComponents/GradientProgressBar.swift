@@ -15,7 +15,6 @@ import Foundation
 import UIKit
 
 open class GradientProgressBar: UIProgressView {
-
     private struct DefaultValues {
         static let backgroundColor = UIColor.clear
 
@@ -29,10 +28,10 @@ open class GradientProgressBar: UIProgressView {
     }
 
     // Alpha mask for visible part of gradient.
-    private var alphaMaskLayer: CALayer = CALayer()
+    private var alphaMaskLayer = CALayer()
 
     // Gradient layer.
-    open var gradientLayer: CAGradientLayer = CAGradientLayer()
+    open var gradientLayer = CAGradientLayer()
 
     // Duration for "setProgress(animated: true)"
     open var animationDuration = DefaultValues.animationDuration
@@ -65,7 +64,7 @@ open class GradientProgressBar: UIProgressView {
         updateAlphaMaskLayerWidth()
     }
 
-    required public init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
         setupProgressViewColors()

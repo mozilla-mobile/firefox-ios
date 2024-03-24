@@ -8,6 +8,7 @@ import ComponentLibrary
 /// A `UIHostingController` subclass that automatically adjusts its size to fit its SwiftUI `View` content.
 /// It also conforms to `BottomSheetChild` for use in bottom sheet contexts, allowing for dismissal handling.
 class SelfSizingHostingController<Content>: UIHostingController<Content>, BottomSheetChild where Content: View {
+    var controllerWillDismiss: () -> Void = {}
     /// Ensures the view controller dynamically adjusts its size to its content after layout changes.
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -15,5 +16,7 @@ class SelfSizingHostingController<Content>: UIHostingController<Content>, Bottom
     }
 
     /// Placeholder for bottom sheet dismissal handling. Override to add custom behavior.
-    public func willDismiss() {}
+    public func willDismiss() {
+        self.controllerWillDismiss()
+    }
 }

@@ -88,7 +88,7 @@ class BrowserViewController: UIViewController {
 
     private let searchSuggestionsDebouncer = Debouncer(timeInterval: 0.1)
     private var shouldEnsureBrowsingMode = false
-    private var isIPadRegularDimensions: Bool = false {
+    private var isIPadRegularDimensions = false {
         didSet {
             overlayView.isIpadView = isIPadRegularDimensions
         }
@@ -482,7 +482,6 @@ class BrowserViewController: UIViewController {
         shortcutsPresenter
             .$shortcutsState
             .sink { [unowned self] shortcutsState in
-
                 switch shortcutsState {
                 case .createShortcutViews:
                     self.mainContainerView.addSubview(shortcutsBackground)
@@ -562,7 +561,6 @@ class BrowserViewController: UIViewController {
             background.image = UIApplication.shared.orientation?.isLandscape == true ? #imageLiteral(resourceName: "background_ipad_landscape") : #imageLiteral(resourceName: "background_ipad_portrait")
         default:
             background.image = #imageLiteral(resourceName: "background_iphone_portrait")
-
         }
     }
 
@@ -583,7 +581,6 @@ class BrowserViewController: UIViewController {
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
-
         // Do not activate if a modal is presented
         if self.presentedViewController != nil {
             return
@@ -698,7 +695,6 @@ class BrowserViewController: UIViewController {
     }
 
     private func addURLBarConstraints() {
-
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
 
@@ -790,7 +786,6 @@ class BrowserViewController: UIViewController {
     }
 
     func resetBrowser(hidePreviousSession: Bool = false) {
-
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
             clearBrowser()
@@ -996,7 +991,6 @@ class BrowserViewController: UIViewController {
         if urlBar.state == .default {
             urlBar.snp.removeConstraints()
             addURLBarConstraints()
-
         } else {
             urlBarContainer.snp.makeConstraints { make in
                 make.width.equalTo(view)
@@ -1159,7 +1153,6 @@ class BrowserViewController: UIViewController {
             let shareMenu = UIMenu(options: .displayInline, children: shareItems.compactMap { $0 })
             actions.append(shareMenu)
             actions.append(UIMenu(options: .displayInline, children: [UIAction(settingsItem)]))
-
         } else {
             let actionMenu = UIMenu(options: .displayInline, children: [UIAction(helpItem), UIAction(settingsItem)])
             actions.append(actionMenu)
@@ -1222,7 +1215,6 @@ extension BrowserViewController: UIDropInteractionDelegate {
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         _ = session.loadObjects(ofClass: URL.self) { urls in
-
             guard let url = urls.first else {
                 return
             }
@@ -1263,7 +1255,7 @@ extension BrowserViewController: FindInPageBarDelegate {
     }
 
     private func shortcutContextMenuIsOpenOnIpad() -> Bool {
-        var shortcutContextMenuIsDisplayed: Bool =  false
+        var shortcutContextMenuIsDisplayed =  false
         for element in shortcutsContainer.subviews {
             if let shortcut = element as? ShortcutView, shortcut.contextMenuIsDisplayed {
                 shortcutContextMenuIsDisplayed = true
@@ -1274,7 +1266,6 @@ extension BrowserViewController: FindInPageBarDelegate {
 }
 
 extension BrowserViewController: URLBarDelegate {
-
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
         // Add the URL to the autocomplete list:
         let autocompleteSource = CustomCompletionSource(
@@ -1380,7 +1371,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidDismiss(_ urlBar: URLBar) {
-
         guard !shortcutContextMenuIsOpenOnIpad() else { return }
         overlayView.dismiss()
 
@@ -1507,7 +1497,7 @@ extension BrowserViewController: TrackingProtectionDelegate {
     // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
     func trackingProtectionDidToggleProtection(enabled: Bool) {
         enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
-        
+
         TipManager.sitesNotWorkingTip = false
 
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
@@ -1904,7 +1894,6 @@ extension BrowserViewController: LegacyWebControllerDelegate {
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         self.updateViewConstraints()
@@ -1928,7 +1917,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
             urlBar.dismiss()
         }
         orientationWillChange = false
-
     }
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) { }
 }
@@ -1956,7 +1944,6 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: MenuActionable {
-
     func openInFirefox(url: URL) {
         guard let escaped = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed),
               let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)&private=true", invalidCharacters: false),
@@ -2104,11 +2091,9 @@ extension BrowserViewController {
                 guard let self = self else { return }
                 self.shortcutManager.rename(shortcut: shortcut, newName: newName)
                 self.urlBar.activateTextField()
-
             }, cancelAction: { [weak self] in
                 guard let self = self else { return }
                 self.urlBar.activateTextField()
-
             })
         self.show(alert, sender: nil)
     }

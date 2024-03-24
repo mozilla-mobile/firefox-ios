@@ -9,7 +9,7 @@ import Shared
 import SiteImageView
 
 protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(for tabUUID: String)
+    func tabCellDidClose(for tabUUID: TabUUID)
 }
 
 class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {

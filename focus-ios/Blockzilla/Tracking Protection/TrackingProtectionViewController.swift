@@ -209,14 +209,14 @@ class TrackingProtectionViewController: UIViewController {
 
     private var modalDelegate: ModalDelegate?
     private var sourceOfChange: String {
-        if case .settings = state { return "Settings" }  else { return "Panel" }
+        if case .settings = state { return "Settings" } else { return "Panel" }
     }
     private var subscriptions = Set<AnyCancellable>()
     private var trackersSectionIndex: Int {
-        if case .browsing = state { return 2 }  else { return 1 }
+        if case .browsing = state { return 2 } else { return 1 }
     }
     private var tableViewTopInset: CGFloat {
-        if case .settings = state { return 0 }  else { return UIConstants.layout.trackingProtectionTableViewTopInset }
+        if case .settings = state { return 0 } else { return UIConstants.layout.trackingProtectionTableViewTopInset }
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<URL?, Never>?
@@ -271,7 +271,7 @@ class TrackingProtectionViewController: UIViewController {
             let doneButton = UIBarButtonItem(title: UIConstants.strings.done, style: .plain, target: self, action: #selector(doneTapped))
             doneButton.tintColor = .accent
             navigationItem.rightBarButtonItem = doneButton
-            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
+            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.navigationController?.navigationBar.shadowImage = UIImage()
             self.navigationController?.navigationBar.layoutIfNeeded()
             self.navigationController?.navigationBar.isTranslucent = false

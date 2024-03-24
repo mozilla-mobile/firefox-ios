@@ -16,6 +16,9 @@ public protocol TabSessionStore {
     /// - Parameter tabID: an ID that uniquely identifies the tab
     /// - Returns: the data associated with a session, encoded as a Data object
     func fetchTabSession(tabID: UUID) async -> Data?
+
+    /// Cleans up any tab session data files for tabs that are no longer open.
+    func deleteUnusedTabSessionData(keeping: [UUID]) async
 }
 
 public actor DefaultTabSessionStore: TabSessionStore {
@@ -57,6 +60,24 @@ public actor DefaultTabSessionStore: TabSessionStore {
                        level: .debug,
                        category: .tabs)
             return nil
+        }
+    }
+
+    public func deleteUnusedTabSessionData(keeping: [UUID]) async {
+        guard let directory = fileManager.tabSessionDataDirectory() else { return }
+        let contents = fileManager.contentsOfDirectory(at: directory)
+        guard !contents.isEmpty else { return }
+
+        let liveTabs = keeping.compactMap { $0.uuidString }
+
+        // This is O(m*n) but in general the performance here should not be problematic
+        // since this will be performed off the main thread, and it will only be operating
+        // on files for dead tabs that won't be accessed by any other code.
+        for fileURL in contents {
+            guard fileURL.lastPathComponent.hasPrefix(filePrefix) else { continue }
+            let tabID = String(fileURL.lastPathComponent.dropFirst(filePrefix.count))
+            guard !liveTabs.contains(tabID) else { continue }
+            fileManager.removeFileAt(path: fileURL)
         }
     }
 }

@@ -101,7 +101,6 @@ class SearchEngineManager {
     }
 
     private func loadEngines() {
-
         // Get the directories to look for engines, from most to least specific.
         var components = Locale.preferredLanguages.first!.components(separatedBy: "-")
         if components.count == 3 {
@@ -171,8 +170,7 @@ class SearchEngineManager {
                     return engine
                 }
             }
-        }
-        catch {
+        } catch {
             print(error)
         }
         return [SearchEngine]()

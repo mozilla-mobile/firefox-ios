@@ -10,7 +10,6 @@ public protocol TooltipViewDelegate: AnyObject {
 }
 
 class TooltipView: UIView {
-
     weak var delegate: TooltipViewDelegate?
 
     private lazy var gradient: CAGradientLayer = {

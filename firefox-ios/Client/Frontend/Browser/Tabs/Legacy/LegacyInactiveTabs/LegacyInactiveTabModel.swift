@@ -18,7 +18,7 @@ struct InactiveTabStates: Codable {
 
 struct LegacyInactiveTabModel: Codable {
     // Contains [TabUUID String : InactiveTabState current or for next launch]
-    var tabWithStatus: [String: InactiveTabStates] = [String: InactiveTabStates]()
+    var tabWithStatus: [TabUUID: InactiveTabStates] = [TabUUID: InactiveTabStates]()
 
     static let userDefaults = UserDefaults()
 

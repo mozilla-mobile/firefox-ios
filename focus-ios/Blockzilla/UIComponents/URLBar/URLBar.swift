@@ -204,7 +204,7 @@ class URLBar: UIView {
 
     weak var delegate: URLBarDelegate?
     var userInputText: String?
-    var inBrowsingMode: Bool = false {
+    var inBrowsingMode = false {
         didSet {
             DispatchQueue.main.async {
                 self.updateBarState()
@@ -520,7 +520,6 @@ class URLBar: UIView {
                 self.viewModel.viewActionSubject.send(.contextMenuTap(anchor: self.contextMenuButton))
             }
             .store(in: &cancellables)
-
     }
 
     fileprivate func bindViewModelEvents() {
@@ -607,7 +606,6 @@ class URLBar: UIView {
     }
 
     private func updateURLBarLayoutAfterSplitView() {
-
         shieldIcon.snp.removeConstraints()
         addShieldConstraints()
 
@@ -619,7 +617,6 @@ class URLBar: UIView {
             leftBarViewLayoutGuide.snp.makeConstraints { make in
                 make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.urlBarMargin)
             }
-
         }
 
         rightBarViewLayoutGuide.snp.makeConstraints { (make) in
@@ -702,7 +699,7 @@ class URLBar: UIView {
         addCustomMenu()
         return super.canPerformAction(action, withSender: sender)
     }
-    var url: URL? = nil {
+    var url: URL? {
         didSet {
             if !urlTextField.isEditing {
                 setTextToURL()
@@ -711,7 +708,7 @@ class URLBar: UIView {
         }
     }
 
-    var shouldShowToolset: Bool = false {
+    var shouldShowToolset = false {
         didSet {
             updateViews()
             updateToolsetConstraints()
@@ -965,7 +962,6 @@ class URLBar: UIView {
         forwardButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         deleteButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
         contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-
     }
 
     @objc private func didPressClear() {
@@ -1074,7 +1070,6 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool { return true }
 
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
-
         DispatchQueue.main.async {
             self.setTextForURL()
         }
@@ -1141,7 +1136,6 @@ extension URLBar: UIDragInteractionDelegate {
 }
 
 private class URLTextField: AutocompleteTextField {
-
     // Disable user interaction on resign so that touch and hold on URL bar creates menu
     override func resignFirstResponder() -> Bool {
         isUserInteractionEnabled = false
