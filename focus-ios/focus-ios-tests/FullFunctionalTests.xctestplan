@@ -33,8 +33,6 @@
         "SettingAppearanceTest\/testCheckSetting()",
         "SettingAppearanceTest\/testSafariIntegration()",
         "ShortcutsTest",
-        "TrackingProtectionMenu\/testActiveProtectionSidebar()",
-        "TrackingProtectionMenu\/testProtectionSidebar()",
         "URLValidationTest",
         "WebsiteAccessTests\/testVisitWebsite()"
       ],
