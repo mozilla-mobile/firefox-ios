@@ -66,7 +66,8 @@ class IntroViewControllerTests: XCTestCase {
         let subject = createSubject(withCustomPrimaryActions: [.syncSignIn, .setDefaultBrowser, .requestNotifications])
 
         XCTAssertEqual(subject.pageControl.currentPage, 0)
-        subject.showNextPage(
+        subject.advance(
+            numberOfPages: 1,
             from: subject.viewModel.availableCards[subject.pageControl.currentPage].viewModel.name,
             completionIfLastCard: nil)
         XCTAssertEqual(subject.pageControl.currentPage, 1)
