@@ -11,6 +11,7 @@ final class HistoryCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var parentCoordinator: MockLibraryCoordinatorDelegate!
     private var notificationCenter: MockNotificationCenter!
+    private var navigationHandler: MockLibraryNavigationHandler!
 
     override func setUp() {
         super.setUp()
@@ -19,6 +20,7 @@ final class HistoryCoordinatorTests: XCTestCase {
         profile = MockProfile()
         notificationCenter = MockNotificationCenter()
         parentCoordinator = MockLibraryCoordinatorDelegate()
+        navigationHandler = MockLibraryNavigationHandler()
     }
 
     override func tearDown() {
@@ -28,6 +30,7 @@ final class HistoryCoordinatorTests: XCTestCase {
         profile = nil
         parentCoordinator = nil
         notificationCenter = nil
+        navigationHandler = nil
     }
 
     func testShowRecentlyClosedTabs() {
@@ -57,13 +60,27 @@ final class HistoryCoordinatorTests: XCTestCase {
         XCTAssertEqual(notificationCenter.postCallCount, 1)
     }
 
+    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+        let subject = createSubject()
+
+        subject.shareLibraryItem(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            sourceView: UIView()
+        )
+
+        XCTAssertEqual(navigationHandler.didShareLibraryItemCalled, 1)
+    }
+
     private func createSubject() -> HistoryCoordinator {
         let subject = HistoryCoordinator(
             profile: profile,
             windowUUID: .XCTestDefaultUUID,
             router: router,
             notificationCenter: notificationCenter,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            navigationHandler: navigationHandler
         )
         trackForMemoryLeaks(subject)
         return subject

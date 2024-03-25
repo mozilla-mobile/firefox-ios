@@ -29,10 +29,6 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        if let currentTab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(currentTab)
-        }
-
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -287,7 +283,7 @@ extension BrowserViewController: WKUIDelegate {
                         image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                         identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                     ) { _ in
-                        self.removeBookmark(url: url.absoluteString)
+                        self.removeBookmark(url: url, title: elements.title)
                         TelemetryWrapper.recordEvent(category: .action,
                                                      method: .delete,
                                                      object: .bookmark,

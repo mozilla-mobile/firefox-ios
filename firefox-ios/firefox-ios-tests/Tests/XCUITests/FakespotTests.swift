@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 import XCTest
 
-class FakespotTests: IphoneOnlyTestCase {
+class FakespotTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307128
     func testFakespotAvailable() {
-        if skipPlatform { return }
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
@@ -19,7 +18,6 @@ class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
     // Smoketest
     func testReviewQualityCheckBottomSheetUI() {
-        if skipPlatform { return }
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
         app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
@@ -47,7 +45,6 @@ class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358902
     // Smoketest
     func testPriceTagIconAvailableOnlyOnDetailPage() {
-        if skipPlatform { return }
         // Search for a product but do not open the product detail page
         loadWebsiteAndPerformSearch()
 
@@ -58,7 +55,6 @@ class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358904
     // Smoketest
     func testPriceTagNotDisplayedInPrivateMode() {
-        if skipPlatform { return }
         // Open a product detail page using a private tab and check the address bar
         loadWebsiteInPrivateMode()
 
@@ -69,7 +65,6 @@ class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358924
     // Smoketest
     func testAcceptTheRejectedOptInNotification() {
-        if skipPlatform { return }
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
@@ -95,7 +90,6 @@ class FakespotTests: IphoneOnlyTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358901
     func testPriceTagNotDisplayedOnSitesNotIntegratedFakespot() {
-        if skipPlatform { return }
         // Navigate to ebay.com
         navigator.openURL("https://www.ebay.com")
         waitUntilPageLoad()
@@ -118,7 +112,6 @@ class FakespotTests: IphoneOnlyTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
     // Smoketest
     func testSettingsSectionUI() {
-        if skipPlatform { return }
         // Navigate to a product detail page
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
@@ -146,7 +139,6 @@ class FakespotTests: IphoneOnlyTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358892
     func testOptInNotificationLayout() {
-        if skipPlatform { return }
         // Navigate to a product detail page on amazon.com page
         reachReviewChecker()
         validateOptInLayout("Amazon", "Walmart", "Best Buy")
@@ -160,7 +152,6 @@ class FakespotTests: IphoneOnlyTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358878
     func testLearnMoreAboutFakespotHyperlink() {
-        if skipPlatform { return }
         // Navigate to a product detail page
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
@@ -176,15 +167,11 @@ class FakespotTests: IphoneOnlyTestCase {
         learnMoreLink.tap()
         // The link opens in a new tab
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.staticTexts["Review Checker for Firefox Mobile"])
-        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
-        let numTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual(numTab, "2")
+        validateMozillaSupportWebpage("Review Checker for Firefox Mobile", "support.mozilla.org")
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358864
     func testTurnOffAndOnTheReviewQualityCheck() {
-        if skipPlatform { return }
         // Navigate to a product detail page
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
@@ -204,6 +191,52 @@ class FakespotTests: IphoneOnlyTestCase {
         // Opt-in card is displayed
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358894
+    func testLearnMoreLink() {
+        // Navigate to a product detail page
+        reachReviewChecker()
+        // Tap Learn more link
+        let learnMoreLink = app.scrollViews.otherElements.staticTexts["Learn more"]
+        mozWaitForElementToExist(learnMoreLink)
+        learnMoreLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        validateMozillaSupportWebpage("Review Checker for Firefox Mobile", "support.mozilla.org")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358896
+    func testTermsOfUseLink() {
+        // Navigate to a product detail page
+        reachReviewChecker()
+        // Tap Terms of use link
+        let termsOfUseLink = app.scrollViews.otherElements.staticTexts["Fakespot’s terms of use"]
+        mozWaitForElementToExist(termsOfUseLink)
+        termsOfUseLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        validateMozillaSupportWebpage("Fakespot Terms of Use", "www.fakespot.com")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358895
+    func testPrivacyPolicyLink() {
+        // Navigate to a product detail page
+        reachReviewChecker()
+        // Tap privacy policy link
+        let privacyPolicyLink = app.scrollViews.otherElements.staticTexts["Firefox’s privacy notice"]
+        mozWaitForElementToExist(privacyPolicyLink)
+        privacyPolicyLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        validateMozillaSupportWebpage("Privacy Notice", "privacy/firefox")
+    }
+
+    private func validateMozillaSupportWebpage(_ webpageTitle: String, _ url: String) {
+        mozWaitForElementToExist(app.staticTexts[webpageTitle])
+        mozWaitForValueContains(app.textFields["url"], value: url)
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTab, "2")
     }
 
     private func validateLayoutOnWalmartAndBestBuy(_ website: String, isWalmart: Bool, _ currentWebsite: String,
@@ -227,7 +260,13 @@ class FakespotTests: IphoneOnlyTestCase {
                 app.links["United States"].tap()
                 waitUntilPageLoad()
             }
-            let searchBestBuy = app.webViews["contentView"].textFields["Search"]
+            var searchBestBuy: XCUIElement
+            if !iPad() {
+                searchBestBuy = app.webViews["contentView"].textFields["Search"]
+            } else {
+                let searchText = "Type to search. Navigate forward to hear suggestions"
+                searchBestBuy = app.webViews["contentView"].textFields[searchText]
+            }
             mozWaitForElementToExist(searchBestBuy)
             searchBestBuy.tap()
             searchBestBuy.typeText("macbook air")
@@ -329,6 +368,7 @@ class FakespotTests: IphoneOnlyTestCase {
 
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
+        app.swipeDown()
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
 
         // Retry loading the page if page is not loading
@@ -336,9 +376,21 @@ class FakespotTests: IphoneOnlyTestCase {
             app.buttons["Reload page"].tap()
             waitUntilPageLoad()
         }
+        // Workaround for iPad issue: https://github.com/mozilla-mobile/firefox-ios/issues/19346
+        if app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].exists {
+            app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
+        }
         // Tap the shopping cart icon
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
+        var nrOfRetries = 4
+        while !shoppingButton.exists && nrOfRetries > 0 {
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
+            app.swipeDown()
+            app.webViews["contentView"].firstMatch.images.firstMatch.tap(force: true)
+            nrOfRetries -= 1
+        }
+        shoppingButton.tap()
     }
 
     private func loadWebsiteAndPerformSearch() {
@@ -348,9 +400,11 @@ class FakespotTests: IphoneOnlyTestCase {
 
         // Search for and open a shoe listing
         let searchAmazon = website.textFields["Search Amazon"]
-        if !searchAmazon.exists {
+        var nrOfRetries = 10
+        if !searchAmazon.exists && nrOfRetries > 10 {
             navigator.openURL("https://www.amazon.com")
             waitUntilPageLoad()
+            nrOfRetries -= 1
         }
         mozWaitForElementToExist(searchAmazon)
         XCTAssert(searchAmazon.isEnabled)
@@ -375,9 +429,11 @@ class FakespotTests: IphoneOnlyTestCase {
         waitUntilPageLoad()
         let website = app.webViews["contentView"].firstMatch
         let searchAmazon = website.textFields["Search Amazon"]
-        while !searchAmazon.exists {
+        var nrOfRetries = 10
+        while !searchAmazon.exists && nrOfRetries > 0 {
             app.buttons["Reload page"].tap()
             waitUntilPageLoad()
+            nrOfRetries -= 1
         }
         mozWaitForElementToExist(searchAmazon)
         searchAmazon.tap()

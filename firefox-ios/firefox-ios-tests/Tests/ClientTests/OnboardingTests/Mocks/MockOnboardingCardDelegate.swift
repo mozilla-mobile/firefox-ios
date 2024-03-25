@@ -39,8 +39,12 @@ class MockOnboardinCardDelegateController: UIViewController,
             self.action = .syncSignIn
         case .requestNotifications:
             self.action = .requestNotifications
-        case .nextCard:
-            showNextPage(from: cardName, completionIfLastCard: {})
+        case .forwardOneCard:
+            showNextPage(numberOfCards: 1, from: cardName, completionIfLastCard: {})
+        case .forwardTwoCard:
+            showNextPage(numberOfCards: 2, from: cardName, completionIfLastCard: {})
+        case .forwardThreeCard:
+            showNextPage(numberOfCards: 3, from: cardName, completionIfLastCard: {})
         case .setDefaultBrowser:
             self.action = .setDefaultBrowser
         case .openInstructionsPopup:
@@ -77,8 +81,15 @@ class MockOnboardinCardDelegateController: UIViewController,
         action = .syncSignIn
     }
 
-    func showNextPage(from cardNamed: String, completionIfLastCard completion: () -> Void) {
-        action = .nextCard
+    func showNextPage(numberOfCards: Int, from cardNamed: String, completionIfLastCard completion: () -> Void) {
+        action = .forwardOneCard
+        if numberOfCards == 1 {
+            action = .forwardOneCard
+        } else if numberOfCards == 2 {
+            action = .forwardTwoCard
+        } else if numberOfCards == 3 {
+            action = .forwardThreeCard
+        }
     }
 
     func pageChanged(from cardName: String) { }

@@ -178,7 +178,12 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
         else { return nil }
 
         pageControl.currentPage = index
-        return getNextOnboardingCard(index: index, goForward: false)
+
+        return getNextOnboardingCard(
+            currentIndex: index,
+            numberOfCardsToMove: 1,
+            goForward: false
+        )
     }
 
     func pageViewController(
@@ -190,7 +195,12 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
         else { return nil }
 
         pageControl.currentPage = index
-        return getNextOnboardingCard(index: index, goForward: true)
+
+        return getNextOnboardingCard(
+            currentIndex: index,
+            numberOfCardsToMove: 1,
+            goForward: true
+        )
     }
 }
 
@@ -206,8 +216,16 @@ extension UpdateViewController: OnboardingCardDelegate {
             and: isPrimaryButton)
 
         switch action {
-        case .nextCard:
-            showNextPage(from: cardName) {
+        case .forwardOneCard:
+            advance(numberOfPages: 1, from: cardName) {
+                self.didFinishFlow?()
+            }
+        case .forwardTwoCard:
+            advance(numberOfPages: 2, from: cardName) {
+                self.didFinishFlow?()
+            }
+        case .forwardThreeCard:
+            advance(numberOfPages: 3, from: cardName) {
                 self.didFinishFlow?()
             }
         case .syncSignIn:
