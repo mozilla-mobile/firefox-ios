@@ -50,7 +50,7 @@ extension NimbusAppSettings {
 
 extension Nimbus {
     /// Return the default path of the nimbus database. Which is stored in the application support directory and named `nimbus.db`.
-    /// - Returns: The path in a String or nil if the the support directory could not be found.
+    /// - Returns: The path in a String or nil if the support directory could not be found.
     static func defaultDatabasePath() -> String? {
         let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
         if paths.count == 0 {

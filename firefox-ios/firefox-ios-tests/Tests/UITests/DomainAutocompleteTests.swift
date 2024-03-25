@@ -90,7 +90,7 @@ class DomainAutocompleteTests: KIFTestCase {
         let textField = tester().waitForView(withAccessibilityLabel: "Address and Search") as! UITextField
         tester().enterText(intoCurrentFirstResponder: "foo")
 
-        // Remove the completion part and the the foo chars one by one
+        // Remove the completion part and the foo chars one by one
         for _ in 1...4 {
             tester().tapView(withAccessibilityIdentifier: "address")
             tester().enterText(intoCurrentFirstResponder: "\u{0008}")
