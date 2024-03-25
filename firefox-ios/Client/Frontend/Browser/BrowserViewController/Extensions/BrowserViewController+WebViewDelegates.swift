@@ -47,7 +47,9 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        newTab.url = URL(string: "about:blank")
+        if navigationAction.request.url == nil {
+            newTab.url = URL(string: "about:blank")
+        }
 
         return newTab.webView
     }
