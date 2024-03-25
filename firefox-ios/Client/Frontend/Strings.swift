@@ -570,7 +570,7 @@ extension String {
                 key: "CreditCard.SnackBar.CancelRemoveCardButton.v112",
                 tableName: "Alert",
                 value: "Cancel",
-                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and cancel the the operation.")
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and cancel the operation.")
 
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardButton.v112",
