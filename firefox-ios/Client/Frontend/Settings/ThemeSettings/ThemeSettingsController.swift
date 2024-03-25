@@ -28,7 +28,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
-    private let windowUUID: WindowUUID
 
     var isAutoBrightnessOn: Bool {
         return themeState.isAutomaticBrightnessEnabled
@@ -44,8 +43,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     init(windowUUID: WindowUUID) {
         self.themeState = ThemeSettingsState(windowUUID: windowUUID)
-        self.windowUUID = windowUUID
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -140,11 +138,12 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = [StandardImageIdentifiers.Medium.nightMode, StandardImageIdentifiers.Medium.sun].map { name in
             UIImage(imageLiteralResourceName: name)
                 .createScaled(size)
-                .tinted(withColor: themeManager.currentTheme.colors.iconSecondary)
+                .tinted(withColor: theme.colors.iconSecondary)
         }
 
         let slider: UISlider = .build { slider in
@@ -194,7 +193,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             label.numberOfLines = 0
             label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
                                                                 size: UX.footerFontSize)
-            label.textColor = self.themeManager.currentTheme.colors.textSecondary
+            label.textColor = self.themeManager.currentTheme(for: self.windowUUID).colors.textSecondary
         }
         footer.addSubview(label)
         NSLayoutConstraint.activate([
@@ -221,6 +220,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.selectionStyle = .none
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
+        let theme = themeManager.currentTheme(for: windowUUID)
         switch section {
         case .systemTheme:
             cell.textLabel?.text = .SystemThemeSectionSwitchTitle
@@ -228,9 +228,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             cell.textLabel?.lineBreakMode = .byWordWrapping
 
             let control = ThemedSwitch()
-            control.applyTheme(theme: themeManager.currentTheme)
+            control.applyTheme(theme: theme)
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
-            control.onTintColor = themeManager.currentTheme.colors.actionPrimary
+            control.onTintColor = theme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = themeState.useSystemAppearance
 
@@ -241,7 +241,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         case .lightDarkPicker:
             configureLightDarkTheme(indexPath: indexPath, cell: cell)
         }
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: theme)
 
         return cell
     }
@@ -349,6 +349,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func configureAutomaticBrightness(cell: ThemedTableViewCell) {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
         let slider = makeSlider(parent: cell.contentView)
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
@@ -357,7 +358,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         deviceBrightnessIndicator.isUserInteractionEnabled = false
         deviceBrightnessIndicator.minimumTrackTintColor = .clear
         deviceBrightnessIndicator.maximumTrackTintColor = .clear
-        deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
+        deviceBrightnessIndicator.thumbTintColor = theme.colors.formKnob
         self.slider = (slider, deviceBrightnessIndicator)
     }
 }

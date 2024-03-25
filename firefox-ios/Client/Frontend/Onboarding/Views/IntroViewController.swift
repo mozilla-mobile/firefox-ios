@@ -32,6 +32,8 @@ class IntroViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var introViewControllerState: OnboardingViewControllerState?
 
@@ -74,6 +76,7 @@ class IntroViewController: UIViewController,
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.userDefaults = userDefaults
         super.init(nibName: nil, bundle: nil)
@@ -225,7 +228,7 @@ class IntroViewController: UIViewController,
 
     // MARK: - Themable
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer2
 
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary

@@ -16,6 +16,8 @@ class SettingsViewController: UIViewController, Themeable {
     var profile: Profile!
     var tabManager: TabManager!
 
+    var currentWindowUUID: UUID? { return tabManager.windowUUID }
+
     init(profile: Profile? = nil,
          tabManager: TabManager? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -38,6 +40,7 @@ class SettingsViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        let theme = themeManager.currentTheme(for: currentWindowUUID)
+        view.backgroundColor = theme.colors.layer1
     }
 }

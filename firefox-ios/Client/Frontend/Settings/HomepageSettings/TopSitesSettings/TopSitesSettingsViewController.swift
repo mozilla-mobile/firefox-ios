@@ -7,8 +7,8 @@ import Shared
 
 class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     // MARK: - Initializers
-    init() {
-        super.init(style: .grouped)
+    init(windowUUID: WindowUUID) {
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .Settings.Homepage.Shortcuts.ShortcutsPageTitle
         self.navigationController?.navigationBar.accessibilityIdentifier = AccessibilityIdentifiers
@@ -30,7 +30,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
         var sections = [Setting]()
         let topSitesSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme,
+            theme: themeManager.currentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
             defaultValue: true,
             titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
@@ -39,7 +39,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
 
         let sponsoredShortcutSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme,
+            theme: themeManager.currentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
             defaultValue: true,
             titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
@@ -60,6 +60,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
 extension TopSitesSettingsViewController {
     class RowSettings: Setting {
         let profile: Profile
+        let windowUUID: WindowUUID
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
@@ -76,11 +77,12 @@ extension TopSitesSettingsViewController {
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
+            self.windowUUID = settings.windowUUID
             super.init(
                 title: NSAttributedString(
                     string: .Settings.Homepage.Shortcuts.Rows,
                     attributes: [
-                        NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                        NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme(for: windowUUID).colors.textPrimary
                     ]
                 )
             )
