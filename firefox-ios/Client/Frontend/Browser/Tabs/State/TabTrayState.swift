@@ -119,7 +119,6 @@ struct TabTrayState: ScreenState, Equatable {
         case TabTrayAction.firefoxAccountChanged(let context):
             let isSyncAccountEnabled = context.hasSyncableAccount
             // Account updates may occur in a global manner, independent of specific windows.
-            // TODO: [8188] Need to revisit to confirm ideal handling when UUID is `.unavailable`
             let uuid = state.windowUUID
             return TabTrayState(windowUUID: uuid,
                                 isPrivateMode: state.isPrivateMode,
