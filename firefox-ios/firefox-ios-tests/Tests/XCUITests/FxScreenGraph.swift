@@ -624,7 +624,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // Screengraph will go back to main Settings screen. Manually tap on settings
             app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
-            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            if #unavailable(iOS 17) {
+                app.tables.buttons["Delete Mozilla Engine"].tap()
+            } else {
+                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            }
             app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         }
     }
