@@ -37,7 +37,6 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         app.buttons["Edit"].tap()
         XCTAssertTrue(app.buttons["Done"].isEnabled)
-        print(app.debugDescription)
         if #unavailable(iOS 17) {
             mozWaitForElementToExist(app.tables.buttons["Delete \(customSearchEngine["name"]!)"])
         } else {
