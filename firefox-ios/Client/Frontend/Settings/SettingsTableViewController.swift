@@ -983,7 +983,7 @@ class SettingsTableViewController: ThemedTableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
-            setting.onConfigureCell(cell, theme: themeManager.currentTheme)
+            setting.onConfigureCell(cell, theme: themeManager.currentTheme(for: windowUUID))
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
@@ -996,8 +996,8 @@ class SettingsTableViewController: ThemedTableViewController {
     ) {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
-            setting.onConfigureCell(themedCell, theme: themeManager.currentTheme)
-            themedCell.applyTheme(theme: themeManager.currentTheme)
+            setting.onConfigureCell(themedCell, theme: themeManager.currentTheme(for: windowUUID))
+            themedCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -1041,7 +1041,7 @@ class SettingsTableViewController: ThemedTableViewController {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return headerView
     }
 
@@ -1055,7 +1055,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.applyTheme(theme: themeManager.currentTheme)
+        footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return footerView
     }
 

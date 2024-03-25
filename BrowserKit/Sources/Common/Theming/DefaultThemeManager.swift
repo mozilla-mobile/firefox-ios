@@ -88,6 +88,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - ThemeManager
 
+    public func setWindow(_ window: UIWindow, for uuid: UUID) {
+        windows[uuid] = window
+    }
+
     public func currentTheme(for window: UUID?) -> Theme {
         // TODO: [8313] Need to revisit how we handle nil here, return theme for 'main'/active window
         guard let window else { return DarkTheme() }

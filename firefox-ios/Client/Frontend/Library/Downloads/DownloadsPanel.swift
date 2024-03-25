@@ -30,6 +30,8 @@ class DownloadsPanel: UIViewController,
     private let events: [Notification.Name] = [.FileDidDownload,
                                                .PrivateDataClearedDownloadedFiles,
                                                .DynamicFontChanged]
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
@@ -49,13 +51,15 @@ class DownloadsPanel: UIViewController,
     }
 
     // MARK: - Lifecycle
-    init(notificationCenter: NotificationProtocol = NotificationCenter.default,
+    init(windowUUID: WindowUUID,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.logger = logger
         self.state = .downloads
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         events.forEach {
             NotificationCenter.default.addObserver(
@@ -175,7 +179,8 @@ class DownloadsPanel: UIViewController,
     ) -> UIImage? {
         let radius: CGFloat = 5.0
         let strokeWidth: CGFloat = 1.0
-        let strokeColor: UIColor = themeManager.currentTheme.colors.iconSecondary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let strokeColor: UIColor = theme.colors.iconSecondary
         let fontSize: CGFloat = 9.0
 
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
@@ -231,14 +236,15 @@ class DownloadsPanel: UIViewController,
     }
 
     private func createEmptyStateOverlayView() -> UIView {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let overlayView: UIView = .build { view in
-            view.backgroundColor = self.themeManager.currentTheme.colors.layer1
+            view.backgroundColor = theme.colors.layer1
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         let logoImageView: UIImageView = .build { imageView in
             imageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.download)?
                 .withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = self.themeManager.currentTheme.colors.iconSecondary
+            imageView.tintColor = theme.colors.iconSecondary
         }
         let welcomeLabel: UILabel = .build { label in
             label.text = .TabsTray.DownloadsPanel.EmptyStateTitle
@@ -246,7 +252,7 @@ class DownloadsPanel: UIViewController,
             label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
                                                                 size: 17,
                                                                 weight: .light)
-            label.textColor = self.themeManager.currentTheme.colors.textSecondary
+            label.textColor = theme.colors.textSecondary
             label.numberOfLines = 0
             label.adjustsFontSizeToFitWidth = true
         }
@@ -278,8 +284,9 @@ class DownloadsPanel: UIViewController,
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
-            header.contentView.backgroundColor = themeManager.currentTheme.colors.layer1
+            let theme = themeManager.currentTheme(for: windowUUID)
+            header.textLabel?.textColor = theme.colors.textPrimary
+            header.contentView.backgroundColor = theme.colors.layer1
         }
     }
 
@@ -303,7 +310,7 @@ class DownloadsPanel: UIViewController,
                                                        collapsibleState: nil)
         headerView.configure(headerViewModel)
         headerView.showBorder(for: .top, !viewModel.isFirstSection(section))
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
 
         return headerView
     }
@@ -314,7 +321,7 @@ class DownloadsPanel: UIViewController,
             cell.titleLabel.text = downloadedFile.filename
             cell.descriptionLabel.text = downloadedFile.formattedSize
             cell.leftImageView.manuallySetImage(iconForFileExtension(downloadedFile.fileExtension) ?? UIImage())
-            cell.applyTheme(theme: themeManager.currentTheme)
+            cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         return cell
     }
@@ -400,8 +407,9 @@ class DownloadsPanel: UIViewController,
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
-        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        tableView.backgroundColor = theme.colors.layer1
+        tableView.separatorColor = theme.colors.borderPrimary
 
         reloadData()
     }

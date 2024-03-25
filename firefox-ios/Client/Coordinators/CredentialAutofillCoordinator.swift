@@ -50,7 +50,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
-        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
+        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel,
+                                                                 windowUUID: windowUUID)
         viewController.didTapYesClosure = { [weak self] error in
             guard let self = self else { return }
             if let error = error {

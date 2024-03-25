@@ -43,6 +43,8 @@ class HomepageViewController:
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
     private var logger: Logger
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
+    var currentWindowUUID: UUID? { return windowUUID }
 
     var contentType: ContentType = .homepage
 
@@ -78,18 +80,18 @@ class HomepageViewController:
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           theme: themeManager.currentTheme)
+                                           theme: themeManager.currentTheme(for: tabManager.windowUUID))
 
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackIn,
                                                                           with: viewModel.profile)
         self.jumpBackInContextualHintViewController = ContextualHintViewController(
-            with: jumpBackInContextualViewProvider
+            with: jumpBackInContextualViewProvider, windowUUID: tabManager.windowUUID
         )
         let syncTabContextualViewProvider = ContextualHintViewProvider(
             forHintType: .jumpBackInSyncedTab,
             with: viewModel.profile
         )
-        self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewProvider)
+        self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewProvider, windowUUID: tabManager.windowUUID)
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
 
         self.themeManager = themeManager
@@ -343,7 +345,7 @@ class HomepageViewController:
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
     }
@@ -363,9 +365,10 @@ class HomepageViewController:
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+            let theme = themeManager.currentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
-                                                         theme: themeManager.currentTheme)
+                                                         theme: theme)
         }
     }
 
@@ -476,7 +479,8 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
             // swiftlint:disable line_length
             let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
             // swiftlint:enable line_length
-            headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
+            headerView.configure(viewModel: headerViewModel,
+                                 theme: themeManager.currentTheme(for: windowUUID))
 
             // Jump back in header specific setup
             if sectionViewModel.sectionType == .jumpBackIn {
@@ -504,7 +508,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
                 }
                 self.showSiteWithURLHandler(learnMoreURL)
             }
-            footerView.applyTheme(theme: themeManager.currentTheme)
+            footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             return footerView
         }
         return reusableView

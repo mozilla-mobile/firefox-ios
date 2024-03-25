@@ -23,8 +23,10 @@ class PasswordManagerCoordinator: BaseCoordinator,
     let profile: Profile
     weak var passwordManager: PasswordManagerListViewController?
     weak var parentCoordinator: PasswordManagerCoordinatorDelegate?
+    let windowUUID: WindowUUID
 
-    init(router: Router, profile: Profile) {
+    init(router: Router, profile: Profile, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         self.profile = profile
         super.init(router: router)
     }
@@ -38,7 +40,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func showPasswordManager() {
-        let viewController = PasswordManagerListViewController(profile: profile)
+        let viewController = PasswordManagerListViewController(profile: profile, windowUUID: windowUUID)
         viewController.coordinator = self
         router.push(viewController) { [weak self] in
             guard let self = self else { return }
@@ -82,7 +84,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func pressedAddPassword(completion: @escaping (LoginEntry) -> Void) {
-        let viewController = AddCredentialViewController(didSaveAction: completion)
+        let viewController = AddCredentialViewController(didSaveAction: completion, windowUUID: windowUUID)
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .formSheet
         passwordManager?.present(navigationController, animated: true)

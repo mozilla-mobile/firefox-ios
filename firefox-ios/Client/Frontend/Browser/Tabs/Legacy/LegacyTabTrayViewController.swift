@@ -624,7 +624,8 @@ extension LegacyTabTrayViewController: RemotePanelDelegate {
         let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams,
                                                                                      flowType: .emailLoginFlow,
                                                                                      referringPage: .tabTray,
-                                                                                     profile: viewModel.profile)
+                                                                                     profile: viewModel.profile,
+                                                                                     windowUUID: windowUUID)
         (controller as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
         (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
             self?.viewModel.reloadRemoteTabs()

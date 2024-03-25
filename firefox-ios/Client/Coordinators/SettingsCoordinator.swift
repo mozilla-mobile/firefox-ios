@@ -80,7 +80,8 @@ class SettingsCoordinator: BaseCoordinator,
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
         case .newTab:
-            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+            let viewController = NewTabContentSettingsViewController(prefs: profile.prefs,
+                                                                     windowUUID: windowUUID)
             viewController.profile = profile
             return viewController
 
@@ -92,7 +93,7 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .mailto:
-            let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+            let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
             return viewController
 
         case .search:
@@ -109,7 +110,8 @@ class SettingsCoordinator: BaseCoordinator,
                 fxaParams,
                 flowType: .emailLoginFlow,
                 referringPage: .settings,
-                profile: profile
+                profile: profile,
+                windowUUID: windowUUID
             )
             (viewController as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = self
             return viewController
@@ -122,7 +124,7 @@ class SettingsCoordinator: BaseCoordinator,
                 let viewModel = WallpaperSettingsViewModel(
                     wallpaperManager: wallpaperManager,
                     tabManager: tabManager,
-                    theme: themeManager.currentTheme
+                    theme: themeManager.currentTheme(for: windowUUID)
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
                 wallpaperVC.settingsDelegate = self
@@ -147,7 +149,7 @@ class SettingsCoordinator: BaseCoordinator,
             return SearchBarSettingsViewController(viewModel: viewModel)
 
         case .topSites:
-            let viewController = TopSitesSettingsViewController()
+            let viewController = TopSitesSettingsViewController(windowUUID: windowUUID)
             viewController.profile = profile
             return viewController
 
@@ -176,7 +178,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func showCreditCardSettings() {
-        let viewModel = CreditCardSettingsViewModel(profile: profile)
+        let viewModel = CreditCardSettingsViewModel(profile: profile, windowUUID: windowUUID)
         let creditCardViewController = CreditCardSettingsViewController(creditCardViewModel: viewModel)
         router.push(creditCardViewController)
     }
@@ -198,7 +200,8 @@ class SettingsCoordinator: BaseCoordinator,
     func showPasswordManager(shouldShowOnboarding: Bool) {
         let passwordCoordinator = PasswordManagerCoordinator(
             router: router,
-            profile: profile
+            profile: profile,
+            windowUUID: windowUUID
         )
         add(child: passwordCoordinator)
         passwordCoordinator.parentCoordinator = self
@@ -234,7 +237,7 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedAddressAutofill() {
         let viewModel = AddressAutofillSettingsViewModel(profile: profile)
-        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel)
+        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel, windowUUID: windowUUID)
         router.push(viewController)
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -294,7 +297,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedNewTab() {
-        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs)
+        let viewController = NewTabContentSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         viewController.profile = profile
         router.push(viewController)
     }
@@ -334,13 +337,14 @@ class SettingsCoordinator: BaseCoordinator,
         let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
         let viewController = FirefoxAccountSignInViewController(profile: profile,
                                                                 parentType: .settings,
-                                                                deepLinkParams: fxaParams)
+                                                                deepLinkParams: fxaParams,
+                                                                windowUUID: windowUUID)
         viewController.qrCodeNavigationHandler = self
         router.push(viewController)
     }
 
     func pressedAdvancedAccountSetting() {
-        let viewController = AdvancedAccountSettingViewController()
+        let viewController = AdvancedAccountSettingViewController(windowUUID: windowUUID)
         viewController.profile = profile
         router.push(viewController)
     }
@@ -355,7 +359,8 @@ class SettingsCoordinator: BaseCoordinator,
         let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
         let viewController = FirefoxAccountSignInViewController(profile: profile,
                                                                 parentType: .settings,
-                                                                deepLinkParams: fxaParams)
+                                                                deepLinkParams: fxaParams,
+                                                                windowUUID: windowUUID)
         viewController.qrCodeNavigationHandler = self
         router.push(viewController)
     }
