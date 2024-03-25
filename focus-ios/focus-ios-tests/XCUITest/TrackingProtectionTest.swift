@@ -91,7 +91,11 @@ class TrackingProtectionTest: BaseTestCase {
         XCTAssertEqual(app.switches["BlockerToggle.TrackingProtection"].value! as! String, "0")
 
         // Go to Settings -> Tracking Protection
-        app.buttons["closeSheetButton"].tap()
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+        } else {
+            app.buttons["closeSheetButton"].tap()
+        }
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         waitForExistence(app.collectionViews.buttons["Settings"], timeout: 5)
