@@ -223,7 +223,7 @@ class FakespotTests: BaseTestCase {
     func testPrivacyPolicyLink() {
         // Navigate to a product detail page
         reachReviewChecker()
-        // Tap Terms of use link
+        // Tap privacy policy link
         let privacyPolicyLink = app.scrollViews.otherElements.staticTexts["Firefox’s privacy notice"]
         mozWaitForElementToExist(privacyPolicyLink)
         privacyPolicyLink.tap()
@@ -368,6 +368,7 @@ class FakespotTests: BaseTestCase {
 
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
+        app.swipeDown()
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
 
         // Retry loading the page if page is not loading
@@ -380,8 +381,16 @@ class FakespotTests: BaseTestCase {
             app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
         }
         // Tap the shopping cart icon
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
+        var nrOfRetries = 4
+        while !shoppingButton.exists && nrOfRetries > 0 {
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
+            app.swipeDown()
+            app.webViews["contentView"].firstMatch.images.firstMatch.tap(force: true)
+            nrOfRetries -= 1
+        }
+        shoppingButton.tap()
     }
 
     private func loadWebsiteAndPerformSearch() {
