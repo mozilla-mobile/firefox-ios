@@ -182,7 +182,7 @@ class BookmarksTests: BaseTestCase {
         app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 2)
         navigator.nowAt(MobileBookmarks)
-        if #available (iOS 17.4, *) {
+        if #available (iOS 17, *) {
             // Now remove the folder
             navigator.performAction(Action.RemoveItemMobileBookmarks)
             mozWaitForElementToExist(app.buttons["Remove Test Folder"])
