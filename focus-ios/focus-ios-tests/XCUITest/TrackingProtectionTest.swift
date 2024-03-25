@@ -71,4 +71,50 @@ class TrackingProtectionTest: BaseTestCase {
         let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
         XCTAssertTrue(TrackingProtection.exists)
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
+    func testShieldMenuSetting() {
+        // Load URL
+        loadWebPage("https://blockads.fivefilters.org/")
+        waitForWebPageLoad()
+
+        // Tap on the shield to open the tracking protection sidebar
+        app.buttons["URLBar.trackingProtectionIcon"].tap()
+
+        // Disable tracking protection
+        waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
+        app.switches["BlockerToggle.TrackingProtection"].tap()
+
+        // Enhanced tracking protection is disabled
+        waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
+        XCTAssertEqual(app.switches["BlockerToggle.TrackingProtection"].value! as! String, "0")
+
+        // Go to Settings -> Tracking Protection
+        app.buttons["closeSheetButton"].tap()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
+        waitForExistence(app.collectionViews.buttons["Settings"], timeout: 5)
+        app.collectionViews.buttons["Settings"].tap()
+        waitForExistence(app.cells["settingsViewController.trackingCell"])
+        app.cells["settingsViewController.trackingCell"].tap()
+
+        // The change is reflected in Tracking Protection settings.
+        waitForExistence(app.tables.staticTexts["Enhanced Tracking Protection"])
+        XCTAssertEqual(app.tables.switches["BlockerToggle.TrackingProtection"].value! as! String, "0")
+
+        // Tap on enhanced tracking protection to enable
+        app.tables.switches["BlockerToggle.TrackingProtection"].tap()
+
+        // Enhance tracking protection is enabled
+        waitForExistence(app.tables.staticTexts["Protections are ON for this session"])
+        XCTAssertEqual(app.tables.switches["BlockerToggle.TrackingProtection"].value! as! String, "1")
+        app.navigationBars.buttons["Done"].tap()
+
+        // Tap on the shield icon
+        app.buttons["URLBar.trackingProtectionIcon"].tap()
+
+        // Enhanced tracking protection is enabled
+        waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
+        XCTAssertEqual(app.switches["BlockerToggle.TrackingProtection"].value! as! String, "1")
+    }
 }
