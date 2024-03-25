@@ -72,6 +72,7 @@ class TrackingProtectionTest: BaseTestCase {
         XCTAssertTrue(TrackingProtection.exists)
     }
 
+    // Smoke test
     // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
     func testShieldMenuSetting() {
         // Load URL
