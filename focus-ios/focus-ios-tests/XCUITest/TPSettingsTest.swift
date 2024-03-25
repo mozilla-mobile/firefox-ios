@@ -34,7 +34,6 @@ class TrackingProtectionTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
     // https://testrail.stage.mozaws.net/index.php?/cases/view/394999
     func testProtectionSidebar() {
         // Visit https://www.mozilla.org
@@ -60,7 +59,7 @@ class TrackingProtectionTest: BaseTestCase {
         let switchValue = app.switches["BlockerToggle.TrackingProtection"].value!
         XCTAssertLessThan(switchValue as! String, "2")
     }
-    
+
     // Smoke test
     // https://testrail.stage.mozaws.net/index.php?/cases/view/1569890
     func testAdBlocking() {
