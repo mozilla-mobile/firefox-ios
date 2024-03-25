@@ -3680,24 +3680,6 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: never
 
-# Theme metrics
-theme:
-  use_system_theme:
-    type: boolean
-    description: |
-      Measures the state of the "Use System Light/Dark Mode"
-      theme preference.
-    bugs:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_reviews:
-      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-      - https://github.com/mozilla-mobile/firefox-ios/pull/9673
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
-
 # Enhanced Tracking Protection metrics
 tracking_protection:
   enabled:
