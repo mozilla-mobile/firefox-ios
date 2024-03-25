@@ -65,7 +65,9 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
 
     func showSearchGroupedItems(_ items: ASGroup<Site>) {
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: items, presenter: .historyPanel)
-        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel, profile: profile)
+        let asGroupListVC = SearchGroupedItemsViewController(viewModel: asGroupListViewModel,
+                                                             profile: profile,
+                                                             windowUUID: windowUUID)
         asGroupListVC.libraryPanelDelegate = parentCoordinator
         asGroupListVC.title = items.displayTitle
         router.push(asGroupListVC)

@@ -97,7 +97,7 @@ class SettingsCoordinator: BaseCoordinator,
             return viewController
 
         case .search:
-            let viewController = SearchSettingsTableViewController(profile: profile)
+            let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
             return viewController
 
         case .clearPrivateData:
@@ -134,7 +134,8 @@ class SettingsCoordinator: BaseCoordinator,
             }
 
         case .contentBlocker:
-            let contentBlockerVC = ContentBlockerSettingViewController(prefs: profile.prefs,
+            let contentBlockerVC = ContentBlockerSettingViewController(windowUUID: windowUUID,
+                                                                       prefs: profile.prefs,
                                                                        isShownFromSettings: false)
             contentBlockerVC.settingsDelegate = self
             contentBlockerVC.profile = profile
@@ -189,7 +190,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func showFirefoxSuggest() {
-        let firefoxSuggestViewController = FirefoxSuggestSettingsViewController(profile: profile)
+        let firefoxSuggestViewController = FirefoxSuggestSettingsViewController(profile: profile, windowUUID: windowUUID)
         router.push(firefoxSuggestViewController)
     }
 
@@ -256,7 +257,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedContentBlocker() {
-        let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+        let viewController = ContentBlockerSettingViewController(windowUUID: windowUUID, prefs: profile.prefs)
         viewController.settingsDelegate = self
         viewController.profile = profile
         viewController.tabManager = tabManager
@@ -292,7 +293,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedMailApp() {
-        let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
+        let viewController = OpenWithSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         router.push(viewController)
     }
 
@@ -303,7 +304,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSearchEngine() {
-        let viewController = SearchSettingsTableViewController(profile: profile)
+        let viewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
         router.push(viewController)
     }
 
@@ -350,7 +351,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedToShowSyncContent() {
-        let viewController = SyncContentSettingsViewController()
+        let viewController = SyncContentSettingsViewController(windowUUID: windowUUID)
         viewController.profile = profile
         router.push(viewController)
     }

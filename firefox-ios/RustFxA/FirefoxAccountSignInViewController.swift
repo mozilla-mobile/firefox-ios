@@ -342,7 +342,7 @@ extension FirefoxAccountSignInViewController {
             return signInVC
         }
 
-        let settingsTableViewController = SyncContentSettingsViewController()
+        let settingsTableViewController = SyncContentSettingsViewController(windowUUID: windowUUID)
         settingsTableViewController.profile = profile
         return settingsTableViewController
     }

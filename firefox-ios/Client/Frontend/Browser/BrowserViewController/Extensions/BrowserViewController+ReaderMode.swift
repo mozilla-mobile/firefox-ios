@@ -169,7 +169,7 @@ extension BrowserViewController {
         readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
         let viewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
                                                  readerModeStyle: readerModeStyle)
-        let viewController = ReaderModeStyleViewController(viewModel: viewModel)
+        let viewController = ReaderModeStyleViewController(viewModel: viewModel, windowUUID: windowUUID)
         viewController.applyTheme(preferences, contentScript: contentScript)
     }
 }
@@ -191,7 +191,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             let readerModeViewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
                                                                readerModeStyle: readerModeStyle)
             readerModeViewModel.delegate = self
-            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel)
+            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel,
+                                                                              windowUUID: windowUUID)
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in

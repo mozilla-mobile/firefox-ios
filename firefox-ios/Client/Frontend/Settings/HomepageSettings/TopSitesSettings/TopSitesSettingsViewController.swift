@@ -89,7 +89,7 @@ extension TopSitesSettingsViewController {
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let viewController = TopSitesRowCountSettingsController(prefs: profile.prefs)
+            let viewController = TopSitesRowCountSettingsController(prefs: profile.prefs, windowUUID: windowUUID)
             viewController.profile = profile
             navigationController?.pushViewController(viewController, animated: true)
         }

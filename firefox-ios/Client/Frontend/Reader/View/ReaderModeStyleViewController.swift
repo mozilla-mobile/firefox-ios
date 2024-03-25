@@ -29,13 +29,17 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     init(viewModel: ReaderModeStyleViewModel,
+         windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -200,7 +204,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
     // MARK: - Applying Theme
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         popoverPresentationController?.backgroundColor = theme.colors.layer1
 
         slider.tintColor = theme.colors.actionPrimary
