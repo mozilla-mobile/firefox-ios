@@ -121,6 +121,9 @@
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Zoeken";
 
+/* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Description.v125" = "Suggesties van zoekmachines tonen in privésessies";
+
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v122" = "Suggesties tonen in privénavigatie";
 
@@ -141,6 +144,9 @@
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Meer info over Firefox Suggesties";
+
+/* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Suggesties van Firefox Suggesties tonen in privésessies";
 
 /* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
 "Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Navigatiegeschiedenis doorzoeken";
