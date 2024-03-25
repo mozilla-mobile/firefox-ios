@@ -52,9 +52,9 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer1
-        locationContainer.backgroundColor = theme.colors.layer3
-        locationDividerView.backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layer2
+        locationContainer.backgroundColor = theme.colors.layerSearch
+        locationDividerView.backgroundColor = theme.colors.layer2
     }
 
     // MARK: - Private
