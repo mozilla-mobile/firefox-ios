@@ -21,15 +21,17 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
 
         enum PrivateMode {
-            static let isOn = "profile.PrivateModeStatus"
+            // TODO: [8313] Need to consider "migration", how this will work for users will older key present but not this one
+            static let isOn = "profile.PrivateModeWindowStatus"
         }
     }
 
     // MARK: - Variables
 
-    public var currentTheme: Theme = LightTheme()
+    private var windowThemeState: [UUID: Theme] = [:] //LightTheme()
+    private var windows: [UUID: UIWindow?] = [:]
+    private var allWindowUUIDs: [UUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
-    public var window: UIWindow?
 
     private var userDefaults: UserDefaultsInterface
     private var mainQueue: DispatchQueueInterface
@@ -39,7 +41,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
 
-    private var privateModeIsOn: Bool {
+    private func privateModeIsOn(for window: UUID) -> Bool {
         return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
     }
 
@@ -58,6 +60,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Initializers
 
     public init(
+        defaultWindowID: UUID,
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
@@ -74,8 +77,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             ThemeKeys.PrivateMode.isOn: false,
         ])
 
+        // TODO: [8313] Can we get rid of this? This won't work unless we inject the default window etc.
         updateSavedTheme(to: getNormalSavedTheme())
-        updateCurrentTheme(to: fetchSavedThemeType())
+        updateCurrentTheme(to: fetchSavedThemeType(for: defaultWindowID), for: defaultWindowID)
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
@@ -84,28 +88,37 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - ThemeManager
 
-    public func changeCurrentTheme(_ newTheme: ThemeType) {
-        guard currentTheme.type != newTheme else { return }
+    public func currentTheme(for window: UUID?) -> Theme {
+        // TODO: [8313] Need to revisit how we handle nil here, return theme for 'main'/active window
+        guard let window else { return DarkTheme() }
 
-        updateSavedTheme(to: newTheme)
-        updateCurrentTheme(to: fetchSavedThemeType())
+        return windowThemeState[window] ?? DarkTheme()
     }
 
-    public func reloadTheme() {
-        updateCurrentTheme(to: fetchSavedThemeType())
+    public func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID) {
+        guard currentTheme(for: window).type != newTheme else { return }
+
+        updateSavedTheme(to: newTheme)
+        updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
+    }
+
+    public func reloadTheme(for window: UUID) {
+        updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
     }
 
     public func systemThemeChanged() {
-        // Ignore if:
-        // the system theme is off
-        // OR night mode is on
-        // OR private mode is on
-        guard systemThemeIsOn,
-              !nightModeIsOn,
-              !privateModeIsOn
-        else { return }
+        allWindowUUIDs.forEach { uuid in
+            // Ignore if:
+            // the system theme is off
+            // OR night mode is on
+            // OR private mode is on
+            guard systemThemeIsOn,
+                  !nightModeIsOn,
+                  !privateModeIsOn(for: uuid)
+            else { return }
 
-        changeCurrentTheme(getSystemThemeType())
+            changeCurrentTheme(getSystemThemeType(), for: uuid)
+        }
     }
 
     public func setSystemTheme(isOn: Bool) {
@@ -118,12 +131,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    public func setPrivateTheme(isOn: Bool) {
+    public func setPrivateTheme(isOn: Bool, for window: UUID) {
         guard userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn) != isOn else { return }
 
         userDefaults.set(isOn, forKey: ThemeKeys.PrivateMode.isOn)
 
-        updateCurrentTheme(to: fetchSavedThemeType())
+        updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
@@ -163,20 +176,24 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
-    private func updateCurrentTheme(to newTheme: ThemeType) {
-        currentTheme = newThemeForType(newTheme)
+    private func updateCurrentTheme(to newTheme: ThemeType, for window: UUID) {
+        windowThemeState[window] = newThemeForType(newTheme)
 
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-        window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
+
+        // TODO: [8313] Fix for multi-window
+        windows.forEach { (uuid, window) in
+            window?.overrideUserInterfaceStyle = currentTheme(for: uuid).type.getInterfaceStyle()
+        }
 
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)
         }
     }
 
-    private func fetchSavedThemeType() -> ThemeType {
-        if privateModeIsOn { return .privateMode }
+    private func fetchSavedThemeType(for window: UUID) -> ThemeType {
+        if privateModeIsOn(for: window) { return .privateMode }
         if nightModeIsOn { return .dark }
 
         return getNormalSavedTheme()
@@ -198,12 +215,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func updateThemeBasedOnBrightness() {
-        let currentValue = Float(UIScreen.main.brightness)
+        // TODO: [8313] Revisit / fix.
+        allWindowUUIDs.forEach { uuid in
+            let currentValue = Float(UIScreen.main.brightness)
 
-        if currentValue < automaticBrightnessValue {
-            changeCurrentTheme(.dark)
-        } else {
-            changeCurrentTheme(.light)
+            if currentValue < automaticBrightnessValue {
+                changeCurrentTheme(.dark, for: uuid)
+            } else {
+                changeCurrentTheme(.light, for: uuid)
+            }
         }
     }
 

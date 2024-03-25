@@ -6,9 +6,11 @@ import Foundation
 
 public struct WindowData: Codable {
     public let id: UUID
-    public let isPrimary: Bool
     public let activeTabId: UUID
     public let tabData: [TabData]
+
+    // Note: currently this is unused.
+    public let isPrimary: Bool
 
     /// Providing default values for id and isPrimary for now
     /// This will change when multi-window support is added

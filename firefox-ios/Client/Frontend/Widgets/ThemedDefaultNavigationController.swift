@@ -10,10 +10,15 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
+    let windowUUID: WindowUUID
+
+    var currentWindowUUID: UUID? { return windowUUID }
 
     init(rootViewController: UIViewController,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(rootViewController: rootViewController)
@@ -30,25 +35,27 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
     }
 
     private func setupNavigationBarAppearance() {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
+        standardAppearance.backgroundColor = theme.colors.layer1
         standardAppearance.shadowColor = nil
         standardAppearance.shadowImage = UIImage()
-        standardAppearance.titleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
-        standardAppearance.largeTitleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
+        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
+        standardAppearance.largeTitleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
 
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance
         navigationBar.scrollEdgeAppearance = standardAppearance
         navigationBar.compactScrollEdgeAppearance = standardAppearance
-        navigationBar.tintColor = themeManager.currentTheme.colors.textPrimary
+        navigationBar.tintColor = theme.colors.textPrimary
     }
 
     private func setupToolBarAppearance() {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
+        standardAppearance.backgroundColor = theme.colors.layer1
         standardAppearance.shadowColor = nil
         standardAppearance.shadowImage = UIImage()
 
@@ -56,7 +63,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
         toolbar.compactAppearance = standardAppearance
         toolbar.scrollEdgeAppearance = standardAppearance
         toolbar.compactScrollEdgeAppearance = standardAppearance
-        toolbar.tintColor = themeManager.currentTheme.colors.textPrimary
+        toolbar.tintColor = theme.colors.textPrimary
     }
 
     // MARK: - Themable

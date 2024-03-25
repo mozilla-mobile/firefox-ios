@@ -17,6 +17,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     private let themeManager: ThemeManager
     private let tabManager: TabManager
     private weak var parentCoordinator: BottomSheetCardParentCoordinator?
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Inits
 
@@ -36,6 +37,10 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
     // MARK: - Methods
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func showCreditCardAutofill(creditCard: CreditCard?,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
@@ -51,7 +56,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             if let error = error {
                 SimpleToast().showAlertWithText(error.localizedDescription,
                                                 bottomContainer: alertContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
             } else {
                 // send telemetry
                 if state == .save {
@@ -66,7 +71,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
                 SimpleToast().showAlertWithText(toastMessage,
                                                 bottomContainer: alertContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
                 self.parentCoordinator?.didFinish(from: self)
             }
         }

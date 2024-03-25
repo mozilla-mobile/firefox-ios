@@ -5,6 +5,7 @@
 import Common
 import Redux
 
+// TODO: [8313] Need to update for multi-window support (use ActionContext associated values)
 enum ThemeSettingsAction: Action {
     // UI trigger actions
     case themeSettingsDidAppear(ActionContext)

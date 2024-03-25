@@ -33,6 +33,14 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         return button
     }()
 
+    var currentWindowUUID: UUID? {
+        return windowUUID
+    }
+
+    private var windowUUID: WindowUUID {
+        return viewModel.windowUUID
+    }
+
     // MARK: Initializers
     init(creditCardViewModel: CreditCardSettingsViewModel,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -132,8 +140,12 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         creditCardTableViewController.view.isHidden = true
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer1
     }
 
@@ -177,7 +189,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         guard status != .none else { return }
         SimpleToast().showAlertWithText(status.message,
                                         bottomContainer: view,
-                                        theme: themeManager.currentTheme)
+                                        theme: self.themeManager.currentTheme(for: self.windowUUID))
     }
 
     @objc
