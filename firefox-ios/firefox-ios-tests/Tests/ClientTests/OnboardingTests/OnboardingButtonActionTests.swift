@@ -20,13 +20,13 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testMockDelegate_whenInitialized_actionIsNil() {
-        _ = setSubjectUpWith(firstAction: .nextCard)
+        _ = setSubjectUpWith(firstAction: .forwardOneCard)
 
         XCTAssertNil(mockDelegate.action)
     }
 
     func testsubject_whenOnlyOneButtonExists_secondaryButtonIsHidden() {
-        let subject = setSubjectUpWith(firstAction: .nextCard, twoButtons: false)
+        let subject = setSubjectUpWith(firstAction: .forwardOneCard, twoButtons: false)
 
         subject.secondaryAction()
 
@@ -34,11 +34,27 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     func testsubject_primaryAction_returnsNextCardAction() {
-        let subject = setSubjectUpWith(firstAction: .nextCard)
+        let subject = setSubjectUpWith(firstAction: .forwardOneCard)
 
         subject.primaryAction()
 
-        XCTAssertEqual(mockDelegate.action, OnboardingActions.nextCard)
+        XCTAssertEqual(mockDelegate.action, OnboardingActions.forwardOneCard)
+    }
+
+    func testsubject_primaryAction_returnsTwoCardAction() {
+        let subject = setSubjectUpWith(firstAction: .forwardTwoCard)
+
+        subject.primaryAction()
+
+        XCTAssertEqual(mockDelegate.action, OnboardingActions.forwardTwoCard)
+    }
+
+    func testsubject_primaryAction_returnsThirdCardAction() {
+        let subject = setSubjectUpWith(firstAction: .forwardThreeCard)
+
+        subject.primaryAction()
+
+        XCTAssertEqual(mockDelegate.action, OnboardingActions.forwardThreeCard)
     }
 
     func testsubject_buttonAction_returnsPrivacyPolicyAction() {
@@ -95,7 +111,7 @@ class OnboardingButtonActionTests: XCTestCase {
                     action: firstAction),
                 secondary: OnboardingButtonInfoModel(
                     title: .Onboarding.Sync.SkipAction,
-                    action: .nextCard))
+                    action: .forwardOneCard))
         } else {
             buttons = OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
@@ -110,9 +126,10 @@ class OnboardingButtonActionTests: XCTestCase {
             body: String(format: .Onboarding.Sync.Description),
             link: nil,
             buttons: buttons,
+            multipleChoiceButtons: [],
             type: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.onboarding,
-            imageID: ImageIdentifiers.onboardingSyncv106,
+            imageID: ImageIdentifiers.Onboarding.HeaderImages.syncv106,
             instructionsPopup: nil)
 
         mockDelegate = MockOnboardinCardDelegateController()

@@ -562,6 +562,7 @@
 		7BEB64441C7345600092C02E /* L10nSuite2SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3632D31C2983F000D12AF9 /* L10nSuite2SnapshotTests.swift */; };
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
+		81055B562BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */; };
 		810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */; };
 		810FF3562B1783B0009F062C /* FeltPrivacyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */; };
 		810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3572B1784E7009F062C /* PrivateModeAction.swift */; };
@@ -5617,6 +5618,7 @@
 		80B54D93BC553D6E6CDFAA0A /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		80B8473B933671C9605DC837 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80E24B20A5655593E1D9E85B /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Search.strings"; sourceTree = "<group>"; };
+		81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMultipeChoiceButtonModel.swift; sourceTree = "<group>"; };
 		810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyMiddleware.swift; sourceTree = "<group>"; };
 		810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyManager.swift; sourceTree = "<group>"; };
 		810FF3572B1784E7009F062C /* PrivateModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateModeAction.swift; sourceTree = "<group>"; };
@@ -10478,6 +10480,7 @@
 				21A7C44D283539170071D996 /* IntroViewModel.swift */,
 				C88E7A562A0553360072E638 /* OnboardingButtonInfoModel.swift */,
 				C8BD875F2A0C248000CD803A /* OnboardingButtonsModel.swift */,
+				81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */,
 				C88E7A582A0553440072E638 /* OnboardingCardInfoModel.swift */,
 				C88E7A5A2A0553510072E638 /* OnboardingLinkInfoModel.swift */,
 				C88E7A542A0553180072E638 /* OnboardingViewModel.swift */,
@@ -13888,6 +13891,7 @@
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
 				B236204D2B8673DE000B1DE7 /* AddressScrollView.swift in Sources */,
 				E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */,
+				81055B562BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				C8CD80DA2A1E8C1D0097C3AE /* OnboardingTelemetryProtocol.swift in Sources */,
 				8A5D1CB02A30D740005AD35C /* SearchBarSetting.swift in Sources */,
