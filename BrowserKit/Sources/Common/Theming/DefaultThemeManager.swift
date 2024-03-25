@@ -119,6 +119,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func setPrivateTheme(isOn: Bool) {
+        guard userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn) != isOn else { return }
+
         userDefaults.set(isOn, forKey: ThemeKeys.PrivateMode.isOn)
 
         updateCurrentTheme(to: fetchSavedThemeType())
