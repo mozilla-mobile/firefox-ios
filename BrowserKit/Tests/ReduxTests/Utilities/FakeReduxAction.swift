@@ -4,7 +4,6 @@
 
 import XCTest
 
-
 @testable import Redux
 
 enum FakeReduxAction: Action {
