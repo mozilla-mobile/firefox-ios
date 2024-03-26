@@ -31,6 +31,10 @@ struct AppState: StateType {
                 // This is necessary to allow us to have more than 1 of the same type of
                 // screen in Redux at the same time. If no UUID is provided we return `first`.
                 guard let expectedUUID = window else { return true }
+                // Generally this should be considered a code smell, attempting to select the
+                // screen for an .unavailable window is nonsensical and may indicate a bug.
+                guard expectedUUID != .unavailable else { return true }
+
                 return $0.windowUUID == expectedUUID
             })
     }
