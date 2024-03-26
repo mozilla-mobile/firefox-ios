@@ -27,8 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
 
+    // TODO: [8313] Revisit, provide default window UUID
     lazy var themeManager: ThemeManager = DefaultThemeManager(
-        sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
+        defaultWindowID: UUID(), sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
     )
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()

@@ -176,7 +176,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
     @objc
     func moreInfoTapped() {
-        let viewController = SettingsContentViewController()
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)
     }

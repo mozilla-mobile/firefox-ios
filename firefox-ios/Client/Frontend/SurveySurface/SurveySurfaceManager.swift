@@ -58,7 +58,8 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
         let viewModel = SurveySurfaceViewModel(with: info, delegate: self)
 
-        return SurveySurfaceViewController(viewModel: viewModel,
+        return SurveySurfaceViewController(windowUUID: windowUUID,
+                                           viewModel: viewModel,
                                            themeManager: themeManager,
                                            notificationCenter: notificationCenter)
     }

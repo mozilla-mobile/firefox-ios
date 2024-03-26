@@ -41,6 +41,9 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
 
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
+
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
@@ -143,9 +146,11 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // MARK: - Initializers
     init(
         viewModel: OnboardingCardInfoModelProtocol,
-        delegate: OnboardingCardDelegate?
+        delegate: OnboardingCardDelegate?,
+        windowUUID: WindowUUID
     ) {
         self.delegate = delegate
+        self.windowUUID = windowUUID
 
         super.init(viewModel: viewModel)
     }
@@ -309,6 +314,10 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         return UX.stackViewSpacingWithLink
     }
 
+    func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     private func updateLayout() {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.body
@@ -319,7 +328,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
         )
         primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.currentTheme)
+        primaryButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
 
         setupSecondaryButton()
     }
@@ -338,7 +347,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
         )
         secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: themeManager.currentTheme)
+        secondaryButton.applyTheme(theme: currentTheme())
     }
 
     private func setupLinkButton() {
@@ -354,7 +363,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)
-        linkButton.applyTheme(theme: themeManager.currentTheme)
+        linkButton.applyTheme(theme: currentTheme())
     }
 
     // MARK: - Button Actions
@@ -386,7 +395,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
 
     // MARK: - Themeable
     override func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary
 

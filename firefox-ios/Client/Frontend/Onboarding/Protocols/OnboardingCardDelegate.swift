@@ -53,6 +53,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                                        Self: Themeable {
     // MARK: - Privacy Policy
     func presentPrivacyPolicy(
+        windowUUID: WindowUUID,
         from cardName: String,
         selector: Selector?,
         completion: (() -> Void)? = nil,
@@ -64,7 +65,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
               let url = infoModel.link?.url
         else { return }
 
-        let privacyPolicyVC = PrivacyPolicyViewController(url: url)
+        let privacyPolicyVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
@@ -114,6 +115,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
     // MARK: - Sync sign in
     func presentSignToSync(
+        windowUUID: WindowUUID,
         with fxaOptions: FxALaunchParams,
         selector: Selector?,
         completion: @escaping () -> Void,
@@ -125,13 +127,14 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             fxaOptions,
             flowType: flowType,
             referringPage: referringPage,
-            profile: viewModel.profile)
+            profile: viewModel.profile,
+            windowUUID: windowUUID)
         let buttonItem = UIBarButtonItem(
             title: .SettingsSearchDoneButton,
             style: .plain,
             target: self,
             action: selector)
-        buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
+        buttonItem.tintColor = themeManager.currentTheme(for: windowUUID).colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 

@@ -19,7 +19,8 @@ class LaunchScreenViewModel {
 
     weak var delegate: LaunchFinishedLoadingDelegate?
 
-    init(profile: Profile = AppContainer.shared.resolve(),
+    init(windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
          onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
         self.profile = profile
@@ -27,7 +28,8 @@ class LaunchScreenViewModel {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         self.updateViewModel = UpdateViewModel(profile: profile,
                                                model: onboardingModel,
-                                               telemetryUtility: telemetryUtility)
+                                               telemetryUtility: telemetryUtility,
+                                               windowUUID: windowUUID)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
     }
 

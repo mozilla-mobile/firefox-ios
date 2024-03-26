@@ -51,9 +51,9 @@ class TabTrayCoordinator: BaseCoordinator,
         let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: windowUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
         return [
-            ThemedNavigationController(rootViewController: regularTabsPanel),
-            ThemedNavigationController(rootViewController: privateTabsPanel),
-            ThemedNavigationController(rootViewController: syncTabs)
+            ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: privateTabsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: syncTabs, windowUUID: windowUUID)
         ]
     }
 

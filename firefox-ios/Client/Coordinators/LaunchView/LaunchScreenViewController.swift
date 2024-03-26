@@ -19,14 +19,15 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         && !viewModel.getSplashScreenExperimentHasShown()
     }
 
-    init(coordinator: LaunchFinishedLoadingDelegate,
+    init(windowUUID: WindowUUID,
+         coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.coordinator = coordinator
-        self.viewModel = viewModel
+        self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
         self.mainQueue = mainQueue
         super.init(nibName: nil, bundle: nil)
-        viewModel.delegate = self
+        self.viewModel.delegate = self
     }
 
     override var prefersStatusBarHidden: Bool {

@@ -28,16 +28,18 @@ extension LibraryPanelContextMenu {
     }
 
     func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
-
-        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
-        let contextMenu = PhotonActionSheet(viewModel: viewModel)
-        contextMenu.modalTransitionStyle = .crossDissolve
-
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        return contextMenu
+        fatalError()
+//        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
+//
+//        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
+//        // TODO: [8313] Fix me
+//        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+//        contextMenu.modalTransitionStyle = .crossDissolve
+//
+//        let generator = UIImpactFeedbackGenerator(style: .heavy)
+//        generator.impactOccurred()
+//
+//        return contextMenu
     }
 
     func getRecentlyClosedTabContexMenuActions(

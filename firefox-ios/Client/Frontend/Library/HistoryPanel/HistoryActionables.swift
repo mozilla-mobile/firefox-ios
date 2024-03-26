@@ -26,14 +26,14 @@ struct HistoryActionablesModel: Hashable {
 
     // MARK: - Init
 
-    init(imageName: String?, title: String, a11yId: String, itemIdentity: ActionableItem) {
+    init(windowUUID: WindowUUID, imageName: String?, title: String, a11yId: String, itemIdentity: ActionableItem) {
         self.itemTitle = title
         self.itemA11yId = a11yId
         self.itemIdentity = itemIdentity
 
         if let imageName = imageName {
             let themeManager: ThemeManager = AppContainer.shared.resolve()
-            self.itemImage = UIImage(named: imageName)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
+            self.itemImage = UIImage(named: imageName)?.withTintColor(themeManager.currentTheme(for: windowUUID).colors.iconSecondary)
         } else {
             self.itemImage = nil
         }
@@ -41,25 +41,27 @@ struct HistoryActionablesModel: Hashable {
 
     // As this section evolves (or we experiment with it), we may need to replace items within.
     // Let's keep separate stashes of ALL and ACTIVE items.
-    static let allActionables = [
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.delete,
-                                title: History.HistoryPanelClearHistoryButtonTitle,
-                                a11yId: a11y.clearHistoryCell,
-                                itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.tabTray,
-                                title: History.RecentlyClosedTabsButtonTitle,
-                                a11yId: a11y.recentlyClosedCell,
-                                itemIdentity: .recentlyClosed),
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.syncTabs,
-                                title: History.SyncedHistory,
-                                a11yId: a11y.syncedHistoryCell,
-                                itemIdentity: .syncHistory)
+    static let allActionables: [HistoryActionablesModel] = [
+        // TODO: [8313] These can no longer be declared static like this, need to know which window they are being shown in
+//        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.delete,
+//                                title: History.HistoryPanelClearHistoryButtonTitle,
+//                                a11yId: a11y.clearHistoryCell,
+//                                itemIdentity: .clearHistory),
+//        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.tabTray,
+//                                title: History.RecentlyClosedTabsButtonTitle,
+//                                a11yId: a11y.recentlyClosedCell,
+//                                itemIdentity: .recentlyClosed),
+//        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.syncTabs,
+//                                title: History.SyncedHistory,
+//                                a11yId: a11y.syncedHistoryCell,
+//                                itemIdentity: .syncHistory)
     ]
 
-    static let activeActionables = [
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.tabTray,
-                                title: History.RecentlyClosedTabsButtonTitle,
-                                a11yId: a11y.recentlyClosedCell,
-                                itemIdentity: .recentlyClosed)
+    static let activeActionables: [HistoryActionablesModel] = [
+        // TODO: [8313] These can no longer be declared static like this, need to know which window they are being shown in
+//        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.tabTray,
+//                                title: History.RecentlyClosedTabsButtonTitle,
+//                                a11yId: a11y.recentlyClosedCell,
+//                                itemIdentity: .recentlyClosed)
     ]
 }

@@ -383,7 +383,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             return nil
         case .firefoxSuggestSettings:
             guard indexPath.item == FirefoxSuggestItem.suggestionLearnMore.rawValue else { return nil }
-            let viewController = SettingsContentViewController()
+            let viewController = SettingsContentViewController(windowUUID: windowUUID)
             viewController.url = SupportUtils.URLForTopic("search-suggestions-firefox")
             navigationController?.pushViewController(viewController, animated: true)
         }

@@ -53,6 +53,8 @@ class LegacyGridTabViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var shownToast: Toast?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var toolbarHeight: CGFloat {
         return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
@@ -98,6 +100,7 @@ class LegacyGridTabViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.tabManager = tabManager
+        self.windowUUID = tabManager.windowUUID
         self.profile = profile
         self.delegate = tabTrayDelegate
         self.tabToFocus = tabToFocus
@@ -105,7 +108,8 @@ class LegacyGridTabViewController: UIViewController,
 
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .inactiveTabs,
                                                                 with: profile)
-        self.contextualHintViewController = ContextualHintViewController(with: contextualViewProvider)
+        self.contextualHintViewController = ContextualHintViewController(with: contextualViewProvider,
+                                                                         windowUUID: tabManager.windowUUID)
         self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
@@ -128,7 +132,7 @@ class LegacyGridTabViewController: UIViewController,
                                                     tabDisplayType: .TabGrid,
                                                     profile: profile,
                                                     cfrDelegate: self,
-                                                    theme: themeManager.currentTheme)
+                                                    theme: currentTheme())
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -170,6 +174,10 @@ class LegacyGridTabViewController: UIViewController,
         DispatchQueue.main.async {
             self.focusItem()
         }
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
     }
 
     private func setupView() {
@@ -292,10 +300,10 @@ class LegacyGridTabViewController: UIViewController,
     }
 
     func applyTheme() {
-        tabDisplayManager.theme = themeManager.currentTheme
-        emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
-        backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
-        collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
+        tabDisplayManager.theme = currentTheme()
+        emptyPrivateTabsView.applyTheme(currentTheme())
+        backgroundPrivacyOverlay.backgroundColor = currentTheme().colors.layerScrim
+        collectionView.backgroundColor = currentTheme().colors.layer3
         collectionView.reloadData()
     }
 
@@ -418,7 +426,7 @@ class LegacyGridTabViewController: UIViewController,
             labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
             buttonText: .TabsTray.CloseTabsToast.Action)
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
+                                theme: currentTheme(),
                                 completion: { [weak self]  undoButtonPressed in
             guard undoButtonPressed, let closedTab = self?.tabManager.backupCloseTab else { return }
 
@@ -438,7 +446,7 @@ class LegacyGridTabViewController: UIViewController,
             labelText: toastType.title,
             buttonText: toastType.buttonText)
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
+                                theme: currentTheme(),
                                 completion: { buttonPressed in
             completion(buttonPressed)
         })
@@ -468,7 +476,7 @@ extension LegacyGridTabViewController: TabDisplayerDelegate {
         tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
-        tabCell.configureLegacyCellWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
+        tabCell.configureLegacyCellWith(tab: tab, isSelected: selected, theme: currentTheme())
         return tabCell
     }
 }
@@ -616,7 +624,7 @@ extension LegacyGridTabViewController: LegacyTabPeekDelegate {
     func tabPeekDidCopyUrl() {
         SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                         bottomContainer: view,
-                                        theme: themeManager.currentTheme,
+                                        theme: currentTheme(),
                                         bottomConstraintPadding: -toolbarHeight)
     }
 }

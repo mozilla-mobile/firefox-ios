@@ -57,6 +57,8 @@ class BackForwardListViewController: UIViewController,
     weak var browserFrameInfoProvider: BrowserFrameInfoProvider?
     var currentItem: WKBackForwardListItem?
     var listData = [WKBackForwardListItem]()
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var tableHeight: CGFloat {
         return min(BackForwardViewUX.RowHeight * CGFloat(listData.count), self.view.frame.height/2)
@@ -71,10 +73,12 @@ class BackForwardListViewController: UIViewController,
     var snappedToBottom = true
 
     init(profile: Profile,
+         windowUUID: WindowUUID,
          backForwardList: WKBackForwardList,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -119,8 +123,12 @@ class BackForwardListViewController: UIViewController,
                && previousTraitCollection.horizontalSizeClass != .regular
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
 
         if UIAccessibility.isReduceTransparencyEnabled {
             // Remove the visual effect and the background alpha
@@ -297,9 +305,9 @@ class BackForwardListViewController: UIViewController,
                                                  connectingForwards: indexPath.item != 0,
                                                  connectingBackwards: indexPath.item != listData.count-1,
                                                  isCurrentTab: listData[indexPath.item] == currentItem,
-                                                 strokeBackgroundColor: themeManager.currentTheme.colors.iconPrimary)
+                                                 strokeBackgroundColor: currentTheme().colors.iconPrimary)
 
-        cell.configure(viewModel: viewModel, theme: themeManager.currentTheme)
+        cell.configure(viewModel: viewModel, theme: currentTheme())
         return cell
     }
 

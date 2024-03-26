@@ -54,9 +54,7 @@ class DevicePickerViewController: UITableViewController {
         static let tabTitleTextFont = UIFont.boldSystemFont(ofSize: 16)
     }
 
-    private lazy var tabTitleLabel: UILabel = .build { view in
-        // TODO: [8313] Fix me -- why is this necessary?
-        guard let label = view as? UILabel else { return }
+    private lazy var tabTitleLabel: UILabel = .build { label in
         label.font = UX.tabTitleTextFont
         label.textColor = self.currentTheme().colors.textPrimary
     }

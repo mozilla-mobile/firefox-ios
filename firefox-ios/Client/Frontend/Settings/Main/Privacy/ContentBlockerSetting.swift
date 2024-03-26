@@ -43,7 +43,7 @@ class ContentBlockerSetting: Setting {
             title: NSAttributedString(
                 string: .SettingsTrackingProtectionSectionName,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme(for: settings.windowUUID).colors.textPrimary
                 ]
             )
         )

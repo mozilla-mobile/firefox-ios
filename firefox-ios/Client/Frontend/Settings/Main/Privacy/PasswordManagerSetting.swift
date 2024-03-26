@@ -18,12 +18,12 @@ class PasswordManagerSetting: Setting {
     init(settings: SettingsTableViewController,
          settingsDelegate: PrivacySettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
-
+        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .Settings.Passwords.Title,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )

@@ -152,7 +152,7 @@ class BookmarksPanel: SiteTableViewController,
                                                               getNewFolderAction(),
                                                               getNewSeparatorAction()]],
                                                    modalStyle: .overFullScreen)
-        let sheet = PhotonActionSheet(viewModel: viewModel)
+        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         sheet.modalTransitionStyle = .crossDissolve
         present(sheet, animated: true)
     }
@@ -419,12 +419,12 @@ class BookmarksPanel: SiteTableViewController,
             }
 
             cell.configure(viewModel: viewModel)
-            cell.applyTheme(theme: themeManager.currentTheme)
+            cell.applyTheme(theme: currentTheme())
             return cell
         } else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
                                                         for: indexPath) as? SeparatorTableViewCell {
-                cell.applyTheme(theme: themeManager.currentTheme)
+                cell.applyTheme(theme: currentTheme())
                 return cell
             } else {
                 return UITableViewCell()
@@ -480,6 +480,10 @@ class BookmarksPanel: SiteTableViewController,
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
 }
 
 // MARK: - LibraryPanelContextMenu
@@ -520,7 +524,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                 if result.isSuccess {
                     SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
                                                     bottomContainer: self.view,
-                                                    theme: self.themeManager.currentTheme)
+                                                    theme: self.currentTheme())
                 } else {
                     self.logger.log("Could not add pinned top site",
                                     level: .debug,

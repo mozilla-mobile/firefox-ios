@@ -9,7 +9,7 @@ protocol ThemeManagerProvider {
     func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState
     func toggleUseSystemAppearance(_ enabled: Bool)
     func toggleAutomaticBrightness(_ enabled: Bool)
-    func updateManualTheme(_ theme: ThemeType)
+    func updateManualTheme(_ theme: ThemeType, for window: WindowUUID)
     func updateUserBrightness(_ value: Float)
 }
 
@@ -22,6 +22,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     lazy var themeManagerProvider: Middleware<AppState> = { state, action in
+        let windowUUID = action.windowUUID
         switch action {
         case ThemeSettingsAction.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
@@ -35,7 +36,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
                 ThemeSettingsAction.automaticBrightnessChanged(self.themeManager.automaticBrightnessIsOn)
             )
         case ThemeSettingsAction.switchManualTheme(let theme):
-            self.updateManualTheme(theme)
+            self.updateManualTheme(theme, for: windowUUID)
             store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
         case ThemeSettingsAction.updateUserBrightness(let value):
             self.updateUserBrightness(value)
@@ -45,7 +46,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             let systemBrightness = self.getScreenBrightness()
             store.dispatch(ThemeSettingsAction.systemBrightnessChanged(systemBrightness))
         case PrivateModeMiddlewareAction.privateModeUpdated(let newState):
-            self.toggleUsePrivateTheme(to: newState)
+            self.toggleUsePrivateTheme(to: newState, for: windowUUID)
         default:
             break
         }
@@ -66,16 +67,16 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setSystemTheme(isOn: enabled)
     }
 
-    func toggleUsePrivateTheme(to state: Bool) {
-        themeManager.setPrivateTheme(isOn: state)
+    func toggleUsePrivateTheme(to state: Bool, for window: WindowUUID) {
+        themeManager.setPrivateTheme(isOn: state, for: window)
     }
 
     func toggleAutomaticBrightness(_ enabled: Bool) {
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
-    func updateManualTheme(_ newTheme: ThemeType) {
-        themeManager.changeCurrentTheme(newTheme)
+    func updateManualTheme(_ newTheme: ThemeType, for window: UUID) {
+        themeManager.changeCurrentTheme(newTheme, for: window)
     }
 
     func updateUserBrightness(_ value: Float) {

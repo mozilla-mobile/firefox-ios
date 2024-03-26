@@ -11,7 +11,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
             let downloadToast = DownloadToast(download: download,
-                                              theme: themeManager.currentTheme,
+                                              theme: currentTheme(),
                                               completion: { buttonPressed in
                 // When this toast is dismissed, be sure to clear this so that any
                 // subsequent downloads cause a new toast to be created.
@@ -23,7 +23,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
                     SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
                                                     bottomContainer: self.contentContainer,
-                                                    theme: self.themeManager.currentTheme)
+                                                    theme: self.currentTheme())
                 }
             })
 
@@ -58,7 +58,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                                                      imageName: StandardImageIdentifiers.Large.checkmark,
                                                      buttonText: .DownloadsButtonTitle)
                 let downloadCompleteToast = ButtonToast(viewModel: viewModel,
-                                                        theme: self.themeManager.currentTheme,
+                                                        theme: self.currentTheme(),
                                                         completion: { buttonPressed in
                     guard buttonPressed else { return }
 
@@ -75,7 +75,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             } else {
                 SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
                                                 bottomContainer: self.contentContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.currentTheme())
             }
         }
     }

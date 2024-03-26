@@ -15,6 +15,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
     var telemetryUtility: OnboardingTelemetryProtocol
+    let windowUUID: WindowUUID
     private var cardModels: [OnboardingCardInfoModelProtocol]
 
     var shouldShowSingleCard: Bool {
@@ -34,13 +35,15 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     init(
         profile: Profile,
         model: OnboardingViewModel,
-        telemetryUtility: OnboardingTelemetryProtocol
+        telemetryUtility: OnboardingTelemetryProtocol,
+        windowUUID: WindowUUID
     ) {
         self.profile = profile
         self.telemetryUtility = telemetryUtility
         self.cardModels = model.cards
         self.isDismissable = model.isDismissable
         self.availableCards = []
+        self.windowUUID = windowUUID
     }
 
     // MARK: - Methods
@@ -101,7 +104,8 @@ class UpdateViewModel: OnboardingViewModelProtocol,
             if cardModel.cardType == .multipleChoice {
             availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
-                delegate: delegate))
+                delegate: delegate,
+                windowUUID: windowUUID))
             } else {
                 availableCards.append(OnboardingBasicCardViewController(
                     viewModel: cardModel,

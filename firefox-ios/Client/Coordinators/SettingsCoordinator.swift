@@ -276,7 +276,7 @@ class SettingsCoordinator: BaseCoordinator,
 
     func askedToOpen(url: URL?, withTitle title: NSAttributedString?) {
         guard let url = url else { return }
-        let viewController = SettingsContentViewController()
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.settingsTitle = title
         viewController.url = url
         router.push(viewController)
@@ -387,14 +387,14 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedLicense(url: URL, title: NSAttributedString) {
-        let viewController = SettingsContentViewController()
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.settingsTitle = title
         viewController.url = url
         router.push(viewController)
     }
 
     func pressedYourRights(url: URL, title: NSAttributedString) {
-        let viewController = SettingsContentViewController()
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.settingsTitle = title
         viewController.url = url
         router.push(viewController)

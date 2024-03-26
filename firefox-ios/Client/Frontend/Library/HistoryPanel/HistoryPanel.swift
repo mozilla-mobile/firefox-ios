@@ -37,6 +37,8 @@ class HistoryPanel: UIViewController,
     var state: LibraryPanelMainState
 
     let profile: Profile
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistorySheetProvider
     var keyboardState: KeyboardState?
@@ -142,6 +144,7 @@ class HistoryPanel: UIViewController,
     // MARK: - Inits
 
     init(profile: Profile,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
@@ -181,7 +184,7 @@ class HistoryPanel: UIViewController,
         applyTheme()
 
         // Update theme of already existing view
-        bottomStackView.applyTheme(theme: themeManager.currentTheme)
+        bottomStackView.applyTheme(theme: currentTheme())
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -205,6 +208,10 @@ class HistoryPanel: UIViewController,
     }
 
     // MARK: - Private helpers
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
 
     private func setupLayout() {
         view.addSubview(tableView)
@@ -407,7 +414,7 @@ class HistoryPanel: UIViewController,
         _ historyActionable: HistoryActionablesModel,
         _ cell: OneLineTableViewCell
     ) -> OneLineTableViewCell {
-        cell.leftImageView.tintColor = themeManager.currentTheme.colors.textPrimary
+        cell.leftImageView.tintColor = currentTheme().colors.textPrimary
         cell.leftImageView.backgroundColor = .clear
 
         let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
@@ -417,7 +424,7 @@ class HistoryPanel: UIViewController,
         cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: currentTheme())
         return cell
     }
 
@@ -429,11 +436,11 @@ class HistoryPanel: UIViewController,
         cell.titleLabel.isHidden = site.title.isEmpty
         cell.descriptionLabel.text = site.url
         cell.descriptionLabel.isHidden = false
-        cell.leftImageView.layer.borderColor = themeManager.currentTheme.colors.borderPrimary.cgColor
+        cell.leftImageView.layer.borderColor = currentTheme().colors.borderPrimary.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         cell.accessoryView = nil
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: currentTheme())
         return cell
     }
 
@@ -449,10 +456,10 @@ class HistoryPanel: UIViewController,
         let imageView = UIImageView(image: chevronImage)
         cell.accessoryView = imageView
         let tabTrayImage = UIImage(named: StandardImageIdentifiers.Large.tabTray) ?? UIImage()
-        let tintedTabTrayImage = tabTrayImage.withTintColor(themeManager.currentTheme.colors.iconSecondary)
+        let tintedTabTrayImage = tabTrayImage.withTintColor(currentTheme().colors.iconSecondary)
         cell.leftImageView.manuallySetImage(tintedTabTrayImage)
-        cell.leftImageView.backgroundColor = themeManager.currentTheme.colors.layer5
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.leftImageView.backgroundColor = currentTheme().colors.layer5
+        cell.applyTheme(theme: currentTheme())
         return cell
     }
 
@@ -568,7 +575,7 @@ class HistoryPanel: UIViewController,
         // overlayView becomes the footer view, and for unknown reason, setting the bgcolor is ignored.
         // Create an explicit view for setting the color.
         let bgColor: UIView = .build { view in
-            view.backgroundColor = self.themeManager.currentTheme.colors.layer1
+            view.backgroundColor = self.currentTheme().colors.layer1
         }
         overlayView.addSubview(bgColor)
 
@@ -596,22 +603,23 @@ class HistoryPanel: UIViewController,
     func applyTheme() {
         updateEmptyPanelState()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
-        emptyStateOverlayView.backgroundColor = themeManager.currentTheme.colors.layer1
+        let theme = currentTheme()
+        tableView.backgroundColor = theme.colors.layer1
+        emptyStateOverlayView.backgroundColor = theme.colors.layer1
 
-        searchbar.backgroundColor = themeManager.currentTheme.colors.layer3
-        let tintColor = themeManager.currentTheme.colors.textPrimary
+        searchbar.backgroundColor = theme.colors.layer3
+        let tintColor = theme.colors.textPrimary
         let searchBarImage = UIImage(named: StandardImageIdentifiers.Large.history)?
             .withRenderingMode(.alwaysTemplate)
             .tinted(withColor: tintColor)
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
-        searchbar.tintColor = themeManager.currentTheme.colors.textPrimary
+        searchbar.tintColor = theme.colors.textPrimary
         navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary
+            NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
         ]
-        bottomSearchButton.tintColor = themeManager.currentTheme.colors.iconPrimary
-        bottomDeleteButton.tintColor = themeManager.currentTheme.colors.iconPrimary
-        welcomeLabel.textColor = themeManager.currentTheme.colors.textSecondary
+        bottomSearchButton.tintColor = theme.colors.iconPrimary
+        bottomDeleteButton.tintColor = theme.colors.iconPrimary
+        welcomeLabel.textColor = theme.colors.textSecondary
 
         tableView.reloadData()
     }
@@ -770,7 +778,7 @@ extension HistoryPanel: UITableViewDelegate {
             collapsibleState: isCollapsed ? ExpandButtonState.trailing : ExpandButtonState.down
         )
         header.configure(headerViewModel)
-        header.applyTheme(theme: themeManager.currentTheme)
+        header.applyTheme(theme: currentTheme())
 
         // Configure tap to collapse/expand section
         header.tag = section
@@ -863,7 +871,7 @@ extension HistoryPanel {
             if result.isSuccess {
                 SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
                                                 bottomContainer: self.view,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.currentTheme())
             }
         }
     }

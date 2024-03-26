@@ -688,7 +688,8 @@ private extension HomepageViewController {
         let asGroupListViewModel = SearchGroupedItemsViewModel(asGroup: groupSite, presenter: .recentlyVisited)
         let asGroupListVC = SearchGroupedItemsViewController(
             viewModel: asGroupListViewModel,
-            profile: viewModel.profile
+            profile: viewModel.profile,
+            windowUUID: windowUUID
         )
 
         let dismissableController: DismissableNavigationViewController

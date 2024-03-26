@@ -30,6 +30,7 @@ class LibraryViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var logger: Logger
     let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // Views
     private var controllerContainerView: UIView = .build { view in }

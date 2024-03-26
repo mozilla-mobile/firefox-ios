@@ -46,11 +46,14 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     weak var coordinator: PasswordManagerFlowDelegate?
     private var appAuthenticator: AppAuthenticationProtocol
+    let windowUUID: WindowUUID
 
     init(profile: Profile? = nil,
          tabManager: TabManager? = nil,
+         windowUUID: WindowUUID,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.appAuthenticator = appAuthenticator
+        self.windowUUID = windowUUID
         super.init(profile: profile, tabManager: tabManager)
     }
 
@@ -107,7 +110,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     @objc
     func learnMoreButtonTapped(_ sender: UIButton) {
-        let viewController = SettingsContentViewController()
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -132,9 +135,10 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     override func applyTheme() {
         super.applyTheme()
-        let currentTheme = themeManager.currentTheme.colors
+
+        let currentTheme = themeManager.currentTheme(for: windowUUID).colors
         learnMoreButton.setTitleColor(currentTheme.actionPrimary, for: .normal)
         continueButton.backgroundColor = currentTheme.actionPrimary
-        continueButton.applyTheme(theme: themeManager.currentTheme)
+        continueButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
     }
 }

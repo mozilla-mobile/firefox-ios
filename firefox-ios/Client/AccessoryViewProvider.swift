@@ -26,6 +26,7 @@ class AccessoryViewProvider: UIView, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     private var currentAccessoryView: AutofillAccessoryViewButtonItem?
+    let windowUUID: WindowUUID
 
     // Stub closures - these closures will be given as selectors in a future task
     var previousClosure: (() -> Void)?
@@ -132,8 +133,10 @@ class AccessoryViewProvider: UIView, Themeable {
 
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         windowUUID: WindowUUID,
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
 
         super.init(frame: CGRect(width: UIScreen.main.bounds.width,
@@ -216,7 +219,7 @@ class AccessoryViewProvider: UIView, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
 
         backgroundColor = theme.colors.layer5
         [previousButton, nextButton, doneButton].forEach {
