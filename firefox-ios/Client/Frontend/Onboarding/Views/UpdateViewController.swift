@@ -255,6 +255,7 @@ extension UpdateViewController: OnboardingCardDelegate {
                 selector: #selector(dismissPrivacyPolicyViewController))
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
+                windowUUID: windowUUID,
                 from: cardName,
                 completionIfLastCard: { self.closeUpdate() })
 

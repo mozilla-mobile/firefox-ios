@@ -91,7 +91,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         }
     }
 
-    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {
         availableCards.removeAll()
         for cardModel in cardModels {
             // If it's a sync sign in card and we're already signed in, don't add
@@ -105,7 +105,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
             availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
                 delegate: delegate,
-                windowUUID: windowUUID))
+                windowUUID: window))
             } else {
                 availableCards.append(OnboardingBasicCardViewController(
                     viewModel: cardModel,

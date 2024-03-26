@@ -84,6 +84,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
     // MARK: - Default Browser Popup
     func presentDefaultBrowserPopup(
+        windowUUID: WindowUUID,
         from name: String,
         completionIfLastCard: (() -> Void)?
     ) {

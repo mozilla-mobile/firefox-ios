@@ -327,6 +327,7 @@ extension IntroViewController: OnboardingCardDelegate {
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
+                windowUUID: windowUUID,
                 from: cardName,
                 completionIfLastCard: { self.showNextPageCompletionForLastCard() })
         case .readPrivacyPolicy:
