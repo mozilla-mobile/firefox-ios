@@ -57,6 +57,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 body: card.body,
                 link: card.link,
                 buttons: card.buttons,
+                multipleChoiceButtons: card.multipleChoiceButtons,
                 type: card.type,
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
@@ -90,9 +91,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                         AppName.shortName.rawValue),
                     link: getOnboardingLink(from: cardData.link),
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
+                    multipleChoiceButtons: getOnboardingMultipleChoiceButtons(from: cardData.multipleChoiceButtons),
                     type: cardData.type,
                     a11yIdRoot: cardData.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
-                    imageID: getOnboardingImageID(from: cardData.image),
+                    imageID: getOnboardingHeaderImageID(from: cardData.image),
                     instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,
                         withA11yID: "")
@@ -150,7 +152,9 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
 
     /// Returns an optional array of ``OnboardingButtonInfoModel`` given the data.
     /// A card is not viable without buttons.
-    private func getOnboardingCardButtons(from cardButtons: NimbusOnboardingButtons) -> OnboardingButtons {
+    private func getOnboardingCardButtons(
+        from cardButtons: NimbusOnboardingButtons
+    ) -> OnboardingButtons {
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
                 title: cardButtons.primary.title,
@@ -160,7 +164,21 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
             })
     }
 
-    private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfoModel? {
+    private func getOnboardingMultipleChoiceButtons(
+        from cardButtons: [NimbusOnboardingMultipleChoiceButton]
+    ) -> [OnboardingMultipleChoiceButtonModel] {
+        return cardButtons.map { button in
+            return OnboardingMultipleChoiceButtonModel(
+                title: button.title,
+                action: button.action,
+                imageID: getOnboardingMultipleChoiceButtonImageID(from: button.image)
+            )
+        }
+    }
+
+    private func getOnboardingLink(
+        from cardLink: NimbusOnboardingLink?
+    ) -> OnboardingLinkInfoModel? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url, invalidCharacters: false)
         else { return nil }
@@ -168,21 +186,36 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return OnboardingLinkInfoModel(title: cardLink.title, url: url)
     }
 
-    private func getOnboardingImageID(from identifier: NimbusOnboardingImages) -> String {
+    private func getOnboardingHeaderImageID(
+        from identifier: NimbusOnboardingHeaderImage
+    ) -> String {
         switch identifier {
-        case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
-        case .syncDevices: return ImageIdentifiers.onboardingSyncv106
-        case .notifications: return ImageIdentifiers.onboardingNotification
-        case .notificationsCtd: return ImageIdentifiers.onboardingNotificationsCTD
-        case .welcomeCtd: return ImageIdentifiers.onboardingWelcomeCTD
-        case .syncDevicesCtd: return ImageIdentifiers.onboardingSyncCTD
-        case .setToDock: return ImageIdentifiers.onboardingSetToDock
-        case .searchWidget: return ImageIdentifiers.onboardingSearchWidget
+        case .welcomeGlobe: return ImageIdentifiers.Onboarding.HeaderImages.welcomev106
+        case .syncDevices: return ImageIdentifiers.Onboarding.HeaderImages.syncv106
+        case .notifications: return ImageIdentifiers.Onboarding.HeaderImages.notification
+        case .setToDock: return ImageIdentifiers.Onboarding.HeaderImages.setToDock
+        case .searchWidget: return ImageIdentifiers.Onboarding.HeaderImages.searchWidget
+        // Challenge the Default experiment
+        case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
+        case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome
+        case .syncDevicesCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.sync
+        }
+    }
+
+    private func getOnboardingMultipleChoiceButtonImageID(
+        from identifier: NimbusOnboardingMultipleChoiceButtonImage
+    ) -> String {
+        switch identifier {
+        case .themeSystem: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeSystem
+        case .themeDark: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeDark
+        case .themeLight: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.themeLight
+        case .toolbarTop: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarTop
+        case .toolbarBottom: return ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.toolbarBottom
         }
     }
 
     private func getPopupInfoModel(
-        from data: NimbusInstructionPopup?,
+        from data: NimbusOnboardingInstructionPopup?,
         withA11yID a11yID: String
     ) -> OnboardingInstructionsPopupInfoModel? {
         guard let data else { return nil }

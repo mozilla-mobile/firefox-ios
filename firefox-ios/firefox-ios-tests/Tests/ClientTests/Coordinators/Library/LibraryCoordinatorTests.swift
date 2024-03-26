@@ -96,6 +96,22 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
+    func testShowShareExtension_addsShareExtensionCoordinator() {
+        let subject = createSubject()
+
+        subject.shareLibraryItem(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            sourceView: UIView()
+        )
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+    }
+
     // MARK: - Helper
     func createSubject() -> LibraryCoordinator {
         let subject = LibraryCoordinator(router: mockRouter, tabManager: MockTabManager())

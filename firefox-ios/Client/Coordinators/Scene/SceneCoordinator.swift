@@ -20,15 +20,17 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
          screenshotService: ScreenshotService = ScreenshotService(),
          sceneContainer: SceneContainer = SceneContainer(),
          windowManager: WindowManager = AppContainer.shared.resolve()) {
-        self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: screenshotService)
-        self.screenshotService = screenshotService
-        self.sceneContainer = sceneContainer
-        self.windowManager = windowManager
         // Note: this is where we singularly decide the UUID for this specific iOS browser window (UIScene).
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
         // such as its TabManager instance, which also has the window UUID property as a convenience.
         self.windowUUID = windowManager.reserveNextAvailableWindowUUID()
+        self.window = sceneSetupHelper.configureWindowFor(scene,
+                                                          windowUUID: windowUUID,
+                                                          screenshotServiceDelegate: screenshotService)
+        self.screenshotService = screenshotService
+        self.sceneContainer = sceneContainer
+        self.windowManager = windowManager
 
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)

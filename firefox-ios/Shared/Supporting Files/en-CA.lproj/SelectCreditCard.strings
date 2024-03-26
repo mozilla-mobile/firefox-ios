@@ -1,3 +1,6 @@
 /* This value is used as the title for the select a credit card from list of available cards. */
 "CreditCard.SelectCreditCard.MainTitle.v116" = "Use a saved card?";
 
+/* This value is used as the title for the select a credit card from list of available cards. */
+"CreditCard.SelectCreditCard.MainTitle.v122" = "Use saved card";
+

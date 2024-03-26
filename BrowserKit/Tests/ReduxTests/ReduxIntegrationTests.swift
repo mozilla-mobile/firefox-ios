@@ -9,7 +9,7 @@ let store = Store(state: FakeReduxState(),
                   reducer: FakeReduxState.reducer,
                   middlewares: [FakeReduxMiddleware().fakeProvider])
 
-final class IntegrationTests: XCTestCase {
+final class ReduxIntegrationTests: XCTestCase {
     var fakeViewController: FakeReduxViewController!
     var expectedIntValue: Int!
 

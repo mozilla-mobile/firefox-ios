@@ -9,17 +9,20 @@ import Storage
 final class ReadingListCoordinatorTests: XCTestCase {
     var router: MockRouter!
     var parentCoordinator: MockLibraryCoordinatorDelegate!
+    private var navigationHandler: MockLibraryNavigationHandler!
 
     override func setUp() {
         super.setUp()
         router = MockRouter(navigationController: UINavigationController())
         parentCoordinator = MockLibraryCoordinatorDelegate()
+        navigationHandler = MockLibraryNavigationHandler()
     }
 
     override func tearDown() {
         super.tearDown()
         router = nil
         parentCoordinator = nil
+        navigationHandler = nil
     }
 
     func testOpenUrl() {
@@ -35,9 +38,23 @@ final class ReadingListCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.lastOpenedURL, urlToOpen)
     }
 
+    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+        let subject = createSubject()
+
+        subject.shareLibraryItem(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            sourceView: UIView()
+        )
+
+        XCTAssertEqual(navigationHandler.didShareLibraryItemCalled, 1)
+    }
+
     private func createSubject() -> ReadingListCoordinator {
         let subject = ReadingListCoordinator(
             parentCoordinator: parentCoordinator,
+            navigationHandler: navigationHandler,
             router: router
         )
         trackForMemoryLeaks(subject)

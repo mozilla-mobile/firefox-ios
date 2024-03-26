@@ -5,7 +5,7 @@
 import Foundation
 
 struct InactiveTabsModel: Equatable {
-    var tabUUID: String
+    var tabUUID: TabUUID
     var title: String
     var url: URL?
     var favIconURL: String?

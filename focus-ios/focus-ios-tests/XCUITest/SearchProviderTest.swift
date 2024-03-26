@@ -21,7 +21,10 @@ class SearchProviderTest: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2512722
-    func testAmazonSearchProvider() {
+    func testAmazonSearchProvider() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("Amazon search not working in iOS 16")
+        }
         searchProviderTestHelper(provider: "Amazon.com")
     }
 
@@ -103,8 +106,13 @@ class SearchProviderTest: BaseTestCase {
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        waitForExistence(app.tables.cells["MDN"].buttons["Remove MDN"])
-        app.tables.cells["MDN"].buttons["Remove MDN"].tap()
+        if #available(iOS 17, *) {
+            waitForExistence(app.tables.cells["MDN"].buttons["Remove MDN"])
+            app.tables.cells["MDN"].buttons["Remove MDN"].tap()
+        } else {
+            waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
+            app.tables.cells["MDN"].buttons["Delete MDN"].tap()
+        }
         waitForExistence(app.tables.cells["MDN"].buttons["Delete"])
         app.tables.cells["MDN"].buttons["Delete"].tap()
 
