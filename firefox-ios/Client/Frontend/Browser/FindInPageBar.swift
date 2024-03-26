@@ -65,7 +65,6 @@ class FindInPageBar: UIView, ThemeApplicable {
         button.addTarget(self, action: #selector(self.didFindNext), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findNextButton
     }
-    
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(
             UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
