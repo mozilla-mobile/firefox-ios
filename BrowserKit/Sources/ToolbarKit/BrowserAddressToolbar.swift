@@ -13,10 +13,12 @@ import Common
 /// +------------------------progress------------------------------------+
 public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
     private enum UX {
-        static let horizontalSpace: CGFloat = 16
+        static let horizontalEdgeSpace: CGFloat = 16
+        static let horizontalSpace: CGFloat = 8
         static let cornerRadius: CGFloat = 8
         static let dividerWidth: CGFloat = 4
         static let actionSpacing: CGFloat = 0
+        static let buttonSize = CGSize(width: 40, height: 40)
     }
 
     private lazy var navigationActionStack: UIStackView = .build()
@@ -47,14 +49,16 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
     }
 
     public func configure(state: AddressToolbarState) {
-        updateActionSpacing()
+        updateActions(state: state)
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer1
-        locationContainer.backgroundColor = theme.colors.layer3
-        locationDividerView.backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layer2
+        locationContainer.backgroundColor = theme.colors.layerSearch
+        locationDividerView.backgroundColor = theme.colors.layer2
     }
 
     // MARK: - Private
@@ -83,18 +87,18 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
 
         let navigationActionWidthAnchor = navigationActionStack.widthAnchor.constraint(equalToConstant: 0)
         navigationActionWidthAnchor.isActive = true
-        navigationActionWidthAnchor.priority = .defaultHigh
+        navigationActionWidthAnchor.priority = .defaultLow
 
         let pageActionWidthAnchor = pageActionStack.widthAnchor.constraint(equalToConstant: 0)
         pageActionWidthAnchor.isActive = true
-        pageActionWidthAnchor.priority = .defaultHigh
+        pageActionWidthAnchor.priority = .defaultLow
 
         let browserActionWidthAnchor = browserActionStack.widthAnchor.constraint(equalToConstant: 0)
         browserActionWidthAnchor.isActive = true
-        browserActionWidthAnchor.priority = .defaultHigh
+        browserActionWidthAnchor.priority = .defaultLow
 
         NSLayoutConstraint.activate([
-            navigationActionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
+            navigationActionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
             navigationActionStack.topAnchor.constraint(equalTo: topAnchor),
             navigationActionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
 
@@ -115,14 +119,40 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
             pageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             browserActionStack.topAnchor.constraint(equalTo: topAnchor),
-            browserActionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
+            browserActionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
             browserActionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
         updateActionSpacing()
     }
 
-    // MARK: - Private
+    private func updateActions(state: AddressToolbarState) {
+        // Browser actions
+        updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
+
+        // Navigation actions
+        updateActionStack(stackView: navigationActionStack, toolbarElements: state.navigationActions)
+
+        // Page actions
+        updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
+
+        updateActionSpacing()
+    }
+
+    private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
+        stackView.removeAllArrangedViews()
+        toolbarElements.forEach { toolbarElement in
+            let button = ToolbarButton()
+            button.configure(element: toolbarElement)
+            stackView.addArrangedSubview(button)
+
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
+                button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
+            ])
+        }
+    }
+
     private func updateActionSpacing() {
         // Browser action spacing
         let hasBrowserActions = !browserActionStack.arrangedSubviews.isEmpty
