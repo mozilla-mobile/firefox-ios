@@ -638,7 +638,6 @@ extension BrowserViewController: WKNavigationDelegate {
                            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
                         }
                     }
-                    return
                 }
             }
 
