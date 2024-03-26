@@ -108,7 +108,7 @@ public class CollapsibleCardView: ShadowCardView, UIGestureRecognizerDelegate {
 
     lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.header)
     }
