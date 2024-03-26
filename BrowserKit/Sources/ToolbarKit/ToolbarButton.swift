@@ -1,9 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by Winnie Teichmann on 2024-03-22.
-//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import UIKit
@@ -86,5 +83,4 @@ class ToolbarButton: UIButton, ThemeApplicable {
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
     }
-
 }
