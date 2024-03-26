@@ -5,7 +5,7 @@
 import Foundation
 
 protocol OnboardingViewModelProtocol {
-    var availableCards: [OnboardingCardViewController] { get }
+    var availableCards: [OnboardingBasicCardViewController] { get }
     var isDismissable: Bool { get }
     var profile: Profile { get }
     var telemetryUtility: OnboardingTelemetryProtocol { get }

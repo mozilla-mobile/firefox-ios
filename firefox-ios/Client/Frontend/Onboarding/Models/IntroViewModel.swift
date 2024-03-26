@@ -24,7 +24,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     var introScreenManager: IntroScreenManager?
     var chosenOptions: OnboardingOptions = []
 
-    var availableCards: [OnboardingCardViewController]
+    var availableCards: [OnboardingBasicCardViewController]
     var isDismissable: Bool
     var profile: Profile
     var telemetryUtility: OnboardingTelemetryProtocol
@@ -49,7 +49,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
         availableCards.removeAll()
         cardModels.forEach { cardModel in
-            availableCards.append(OnboardingCardViewController(
+            availableCards.append(OnboardingBasicCardViewController(
                 viewModel: cardModel,
                 delegate: delegate))
         }

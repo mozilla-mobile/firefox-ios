@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 import Shared
 
-class OnboardingCardViewController: UIViewController, Themeable {
+class OnboardingBasicCardViewController: OnboardingCardViewController, Themeable {
     struct UX {
         static let stackViewSpacingWithLink: CGFloat = 15
         static let stackViewSpacingWithoutLink: CGFloat = 24
@@ -40,7 +40,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
-    var viewModel: OnboardingCardInfoModelProtocol
     weak var delegate: OnboardingCardDelegate?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -152,12 +151,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
-        self.viewModel = viewModel
         self.delegate = delegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
