@@ -23,7 +23,6 @@
         "PastenGoTest\/testClipboard()",
         "QuickAddAutocompleteURLTest",
         "SearchProviderTest\/testAddRemoveCustomSearchProvider()",
-        "SearchProviderTest\/testAmazonSearchProvider()",
         "SearchProviderTest\/testDuckDuckGoSearchProvider()",
         "SearchProviderTest\/testPreventionOfRemovingDefaultSearchProvider()",
         "SearchProviderTest\/testWikipediaSearchProvider()",
