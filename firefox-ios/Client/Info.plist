@@ -55,6 +55,9 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>paypal</string>
+		<string>instagram</string>
+		<string>youtube</string>
 		<string>pocket</string>
 		<string>firefox-focus</string>
 		<string>firefox-klar</string>

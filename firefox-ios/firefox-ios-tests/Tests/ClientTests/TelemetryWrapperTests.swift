@@ -1252,6 +1252,101 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Sync.useEmail)
     }
 
+    // MARK: - Address autofill
+
+    func test_addressSavedAll_GleanIsCalledWithQuantity() {
+        let expectedAddressesCount: Int64 = 5
+        let extras: [String: Any] = [TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue: Int64(5)]
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .foreground,
+            object: .addressAutofillSettings,
+            value: nil,
+            extras: extras
+        )
+
+        testQuantityMetricSuccess(metric: GleanMetrics.Addresses.savedAll,
+                                  expectedValue: expectedAddressesCount,
+                                  failureMessage: "Should have \(expectedAddressesCount) addresses")
+    }
+
+    func test_addressSettingsAutofill_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .addressAutofillSettings
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.settingsAutofill
+        )
+    }
+
+    func test_addressAutofillPromptShown_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .view,
+            object: .addressAutofillPromptShown
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.autofillPromptShown
+        )
+    }
+
+    func test_addressAutofillPromptExpanded_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .addressAutofillPromptExpanded
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.autofillPromptExpanded
+        )
+    }
+
+    func test_addressAutofillPromptDismissed_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .close,
+            object: .addressAutofillPromptDismissed
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.autofillPromptDismissed
+        )
+    }
+
+    func test_addressFormFilledModified_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .change,
+            object: .addressFormFilledModified
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.modified
+        )
+    }
+
+    func test_addressFormAutofilled_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .detect,
+            object: .addressFormFilled
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.autofilled
+        )
+    }
+
+    func test_addressFormDetected_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .detect,
+            object: .addressForm
+        )
+        testEventMetricRecordingSuccess(
+            metric: GleanMetrics.Addresses.formDetected
+        )
+    }
+
     // MARK: - Credit card autofill
 
     func test_autofill_credit_card_settings_tapped_GleanIsCalled() {

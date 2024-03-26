@@ -75,8 +75,15 @@ public class Store<State: StateType>: DefaultDispatchStore {
         }
         actionRunning = true; defer { actionRunning = false }
 
+        // Each active screen state is given an opportunity to be reduced using the dispatched action
+        // (Note: this is true even if the action's UUID differs from the screen's window's UUID).
+        // Typically, reducers should compare the action's UUID to the incoming state UUID and skip
+        // processing for actions originating in other windows.
         let newState = reducer(state, action)
 
+        // Middlewares are all given an opportunity to respond to the action. This is only done once
+        // per middleware, regardless of how many active windows or screen states there are. (This
+        // differs slightly from reducers, which are called once for each screen.)
         middlewares.forEach { middleware in
             middleware(newState, action)
         }

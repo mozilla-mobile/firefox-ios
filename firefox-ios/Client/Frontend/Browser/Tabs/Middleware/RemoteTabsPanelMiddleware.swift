@@ -94,8 +94,8 @@ class RemoteTabsPanelMiddleware {
         case .FirefoxAccountChanged,
                 .ProfileDidFinishSyncing:
             // This update occurs independently of any specific window, so for now we send `.unavailable`
-            // as the window UUID. Aspects of this are TBD and part of ongoing MW/Redux refactors.
-            // TODO: [8188] Revisit UUID here to determine ideal handling.
+            // as the window UUID. Reducers responding to these types of messages need to use care not to
+            // propagate that UUID in any subsequent actions or state changes.
             let uuid = WindowUUID.unavailable
             let context = HasSyncableAccountContext(hasSyncableAccount: hasSyncableAccount, windowUUID: uuid)
             store.dispatch(TabTrayAction.firefoxAccountChanged(context))

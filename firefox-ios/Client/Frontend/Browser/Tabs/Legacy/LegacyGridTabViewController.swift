@@ -341,7 +341,7 @@ class LegacyGridTabViewController: UIViewController,
         }
     }
 
-    private func presentToastForClosingAllTabs(recentlyClosedTabs: [Tab], previousTabUUID: String, isPrivate: Bool) {
+    private func presentToastForClosingAllTabs(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool) {
         self.presentUndoToast(tabsCount: recentlyClosedTabs.count) { [weak self] undoButtonPressed in
             guard undoButtonPressed else { return }
             self?.tabManager.undoCloseAllTabsLegacy(

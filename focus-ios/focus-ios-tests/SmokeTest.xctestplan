@@ -15,7 +15,6 @@
     {
       "skippedTests" : [
         "AsianLocaleTest",
-        "BasicBrowsing\/testLaunchExternalApp()",
         "CollapsedURLTest",
         "CopyTest",
         "DragAndDropTest",
@@ -32,8 +31,7 @@
         "SettingAppearanceTest\/testAddRemoveCustomDomain()",
         "SettingAppearanceTest\/testDisableAutocomplete()",
         "SettingAppearanceTest\/testOpenInSafari()",
-        "TrackingProtectionMenu\/testInactiveProtectionSidebar()",
-        "TrackingProtectionSettings",
+        "TrackingProtectionTest\/testInactiveSettings()",
         "UserAgentTest",
         "WebsiteAccessTests\/testAutocompleteCustomDomain()",
         "WebsiteAccessTests\/testDisableAutocomplete()",
