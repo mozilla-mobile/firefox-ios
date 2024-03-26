@@ -13,7 +13,12 @@ class RootViewController: UIViewController,
                           SearchSuggestionDelegate,
                           MenuDelegate,
                           SettingsDelegate,
-                          FindInPageBarDelegate {
+                          FindInPageBarDelegate,
+                          Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private lazy var toolbar: BrowserToolbar = .build { _ in }
     private lazy var searchBar: BrowserSearchBar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
@@ -25,10 +30,10 @@ class RootViewController: UIViewController,
     private var findInPageBar: FindInPageBar?
 
     // MARK: - Init
-
-    init(engineProvider: EngineProvider) {
+    init(engineProvider: EngineProvider, themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -46,6 +51,9 @@ class RootViewController: UIViewController,
         configureSearchbar()
         configureSearchView()
         configureToolbar()
+
+        listenForThemeChange(view)
+        applyTheme()
     }
 
     private func configureBrowserView() {
@@ -274,5 +282,11 @@ class RootViewController: UIViewController,
         findInPageBar?.endEditing(true)
         findInPageBar?.removeFromSuperview()
         findInPageBar = nil
+    }
+
+    // MARK: Themeable
+    func applyTheme() {
+        updateThemeApplicableSubviews(view)
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
