@@ -27,20 +27,18 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     open func configure(element: ToolbarElement) {
-        guard let config = configuration else {
+        guard var config = configuration else {
             return
         }
-        var updatedConfiguration = config
 
         let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
-            guard let closure = element.onSelected else { return }
-            closure()
+            element.onSelected?()
         })
 
-        updatedConfiguration.image = image
+        config.image = image
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         addAction(action, for: .touchUpInside)
@@ -49,7 +47,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         largeContentTitle = element.a11yLabel
         largeContentImage = image
 
-        configuration = updatedConfiguration
+        configuration = config
         layoutIfNeeded()
     }
 
