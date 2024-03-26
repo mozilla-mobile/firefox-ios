@@ -306,7 +306,7 @@ class TabDisplayView: UIView,
     }
 
     // MARK: - TabCellDelegate
-    func tabCellDidClose(for tabUUID: String) {
+    func tabCellDidClose(for tabUUID: TabUUID) {
         store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
     }
 

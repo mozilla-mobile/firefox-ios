@@ -55,12 +55,12 @@ struct NimbusOnboardingTestingConfigUtility {
 
     // MARK: - Custom setups
     func setupNimbusWith(
-        image: NimbusOnboardingImages = .welcomeGlobe,
+        image: NimbusOnboardingHeaderImage = .welcomeGlobe,
         type: OnboardingType = .freshInstall,
         dismissable: Bool = true,
         shouldAddLink: Bool = false,
         withSecondaryButton: Bool = false,
-        withPrimaryButtonAction primaryAction: [OnboardingActions] = [.nextCard],
+        withPrimaryButtonAction primaryAction: [OnboardingActions] = [.forwardOneCard],
         prerequisites: [String] = ["ALWAYS"],
         disqualifiers: [String] = []
     ) {
@@ -84,7 +84,7 @@ struct NimbusOnboardingTestingConfigUtility {
     // MARK: - Private helpers
     private func createCards(
         numbering numberOfCards: Int,
-        image: NimbusOnboardingImages,
+        image: NimbusOnboardingHeaderImage,
         type: OnboardingType,
         shouldAddLink: Bool,
         withSecondaryButton: Bool,
@@ -119,7 +119,7 @@ struct NimbusOnboardingTestingConfigUtility {
     ) -> NimbusOnboardingCardData {
         let shouldAddLink: [CardOrder] = [.welcome, .updateWelcome]
         let isUpdate: [CardOrder] = [.updateWelcome, .updateSync]
-        let image: NimbusOnboardingImages = {
+        let image: NimbusOnboardingHeaderImage = {
             switch id {
             case .notifications: return .notifications
             case .welcome, .updateWelcome: return .welcomeGlobe
@@ -150,7 +150,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     action: primaryAction,
                     title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)")
             )
         }
@@ -168,7 +168,7 @@ struct NimbusOnboardingTestingConfigUtility {
         case .welcome, .updateWelcome:
             return NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.primaryButtonTitle)"))
         case .notifications:
             return NimbusOnboardingButtons(
@@ -176,7 +176,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     action: .requestNotifications,
                     title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)"))
         case .sync, .updateSync:
             return NimbusOnboardingButtons(
@@ -184,7 +184,7 @@ struct NimbusOnboardingTestingConfigUtility {
                     action: .syncSignIn,
                     title: "\(CardElementNames.primaryButtonTitle)"),
                 secondary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.secondaryButtonTitle)"))
         }
     }
@@ -195,8 +195,8 @@ struct NimbusOnboardingTestingConfigUtility {
             url: "\(CardElementNames.linkURL)")
     }
 
-    private func buildInfoPopup() -> NimbusInstructionPopup {
-        return NimbusInstructionPopup(
+    private func buildInfoPopup() -> NimbusOnboardingInstructionPopup {
+        return NimbusOnboardingInstructionPopup(
             buttonAction: .dismiss,
             buttonTitle: CardElementNames.popupButtonTitle,
             instructions: [

@@ -11,25 +11,56 @@ protocol OnboardingViewControllerProtocol {
     var viewModel: OnboardingViewModelProtocol { get }
     var didFinishFlow: (() -> Void)? { get }
 
-    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController?
-    func moveToNextPage(from cardNamed: String)
+    func canMoveForward(numberOfPages: Int, from cardNamed: String) -> Bool
+    func moveForward(numberOfPages: Int, from cardNamed: String)
+    func getNextOnboardingCard(
+        currentIndex: Int,
+        numberOfCardsToMove: Int,
+        goForward: Bool
+    ) -> OnboardingCardViewController?
+
     func getCardIndex(viewController: OnboardingCardViewController) -> Int?
 }
 
 extension OnboardingViewControllerProtocol {
-    func getNextOnboardingCard(index: Int, goForward: Bool) -> OnboardingCardViewController? {
-        guard let index = viewModel.getNextIndex(currentIndex: index, goForward: goForward) else { return nil }
+    func getNextOnboardingCard(
+        currentIndex: Int,
+        numberOfCardsToMove: Int,
+        goForward: Bool
+    ) -> OnboardingCardViewController? {
+        guard let nextIndex = viewModel.getNextIndexFrom(
+            currentIndex: currentIndex,
+            numberOfCardsToMove: numberOfCardsToMove,
+            goForward: goForward
+        ) else { return nil }
 
-        return viewModel.availableCards[index]
+        return viewModel.availableCards[nextIndex]
     }
 
-    func moveToNextPage(from cardName: String) {
+    func canMoveForward(numberOfPages: Int, from cardName: String) -> Bool {
         guard let index = viewModel.availableCards
             .firstIndex(where: { $0.viewModel.name == cardName }),
-              let nextViewController = getNextOnboardingCard(index: index, goForward: true)
+              getNextOnboardingCard(
+                currentIndex: index,
+                numberOfCardsToMove: numberOfPages,
+                goForward: true
+              ) != nil
+        else { return false}
+
+        return true
+    }
+
+    func moveForward(numberOfPages: Int, from cardName: String) {
+        guard let index = viewModel.availableCards
+            .firstIndex(where: { $0.viewModel.name == cardName }),
+              let nextViewController = getNextOnboardingCard(
+                currentIndex: index,
+                numberOfCardsToMove: numberOfPages,
+                goForward: true
+              )
         else { return }
 
-        pageControl.currentPage = index + 1
+        pageControl.currentPage = index + numberOfPages
         pageController.setViewControllers(
             [nextViewController],
             direction: .forward,

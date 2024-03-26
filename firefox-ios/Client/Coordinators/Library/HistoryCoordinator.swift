@@ -7,7 +7,7 @@ import Common
 import Shared
 import Storage
 
-protocol HistoryCoordinatorDelegate: AnyObject {
+protocol HistoryCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func showRecentlyClosedTab()
 
     /// Shows table view controller with searched sites grouped.
@@ -21,6 +21,7 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
     private let windowUUID: WindowUUID
     private let notificationCenter: NotificationProtocol
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
+    private weak var navigationHandler: LibraryNavigationHandler?
 
     // MARK: - Initializers
 
@@ -29,12 +30,14 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
         windowUUID: WindowUUID,
         router: Router,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        parentCoordinator: LibraryCoordinatorDelegate?
+        parentCoordinator: LibraryCoordinatorDelegate?,
+        navigationHandler: LibraryNavigationHandler?
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.parentCoordinator = parentCoordinator
         self.notificationCenter = notificationCenter
+        self.navigationHandler = navigationHandler
         super.init(router: router)
         self.notificationCenter.addObserver(
             self,
@@ -66,6 +69,10 @@ class HistoryCoordinator: BaseCoordinator, HistoryCoordinatorDelegate {
         asGroupListVC.libraryPanelDelegate = parentCoordinator
         asGroupListVC.title = items.displayTitle
         router.push(asGroupListVC)
+    }
+
+    func shareLibraryItem(url: URL, sourceView: UIView) {
+        navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
     }
 
     deinit {

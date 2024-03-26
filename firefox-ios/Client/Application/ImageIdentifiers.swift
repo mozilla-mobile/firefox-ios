@@ -26,14 +26,6 @@ public struct ImageIdentifiers {
     public static let logoVisa = "logo_visa"
     public static let menuBadge = "menuBadge"
     public static let menuWarningMask = "warning-mask"
-    public static let onboardingWelcomev106 = "onboardingWelcome"
-    public static let onboardingSyncv106 = "onboardingSync"
-    public static let onboardingNotification = "onboardingNotification"
-    public static let onboardingNotificationsCTD = "onboardingNotificationsCTD"
-    public static let onboardingWelcomeCTD = "onboardingWelcomeCTD"
-    public static let onboardingSyncCTD = "onboardingSyncCTD"
-    public static let onboardingSearchWidget = "onboardingSearchWidget"
-    public static let onboardingSetToDock = "onboardingDock"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
     public static let privateModeBadge = "privateModeBadge"
@@ -41,4 +33,28 @@ public struct ImageIdentifiers {
     public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"
     public static let syncOpenTab = "sync_open_tab"
+
+    public struct Onboarding {
+        public struct HeaderImages {
+            public static let welcomev106 = "onboardingWelcome"
+            public static let syncv106 = "onboardingSync"
+            public static let notification = "onboardingNotification"
+            public static let searchWidget = "onboardingSearchWidget"
+            public static let setToDock = "onboardingDock"
+        }
+
+        public struct MultipleChoiceButtonImages {
+            public static let themeSystem = "onboardingDock"
+            public static let themeDark = "onboardingDock"
+            public static let themeLight = "onboardingDock"
+            public static let toolbarTop = "onboardingDock"
+            public static let toolbarBottom = "onboardingDock"
+        }
+
+        public struct ChallengeTheDefault {
+            public static let notifications = "onboardingNotificationsCTD"
+            public static let welcome = "onboardingWelcomeCTD"
+            public static let sync = "onboardingSyncCTD"
+        }
+    }
 }

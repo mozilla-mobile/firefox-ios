@@ -39,7 +39,11 @@ protocol OnboardingCardDelegate: AnyObject {
         qrCodeNavigationHandler: QRCodeNavigationHandler?
     )
 
-    func showNextPage(from cardNamed: String, completionIfLastCard completion: (() -> Void)?)
+    func advance(
+        numberOfPages: Int,
+        from cardName: String,
+        completionIfLastCard completion: (() -> Void)?
+    )
     func pageChanged(from cardName: String)
 }
 
@@ -88,9 +92,11 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         let instructionsVC = OnboardingInstructionPopupViewController(
             viewModel: popupViewModel,
             buttonTappedFinishFlow: {
-                self.showNextPage(
+                self.advance(
+                    numberOfPages: 1,
                     from: name,
-                    completionIfLastCard: completionIfLastCard)
+                    completionIfLastCard: completionIfLastCard
+                )
             }
         )
         var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
@@ -135,7 +141,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
     }
 
     // MARK: - Page helpers
-    func showNextPage(
+    func advance(
+        numberOfPages: Int,
         from cardName: String,
         completionIfLastCard completion: (() -> Void)?
     ) {
@@ -144,7 +151,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             return
         }
 
-        moveToNextPage(from: cardName)
+        moveForward(numberOfPages: numberOfPages, from: cardName)
     }
 
     // Extra step to make sure pageControl.currentPage is the right index card

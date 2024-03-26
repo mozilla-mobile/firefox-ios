@@ -247,7 +247,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return tabs.first(where: { $0.webView?.url == url })
     }
 
-    func getTabForUUID(uuid: String) -> Tab? {
+    func getTabForUUID(uuid: TabUUID) -> Tab? {
         let filterdTabs = tabs.filter { tab -> Bool in
             tab.tabUUID == uuid
         }
@@ -571,7 +571,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
-    func removeTab(_ tabUUID: String) async {
+    func removeTab(_ tabUUID: TabUUID) async {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -675,7 +675,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
-                                                          _ previousTabUUID: String) -> Void) {
+                                                          _ previousTabUUID: TabUUID) -> Void) {
         let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
         // moved closing of multiple tabs to background thread
         DispatchQueue.global().async { [unowned self] in
@@ -721,7 +721,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Toasts
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
                                          isPrivate: Bool,
-                                         previousTabUUID: String) {
+                                         previousTabUUID: TabUUID) {
         guard !recentlyClosedTabs.isEmpty else { return }
 
         // Add last 10 tab(s) to recently closed list
@@ -766,7 +766,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     /// Restore recently closed tabs when tab tray refactor is disabled
-    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: String, isPrivate: Bool = false) {
+    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool = false) {
         self.reAddTabs(
             tabsToAdd: recentlyClosedTabs,
             previousTabUUID: previousTabUUID,
@@ -831,7 +831,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
     }
 
-    private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String, isPrivate: Bool = false) {
+    private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: TabUUID, isPrivate: Bool = false) {
         tabs.append(contentsOf: tabsToAdd)
         let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })
         let currentlySelectedTab = selectedTab

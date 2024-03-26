@@ -21,4 +21,6 @@ class MockTabSessionStore: TabSessionStore {
     }
 
     func clearAllData() async {}
+
+    func deleteUnusedTabSessionData(keeping: [UUID]) async {}
 }

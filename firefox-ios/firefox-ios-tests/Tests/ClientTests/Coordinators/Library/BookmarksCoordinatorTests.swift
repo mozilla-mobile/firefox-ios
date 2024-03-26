@@ -10,6 +10,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
     private var router: MockRouter!
     private var profile: MockProfile!
     private var parentCoordinator: MockLibraryCoordinatorDelegate!
+    private var navigationHandler: MockLibraryNavigationHandler!
 
     override func setUp() {
         super.setUp()
@@ -17,6 +18,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         router = MockRouter(navigationController: UINavigationController())
         profile = MockProfile()
         parentCoordinator = MockLibraryCoordinatorDelegate()
+        navigationHandler = MockLibraryNavigationHandler()
     }
 
     override func tearDown() {
@@ -25,6 +27,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         router = nil
         profile = nil
         parentCoordinator = nil
+        navigationHandler = nil
     }
 
     func testStart() {
@@ -65,12 +68,26 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
+    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+        let subject = createSubject()
+
+        subject.shareLibraryItem(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            sourceView: UIView()
+        )
+
+        XCTAssertEqual(navigationHandler.didShareLibraryItemCalled, 1)
+    }
+
     private func createSubject() -> BookmarksCoordinator {
         let subject = BookmarksCoordinator(
             router: router,
             profile: profile,
             windowUUID: .XCTestDefaultUUID,
-            parentCoordinator: parentCoordinator
+            parentCoordinator: parentCoordinator,
+            navigationHandler: navigationHandler
         )
         trackForMemoryLeaks(subject)
         return subject

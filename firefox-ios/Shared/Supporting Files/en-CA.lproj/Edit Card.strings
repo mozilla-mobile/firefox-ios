@@ -1,3 +1,6 @@
 /* Title label for the view where user can edit their credit card info */
 "CreditCard.EditCard.EditCreditCardTitle.v113" = "Edit Credit Card";
 
+/* Title label for the view where user can edit their credit card info */
+"CreditCard.EditCard.EditCreditCardTitle.v122" = "Edit Card";
+

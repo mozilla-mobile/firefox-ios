@@ -20,6 +20,7 @@ final class AppStartupTelemetry {
         queryCreditCards()
         queryLogins()
         queryBookmarks()
+        queryAddresses()
     }
 
     // MARK: Credit Cards
@@ -45,6 +46,13 @@ final class AppStartupTelemetry {
         loginsViewModel.queryLogins("") { logins in
             self.sendLoginsSavedAllTelemetry(numberOfSavedLogins: logins.count)
         }
+    }
+
+    func queryAddresses() {
+        profile.autofill.listAllAddresses(completion: { [weak self] addresses, error in
+            guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
+            self?.sendAddressAutofillSavedAllTelemetry(numberOfAddresses: addresses.count)
+        })
     }
 
     // MARK: Bookmarks
@@ -82,6 +90,15 @@ final class AppStartupTelemetry {
                                      method: .foreground,
                                      object: .creditCardSavedAll,
                                      extras: savedCardsExtra)
+    }
+
+    private func sendAddressAutofillSavedAllTelemetry(numberOfAddresses: Int) {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .foreground,
+            object: .addressAutofillSettings,
+            extras: [TelemetryWrapper.EventExtraKey.AddressTelemetry.count.rawValue: Int64(numberOfAddresses)]
+        )
     }
 
     private func sendDoesHaveMobileBookmarksTelemetry() {

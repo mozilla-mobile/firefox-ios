@@ -46,7 +46,7 @@ features:
                   action: open-instructions-popup
                 secondary:
                   title: Onboarding/Onboarding.Welcome.Skip.v114
-                  action: next-card
+                  action: forward-one-card
               instructions-popup:
                 title: Onboarding/DefaultBrowserPopup.Title.v114
                 button-title: Onboarding/DefaultBrowserPopup.ButtonTitle.v114
@@ -69,7 +69,7 @@ features:
                   action: request-notifications
                 secondary:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v115
-                  action: next-card
+                  action: forward-one-card
               type: fresh-install
               prerequisites:
                 - ALWAYS
@@ -84,7 +84,7 @@ features:
                   action: sync-sign-in
                 secondary:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
-                  action: next-card
+                  action: forward-one-card
               type: fresh-install
               prerequisites:
                 - ALWAYS
@@ -96,7 +96,7 @@ features:
               buttons:
                 primary:
                   title: Upgrade/Upgrade.Welcome.Action.v114
-                  action: next-card
+                  action: forward-one-card
               type: upgrade
               prerequisites:
                 - NEVER
@@ -111,7 +111,7 @@ features:
                   action: sync-sign-in
                 secondary:
                   title: Onboarding/Onboarding.LaterAction.v114
-                  action: next-card
+                  action: forward-one-card
               type: upgrade
               prerequisites:
                 - NEVER
@@ -141,7 +141,7 @@ objects:
           This should never be defaulted.
         default: ""
       image:
-        type: NimbusOnboardingImages
+        type: NimbusOnboardingHeaderImage
         description: >
           The image that should be dispalyed on the card.
         default: welcome-globe
@@ -158,10 +158,15 @@ objects:
         default:
           primary:
             title: Onboarding/Onboarding.Sync.Skip.Action.v114
-            action: next-card
+            action: forward-one-card
           secondary: null
+      multiple-choice-buttons:
+        type: List<NimbusOnboardingMultipleChoiceButton>
+        description: >
+          A list of multiple choice buttons that the card will display
+        default: []
       instructions-popup:
-        type: Option<NimbusInstructionPopup>
+        type: Option<NimbusOnboardingInstructionPopup>
         description: >
           The object describing the specific instruction popup
           button for a card.
@@ -215,7 +220,7 @@ objects:
           The primary button for the card. This must exist.
         default:
           title: "Primary Button"
-          action: next-card
+          action: forward-one-card
       secondary:
         type: Option<NimbusOnboardingButton>
         description: >
@@ -235,9 +240,32 @@ objects:
         type: OnboardingActions
         description: >
           The action the button should take.
-          The default for this will be "next-card"
-        default: next-card
-  NimbusInstructionPopup:
+          The default for this will be "forward-one-card"
+        default: forward-one-card
+  NimbusOnboardingMultipleChoiceButton:
+    description: >
+      A group of properties describing the attributes of a
+      multiple choice button on a card
+    fields:
+      title:
+        type: Text
+        description: >
+          The text of the button title.
+          This should never be defaulted.
+        default: ""
+      image:
+        type: NimbusOnboardingMultipleChoiceButtonImage
+        description: >
+          The text of the button title.
+          This should never be defaulted.
+        default: theme-system
+      action:
+        type: OnboardingMultipleChoiceAction
+        description: >
+          The action the button should take.
+          The default for this will be "theme-system-default"
+        default: theme-system-default
+  NimbusOnboardingInstructionPopup:
     description: >
       The object outlining the content of the instruction card.
     fields:
@@ -270,7 +298,13 @@ enums:
     description: >
       The identifiers for the different actions available for cards in onboarding
     variants:
-      next-card:
+      forward-one-card:
+        description: >
+          Will take the user to the next card
+      forward-two-card:
+        description: >
+          Will take the user to the next card
+      forward-three-card:
         description: >
           Will take the user to the next card
       sync-sign-in:
@@ -303,7 +337,7 @@ enums:
       dismiss:
         description: >
           Will dismiss the popup
-  NimbusOnboardingImages:
+  NimbusOnboardingHeaderImage:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:
@@ -342,3 +376,42 @@ enums:
         description: >
           Corresponding to onboarding cards that are for users
           who have updated
+  OnboardingMultipleChoiceAction:
+    description: >
+      The identifiers for the different actions available for cards in onboarding
+    variants:
+      theme-system-default:
+        description: >
+          Will set the theme to use the system theme
+      theme-dark:
+        description: >
+          Will will set the theme to dark mode
+      theme-light:
+        description: >
+          Will set the theme to light mode
+      toolbar-top:
+        description: >
+          Will set the toolbar on the top
+      toolbar-bottom:
+        description: >
+          Will set the toolbar on the bottom
+  NimbusOnboardingMultipleChoiceButtonImage:
+    description: >
+      The identifiers for the different images available
+      for multiple choice buttons in onboarding
+    variants:
+      theme-system:
+        description: >
+          Corresponding to the system theme
+      theme-dark:
+        description: >
+          Corresponding to the dark theme
+      theme-light:
+        description: >
+          Corresponding to the light theme
+      toolbar-top:
+        description: >
+          Corresponding to the toolbar on top
+      toolbar-bottom:
+        description: >
+          Corresponding to the toolbar on the bottom

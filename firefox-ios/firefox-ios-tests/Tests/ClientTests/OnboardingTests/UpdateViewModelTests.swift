@@ -192,13 +192,14 @@ class UpdateViewModelTests: XCTestCase {
 
     func createCard(index: Int) -> OnboardingCardInfoModel {
         let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
-                                                                           action: .nextCard))
+                                                                           action: .forwardOneCard))
         return OnboardingCardInfoModel(name: "Name \(index)",
                                        order: index,
                                        title: "Title \(index)",
                                        body: "Body \(index)",
                                        link: nil,
                                        buttons: buttons,
+                                       multipleChoiceButtons: [],
                                        type: .upgrade,
                                        a11yIdRoot: "A11y id \(index)",
                                        imageID: "Image id \(index)",

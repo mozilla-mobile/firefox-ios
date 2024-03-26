@@ -317,7 +317,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
-    func showToast(message: String, toastAction: MenuButtonToastAction) {
+    func showToast(_ bookmarkURL: URL? = nil, _ title: String?, message: String, toastAction: MenuButtonToastAction) {
         switch toastAction {
         case .bookmarkPage:
             let viewModel = ButtonToastViewModel(labelText: message,
@@ -334,10 +334,10 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: themeManager.currentTheme) { [weak self] isButtonTapped in
-                guard let strongSelf = self, let currentTab = strongSelf.tabManager.selectedTab else { return }
-                isButtonTapped ? strongSelf.addBookmark(
-                    url: currentTab.url?.absoluteString ?? "",
-                    title: currentTab.title
+                guard let self, let currentTab = tabManager.selectedTab else { return }
+                isButtonTapped ? self.addBookmark(
+                    url: bookmarkURL?.absoluteString ?? currentTab.url?.absoluteString ?? "",
+                    title: title ?? currentTab.title
                 ) : nil
             }
             show(toast: toast)
