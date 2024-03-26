@@ -24,14 +24,17 @@ protocol OnboardingCardDelegate: AnyObject {
     func sendCardViewTelemetry(from cardName: String)
 
     // Implemented by default for code sharing
-    func presentPrivacyPolicy(from cardName: String,
+    func presentPrivacyPolicy(windowUUID: WindowUUID,
+                              from cardName: String,
                               selector: Selector?,
                               completion: (() -> Void)?,
                               referringPage: ReferringPage)
-    func presentDefaultBrowserPopup(from name: String,
+    func presentDefaultBrowserPopup(windowUUID: WindowUUID,
+                                    from name: String,
                                     completionIfLastCard: (() -> Void)?)
 
     func presentSignToSync(
+        windowUUID: WindowUUID,
         with fxaOptions: FxALaunchParams,
         selector: Selector?,
         completion: @escaping () -> Void,
@@ -93,6 +96,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
         let instructionsVC = OnboardingInstructionPopupViewController(
             viewModel: popupViewModel,
+            /* TODO: [8313] MUST FIX. */
+            windowUUID: UUID(),
             buttonTappedFinishFlow: {
                 self.advance(
                     numberOfPages: 1,

@@ -70,6 +70,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.profile = profile
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger

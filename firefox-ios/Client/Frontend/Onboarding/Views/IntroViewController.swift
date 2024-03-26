@@ -81,7 +81,7 @@ class IntroViewController: UIViewController,
         self.userDefaults = userDefaults
         super.init(nibName: nil, bundle: nil)
 
-        self.viewModel.setupViewControllerDelegates(with: self)
+        self.viewModel.setupViewControllerDelegates(with: self, for: windowUUID)
         setupLayout()
         applyTheme()
     }
@@ -310,6 +310,7 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.updateOnboardingUserActivationEvent()
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
+                windowUUID: windowUUID,
                 with: fxaPrams,
                 selector: #selector(dismissSignInViewController),
                 completion: {
@@ -330,6 +331,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 completionIfLastCard: { self.showNextPageCompletionForLastCard() })
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
+                windowUUID: windowUUID,
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         }

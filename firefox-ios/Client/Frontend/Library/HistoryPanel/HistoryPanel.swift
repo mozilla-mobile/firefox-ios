@@ -155,6 +155,7 @@ class HistoryPanel: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
 

@@ -15,6 +15,8 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -44,9 +46,11 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     }
 
     init(viewModel: PasswordDetailViewControllerModel,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -108,8 +112,12 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
         coordinator?.openURL(url: url)
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
     }
@@ -141,7 +149,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
                                                          constant: -UX.horizontalMargin)
             ])
             breachDetailView.setup(breach)
-            breachDetailView.applyTheme(theme: themeManager.currentTheme)
+            breachDetailView.applyTheme(theme: currentTheme())
 
             breachDetailView.onTapLearnMore = { [weak self] in
                 self?.didTapBreachLearnMore()
@@ -154,7 +162,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true
             breachCell.accessibilityElements = [breachDetailView]
-            breachCell.applyTheme(theme: themeManager.currentTheme)
+            breachCell.applyTheme(theme: currentTheme())
 
             return breachCell
 
@@ -170,7 +178,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
                 isEditingFieldData: isEditingFieldData)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme)
+            loginCell.applyTheme(theme: currentTheme())
             usernameField = loginCell.descriptionLabel
             return loginCell
 
@@ -186,7 +194,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
                 isEditingFieldData: isEditingFieldData)
             setCellSeparatorHidden(loginCell)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme)
+            loginCell.applyTheme(theme: currentTheme())
             passwordField = loginCell.descriptionLabel
             return loginCell
 
@@ -202,7 +210,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
                 loginCell.contentView.alpha = 0.5
             }
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme)
+            loginCell.applyTheme(theme: currentTheme())
             websiteField = loginCell.descriptionLabel
             return loginCell
 
@@ -229,7 +237,7 @@ extension PasswordDetailViewController: UITableViewDataSource {
                 label: createdFormatted + "\n" + lastModifiedFormatted)
             cell.configure(viewModel: cellModel)
             setCellSeparatorHidden(cell)
-            cell.applyTheme(theme: themeManager.currentTheme)
+            cell.applyTheme(theme: currentTheme())
             return cell
 
         case .delete:
@@ -241,9 +249,9 @@ extension PasswordDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.selectionStyle = .none
-            deleteCell.configure(viewModel: ThemedTableViewCellViewModel(theme: themeManager.currentTheme,
+            deleteCell.configure(viewModel: ThemedTableViewCellViewModel(theme: currentTheme(),
                                                                          type: .destructive))
-            deleteCell.applyTheme(theme: themeManager.currentTheme)
+            deleteCell.applyTheme(theme: currentTheme())
 
             setCellSeparatorFullWidth(deleteCell)
             return deleteCell

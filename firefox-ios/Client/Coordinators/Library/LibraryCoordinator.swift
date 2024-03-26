@@ -52,7 +52,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
                                             windowUUID: windowUUID)
         let historyPanel = HistoryPanel(profile: profile, windowUUID: windowUUID)
         let downloadsPanel = DownloadsPanel(windowUUID: windowUUID)
-        let readingListPanel = ReadingListPanel(profile: profile)
+        let readingListPanel = ReadingListPanel(profile: profile, windowUUID: windowUUID)
         return [
             ThemedNavigationController(rootViewController: bookmarksPanel, windowUUID: windowUUID),
             ThemedNavigationController(rootViewController: historyPanel, windowUUID: windowUUID),

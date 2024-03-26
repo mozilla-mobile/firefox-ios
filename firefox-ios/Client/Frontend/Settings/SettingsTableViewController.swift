@@ -920,6 +920,10 @@ class SettingsTableViewController: ThemedTableViewController {
         applyTheme()
     }
 
+    func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     override func applyTheme() {
         settings = generateSettings()
         super.applyTheme()

@@ -38,7 +38,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
          tabManager: TabManager) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
-        super.init(style: .grouped, windowUUID: windowUUID)
+        super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
 
@@ -319,7 +319,7 @@ extension HomePageSettingViewController {
             let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
                                                        tabManager: tabManager,
                                                        theme: theme)
-            let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+            let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
             wallpaperVC.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(wallpaperVC, animated: true)
         }

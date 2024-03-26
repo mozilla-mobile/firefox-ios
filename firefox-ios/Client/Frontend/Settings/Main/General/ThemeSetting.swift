@@ -39,11 +39,13 @@ class ThemeSetting: Setting {
         self.settingsDelegate = settingsDelegate
         self.themeManager = themeManager
 
+        // TODO: [8313] Update other code that follows similar pattern of using settings to just call `currentTheme()`
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: .SettingsDisplayThemeTitle,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )

@@ -83,7 +83,7 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - Update
     private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
                                          isFullScreen: Bool) {
-        let updateViewController = UpdateViewController(viewModel: updateViewModel)
+        let updateViewController = UpdateViewController(viewModel: updateViewModel, windowUUID: windowUUID)
         updateViewController.qrCodeNavigationHandler = self
         updateViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
@@ -108,7 +108,7 @@ class LaunchCoordinator: BaseCoordinator,
 
     // MARK: - Default Browser
     func presentDefaultBrowserOnboarding() {
-        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController()
+        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(windowUUID: windowUUID)
         defaultOnboardingViewController.viewModel.goToSettings = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)

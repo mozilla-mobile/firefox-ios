@@ -46,17 +46,19 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     // MARK: - Methods
-    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID) {
         availableCards.removeAll()
         cardModels.forEach { cardModel in
             if cardModel.cardType == .multipleChoice {
             availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
-                delegate: delegate))
+                delegate: delegate,
+                windowUUID: window))
             } else {
                 availableCards.append(OnboardingBasicCardViewController(
                     viewModel: cardModel,
-                    delegate: delegate))
+                    delegate: delegate,
+                    windowUUID: window))
             }
         }
     }

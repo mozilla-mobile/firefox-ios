@@ -48,7 +48,8 @@ class WebsiteDataManagementViewController: UIViewController,
     var searchController: UISearchController?
     var showMoreButtonEnabled = true
 
-    private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel)
+    private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel,
+                                                                                          windowUUID: windowUUID)
 
     private func currentTheme() -> Theme {
         return themeManager.currentTheme(for: windowUUID)

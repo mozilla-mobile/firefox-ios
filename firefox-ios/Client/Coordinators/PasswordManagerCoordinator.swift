@@ -50,7 +50,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func showPasswordOnboarding() {
-        let viewController = PasswordManagerOnboardingViewController()
+        let viewController = PasswordManagerOnboardingViewController(windowUUID: windowUUID)
         viewController.coordinator = self
         router.push(viewController) { [weak self] in
             guard let self = self else { return }
@@ -78,7 +78,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
-        let viewController = PasswordDetailViewController(viewModel: model)
+        let viewController = PasswordDetailViewController(viewModel: model, windowUUID: windowUUID)
         viewController.coordinator = self
         router.push(viewController)
     }

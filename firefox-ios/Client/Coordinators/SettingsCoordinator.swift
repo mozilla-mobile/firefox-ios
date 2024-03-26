@@ -126,7 +126,7 @@ class SettingsCoordinator: BaseCoordinator,
                     tabManager: tabManager,
                     theme: themeManager.currentTheme(for: windowUUID)
                 )
-                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
                 wallpaperVC.settingsDelegate = self
                 return wallpaperVC
             } else {
@@ -143,11 +143,11 @@ class SettingsCoordinator: BaseCoordinator,
             return contentBlockerVC
 
         case .tabs:
-            return TabsSettingsViewController()
+            return TabsSettingsViewController(windowUUID: windowUUID)
 
         case .toolbar:
             let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-            return SearchBarSettingsViewController(viewModel: viewModel)
+            return SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
 
         case .topSites:
             let viewController = TopSitesSettingsViewController(windowUUID: windowUUID)
@@ -270,7 +270,8 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedNotifications() {
         let viewController = NotificationsSettingsViewController(prefs: profile.prefs,
-                                                                 hasAccount: profile.hasAccount())
+                                                                 hasAccount: profile.hasAccount(),
+                                                                 windowUUID: windowUUID)
         router.push(viewController)
     }
 
@@ -309,19 +310,19 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedSiri() {
-        let viewController = SiriSettingsViewController(prefs: profile.prefs)
+        let viewController = SiriSettingsViewController(prefs: profile.prefs, windowUUID: windowUUID)
         viewController.profile = profile
         router.push(viewController)
     }
 
     func pressedToolbar() {
         let viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
-        let viewController = SearchBarSettingsViewController(viewModel: viewModel)
+        let viewController = SearchBarSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
         router.push(viewController)
     }
 
     func pressedTabs() {
-        let viewController = TabsSettingsViewController()
+        let viewController = TabsSettingsViewController(windowUUID: windowUUID)
         router.push(viewController)
     }
 

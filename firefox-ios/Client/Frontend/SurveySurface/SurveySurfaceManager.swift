@@ -58,7 +58,8 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
         let viewModel = SurveySurfaceViewModel(with: info, delegate: self)
 
-        return SurveySurfaceViewController(windowUUID: windowUUID,
+        // TODO: [8313] FIX ME.
+        return SurveySurfaceViewController(windowUUID: UUID() /* NEED TO INVESTIGATE FIX */,
                                            viewModel: viewModel,
                                            themeManager: themeManager,
                                            notificationCenter: notificationCenter)

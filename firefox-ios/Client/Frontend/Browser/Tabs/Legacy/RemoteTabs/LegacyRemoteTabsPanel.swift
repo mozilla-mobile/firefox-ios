@@ -38,7 +38,7 @@ class LegacyRemoteTabsPanel: UIViewController,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile)
+        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile, windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         notificationCenter.addObserver(self,
