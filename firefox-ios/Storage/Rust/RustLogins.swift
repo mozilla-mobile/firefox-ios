@@ -692,12 +692,12 @@ public class RustLogins: LoginsProtocol {
                 switch result {
                 case .success(let logins):
                     let records = logins
-                    
+
                     guard let query = query?.lowercased(), !query.isEmpty else {
                         completionHandler(.success(records.first))
                         return
                     }
-                    
+
                     let filteredRecords = records.filter {
                         let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
                         return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
@@ -922,7 +922,7 @@ public class RustLogins: LoginsProtocol {
                     completionHandler(.failure(error))
                     return
                 }
-                
+
                 self.getStoredKey { result in
                     switch result {
                     case .success(let key):
