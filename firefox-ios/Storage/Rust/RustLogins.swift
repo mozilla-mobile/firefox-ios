@@ -726,23 +726,6 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
-    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
-        queue.async {
-            guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
-                completionHandler(.failure(error))
-                return
-            }
-
-            do {
-                let records = try self.storage?.list()
-                completionHandler(.success(records ?? []))
-            } catch let err as NSError {
-                completionHandler(.failure(err))
-            }
-        }
-    }
-
     public func listLogins() -> Deferred<Maybe<[EncryptedLogin]>> {
         let deferred = Deferred<Maybe<[EncryptedLogin]>>()
 
@@ -762,6 +745,23 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let records = try self.storage?.list()
+                completionHandler(.success(records ?? []))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
     }
 
     public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
