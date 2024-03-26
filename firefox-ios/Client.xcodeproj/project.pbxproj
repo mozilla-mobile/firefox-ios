@@ -10596,10 +10596,10 @@
 			children = (
 				E49943F31AE6879C00BF9DE4 /* FirstInstall */,
 				21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */,
+				810CD9C22BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift */,
 				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
 				742BD99D2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift */,
 				43A5643423CD1E1B00B6857D /* Update */,
-				810CD9C22BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

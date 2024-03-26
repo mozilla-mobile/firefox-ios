@@ -17,7 +17,7 @@ protocol OnboardingViewControllerProtocol {
         currentIndex: Int,
         numberOfCardsToMove: Int,
         goForward: Bool
-    ) -> OnboardingBasicCardViewController?
+    ) -> OnboardingCardViewController?
 
     func getCardIndex(viewController: OnboardingCardViewController) -> Int?
 }
@@ -27,7 +27,7 @@ extension OnboardingViewControllerProtocol {
         currentIndex: Int,
         numberOfCardsToMove: Int,
         goForward: Bool
-    ) -> OnboardingBasicCardViewController? {
+    ) -> OnboardingCardViewController? {
         guard let nextIndex = viewModel.getNextIndexFrom(
             currentIndex: currentIndex,
             numberOfCardsToMove: numberOfCardsToMove,

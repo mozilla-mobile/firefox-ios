@@ -12,7 +12,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     // MARK: - Properties
     var profile: Profile
     var hasSyncableAccount: Bool?
-    var availableCards: [OnboardingBasicCardViewController]
+    var availableCards: [OnboardingCardViewController]
     var isDismissable: Bool
     var telemetryUtility: OnboardingTelemetryProtocol
     private var cardModels: [OnboardingCardInfoModelProtocol]
@@ -98,9 +98,15 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                 break
             }
 
-            availableCards.append(OnboardingBasicCardViewController(
+            if !cardModel.multipleChoiceButtons.isEmpty {
+            availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
                 delegate: delegate))
+            } else {
+                availableCards.append(OnboardingBasicCardViewController(
+                    viewModel: cardModel,
+                    delegate: delegate))
+            }
         }
     }
 
