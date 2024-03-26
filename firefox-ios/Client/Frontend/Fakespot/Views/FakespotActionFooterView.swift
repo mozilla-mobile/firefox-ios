@@ -68,7 +68,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         let linkButtonViewModel = LinkButtonViewModel(
             title: viewModel.actionTitle,
             a11yIdentifier: viewModel.a11yActionIdentifier,
-            font: FXFontStyles.Regular.footnote,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.buttonInsets,
             contentHorizontalAlignment: .leading
         )

@@ -36,7 +36,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         let buttonViewModel = LinkButtonViewModel(
             title: .CreditCard.UpdateCreditCard.ManageCardsButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.manageCardsButton,
-            font: FXFontStyles.Regular.callout,
+            font: FXFontStyles.Regular.callout.scaledFont(),
             contentHorizontalAlignment: .left
         )
 

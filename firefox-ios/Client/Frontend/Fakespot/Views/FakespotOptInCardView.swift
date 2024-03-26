@@ -194,7 +194,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         let learnMoreButtonViewModel = LinkButtonViewModel(
             title: viewModel.learnMoreButtonText,
             a11yIdentifier: viewModel.learnMoreButtonA11yId,
-            font: FXFontStyles.Regular.subheadline,
+            font: FXFontStyles.Regular.subheadline.scaledFont(),
             contentInsets: UX.learnMoreInsets
         )
         learnMoreButton.configure(viewModel: learnMoreButtonViewModel)
@@ -202,7 +202,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         let termsOfUseButtonViewModel = LinkButtonViewModel(
             title: viewModel.termsOfUseButtonText,
             a11yIdentifier: viewModel.termsOfUseButtonA11yId,
-            font: FXFontStyles.Regular.footnote,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.termsOfUseButtonInsets
         )
         termsOfUseButton.configure(viewModel: termsOfUseButtonViewModel)
@@ -210,7 +210,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         let privacyButtonViewModel = LinkButtonViewModel(
             title: viewModel.privacyPolicyButtonText,
             a11yIdentifier: viewModel.privacyPolicyButtonA11yId,
-            font: FXFontStyles.Regular.footnote,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.privacyButtonInsets
         )
         privacyPolicyButton.configure(viewModel: privacyButtonViewModel)
@@ -224,7 +224,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
         let secondaryButtonViewModel = LinkButtonViewModel(
             title: viewModel.secondaryButtonText,
             a11yIdentifier: viewModel.secondaryButtonA11yId,
-            font: FXFontStyles.Regular.footnote,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.secondaryButtonInsets,
             contentHorizontalAlignment: .center
         )

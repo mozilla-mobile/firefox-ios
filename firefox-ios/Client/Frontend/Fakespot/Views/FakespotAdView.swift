@@ -190,7 +190,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         let productLinkButtonViewModel = LinkButtonViewModel(
             title: productAdsData.name,
             a11yIdentifier: viewModel.productTitleA11yId,
-            font: FXFontStyles.Regular.footnote,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.linkInsets
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)

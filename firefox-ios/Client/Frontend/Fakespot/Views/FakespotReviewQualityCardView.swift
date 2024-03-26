@@ -298,7 +298,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         let learnMoreButtonViewModel = LinkButtonViewModel(
             title: viewModel.learnMoreButtonTitle,
             a11yIdentifier: viewModel.learnMoreButtonA11yId,
-            font: FXFontStyles.Regular.subheadline,
+            font: FXFontStyles.Regular.subheadline.scaledFont(),
             contentInsets: UX.learnMoreInset
         )
         learnMoreButton.configure(viewModel: learnMoreButtonViewModel)

@@ -25,7 +25,7 @@ open class LinkButton: UIButton, ThemeApplicable {
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = viewModel.font?.scaledFont()
+            outgoing.font = viewModel.font
             return outgoing
         }
         updatedConfiguration.contentInsets = viewModel.contentInsets

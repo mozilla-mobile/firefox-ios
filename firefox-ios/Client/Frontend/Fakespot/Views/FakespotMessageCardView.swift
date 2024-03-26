@@ -294,7 +294,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             let linkButtonViewModel = LinkButtonViewModel(
                 title: linkText,
                 a11yIdentifier: viewModel.a11yLinkActionIdentifier ?? "",
-                font: FXFontStyles.Regular.caption1,
+                font: FXFontStyles.Regular.caption1.scaledFont(),
                 contentHorizontalAlignment: .leading)
             linkButton.configure(viewModel: linkButtonViewModel)
             if linkButton.superview == nil {

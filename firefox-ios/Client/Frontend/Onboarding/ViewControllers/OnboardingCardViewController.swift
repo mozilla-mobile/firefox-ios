@@ -359,7 +359,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         let buttonViewModel = LinkButtonViewModel(
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            font: FXFontStyles.Regular.callout,
+            font: FXFontStyles.Regular.callout.scaledFont(),
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)
