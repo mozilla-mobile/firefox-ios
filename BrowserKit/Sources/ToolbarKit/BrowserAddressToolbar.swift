@@ -21,6 +21,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         static let buttonSize = CGSize(width: 40, height: 40)
     }
 
+    private weak var toolbarDelegate: AddressToolbarDelegate?
+
     private lazy var navigationActionStack: UIStackView = .build()
 
     private lazy var locationContainer: UIView = .build { view in
@@ -48,8 +50,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState) {
+    public func configure(state: AddressToolbarState,
+                          toolbarDelegate: AddressToolbarDelegate) {
         updateActions(state: state)
+
+        self.toolbarDelegate = toolbarDelegate
+
         setNeedsLayout()
         layoutIfNeeded()
     }

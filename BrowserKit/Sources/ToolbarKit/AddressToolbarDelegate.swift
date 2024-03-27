@@ -4,7 +4,8 @@
 
 import Foundation
 
-/// Protocol representing an address toolbar.
-public protocol AddressToolbar {
-    func configure(state: AddressToolbarState, toolbarDelegate: AddressToolbarDelegate)
+public protocol AddressToolbarDelegate: AnyObject {
+    func searchSuggestions(searchTerm: String)
+    func openBrowser(searchTerm: String)
+    func openSuggestions(searchTerm: String)
 }
