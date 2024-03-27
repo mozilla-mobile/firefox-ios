@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 import Shared
 
-class OnboardingCardViewController: UIViewController, Themeable {
+class OnboardingBasicCardViewController: OnboardingCardViewController {
     struct UX {
         static let stackViewSpacingWithLink: CGFloat = 15
         static let stackViewSpacingWithoutLink: CGFloat = 24
@@ -40,11 +40,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
-    var viewModel: OnboardingCardInfoModelProtocol
     weak var delegate: OnboardingCardDelegate?
-    var notificationCenter: NotificationProtocol
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
 
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
@@ -148,16 +144,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // MARK: - Initializers
     init(
         viewModel: OnboardingCardInfoModelProtocol,
-        delegate: OnboardingCardDelegate?,
-        themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        delegate: OnboardingCardDelegate?
     ) {
-        self.viewModel = viewModel
         self.delegate = delegate
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
@@ -395,7 +386,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Themeable
-    func applyTheme() {
+    override func applyTheme() {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary

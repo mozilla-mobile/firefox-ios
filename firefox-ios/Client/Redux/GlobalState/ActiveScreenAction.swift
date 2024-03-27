@@ -15,6 +15,7 @@ class ScreenActionContext: ActionContext {
 
 enum AppScreen {
     case browserViewController
+    case onboardingViewController
     case themeSettings
     case tabsTray
     case tabsPanel
