@@ -49,7 +49,7 @@ struct LoginCellView: View {
                         .font(.body)
                         .foregroundColor(textColor)
                         .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
-                    Text("**********")
+                    Text(verbatim: "**********")
                         .font(.subheadline)
                         .foregroundColor(customLightGray)
                 }
