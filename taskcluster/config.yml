@@ -13,6 +13,7 @@ taskgraph:
         mobile:
             name: "Firefox for iOS"
     cached-task-prefix: mobile.v2.firefox-ios
+    decision-parameters: ffios_taskgraph.parameters:get_decision_parameters
 
 workers:
     aliases:
