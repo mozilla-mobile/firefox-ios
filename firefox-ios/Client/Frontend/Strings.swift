@@ -341,7 +341,7 @@ extension String {
                 key: "CreditCard.Settings.ListItemA11y.v118",
                 tableName: "Settings",
                 value: "%1$@, issued to %2$@, ending in %3$@, expires %4$@",
-                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date.")
+                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date.")
         }
 
         // Displaying a credit card
@@ -570,13 +570,13 @@ extension String {
                 key: "CreditCard.SnackBar.CancelRemoveCardButton.v112",
                 tableName: "Alert",
                 value: "Cancel",
-                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and cancel the operation.")
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation.")
 
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardButton.v112",
                 tableName: "Alert",
                 value: "Remove",
-                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and perform the operation of removing the credit card.")
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to remove card and perform the operation of removing the credit card.")
         }
     }
 }
@@ -1366,7 +1366,7 @@ extension String {
                 key: "Upgrade.SyncSign.Description.v114",
                 tableName: "Upgrade",
                 value: "Pick up where you left off with tabs from other devices now on your homepage.",
-                comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
+                comment: "Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
             public static let Action = MZLocalizedString(
                 key: "Upgrade.SyncSign.Action.v114",
                 tableName: "Upgrade",
@@ -3387,17 +3387,17 @@ extension String {
             key: "Menu.History.Label",
             tableName: nil,
             value: "History",
-            comment: "Label for the button, displayed in the menu, takes you to to History screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to History screen when pressed.")
         public static let AppMenuDownloads = MZLocalizedString(
             key: "Menu.Downloads.Label",
             tableName: nil,
             value: "Downloads",
-            comment: "Label for the button, displayed in the menu, takes you to to Downloads screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to Downloads screen when pressed.")
         public static let AppMenuPasswords = MZLocalizedString(
             key: "Menu.Passwords.Label",
             tableName: nil,
             value: "Passwords",
-            comment: "Label for the button, displayed in the menu, takes you to to passwords screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to passwords screen when pressed.")
         public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
             key: "Menu.CopyURL.Confirm",
             tableName: nil,
@@ -3466,7 +3466,7 @@ extension String {
             key: "Menu.Bookmarks.Label",
             tableName: nil,
             value: "Bookmarks",
-            comment: "Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to bookmarks screen when pressed.")
         public static let AddBookmark = MZLocalizedString(
             key: "Menu.AddBookmark.Label.v99",
             tableName: nil,
@@ -3493,7 +3493,7 @@ extension String {
             key: "Menu.ReadingList.Label",
             tableName: nil,
             value: "Reading List",
-            comment: "Label for the button, displayed in the menu, takes you to to Reading List screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to Reading List screen when pressed.")
         public static let AddReadingList = MZLocalizedString(
             key: "Menu.AddReadingList.Label.v99",
             tableName: nil,
@@ -6089,7 +6089,7 @@ extension String {
                 key: "Settings.Search.DefaultSearchEngine.Footer.v122",
                 tableName: "Settings",
                 value: "Results from searches, history, bookmarks, and more",
-                comment: "Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes.")
+                comment: "Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes.")
             public static let PrivateSessionSetting = MZLocalizedString(
                 key: "Settings.Search.PrivateSession.Setting.v122",
                 tableName: "Settings",
