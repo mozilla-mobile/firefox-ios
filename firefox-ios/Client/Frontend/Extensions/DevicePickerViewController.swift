@@ -67,7 +67,7 @@ class DevicePickerViewController: UITableViewController {
     private var loadingState = LoadingState.loading
 
     // TODO: [8313] Revisit this UUID here!
-    private let themeManager = DefaultThemeManager(defaultWindowID: UUID(), sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
     // provide Share To functionality

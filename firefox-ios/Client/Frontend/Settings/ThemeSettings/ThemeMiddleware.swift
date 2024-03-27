@@ -54,7 +54,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
             let systemBrightness = self.getScreenBrightness()
             let context = FloatValueContext(floatValue: systemBrightness, windowUUID: windowUUID)
             store.dispatch(ThemeSettingsAction.systemBrightnessChanged(context))
-        case PrivateModeMiddlewareAction.privateModeUpdated(let newState):
+        case PrivateModeMiddlewareAction.privateModeUpdated(let context):
+            let newState = context.boolValue
             self.toggleUsePrivateTheme(to: newState, for: windowUUID)
         default:
             break

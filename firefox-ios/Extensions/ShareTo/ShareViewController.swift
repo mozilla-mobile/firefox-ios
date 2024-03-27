@@ -76,8 +76,7 @@ class ShareViewController: UIViewController {
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
     // TODO: [8313] [FIX ME] Revisit this UUID.
-    private let themeManager = DefaultThemeManager(defaultWindowID: UUID(),
-                                                   sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     weak var delegate: ShareControllerDelegate?
 

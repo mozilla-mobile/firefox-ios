@@ -13,7 +13,7 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
     weak var delegate: ShareControllerDelegate?
 
     // TODO: [8313] [FIX ME] Revisit this UUID here
-    private let themeManager = DefaultThemeManager(defaultWindowID: UUID(), sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+    private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     private var profile: Profile {
         let profile = BrowserProfile(localName: "profile")

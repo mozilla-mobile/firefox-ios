@@ -29,7 +29,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Variables
 
     private var windowThemeState: [UUID: Theme] = [:] //LightTheme()
-    private var windows: [UUID: UIWindow?] = [:]
+    private var windows: [UUID: UIWindow] = [:]
     private var allWindowUUIDs: [UUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
 
@@ -60,7 +60,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Initializers
 
     public init(
-        defaultWindowID: UUID,
         userDefaults: UserDefaultsInterface = UserDefaults.standard,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         mainQueue: DispatchQueueInterface = DispatchQueue.main,
@@ -76,10 +75,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             ThemeKeys.NightMode.isOn: false,
             ThemeKeys.PrivateMode.isOn: false,
         ])
-
-        // TODO: [8313] Can we get rid of this? This won't work unless we inject the default window etc.
-        updateSavedTheme(to: getNormalSavedTheme())
-        updateCurrentTheme(to: fetchSavedThemeType(for: defaultWindowID), for: defaultWindowID)
+        // TODO: [8313] Moved the early setup and config code here to setWindow(). Confirm this won't cause issues.
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,
@@ -88,13 +84,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - ThemeManager
 
+    // TODO: [8313] Need to add support for cleaning up and releasing window references on iPad when a window is closed.
     public func setWindow(_ window: UIWindow, for uuid: UUID) {
         windows[uuid] = window
+        updateSavedTheme(to: getNormalSavedTheme())
+        updateCurrentTheme(to: fetchSavedThemeType(for: uuid), for: uuid)
     }
 
     public func currentTheme(for window: UUID?) -> Theme {
-        // TODO: [8313] Need to revisit how we handle nil here, return theme for 'main'/active window
-        guard let window else { return DarkTheme() }
+        guard let window else {
+            assertionFailure("Attempt to get the theme for a nil window UUID.")
+            return DarkTheme()
+        }
 
         return windowThemeState[window] ?? DarkTheme()
     }
@@ -186,10 +187,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
 
-        // TODO: [8313] Fix for multi-window
-        windows.forEach { (uuid, window) in
-            window?.overrideUserInterfaceStyle = currentTheme(for: uuid).type.getInterfaceStyle()
-        }
+        windows[window]?.overrideUserInterfaceStyle = currentTheme(for: window).type.getInterfaceStyle()
 
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)
