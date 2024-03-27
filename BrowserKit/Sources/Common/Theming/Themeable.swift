@@ -23,6 +23,7 @@ extension Themeable {
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
             self?.applyTheme()
+            // TODO: [8313] This may not be a reliable solution, some views will not be installed in view hierarchy.
             guard let uuidIdentifiable = subview as? ThemeUUIDIdentifiable else { return }
             self?.updateThemeApplicableSubviews(subview, for: uuidIdentifiable.currentWindowUUID)
         }
