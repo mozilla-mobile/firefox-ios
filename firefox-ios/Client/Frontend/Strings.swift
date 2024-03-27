@@ -570,13 +570,13 @@ extension String {
                 key: "CreditCard.SnackBar.CancelRemoveCardButton.v112",
                 tableName: "Alert",
                 value: "Cancel",
-                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and cancel the operation.")
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation.")
 
             public static let RemovedCardLabel = MZLocalizedString(
                 key: "CreditCard.SnackBar.RemovedCardButton.v112",
                 tableName: "Alert",
                 value: "Remove",
-                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and perform the operation of removing the credit card.")
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to remove card and perform the operation of removing the credit card.")
         }
     }
 }
@@ -1366,7 +1366,7 @@ extension String {
                 key: "Upgrade.SyncSign.Description.v114",
                 tableName: "Upgrade",
                 value: "Pick up where you left off with tabs from other devices now on your homepage.",
-                comment: "Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
+                comment: "Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version.")
             public static let Action = MZLocalizedString(
                 key: "Upgrade.SyncSign.Action.v114",
                 tableName: "Upgrade",
@@ -3387,17 +3387,17 @@ extension String {
             key: "Menu.History.Label",
             tableName: nil,
             value: "History",
-            comment: "Label for the button, displayed in the menu, takes you to to History screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to History screen when pressed.")
         public static let AppMenuDownloads = MZLocalizedString(
             key: "Menu.Downloads.Label",
             tableName: nil,
             value: "Downloads",
-            comment: "Label for the button, displayed in the menu, takes you to to Downloads screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to Downloads screen when pressed.")
         public static let AppMenuPasswords = MZLocalizedString(
             key: "Menu.Passwords.Label",
             tableName: nil,
             value: "Passwords",
-            comment: "Label for the button, displayed in the menu, takes you to to passwords screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to passwords screen when pressed.")
         public static let AppMenuCopyURLConfirmMessage = MZLocalizedString(
             key: "Menu.CopyURL.Confirm",
             tableName: nil,
@@ -3466,7 +3466,7 @@ extension String {
             key: "Menu.Bookmarks.Label",
             tableName: nil,
             value: "Bookmarks",
-            comment: "Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to bookmarks screen when pressed.")
         public static let AddBookmark = MZLocalizedString(
             key: "Menu.AddBookmark.Label.v99",
             tableName: nil,
@@ -3493,7 +3493,7 @@ extension String {
             key: "Menu.ReadingList.Label",
             tableName: nil,
             value: "Reading List",
-            comment: "Label for the button, displayed in the menu, takes you to to Reading List screen when pressed.")
+            comment: "Label for the button, displayed in the menu, takes you to Reading List screen when pressed.")
         public static let AddReadingList = MZLocalizedString(
             key: "Menu.AddReadingList.Label.v99",
             tableName: nil,
