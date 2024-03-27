@@ -505,6 +505,8 @@ protocol LoginsProtocol {
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void)
+    func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void)
 }
 
 public class RustLogins: LoginsProtocol {
@@ -904,6 +906,35 @@ public class RustLogins: LoginsProtocol {
                 }
             }
         }
+
+    public func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void) {
+        var results: [Result<Bool?, Error>] = []
+        for id in ids {
+            deleteLogin(id: id) { result in
+                results.append(result)
+                if results.count == ids.count {
+                    completionHandler(results)
+                }
+            }
+        }
+    }
+
+    public func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let existed = try self.storage?.delete(id: id)
+                completionHandler(.success(existed))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
+    }
 
     public func deleteLogins(ids: [String]) -> Deferred<[Maybe<Bool>]> {
         return all(ids.map { deleteLogin(id: $0) })
