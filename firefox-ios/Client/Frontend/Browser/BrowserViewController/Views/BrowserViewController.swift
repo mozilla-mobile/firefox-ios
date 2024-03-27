@@ -1290,19 +1290,19 @@ class BrowserViewController: UIViewController,
         showBookmarkToast(for: .add)
     }
 
-    func removeBookmark(url: String) {
-        profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+    func removeBookmark(url: URL, title: String?) {
+        profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(for: .remove)
+            self.showBookmarkToast(url, title, for: .remove)
         }
     }
 
-    private func showBookmarkToast(for action: BookmarkAction) {
+    private func showBookmarkToast(_ bookmarkURL: URL? = nil, _ title: String? = nil, for action: BookmarkAction) {
         switch action {
         case .add:
             self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
         case .remove:
-            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(bookmarkURL, title, message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
 
