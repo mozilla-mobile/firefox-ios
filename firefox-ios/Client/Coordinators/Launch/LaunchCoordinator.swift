@@ -73,7 +73,9 @@ class LaunchCoordinator: BaseCoordinator,
             if !introViewModel.isDismissable {
                 introViewController.isModalInPresentation = true
             }
-            router.present(introViewController, animated: true)
+            router.present(introViewController, animated: true) {
+                introViewController.closeOnboarding()
+            }
         }
     }
 
