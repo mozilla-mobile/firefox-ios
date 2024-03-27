@@ -24,7 +24,6 @@ struct LoginCellView: View {
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
-    @State private var stroke: Color = .clear
 
     private(set) var login: EncryptedLogin
     @Environment(\.themeType)
@@ -72,7 +71,6 @@ struct LoginCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
-        stroke = Color(color.actionSecondary)
     }
 }
 
@@ -91,7 +89,7 @@ struct LoginButtonStyle: ButtonStyle {
                     style: .continuous
                 )
                 .stroke(style: StrokeStyle())
-                .foregroundColor(Color(theme.colors.actionSecondary))
+                .foregroundColor(.clear)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
