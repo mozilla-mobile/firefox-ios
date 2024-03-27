@@ -144,6 +144,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
     }
 
+    public func getPrivateThemeIsOn(for window: UUID) -> Bool {
+        return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+    }
+
     public func setAutomaticBrightness(isOn: Bool) {
         guard automaticBrightnessIsOn != isOn else { return }
 

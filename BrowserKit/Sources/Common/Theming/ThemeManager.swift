@@ -22,6 +22,7 @@ public protocol ThemeManager {
     // Window management and window-specific themeing
     func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID)
     func setPrivateTheme(isOn: Bool, for window: UUID)
+    func getPrivateThemeIsOn(for window: UUID) -> Bool
     func reloadTheme(for window: UUID)
     func setWindow(_ window: UIWindow, for uuid: UUID)
 }

@@ -4,13 +4,14 @@
 
 import Foundation
 import Redux
+import Common
+import Shared
 
-// TODO: [8313] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class FeltPrivacyMiddleware {
-    var privacyManager: FeltPrivacyManager
+    var privacyStateManager: ThemeManager
 
-    init(privacyManager: FeltPrivacyManager = FeltPrivacyManager(isInPrivateMode: false)) {
-        self.privacyManager = privacyManager
+    init(privacyStateManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.privacyStateManager = privacyStateManager
     }
 
     lazy var privacyManagerProvider: Middleware<AppState> = { state, action in
@@ -18,8 +19,9 @@ class FeltPrivacyMiddleware {
         switch action {
         case PrivateModeUserAction.setPrivateModeTo(let context):
             let privateState = context.boolValue
-            self.updateManagerWith(newState: privateState)
-            let newContext = BoolValueContext(boolValue: self.privacyManager.getPrivateModeState(), windowUUID: uuid)
+            self.updateManagerWith(newState: privateState, for: uuid)
+            let newState = self.privacyStateManager.getPrivateThemeIsOn(for: uuid)
+            let newContext = BoolValueContext(boolValue: newState, windowUUID: uuid)
             store.dispatch(PrivateModeMiddlewareAction.privateModeUpdated(newContext))
         default:
             break
@@ -27,7 +29,7 @@ class FeltPrivacyMiddleware {
     }
 
     // MARK: - Helper Functions
-    private func updateManagerWith(newState: Bool) {
-        privacyManager.setPrivateModeState(to: newState)
+    private func updateManagerWith(newState: Bool, for window: UUID) {
+        privacyStateManager.setPrivateTheme(isOn: newState, for: window)
     }
 }
