@@ -17,12 +17,15 @@ class LaunchCoordinator: BaseCoordinator,
     private let profile: Profile
     private let isIphone: Bool
     weak var parentCoordinator: LaunchCoordinatorDelegate?
+    private var windowUUID: WindowUUID
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
+         windowUUID: WindowUUID,
          isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone
+        self.windowUUID = windowUUID
         super.init(router: router)
     }
 
@@ -49,7 +52,8 @@ class LaunchCoordinator: BaseCoordinator,
                                             profile: profile,
                                             model: onboardingModel,
                                             telemetryUtility: telemetryUtility)
-        let introViewController = IntroViewController(viewModel: introViewModel)
+        let introViewController = IntroViewController(viewModel: introViewModel,
+                                                      windowUUID: windowUUID)
         introViewController.qrCodeNavigationHandler = self
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }

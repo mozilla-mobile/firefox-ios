@@ -86,7 +86,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
         let viewModel = IntroViewModel(profile: MockProfile(),
                                        model: onboardingViewModel,
                                        telemetryUtility: telemetryUtility)
-        let subject = IntroViewController(viewModel: viewModel)
+        let subject = IntroViewController(viewModel: viewModel, windowUUID: .XCTestDefaultUUID)
 
         subject.viewDidLoad()
         trackForMemoryLeaks(subject, file: file, line: line)
