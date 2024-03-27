@@ -10,7 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var themeManager: ThemeManager = DefaultThemeManager(
         sharedContainerIdentifier: DependencyHelper.baseBundleIdentifier
     )
-    
+
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {

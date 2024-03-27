@@ -68,11 +68,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         locationDividerView.backgroundColor = theme.colors.layer2
     }
 
-    public override func becomeFirstResponder() -> Bool {
+    override public func becomeFirstResponder() -> Bool {
         return locationView.becomeFirstResponder()
     }
 
-    public override func resignFirstResponder() -> Bool {
+    override public func resignFirstResponder() -> Bool {
         return locationView.resignFirstResponder()
     }
 
