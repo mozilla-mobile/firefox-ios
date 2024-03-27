@@ -76,7 +76,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
-        let launchCoordinator = LaunchCoordinator(router: router)
+        let launchCoordinator = LaunchCoordinator(router: router, windowUUID: windowUUID)
         launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
         launchCoordinator.start(with: launchType)

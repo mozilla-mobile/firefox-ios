@@ -2,15 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import UIKit
-import Shared
 import Common
+import Foundation
+import Redux
+import Shared
+import UIKit
 
 class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
-                           Notifiable {
+                           Notifiable,
+                           StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -18,8 +20,11 @@ class IntroViewController: UIViewController,
         static let pageControlHeight: CGFloat = 40
     }
 
+    typealias SubscriberStateType = OnboardingViewControllerState
+
     // MARK: - Properties
     var viewModel: OnboardingViewModelProtocol
+    var windowUUID: WindowUUID
     var didFinishFlow: (() -> Void)?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -27,6 +32,9 @@ class IntroViewController: UIViewController,
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
+    private var introViewControllerState: OnboardingViewControllerState?
+
+    // MARK: - UI elements
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
@@ -57,11 +65,13 @@ class IntroViewController: UIViewController,
     // MARK: Initializers
     init(
         viewModel: IntroViewModel,
+        windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.userDefaults = userDefaults
@@ -129,6 +139,35 @@ class IntroViewController: UIViewController,
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
         ])
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .onboardingViewController, windowUUID: windowUUID)
+        ))
+        let uuid = self.windowUUID
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return OnboardingViewControllerState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .onboardingViewController, windowUUID: windowUUID)
+        ))
+    }
+
+    func newState(state: OnboardingViewControllerState) {
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+
+            introViewControllerState = state
+        }
     }
 
     // MARK: - Button actions

@@ -102,7 +102,7 @@ class OnboardingButtonActionTests: XCTestCase {
         twoButtons: Bool = true,
         file: StaticString = #file,
         line: UInt = #line
-    ) -> OnboardingCardViewController {
+    ) -> OnboardingBasicCardViewController {
         var buttons: OnboardingButtons
         if twoButtons {
             buttons = OnboardingButtons(
@@ -133,7 +133,7 @@ class OnboardingButtonActionTests: XCTestCase {
             instructionsPopup: nil)
 
         mockDelegate = MockOnboardinCardDelegateController()
-        let subject = OnboardingCardViewController(
+        let subject = OnboardingBasicCardViewController(
             viewModel: mockInfoModel,
             delegate: mockDelegate)
 
