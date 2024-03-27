@@ -57,7 +57,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       switch (msg.name) {
         case "RemoteLogins:loginsFound": {
           request.promise.resolve({ form: request.form,
-                                    loginsFound: msg.logins });
+                                    loginsFound: msg.logins});
           break;
         }
 
@@ -478,53 +478,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         log("form not filled, has autocomplete=off");
       }
 
-      // Variable such that we reduce code duplication and can be sure we
-      // should be firing notifications if and only if we can fill the form.
-      var selectedLogin = null;
-
-      if (usernameField && (usernameField.value || usernameField.disabled || usernameField.readOnly)) {
-        // If username was specified in the field, it's disabled or it's readOnly, only fill in the
-        // password if we find a matching login.
-        var username = usernameField.value.toLowerCase();
-
-        var matchingLogins = logins.filter(function(l) { return l.username.toLowerCase() == username });
-        if (matchingLogins.length) {
-          // If there are multiple, and one matches case, use it
-          for (var i = 0; i < matchingLogins.length; i++) {
-            var l = matchingLogins[i];
-            if (l.username == usernameField.value) {
-              selectedLogin = l;
-            }
-          }
-          // Otherwise just use the first
-          if (!selectedLogin) {
-            selectedLogin = matchingLogins[0];
-          }
-        } else {
-          didntFillReason = "existingUsername";
-          log("Password not filled. None of the stored logins match the username already present.");
-        }
-      } else if (logins.length == 1) {
-        selectedLogin = logins[0];
-      } else {
-        // We have multiple logins. Handle a special case here, for sites
-        // which have a normal user+pass login *and* a password-only login
-        // (eg, a PIN). Prefer the login that matches the type of the form
-        // (user+pass or pass-only) when there's exactly one that matches.
-        var matchingLogins;
-        if (usernameField)
-          matchingLogins = logins.filter(function(l) { return l.username });
-        else
-          matchingLogins = logins.filter(function(l) { return !l.username });
-
-        // We really don't want to type on phones, so we always autofill with something...
-        //if (matchingLogins.length == 1) {
-          selectedLogin = matchingLogins[0];
-        //} else {
-          //didntFillReason = "multipleLogins";
-          //log("Multiple logins for form, so not filling any.");
-        //}
-      }
+      // We only receive one login in the array, which the login the user selected
+      const selectedLogin = logins?.[0];
 
       var didFillForm = false;
       if (selectedLogin && autofillForm && !isFormDisabled) {
@@ -632,45 +587,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   function onBlur(event) {
     LoginManagerContent.onUsernameInput(event)
   }
-
-  var observer = new MutationObserver(function(mutations) {
-    for(var idx = 0; idx < mutations.length; ++idx){
-      findForms(mutations[idx].addedNodes);
-    }
-  });
-
-  function findForms(nodes) {
-    for (var i = 0; i < nodes.length; i++) {
-      var node = nodes[i];
-      if (node.nodeName === "FORM") {
-        findLogins(node);
-      } else if(node.hasChildNodes()) {
-        findForms(node.childNodes);
-      }
-
-    }
-    return false;
-  }
-
-
-  function findLogins(form) {
-    try {
-        LoginManagerContent._asyncFindLogins(form, { })
-          .then(function(res) {
-            LoginManagerContent.loginsFound(res.form, res.loginsFound);
-          }).then(null, log);
-     } catch(ex) {
-       // Eat errors to avoid leaking them to the page
-       log(ex);
-     }
-   }
-
-  window.addEventListener("load", function(event) {
-    observer.observe(document.body, { attributes: false, childList: true, characterData: false, subtree: true });
-    for (var i = 0; i < document.forms.length; i++) {
-      findLogins(document.forms[i]);
-    }
-  });
 
   window.addEventListener("submit", function(event) {
     try {
