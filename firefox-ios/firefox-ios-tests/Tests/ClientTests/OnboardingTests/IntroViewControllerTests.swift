@@ -109,6 +109,7 @@ class IntroViewControllerTests: XCTestCase {
                                        model: onboardingViewModel,
                                        telemetryUtility: telemetryUtility)
         let subject = IntroViewController(viewModel: viewModel,
+                                          windowUUID: .XCTestDefaultUUID,
                                           notificationCenter: mockNotificationCenter)
 
         trackForMemoryLeaks(subject, file: file, line: line)

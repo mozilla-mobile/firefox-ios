@@ -155,7 +155,7 @@
 		21A1C3C72996AFF800181B7C /* OverlayModeManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A1C3C62996AFF800181B7C /* OverlayModeManagerTests.swift */; };
 		21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */; };
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
-		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
+		21A7C45028353D0E0071D996 /* OnboardingBasicCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */; };
 		21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */; };
 		21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
@@ -563,11 +563,14 @@
 		7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
 		7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEFC67F1BFF68C30059C952 /* QuickActions.swift */; };
 		81055B562BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */; };
+		810CD9C12BB346D800E290C2 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810CD9C02BB346D800E290C2 /* OnboardingCardViewController.swift */; };
+		810CD9C32BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810CD9C22BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift */; };
 		810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */; };
 		810FF3562B1783B0009F062C /* FeltPrivacyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */; };
 		810FF3582B1784E7009F062C /* PrivateModeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810FF3572B1784E7009F062C /* PrivateModeAction.swift */; };
 		81122E212B221AC0003DD9F8 /* SearchScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81122E202B221AC0003DD9F8 /* SearchScreenState.swift */; };
 		814A62462B587A3E00608195 /* DefaultThemeManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */; };
+		8187561A2BB4618500DCD1F3 /* OnboardingViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818756192BB4618500DCD1F3 /* OnboardingViewControllerState.swift */; };
 		81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */; };
 		884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884CA7482344A301002E4711 /* TextContentDetector.swift */; };
 		8A0017C128A3FF6100FEFC8B /* MessageCardDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A0017C028A3FF6100FEFC8B /* MessageCardDataAdaptor.swift */; };
@@ -2327,7 +2330,7 @@
 		21A1C3C62996AFF800181B7C /* OverlayModeManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayModeManagerTests.swift; sourceTree = "<group>"; };
 		21A43CDC291461C700B1206D /* ReaderModeFontTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeFontTypeButton.swift; sourceTree = "<group>"; };
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
-		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
+		21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBasicCardViewController.swift; sourceTree = "<group>"; };
 		21AFCFED2AE80B700027E9CE /* TabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsCoordinator.swift; sourceTree = "<group>"; };
 		21AFCFEF2AE80D370027E9CE /* RemoteTabsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsCoordinator.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
@@ -5639,6 +5642,8 @@
 		80B8473B933671C9605DC837 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80E24B20A5655593E1D9E85B /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/Search.strings"; sourceTree = "<group>"; };
 		81055B552BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMultipeChoiceButtonModel.swift; sourceTree = "<group>"; };
+		810CD9C02BB346D800E290C2 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
+		810CD9C22BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMultipleChoiceCardViewController.swift; sourceTree = "<group>"; };
 		810FF3532B178343009F062C /* FeltPrivacyMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyMiddleware.swift; sourceTree = "<group>"; };
 		810FF3552B1783B0009F062C /* FeltPrivacyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeltPrivacyManager.swift; sourceTree = "<group>"; };
 		810FF3572B1784E7009F062C /* PrivateModeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateModeAction.swift; sourceTree = "<group>"; };
@@ -5648,6 +5653,7 @@
 		81584D62B22049E40FC78F93 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		816D458CBEAE2A6721134028 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		81754147A06566E64C025F70 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = "nn.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		818756192BB4618500DCD1F3 /* OnboardingViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerState.swift; sourceTree = "<group>"; };
 		81A244F4A7C6FC8976DC21F0 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		81C14765AA7C25DF1817AC04 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Today.strings; sourceTree = "<group>"; };
 		81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerState.swift; sourceTree = "<group>"; };
@@ -8905,14 +8911,6 @@
 			path = CC_Script;
 			sourceTree = "<group>";
 		};
-		43A5643423CD1E1B00B6857D /* Update */ = {
-			isa = PBXGroup;
-			children = (
-				43A5643523CD1E1B00B6857D /* UpdateViewController.swift */,
-			);
-			path = Update;
-			sourceTree = "<group>";
-		};
 		43B002BB29E9E00000C7B788 /* AutofillAtDocumentStart */ = {
 			isa = PBXGroup;
 			children = (
@@ -9246,6 +9244,34 @@
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		818756162BB4616700DCD1F3 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		818756172BB4616B00DCD1F3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				435D7CC4246209AA0043ACB9 /* IntroViewController.swift */,
+				43A5643523CD1E1B00B6857D /* UpdateViewController.swift */,
+				21A7C44F28353D0E0071D996 /* OnboardingBasicCardViewController.swift */,
+				810CD9C22BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift */,
+				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
+				742BD99D2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		818756182BB4617600DCD1F3 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				818756192BB4618500DCD1F3 /* OnboardingViewControllerState.swift */,
+			);
+			path = State;
 			sourceTree = "<group>";
 		};
 		8A0017BF28A3FED300FEFC8B /* MessageCard */ = {
@@ -10518,6 +10544,7 @@
 				C8610DA92A0EBF7100B79FF1 /* OnboardingCardDelegate.swift */,
 				74BBDF462A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift */,
 				C8CD80D92A1E8C1D0097C3AE /* OnboardingTelemetryProtocol.swift */,
+				810CD9C02BB346D800E290C2 /* OnboardingCardViewController.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -10579,23 +10606,13 @@
 		C8BD875D2A0C23F500CD803A /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				C8BD875E2A0C243400CD803A /* ViewControllers */,
+				818756162BB4616700DCD1F3 /* Actions */,
+				818756172BB4616B00DCD1F3 /* Views */,
+				818756182BB4617600DCD1F3 /* State */,
 				C88E7A532A0552F10072E638 /* Models */,
 				C88E7A5C2A0554BD0072E638 /* Protocols */,
 			);
 			path = Onboarding;
-			sourceTree = "<group>";
-		};
-		C8BD875E2A0C243400CD803A /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				E49943F31AE6879C00BF9DE4 /* FirstInstall */,
-				21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */,
-				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
-				742BD99D2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift */,
-				43A5643423CD1E1B00B6857D /* Update */,
-			);
-			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		C8CE38B0265E71FE0009B09E /* Cells */ = {
@@ -11262,14 +11279,6 @@
 				E40A18FA1EDC73D5006B7F28 /* FirefoxBeta.entitlements */,
 			);
 			path = Entitlements;
-			sourceTree = "<group>";
-		};
-		E49943F31AE6879C00BF9DE4 /* FirstInstall */ = {
-			isa = PBXGroup;
-			children = (
-				435D7CC4246209AA0043ACB9 /* IntroViewController.swift */,
-			);
-			path = FirstInstall;
 			sourceTree = "<group>";
 		};
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
@@ -13754,6 +13763,7 @@
 				21B359C62AEAC20300FF09E3 /* TabsSectionManager.swift in Sources */,
 				21BFEEF52A040EF40033048D /* TabMigrationUtility.swift in Sources */,
 				A55319BB2B5D5A850051559F /* SearchSettingsAction.swift in Sources */,
+				810CD9C12BB346D800E290C2 /* OnboardingCardViewController.swift in Sources */,
 				C8A012F126AB07D70096A7A7 /* JumpBackInViewModel.swift in Sources */,
 				8A3EF8172A2FD2B900796E3A /* AdvancedAccountSettings.swift in Sources */,
 				EBB89509219398E500EB91A0 /* TabContentBlocker+ContentScript.swift in Sources */,
@@ -13892,7 +13902,7 @@
 				43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */,
 				8ADAE4202A33A0FD007BF926 /* SendFeedbackSetting.swift in Sources */,
 				C29B64812AD6959E00F3244B /* QRCodeCoordinator.swift in Sources */,
-				21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */,
+				21A7C45028353D0E0071D996 /* OnboardingBasicCardViewController.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				E1442FD3294782D9003680B0 /* UIView+Constraints.swift in Sources */,
@@ -14279,6 +14289,7 @@
 				8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */,
 				21A43CDD291461C700B1206D /* ReaderModeFontTypeButton.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
+				810CD9C32BB3484F00E290C2 /* OnboardingMultipleChoiceCardViewController.swift in Sources */,
 				DFD104682B2341F900938418 /* ProductAdsCache.swift in Sources */,
 				C2D71B992A384F6A003DEC7A /* ThemedLeftAlignedTableViewCell.swift in Sources */,
 				B28BF6602B7A9E4F006357CA /* FillAddressAutofillForm.swift in Sources */,
@@ -14314,6 +14325,7 @@
 				8AB30ECA2B6C03C700BD9A9B /* DataClearanceAnimation.swift in Sources */,
 				8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */,
 				43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */,
+				8187561A2BB4618500DCD1F3 /* OnboardingViewControllerState.swift in Sources */,
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
