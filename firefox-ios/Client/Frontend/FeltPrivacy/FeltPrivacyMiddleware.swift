@@ -20,8 +20,7 @@ class FeltPrivacyMiddleware {
         case PrivateModeUserAction.setPrivateModeTo(let context):
             let privateState = context.boolValue
             self.updateManagerWith(newState: privateState, for: uuid)
-            let newState = self.privacyStateManager.getPrivateThemeIsOn(for: uuid)
-            let newContext = BoolValueContext(boolValue: newState, windowUUID: uuid)
+            let newContext = BoolValueContext(boolValue: privateState, windowUUID: uuid)
             store.dispatch(PrivateModeMiddlewareAction.privateModeUpdated(newContext))
         default:
             break
