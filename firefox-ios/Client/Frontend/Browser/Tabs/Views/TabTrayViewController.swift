@@ -255,7 +255,7 @@ class TabTrayViewController: UIViewController,
         store.dispatch(ActiveScreensStateAction.showScreen(
             ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
         ))
-        let context = TabTrayPanelContext(panelType: tabTrayState.selectedPanel, windowUUID: windowUUID)
+        let context = ActionContext(windowUUID: windowUUID)
         store.dispatch(TabTrayAction.tabTrayDidLoad(context))
         let uuid = windowUUID
         store.subscribe(self, transform: {
