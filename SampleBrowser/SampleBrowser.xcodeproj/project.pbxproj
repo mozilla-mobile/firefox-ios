@@ -46,6 +46,8 @@
 		8ADF72CA2B73DB9700530E7A /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = 8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */; };
 		8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */; };
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
+		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
+		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +92,7 @@
 		8ADF72C52B73DB9700530E7A /* MainFrameAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MainFrameAtDocumentEnd.js; sourceTree = "<group>"; };
 		8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPage.swift; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
+		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A0F446E2B56EF1A00438589 /* WebEngine in Frameworks */,
+				E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +206,7 @@
 				8A4601EF2B0FE20700FFD17F /* LaunchScreen.storyboard */,
 				8A0F44882B5704C100438589 /* Model */,
 				8A0F44892B57050200438589 /* Networking */,
+				E189C24A2BB2D1140065CEF2 /* Dependency */,
 				8A4601E62B0FE20500FFD17F /* SceneDelegate.swift */,
 				1D1C32762B97EFD4006CF034 /* TelemetryHandler.swift */,
 				8A4602142B0FE40E00FFD17F /* UI */,
@@ -263,6 +268,15 @@
 			path = Scripts;
 			sourceTree = "<group>";
 		};
+		E189C24A2BB2D1140065CEF2 /* Dependency */ = {
+			isa = PBXGroup;
+			children = (
+				E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */,
+			);
+			name = Dependency;
+			path = ../../SampleComponentLibraryApp/SampleComponentLibraryApp/Dependency;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -281,6 +295,7 @@
 			name = SampleBrowser;
 			packageProductDependencies = (
 				8A0F446D2B56EF1A00438589 /* WebEngine */,
+				E132973B2BA9E71B0095FF61 /* ToolbarKit */,
 			);
 			productName = SampleBrowser;
 			productReference = 8A4601E12B0FE20500FFD17F /* SampleBrowser.app */;
@@ -357,6 +372,7 @@
 				8A0F447D2B56FD9600438589 /* SearchModel.swift in Sources */,
 				8A0F44852B56FFFC00438589 /* SearchTerm.swift in Sources */,
 				1D96A2D72BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift in Sources */,
+				E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */,
 				8A3DB32F2B5AD3D400F89705 /* SettingsCell.swift in Sources */,
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
 				8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */,
@@ -591,6 +607,10 @@
 		8A0F446D2B56EF1A00438589 /* WebEngine */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WebEngine;
+		};
+		E132973B2BA9E71B0095FF61 /* ToolbarKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ToolbarKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
