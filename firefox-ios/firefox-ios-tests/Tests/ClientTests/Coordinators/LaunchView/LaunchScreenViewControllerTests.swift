@@ -7,13 +7,16 @@ import XCTest
 @testable import Client
 
 final class LaunchScreenViewControllerTests: XCTestCase {
+    private var profile: MockProfile!
     private var viewModel: MockLaunchScreenViewModel!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        viewModel = MockLaunchScreenViewModel(profile: MockProfile())
+        profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        viewModel = MockLaunchScreenViewModel(profile: profile)
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 
@@ -61,6 +64,24 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertTrue(subject.view.subviews.isEmpty)
         subject.viewWillAppear(false)
         XCTAssertNotNil(subject.view.subviews[0])
+    }
+
+    // MARK: - Splash Screen
+    @MainActor
+    func testViewDidLoad_callsSplashScreenExperiment() async {
+        let subject = createSubject()
+        await subject.startSplashScreenExperiment()
+        XCTAssertEqual(viewModel.startSplashScreenExperiment, 1)
+    }
+
+    func testAddLaunchView_whenViewWillAppear_showsSplashScreenAnimation() {
+        let subject = LaunchScreenViewController(coordinator: coordinatorDelegate,
+                                                 viewModel: viewModel)
+        XCTAssertTrue(subject.view.subviews.isEmpty)
+        subject.viewWillAppear(false)
+        let launchScreenSubviews = subject.view.subviews[0].subviews
+        XCTAssertEqual(launchScreenSubviews.count, 2)
+        XCTAssertEqual(launchScreenSubviews[1].accessibilityIdentifier, "SplashScreenAnimation")
     }
 
     // MARK: - Helpers

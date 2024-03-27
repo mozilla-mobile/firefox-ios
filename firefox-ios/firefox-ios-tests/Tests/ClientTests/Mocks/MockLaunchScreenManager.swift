@@ -3,19 +3,23 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 @testable import Client
 
 class MockLaunchScreenViewModel: LaunchScreenViewModel {
     var introScreenManager: IntroScreenManager
     var updateViewModel: UpdateViewModel
     var surveySurfaceManager: SurveySurfaceManager
+    var notificationCenter: NotificationProtocol
     var startLoadingCalled = 0
+    var startSplashScreenExperiment = 0
     var mockLaunchType: LaunchType?
 
     override init(
         profile: Profile,
         messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
-        onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)
+        onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
@@ -23,6 +27,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
+        self.notificationCenter = notificationCenter
     }
 
     override func startLoading(appVersion: String) async {
@@ -32,5 +37,9 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         } else {
             delegate?.launchBrowser()
         }
+    }
+
+    override func startSplashScreenExperiment() async {
+        startSplashScreenExperiment += 1
     }
 }

@@ -130,6 +130,10 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct LaunchScreen {
+        public static let splashScreenAnimation = "SplashScreenAnimation"
+    }
+
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
         struct Homepage {
