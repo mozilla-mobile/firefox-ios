@@ -28,7 +28,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Variables
 
-    private var windowThemeState: [UUID: Theme] = [:] //LightTheme()
+    private var windowThemeState: [UUID: Theme] = [:]
     private var windows: [UUID: UIWindow] = [:]
     private var allWindowUUIDs: [UUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
@@ -222,7 +222,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func updateThemeBasedOnBrightness() {
-        // TODO: [8313] Revisit / fix.
+        // TODO: [8313] Regression-test system brightness theme changing.
         allWindowUUIDs.forEach { uuid in
             let currentValue = Float(UIScreen.main.brightness)
 
