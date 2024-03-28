@@ -21,7 +21,7 @@ public struct LinkButtonViewModel {
 
     public init(title: String,
                 a11yIdentifier: String,
-                font: UIFont? = nil,
+                font: UIFont? = FXFontStyles.Regular.callout.scaledFont(),
                 contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
                                                                                  leading: UX.horizontalInset,
                                                                                  bottom: UX.verticalInset,
