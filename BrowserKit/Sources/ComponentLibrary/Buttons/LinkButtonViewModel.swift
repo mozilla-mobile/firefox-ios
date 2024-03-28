@@ -4,6 +4,7 @@
 
 import UIKit
 import Foundation
+import Common
 
 /// The view model used to configure a `LinkButton`
 public struct LinkButtonViewModel {
@@ -14,13 +15,13 @@ public struct LinkButtonViewModel {
 
     public let title: String
     public let a11yIdentifier: String
-    public let fontSize: CGFloat
+    public let font: UIFont
     public let contentInsets: NSDirectionalEdgeInsets
     public let contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
 
     public init(title: String,
                 a11yIdentifier: String,
-                fontSize: CGFloat = 16,
+                font: UIFont = FXFontStyles.Regular.callout.scaledFont(),
                 contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
                                                                                  leading: UX.horizontalInset,
                                                                                  bottom: UX.verticalInset,
@@ -28,7 +29,7 @@ public struct LinkButtonViewModel {
                 contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
-        self.fontSize = fontSize
+        self.font = font
         self.contentInsets = contentInsets
         self.contentHorizontalAlignment = contentHorizontalAlignment
     }
