@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
+class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
     // MARK: - UX/UI
     struct UX {
         struct Measurements {
@@ -23,22 +23,27 @@ public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
 
     private lazy var containerView: UIView = .build { _ in }
 
-    lazy var imageView: UIImageView = .build { imageView in
+    private lazy var button: UIButton = .build { button in
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(self.buttonTapped), for: .touchUpInside)
+    }
+
+    private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: self.viewModel.info.imageID)
 //        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
     }
 
-//    private var descriptionLabel: UILabel = .build { label in
-//        label.numberOfLines = 0
-//        label.textAlignment = .center
-//        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-//                                                            size: UX.descriptionFontSize)
-//        label.adjustsFontForContentSizeCategory = true
-////        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
-//    }
+    private lazy var titleLabel: UILabel = .build { label in
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: 13)
+        label.text = self.viewModel.info.title
+//        label.accessibilityIdentifier = "\(self.viewModel.info.title)TitleLabel"
+    }
 
-    lazy var checkboxView: UIImageView = .build { imageView in
+    private lazy var checkboxView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: UX.Images.notSelected)
 //        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
@@ -73,11 +78,19 @@ public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
                 imageView.widthAnchor.constraint(equalToConstant: UX.Measurements.imageWidth),
                 imageView.heightAnchor.constraint(equalToConstant: UX.Measurements.imageHeight),
 
-                checkboxView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+                titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+                titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+
+                checkboxView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
                 checkboxView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
                 checkboxView.widthAnchor.constraint(equalToConstant: UX.Measurements.checkboxDimensions),
                 checkboxView.heightAnchor.constraint(equalToConstant: UX.Measurements.checkboxDimensions),
                 checkboxView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+                button.topAnchor.constraint(equalTo: containerView.topAnchor),
+                button.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                button.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                button.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
                 containerView.topAnchor.constraint(equalTo: self.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -89,16 +102,23 @@ public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
 
     private func addViews() {
         containerView.addSubview(imageView)
+        containerView.addSubview(titleLabel)
         containerView.addSubview(checkboxView)
+        containerView.addSubview(button)
         addSubview(containerView)
     }
 
-    func updateButtonState() {
+    func updateState() {
+        let checkImage = viewModel.isSelected ? UX.Images.selected : UX.Images.notSelected
+        checkboxView.image = UIImage(named: checkImage)
     }
 
     // MARK: - Actions
     @objc
-    func selected() {
+    func buttonTapped() {
+        print("test")
+        viewModel.isSelected.toggle()
+        updateState()
     }
 
     // MARK: - Theme

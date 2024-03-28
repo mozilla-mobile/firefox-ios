@@ -274,13 +274,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
-//                choiceButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 choiceButtonStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentStackView.leadingAnchor),
                 choiceButtonStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: 10),
-//                choiceButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
                 choiceButtonStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentStackView.trailingAnchor),
 
-                bottomButtonStackView.topAnchor.constraint(greaterThanOrEqualTo: choiceButtonStackView.bottomAnchor),
                 bottomButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 bottomButtonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
                 bottomButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
@@ -297,13 +294,14 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         contentStackView.addArrangedSubview(topStackView)
 
         viewModel.multipleChoiceButtons.forEach { model in
-            let buttonModel = OnboardingMultipleChoiceButtonViewModel(
-                isSelected: false,
-                info: model
+            choiceButtonStackView.addArrangedSubview(
+                OnboardingMultipleChoiceButtonView(
+                    viewModel: OnboardingMultipleChoiceButtonViewModel(
+                        isSelected: false,
+                        info: model
+                    )
+                )
             )
-
-            let buttonView = OnboardingMultipleChoiceButtonView(viewModel: buttonModel)
-            choiceButtonStackView.addArrangedSubview(buttonView)
         }
         contentStackView.addArrangedSubview(choiceButtonStackView)
 
