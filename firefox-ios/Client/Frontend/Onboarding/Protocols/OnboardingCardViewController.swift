@@ -6,6 +6,8 @@ import UIKit
 import Common
 
 class OnboardingCardViewController: UIViewController, Themeable {
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
     // MARK: - Themeable
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -15,10 +17,12 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     init(
         viewModel: OnboardingCardInfoModelProtocol,
+        windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 

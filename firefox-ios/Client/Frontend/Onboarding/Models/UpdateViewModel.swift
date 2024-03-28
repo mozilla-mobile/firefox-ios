@@ -109,7 +109,8 @@ class UpdateViewModel: OnboardingViewModelProtocol,
             } else {
                 availableCards.append(OnboardingBasicCardViewController(
                     viewModel: cardModel,
-                    delegate: delegate))
+                    delegate: delegate,
+                    windowUUID: window))
             }
         }
     }

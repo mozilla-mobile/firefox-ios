@@ -41,9 +41,6 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
 
-    let windowUUID: WindowUUID
-    var currentWindowUUID: UUID? { windowUUID }
-
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
@@ -150,9 +147,8 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         windowUUID: WindowUUID
     ) {
         self.delegate = delegate
-        self.windowUUID = windowUUID
 
-        super.init(viewModel: viewModel)
+        super.init(viewModel: viewModel, windowUUID: windowUUID)
     }
 
     required init?(coder: NSCoder) {

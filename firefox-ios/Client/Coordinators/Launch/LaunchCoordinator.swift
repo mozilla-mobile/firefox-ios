@@ -18,12 +18,10 @@ class LaunchCoordinator: BaseCoordinator,
     private let isIphone: Bool
     let windowUUID: WindowUUID
     weak var parentCoordinator: LaunchCoordinatorDelegate?
-    private var windowUUID: WindowUUID
 
     init(router: Router,
          windowUUID: WindowUUID,
          profile: Profile = AppContainer.shared.resolve(),
-         windowUUID: WindowUUID,
          isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone

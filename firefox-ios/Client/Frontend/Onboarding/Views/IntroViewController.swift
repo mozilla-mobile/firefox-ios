@@ -32,7 +32,6 @@ class IntroViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
-    let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var introViewControllerState: OnboardingViewControllerState?
