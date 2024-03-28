@@ -139,7 +139,8 @@
         "TopTabsTestIphone",
         "TrackingProtectionTests",
         "UrlBarTests",
-        "WhatsNewTest"
+        "WhatsNewTest",
+        "ZoomingTests"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
