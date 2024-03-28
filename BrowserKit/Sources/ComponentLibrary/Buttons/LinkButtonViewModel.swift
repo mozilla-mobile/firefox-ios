@@ -15,13 +15,13 @@ public struct LinkButtonViewModel {
 
     public let title: String
     public let a11yIdentifier: String
-    public let font: UIFont?
+    public let font: UIFont
     public let contentInsets: NSDirectionalEdgeInsets
     public let contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
 
     public init(title: String,
                 a11yIdentifier: String,
-                font: UIFont? = FXFontStyles.Regular.callout.scaledFont(),
+                font: UIFont = FXFontStyles.Regular.callout.scaledFont(),
                 contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
                                                                                  leading: UX.horizontalInset,
                                                                                  bottom: UX.verticalInset,
