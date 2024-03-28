@@ -118,10 +118,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
     }
 
-    private lazy var linkButton: LinkButton = .build { button in
-        button.addTarget(self, action: #selector(self.linkButtonAction), for: .touchUpInside)
-    }
-
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6816
     // This should not be calculated using scaling coefficients, but with some
     // version based on constrains of some kind. The ticket above ensures this work
@@ -272,9 +268,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
-                linkButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                linkButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-
                 buttonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 buttonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
                 buttonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
@@ -289,7 +282,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         topStackView.addArrangedSubview(titleLabel)
         topStackView.addArrangedSubview(descriptionLabel)
         contentStackView.addArrangedSubview(topStackView)
-        contentStackView.addArrangedSubview(linkButton)
 
         buttonStackView.addArrangedSubview(primaryButton)
         buttonStackView.addArrangedSubview(secondaryButton)
@@ -341,22 +333,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
     }
 
-    private func setupLinkButton() {
-        guard let buttonTitle = viewModel.link?.title else {
-            linkButton.isUserInteractionEnabled = false
-            linkButton.isHidden = true
-            return
-        }
-        let buttonViewModel = LinkButtonViewModel(
-            title: buttonTitle,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            font: FXFontStyles.Regular.callout.scaledFont(),
-            contentHorizontalAlignment: .center
-        )
-        linkButton.configure(viewModel: buttonViewModel)
-        linkButton.applyTheme(theme: themeManager.currentTheme)
-    }
-
     // MARK: - Button Actions
     @objc
     func primaryAction() {
@@ -389,9 +365,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
-        view.backgroundColor = .purple
 
         setupSecondaryButton()
-        setupLinkButton()
     }
 }
