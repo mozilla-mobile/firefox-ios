@@ -84,7 +84,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         highlightedBackgroundColor = theme.colors.actionSecondaryHover
         normalBackgroundColor = theme.colors.actionSecondary
-        foregroundColor = theme.colors.textOnLight
+        foregroundColor = theme.colors.textPrimary
 
         setNeedsUpdateConfiguration()
     }
