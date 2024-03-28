@@ -25,7 +25,7 @@ class RemoteTabsTableViewController: UITableViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     weak var remoteTabsPanel: RemoteTabsPanel?
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }

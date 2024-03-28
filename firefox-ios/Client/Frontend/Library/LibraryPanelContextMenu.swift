@@ -7,6 +7,7 @@ import Storage
 import Shared
 
 protocol LibraryPanelContextMenu {
+    var windowUUID: WindowUUID { get }
     func getSiteDetails(for indexPath: IndexPath) -> Site?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
     func getShareAction(site: Site, sourceView: UIView, delegate: LibraryPanelCoordinatorDelegate?) -> PhotonRowActions
@@ -28,18 +29,17 @@ extension LibraryPanelContextMenu {
     }
 
     func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        fatalError()
-//        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
-//
-//        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
-//        // TODO: [8313] Fix me
-//        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
-//        contextMenu.modalTransitionStyle = .crossDissolve
-//
-//        let generator = UIImpactFeedbackGenerator(style: .heavy)
-//        generator.impactOccurred()
-//
-//        return contextMenu
+        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
+
+        let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
+
+        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        contextMenu.modalTransitionStyle = .crossDissolve
+
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        return contextMenu
     }
 
     func getRecentlyClosedTabContexMenuActions(
