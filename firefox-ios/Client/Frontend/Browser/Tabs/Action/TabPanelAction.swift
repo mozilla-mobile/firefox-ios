@@ -122,6 +122,7 @@ enum TabPanelAction: Action {
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModelContext)
+    case didChangeTabPanel(TabDisplayModelContext)
     case refreshTab(RefreshTabContext) // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshInactiveTabs(RefreshInactiveTabsContext)
 
@@ -147,6 +148,7 @@ enum TabPanelAction: Action {
                 .hideUndoToast(let context),
                 .showShareSheet(let context as ActionContext),
                 .didLoadTabPanel(let context as ActionContext),
+                .didChangeTabPanel(let context as ActionContext),
                 .refreshTab(let context as ActionContext),
                 .refreshInactiveTabs(let context as ActionContext):
             return context.windowUUID
