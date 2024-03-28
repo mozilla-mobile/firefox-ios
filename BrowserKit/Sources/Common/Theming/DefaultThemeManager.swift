@@ -23,8 +23,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
 
         enum PrivateMode {
-            static let isOn = "profile.PrivateModeWindowStatus"
             static let byWindowUUID = "profile.PrivateModeWindowStatusByWindowUUID"
+
+            static let legacy_isOn = "profile.PrivateModeWindowStatus"
         }
     }
 
@@ -44,7 +45,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func privateModeIsOn(for window: UUID) -> Bool {
-        return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+        return getPrivateThemeIsOn(for: window)
     }
 
     public var systemThemeIsOn: Bool {
@@ -74,8 +75,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         self.userDefaults.register(defaults: [
             ThemeKeys.systemThemeIsOn: true,
-            ThemeKeys.NightMode.isOn: false,
-            ThemeKeys.PrivateMode.isOn: false,
+            ThemeKeys.NightMode.isOn: false
         ])
         // TODO: [8313] Moved the early setup and config code here to setWindow(). Confirm this won't cause issues.
 
@@ -192,7 +192,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func migrateSingleWindowPrivateDefaultsToMultiWindow(for window: UUID) {
         // Migrate old private setting to our window-based settings
-        let oldPrivateSetting = userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+        let oldPrivateSetting = userDefaults.bool(forKey: ThemeKeys.PrivateMode.legacy_isOn)
         let newSettings: KeyedPrivateModeFlags = [window.uuidString: NSNumber(value: oldPrivateSetting)]
         userDefaults.set(newSettings, forKey: ThemeKeys.PrivateMode.byWindowUUID)
     }
