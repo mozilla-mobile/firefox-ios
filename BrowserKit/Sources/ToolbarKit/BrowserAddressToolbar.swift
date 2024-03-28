@@ -11,7 +11,7 @@ import Common
 /// |   actions   |            |           [ actions ] | actions  |      |
 /// +-------------+------------+-----------------------+----------+------+
 /// +------------------------progress------------------------------------+
-public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
+public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let horizontalSpace: CGFloat = 8
@@ -21,13 +21,15 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         static let buttonSize = CGSize(width: 40, height: 40)
     }
 
+    private weak var toolbarDelegate: AddressToolbarDelegate?
+
     private lazy var navigationActionStack: UIStackView = .build()
 
     private lazy var locationContainer: UIView = .build { view in
         view.layer.cornerRadius = UX.cornerRadius
     }
 
-    private lazy var locationView: UIView = .build()
+    private lazy var locationView: LocationView = .build()
     private lazy var locationDividerView: UIView = .build()
 
     private lazy var pageActionStack: UIStackView = .build { view in
@@ -48,8 +50,13 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState) {
+    public func configure(state: AddressToolbarState,
+                          toolbarDelegate: AddressToolbarDelegate) {
         updateActions(state: state)
+
+        self.toolbarDelegate = toolbarDelegate
+        locationView.configure(state.url?.absoluteString, delegate: self)
+
         setNeedsLayout()
         layoutIfNeeded()
     }
@@ -59,6 +66,14 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         backgroundColor = theme.colors.layer2
         locationContainer.backgroundColor = theme.colors.layerSearch
         locationDividerView.backgroundColor = theme.colors.layer2
+    }
+
+    override public func becomeFirstResponder() -> Bool {
+        return locationView.becomeFirstResponder()
+    }
+
+    override public func resignFirstResponder() -> Bool {
+        return locationView.resignFirstResponder()
     }
 
     // MARK: - Private
@@ -165,5 +180,20 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable {
         // Page action spacing
         let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty
         dividerWidthConstraint?.constant = hasPageActions ? UX.dividerWidth : 0
+    }
+
+    // MARK: - LocationViewDelegate
+    func locationViewDidEnterText(_ text: String) {
+        toolbarDelegate?.searchSuggestions(searchTerm: text)
+    }
+
+    func locationViewDidBeginEditing(_ text: String) {
+        toolbarDelegate?.openSuggestions(searchTerm: text.lowercased())
+    }
+
+    func locationViewShouldSearchFor(_ text: String) {
+        guard !text.isEmpty else { return }
+
+        toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
     }
 }

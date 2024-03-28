@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 import Shared
 
-class OnboardingCardViewController: UIViewController, Themeable {
+class OnboardingBasicCardViewController: OnboardingCardViewController {
     struct UX {
         static let stackViewSpacingWithLink: CGFloat = 15
         static let stackViewSpacingWithoutLink: CGFloat = 24
@@ -20,7 +20,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-        static let buttonFontSize: CGFloat = 16
         static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
@@ -40,11 +39,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
-    var viewModel: OnboardingCardInfoModelProtocol
     weak var delegate: OnboardingCardDelegate?
-    var notificationCenter: NotificationProtocol
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
 
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
@@ -148,16 +143,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // MARK: - Initializers
     init(
         viewModel: OnboardingCardInfoModelProtocol,
-        delegate: OnboardingCardDelegate?,
-        themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        delegate: OnboardingCardDelegate?
     ) {
-        self.viewModel = viewModel
         self.delegate = delegate
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(viewModel: viewModel)
     }
 
     required init?(coder: NSCoder) {
@@ -360,7 +350,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         let buttonViewModel = LinkButtonViewModel(
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            fontSize: UX.buttonFontSize,
+            font: FXFontStyles.Regular.callout.scaledFont(),
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)
@@ -395,7 +385,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     // MARK: - Themeable
-    func applyTheme() {
+    override func applyTheme() {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary

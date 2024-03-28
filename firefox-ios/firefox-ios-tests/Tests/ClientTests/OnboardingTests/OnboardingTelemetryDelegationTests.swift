@@ -33,7 +33,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     func testOnboardingCard_callsPrimaryButtonTap() {
         let subject = createSubject()
-        guard let result = subject.pageController.viewControllers?.first as? OnboardingCardViewController else {
+        guard let result = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -45,7 +45,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
 
     func testOnboardingCard_callsSecondaryButtonTap() {
         let subject = createSubject()
-        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingCardViewController else {
+        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -55,7 +55,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
             completionIfLastCard: { })
         subject.pageChanged(from: firstVC.viewModel.name)
         guard let result = subject.pageController
-            .viewControllers?[subject.pageControl.currentPage] as? OnboardingCardViewController else {
+            .viewControllers?[subject.pageControl.currentPage] as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
@@ -86,7 +86,7 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
         let viewModel = IntroViewModel(profile: MockProfile(),
                                        model: onboardingViewModel,
                                        telemetryUtility: telemetryUtility)
-        let subject = IntroViewController(viewModel: viewModel)
+        let subject = IntroViewController(viewModel: viewModel, windowUUID: .XCTestDefaultUUID)
 
         subject.viewDidLoad()
         trackForMemoryLeaks(subject, file: file, line: line)
