@@ -136,15 +136,15 @@ export class FormAutofillSection {
    * specific case. Return the original value in the default case.
    * @param {String} value
    *        The original field value.
-   * @param {Object} fieldDetail
+   * @param {Object} _fieldName
    *        A fieldDetail of the related element.
-   * @param {HTMLElement} element
+   * @param {HTMLElement} _element
    *        A element for checking converting value.
    *
    * @returns {String}
    *          A string of the converted value.
    */
-  computeFillingValue(value, fieldName, element) {
+  computeFillingValue(value, _fieldName, _element) {
     return value;
   }
 
