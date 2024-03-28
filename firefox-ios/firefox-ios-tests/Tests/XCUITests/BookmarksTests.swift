@@ -182,14 +182,17 @@ class BookmarksTests: BaseTestCase {
         app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 2)
         navigator.nowAt(MobileBookmarks)
+
+        // Now remove the folder
+        navigator.performAction(Action.RemoveItemMobileBookmarks)
         if #available (iOS 17, *) {
-            // Now remove the folder
-            navigator.performAction(Action.RemoveItemMobileBookmarks)
             mozWaitForElementToExist(app.buttons["Remove Test Folder"])
-            navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
-            // Verify that there are only 1 cell (desktop bookmark folder)
-            checkItemsInBookmarksList(items: 1)
+        } else {
+            mozWaitForElementToExist(app.buttons["Delete Test Folder"])
         }
+        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
+        // Verify that there are only 1 cell (desktop bookmark folder)
+        checkItemsInBookmarksList(items: 1)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306915
