@@ -459,6 +459,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     // MARK: - Inactive tabs
     override func getInactiveTabs() -> [Tab] {
+        let inactiveTabsEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs)
+        guard inactiveTabsEnabled ?? true else { return [] }
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
     }
 
