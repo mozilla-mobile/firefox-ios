@@ -129,7 +129,6 @@ class FakespotMessageCardViewModel: ObservableObject {
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
-        static let linkFontSize: CGFloat = 12
         static let buttonFontSize: CGFloat = 16
         static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
@@ -295,7 +294,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             let linkButtonViewModel = LinkButtonViewModel(
                 title: linkText,
                 a11yIdentifier: viewModel.a11yLinkActionIdentifier ?? "",
-                fontSize: UX.linkFontSize,
+                font: FXFontStyles.Regular.caption1.scaledFont(),
                 contentHorizontalAlignment: .leading)
             linkButton.configure(viewModel: linkButtonViewModel)
             if linkButton.superview == nil {

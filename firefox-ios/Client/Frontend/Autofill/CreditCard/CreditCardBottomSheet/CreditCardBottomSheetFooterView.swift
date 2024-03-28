@@ -9,7 +9,6 @@ import Shared
 
 class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let manageCardsButtonFontSize: CGFloat = 16
         static let manageCardsButtonLeadingSpace: CGFloat = 0
         static let manageCardsButtonTopSpace: CGFloat = 24
         static let manageCardsButtonBottomSpace: CGFloat = 24
@@ -37,7 +36,7 @@ class CreditCardBottomSheetFooterView: UITableViewHeaderFooterView, ReusableCell
         let buttonViewModel = LinkButtonViewModel(
             title: .CreditCard.UpdateCreditCard.ManageCardsButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.manageCardsButton,
-            fontSize: UX.manageCardsButtonFontSize,
+            font: FXFontStyles.Regular.callout.scaledFont(),
             contentHorizontalAlignment: .left
         )
 

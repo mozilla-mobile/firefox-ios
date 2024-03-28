@@ -32,7 +32,6 @@ public struct FakespotActionFooterViewModel {
 public final class FakespotActionFooterView: UIView, ThemeApplicable {
     private struct UX {
         static let labelSize: CGFloat = 13
-        static let buttonSize: CGFloat = 13
         static let buttonInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 17, trailing: 0)
     }
 
@@ -69,7 +68,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         let linkButtonViewModel = LinkButtonViewModel(
             title: viewModel.actionTitle,
             a11yIdentifier: viewModel.a11yActionIdentifier,
-            fontSize: UX.buttonSize,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.buttonInsets,
             contentHorizontalAlignment: .leading
         )

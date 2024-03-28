@@ -20,7 +20,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-        static let buttonFontSize: CGFloat = 16
         static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
         static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
@@ -351,7 +350,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         let buttonViewModel = LinkButtonViewModel(
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            fontSize: UX.buttonFontSize,
+            font: FXFontStyles.Regular.callout.scaledFont(),
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)

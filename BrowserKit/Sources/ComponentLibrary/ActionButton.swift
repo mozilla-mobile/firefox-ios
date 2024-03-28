@@ -35,8 +35,7 @@ public class ActionButton: ResizableButton {
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
-            outgoing.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   size: viewModel.fontSize)
+            outgoing.font = FXFontStyles.Regular.subheadline.scaledFont()
             return outgoing
         }
         configuration = updatedConfiguration
