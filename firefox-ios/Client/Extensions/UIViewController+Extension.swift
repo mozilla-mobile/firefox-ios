@@ -155,10 +155,3 @@ extension UIViewController {
         loggerViewWillAppear(animated)
     }
 }
-
-// TODO: [8313] Revisit.
-//extension UIViewController: ThemeUUIDIdentifiable {
-//    public var currentWindowUUID: UUID? {
-//        return (view as ThemeUUIDIdentifiable).currentWindowUUID
-//    }
-//}
