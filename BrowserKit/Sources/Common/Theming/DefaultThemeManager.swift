@@ -4,6 +4,8 @@
 
 import UIKit
 
+typealias KeyedPrivateModeFlags = [String: NSNumber]
+
 /// The `ThemeManager` will be responsible for providing the theme throughout the app
 public final class DefaultThemeManager: ThemeManager, Notifiable {
     // These have been carried over from the legacy system to maintain backwards compatibility
@@ -21,8 +23,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
 
         enum PrivateMode {
-            // TODO: [8313] Need to consider "migration", how this will work for users will older key present but not this one
             static let isOn = "profile.PrivateModeWindowStatus"
+            static let byWindowUUID = "profile.PrivateModeWindowStatusByWindowUUID"
         }
     }
 
@@ -137,15 +139,26 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func setPrivateTheme(isOn: Bool, for window: UUID) {
-        guard userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn) != isOn else { return }
+        let currentSetting = getPrivateThemeIsOn(for: window)
+        guard currentSetting != isOn else { return }
 
-        userDefaults.set(isOn, forKey: ThemeKeys.PrivateMode.isOn)
+        var settings: KeyedPrivateModeFlags
+        = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags ?? [:]
+
+        settings[window.uuidString] = NSNumber(value: isOn)
+        userDefaults.set(settings, forKey: ThemeKeys.PrivateMode.byWindowUUID)
 
         updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
     }
 
     public func getPrivateThemeIsOn(for window: UUID) -> Bool {
-        return userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+        let settings = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags
+        if settings == nil {
+            migrateSingleWindowPrivateDefaultsToMultiWindow(for: window)
+        }
+
+        let boxedBool = settings?[window.uuidString] as? NSNumber
+        return boxedBool?.boolValue ?? false
     }
 
     public func setAutomaticBrightness(isOn: Bool) {
@@ -176,6 +189,13 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     // MARK: - Private methods
+
+    private func migrateSingleWindowPrivateDefaultsToMultiWindow(for window: UUID) {
+        // Migrate old private setting to our window-based settings
+        let oldPrivateSetting = userDefaults.bool(forKey: ThemeKeys.PrivateMode.isOn)
+        let newSettings: KeyedPrivateModeFlags = [window.uuidString: NSNumber(value: oldPrivateSetting)]
+        userDefaults.set(newSettings, forKey: ThemeKeys.PrivateMode.byWindowUUID)
+    }
 
     private func updateSavedTheme(to newTheme: ThemeType) {
         // We never want to save the private theme because it's meant to override
