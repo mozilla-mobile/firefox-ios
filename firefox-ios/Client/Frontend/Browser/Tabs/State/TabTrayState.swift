@@ -101,7 +101,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 selectedPanel: panelType,
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount)
-        case TabPanelAction.didLoadTabPanel(let context):
+        case TabPanelAction.didChangeTabPanel(let context):
             let tabState = context.tabDisplayModel
             let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
             return TabTrayState(windowUUID: state.windowUUID,
