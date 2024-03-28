@@ -210,9 +210,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-        
-        // TODO: [8313] This appears to be working correctly but the status bar is not updated as expected. Revisit.
-        windows[window]?.overrideUserInterfaceStyle = currentTheme(for: window).type.getInterfaceStyle()
+
+        let style = self.currentTheme(for: window).type.getInterfaceStyle()
+        self.windows[window]?.overrideUserInterfaceStyle = style
 
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)

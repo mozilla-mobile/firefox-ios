@@ -2089,6 +2089,7 @@ class BrowserViewController: UIViewController,
     func applyTheme() {
         let currentTheme = currentTheme()
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
+        statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
