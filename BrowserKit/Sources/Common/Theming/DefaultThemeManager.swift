@@ -190,7 +190,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-
+        
+        // TODO: [8313] This appears to be working correctly but the status bar is not updated as expected. Revisit.
         windows[window]?.overrideUserInterfaceStyle = currentTheme(for: window).type.getInterfaceStyle()
 
         mainQueue.ensureMainThread { [weak self] in
