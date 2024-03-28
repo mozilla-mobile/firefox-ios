@@ -197,6 +197,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .notifications: return ImageIdentifiers.Onboarding.HeaderImages.notification
         case .setToDock: return ImageIdentifiers.Onboarding.HeaderImages.setToDock
         case .searchWidget: return ImageIdentifiers.Onboarding.HeaderImages.searchWidget
+        case .themeing: return ImageIdentifiers.Onboarding.HeaderImages.theming
+        case .toolbar: return ImageIdentifiers.Onboarding.HeaderImages.toolbar
         // Challenge the Default experiment
         case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
         case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome

@@ -49,6 +49,8 @@ public struct ImageIdentifiers {
             public static let notification = "onboardingNotification"
             public static let searchWidget = "onboardingSearchWidget"
             public static let setToDock = "onboardingDock"
+            public static let theming = "onboardingThemeing"
+            public static let toolbar = "onboardingThemeing"
         }
 
         public struct MultipleChoiceButtonImages {

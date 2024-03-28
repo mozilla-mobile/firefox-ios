@@ -10,15 +10,14 @@ public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
     // MARK: - UX/UI
     struct UX {
         struct Measurements {
-            static let padding: CGFloat = 8
             static let imageWidth: CGFloat = 60
             static let imageHeight: CGFloat = 97
             static let checkboxDimensions: CGFloat = 24
         }
 
         struct Images {
-            static let selected = "test"
-            static let notSelected = "test"
+            static let selected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkFilled
+            static let notSelected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty
         }
     }
 
@@ -41,14 +40,8 @@ public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
 
     lazy var checkboxView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty)
+        imageView.image = UIImage(named: UX.Images.notSelected)
 //        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
-    }
-
-    lazy var stackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.distribution = .fill
-        stack.axis = .vertical
     }
 
     // MARK: - Properties
@@ -72,29 +65,31 @@ public class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
     private func setupLayout() {
         addViews()
 
-        stackView.spacing = 4
-
         NSLayoutConstraint.activate(
             [
+                imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 imageView.widthAnchor.constraint(equalToConstant: UX.Measurements.imageWidth),
                 imageView.heightAnchor.constraint(equalToConstant: UX.Measurements.imageHeight),
 
+                checkboxView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 5),
+                checkboxView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
                 checkboxView.widthAnchor.constraint(equalToConstant: UX.Measurements.checkboxDimensions),
                 checkboxView.heightAnchor.constraint(equalToConstant: UX.Measurements.checkboxDimensions),
+                checkboxView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
-                stackView.topAnchor.constraint(equalTo: self.topAnchor),
-                stackView.leftAnchor.constraint(equalTo: self.leftAnchor),
-                stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-                stackView.rightAnchor.constraint(equalTo: self.rightAnchor),
+                containerView.topAnchor.constraint(equalTo: self.topAnchor),
+                containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+                containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             ]
         )
     }
 
     private func addViews() {
-        stackView.addArrangedSubview(imageView)
-//        stackView.addArrangedSubview(descriptionLabel)
-//        stackView.addArrangedSubview(checkboxView)
-        containerView.addSubview(stackView)
+        containerView.addSubview(imageView)
+        containerView.addSubview(checkboxView)
         addSubview(containerView)
     }
 

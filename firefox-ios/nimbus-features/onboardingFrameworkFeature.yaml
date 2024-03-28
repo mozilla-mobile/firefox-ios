@@ -64,7 +64,7 @@ features:
               order: 5
               title: Onboarding/Onboarding.Customization.Theme.Title.v123
               body: Onboarding/Onboarding.Customization.Theme.Description.v123
-              image: welcome-globe
+              image: themeing
               link:
                 title: Onboarding/Onboarding.Welcome.Link.Action.v114
                 url: "https://www.mozilla.org/privacy/firefox/"
@@ -93,7 +93,7 @@ features:
               order: 7
               title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
               body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
-              image: welcome-globe
+              image: themeing
               link:
                 title: Onboarding/Onboarding.Welcome.Link.Action.v114
                 url: "https://www.mozilla.org/privacy/firefox/"
@@ -430,6 +430,12 @@ enums:
         description: >
           Corresponding to the fox search widget image
       welcome-globe:
+        description: >
+          Corresponding to the fox world image
+      themeing:
+        description: >
+          Corresponding to the fox world image
+      toolbar:
         description: >
           Corresponding to the fox world image
   OnboardingCardType:

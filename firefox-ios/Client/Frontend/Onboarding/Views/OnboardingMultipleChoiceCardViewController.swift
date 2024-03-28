@@ -9,7 +9,7 @@ import Shared
 
 class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     struct UX {
-        static let stackViewSpacingWithoutLink: CGFloat = 24
+        static let stackViewSpacingWithoutLink: CGFloat = 5
         static let stackViewSpacingButtons: CGFloat = 16
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
@@ -100,7 +100,8 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
     lazy var choiceButtonStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
-        stack.distribution = .equalSpacing
+        stack.distribution = .equalCentering
+        stack.alignment = .center
         stack.axis = .horizontal
     }
 
@@ -209,8 +210,9 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
+                topStackView.setCustomSpacing(10, after: imageView)
                 topStackView.spacing = UX.stackViewSpacingWithoutLink
-                choiceButtonStackView.spacing = 0
+                choiceButtonStackView.spacing = 36
                 bottomButtonStackView.spacing = UX.stackViewSpacingButtons
                 scrollViewVerticalPadding = UX.scrollViewVerticalPadding
                 topPadding = view.frame.height * 0.1
@@ -272,10 +274,13 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
-                choiceButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                choiceButtonStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor),
-                choiceButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+//                choiceButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                choiceButtonStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentStackView.leadingAnchor),
+                choiceButtonStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: 10),
+//                choiceButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+                choiceButtonStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentStackView.trailingAnchor),
 
+                bottomButtonStackView.topAnchor.constraint(greaterThanOrEqualTo: choiceButtonStackView.bottomAnchor),
                 bottomButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 bottomButtonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
                 bottomButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
