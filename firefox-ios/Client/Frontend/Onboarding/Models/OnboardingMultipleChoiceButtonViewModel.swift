@@ -6,8 +6,10 @@ import Foundation
 
 class OnboardingMultipleChoiceButtonViewModel {
     var isSelected: Bool
+    let info: OnboardingMultipleChoiceButtonModel
 
-    init(isSelected: Bool) {
+    init(isSelected: Bool, info: OnboardingMultipleChoiceButtonModel) {
         self.isSelected = isSelected
+        self.info = info
     }
 }

@@ -52,11 +52,13 @@ public struct ImageIdentifiers {
         }
 
         public struct MultipleChoiceButtonImages {
-            public static let themeSystem = "onboardingDock"
-            public static let themeDark = "onboardingDock"
-            public static let themeLight = "onboardingDock"
-            public static let toolbarTop = "onboardingDock"
-            public static let toolbarBottom = "onboardingDock"
+            public static let themeSystem = "onboardingThemeSystem"
+            public static let themeDark = "onboardingThemeDark"
+            public static let themeLight = "onboardingThemeLight"
+            public static let toolbarTop = "onboardingToolbarIconTop"
+            public static let toolbarBottom = "onboardingToolbarIconBottom"
+            public static let checkmarkEmpty = "onboardingCheckmarkEmpty"
+            public static let checkmarkFilled = "onboardingCheckmarkFilled"
         }
 
         public struct ChallengeTheDefault {
