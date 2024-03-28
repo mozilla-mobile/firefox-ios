@@ -547,6 +547,9 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
               // Fire 'change' event to notify client-side validation on this field.
               usernameField.dispatchEvent(new Event("change"));
             }
+            // When the keyboard steals focus and gives it back,
+            // focusin is not triggered on the input it yields focus back to.
+            usernameField.focus();
           }
         }
         if (passwordField.value != selectedLogin.password) {
@@ -557,6 +560,9 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
             // Fire 'change' event to notify client-side validation on this field.
             passwordField.dispatchEvent(new Event("change"));
           }
+          // When the keyboard steals focus and gives it back,
+          // focusin is not triggered on the input it yields focus back to.
+          passwordField.focus();
         }
         didFillForm = true;
       } else if (selectedLogin && !autofillForm) {
