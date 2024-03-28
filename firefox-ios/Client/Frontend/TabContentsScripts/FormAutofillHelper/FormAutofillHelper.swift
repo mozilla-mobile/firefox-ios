@@ -219,8 +219,6 @@ class FormAutofillHelper: TabContentScript {
         }
     }
 
-<<<<<<< HEAD
-=======
     static func injectionJSONBuilder(address: UnencryptedAddressFields) -> [String: Any] {
         let sanitizedOrganization = address.organization.htmlEntityEncodedString
         let sanitizedStreetAddress = address.streetAddress.htmlEntityEncodedString
@@ -248,7 +246,6 @@ class FormAutofillHelper: TabContentScript {
         return injectionJSON
     }
 
->>>>>>> ff1ffba68 (Add FXIOS-8660 missing address fields ( `tel` and `addressLevel3`) (#19223))
     static func injectionJSONBuilder(card: UnencryptedCreditCardFields) -> [String: Any] {
         let sanitizedName = card.ccName.htmlEntityEncodedString
         let sanitizedNumber = card.ccNumber.htmlEntityEncodedString

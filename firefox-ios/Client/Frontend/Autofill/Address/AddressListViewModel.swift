@@ -62,8 +62,6 @@ class AddressListViewModel: ObservableObject {
             }
         }
     }
-<<<<<<< HEAD
-=======
 
     /// Converts an Address object to UnencryptedAddressFields.
     /// - Parameter address: The address to be converted.
@@ -83,10 +81,9 @@ class AddressListViewModel: ObservableObject {
 
     // MARK: - Handle Address Selection
 
-        /// Handles the selection of an address.
-        /// - Parameter address: The selected address.
-        func handleAddressSelection(_ address: Address) {
-            addressSelectionCallback?(fromAddress(address))
-        }
->>>>>>> ff1ffba68 (Add FXIOS-8660 missing address fields ( `tel` and `addressLevel3`) (#19223))
+    /// Handles the selection of an address.
+    /// - Parameter address: The selected address.
+    func handleAddressSelection(_ address: Address) {
+        addressSelectionCallback?(fromAddress(address))
+    }
 }
