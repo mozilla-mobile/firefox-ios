@@ -77,7 +77,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             ThemeKeys.systemThemeIsOn: true,
             ThemeKeys.NightMode.isOn: false
         ])
-        // TODO: [8313] Moved the early setup and config code here to setWindow(). Confirm this won't cause issues.
 
         setupNotifications(forObserver: self,
                            observing: [UIScreen.brightnessDidChangeNotification,

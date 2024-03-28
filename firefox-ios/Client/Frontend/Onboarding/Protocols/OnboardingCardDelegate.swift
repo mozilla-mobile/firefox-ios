@@ -97,8 +97,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
 
         let instructionsVC = OnboardingInstructionPopupViewController(
             viewModel: popupViewModel,
-            /* TODO: [8313] MUST FIX. */
-            windowUUID: UUID(),
+            windowUUID: windowUUID,
             buttonTappedFinishFlow: {
                 self.advance(
                     numberOfPages: 1,

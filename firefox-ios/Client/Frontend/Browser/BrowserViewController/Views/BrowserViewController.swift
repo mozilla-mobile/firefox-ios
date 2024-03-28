@@ -2103,7 +2103,6 @@ class BrowserViewController: UIViewController,
             $0.applyTheme(theme: currentTheme)
         }
 
-        // TODO: [8313] This fixes a bug that prevents the URL bar from being updated correctly. May need to revisit.
         let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
         let isPrivate = (currentTheme.type == .privateMode)
         ui.forEach { $0?.applyUIMode(isPrivate: isPrivate, theme: currentTheme) }

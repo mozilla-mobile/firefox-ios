@@ -61,7 +61,6 @@ extension UIViewController {
         vcBeingPresented: UIViewController,
         topTabsVisible: Bool
     ) {
-        // TODO: [8313] Need to test this and revisit.
         guard let uuid = (view as ThemeUUIDIdentifiable).currentWindowUUID else { return }
 
         let vcToPresent = vcBeingPresented
