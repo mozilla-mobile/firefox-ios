@@ -25,7 +25,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         enum PrivateMode {
             static let byWindowUUID = "profile.PrivateModeWindowStatusByWindowUUID"
 
-            static let legacy_isOn = "profile.PrivateModeWindowStatus"
+            static let legacy_isOn = "profile.PrivateModeStatus"
         }
     }
 
