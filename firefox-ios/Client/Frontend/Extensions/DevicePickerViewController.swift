@@ -66,7 +66,6 @@ class DevicePickerViewController: UITableViewController {
     private var notification: Any?
     private var loadingState = LoadingState.loading
 
-    // TODO: [8313] Revisit this UUID here!
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
@@ -134,7 +133,7 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private func currentTheme() -> Theme {
-        // TODO: [8313] Revisit.
+        // TODO: [8313] Revisit. This UUID will be nil when used in extension, need to consider how to handle that.
         guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
         return themeManager.currentTheme(for: uuid)
     }
