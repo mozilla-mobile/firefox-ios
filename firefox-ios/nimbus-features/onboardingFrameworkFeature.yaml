@@ -93,7 +93,7 @@ features:
               order: 7
               title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
               body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
-              image: themeing
+              image: toolbar
               link:
                 title: Onboarding/Onboarding.Welcome.Link.Action.v114
                 url: "https://www.mozilla.org/privacy/firefox/"
