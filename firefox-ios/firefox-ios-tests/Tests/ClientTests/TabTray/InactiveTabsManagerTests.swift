@@ -71,27 +71,21 @@ final class InactiveTabsManagerTests: XCTestCase {
         var tabs = [Tab]()
         for _ in  0..<amountOfRegularTabs {
             let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-            tab.sessionData = createSessionData(useInactiveTimestamp: false)
             tabs.append(tab)
         }
 
         for _ in  0..<amountOfPrivateTabs {
             let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), isPrivate: true)
-            tab.sessionData = createSessionData(useInactiveTimestamp: false)
             tabs.append(tab)
         }
 
         for _ in 0..<amountOfInactiveTabs {
             let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-            tab.sessionData = createSessionData(useInactiveTimestamp: true)
+            let lastExecutedDate = Calendar.current.add(numberOfDays: -15, to: Date())
+            tab.lastExecutedTime = lastExecutedDate?.toTimestamp()
             tabs.append(tab)
         }
 
         return tabs
-    }
-
-    private func createSessionData(useInactiveTimestamp: Bool) -> LegacySessionData {
-        let timestamp = useInactiveTimestamp ? twentyDaysOldTime.toTimestamp() : Date.now()
-        return LegacySessionData(currentPage: 0, urls: [], lastUsedTime: timestamp)
     }
 }

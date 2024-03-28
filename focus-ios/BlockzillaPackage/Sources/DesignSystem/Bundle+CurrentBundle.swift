@@ -11,9 +11,7 @@ import Foundation
 private class CurrentBundleFinder {}
 
 extension Foundation.Bundle {
-
     static var myModule: Bundle = {
-
         // Name of the target
         let bundleName = "DesignSystem_DesignSystem"
         // Name of Package prefixed by LocalPackages_
@@ -47,7 +45,5 @@ extension Foundation.Bundle {
         }
 
         return .module
-
     }()
-
 }

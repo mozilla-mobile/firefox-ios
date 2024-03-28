@@ -29,8 +29,9 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        if let currentTab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(currentTab)
+        if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
+            UIApplication.shared.open(url)
+            return nil
         }
 
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
@@ -42,7 +43,9 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        newTab.url = URL(string: "about:blank")
+        if navigationAction.request.url == nil {
+            newTab.url = URL(string: "about:blank")
+        }
 
         return newTab.webView
     }
@@ -282,7 +285,7 @@ extension BrowserViewController: WKUIDelegate {
                         image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                         identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                     ) { _ in
-                        self.removeBookmark(url: url.absoluteString)
+                        self.removeBookmark(url: url, title: elements.title)
                         TelemetryWrapper.recordEvent(category: .action,
                                                      method: .delete,
                                                      object: .bookmark,
@@ -633,6 +636,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 } else if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
                         if isAppInstalled {
+                            webView.reload()
                            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
                         }
                     }
@@ -672,6 +676,9 @@ extension BrowserViewController: WKNavigationDelegate {
     ) {
         let response = navigationResponse.response
         let responseURL = response.url
+
+        tabManager[webView]?.mimeType = response.mimeType
+        notificationCenter.post(name: .TabMimeTypeDidSet)
 
         var request: URLRequest?
         if let url = responseURL {
@@ -1078,5 +1085,15 @@ extension WKNavigationAction {
         } else {
             return false
         }
+    }
+
+    var canOpenExternalApp: Bool {
+        guard let urlShortDomain = request.url?.shortDomain else { return false }
+
+        if let url = URL(string: "\(urlShortDomain)://"), UIApplication.shared.canOpenURL(url) {
+            return true
+        }
+
+        return false
     }
 }

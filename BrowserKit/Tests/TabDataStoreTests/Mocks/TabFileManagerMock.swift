@@ -22,6 +22,7 @@ class TabFileManagerMock: TabFileManager {
     var fileExists = false
     var removeFileAtCalledCount = 0
     var removeAllFilesAtCalledCount = 0
+    var removeFileAtPathCalledCount = 0
 
     func tabSessionDataDirectory() -> URL? {
         tabSessionDataDirectoryCalledCount += 1
@@ -47,6 +48,10 @@ class TabFileManagerMock: TabFileManager {
 
     func removeAllFilesAt(directory: URL) {
         removeAllFilesAtCalledCount += 1
+    }
+
+    func removeFileAt(path: URL) {
+        removeFileAtPathCalledCount += 1
     }
 
     func fileExists(atPath pathURL: URL) -> Bool {

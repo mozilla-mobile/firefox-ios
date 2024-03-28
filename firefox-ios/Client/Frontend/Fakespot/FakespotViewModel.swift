@@ -373,6 +373,7 @@ class FakespotViewModel {
     }
 
     func fetchProductAnalysis(showLoading: Bool = true) async {
+        let windowUUID = tabManager.windowUUID
         if showLoading { state = .loading }
         do {
             let product = try await shoppingProduct.fetchProductAnalysisData()
@@ -403,7 +404,8 @@ class FakespotViewModel {
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
 
-            store.dispatch(FakespotAction.adsExposureEventSendFor(productId: productId))
+            let context = FakespotProductContext(productId: productId, tabUUID: nil, windowUUID: windowUUID)
+            store.dispatch(FakespotAction.adsExposureEventSendFor(context))
         } catch {
             state = .error(error)
         }
@@ -540,7 +542,8 @@ class FakespotViewModel {
         stopTimer()
 
         guard let productId = shoppingProduct.product?.id else { return }
-        store.dispatch(FakespotAction.adsImpressionEventSendFor(productId: productId))
+        let context = FakespotProductContext(productId: productId, tabUUID: nil, windowUUID: tabManager.windowUUID)
+        store.dispatch(FakespotAction.adsImpressionEventSendFor(context))
         isViewVisible = false
     }
 

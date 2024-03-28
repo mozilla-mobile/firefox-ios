@@ -542,6 +542,9 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         }).items
         actions.append(removeAction)
 
+        let cell = tableView.cellForRow(at: indexPath)
+        actions.append(getShareAction(site: site, sourceView: cell ?? self.view, delegate: bookmarkCoordinatorDelegate))
+
         return actions
     }
 }

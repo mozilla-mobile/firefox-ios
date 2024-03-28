@@ -98,9 +98,15 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                 break
             }
 
-            availableCards.append(OnboardingCardViewController(
+            if !cardModel.multipleChoiceButtons.isEmpty {
+            availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
                 delegate: delegate))
+            } else {
+                availableCards.append(OnboardingBasicCardViewController(
+                    viewModel: cardModel,
+                    delegate: delegate))
+            }
         }
     }
 

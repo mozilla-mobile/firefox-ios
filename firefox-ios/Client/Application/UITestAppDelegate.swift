@@ -262,18 +262,25 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
     // MARK: - Private
     private func loadExperiment() {
-        let argument = ProcessInfo.processInfo.arguments.first { string in
+        let argumentExperimentFile = ProcessInfo.processInfo.arguments.first { string in
             string.starts(with: LaunchArguments.LoadExperiment)
         }
 
-        guard let arg = argument else { return }
+        let argumentFeatureName = ProcessInfo.processInfo.arguments.first { string in
+            string.starts(with: LaunchArguments.ExperimentFeatureName)
+        }
 
-        let experimentName = arg.replacingOccurrences(of: LaunchArguments.LoadExperiment, with: "")
-        let fileURL = Bundle.main.url(forResource: experimentName, withExtension: "json")
+        guard let argumentExperimentFile, let argumentFeatureName else { return }
+
+        let experimentFeatureName = argumentFeatureName.replacingOccurrences(of: LaunchArguments.ExperimentFeatureName,
+                                                                             with: "")
+        let experimentFileName = argumentExperimentFile.replacingOccurrences(of: LaunchArguments.LoadExperiment,
+                                                                             with: "")
+        let fileURL = Bundle.main.url(forResource: experimentFileName, withExtension: "json")
         if let fileURL = fileURL {
             do {
                 let fileContent = try String(contentsOf: fileURL)
-                let features = HardcodedNimbusFeatures(with: ["messaging": fileContent])
+                let features = HardcodedNimbusFeatures(with: [experimentFeatureName: fileContent])
                 features.connect(with: FxNimbus.shared)
             } catch {
             }

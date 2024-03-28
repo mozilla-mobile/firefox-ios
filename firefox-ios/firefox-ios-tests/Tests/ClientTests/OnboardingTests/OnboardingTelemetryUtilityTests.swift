@@ -67,7 +67,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendButtonActionTelemetry(from: CardNames.welcome.rawValue,
-                                          with: .nextCard,
+                                          with: .forwardOneCard,
                                           and: isPrimaryButton)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
@@ -90,7 +90,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let subject = createTelemetryUtility(for: .freshInstall)
 
         subject.sendButtonActionTelemetry(from: CardNames.sync.rawValue,
-                                          with: .nextCard,
+                                          with: .forwardOneCard,
                                           and: isPrimaryButton)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
@@ -101,7 +101,7 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         let subject = createTelemetryUtility(for: .upgrade)
 
         subject.sendButtonActionTelemetry(from: CardNames.updateSync.rawValue,
-                                          with: .nextCard,
+                                          with: .forwardOneCard,
                                           and: isPrimaryButton)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)

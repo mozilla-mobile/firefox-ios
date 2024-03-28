@@ -107,6 +107,7 @@ analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
+  # Firefox specific
   - build/
   - .build/
   - firefox-ios/Client/Assets/Search/get_supported_locales.swift
@@ -138,6 +139,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
 included:
   - /Users/vagrant/git
   - .
+
 
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

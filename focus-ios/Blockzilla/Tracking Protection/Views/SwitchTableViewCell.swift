@@ -18,7 +18,7 @@ class SwitchTableViewCell: UITableViewCell {
     private var cancellable: AnyCancellable?
     private var subject = PassthroughSubject<Bool, Never>()
     public var valueChanged: AnyPublisher<Bool, Never> { subject.eraseToAnyPublisher() }
-    public var isOn: Bool = false {
+    public var isOn = false {
         didSet { toggle.isOn = isOn }
     }
 

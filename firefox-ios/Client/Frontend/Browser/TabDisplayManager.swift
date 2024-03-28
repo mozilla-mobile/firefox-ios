@@ -59,7 +59,7 @@ enum TabDisplayType {
 // Regular tab order persistence for TabDisplayManager
 struct TabDisplayOrder: Codable {
     static let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-    var regularTabUUID: [String] = []
+    var regularTabUUID: [TabUUID] = []
 }
 
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
@@ -735,17 +735,6 @@ extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
         let section = TabDisplaySection(rawValue: indexPath.section)
         guard tabDisplayType == .TopTabTray || section == .regularTabs else { return [] }
         guard let tab = dataStore.at(indexPath.item) else { return [] }
-
-        // Get the tab's current URL. If it is `nil`, check the `sessionData` since
-        // it may be a tab that has not been restored yet.
-        var url = tab.url
-        if url == nil, let sessionData = tab.sessionData {
-            let urls = sessionData.urls
-            let index = sessionData.currentPage + urls.count - 1
-            if index < urls.count {
-                url = urls[index]
-            }
-        }
 
         // Don't store the URL in the item as dragging a tab near the screen edge will
         // prompt to open Safari with the URL

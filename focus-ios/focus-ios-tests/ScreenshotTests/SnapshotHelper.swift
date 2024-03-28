@@ -64,7 +64,6 @@ open class Snapshot: NSObject {
     static var currentLocale = ""
 
     open class func setupSnapshot(_ app: XCUIApplication, waitForAnimations: Bool = true) {
-
         Snapshot.app = app
         Snapshot.waitForAnimations = waitForAnimations
 

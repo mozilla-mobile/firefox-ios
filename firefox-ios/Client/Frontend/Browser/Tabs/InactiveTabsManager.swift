@@ -26,7 +26,7 @@ class InactiveTabsManager: InactiveTabsManagerProtocol {
 
         let regularTabs = tabs.filter({ $0.isPrivate == false })
         for tab in regularTabs {
-            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
 
             if tabDate <= defaultOldDay {

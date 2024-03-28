@@ -29,7 +29,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
 
     override func viewDidLoad() {
-
         title = UIConstants.strings.settingsAutocompleteSection
         navigationController?.navigationBar.tintColor = .accent
 
@@ -62,7 +61,6 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
             toggle.isOn = Settings.getToggle(.enableDomainAutocomplete)
             toggle.onTintColor = .accent
             cell.accessoryView = PaddedSwitch(switchView: toggle)
-
         } else {
             if indexPath.row == 0 {
                 cell = UITableViewCell(style: .subtitle, reuseIdentifier: "enableCell")

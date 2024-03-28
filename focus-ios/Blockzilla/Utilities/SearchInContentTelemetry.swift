@@ -80,18 +80,15 @@ class SearchInContentTelemetry {
             urlType = .search
             SearchInContentTelemetry.shouldSetUrlTypeSearch = false
             trackSAP()
-        }
-        else if let url = webView.url {
+        } else if let url = webView.url {
             let clients = getClientsValue(url: url)
             if isFollowOnSearch(clientValue: clients.clientValue, code: code) {
                 urlType = .followOnSearch
                 trackSAPFollowOn()
-            }
-            else if isOrganicSearch(sClientValue: clients.sClientValue, provider: provider) {
+            } else if isOrganicSearch(sClientValue: clients.sClientValue, provider: provider) {
                 urlType = .organicSearch
                 trackOrganicSearch()
-            }
-            else { urlType = .regular }
+            } else { urlType = .regular }
         }
     }
 }

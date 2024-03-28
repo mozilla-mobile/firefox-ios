@@ -18,7 +18,7 @@ class TabLocationViewTests: XCTestCase {
     }
 
     func testDelegateMemoryLeak() {
-        let tabLocationView = TabLocationView()
+        let tabLocationView = TabLocationView(windowUUID: .XCTestDefaultUUID)
         let delegate = MockTabLocationViewDelegate()
         tabLocationView.delegate = delegate
         trackForMemoryLeaks(tabLocationView)

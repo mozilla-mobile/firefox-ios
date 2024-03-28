@@ -22,7 +22,6 @@ class MockPersister: ShortcutsPersister {
 }
 
 class AppShortcutsTests: XCTestCase {
-
     var sut: ShortcutsManager!
 
     override func setUp() {

@@ -67,7 +67,7 @@ class SearchSuggestionsPromptView: UIView {
         return label
     }()
 
-    var isIpadView: Bool = false {
+    var isIpadView = false {
         didSet {
             updateUI()
         }
@@ -133,8 +133,7 @@ class SearchSuggestionsPromptView: UIView {
             promptContainer.addConstraint(heightPromptContainerConstraint)
             promptContainer.widthAnchor.constraint(equalTo: widthAnchor, multiplier: UIConstants.layout.suggestionViewWidthMultiplier).isActive = true
             promptContainer.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        }
-        else {
+        } else {
             promptContainer.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
             promptContainer.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         }

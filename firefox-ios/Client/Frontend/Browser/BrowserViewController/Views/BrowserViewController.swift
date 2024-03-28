@@ -415,6 +415,9 @@ class BrowserViewController: UIViewController,
         if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
@@ -508,7 +511,7 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         if tabManager.startAtHomeCheck() {
-            store.dispatch(FakespotAction.setAppearanceTo(false))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             guard presentedViewController != nil else { return }
             dismissVC()
         }
@@ -725,7 +728,7 @@ class BrowserViewController: UIViewController,
         view.addSubview(statusBarOverlay)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        urlBar = URLBarView(profile: profile)
+        urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -764,8 +767,6 @@ class BrowserViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        screenshotHelper.viewIsVisible = true
-
         if let toast = self.pendingToast {
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
@@ -799,9 +800,10 @@ class BrowserViewController: UIViewController,
         UIAccessibility.post(notification: .layoutChanged, argument: toolbarContextHintVC)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        screenshotHelper.viewIsVisible = false
-        super.viewWillDisappear(animated)
+    func willNavigateAway() {
+        if let tab = tabManager.selectedTab {
+            screenshotHelper.takeScreenshot(tab)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -1288,19 +1290,19 @@ class BrowserViewController: UIViewController,
         showBookmarkToast(for: .add)
     }
 
-    func removeBookmark(url: String) {
-        profile.places.deleteBookmarksWithURL(url: url).uponQueue(.main) { result in
+    func removeBookmark(url: URL, title: String?) {
+        profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(for: .remove)
+            self.showBookmarkToast(url, title, for: .remove)
         }
     }
 
-    private func showBookmarkToast(for action: BookmarkAction) {
+    private func showBookmarkToast(_ bookmarkURL: URL? = nil, _ title: String? = nil, for action: BookmarkAction) {
         switch action {
         case .add:
             self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
         case .remove:
-            self.showToast(message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(bookmarkURL, title, message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
 
@@ -1631,9 +1633,6 @@ class BrowserViewController: UIViewController,
 
     @discardableResult
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) -> Tab {
-        if let selectedTab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(selectedTab)
-        }
         let request: URLRequest?
         if let url = url {
             request = URLRequest(url: url)
@@ -1764,13 +1763,7 @@ class BrowserViewController: UIViewController,
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        // Represents WebView observation or delegate update that called this function
-
         if webViewStatus == .finishedNavigation {
-            // A delay of 500 milliseconds is added when we take screenshot
-            // as we don't know exactly when wkwebview is rendered
-            let delayedTimeInterval = DispatchTimeInterval.milliseconds(500)
-
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -1779,21 +1772,6 @@ class BrowserViewController: UIViewController,
                 // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
                 // touch-screen keyboard from the background even though they shouldn't be able to.
                 webView.resignFirstResponder()
-
-                // We need a better way of identifying when webviews are finished rendering
-                // There are cases in which the page will still show a loading animation or nothing
-                // when the screenshot is being taken, depending on internet connection
-                // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
-                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                    if webView.superview == self.view {
-                        webView.removeFromSuperview()
-                    }
-                }
-            } else if tab.webView != nil {
-                DispatchQueue.main.asyncAfter(deadline: .now() + delayedTimeInterval) {
-                    self.screenshotHelper.takeScreenshot(tab)
-                }
             }
         }
     }
@@ -1803,17 +1781,17 @@ class BrowserViewController: UIViewController,
               let url = webView.url
         else {
             // We're on homepage or a blank tab
-            store.dispatch(FakespotAction.setAppearanceTo(false))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             return
         }
 
-        store.dispatch(FakespotAction.tabDidChange(tabUIDD: tab.tabUUID))
+        store.dispatch(FakespotAction.tabDidChange(FakespotTabContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
         let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
         let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
-            store.dispatch(FakespotAction.setAppearanceTo(false))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
 
             // Quick fix: make sure to sidebar is hidden when opened from deep-link
             // Relates to FXIOS-7844
@@ -1822,7 +1800,8 @@ class BrowserViewController: UIViewController,
         }
 
         if isReload, let productId = product.product?.id {
-           store.dispatch(FakespotAction.tabDidReload(tabUIDD: tab.tabUUID, productId: productId))
+            let context = FakespotProductContext(productId: productId, tabUUID: tab.tabUUID, windowUUID: windowUUID)
+           store.dispatch(FakespotAction.tabDidReload(context))
         }
 
         // Do not update Fakespot when we are not on a selected tab
@@ -1842,7 +1821,7 @@ class BrowserViewController: UIViewController,
                   fakespotState.sidebarOpenForiPadLandscape,
                   UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
-            store.dispatch(FakespotAction.setAppearanceTo(true))
+            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: true, windowUUID: windowUUID)))
         }
     }
 
@@ -1986,6 +1965,12 @@ class BrowserViewController: UIViewController,
     private func displayAddressAutofillAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listAllAddresses(completion: { addresses, error in
             guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
+
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .view,
+                object: .addressAutofillPromptShown
+            )
             DispatchQueue.main.async {
                 tabWebView.accessoryView.reloadViewFor(AccessoryType.address)
                 tabWebView.reloadInputViews()

@@ -45,6 +45,6 @@ class SearchSuggestClient {
                 callback(nil, error)
                 return
             }
-            }.resume()
+        }.resume()
     }
 }

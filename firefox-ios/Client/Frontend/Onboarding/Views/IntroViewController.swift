@@ -2,15 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import UIKit
-import Shared
 import Common
+import Foundation
+import Redux
+import Shared
+import UIKit
 
 class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
-                           Notifiable {
+                           Notifiable,
+                           StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -18,8 +20,11 @@ class IntroViewController: UIViewController,
         static let pageControlHeight: CGFloat = 40
     }
 
+    typealias SubscriberStateType = OnboardingViewControllerState
+
     // MARK: - Properties
     var viewModel: OnboardingViewModelProtocol
+    var windowUUID: WindowUUID
     var didFinishFlow: (() -> Void)?
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -27,6 +32,9 @@ class IntroViewController: UIViewController,
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
+    private var introViewControllerState: OnboardingViewControllerState?
+
+    // MARK: - UI elements
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
@@ -57,11 +65,13 @@ class IntroViewController: UIViewController,
     // MARK: Initializers
     init(
         viewModel: IntroViewModel,
+        windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.userDefaults = userDefaults
@@ -131,6 +141,35 @@ class IntroViewController: UIViewController,
         ])
     }
 
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(ActiveScreensStateAction.showScreen(
+            ScreenActionContext(screen: .onboardingViewController, windowUUID: windowUUID)
+        ))
+        let uuid = self.windowUUID
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return OnboardingViewControllerState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
+    func unsubscribeFromRedux() {
+        store.dispatch(ActiveScreensStateAction.closeScreen(
+            ScreenActionContext(screen: .onboardingViewController, windowUUID: windowUUID)
+        ))
+    }
+
+    func newState(state: OnboardingViewControllerState) {
+        ensureMainThread { [weak self] in
+            guard let self else { return }
+
+            introViewControllerState = state
+        }
+    }
+
     // MARK: - Button actions
     @objc
     func closeOnboarding() {
@@ -175,7 +214,8 @@ class IntroViewController: UIViewController,
                 || currentViewModel.buttons.secondary?.action == .setDefaultBrowser
         else { return }
 
-        showNextPage(
+        advance(
+            numberOfPages: 1,
             from: currentViewModel.name,
             completionIfLastCard: { self.showNextPageCompletionForLastCard() })
     }
@@ -203,7 +243,12 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         else { return nil }
 
         pageControl.currentPage = index
-        return getNextOnboardingCard(index: index, goForward: false)
+
+        return getNextOnboardingCard(
+            currentIndex: index,
+            numberOfCardsToMove: 1,
+            goForward: false
+        )
     }
 
     func pageViewController(
@@ -215,7 +260,12 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         else { return nil }
 
         pageControl.currentPage = index
-        return getNextOnboardingCard(index: index, goForward: true)
+
+        return getNextOnboardingCard(
+            currentIndex: index,
+            numberOfCardsToMove: 1,
+            goForward: true
+        )
     }
 }
 
@@ -237,8 +287,16 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.chosenOptions.insert(.askForNotificationPermission)
             introViewModel.updateOnboardingUserActivationEvent()
             askForNotificationPermission(from: cardName)
-        case .nextCard:
-            showNextPage(from: cardName) {
+        case .forwardOneCard:
+            advance(numberOfPages: 1, from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
+        case .forwardTwoCard:
+            advance(numberOfPages: 2, from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
+        case .forwardThreeCard:
+            advance(numberOfPages: 3, from: cardName) {
                 self.showNextPageCompletionForLastCard()
             }
         case .syncSignIn:
@@ -249,7 +307,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 with: fxaPrams,
                 selector: #selector(dismissSignInViewController),
                 completion: {
-                    self.showNextPage(from: cardName) {
+                    self.advance(numberOfPages: 1, from: cardName) {
                         self.showNextPageCompletionForLastCard()
                     }
                 },
@@ -298,7 +356,7 @@ extension IntroViewController: OnboardingCardDelegate {
 
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
-                self.showNextPage(from: cardName) {
+                self.advance(numberOfPages: 1, from: cardName) {
                     self.showNextPageCompletionForLastCard()
                 }
             }

@@ -5,7 +5,6 @@
 import XCTest
 
 class UserAgentTest: BaseTestCase {
-
     func testSignInWithGoogle() throws {
         throw XCTSkip("This test fails and not sure the purpose of that check, disabled while investigating")
         loadWebPage("https://getpocket.com/")

@@ -50,6 +50,10 @@ public protocol TabFileManager {
     ///   - windowData: the window data to be saved
     ///   - url: the directory to save the data to
     func writeWindowData(windowData: WindowData, to url: URL) throws
+
+    /// Removes the file at the given URL.
+    /// - Parameter path: the file to be removed.
+    func removeFileAt(path: URL)
 }
 
 public struct DefaultTabFileManager: TabFileManager {
@@ -101,7 +105,7 @@ public struct DefaultTabFileManager: TabFileManager {
         try fileManager.copyItem(at: sourceURL, to: destinationURL)
     }
 
-    private func removeFileAt(path: URL) {
+    public func removeFileAt(path: URL) {
         do {
             try fileManager.removeItem(at: path)
             return
