@@ -62,28 +62,4 @@ class AddressListViewModel: ObservableObject {
             }
         }
     }
-
-    /// Converts an Address object to UnencryptedAddressFields.
-    /// - Parameter address: The address to be converted.
-    /// - Returns: The UnencryptedAddressFields representation of the address.
-    func fromAddress(_ address: Address) -> UnencryptedAddressFields {
-        return UnencryptedAddressFields(addressLevel1: address.addressLevel1,
-                                        organization: address.organization,
-                                        country: address.country,
-                                        addressLevel2: address.addressLevel2,
-                                        addressLevel3: address.addressLevel3,
-                                        email: address.email,
-                                        streetAddress: address.streetAddress,
-                                        name: address.name,
-                                        postalCode: address.postalCode,
-                                        tel: address.tel)
-    }
-
-    // MARK: - Handle Address Selection
-
-    /// Handles the selection of an address.
-    /// - Parameter address: The selected address.
-    func handleAddressSelection(_ address: Address) {
-        addressSelectionCallback?(fromAddress(address))
-    }
 }

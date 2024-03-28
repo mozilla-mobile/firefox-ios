@@ -90,8 +90,6 @@ class FormAutofillHelperTests: XCTestCase {
 
     // MARK: Parsing
 
-<<<<<<< HEAD
-=======
     func testInjectionJsonBuilder_addressNoSpecialCharacters() {
         // Arrange
         let address = UnencryptedAddressFields(addressLevel1: "123 Main St",
@@ -177,7 +175,6 @@ class FormAutofillHelperTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
->>>>>>> ff1ffba68 (Add FXIOS-8660 missing address fields ( `tel` and `addressLevel3`) (#19223))
     func testInjectionJsonBuilder_noSpecialCharacters() {
         let card = UnencryptedCreditCardFields(ccName: "John Doe",
                                                ccNumber: "1234567812345678",
@@ -317,42 +314,6 @@ class FormAutofillHelperTests: XCTestCase {
 
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue))
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue))
-    }
-
-    func testUserContentControllerDidReceiveScriptMessage_withAddressHandler() {
-        let formAutofillHelper = FormAutofillHelper(tab: tab)
-
-        // Create a mock WKScriptMessage with handler name "addressFormMessageHandler"
-        let mockBody: [String: Any] = ["type": "fill-address-form",
-                                       "payload": ["address-level1": "123 Main St",
-                                                   "address-level2": "Apt 101",
-                                                   "email": "mozilla@mozzilla.com",
-                                                   "street-address": "123 mozilla",
-                                                   "name": "John",
-                                                   "organization": "Mozilla",
-                                                   "postal-code": "12345",
-                                                   "country": "USA"]]
-        let mockAddressScriptMessage = WKScriptMessageMock(
-            name: FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue,
-            body: mockBody,
-            frameInfo: secureFrameMock)
-
-        // Create an expectation for the closure to be called
-        let expectation = XCTestExpectation(description: "foundFieldValues closure should be called")
-
-        // Set up the closure to fulfill the expectation
-        formAutofillHelper.foundFieldValues = { payload, _, _ in
-            XCTAssertEqual(payload.fieldValue, .address)
-            expectation.fulfill()
-        }
-
-        // Test user content controller's didReceiveScriptMessage method with the mock message
-        formAutofillHelper.userContentController(
-            WKUserContentController(),
-            didReceiveScriptMessage: mockAddressScriptMessage)
-
-        // Wait for the expectation to be fulfilled
-        wait(for: [expectation], timeout: 2.0)
     }
 
     func testUserContentControllerDidReceiveScriptMessage_withCreditCardHandler() {
