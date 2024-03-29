@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Gant se e c’hallit kemer ha pellgas luc’hskeudennoù.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Face ID a zo rekis evit ma c’hallfe kaout Firefox ho kerioù-tremen enrollet hag ho toareoù paeañ.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Lec’hiennoù web a weladennit a c’hall azgoulenn ho lec’hiadur.";
 
