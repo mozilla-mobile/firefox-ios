@@ -32,8 +32,10 @@ enum ReaderModeTheme: String {
 
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        // TODO: [8313] This nil UUID will not work. Need to determine how to find UUID for Reader Mode. 
-        guard themeManager.currentTheme(for: nil).type != .dark else { return .dark }
+
+        // TODO: [8313] Revisit and update for UUID-based themeing.
+        // guard themeManager.currentTheme(for: ??).type != .dark else { return .dark }
+        guard themeManager.legacy_currentTheme().type != .dark else { return .dark }
 
         return theme ?? .light
     }

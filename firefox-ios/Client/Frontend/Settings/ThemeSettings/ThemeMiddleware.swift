@@ -13,7 +13,6 @@ protocol ThemeManagerProvider {
     func updateUserBrightness(_ value: Float)
 }
 
-// TODO: [8313] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 

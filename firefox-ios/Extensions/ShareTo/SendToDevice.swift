@@ -12,7 +12,6 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
 
-    // TODO: [8313] [FIX ME] Revisit this UUID here
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     private var profile: Profile {
@@ -28,10 +27,10 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
     }
 
     private func currentTheme() -> Theme {
-        // TODO: [8313] Use default window theme? We have no UUID here.
-//        guard let uuid = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
-//        return themeManager.currentTheme(for: uuid)
-        return DarkTheme()
+        // TODO: [8313] Revisit and update to use UUID based themeing.
+        // guard let uuid = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
+        // return themeManager.currentTheme(for: uuid)
+        return themeManager.legacy_currentTheme()
     }
 
     func initialViewController() -> UIViewController {

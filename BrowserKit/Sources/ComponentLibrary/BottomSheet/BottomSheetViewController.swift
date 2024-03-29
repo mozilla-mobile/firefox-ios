@@ -146,7 +146,7 @@ public class BottomSheetViewController: UIViewController,
     }
 
     public var currentWindowUUID: UUID? {
-        // TODO: [8313] Revisit.
+        // TODO: [8313] Regression testing needed.
         return (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID
     }
 

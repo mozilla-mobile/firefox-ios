@@ -133,9 +133,10 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private func currentTheme() -> Theme {
-        // TODO: [8313] Revisit. This UUID will be nil when used in extension, need to consider how to handle that.
-        guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
-        return themeManager.currentTheme(for: uuid)
+        // TODO: [8313] Revisit. Needs to be updated to use UUID-based themeing.
+        // guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
+        // return themeManager.currentTheme(for: uuid)
+        return themeManager.legacy_currentTheme()
     }
 
     private func loadList() {

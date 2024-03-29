@@ -24,8 +24,9 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     func currentTheme() -> Theme {
-        // TODO: [8313] NEED TO REVISIT. FIX THIS. THIS WON'T WORK HERE. WILL BE NIL.
-        return themeManager.currentTheme(for: view.currentWindowUUID)
+        // TODO: [8313] Need to revisit and update to use UUID-based themeing.
+        // return themeManager.currentTheme(for: view.currentWindowUUID)
+        return themeManager.legacy_currentTheme()
     }
 
     func headerView() -> UIView {

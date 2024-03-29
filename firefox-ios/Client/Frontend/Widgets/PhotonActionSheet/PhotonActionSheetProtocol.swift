@@ -20,7 +20,7 @@ extension PhotonActionSheetProtocol {
     func presentSheetWith(viewModel: PhotonActionSheetViewModel,
                           on viewController: PresentableVC,
                           from view: UIView) {
-        // TODO: [8313] Revisit and test.
+        // TODO: Regression testing needed here.
         guard let uuid = view.currentWindowUUID else { return }
 
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: uuid)

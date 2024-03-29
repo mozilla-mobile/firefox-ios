@@ -30,7 +30,7 @@ class LaunchScreenViewModel {
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility,
                                                windowUUID: windowUUID)
-        self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
+        self.surveySurfaceManager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
     }
 
     func getSplashScreenExperimentHasShown() -> Bool {
