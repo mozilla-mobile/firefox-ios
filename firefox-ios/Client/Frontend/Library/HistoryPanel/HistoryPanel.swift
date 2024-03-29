@@ -368,7 +368,8 @@ class HistoryPanel: UIViewController,
         >(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else { return nil }
 
-            if let historyActionable = item as? HistoryActionablesModel {
+            if var historyActionable = item as? HistoryActionablesModel {
+                historyActionable.configureImage(for: windowUUID)
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: OneLineTableViewCell.cellIdentifier,
                     for: indexPath
