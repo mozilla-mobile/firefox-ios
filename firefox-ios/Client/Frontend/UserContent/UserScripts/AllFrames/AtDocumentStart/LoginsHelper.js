@@ -43,6 +43,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     receiveMessage: function (msg) {
       switch (msg.name) {
         case "RemoteLogins:loginsFound": {
+          console.log("ooooo ---- here ?? ", this.activeField.form, this.activeField)
           this.loginsFound(this.activeField.form, msg.logins);
           break;
         }
@@ -51,7 +52,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
 
     loginsFound : function (form, loginsFound) {
       var autofillForm = gAutofillForms; // && !PrivateBrowsingUtils.isContentWindowPrivate(doc.defaultView);
-      this._fillForm(form, autofillForm, false, false, false, loginsFound);
+      this._fillForm(form, autofillForm, true, false, false, loginsFound);
     },
 
     /*
@@ -471,7 +472,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     }
   }
 
-  document.addEventListener("focusin", (ev) => onFocusIn(ev));
+  document.addEventListener("focusin", (ev) => onFocusIn(ev), {capture: true});
     
   var LoginUtils = {
     /*
