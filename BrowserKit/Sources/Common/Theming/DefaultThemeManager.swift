@@ -241,7 +241,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func updateThemeBasedOnBrightness() {
-        // TODO: [8313] Regression-test system brightness theme changing.
         allWindowUUIDs.forEach { uuid in
             let currentValue = Float(UIScreen.main.brightness)
 
