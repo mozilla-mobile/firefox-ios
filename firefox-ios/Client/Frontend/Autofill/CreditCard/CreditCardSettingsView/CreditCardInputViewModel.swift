@@ -237,7 +237,7 @@ class CreditCardInputViewModel: ObservableObject {
                                completion: completion)
     }
 
-    func updateCreditCard(completion: @escaping (Bool, Error?) -> Void) {
+    func updateCreditCard(completion: @escaping (Bool?, Error?) -> Void) {
         guard let creditCard = creditCard,
               let plainCreditCard = getDisplayedCCValues() else {
             completion(true, InputVMError.unableToUpdateCC)

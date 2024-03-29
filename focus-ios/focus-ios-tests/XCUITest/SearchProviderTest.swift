@@ -28,13 +28,12 @@ class SearchProviderTest: BaseTestCase {
     }
 
     private func dismissKeyboardFocusMenuSettings() {
-        if !app.buttons["HomeView.settingsButton"].isHittable
-        {
+        if !app.buttons["HomeView.settingsButton"].isHittable {
             dismissURLBarFocused()
         }
     }
 
-    func searchProviderTestHelper(provider:String) {
+    func searchProviderTestHelper(provider: String) {
         changeSearchProvider(provider: provider)
         doSearch(searchWord: "mozilla", provider: provider)
         waitForWebPageLoad()
@@ -97,8 +96,13 @@ class SearchProviderTest: BaseTestCase {
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        waitForExistence(app.tables.cells["MDN"].buttons["Remove MDN"])
-        app.tables.cells["MDN"].buttons["Remove MDN"].tap()
+        if #available(iOS 17, *) {
+            waitForExistence(app.tables.cells["MDN"].buttons["Remove MDN"])
+            app.tables.cells["MDN"].buttons["Remove MDN"].tap()
+        } else {
+            waitForExistence(app.tables.cells["MDN"].buttons["Delete MDN"])
+            app.tables.cells["MDN"].buttons["Delete MDN"].tap()
+        }
         waitForExistence(app.tables.cells["MDN"].buttons["Delete"])
         app.tables.cells["MDN"].buttons["Delete"].tap()
 

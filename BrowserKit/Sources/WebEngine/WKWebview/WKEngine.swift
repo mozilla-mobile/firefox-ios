@@ -19,8 +19,9 @@ public class WKEngine: Engine {
         return WKEngineView(frame: .zero)
     }
 
-    public func createSession() throws -> EngineSession {
-        guard let session = WKEngineSession(userScriptManager: userScriptManager) else {
+    public func createSession(dependencies: EngineSessionDependencies?) throws -> EngineSession {
+        guard let session = WKEngineSession(userScriptManager: userScriptManager,
+                                            telemetryProxy: dependencies?.telemetryProxy) else {
             throw EngineError.sessionNotCreated
         }
 

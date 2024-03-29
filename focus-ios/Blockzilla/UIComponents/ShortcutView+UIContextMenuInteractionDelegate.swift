@@ -8,9 +8,7 @@ import AudioToolbox
 import CoreHaptics
 
 extension ShortcutView: UIContextMenuInteractionDelegate {
-
     public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: nil,
                                           actionProvider: { _ in
@@ -18,7 +16,7 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
                 title: UIConstants.strings.renameShortcut,
                 image: .renameShortcut) { _ in
                     self.viewModel.send(action: .showRenameAlert)
-                }
+            }
 
             let removeFromShortcutsAction = UIAction(
                 title: UIConstants.strings.removeFromShortcuts,
@@ -28,7 +26,7 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
                     feedbackGenerator.prepare()
                     CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
                     self.viewModel.send(action: .remove)
-                }
+            }
             return UIMenu(children: [removeFromShortcutsAction, renameAction])
         })
     }

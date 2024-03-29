@@ -84,7 +84,6 @@ struct FakespotAdViewModel: FeatureFlaggable {
 class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private enum UX {
         static let titleFontSize: CGFloat = 15
-        static let linkFontSize: CGFloat = 13
         static let priceFontSize: CGFloat = 13
         static let footerFontSize: CGFloat = 13
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -191,7 +190,7 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
         let productLinkButtonViewModel = LinkButtonViewModel(
             title: productAdsData.name,
             a11yIdentifier: viewModel.productTitleA11yId,
-            fontSize: UX.linkFontSize,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.linkInsets
         )
         productLinkButton.configure(viewModel: productLinkButtonViewModel)

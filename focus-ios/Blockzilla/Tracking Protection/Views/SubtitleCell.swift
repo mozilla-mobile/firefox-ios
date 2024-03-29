@@ -5,7 +5,6 @@
 import UIKit
 
 class SubtitleCell: UITableViewCell {
-
     convenience init(title: String, subtitle: String, reuseIdentifier: String? = nil) {
         self.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         textLabel?.text = title
@@ -28,5 +27,4 @@ class SubtitleCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }

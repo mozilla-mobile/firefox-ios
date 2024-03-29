@@ -12,7 +12,6 @@ public struct InternalURL {
     public static let baseUrl = "\(scheme)://local"
     public enum Path: String {
         case errorpage
-        case sessionrestore
         func matches(_ string: String) -> Bool {
             return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
@@ -25,8 +24,6 @@ public struct InternalURL {
     }
 
     public let url: URL
-
-    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
 
     public static func isValid(url: URL) -> Bool {
         let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(AppInfo.webserverPort)/")
@@ -75,25 +72,12 @@ public struct InternalURL {
         return components.url
     }
 
-    public var isSessionRestore: Bool {
-        return url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
-    }
-
     public var isErrorPage: Bool {
-        // Error pages can be nested in session restore URLs, and session restore handler will
-        // forward them to the error page handler
-        let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
-        return InternalURL.Path.errorpage.matches(path ?? "")
+        return InternalURL.Path.errorpage.matches(url.path)
     }
 
     public var originalURLFromErrorPage: URL? {
-        if !url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) {
-            return isErrorPage ? extractedUrlParam : nil
-        }
-        if let urlParam = extractedUrlParam, let nested = InternalURL(urlParam), nested.isErrorPage {
-            return nested.extractedUrlParam
-        }
-        return nil
+        return isErrorPage ? extractedUrlParam : nil
     }
 
     public var extractedUrlParam: URL? {

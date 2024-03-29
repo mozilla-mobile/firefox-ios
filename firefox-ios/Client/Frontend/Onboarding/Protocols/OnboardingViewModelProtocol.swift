@@ -14,13 +14,19 @@ protocol OnboardingViewModelProtocol {
 }
 
 extension OnboardingViewModelProtocol {
-    func getNextIndex(currentIndex: Int, goForward: Bool) -> Int? {
-        if goForward && currentIndex + 1 < availableCards.count {
-            return currentIndex + 1
+    func getNextIndexFrom(
+        currentIndex: Int,
+        numberOfCardsToMove: Int,
+        goForward: Bool
+    ) -> Int? {
+        if goForward && currentIndex + numberOfCardsToMove < availableCards.count {
+            return currentIndex + numberOfCardsToMove
         }
 
-        if !goForward && currentIndex > 0 {
-            return currentIndex - 1
+        if !goForward &&
+            currentIndex > 0 &&
+            currentIndex - numberOfCardsToMove >= 0 {
+            return currentIndex - numberOfCardsToMove
         }
 
         return nil

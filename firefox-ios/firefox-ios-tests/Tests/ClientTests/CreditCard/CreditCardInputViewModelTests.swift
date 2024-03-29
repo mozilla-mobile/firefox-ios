@@ -261,7 +261,10 @@ class CreditCardInputViewModelTests: XCTestCase {
                 // Update card with new values
                 self.viewModel.updateCreditCard { success, error in
                     XCTAssertNil(error)
-                    XCTAssertTrue(success)
+                    XCTAssertNotNil(success)
+                    if let updated = success {
+                        XCTAssert(updated)
+                    }
                     // Check updated values
                     self.viewModel.autofill.getCreditCard(id: ccCard.guid) { ccUpdatedCard, error in
                         XCTAssertNil(error)

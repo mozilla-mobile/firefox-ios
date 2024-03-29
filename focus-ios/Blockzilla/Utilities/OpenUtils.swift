@@ -6,9 +6,9 @@ import UIKit
 
 class OpenUtils: NSObject {
     private let selectedURL: URL
-    private let webViewController: WebViewController
+    private let webViewController: LegacyWebViewController
 
-    init(url: URL, webViewController: WebViewController) {
+    init(url: URL, webViewController: LegacyWebViewController) {
         self.selectedURL = url
         self.webViewController = webViewController
     }

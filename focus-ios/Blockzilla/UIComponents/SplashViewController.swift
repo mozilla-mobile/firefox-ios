@@ -45,7 +45,7 @@ class SplashViewController: UIViewController {
         button.setTitle(UIConstants.strings.unlockWithBiometricsActionButton, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addBackgroundView(color: .authButtonBackground, cornerRadius: .cornerRadius)
-        button.addTarget(self, action:#selector(self.showAuth), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.showAuth), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

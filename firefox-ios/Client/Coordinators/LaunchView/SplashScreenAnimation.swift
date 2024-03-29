@@ -11,7 +11,7 @@ import SwiftUI
 struct SplashScreenAnimation {
     private let animationView: LottieAnimationView
     private enum UX {
-        static let imageSize = 130
+        static let imageSize = 170
     }
 
     init() {

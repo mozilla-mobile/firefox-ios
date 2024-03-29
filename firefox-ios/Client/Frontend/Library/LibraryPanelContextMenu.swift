@@ -9,6 +9,7 @@ import Shared
 protocol LibraryPanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
+    func getShareAction(site: Site, sourceView: UIView, delegate: LibraryPanelCoordinatorDelegate?) -> PhotonRowActions
     func presentContextMenu(for indexPath: IndexPath)
     func presentContextMenu(
         for site: Site,
@@ -103,5 +104,14 @@ extension LibraryPanelContextMenu {
         }.items
 
         return [openInNewTabAction, openInNewPrivateTabAction]
+    }
+
+    func getShareAction(site: Site, sourceView: UIView, delegate: LibraryPanelCoordinatorDelegate?) -> PhotonRowActions {
+        return SingleActionViewModel(
+            title: .ShareContextMenuTitle,
+            iconString: StandardImageIdentifiers.Large.shareApple) { _ in
+                guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return }
+                delegate?.shareLibraryItem(url: siteURL, sourceView: sourceView)
+        }.items
     }
 }

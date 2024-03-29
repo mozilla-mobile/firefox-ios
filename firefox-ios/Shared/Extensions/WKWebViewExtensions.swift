@@ -36,6 +36,13 @@ extension WKWebView {
             }
         }
     }
+
+    /// Use JS to redirect the page without adding a history entry
+    public func replaceLocation(with url: URL) {
+        let apostropheEncoded = "%27"
+        let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: apostropheEncoded)
+        evaluateJavascriptInDefaultContentWorld("location.replace('\(safeUrl)')")
+    }
 }
 
 extension WKUserContentController {

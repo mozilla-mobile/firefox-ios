@@ -101,7 +101,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 selectedPanel: panelType,
                                 normalTabsCount: state.normalTabsCount,
                                 hasSyncableAccount: state.hasSyncableAccount)
-        case TabPanelAction.didLoadTabPanel(let context):
+        case TabPanelAction.didChangeTabPanel(let context):
             let tabState = context.tabDisplayModel
             let panelType = tabState.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
             return TabTrayState(windowUUID: state.windowUUID,
@@ -119,7 +119,6 @@ struct TabTrayState: ScreenState, Equatable {
         case TabTrayAction.firefoxAccountChanged(let context):
             let isSyncAccountEnabled = context.hasSyncableAccount
             // Account updates may occur in a global manner, independent of specific windows.
-            // TODO: [8188] Need to revisit to confirm ideal handling when UUID is `.unavailable`
             let uuid = state.windowUUID
             return TabTrayState(windowUUID: uuid,
                                 isPrivateMode: state.isPrivateMode,

@@ -1,0 +1,141 @@
+only_rules: # Only enforce these rules, ignore all others
+  # - line_length
+  # - blanket_disable_command
+  # - class_delegate_protocol
+  # - closure_spacing
+  # - closure_parameter_position
+  # - colon
+  # - comma
+  # - comment_spacing
+  # - compiler_protocol_init
+  # - computed_accessors_order
+  # - control_statement
+  # - duplicate_conditions
+  # - dynamic_inline
+  # - empty_enum_arguments
+  # - empty_parameters
+  # - empty_parentheses_with_trailing_closure
+  # - for_where
+  # - force_try
+  # - implicit_getter
+  # - inclusive_language
+  # - invalid_swiftlint_command
+  # - large_tuple
+  # - leading_whitespace
+  # - legacy_cggeometry_functions
+  # - legacy_constant
+  # - legacy_constructor
+  # - legacy_hashing
+  # - legacy_nsgeometry_functions
+  # - mark
+  # - no_space_in_method_call
+  # - ns_number_init_as_function_reference
+  # - operator_whitespace
+  # - orphaned_doc_comment
+  # - private_over_fileprivate
+  # - protocol_property_accessors_order
+  # - redundant_discardable_let
+  # - redundant_objc_attribute
+  # - redundant_optional_initialization
+  # - redundant_string_enum_value
+  # - redundant_void_return
+  # - return_arrow_whitespace
+  # - statement_position
+  # - switch_case_alignment
+  # - syntactic_sugar
+  # - trailing_newline
+  # - trailing_semicolon
+  - trailing_whitespace
+  # - unavailable_condition
+  # - unneeded_override
+  # - unneeded_synthesized_initializer
+  # - unused_optional_binding
+  # - unused_setter_value
+  # - vertical_parameter_alignment
+  # - vertical_whitespace
+  # - void_function_in_ternary
+  # - void_return
+  # - file_header
+  # - redundant_type_annotation
+  # - attributes
+  # - closing_brace
+  # - closure_end_indentation
+  # - contains_over_filter_count
+  # - contains_over_filter_is_empty
+  # - contains_over_first_not_nil
+  # - contains_over_range_nil_comparison
+  # - empty_collection_literal
+  # - empty_count
+  # - empty_string
+  # - empty_xctest_method
+  # - explicit_init
+  # - first_where
+  # - discouraged_assert
+  # - duplicate_imports
+  # - duplicate_enum_cases
+  # - last_where
+  # - modifier_order
+  # - multiline_arguments
+  # - opening_brace
+  # - overridden_super_call
+  # - vertical_parameter_alignment_on_call
+  # - vertical_whitespace_closing_braces
+  # - vertical_whitespace_opening_braces
+  # - yoda_condition
+
+# These rules were originally opted into. Disabling for now to get
+# Swiftlint up and running.
+
+  # - deployment_target
+  # - discouraged_optional_collection
+  # - prohibited_interface_builder
+  # - prohibited_super_call
+  # - protocol_property_accessors_order
+
+# line_length:
+#   warning: 125
+#   ignores_urls: true
+#   ignores_interpolated_strings: true
+
+# file_header:
+#   required_string: |
+#                     // This Source Code Form is subject to the terms of the Mozilla Public
+#                     // License, v. 2.0. If a copy of the MPL was not distributed with this
+#                     // file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+analyzer_rules: # Rules run by `swiftlint analyze`
+  - unused_import
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - build/
+  - .build/
+  - firefox-ios/Client/Assets/Search/get_supported_locales.swift
+  - firefox-ios/Client/Generated
+  - firefox-ios/fastlane/
+  - firefox-ios/FxA
+  - firefox-ios/FxAClient
+  - firefox-ios/Source/ExcludedFolder
+  - firefox-ios/Source/ExcludedFile.swift
+  - firefox-ios/Storage/ThirdParty/SwiftData.swift
+  - firefox-ios/Sync/Generated/Metrics.swift
+  - firefox-ios/Storage/Generated/Metrics.swift
+  - firefox-ios/ThirdParty
+  - test-fixtures/tmp
+  - firefox-ios/firefox-ios-tests/Tests/UITests/
+  - l10n-screenshots-dd/
+  - DerivedData/
+  # Package.swift files need a custom header for swift-tools-version
+  # so must be excluded due to file_header rule
+  - firefox-ios/Package.swift
+  - BrowserKit/Package.swift
+  - BrowserKit/.build/
+  - firefox-ios/Client/ContentBlocker/ContentBlockerGenerator/Package.swift
+  - Package.swift
+  - firefox-ios/Build/Intermediates.noindex/Client.build/Fennec-iphoneos/WidgetKitExtension.build/DerivedSources/IntentDefinitionGenerated/WidgetIntents/*
+  # Temporary for Focus
+  - Blockzilla/Generated/
+  - /Users/vagrant/git/DerivedData/
+  - /Users/vagrant/git/firefox-ios/
+
+# reporter: "json" # reporter type (xcode, json, csv, checkstyle)
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)

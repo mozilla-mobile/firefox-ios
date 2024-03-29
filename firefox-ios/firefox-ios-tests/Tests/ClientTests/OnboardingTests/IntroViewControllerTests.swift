@@ -66,7 +66,8 @@ class IntroViewControllerTests: XCTestCase {
         let subject = createSubject(withCustomPrimaryActions: [.syncSignIn, .setDefaultBrowser, .requestNotifications])
 
         XCTAssertEqual(subject.pageControl.currentPage, 0)
-        subject.showNextPage(
+        subject.advance(
+            numberOfPages: 1,
             from: subject.viewModel.availableCards[subject.pageControl.currentPage].viewModel.name,
             completionIfLastCard: nil)
         XCTAssertEqual(subject.pageControl.currentPage, 1)
@@ -108,6 +109,7 @@ class IntroViewControllerTests: XCTestCase {
                                        model: onboardingViewModel,
                                        telemetryUtility: telemetryUtility)
         let subject = IntroViewController(viewModel: viewModel,
+                                          windowUUID: .XCTestDefaultUUID,
                                           notificationCenter: mockNotificationCenter)
 
         trackForMemoryLeaks(subject, file: file, line: line)

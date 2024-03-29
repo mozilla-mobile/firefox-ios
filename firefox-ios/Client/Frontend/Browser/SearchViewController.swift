@@ -171,6 +171,8 @@ class SearchViewController: SiteTableViewController,
                                                    || shouldShowSponsoredSuggestions))
     }
 
+    private let maxNumOfFirefoxSuggestions: Int32 = 1
+
     init(profile: Profile,
          viewModel: SearchViewModel,
          model: SearchEngines,
@@ -223,7 +225,8 @@ class SearchViewController: SiteTableViewController,
         ])
 
         setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
-                                                          .SearchSettingsChanged])
+                                                          .SearchSettingsChanged,
+                                                          .SponsoredAndNonSponsoredSuggestionsChanged])
     }
 
     private func loadSearchHighlights() {
@@ -287,8 +290,13 @@ class SearchViewController: SiteTableViewController,
         let includeNonSponsored = shouldShowNonSponsoredSuggestions
         let includeSponsored = shouldShowSponsoredSuggestions
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
-                && (includeNonSponsored || includeSponsored)
-        else { return nil }
+                && (includeNonSponsored || includeSponsored) else {
+            if !firefoxSuggestions.isEmpty {
+                firefoxSuggestions = []
+                tableView.reloadData()
+            }
+            return nil
+        }
 
         profile.firefoxSuggest?.interruptReader()
 
@@ -304,9 +312,11 @@ class SearchViewController: SiteTableViewController,
                 }
             }
         return Task { [weak self] in
-            guard let suggestions = try? await self?.profile.firefoxSuggest?.query(
-                tempSearchQuery,
-                providers: providers
+            guard let limit = self?.maxNumOfFirefoxSuggestions,
+                  let suggestions = try? await self?.profile.firefoxSuggest?.query(
+                    tempSearchQuery,
+                    providers: providers,
+                    limit: limit
             ) else { return }
             await MainActor.run {
                 guard let self, self.searchQuery == tempSearchQuery else { return }
@@ -666,7 +676,7 @@ class SearchViewController: SiteTableViewController,
             && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
         filteredOpenedTabs = currentTabs.filter { tab in
-            guard let url = tab.url ?? tab.sessionData?.urls.last,
+            guard let url = tab.url,
                   !InternalURL.isValid(url: url) else {
                 return false
             }
@@ -1228,6 +1238,9 @@ class SearchViewController: SiteTableViewController,
             dynamicFontChanged(notification)
         case .SearchSettingsChanged:
             reloadSearchEngines()
+        case .SponsoredAndNonSponsoredSuggestionsChanged:
+            guard !searchQuery.isEmpty else { return }
+            _ = loadFirefoxSuggestions()
         default:
             break
         }

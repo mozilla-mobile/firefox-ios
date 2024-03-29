@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "BrowserKit",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v15),
+        .macOS(.v10_14)
     ],
     products: [
         .library(
@@ -31,7 +32,10 @@ let package = Package(
             targets: ["ToolbarKit"]),
         .library(
             name: "ContentBlockingGenerator",
-            targets: ["ContentBlockingGenerator"])
+            targets: ["ContentBlockingGenerator"]),
+        .executable(
+            name: "ExecutableContentBlockingGenerator",
+            targets: ["ExecutableContentBlockingGenerator"]),
     ],
     dependencies: [
         .package(
@@ -39,7 +43,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.10.2"),
+            exact: "7.11.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -110,6 +114,9 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
-            dependencies: ["ContentBlockingGenerator"])
+            dependencies: ["ContentBlockingGenerator"]),
+        .executableTarget(
+            name: "ExecutableContentBlockingGenerator",
+            dependencies: ["ContentBlockingGenerator"]),
     ]
 )

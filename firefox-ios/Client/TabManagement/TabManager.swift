@@ -45,11 +45,11 @@ protocol TabManager: AnyObject {
     func clearAllTabsHistory()
     func willSwitchTabMode(leavingPBM: Bool)
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool)
-    func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
+    func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
     func preserveTabs()
     func restoreTabs(_ forced: Bool)
     func startAtHomeCheck() -> Bool
-    func getTabForUUID(uuid: String) -> Tab?
+    func getTabForUUID(uuid: TabUUID) -> Tab?
     func getTabForURL(_ url: URL) -> Tab?
     func expireSnackbars()
     @discardableResult
@@ -57,8 +57,8 @@ protocol TabManager: AnyObject {
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
                                          isPrivate: Bool,
-                                         previousTabUUID: String)
-    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: String, isPrivate: Bool)
+                                         previousTabUUID: TabUUID)
+    func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool)
 
     @discardableResult
     func addTab(_ request: URLRequest!,
@@ -74,7 +74,7 @@ protocol TabManager: AnyObject {
 
     /// Async Remove tab option using tabUUID. Replaces direct usage of removeTab where the whole Tab is needed
     /// - Parameter tabUUID: UUID from the tab
-    func removeTab(_ tabUUID: String) async
+    func removeTab(_ tabUUID: TabUUID) async
 
     /// Async Remove all tabs indicating if is on private mode or not
     /// - Parameter isPrivateMode: Is private mode enabled or not
@@ -140,7 +140,7 @@ extension TabManager {
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
-                                                          _ previousTabUUID: String) -> Void) {
+                                                          _ previousTabUUID: TabUUID) -> Void) {
         backgroundRemoveAllTabs(isPrivate: isPrivate,
                                 didClearTabs: didClearTabs)
     }

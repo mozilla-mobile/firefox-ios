@@ -14,7 +14,6 @@ public extension CombineCompatible where Self: UIControl {
 }
 
 public struct UIControlPublisher<Control: UIControl>: Publisher {
-
     public typealias Output = Control
     public typealias Failure = Never
 

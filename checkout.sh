@@ -7,13 +7,15 @@
 set -x
 cd focus-ios
 
+# Version 107.0 hash
+SHAVAR_COMMIT_HASH="1d71be25893b05ba85850078b1ccedc0824ca958"
+
 # Download the nimbus-fml.sh script from application-services.
 NIMBUS_FML_FILE=./nimbus.fml.yaml
 curl --proto '=https' --tlsv1.2 -sSf  https://raw.githubusercontent.com/mozilla/application-services/main/components/nimbus/ios/scripts/bootstrap.sh | bash -s -- $NIMBUS_FML_FILE
 
-git clone https://github.com/mozilla-services/shavar-prod-lists.git || exit 1
+# Clone shavar prod list
+cd .. # Make sure we are at the root of the repo
+rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
 
-# Grab the las known (pinned) commit on the 93.0 branch
-(cd shavar-prod-lists && git checkout -q 352f772269f13e70893d0d112d26aed1f079ce6e)
-
-(cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+(cd BrowserKit && swift run)

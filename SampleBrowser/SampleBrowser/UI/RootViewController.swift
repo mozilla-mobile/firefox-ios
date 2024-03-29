@@ -3,19 +3,25 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ToolbarKit
 import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
                           ToolbarDelegate,
                           NavigationDelegate,
-                          SearchBarDelegate,
+                          AddressToolbarDelegate,
                           SearchSuggestionDelegate,
                           MenuDelegate,
                           SettingsDelegate,
-                          FindInPageBarDelegate {
+                          FindInPageBarDelegate,
+                          Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private lazy var toolbar: BrowserToolbar = .build { _ in }
-    private lazy var searchBar: BrowserSearchBar =  .build { _ in }
+    private lazy var searchBar: BrowserAddressToolbar =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
         view.backgroundColor = .white
     }
@@ -25,10 +31,10 @@ class RootViewController: UIViewController,
     private var findInPageBar: FindInPageBar?
 
     // MARK: - Init
-
-    init(engineProvider: EngineProvider) {
+    init(engineProvider: EngineProvider, themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -46,6 +52,9 @@ class RootViewController: UIViewController,
         configureSearchbar()
         configureSearchView()
         configureToolbar()
+
+        listenForThemeChange(view)
+        applyTheme()
     }
 
     private func configureBrowserView() {
@@ -73,12 +82,25 @@ class RootViewController: UIViewController,
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBar.heightAnchor.constraint(equalToConstant: 40)
         ])
 
-        searchBar.configure(searchBarDelegate: self,
-                            menuDelegate: self)
-        searchBar.becomeFirstResponder()
+        let browserActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            isEnabled: true,
+            a11yLabel: "Open Menu",
+            a11yId: "appMenuButton",
+            onSelected: {
+                self.didClickMenu()
+            })]
+        let state = AddressToolbarState(
+            url: nil,
+            navigationActions: [],
+            pageActions: [],
+            browserActions: browserActions)
+        searchBar.configure(state: state, toolbarDelegate: self)
+        _ = searchBar.becomeFirstResponder()
     }
 
     private func configureSearchView() {
@@ -114,7 +136,7 @@ class RootViewController: UIViewController,
     // MARK: - Private
 
     private func browse(to term: String) {
-        searchBar.resignFirstResponder()
+        _ = searchBar.resignFirstResponder()
         browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
     }
@@ -148,7 +170,8 @@ class RootViewController: UIViewController,
     }
 
     func onURLChange(url: String) {
-        searchBar.setSearchBarText(url)
+        // ToDo: Use model here
+        // searchBar.setSearchBarText(url)
     }
 
     func onFindInPage(selected: String) {
@@ -182,8 +205,7 @@ class RootViewController: UIViewController,
     }
 
     func openBrowser(searchTerm: String) {
-        guard let searchText = searchBar.getSearchBarText(), !searchText.isEmpty else { return }
-        browse(to: searchText)
+        browse(to: searchTerm)
     }
 
     // MARK: - MenuDelegate
@@ -197,7 +219,8 @@ class RootViewController: UIViewController,
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {
-        searchBar.setSearchBarText(term)
+        // ToDo: Use model here
+        // searchBar.setSearchBarText(term)
         browse(to: term)
     }
 
@@ -274,5 +297,11 @@ class RootViewController: UIViewController,
         findInPageBar?.endEditing(true)
         findInPageBar?.removeFromSuperview()
         findInPageBar = nil
+    }
+
+    // MARK: Themeable
+    func applyTheme() {
+        updateThemeApplicableSubviews(view)
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

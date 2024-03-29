@@ -572,9 +572,10 @@ final class WKEngineSessionTests: XCTestCase {
     func testContentScriptGivenInitContentScriptsThenAreAddedAtInit() {
         let subject = createSubject()
 
-        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 1)
-        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 1)
+        XCTAssertEqual(contentScriptManager.addContentScriptCalled, 2)
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames.count, 2)
         XCTAssertEqual(contentScriptManager.savedContentScriptNames[0], FindInPageContentScript.name())
+        XCTAssertEqual(contentScriptManager.savedContentScriptNames[1], AdsTelemetryContentScript.name())
         prepareForTearDown(subject!)
     }
 

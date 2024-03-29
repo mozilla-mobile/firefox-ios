@@ -178,7 +178,12 @@ final class LaunchCoordinatorTests: XCTestCase {
     private func createSubject(isIphone: Bool,
                                file: StaticString = #file,
                                line: UInt = #line) -> LaunchCoordinator {
-        let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: isIphone)
+        let subject = LaunchCoordinator(
+            router: mockRouter,
+            profile: profile,
+            windowUUID: .XCTestDefaultUUID,
+            isIphone: isIphone
+        )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

@@ -306,7 +306,7 @@ class TabDisplayView: UIView,
     }
 
     // MARK: - TabCellDelegate
-    func tabCellDidClose(for tabUUID: String) {
+    func tabCellDidClose(for tabUUID: TabUUID) {
         store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
     }
 
@@ -358,6 +358,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         let end = IndexPath(row: destinationIndexPath.item, section: section)
         store.dispatch(TabPanelAction.moveTab(MoveTabContext(originIndex: start.row,
                                                              destinationIndex: end.row,
+                                                             isPrivate: tabsState.isPrivateMode,
                                                              windowUUID: windowUUID)))
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 

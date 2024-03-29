@@ -8,7 +8,6 @@ import Shared
 
 class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let fontSize: CGFloat = 12
         static let mainContainerSpacing: CGFloat = 8
     }
 
@@ -27,8 +26,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
                             AppName.shortName.rawValue)
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
-                                                            size: UX.fontSize)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 
     private let learnMoreLabel: UILabel = .build { label in
@@ -36,8 +34,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
-                                                            size: UX.fontSize)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 
     private let labelsContainer: UIStackView = .build { stackView in

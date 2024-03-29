@@ -5,7 +5,6 @@
 import UIKit
 
 class DataSource: UITableViewDiffableDataSource<SectionType, SectionItem> {
-
     init(
         tableView: UITableView,
         cellProvider: @escaping UITableViewDiffableDataSource<SectionType, SectionItem>.CellProvider,

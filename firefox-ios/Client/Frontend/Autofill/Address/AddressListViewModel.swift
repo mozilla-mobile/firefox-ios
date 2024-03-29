@@ -68,10 +68,12 @@ class AddressListViewModel: ObservableObject {
                                         organization: address.organization,
                                         country: address.country,
                                         addressLevel2: address.addressLevel2,
+                                        addressLevel3: address.addressLevel3,
                                         email: address.email,
                                         streetAddress: address.streetAddress,
                                         name: address.name,
-                                        postalCode: address.postalCode)
+                                        postalCode: address.postalCode,
+                                        tel: address.tel)
     }
 
     // MARK: - Handle Address Selection

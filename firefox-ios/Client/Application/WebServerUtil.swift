@@ -28,7 +28,6 @@ class WebServerUtil {
         let responders: [(String, InternalSchemeResponse)] =
              [(AboutHomeHandler.path, AboutHomeHandler()),
               (AboutLicenseHandler.path, AboutLicenseHandler()),
-              (SessionRestoreHandler.path, SessionRestoreHandler()),
               (ErrorPageHandler.path, ErrorPageHandler())]
         responders.forEach { (path, responder) in
             InternalSchemeHandler.responders[path] = responder

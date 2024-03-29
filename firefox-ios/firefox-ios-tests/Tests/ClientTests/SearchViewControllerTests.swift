@@ -14,7 +14,8 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
     }
     func query(
         _ keyword: String,
-        providers: [SuggestionProvider]
+        providers: [SuggestionProvider],
+        limit: Int32
     ) async throws -> [RustFirefoxSuggestion] {
         var suggestions = [RustFirefoxSuggestion]()
         if providers.contains(.ampMobile) {

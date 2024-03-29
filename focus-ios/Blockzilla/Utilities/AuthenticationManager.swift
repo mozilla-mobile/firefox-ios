@@ -5,7 +5,6 @@
 import LocalAuthentication
 
 class AuthenticationManager {
-
     enum AuthenticationState {
         case loggedin, loggedout, canceled
     }
@@ -40,7 +39,6 @@ class AuthenticationManager {
                 localizedReason: context.localizedReason
             )
             authenticationState = success ? .loggedin : .loggedout
-
         } catch {
             authenticationState = .canceled
         }

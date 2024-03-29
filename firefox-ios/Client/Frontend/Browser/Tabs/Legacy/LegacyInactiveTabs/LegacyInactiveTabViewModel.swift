@@ -63,7 +63,7 @@ class LegacyInactiveTabViewModel {
         let defaultOldDay = day14Old
 
         for tab in tabs {
-            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
 
             if tabDate > defaultOldDay || tabTimeStamp == 0 {
@@ -93,7 +93,7 @@ class LegacyInactiveTabViewModel {
 
         for tab in self.allTabs {
             // Append selected tab to normal tab as we don't want to remove that
-            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.firstCreatedTime ?? 0
             let tabDate = Date.fromTimestamp(tabTimeStamp)
 
             // 1. Initializing and assigning an empty inactive tab state to the inactiveTabModel mode

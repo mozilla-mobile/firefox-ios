@@ -192,7 +192,7 @@ FormAutofillUtils = {
   getAddressLabel(address) {
     // TODO: Implement a smarter way for deciding what to display
     //       as option text. Possibly improve the algorithm in
-    //       ProfileAutoCompleteResult.jsm and reuse it here.
+    //       ProfileAutoCompleteResult.sys.mjs and reuse it here.
     let fieldOrder = [
       "name",
       "-moz-street-address-one-line", // Street address

@@ -11,6 +11,7 @@ import Storage
 protocol HomepageContextMenuHelperDelegate: UIViewController {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
+    func homePanelDidRequestBookmarkToast(for action: BookmarkAction)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -18,6 +19,11 @@ extension HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
         homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
+}
+
+enum BookmarkAction {
+    case add
+    case remove
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
@@ -54,7 +60,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     ) -> [PhotonRowActions]? {
         var actions = [PhotonRowActions]()
         if sectionType == .topSites,
-           let topSitesActions = getTopSitesActions(site: site) {
+           let topSitesActions = getTopSitesActions(site: site, with: sourceView) {
             actions = topSitesActions
         } else if sectionType == .pocket,
                   let pocketActions = getPocketActions(site: site, with: sourceView) {
@@ -194,6 +200,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 site.setBookmarked(false)
             }
 
+            self.delegate?.homePanelDidRequestBookmarkToast(for: .remove)
+
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
         })
     }
@@ -218,6 +226,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                                                  withUserData: userData,
                                                                                  toApplication: .shared)
             site.setBookmarked(true)
+
+            self.delegate?.homePanelDidRequestBookmarkToast(for: .add)
+
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
     }
@@ -244,7 +255,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - Top sites
 
-    func getTopSitesActions(site: Site) -> [PhotonRowActions]? {
+    func getTopSitesActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = site.url.asURL else { return nil }
 
         let topSiteActions: [PhotonRowActions]
@@ -252,17 +263,20 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
                               getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
-                              getRemoveTopSiteAction(site: site)]
+                              getRemoveTopSiteAction(site: site),
+                              getShareAction(site: site, sourceView: sourceView)]
         } else if site as? SponsoredTile != nil {
             topSiteActions = [getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
                               getSettingsAction(),
-                              getSponsoredContentAction()]
+                              getSponsoredContentAction(),
+                              getShareAction(site: site, sourceView: sourceView)]
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
                               getOpenInNewTabAction(siteURL: siteURL, sectionType: .topSites),
                               getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .topSites),
-                              getRemoveTopSiteAction(site: site)]
+                              getRemoveTopSiteAction(site: site),
+                              getShareAction(site: site, sourceView: sourceView)]
         }
         return topSiteActions
     }

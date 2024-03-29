@@ -46,4 +46,9 @@ public protocol EngineSessionDelegate: AnyObject {
     /// Allows delegates to participate in whether or not a keyboard accessory view is shown
     /// for the current engine session.
     func onWillDisplayAccessoryView() -> EngineInputAccessoryView
+
+    /// Allows delegates to provide custom definitions for ads tracking, for ads found on webpages.
+    /// This is utilized in conjunction with the related ads telemetry events (e.g. `.trackAdsFoundOnPage`
+    /// which are also passed along to telemetry proxy (`EngineTelemetryProxy`).
+    func adsSearchProviderModels() -> [EngineSearchProviderModel]
 }

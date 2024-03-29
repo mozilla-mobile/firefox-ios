@@ -11,7 +11,8 @@ class WKEngineSession: NSObject,
                        WKUIDelegate,
                        WKNavigationDelegate,
                        WKEngineWebViewDelegate,
-                       MetadataFetcherDelegate {
+                       MetadataFetcherDelegate,
+                       AdsTelemetryScriptDelegate {
     weak var delegate: EngineSessionDelegate?
     weak var findInPageDelegate: FindInPageHelperDelegate? {
         didSet {
@@ -32,6 +33,7 @@ class WKEngineSession: NSObject,
     private var contentBlockingSettings: WKContentBlockingSettings = []
 
     init?(userScriptManager: WKUserScriptManager,
+          telemetryProxy: EngineTelemetryProxy? = nil,
           configurationProvider: WKEngineConfigurationProvider = DefaultWKEngineConfigurationProvider(),
           webViewProvider: WKWebViewProvider = DefaultWKWebViewProvider(),
           logger: Logger = DefaultLogger.shared,
@@ -311,6 +313,9 @@ class WKEngineSession: NSObject,
         contentScriptManager.addContentScript(FindInPageContentScript(),
                                               name: FindInPageContentScript.name(),
                                               forSession: self)
+        contentScriptManager.addContentScript(AdsTelemetryContentScript(delegate: self),
+                                              name: AdsTelemetryContentScript.name(),
+                                              forSession: self)
     }
 
     // MARK: - WKUIDelegate
@@ -459,5 +464,19 @@ class WKEngineSession: NSObject,
 
     func didLoad(pageMetadata: EnginePageMetadata) {
         delegate?.didLoad(pageMetadata: pageMetadata)
+    }
+
+    // MARK: - AdsTelemetryScriptDelegate
+
+    func trackAdsClickedOnPage(providerName: String) {
+        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsClickedOnPage(providerName: providerName))
+    }
+
+    func trackAdsFoundOnPage(providerName: String, urls: [String]) {
+        telemetryProxy?.handleTelemetry(session: self, event: .trackAdsFoundOnPage(providerName: providerName, adUrls: urls))
+    }
+
+    func searchProviderModels() -> [EngineSearchProviderModel] {
+        return delegate?.adsSearchProviderModels() ?? []
     }
 }

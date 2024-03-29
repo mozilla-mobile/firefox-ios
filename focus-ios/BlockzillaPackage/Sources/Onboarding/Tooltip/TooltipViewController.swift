@@ -5,7 +5,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import UIKit
 
 public class TooltipViewController: UIViewController {
-
     private lazy var tooltipView: TooltipView = {
         let tooltipView = TooltipView()
         tooltipView.translatesAutoresizingMaskIntoConstraints = false
@@ -15,7 +14,7 @@ public class TooltipViewController: UIViewController {
 
     public var dismiss: (() -> Void)?
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
         preferredContentSize = tooltipView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)

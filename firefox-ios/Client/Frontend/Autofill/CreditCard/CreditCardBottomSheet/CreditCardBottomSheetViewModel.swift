@@ -151,7 +151,7 @@ class CreditCardBottomSheetViewModel {
     // MARK: Update Credit Card
     func updateCreditCard(for creditCardGUID: String?,
                           with decryptedCard: UnencryptedCreditCardFields?,
-                          completion: @escaping (Bool, Error?) -> Void) {
+                          completion: @escaping (Bool?, Error?) -> Void) {
         guard let creditCardGUID = creditCardGUID else {
             completion(false, AutofillApiError.UnexpectedAutofillApiError(reason: "nil credit card GUID"))
             return

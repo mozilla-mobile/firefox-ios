@@ -20,6 +20,7 @@ public struct LaunchArguments {
     public static let SkipAddingGoogleTopSite = "SKIP_ADDING_GOOGLE_TOP_SITE"
     public static let SkipDefaultBrowserOnboarding = "SKIP_DEFAULT_BROWSER_ONBOARDING"
     public static let LoadExperiment = "LOAD_EXPERIMENT"
+    public static let ExperimentFeatureName = "EXPERIMENT_FEATURE_NAME"
     public static let DisableAnimations = "DISABLE_ANIMATIONS"
 
     // After the colon, put the name of the file to load from test bundle

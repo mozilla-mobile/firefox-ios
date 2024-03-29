@@ -5,7 +5,6 @@
 import XCTest
 
 class BaseTestCaseL10n: XCTestCase {
-
     let app = XCUIApplication()
     let testRunningFirstRun = ["test01FirstRunScreens"]
 
@@ -30,16 +29,16 @@ class BaseTestCaseL10n: XCTestCase {
         app.terminate()
     }
 
-    //If it is a first run, first run window should be gone
+    // If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
         let onboardingUI = XCUIApplication().buttons["Skip"]
 
-        if (firstRunUI.exists) {
+        if firstRunUI.exists {
             firstRunUI.tap()
         }
 
-        if (onboardingUI.exists) {
+        if onboardingUI.exists {
             onboardingUI.tap()
         }
     }
@@ -153,4 +152,3 @@ class BaseTestCaseL10n: XCTestCase {
         app.collectionViews.buttons.element(boundBy: 1).tap()
     }
 }
-

@@ -43,7 +43,7 @@ class OverlayView: UIView {
     private let maxNumOfSuggestions = UIDevice.current.isSmallDevice() ? UIConstants.layout.smallDeviceMaxNumSuggestions : UIConstants.layout.largeDeviceMaxNumSuggestions
     public var currentURL = ""
 
-    var isIpadView: Bool = false {
+    var isIpadView = false {
         didSet {
             searchSuggestionsPrompt.isIpadView = isIpadView
             updateLayout(for: isIpadView)
@@ -51,7 +51,7 @@ class OverlayView: UIView {
         }
     }
 
-    private var shouldShowFindInPage: Bool =  false {
+    private var shouldShowFindInPage =  false {
         didSet {
             updateDesign(shouldShowFindInPage)
         }
@@ -180,13 +180,11 @@ class OverlayView: UIView {
             findInPageButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
             lastSeparator.backgroundColor = .systemGray
             topBorder.backgroundColor = .clear
-
         } else {
             searchButtonGroup.first?.layer.cornerRadius = 0
             findInPageButton.layer.cornerRadius = 0
             lastSeparator.backgroundColor = .clear
             topBorder.backgroundColor =  .grey90.withAlphaComponent(0.4)
-
         }
         setColorstToSearchButtons()
     }
@@ -283,7 +281,6 @@ class OverlayView: UIView {
 	}
 
     func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
-
         let attributedString = getAttributedButtonTitle(phrase: phrase,
                                                         localizedStringFormat: localizedStringFormat)
         button.setAttributedTitle(attributedString, for: .normal)

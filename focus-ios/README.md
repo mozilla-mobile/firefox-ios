@@ -22,13 +22,13 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
 2. Clone the repository:
 
   ```shell
-  git clone https://github.com/mozilla-mobile/focus-ios.git
+  git clone https://github.com/mozilla-mobile/firefox-ios.git
   ```
 
 3. Pull in the project dependencies:
 
   ```shell
-  cd focus-ios
+  cd firefox-ios
   ./checkout.sh
   ```
 

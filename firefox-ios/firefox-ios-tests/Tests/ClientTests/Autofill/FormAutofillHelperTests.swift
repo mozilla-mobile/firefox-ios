@@ -96,10 +96,12 @@ class FormAutofillHelperTests: XCTestCase {
                                                organization: "Mozilla",
                                                country: "USA",
                                                addressLevel2: "Apt 101",
+                                               addressLevel3: "Suburb",
                                                email: "mozilla@mozilla.com",
                                                streetAddress: "123 Mozilla",
                                                name: "John",
-                                               postalCode: "12345")
+                                               postalCode: "12345",
+                                               tel: "+16509030800")
 
         // Act
         let json = FormAutofillHelper.injectionJSONBuilder(address: address)
@@ -111,8 +113,10 @@ class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["country"] as? String, "USA")
         XCTAssertEqual(json["address-level1"] as? String, "123 Main St")
         XCTAssertEqual(json["address-level2"] as? String, "Apt 101")
+        XCTAssertEqual(json["address-level3"] as? String, "Suburb")
         XCTAssertEqual(json["email"] as? String, "mozilla@mozilla.com")
         XCTAssertEqual(json["postal-code"] as? String, "12345")
+        XCTAssertEqual(json["tel"] as? String, "+16509030800")
     }
 
     func testUserContentControllerDidReceiveScriptMessage_withAddressHandler() {
@@ -123,11 +127,13 @@ class FormAutofillHelperTests: XCTestCase {
         let mockBody: [String: Any] = ["type": "fill-address-form",
                                        "payload": ["address-level1": "123 Main St",
                                                    "address-level2": "Apt 101",
+                                                   "address-level3": "Suburb",
                                                    "email": "mozilla@mozilla.com",
                                                    "street-address": "123 Mozilla",
                                                    "name": "John",
                                                    "organization": "Mozilla",
                                                    "postal-code": "12345",
+                                                   "tel": "+16509030800",
                                                    "country": "USA"]]
         let mockAddressScriptMessage = WKScriptMessageMock(
             name: FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue,
@@ -145,12 +151,14 @@ class FormAutofillHelperTests: XCTestCase {
             if let addressPayload = payload.fieldData as? UnencryptedAddressFields {
                 XCTAssertEqual(addressPayload.addressLevel1, "123 Main St")
                 XCTAssertEqual(addressPayload.addressLevel2, "Apt 101")
+                XCTAssertEqual(addressPayload.addressLevel3, "Suburb")
                 XCTAssertEqual(addressPayload.email, "mozilla@mozilla.com")
                 XCTAssertEqual(addressPayload.streetAddress, "123 Mozilla")
                 XCTAssertEqual(addressPayload.name, "John")
                 XCTAssertEqual(addressPayload.organization, "Mozilla")
                 XCTAssertEqual(addressPayload.postalCode, "12345")
                 XCTAssertEqual(addressPayload.country, "USA")
+                XCTAssertEqual(addressPayload.tel, "+16509030800")
             } else {
                 XCTFail("Failed to cast fieldData to expected type")
             }
@@ -227,15 +235,8 @@ class FormAutofillHelperTests: XCTestCase {
         XCTAssertEqual(json["cc-exp"] as? String, "12/2023")
     }
 
-    func test_getValidPayloadData() {
-        XCTAssertNotNil(formAutofillHelper.getValidPayloadData(from: validMockWKMessage))
-        XCTAssertNotNil(formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage))
-    }
-
     func test_parseFieldType_valid() {
-        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
-                                                                                   formType: FillCreditCardForm.self)
+        let messageFields = validMockWKMessage.decodeBody(as: FillCreditCardForm.self)
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formInput.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -245,9 +246,8 @@ class FormAutofillHelperTests: XCTestCase {
     }
 
     func test_parseFieldCaptureJsonType_valid() {
-        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validPayloadCaptureMockWKMessage)
-        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
-                                                                                   formType: FillCreditCardForm.self)
+        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
+
         XCTAssertNotNil(messageFields)
         XCTAssertEqual(messageFields!.type, FormAutofillPayloadType.formSubmit.rawValue)
         XCTAssertEqual(messageFields!.creditCardPayload.ccExpMonth, "03")
@@ -259,9 +259,7 @@ class FormAutofillHelperTests: XCTestCase {
     // MARK: Retrieval
 
     func test_getFieldTypeValues() {
-        let messageBodyDict = formAutofillHelper.getValidPayloadData(from: validMockWKMessage)
-        let messageFields: FillCreditCardForm? = formAutofillHelper.parseFieldType(messageBody: messageBodyDict!,
-                                                                                   formType: FillCreditCardForm.self)
+        let messageFields = validPayloadCaptureMockWKMessage.decodeBody(as: FillCreditCardForm.self)
 
         XCTAssertNotNil(messageFields)
         if let fieldValues = formAutofillHelper.getFieldTypeValues(

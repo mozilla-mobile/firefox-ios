@@ -48,8 +48,8 @@ class URLContext: ActionContext {
 }
 
 class TabUUIDContext: ActionContext {
-    let tabUUID: String
-    init(tabUUID: String, windowUUID: WindowUUID) {
+    let tabUUID: TabUUID
+    init(tabUUID: TabUUID, windowUUID: WindowUUID) {
         self.tabUUID = tabUUID
         super.init(windowUUID: windowUUID)
     }
@@ -58,9 +58,11 @@ class TabUUIDContext: ActionContext {
 class MoveTabContext: ActionContext {
     let originIndex: Int
     let destinationIndex: Int
-    init(originIndex: Int, destinationIndex: Int, windowUUID: WindowUUID) {
+    let isPrivate: Bool
+    init(originIndex: Int, destinationIndex: Int, isPrivate: Bool, windowUUID: WindowUUID) {
         self.originIndex = originIndex
         self.destinationIndex = destinationIndex
+        self.isPrivate = isPrivate
         super.init(windowUUID: windowUUID)
     }
 }
@@ -120,6 +122,7 @@ enum TabPanelAction: Action {
 
     // Middleware actions
     case didLoadTabPanel(TabDisplayModelContext)
+    case didChangeTabPanel(TabDisplayModelContext)
     case refreshTab(RefreshTabContext) // Response to all user actions involving tabs ex: add, close and close all tabs
     case refreshInactiveTabs(RefreshInactiveTabsContext)
 
@@ -145,6 +148,7 @@ enum TabPanelAction: Action {
                 .hideUndoToast(let context),
                 .showShareSheet(let context as ActionContext),
                 .didLoadTabPanel(let context as ActionContext),
+                .didChangeTabPanel(let context as ActionContext),
                 .refreshTab(let context as ActionContext),
                 .refreshInactiveTabs(let context as ActionContext):
             return context.windowUUID

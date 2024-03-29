@@ -500,6 +500,17 @@ public class LoginRecordError: MaybeErrorType {
 /// Its part of a long term effort to remove `Deferred` usage inside the application and is a work in progress.
 protocol LoginsProtocol {
     func getLogin(id: String, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func getLoginsFor(
+        protectionSpace: URLProtectionSpace,
+        withUsername username: String?,
+        completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
+    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
+    func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void)
+    func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void)
 }
 
 public class RustLogins: LoginsProtocol {
@@ -645,6 +656,65 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
+    public func getLoginsFor(
+        protectionSpace: URLProtectionSpace,
+        withUsername username: String?,
+        completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
+        let rustKeys = RustLoginEncryptionKeys()
+        listLogins { result in
+            switch result {
+            case .success(let records):
+                let filteredRecords: [EncryptedLogin]
+                if let username = username {
+                    filteredRecords = records.filter {
+                        let login = rustKeys.decryptSecureFields(login: $0)
+                        return login?.secFields.username ?? "" == username && (
+                            $0.fields.origin == protectionSpace.urlString() ||
+                            $0.fields.origin == protectionSpace.host
+                        )
+                    }
+                } else {
+                    filteredRecords = records.filter {
+                        return $0.fields.origin == protectionSpace.urlString() ||
+                        $0.fields.origin == protectionSpace.host
+                    }
+                }
+                completionHandler(.success(filteredRecords))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
+
+    public func searchLoginsWithQuery(
+        _ query: String?,
+        completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+            let rustKeys = RustLoginEncryptionKeys()
+            listLogins { result in
+                switch result {
+                case .success(let logins):
+                    let records = logins
+
+                    guard let query = query?.lowercased(), !query.isEmpty else {
+                        completionHandler(.success(records.first))
+                        return
+                    }
+
+                    let filteredRecords = records.filter {
+                        let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
+                        return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
+                    }
+                    if let firstFilteredRecord = filteredRecords.first {
+                        completionHandler(.success(firstFilteredRecord))
+                    } else {
+                        completionHandler(.success(nil))
+                    }
+                case .failure(let error):
+                    completionHandler(.failure(error))
+                }
+            }
+        }
+
     public func getLoginsForProtectionSpace(
         _ protectionSpace: URLProtectionSpace,
         withUsername username: String? = nil
@@ -709,6 +779,23 @@ public class RustLogins: LoginsProtocol {
         return deferred
     }
 
+    public func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let records = try self.storage?.list()
+                completionHandler(.success(records ?? []))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
+    }
+
     public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
         let deferred = Deferred<Maybe<String>>()
 
@@ -737,6 +824,30 @@ public class RustLogins: LoginsProtocol {
         return deferred
     }
 
+    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            self.getStoredKey { result in
+                switch result {
+                case .success(let key):
+                    do {
+                        let login = try self.storage?.add(login: login, encryptionKey: key)
+                        completionHandler(.success(login))
+                    } catch let err as NSError {
+                        completionHandler(.failure(err))
+                    }
+                case .failure(let err):
+                    completionHandler(.failure(err))
+                }
+            }
+        }
+    }
+
     public func use(login: EncryptedLogin) -> Success {
         let deferred = Success()
 
@@ -756,6 +867,23 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    public func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                try self.storage?.touch(id: login.record.id)
+                completionHandler(.success(login))
+            } catch let error as NSError {
+                completionHandler(.failure(error))
+            }
+        }
     }
 
     public func updateLogin(id: String, login: LoginEntry) -> Success {
@@ -784,6 +912,62 @@ public class RustLogins: LoginsProtocol {
         }
 
         return deferred
+    }
+
+    public func updateLogin(
+        id: String,
+        login: LoginEntry,
+        completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+            queue.async {
+                guard self.isOpen else {
+                    let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                    completionHandler(.failure(error))
+                    return
+                }
+
+                self.getStoredKey { result in
+                    switch result {
+                    case .success(let key):
+                        do {
+                            let updatedLogin = try self.storage?.update(id: id, login: login, encryptionKey: key)
+                            completionHandler(.success(updatedLogin))
+                        } catch let error as NSError {
+                            completionHandler(.failure(error))
+                        }
+                    case .failure(let err):
+                        completionHandler(.failure(err))
+                    }
+                }
+            }
+        }
+
+    public func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void) {
+        var results: [Result<Bool?, Error>] = []
+        for id in ids {
+            deleteLogin(id: id) { result in
+                results.append(result)
+                if results.count == ids.count {
+                    completionHandler(results)
+                }
+            }
+        }
+    }
+
+    public func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void) {
+        queue.async {
+            guard self.isOpen else {
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
+                completionHandler(.failure(error))
+                return
+            }
+
+            do {
+                let existed = try self.storage?.delete(id: id)
+                completionHandler(.success(existed))
+            } catch let err as NSError {
+                completionHandler(.failure(err))
+            }
+        }
     }
 
     public func deleteLogins(ids: [String]) -> Deferred<[Maybe<Bool>]> {
@@ -927,7 +1111,7 @@ public class RustLogins: LoginsProtocol {
 
                     if hasLogins {
                         // Since the key data isn't present and we have login records in
-                        // the database, we both clear the databbase and the reset the key.
+                        // the database, we both clear the database and reset the key.
                         GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
                         self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
                     } else {

@@ -14,7 +14,7 @@ public enum EngineTelemetryEvent {
     case didFailProvisionalNavigation
 
     // An error page was shown on the page. Includes error code.
-    case showErrorPage(Int)
+    case showErrorPage(errorCode: Int)
 
     // A page load started.
     case pageLoadStarted
@@ -24,6 +24,12 @@ public enum EngineTelemetryEvent {
 
     // A page load was completed.
     case pageLoadFinished
+
+    /// Sends an event for ads found on the page. Includes the provider name and ad URLs.
+    case trackAdsFoundOnPage(providerName: String, adUrls: [String])
+
+    /// Sends an event for ads clicked on the page. Includes the provider name.
+    case trackAdsClickedOnPage(providerName: String)
 }
 
 /// Protocol for handling WebEngine telemetry events. These can be custom-handled

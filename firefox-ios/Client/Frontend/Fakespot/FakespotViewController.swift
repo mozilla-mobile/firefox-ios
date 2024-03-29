@@ -186,7 +186,7 @@ class FakespotViewController: UIViewController,
               fakespotState.sendSurfaceDisplayedTelemetryEvent
         else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
-        store.dispatch(FakespotAction.surfaceDisplayedEventSend)
+        store.dispatch(FakespotAction.surfaceDisplayedEventSend(windowUUID.context))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -411,6 +411,7 @@ class FakespotViewController: UIViewController,
     }
 
     private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView? {
+        let windowUUID = windowUUID
         switch viewElement {
         case .loadingView:
             let view: FakespotLoadingView = .build()
@@ -418,7 +419,7 @@ class FakespotViewController: UIViewController,
         case .onboarding:
             let view: FakespotOptInCardView = .build()
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                store.dispatch(FakespotAction.setAppearanceTo(false))
+                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
 
                 guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
@@ -446,7 +447,8 @@ class FakespotViewController: UIViewController,
             guard var cardViewModel = viewModel.highlightsCardViewModel else { return nil }
             cardViewModel.expandState = fakespotState.isHighlightsSectionExpanded ? .expanded : .collapsed
             cardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.highlightsDidChange(isExpanded: state == .expanded))
+                let context = FakespotUIContext(isExpanded: state == .expanded, windowUUID: windowUUID)
+                store.dispatch(FakespotAction.highlightsDidChange(context))
             }
             let view: FakespotHighlightsCardView = .build()
             view.configure(cardViewModel)
@@ -456,10 +458,11 @@ class FakespotViewController: UIViewController,
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
-                store.dispatch(FakespotAction.setAppearanceTo(false))
+                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             }
             viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.reviewQualityDidChange(isExpanded: state == .expanded))
+                let context = FakespotUIContext(isExpanded: state == .expanded, windowUUID: windowUUID)
+                store.dispatch(FakespotAction.reviewQualityDidChange(context))
             }
             reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
 
@@ -471,15 +474,16 @@ class FakespotViewController: UIViewController,
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self, let action else { return }
 
-                store.dispatch(FakespotAction.setAppearanceTo(false))
-                store.dispatch(FakespotAction.surfaceDisplayedEventSend)
+                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
+                store.dispatch(FakespotAction.surfaceDisplayedEventSend(windowUUID.context))
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
                 self?.viewModel.toggleAdsEnabled()
             }
             viewModel.settingsCardViewModel.onExpandStateChanged = { state in
-                store.dispatch(FakespotAction.settingsStateDidChange(isExpanded: state == .expanded))
+                let context = FakespotUIContext(isExpanded: state == .expanded, windowUUID: windowUUID)
+                store.dispatch(FakespotAction.settingsStateDidChange(context))
             }
             view.configure(viewModel.settingsCardViewModel)
 
@@ -501,7 +505,7 @@ class FakespotViewController: UIViewController,
                 self?.viewModel.addTab(url: adData.url)
                 self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
-                store.dispatch(FakespotAction.setAppearanceTo(false))
+                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             }
             view.configure(viewModel)
             adView = view
@@ -579,7 +583,7 @@ class FakespotViewController: UIViewController,
     }
 
     private func triggerDismiss() {
-        store.dispatch(FakespotAction.dismiss)
+        store.dispatch(FakespotAction.dismiss(windowUUID.context))
     }
 
     deinit {

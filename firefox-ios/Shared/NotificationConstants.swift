@@ -79,9 +79,13 @@ extension Notification.Name {
 
     public static let SearchSettingsChanged = Notification.Name("SearchSettingsChanged")
 
+    public static let SponsoredAndNonSponsoredSuggestionsChanged = Notification.Name("SponsoredAndNonSponsoredSuggestions")
+
     public static let TabDataUpdated = Notification.Name("TabDataUpdated")
 
     public static let PendingBlobDownloadAddedToQueue = Notification.Name("PendingBlobDownloadAddedToQueue")
+
+    public static let TabMimeTypeDidSet = Notification.Name("TabMimeTypeDidSet")
 
     // MARK: Tab manager
 

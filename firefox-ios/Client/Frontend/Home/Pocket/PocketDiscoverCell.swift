@@ -10,15 +10,13 @@ import Shared
 /// A cell to be placed at the last position in the Pocket section
 class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
     struct UX {
-        static let discoverMoreFontSize: CGFloat = 20
         static let horizontalMargin: CGFloat = 16
     }
 
     // MARK: - UI Elements
     let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                size: UX.discoverMoreFontSize)
+        label.font = FXFontStyles.Bold.title3.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .left
     }
