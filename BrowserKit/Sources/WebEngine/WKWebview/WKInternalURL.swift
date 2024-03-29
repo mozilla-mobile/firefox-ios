@@ -58,7 +58,7 @@ final class WKInternalURL: InternalURL {
             components.queryItems = []
         }
 
-        if components.queryItems?.find({ Param.uuidkey.matches($0.name) }) == nil {
+        if components.queryItems?.first(where: { Param.uuidkey.matches($0.name) }) == nil {
             components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: WKInternalURL.uuid))
         }
 
