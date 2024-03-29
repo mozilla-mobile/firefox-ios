@@ -173,7 +173,7 @@ class SettingsCoordinator: BaseCoordinator,
 
     // MARK: - SettingsFlowDelegate
     func showDevicePassCode() {
-        let passcodeViewController = DevicePasscodeRequiredViewController()
+        let passcodeViewController = DevicePasscodeRequiredViewController(windowUUID: windowUUID)
         passcodeViewController.profile = profile
         router.push(passcodeViewController)
     }

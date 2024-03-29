@@ -46,15 +46,13 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     weak var coordinator: PasswordManagerFlowDelegate?
     private var appAuthenticator: AppAuthenticationProtocol
-    let windowUUID: WindowUUID
 
     init(profile: Profile? = nil,
          tabManager: TabManager? = nil,
          windowUUID: WindowUUID,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.appAuthenticator = appAuthenticator
-        self.windowUUID = windowUUID
-        super.init(profile: profile, tabManager: tabManager)
+        super.init(windowUUID: windowUUID, profile: profile, tabManager: tabManager)
     }
 
     required init?(coder aDecoder: NSCoder) {

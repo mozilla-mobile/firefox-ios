@@ -177,7 +177,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     }
 
     func showPassCodeController() {
-        let passwordController = DevicePasscodeRequiredViewController()
+        let passwordController = DevicePasscodeRequiredViewController(windowUUID: windowUUID)
         passwordController.profile = profile
         passwordController.parentType = .paymentMethods
         router.present(passwordController)
