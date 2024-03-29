@@ -91,7 +91,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     func testSplashScreenExperiment_afterShown_returnsTrue() async {
         let subject = createSubject()
         let value = subject.getSplashScreenExperimentHasShown()
-        XCTAssertFalse(subject.getSplashScreenExperimentHasShown())
+        XCTAssertFalse(value)
 
         subject.setSplashScreenExperimentHasShown()
 
