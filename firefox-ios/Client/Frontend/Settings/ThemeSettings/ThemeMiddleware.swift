@@ -6,7 +6,7 @@ import Common
 import Redux
 
 protocol ThemeManagerProvider {
-    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState
+    func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState
     func toggleUseSystemAppearance(_ enabled: Bool)
     func toggleAutomaticBrightness(_ enabled: Bool)
     func updateManualTheme(_ theme: ThemeType, for window: WindowUUID)
@@ -63,9 +63,8 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     // MARK: - Helper func
-    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
-        // TODO: [8313] Revisit UUID handling, needs additional investigation.
-        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
+    func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState {
+        ThemeSettingsState(windowUUID: windowUUID,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.getNormalSavedTheme(),
