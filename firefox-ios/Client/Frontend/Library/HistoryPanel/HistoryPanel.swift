@@ -311,8 +311,16 @@ class HistoryPanel: UIViewController,
     private func refreshRecentlyClosedCell() {
         guard let cell = recentlyClosedCell else { return }
 
+        let item: HistoryActionablesModel? =
+        HistoryActionablesModel.activeActionables
+            .first(where: { $0.itemIdentity == .recentlyClosed })
+            .map {
+                var item = $0
+                item.configureImage(for: windowUUID)
+                return item
+            }
         self.setTappableStateAndStyle(
-            with: HistoryActionablesModel.activeActionables.first(where: { $0.itemIdentity == .recentlyClosed }),
+            with: item,
             on: cell)
     }
 
