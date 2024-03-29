@@ -214,11 +214,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         case UIScreen.brightnessDidChangeNotification:
             brightnessChanged()
         case UIApplication.didBecomeActiveNotification:
-            // It seems this notification is fired before the UI is informed of any changes to dark mode
-            // So dispatching to the end of the main queue will ensure it's always got the latest info
-            DispatchQueue.main.async {
-                self.systemThemeChanged()
-            }
+            self.systemThemeChanged()
         default:
             return
         }
