@@ -5,7 +5,7 @@
 import Foundation
 import Storage
 
-protocol BookmarksCoordinatorDelegate: AnyObject {
+protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func start(from folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to modify a bookmark folder
@@ -38,6 +38,7 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
 
     private let profile: Profile
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
+    private weak var navigationHandler: LibraryNavigationHandler?
     private let windowUUID: WindowUUID
 
     // MARK: - Initializers
@@ -46,11 +47,13 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
         router: Router,
         profile: Profile,
         windowUUID: WindowUUID,
-        parentCoordinator: LibraryCoordinatorDelegate?
+        parentCoordinator: LibraryCoordinatorDelegate?,
+        navigationHandler: LibraryNavigationHandler?
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.parentCoordinator = parentCoordinator
+        self.navigationHandler = navigationHandler
         super.init(router: router)
     }
 
@@ -87,5 +90,9 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
             updatePanelState?($0)
         }
         router.push(detailController)
+    }
+
+    func shareLibraryItem(url: URL, sourceView: UIView) {
+        navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
     }
 }

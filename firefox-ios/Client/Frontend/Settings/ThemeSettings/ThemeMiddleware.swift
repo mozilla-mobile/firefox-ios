@@ -13,7 +13,7 @@ protocol ThemeManagerProvider {
     func updateUserBrightness(_ value: Float)
 }
 
-// TODO: [8188] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
+// TODO: [8313] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 
@@ -53,7 +53,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
 
     // MARK: - Helper func
     func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
-        // TODO: [8188] Revisit UUID handling, needs additional investigation.
+        // TODO: [8313] Revisit UUID handling, needs additional investigation.
         ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,

@@ -29,10 +29,6 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
-        if let currentTab = tabManager.selectedTab {
-            screenshotHelper.takeScreenshot(currentTab)
-        }
-
         if navigationAction.canOpenExternalApp, let url = navigationAction.request.url {
             UIApplication.shared.open(url)
             return nil
@@ -47,7 +43,9 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        newTab.url = URL(string: "about:blank")
+        if navigationAction.request.url == nil {
+            newTab.url = URL(string: "about:blank")
+        }
 
         return newTab.webView
     }
@@ -287,7 +285,7 @@ extension BrowserViewController: WKUIDelegate {
                         image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                         identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
                     ) { _ in
-                        self.removeBookmark(url: url.absoluteString)
+                        self.removeBookmark(url: url, title: elements.title)
                         TelemetryWrapper.recordEvent(category: .action,
                                                      method: .delete,
                                                      object: .bookmark,
@@ -638,6 +636,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 } else if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
                         if isAppInstalled {
+                            webView.reload()
                            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
                         }
                     }

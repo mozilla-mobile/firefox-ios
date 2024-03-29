@@ -59,7 +59,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test A11yRoot
     func testLayer_a11yroot_isOnboarding() {
-        configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn])
+        configUtility.setupNimbusWith(withPrimaryButtonAction: [.forwardOneCard, .syncSignIn])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -71,7 +71,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_a11yroot_isUpgrade() {
         configUtility.setupNimbusWith(
             type: .upgrade,
-            withPrimaryButtonAction: [.nextCard, .syncSignIn])
+            withPrimaryButtonAction: [.forwardOneCard, .syncSignIn])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .upgrade).cards
@@ -103,20 +103,21 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             buttons: OnboardingButtons(
                 primary: OnboardingButtonInfoModel(
                     title: CardElementNames.primaryButtonTitle,
-                    action: .nextCard),
+                    action: .forwardOneCard),
                 secondary: OnboardingButtonInfoModel(
                     title: CardElementNames.secondaryButtonTitle,
-                    action: .nextCard)),
+                    action: .forwardOneCard)),
+            multipleChoiceButtons: [],
             type: .freshInstall,
             a11yIdRoot: CardElementNames.a11yIDOnboarding,
-            imageID: ImageIdentifiers.onboardingWelcomev106,
+            imageID: ImageIdentifiers.Onboarding.HeaderImages.welcomev106,
             instructionsPopup: nil)
 
         XCTAssertEqual(subject.name, expectedCard.name)
         XCTAssertEqual(subject.title, expectedCard.title)
         XCTAssertEqual(subject.body, expectedCard.body)
         XCTAssertEqual(subject.type, expectedCard.type)
-        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingWelcomev106))
+        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.Onboarding.HeaderImages.welcomev106))
         XCTAssertEqual(subject.link?.title, expectedCard.link?.title)
         XCTAssertEqual(subject.link?.url, expectedCard.link?.url)
         XCTAssertEqual(subject.buttons.primary.title, expectedCard.buttons.primary.title)
@@ -128,7 +129,13 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_cardsAreReturned_ThreeCardsReturned() {
         let expectedNumberOfCards = 3
-        configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn, .requestNotifications])
+        configUtility.setupNimbusWith(
+            withPrimaryButtonAction: [
+                .forwardOneCard,
+                .syncSignIn,
+                .requestNotifications
+            ]
+        )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -137,7 +144,13 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     func testLayer_cardsAreReturned_InExpectedOrder() {
-        configUtility.setupNimbusWith(withPrimaryButtonAction: [.nextCard, .syncSignIn, .requestNotifications])
+        configUtility.setupNimbusWith(
+            withPrimaryButtonAction: [
+                .forwardOneCard,
+                .syncSignIn,
+                .requestNotifications
+            ]
+        )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         let subject = layer.getOnboardingModel(for: .freshInstall).cards
@@ -275,7 +288,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.imageID, ImageIdentifiers.onboardingWelcomev106)
+        XCTAssertEqual(subject.imageID, ImageIdentifiers.Onboarding.HeaderImages.welcomev106)
     }
 
     func testLayer_cardIsReturned_WithNotificationImageIdenfier() {
@@ -287,7 +300,10 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingNotification))
+        XCTAssertEqual(
+            subject.image,
+            UIImage(named: ImageIdentifiers.Onboarding.HeaderImages.notification)
+        )
     }
 
     func testLayer_cardIsReturned_WithSyncImageIdenfier() {
@@ -299,7 +315,10 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.onboardingSyncv106))
+        XCTAssertEqual(
+            subject.image,
+            UIImage(named: ImageIdentifiers.Onboarding.HeaderImages.syncv106)
+        )
     }
 
     func testLayer_cardIsReturned_WithDockImageIdenfier() {
@@ -311,7 +330,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.imageID, ImageIdentifiers.onboardingSetToDock)
+        XCTAssertEqual(subject.imageID, ImageIdentifiers.Onboarding.HeaderImages.setToDock)
     }
 
     func testLayer_cardIsReturned_WithSearchWidgetImageIdenfier() {
@@ -323,7 +342,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.imageID, ImageIdentifiers.onboardingSearchWidget)
+        XCTAssertEqual(subject.imageID, ImageIdentifiers.Onboarding.HeaderImages.searchWidget)
     }
 
     // MARK: - Test install types
@@ -409,7 +428,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     func testLayer_cardIsReturned_WithNextCardButton() {
         configUtility.setupNimbusWith(
             withSecondaryButton: false,
-            withPrimaryButtonAction: [.nextCard]
+            withPrimaryButtonAction: [.forwardOneCard]
         )
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
@@ -418,7 +437,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.buttons.primary.action, .nextCard)
+        XCTAssertEqual(subject.buttons.primary.action, .forwardOneCard)
     }
 
     func testLayer_cardIsReturned_WithDefaultBrowserButton() {
@@ -472,7 +491,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             body: "\(CardElementNames.noPlaceholderString)",
             buttons: NimbusOnboardingButtons(
                 primary: NimbusOnboardingButton(
-                    action: .nextCard,
+                    action: .forwardOneCard,
                     title: "\(CardElementNames.primaryButtonTitle)")),
             disqualifiers: ["NEVER"],
             image: .notifications,

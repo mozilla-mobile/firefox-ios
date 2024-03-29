@@ -6,9 +6,7 @@ import Redux
 
 enum SearchSettingsAction: Action {
     var windowUUID: UUID {
-        // TODO: [8188] Revisit UUIDs here.
-        switch self {
-        default: return .unavailable
-        }
+        // TODO: Once actions are implemented, include ActionContext as an associated value and return UUID.
+        return .unavailable
     }
 }

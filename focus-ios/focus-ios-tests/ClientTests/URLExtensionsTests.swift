@@ -75,9 +75,12 @@ class URLExtensionsTests: XCTestCase {
     }
 
     func testValidIPv6Addresses() throws {
+        guard #available(iOS 17, *) else {
+            throw XCTSkip("IPv6 address is not supported completely.")
+        }
         try validURLwithIPv6Address.forEach {
             let url = try XCTUnwrap(URL(string: $0))
-            XCTAssertTrue(url.isIPv6, "No IPv& address in URL: '\(url)'")
+            XCTAssertTrue(url.isIPv6, "No IPv6 address in URL: '\(url)'")
         }
     }
 

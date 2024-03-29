@@ -51,7 +51,7 @@ class LockButton: UIButton {
 extension LockButton: ThemeApplicable {
     func applyTheme(theme: Theme) {
         selectedTintColor = theme.colors.actionPrimary
-        disabledTintColor = theme.colors.actionSecondary
+        disabledTintColor = theme.colors.iconDisabled
         unselectedTintColor = theme.colors.textPrimary
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
     }

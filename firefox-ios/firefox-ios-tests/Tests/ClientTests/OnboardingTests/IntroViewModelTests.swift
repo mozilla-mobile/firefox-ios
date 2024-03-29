@@ -75,7 +75,11 @@ class IntroViewModelTests: XCTestCase {
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-        let resultIndex = subject.getNextIndex(currentIndex: 0, goForward: true)
+        let resultIndex = subject.getNextIndexFrom(
+            currentIndex: 0,
+            numberOfCardsToMove: 1,
+            goForward: true
+        )
         XCTAssertEqual(resultIndex, expectedIndex)
     }
 
@@ -86,7 +90,11 @@ class IntroViewModelTests: XCTestCase {
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-        let resultIndex = subject.getNextIndex(currentIndex: 1, goForward: true)
+        let resultIndex = subject.getNextIndexFrom(
+            currentIndex: 1,
+            numberOfCardsToMove: 1,
+            goForward: true
+        )
         XCTAssertEqual(resultIndex, expectedIndex)
     }
 
@@ -96,7 +104,11 @@ class IntroViewModelTests: XCTestCase {
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-        let resultIndex = subject.getNextIndex(currentIndex: 2, goForward: true)
+        let resultIndex = subject.getNextIndexFrom(
+            currentIndex: 2,
+            numberOfCardsToMove: 1,
+            goForward: true
+        )
         XCTAssertNil(resultIndex)
     }
 
@@ -108,7 +120,11 @@ class IntroViewModelTests: XCTestCase {
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-        let resultIndex = subject.getNextIndex(currentIndex: 2, goForward: false)
+        let resultIndex = subject.getNextIndexFrom(
+            currentIndex: 2,
+            numberOfCardsToMove: 1,
+            goForward: false
+        )
         XCTAssertEqual(resultIndex, expectedIndex)
     }
 
@@ -119,7 +135,11 @@ class IntroViewModelTests: XCTestCase {
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-        let resultIndex = subject.getNextIndex(currentIndex: 1, goForward: false)
+        let resultIndex = subject.getNextIndexFrom(
+            currentIndex: 1,
+            numberOfCardsToMove: 1,
+            goForward: false
+        )
         XCTAssertEqual(resultIndex, expectedIndex)
     }
 
@@ -129,7 +149,11 @@ class IntroViewModelTests: XCTestCase {
 
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
 
-        let resultIndex = subject.getNextIndex(currentIndex: 0, goForward: false)
+        let resultIndex = subject.getNextIndexFrom(
+            currentIndex: 0,
+            numberOfCardsToMove: 1,
+            goForward: false
+        )
         XCTAssertNil(resultIndex)
     }
 
