@@ -49,7 +49,7 @@ class SyncNowSetting: WithAccountSetting {
                 string: .FxANoInternetConnection,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: FXFontStyles.Regular.footnote.scaledFont()
+                    NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()
                 ]
             )
         }
