@@ -72,7 +72,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let siteDomainLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Bold.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
