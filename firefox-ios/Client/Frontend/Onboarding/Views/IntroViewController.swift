@@ -335,13 +335,13 @@ extension IntroViewController: OnboardingCardDelegate {
     func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
         switch action {
         case .themeDark:
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(false))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
             store.dispatch(ThemeSettingsAction.switchManualTheme(.dark))
         case .themeLight:
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(false))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
             store.dispatch(ThemeSettingsAction.switchManualTheme(.light))
         case .themeSystemDefault:
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(true))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(true))
         case .toolbarBottom:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
         case .toolbarTop:

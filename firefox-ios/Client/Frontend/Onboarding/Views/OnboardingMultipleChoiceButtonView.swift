@@ -127,20 +127,19 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
 
     func updateUIForState() {
         if viewModel.isSelected {
-            applySelectedUI()
+            checkboxView.image = UIImage(named: UX.Images.selected)
         } else {
-            applyDeselectedUI()
+            checkboxView.image = UIImage(named: UX.Images.notSelected)
         }
+        applyTheme()
     }
 
     private func applySelectedUI() {
         checkboxView.image = UIImage(named: UX.Images.selected)
-        imageView.layer.borderColor = themeManager.currentTheme.colors.actionPrimary.cgColor
     }
 
     private func applyDeselectedUI() {
         checkboxView.image = UIImage(named: UX.Images.notSelected)
-        imageView.layer.borderColor = UIColor.clear.cgColor
     }
 
     // MARK: - Actions
@@ -153,5 +152,10 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - Theme
     func applyTheme() {
         backgroundColor = .clear
+        imageView.layer.borderColor = if viewModel.isSelected {
+            themeManager.currentTheme.colors.actionPrimary.cgColor
+        } else {
+            UIColor.clear.cgColor
+        }
     }
 }
