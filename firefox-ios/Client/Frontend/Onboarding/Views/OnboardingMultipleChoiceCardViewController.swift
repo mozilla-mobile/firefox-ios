@@ -315,7 +315,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
             return OnboardingMultipleChoiceButtonView(
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
-                    isSelected: false,
+                    isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
                     info: buttonModel
                 ),
                 buttonActionDelegate: delegate,

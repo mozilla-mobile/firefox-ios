@@ -6,7 +6,7 @@ import Foundation
 import Common
 import UIKit
 
-class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
+class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - UX/UI
     struct UX {
         struct Measurements {
@@ -31,6 +31,9 @@ class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: self.viewModel.info.imageID)
+        imageView.layer.cornerRadius = 10
+        imageView.layer.borderWidth = 5
+        imageView.layer.borderColor = UIColor.clear.cgColor
 //        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
     }
 
@@ -51,6 +54,9 @@ class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
 
     // MARK: - Properties
     var viewModel: OnboardingMultipleChoiceButtonViewModel
+    var themeManager: Common.ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: Common.NotificationProtocol
     weak var buttonActionDelegate: OnboardingCardDelegate?
     weak var stateUpdateDelegate: OnboardingMultipleChoiceSelectionDelegate?
 
@@ -59,14 +65,19 @@ class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
         frame: CGRect = .zero,
         viewModel: OnboardingMultipleChoiceButtonViewModel,
         buttonActionDelegate: OnboardingCardDelegate?,
-        stateUpdateDelegate: OnboardingMultipleChoiceSelectionDelegate?
+        stateUpdateDelegate: OnboardingMultipleChoiceSelectionDelegate?,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.viewModel = viewModel
         self.buttonActionDelegate = buttonActionDelegate
         self.stateUpdateDelegate = stateUpdateDelegate
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(frame: frame)
 
         setupLayout()
+        updateUIForState()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -124,23 +135,23 @@ class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
 
     private func applySelectedUI() {
         checkboxView.image = UIImage(named: UX.Images.selected)
+        imageView.layer.borderColor = themeManager.currentTheme.colors.actionPrimary.cgColor
     }
 
     private func applyDeselectedUI() {
         checkboxView.image = UIImage(named: UX.Images.notSelected)
+        imageView.layer.borderColor = UIColor.clear.cgColor
     }
 
     // MARK: - Actions
     @objc
     func buttonTapped() {
         buttonActionDelegate?.handleMultipleChoiceButtonActions(for: viewModel.info.action)
-//        viewModel.isSelected.toggle()
-//        updateStateTo(selected: viewModel.isSelected)
         stateUpdateDelegate?.updateSelectedButton(to: viewModel.info.title)
     }
 
     // MARK: - Theme
-    public func applyTheme(theme: Theme) {
+    func applyTheme() {
         backgroundColor = .clear
     }
 }

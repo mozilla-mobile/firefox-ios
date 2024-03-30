@@ -12,7 +12,8 @@ class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
                            Notifiable,
-                           StoreSubscriber {
+                           FeatureFlaggable,
+                           StoreSubscriber{
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -167,6 +168,8 @@ class IntroViewController: UIViewController,
             guard let self else { return }
 
             introViewControllerState = state
+
+            applyTheme()
         }
     }
 
@@ -332,15 +335,17 @@ extension IntroViewController: OnboardingCardDelegate {
     func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
         switch action {
         case .themeDark:
-            print("RGB - dark theme")
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(false))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(.dark))
         case .themeLight:
-            print("RGB - light theme")
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(false))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(.light))
         case .themeSystemDefault:
-            print("RGB - system theme")
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(true))
         case .toolbarBottom:
-            print("RGB - toolbar bottom")
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
         case .toolbarTop:
-            print("RGB - toolbar top")
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
         }
     }
 
