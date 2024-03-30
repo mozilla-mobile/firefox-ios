@@ -34,6 +34,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
+    private var multipleChoiceButtons: [OnboardingMultipleChoiceButtonView]
 
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
@@ -143,6 +144,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         delegate: OnboardingCardDelegate?
     ) {
         self.delegate = delegate
+        self.multipleChoiceButtons = []
 
         super.init(viewModel: viewModel)
     }
@@ -288,20 +290,14 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     }
 
     private func addViewsToView() {
+        buildButtonViews()
         topStackView.addArrangedSubview(imageView)
         topStackView.addArrangedSubview(titleLabel)
         topStackView.addArrangedSubview(descriptionLabel)
         contentStackView.addArrangedSubview(topStackView)
 
-        viewModel.multipleChoiceButtons.forEach { model in
-            choiceButtonStackView.addArrangedSubview(
-                OnboardingMultipleChoiceButtonView(
-                    viewModel: OnboardingMultipleChoiceButtonViewModel(
-                        isSelected: false,
-                        info: model
-                    )
-                )
-            )
+        multipleChoiceButtons.forEach { buttonView in
+            choiceButtonStackView.addArrangedSubview(buttonView)
         }
         contentStackView.addArrangedSubview(choiceButtonStackView)
 
@@ -313,6 +309,19 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         containerView.addSubviews(contentContainerView)
         scrollView.addSubviews(containerView)
         view.addSubview(scrollView)
+    }
+
+    private func buildButtonViews() {
+        multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
+            return OnboardingMultipleChoiceButtonView(
+                viewModel: OnboardingMultipleChoiceButtonViewModel(
+                    isSelected: false,
+                    info: buttonModel
+                ),
+                buttonActionDelegate: delegate,
+                stateUpdateDelegate: self
+            )
+        })
     }
 
     private func updateLayout() {
@@ -350,7 +359,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     // MARK: - Button Actions
     @objc
     func primaryAction() {
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: viewModel.buttons.primary.action,
             from: viewModel.name,
             isPrimaryButton: true)
@@ -360,16 +369,8 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     func secondaryAction() {
         guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: buttonAction,
-            from: viewModel.name,
-            isPrimaryButton: false)
-    }
-
-    @objc
-    func linkButtonAction() {
-        delegate?.handleButtonPress(
-            for: .readPrivacyPolicy,
             from: viewModel.name,
             isPrimaryButton: false)
     }
@@ -381,5 +382,14 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         descriptionLabel.textColor = theme.colors.textPrimary
 
         setupSecondaryButton()
+    }
+}
+
+extension OnboardingMultipleChoiceCardViewController: OnboardingMultipleChoiceSelectionDelegate {
+    func updateSelectedButton(to buttonName: String) {
+        multipleChoiceButtons.forEach { button in
+            button.viewModel.isSelected = button.viewModel.info.title == buttonName
+            button.updateUIForState()
+        }
     }
 }

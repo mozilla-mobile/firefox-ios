@@ -50,14 +50,20 @@ class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
     }
 
     // MARK: - Properties
-    private var viewModel: OnboardingMultipleChoiceButtonViewModel
+    var viewModel: OnboardingMultipleChoiceButtonViewModel
+    weak var buttonActionDelegate: OnboardingCardDelegate?
+    weak var stateUpdateDelegate: OnboardingMultipleChoiceSelectionDelegate?
 
     // MARK: - View configuration
     init(
         frame: CGRect = .zero,
-        viewModel: OnboardingMultipleChoiceButtonViewModel
+        viewModel: OnboardingMultipleChoiceButtonViewModel,
+        buttonActionDelegate: OnboardingCardDelegate?,
+        stateUpdateDelegate: OnboardingMultipleChoiceSelectionDelegate?
     ) {
         self.viewModel = viewModel
+        self.buttonActionDelegate = buttonActionDelegate
+        self.stateUpdateDelegate = stateUpdateDelegate
         super.init(frame: frame)
 
         setupLayout()
@@ -108,19 +114,33 @@ class OnboardingMultipleChoiceButtonView: UIView, ThemeApplicable {
         addSubview(containerView)
     }
 
-    func updateState() {
-        let checkImage = viewModel.isSelected ? UX.Images.selected : UX.Images.notSelected
-        checkboxView.image = UIImage(named: checkImage)
+    func updateUIForState() {
+        if viewModel.isSelected {
+            applySelectedUI()
+        } else {
+            applyDeselectedUI()
+        }
+    }
+
+    private func applySelectedUI() {
+        checkboxView.image = UIImage(named: UX.Images.selected)
+    }
+
+    private func applyDeselectedUI() {
+        checkboxView.image = UIImage(named: UX.Images.notSelected)
     }
 
     // MARK: - Actions
     @objc
     func buttonTapped() {
-        print("test")
-        viewModel.isSelected.toggle()
-        updateState()
+        buttonActionDelegate?.handleMultipleChoiceButtonActions(for: viewModel.info.action)
+//        viewModel.isSelected.toggle()
+//        updateStateTo(selected: viewModel.isSelected)
+        stateUpdateDelegate?.updateSelectedButton(to: viewModel.info.title)
     }
 
     // MARK: - Theme
-    public func applyTheme(theme: Theme) {}
+    public func applyTheme(theme: Theme) {
+        backgroundColor = .clear
+    }
 }

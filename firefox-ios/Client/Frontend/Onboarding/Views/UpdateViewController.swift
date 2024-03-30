@@ -205,7 +205,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 }
 
 extension UpdateViewController: OnboardingCardDelegate {
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
@@ -249,6 +249,21 @@ extension UpdateViewController: OnboardingCardDelegate {
 
         default:
             break
+        }
+    }
+
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+        switch action {
+        case .themeDark:
+            print("RGB - dark theme")
+        case .themeLight:
+            print("RGB - light theme")
+        case .themeSystemDefault:
+            print("RGB - system theme")
+        case .toolbarBottom:
+            print("RGB - toolbar bottom")
+        case .toolbarTop:
+            print("RGB - toolbar top")
         }
     }
 

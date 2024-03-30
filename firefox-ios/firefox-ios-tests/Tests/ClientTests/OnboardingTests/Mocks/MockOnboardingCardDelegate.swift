@@ -29,7 +29,7 @@ class MockOnboardinCardDelegateController: UIViewController,
     // Protocols under test
     var action: OnboardingActions?
 
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: Client.OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
