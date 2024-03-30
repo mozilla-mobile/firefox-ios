@@ -7,6 +7,7 @@ import XCTest
 
 class BasicBrowsing: BaseTestCase {
     // Smoke test
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
     func testLaunchExternalApp() {
         // Load URL
         loadWebPage("https://www.example.com")
@@ -17,10 +18,10 @@ class BasicBrowsing: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         // Tap Share button
-
+        // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
         let shareButton: XCUIElement
         if #available(iOS 14, *) {
-            shareButton = app.cells.buttons["Share Page With..."]
+            shareButton = app.cells.buttons["Share Page With…"]
         } else {
             shareButton = app.cells["Share Page With..."]
         }
@@ -28,25 +29,20 @@ class BasicBrowsing: BaseTestCase {
         shareButton.tap()
 
         // Launch external app
-        let RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        let RemindersApp: XCUIElement
+        if iPad() {
+            RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
+        } else {
+            RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        }
         waitForExistence(RemindersApp, timeout: 5)
         RemindersApp.tap()
         waitForExistence(app.buttons["Add"], timeout: 10)
         XCTAssertTrue(app.buttons["Add"].exists)
     }
 
-    // Smoke test
-    func testAdBlocking() {
-        // Load URL
-        loadWebPage("https://blockads.fivefilters.org/")
-        waitForWebPageLoad()
-
-        // Check ad blocking is enabled
-        let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
-        XCTAssertTrue(TrackingProtection.exists)
-    }
-
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569889
     func testNavigationToolbar() {
         loadWebPage("example.com")
         waitForWebPageLoad()

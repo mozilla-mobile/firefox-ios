@@ -91,7 +91,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             let learnMoreButtonViewModel = LinkButtonViewModel(
                 title: buttonTitle,
                 a11yIdentifier: buttonA11y,
-                fontSize: 12.0,
+                font: FXFontStyles.Regular.caption1.scaledFont(),
                 contentInsets: .zero
             )
             learnMoreButton.configure(viewModel: learnMoreButtonViewModel)

@@ -167,10 +167,7 @@ class FakespotTests: BaseTestCase {
         learnMoreLink.tap()
         // The link opens in a new tab
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.staticTexts["Review Checker for Firefox Mobile"])
-        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
-        let numTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual(numTab, "2")
+        validateMozillaSupportWebpage("Review Checker for Firefox Mobile", "support.mozilla.org")
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358864
@@ -194,6 +191,52 @@ class FakespotTests: BaseTestCase {
         // Opt-in card is displayed
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358894
+    func testLearnMoreLink() {
+        // Navigate to a product detail page
+        reachReviewChecker()
+        // Tap Learn more link
+        let learnMoreLink = app.scrollViews.otherElements.staticTexts["Learn more"]
+        mozWaitForElementToExist(learnMoreLink)
+        learnMoreLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        validateMozillaSupportWebpage("Review Checker for Firefox Mobile", "support.mozilla.org")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358896
+    func testTermsOfUseLink() {
+        // Navigate to a product detail page
+        reachReviewChecker()
+        // Tap Terms of use link
+        let termsOfUseLink = app.scrollViews.otherElements.staticTexts["Fakespot’s terms of use"]
+        mozWaitForElementToExist(termsOfUseLink)
+        termsOfUseLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        validateMozillaSupportWebpage("Fakespot Terms of Use", "www.fakespot.com")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358895
+    func testPrivacyPolicyLink() {
+        // Navigate to a product detail page
+        reachReviewChecker()
+        // Tap privacy policy link
+        let privacyPolicyLink = app.scrollViews.otherElements.staticTexts["Firefox’s privacy notice"]
+        mozWaitForElementToExist(privacyPolicyLink)
+        privacyPolicyLink.tap()
+        // The link opens in a new tab
+        waitUntilPageLoad()
+        validateMozillaSupportWebpage("Privacy Notice", "privacy/firefox")
+    }
+
+    private func validateMozillaSupportWebpage(_ webpageTitle: String, _ url: String) {
+        mozWaitForElementToExist(app.staticTexts[webpageTitle])
+        mozWaitForValueContains(app.textFields["url"], value: url)
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual(numTab, "2")
     }
 
     private func validateLayoutOnWalmartAndBestBuy(_ website: String, isWalmart: Bool, _ currentWebsite: String,
@@ -325,6 +368,7 @@ class FakespotTests: BaseTestCase {
 
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
+        app.swipeDown()
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
 
         // Retry loading the page if page is not loading
@@ -337,8 +381,16 @@ class FakespotTests: BaseTestCase {
             app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
         }
         // Tap the shopping cart icon
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
+        let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
+        var nrOfRetries = 4
+        while !shoppingButton.exists && nrOfRetries > 0 {
+            app.buttons["Reload page"].tap()
+            waitUntilPageLoad()
+            app.swipeDown()
+            app.webViews["contentView"].firstMatch.images.firstMatch.tap(force: true)
+            nrOfRetries -= 1
+        }
+        shoppingButton.tap()
     }
 
     private func loadWebsiteAndPerformSearch() {

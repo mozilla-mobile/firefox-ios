@@ -103,7 +103,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
                    level: .info,
                    category: .coordinator)
 
-        let launchCoordinator = LaunchCoordinator(router: router)
+        let launchCoordinator = LaunchCoordinator(router: router, windowUUID: windowUUID)
         launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
         launchCoordinator.start(with: launchType)

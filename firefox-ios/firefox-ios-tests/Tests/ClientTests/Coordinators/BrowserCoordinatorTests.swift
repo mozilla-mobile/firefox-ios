@@ -748,7 +748,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
         subject.start(with: nil)
 
-        subject.didFinishLaunch(from: LaunchCoordinator(router: mockRouter))
+        subject.didFinishLaunch(
+            from: LaunchCoordinator(
+                router: mockRouter,
+                windowUUID: .XCTestDefaultUUID
+            )
+        )
 
         XCTAssertNotNil(subject.savedRoute)
     }

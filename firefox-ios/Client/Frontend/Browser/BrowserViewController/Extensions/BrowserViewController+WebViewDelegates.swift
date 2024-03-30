@@ -43,7 +43,9 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        newTab.url = URL(string: "about:blank")
+        if navigationAction.request.url == nil {
+            newTab.url = URL(string: "about:blank")
+        }
 
         return newTab.webView
     }
@@ -634,6 +636,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 } else if UIApplication.shared.canOpenURL(url) {
                     UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
                         if isAppInstalled {
+                            webView.reload()
                            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
                         }
                     }

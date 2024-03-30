@@ -59,11 +59,9 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         static let abdfRatingsStackViewSpacing: CGFloat = 8
         static let cRatingStackViewSpacing: CGFloat = 40
         static let headlineStackViewSpacing: CGFloat = 20
-        static let labelFontSize: CGFloat = 15
         static let ratingsFooterStackViewInsets = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         static let contentStackViewInsets = UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
-        static let baseFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                     size: UX.labelFontSize)
+        static let baseFont = FXFontStyles.Regular.subheadline.scaledFont()
         static let footerStackBottomSpace: CGFloat = 0
         static let learnMoreInset = NSDirectionalEdgeInsets(top: 16,
                                                             leading: 0,
@@ -300,7 +298,7 @@ final class FakespotReviewQualityCardView: UIView, Notifiable, ThemeApplicable {
         let learnMoreButtonViewModel = LinkButtonViewModel(
             title: viewModel.learnMoreButtonTitle,
             a11yIdentifier: viewModel.learnMoreButtonA11yId,
-            fontSize: UX.labelFontSize,
+            font: FXFontStyles.Regular.subheadline.scaledFont(),
             contentInsets: UX.learnMoreInset
         )
         learnMoreButton.configure(viewModel: learnMoreButtonViewModel)

@@ -206,8 +206,13 @@ class SettingAppearanceTest: BaseTestCase {
         // Start Editing
         waitForHittable(app.navigationBars.buttons["editButton"])
         app.navigationBars.buttons["editButton"].tap()
-        waitForHittable(app.tables.cells["mozilla.org"].buttons["Remove mozilla.org"])
-        app.tables.cells["mozilla.org"].buttons["Remove mozilla.org"].tap()
+        if #available(iOS 17, *) {
+            waitForHittable(app.tables.cells["mozilla.org"].buttons["Remove mozilla.org"])
+            app.tables.cells["mozilla.org"].buttons["Remove mozilla.org"].tap()
+        } else {
+            waitForHittable(app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"])
+            app.tables.cells["mozilla.org"].buttons["Delete mozilla.org"].tap()
+        }
         waitForHittable(app.tables.cells["mozilla.org"].buttons["Delete"])
         app.tables.cells["mozilla.org"].buttons["Delete"].tap()
 

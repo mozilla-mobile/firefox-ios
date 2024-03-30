@@ -57,8 +57,8 @@ private struct DarkColourPalette: ThemeColourPalette {
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue30
     var actionPrimaryHover: UIColor = FXColors.Blue20
-    var actionSecondary: UIColor = FXColors.LightGrey30
-    var actionSecondaryHover: UIColor = FXColors.LightGrey20
+    var actionSecondary: UIColor = FXColors.DarkGrey05
+    var actionSecondaryHover: UIColor = FXColors.LightGrey90
     var formSurfaceOff: UIColor = FXColors.DarkGrey05
     var formKnob: UIColor = FXColors.White
     var indicatorActive: UIColor = FXColors.LightGrey90
