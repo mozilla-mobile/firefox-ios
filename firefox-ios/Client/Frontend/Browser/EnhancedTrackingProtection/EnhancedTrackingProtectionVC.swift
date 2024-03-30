@@ -13,9 +13,6 @@ struct ETPMenuUX {
         static let viewTitleLabels: UIFont = .systemFont(ofSize: 17, weight: .regular)
         static let detailsLabel: UIFont = .systemFont(ofSize: 12, weight: .regular)
         static let minorInfoLabel: UIFont = .systemFont(ofSize: 15, weight: .regular)
-        static let websiteTitleFontSize: CGFloat = 15
-        static let viewTitleLabelsFontSize: CGFloat = 15
-        static let detailsLabelFontSize: CGFloat = 10
     }
 
     struct UX {
