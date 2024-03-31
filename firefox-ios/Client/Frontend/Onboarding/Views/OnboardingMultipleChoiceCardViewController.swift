@@ -13,8 +13,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let stackViewSpacingButtons: CGFloat = 16
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
+        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 10
+        static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
         static let topStackViewPaddingPhone: CGFloat = 90
-        static let choiceButtonStackViewPadding: CGFloat = 36
+        static let choiceButtonStackViewSpacing: CGFloat = 36
         static let bottomStackViewPaddingPad: CGFloat = 32
         static let bottomStackViewPaddingPhone: CGFloat = 0
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
@@ -206,15 +208,22 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
             bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
                 topStackView.spacing = UX.smallStackViewSpacing
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
                 choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
                 bottomButtonStackView.spacing = UX.smallStackViewSpacing
                 scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
-                topStackView.setCustomSpacing(10, after: imageView)
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
                 topStackView.spacing = UX.stackViewSpacingWithoutLink
-                choiceButtonStackView.spacing = 36
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
+                choiceButtonStackView.spacing = UX.choiceButtonStackViewSpacing
                 bottomButtonStackView.spacing = UX.stackViewSpacingButtons
                 scrollViewVerticalPadding = UX.scrollViewVerticalPadding
                 topPadding = view.frame.height * 0.1
@@ -294,12 +303,12 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         topStackView.addArrangedSubview(imageView)
         topStackView.addArrangedSubview(titleLabel)
         topStackView.addArrangedSubview(descriptionLabel)
-        contentStackView.addArrangedSubview(topStackView)
 
         multipleChoiceButtons.forEach { buttonView in
             choiceButtonStackView.addArrangedSubview(buttonView)
         }
-        contentStackView.addArrangedSubview(choiceButtonStackView)
+        topStackView.addArrangedSubview(choiceButtonStackView)
+        contentStackView.addArrangedSubview(topStackView)
 
         bottomButtonStackView.addArrangedSubview(primaryButton)
         bottomButtonStackView.addArrangedSubview(secondaryButton)
@@ -312,11 +321,13 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     }
 
     private func buildButtonViews() {
+        multipleChoiceButtons.removeAll()
         multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
             return OnboardingMultipleChoiceButtonView(
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
-                    info: buttonModel
+                    info: buttonModel,
+                    a11yIDRoot: viewModel.a11yIdRoot
                 ),
                 buttonActionDelegate: delegate,
                 stateUpdateDelegate: self

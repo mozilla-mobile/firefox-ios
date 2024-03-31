@@ -13,6 +13,8 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
             static let imageWidth: CGFloat = 60
             static let imageHeight: CGFloat = 97
             static let checkboxDimensions: CGFloat = 24
+            static let imageCornerRadius: CGFloat = 10
+            static let imageBorderWidth: CGFloat = 5
         }
 
         struct Images {
@@ -26,15 +28,20 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     private lazy var button: UIButton = .build { button in
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(self.buttonTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = "\(self.viewModel.a11yIDRoot)MultipleChoiceButton"
+        button.accessibilityTraits.insert(.button)
+        button.isAccessibilityElement = true
+        button.accessibilityLabel = self.viewModel.info.title
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: self.viewModel.info.imageID)
-        imageView.layer.cornerRadius = 10
-        imageView.layer.borderWidth = 5
+        imageView.layer.cornerRadius = UX.Measurements.imageCornerRadius
+        imageView.layer.borderWidth = UX.Measurements.imageBorderWidth
         imageView.layer.borderColor = UIColor.clear.cgColor
-//        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
+        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIDRoot)ImageView"
+        imageView.isAccessibilityElement = false
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -43,13 +50,15 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         label.adjustsFontForContentSizeCategory = true
         label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: 13)
         label.text = self.viewModel.info.title
-//        label.accessibilityIdentifier = "\(self.viewModel.info.title)TitleLabel"
+        label.accessibilityIdentifier = "\(self.viewModel.info.title)TitleLabel"
+        label.isAccessibilityElement = false
     }
 
     private lazy var checkboxView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: UX.Images.notSelected)
-//        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
+        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIDRoot)CheckboxView"
+        imageView.isAccessibilityElement = false
     }
 
     // MARK: - Properties
