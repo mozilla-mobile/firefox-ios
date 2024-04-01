@@ -9,37 +9,34 @@ import Shared
 
 class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     struct UX {
-        static let stackViewSpacingWithLink: CGFloat = 15
-        static let stackViewSpacingWithoutLink: CGFloat = 24
+        static let stackViewSpacingWithoutLink: CGFloat = 5
         static let stackViewSpacingButtons: CGFloat = 16
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
+        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 10
+        static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
         static let topStackViewPaddingPhone: CGFloat = 90
+        static let choiceButtonStackViewSpacing: CGFloat = 36
         static let bottomStackViewPaddingPad: CGFloat = 32
         static let bottomStackViewPaddingPhone: CGFloat = 0
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
         static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
-        static let descriptionBoldFontSize: CGFloat = 20
         static let descriptionFontSize: CGFloat = 17
-        static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
         static let smallTitleFontSize: CGFloat = 20
         static let smallStackViewSpacing: CGFloat = 8
         static let smallScrollViewVerticalPadding: CGFloat = 20
-        static let smallImageViewSize = CGSize(width: 240, height: 280)
         static let smallTopStackViewPadding: CGFloat = 40
 
-        // tiny device (SE 1st gen)
-        static let tinyImageViewSize = CGSize(width: 144, height: 180)
-
-        static let baseImageHeight: CGFloat = 211
+        static let baseImageHeight: CGFloat = 200
     }
 
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
+    private var multipleChoiceButtons: [OnboardingMultipleChoiceButtonView]
 
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
@@ -104,7 +101,14 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
 
-    lazy var buttonStackView: UIStackView = .build { stack in
+    lazy var choiceButtonStackView: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.distribution = .equalCentering
+        stack.alignment = .center
+        stack.axis = .horizontal
+    }
+
+    lazy var bottomButtonStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .equalSpacing
         stack.axis = .vertical
@@ -116,10 +120,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
     private lazy var secondaryButton: SecondaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
-    }
-
-    private lazy var linkButton: LinkButton = .build { button in
-        button.addTarget(self, action: #selector(self.linkButtonAction), for: .touchUpInside)
     }
 
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6816
@@ -134,10 +134,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         if shouldUseTinyDeviceLayout {
             return 1.0
         } else if shouldUseSmallDeviceLayout {
-            return 1.25
+            return 1.0
         }
 
-        return 1.4
+        return 1.0
     }
 
     // MARK: - Initializers
@@ -146,6 +146,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         delegate: OnboardingCardDelegate?
     ) {
         self.delegate = delegate
+        self.multipleChoiceButtons = []
 
         super.init(viewModel: viewModel)
     }
@@ -177,8 +178,9 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     // MARK: - View setup
     func setupView() {
         view.backgroundColor = .clear
-        contentStackView.spacing = stackViewSpacing()
-        buttonStackView.spacing = stackViewSpacing()
+        contentStackView.spacing = UX.stackViewSpacingWithoutLink
+        choiceButtonStackView.spacing = 0
+        bottomButtonStackView.spacing = UX.stackViewSpacingWithoutLink
         addViewsToView()
 
         // Adapt layout for smaller screens
@@ -188,8 +190,9 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            topStackView.spacing = stackViewSpacing()
-            buttonStackView.spacing = UX.stackViewSpacingButtons
+            topStackView.spacing = UX.stackViewSpacingWithoutLink
+            choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
+            bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
                 scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPad
@@ -205,13 +208,23 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
             bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
                 topStackView.spacing = UX.smallStackViewSpacing
-                buttonStackView.spacing = UX.smallStackViewSpacing
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
+                choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
+                bottomButtonStackView.spacing = UX.smallStackViewSpacing
                 scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
-                topStackView.spacing = stackViewSpacing()
-                buttonStackView.spacing = UX.stackViewSpacingButtons
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                              after: imageView)
+                topStackView.spacing = UX.stackViewSpacingWithoutLink
+                topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                              after: descriptionLabel)
+                choiceButtonStackView.spacing = UX.choiceButtonStackViewSpacing
+                bottomButtonStackView.spacing = UX.stackViewSpacingButtons
                 scrollViewVerticalPadding = UX.scrollViewVerticalPadding
                 topPadding = view.frame.height * 0.1
             }
@@ -272,12 +285,13 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
-                linkButton.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                linkButton.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+                choiceButtonStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentStackView.leadingAnchor),
+                choiceButtonStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: 10),
+                choiceButtonStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentStackView.trailingAnchor),
 
-                buttonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
-                buttonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
-                buttonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
+                bottomButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
+                bottomButtonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
+                bottomButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
                 imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
             ]
@@ -285,15 +299,20 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     }
 
     private func addViewsToView() {
+        buildButtonViews()
         topStackView.addArrangedSubview(imageView)
         topStackView.addArrangedSubview(titleLabel)
         topStackView.addArrangedSubview(descriptionLabel)
-        contentStackView.addArrangedSubview(topStackView)
-        contentStackView.addArrangedSubview(linkButton)
 
-        buttonStackView.addArrangedSubview(primaryButton)
-        buttonStackView.addArrangedSubview(secondaryButton)
-        contentStackView.addArrangedSubview(buttonStackView)
+        multipleChoiceButtons.forEach { buttonView in
+            choiceButtonStackView.addArrangedSubview(buttonView)
+        }
+        topStackView.addArrangedSubview(choiceButtonStackView)
+        contentStackView.addArrangedSubview(topStackView)
+
+        bottomButtonStackView.addArrangedSubview(primaryButton)
+        bottomButtonStackView.addArrangedSubview(secondaryButton)
+        contentStackView.addArrangedSubview(bottomButtonStackView)
 
         contentContainerView.addSubview(contentStackView)
         containerView.addSubviews(contentContainerView)
@@ -301,12 +320,19 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         view.addSubview(scrollView)
     }
 
-    private func stackViewSpacing() -> CGFloat {
-        guard viewModel.link?.title != nil else {
-            return UX.stackViewSpacingWithoutLink
-        }
-
-        return UX.stackViewSpacingWithLink
+    private func buildButtonViews() {
+        multipleChoiceButtons.removeAll()
+        multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
+            return OnboardingMultipleChoiceButtonView(
+                viewModel: OnboardingMultipleChoiceButtonViewModel(
+                    isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
+                    info: buttonModel,
+                    a11yIDRoot: viewModel.a11yIdRoot
+                ),
+                buttonActionDelegate: delegate,
+                stateUpdateDelegate: self
+            )
+        })
     }
 
     private func updateLayout() {
@@ -341,26 +367,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
     }
 
-    private func setupLinkButton() {
-        guard let buttonTitle = viewModel.link?.title else {
-            linkButton.isUserInteractionEnabled = false
-            linkButton.isHidden = true
-            return
-        }
-        let buttonViewModel = LinkButtonViewModel(
-            title: buttonTitle,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            font: FXFontStyles.Regular.callout.scaledFont(),
-            contentHorizontalAlignment: .center
-        )
-        linkButton.configure(viewModel: buttonViewModel)
-        linkButton.applyTheme(theme: themeManager.currentTheme)
-    }
-
     // MARK: - Button Actions
     @objc
     func primaryAction() {
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: viewModel.buttons.primary.action,
             from: viewModel.name,
             isPrimaryButton: true)
@@ -370,16 +380,8 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     func secondaryAction() {
         guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: buttonAction,
-            from: viewModel.name,
-            isPrimaryButton: false)
-    }
-
-    @objc
-    func linkButtonAction() {
-        delegate?.handleButtonPress(
-            for: .readPrivacyPolicy,
             from: viewModel.name,
             isPrimaryButton: false)
     }
@@ -389,9 +391,18 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
-        view.backgroundColor = .purple
 
         setupSecondaryButton()
-        setupLinkButton()
+
+        multipleChoiceButtons.forEach { $0.applyTheme() }
+    }
+}
+
+extension OnboardingMultipleChoiceCardViewController: OnboardingMultipleChoiceSelectionDelegate {
+    func updateSelectedButton(to buttonName: String) {
+        multipleChoiceButtons.forEach { button in
+            button.viewModel.isSelected = button.viewModel.info.title == buttonName
+            button.updateUIForState()
+        }
     }
 }

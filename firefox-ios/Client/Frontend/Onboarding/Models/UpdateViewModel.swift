@@ -98,7 +98,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                 break
             }
 
-            if !cardModel.multipleChoiceButtons.isEmpty {
+            if cardModel.cardType == .multipleChoice {
             availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
                 delegate: delegate))

@@ -96,7 +96,7 @@ class IntroViewControllerTests: XCTestCase {
     ) -> IntroViewController {
         NimbusOnboardingTestingConfigUtility().setupNimbusWith(
             image: .notifications,
-            type: .freshInstall,
+            onboardingType: .freshInstall,
             dismissable: true,
             shouldAddLink: false,
             withSecondaryButton: true,

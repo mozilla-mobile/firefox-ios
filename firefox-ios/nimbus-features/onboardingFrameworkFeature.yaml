@@ -33,6 +33,7 @@ features:
             NEVER:                    "false"
           cards:
             welcome:
+              card-type: basic
               order: 10
               title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
               body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
@@ -55,10 +56,66 @@ features:
                   - Onboarding/DefaultBrowserPopup.FirstLabel.v114
                   - Onboarding/DefaultBrowserPopup.SecondLabel.v114
                   - Onboarding/DefaultBrowserPopup.ThirdLabel.v114
-              type: fresh-install
+              onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS
+            # multiple-choice-test:
+            #   card-type: multiple-choice
+            #   order: 5
+            #   title: Onboarding/Onboarding.Customization.Theme.Title.v123
+            #   body: Onboarding/Onboarding.Customization.Theme.Description.v123
+            #   image: themeing
+            #   link:
+            #     title: Onboarding/Onboarding.Welcome.Link.Action.v114
+            #     url: "https://www.mozilla.org/privacy/firefox/"
+            #   buttons:
+            #     primary:
+            #       title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
+            #       action: forward-one-card
+            #     secondary:
+            #       title: Onboarding/Onboarding.Welcome.Skip.v114
+            #       action: forward-one-card
+            #   multiple-choice-buttons:
+            #     - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
+            #       image: theme-system
+            #       action: theme-system-default
+            #     - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
+            #       image: theme-light
+            #       action: theme-light
+            #     - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
+            #       image: theme-dark
+            #       action: theme-dark
+            #   onboarding-type: fresh-install
+            #   prerequisites:
+            #     - ALWAYS
+            # multiple-choice-test-two:
+            #   card-type: multiple-choice
+            #   order: 7
+            #   title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
+            #   body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
+            #   image: toolbar
+            #   link:
+            #     title: Onboarding/Onboarding.Welcome.Link.Action.v114
+            #     url: "https://www.mozilla.org/privacy/firefox/"
+            #   buttons:
+            #     primary:
+            #       title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
+            #       action: forward-one-card
+            #     secondary:
+            #       title: Onboarding/Onboarding.Welcome.Skip.v114
+            #       action: forward-one-card
+            #   multiple-choice-buttons:
+            #     - title: "Top"
+            #       image: toolbar-top
+            #       action: toolbar-top
+            #     - title: "Bottom"
+            #       image: toolbar-bottom
+            #       action: toolbar-bottom
+            #   onboarding-type: fresh-install
+            #   prerequisites:
+            #     - ALWAYS
             notification-permissions:
+              card-type: basic
               order: 30
               title: Onboarding/Onboarding.Notification.Title.v120
               body: Onboarding/Onboarding.Notification.Description.v120
@@ -70,10 +127,11 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.Notification.Skip.Action.v115
                   action: forward-one-card
-              type: fresh-install
+              onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS
             sign-to-sync:
+              card-type: basic
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v120
               body: Onboarding/Onboarding.Sync.Description.v120
@@ -85,10 +143,11 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
                   action: forward-one-card
-              type: fresh-install
+              onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS
             update-welcome:
+              card-type: basic
               order: 10
               title: Upgrade/Upgrade.Welcome.Title.v114
               body: Upgrade/Upgrade.Welcome.Description.v114
@@ -97,10 +156,11 @@ features:
                 primary:
                   title: Upgrade/Upgrade.Welcome.Action.v114
                   action: forward-one-card
-              type: upgrade
+              onboarding-type: upgrade
               prerequisites:
                 - NEVER
             update-sign-to-sync:
+              card-type: basic
               order: 20
               title: Upgrade/Upgrade.SyncSign.Title.v114
               body: Upgrade/Upgrade.SyncSign.Description.v114
@@ -112,7 +172,7 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.LaterAction.v114
                   action: forward-one-card
-              type: upgrade
+              onboarding-type: upgrade
               prerequisites:
                 - NEVER
           dismissable: true
@@ -122,6 +182,13 @@ objects:
     description: >
       A group of properties describing the attributes of a card.
     fields:
+      card-type:
+        type: OnboardingCardType
+        description: >
+          The type of onboarding this card should be shown in,
+          whether it a fresh install or an update.
+          The default is fresh-install.
+        default: basic
       order:
         type: Int
         description: >
@@ -187,7 +254,7 @@ objects:
           A list of ConditionName strings corresponding to targeting expressions.
           The card will not be shown if any expression is `true`.
         default: []
-      type:
+      onboarding-type:
         type: OnboardingType
         description: >
           The type of onboarding this card should be shown in,
@@ -365,6 +432,22 @@ enums:
       welcome-globe:
         description: >
           Corresponding to the fox world image
+      themeing:
+        description: >
+          Corresponding to the fox world image
+      toolbar:
+        description: >
+          Corresponding to the fox world image
+  OnboardingCardType:
+    description: >
+      The identifiers for the different types of onboarding cards.
+    variants:
+      basic:
+        description: >
+          Corresponding to basic info onboarding cards
+      multiple-choice:
+        description: >
+          Corresponding to onboarding cards with multiple choice buttons
   OnboardingType:
     description: >
       The identifiers for the different types of onboarding cards.

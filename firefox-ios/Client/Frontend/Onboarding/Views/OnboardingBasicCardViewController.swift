@@ -360,7 +360,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // MARK: - Button Actions
     @objc
     func primaryAction() {
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: viewModel.buttons.primary.action,
             from: viewModel.name,
             isPrimaryButton: true)
@@ -370,7 +370,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     func secondaryAction() {
         guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: buttonAction,
             from: viewModel.name,
             isPrimaryButton: false)
@@ -378,7 +378,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
 
     @objc
     func linkButtonAction() {
-        delegate?.handleButtonPress(
+        delegate?.handleBottomButtonActions(
             for: .readPrivacyPolicy,
             from: viewModel.name,
             isPrimaryButton: false)

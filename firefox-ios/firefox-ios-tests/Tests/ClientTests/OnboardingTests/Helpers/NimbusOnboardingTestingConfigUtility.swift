@@ -56,7 +56,8 @@ struct NimbusOnboardingTestingConfigUtility {
     // MARK: - Custom setups
     func setupNimbusWith(
         image: NimbusOnboardingHeaderImage = .welcomeGlobe,
-        type: OnboardingType = .freshInstall,
+        cardType: OnboardingCardType = .basic,
+        onboardingType: OnboardingType = .freshInstall,
         dismissable: Bool = true,
         shouldAddLink: Bool = false,
         withSecondaryButton: Bool = false,
@@ -67,7 +68,8 @@ struct NimbusOnboardingTestingConfigUtility {
         let cards = createCards(
             numbering: primaryAction.count,
             image: image,
-            type: type,
+            cardType: cardType,
+            onboardingType: onboardingType,
             shouldAddLink: shouldAddLink,
             withSecondaryButton: withSecondaryButton,
             primaryButtonAction: primaryAction,
@@ -85,7 +87,8 @@ struct NimbusOnboardingTestingConfigUtility {
     private func createCards(
         numbering numberOfCards: Int,
         image: NimbusOnboardingHeaderImage,
-        type: OnboardingType,
+        cardType: OnboardingCardType,
+        onboardingType: OnboardingType,
         shouldAddLink: Bool,
         withSecondaryButton: Bool,
         primaryButtonAction: [OnboardingActions],
@@ -100,14 +103,15 @@ struct NimbusOnboardingTestingConfigUtility {
                 buttons: createButtons(
                     withPrimaryAction: primaryButtonAction[number - 1],
                     andSecondaryButton: withSecondaryButton),
+                cardType: cardType,
                 disqualifiers: disqualifiers,
                 image: image,
                 instructionsPopup: buildInfoPopup(),
                 link: shouldAddLink ? buildLink() : nil,
+                onboardingType: onboardingType,
                 order: number,
                 prerequisites: prerequisites,
-                title: "\(CardElementNames.title) \(number)",
-                type: type)
+                title: "\(CardElementNames.title) \(number)")
         }
 
         return dictionary
@@ -130,14 +134,15 @@ struct NimbusOnboardingTestingConfigUtility {
         return NimbusOnboardingCardData(
             body: "body text",
             buttons: createButtons(for: id),
+            cardType: .basic,
             disqualifiers: ["NEVER"],
             image: image,
             instructionsPopup: buildInfoPopup(),
             link: shouldAddLink.contains(where: { $0 == id }) ? buildLink() : nil,
+            onboardingType: isUpdate.contains(where: { $0 == id }) ? .upgrade : .freshInstall,
             order: order,
             prerequisites: ["ALWAYS"],
-            title: "title text",
-            type: isUpdate.contains(where: { $0 == id }) ? .upgrade : .freshInstall)
+            title: "title text")
     }
 
     private func createButtons(

@@ -49,7 +49,7 @@ class IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     func setupViewControllerDelegates(with delegate: OnboardingCardDelegate) {
         availableCards.removeAll()
         cardModels.forEach { cardModel in
-            if !cardModel.multipleChoiceButtons.isEmpty {
+            if cardModel.cardType == .multipleChoice {
             availableCards.append(OnboardingMultipleChoiceCardViewController(
                 viewModel: cardModel,
                 delegate: delegate))
