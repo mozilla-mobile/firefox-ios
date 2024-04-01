@@ -37,7 +37,8 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,
-                           LaunchArguments.DisableAnimations
+                           LaunchArguments.DisableAnimations,
+                           LaunchArguments.SkipSplashScreenExperiment
         ]
 
     func restartInBackground() {
