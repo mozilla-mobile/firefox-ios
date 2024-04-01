@@ -49,11 +49,7 @@ class SyncNowSetting: WithAccountSetting {
                 string: .FxANoInternetConnection,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
-                        withTextStyle: .body,
-                        size: 13,
-                        weight: .regular
-                    )
+                    NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()
                 ]
             )
         }
@@ -64,11 +60,7 @@ class SyncNowSetting: WithAccountSetting {
             string: .FxASyncNow,
             attributes: [
                 NSAttributedString.Key.foregroundColor: self.enabled ? syncText : headerLightText,
-                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
-                    withTextStyle: .body,
-                    size: 17,
-                    weight: .regular
-                )
+                NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()
             ]
         )
     }
@@ -115,11 +107,8 @@ class SyncNowSetting: WithAccountSetting {
                 string: message,
                 attributes: [
                     NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
-                    NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
-                        withTextStyle: .body,
-                        size: 17,
-                        weight: .regular
-                    )]
+                    NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()
+                ]
             )
         case .inProgress:
             return NSAttributedString(
@@ -167,9 +156,7 @@ class SyncNowSetting: WithAccountSetting {
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
         troubleshootButton.setTitleColor(self.theme.colors.textWarning, for: .normal)
-        troubleshootButton.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                                     size: 12,
-                                                                                     weight: .regular)
+        troubleshootButton.titleLabel?.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 
     private lazy var accessoryViewContainer: UIStackView = .build { stackView in
