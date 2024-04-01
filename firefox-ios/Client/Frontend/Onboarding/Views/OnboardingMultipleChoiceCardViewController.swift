@@ -368,25 +368,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
     }
 
-<<<<<<< HEAD
-    private func setupLinkButton() {
-        guard let buttonTitle = viewModel.link?.title else {
-            linkButton.isUserInteractionEnabled = false
-            linkButton.isHidden = true
-            return
-        }
-        let buttonViewModel = LinkButtonViewModel(
-            title: buttonTitle,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            fontSize: UX.buttonFontSize,
-            contentHorizontalAlignment: .center
-        )
-        linkButton.configure(viewModel: buttonViewModel)
-        linkButton.applyTheme(theme: themeManager.currentTheme)
-    }
-
-=======
->>>>>>> aaa843900 (Add FXIOS-8267 [Onboarding Customization] Multiple choice card (#19488))
     // MARK: - Button Actions
     @objc
     func primaryAction() {
