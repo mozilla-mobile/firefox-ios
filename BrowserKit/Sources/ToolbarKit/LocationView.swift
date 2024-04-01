@@ -64,24 +64,24 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func becomeFirstResponder() -> Bool {
+        super.becomeFirstResponder()
         return urlTextField.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
         return urlTextField.resignFirstResponder()
     }
 
     func configure(_ text: String?, delegate: LocationViewDelegate) {
-        urlTextField.text = getHost(from: text)
+        urlTextField.text = getHost(from: "https://wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwaccounts.firefox.com")
         locationViewDelegate = delegate
     }
  
     // MARK: - Layout
     override func layoutSubviews() {
         super.layoutSubviews()
-        let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
-        let urlTextFieldWidth = urlTextField.frame.width
-        gradientLayer.frame = if urlTextFieldWidth >= locationViewWidth { gradientView.bounds } else { CGRect() }
+        updateGradientLayerFrame()
     }
 
     private func setupLayout() {
@@ -116,6 +116,31 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         gradientView.layer.addSublayer(gradientLayer)
     }
 
+    private func updateGradientLayerFrame() {
+        let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
+        let urlTextFieldWidth = urlTextField.frame.width
+        gradientLayer.frame = if (urlTextFieldWidth >= locationViewWidth &&
+                                  !urlTextField.isFirstResponder)
+                                    { gradientView.bounds } else { CGRect() }
+    }
+
+    // MARK: - `urlTextField` Configuration
+    private func applyTruncationStyleToURLTextField() {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byTruncatingHead
+
+        let attributedString = NSMutableAttributedString(string: urlTextField.text ?? "")
+        attributedString.addAttribute(
+            .paragraphStyle,
+            value: paragraphStyle,
+            range: NSRange(
+                location: 0,
+                length: attributedString.length
+            )
+        )
+        urlTextField.attributedText = attributedString
+    }
+
     private func getHost(from stringURL: String?) -> String {
         guard let stringURL,
               let url = URL(string: stringURL) else { return "" }
@@ -131,7 +156,13 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
+        gradientLayer.frame = CGRect()
         locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
+    }
+
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        updateGradientLayerFrame()
+        applyTruncationStyleToURLTextField()
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
