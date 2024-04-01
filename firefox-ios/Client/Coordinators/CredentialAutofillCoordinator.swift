@@ -57,7 +57,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             if let error = error {
                 SimpleToast().showAlertWithText(error.localizedDescription,
                                                 bottomContainer: alertContainer,
-                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
+                                                theme: self.currentTheme())
             } else {
                 // send telemetry
                 if state == .save {
@@ -72,7 +72,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
                 SimpleToast().showAlertWithText(toastMessage,
                                                 bottomContainer: alertContainer,
-                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
+                                                theme: self.currentTheme())
                 self.parentCoordinator?.didFinish(from: self)
             }
         }
