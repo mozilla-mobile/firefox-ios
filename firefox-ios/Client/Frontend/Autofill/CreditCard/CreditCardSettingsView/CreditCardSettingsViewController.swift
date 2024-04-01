@@ -51,7 +51,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
-        self.creditCardTableViewController = 
+        self.creditCardTableViewController =
         CreditCardTableViewController(viewModel: viewModel.tableViewModel,
                                       windowUUID: creditCardViewModel.windowUUID)
 

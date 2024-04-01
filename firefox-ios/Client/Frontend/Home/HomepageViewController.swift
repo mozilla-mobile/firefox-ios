@@ -91,7 +91,7 @@ class HomepageViewController:
             forHintType: .jumpBackInSyncedTab,
             with: viewModel.profile
         )
-        self.syncTabContextualHintViewController = 
+        self.syncTabContextualHintViewController =
         ContextualHintViewController(with: syncTabContextualViewProvider, windowUUID: tabManager.windowUUID)
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel, toastContainer: toastContainer)
 

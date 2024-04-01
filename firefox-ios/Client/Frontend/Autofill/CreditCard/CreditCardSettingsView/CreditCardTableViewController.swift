@@ -154,7 +154,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
                 ) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
-        let headerView = CreditCardSectionHeader(textColor: themeManager.currentTheme(for: windowUUID).colors.textSecondary.color)
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let headerView = CreditCardSectionHeader(textColor: theme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
     }
