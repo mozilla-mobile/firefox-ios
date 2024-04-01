@@ -77,7 +77,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextField.text = text
         locationViewDelegate = delegate
     }
- 
+
     // MARK: - Layout
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -86,7 +86,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private func setupLayout() {
         addSubviews(urlTextField, gradientView)
-    
+
         NSLayoutConstraint.activate(
             [
                 gradientView.topAnchor.constraint(
@@ -100,7 +100,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                 gradientView.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor),
                 gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
                 gradientView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
-                
+
                 urlTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
                 urlTextField.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalSpace),
@@ -119,9 +119,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     private func updateGradientLayerFrame() {
         let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
         let urlTextFieldWidth = urlTextField.frame.width
-        gradientLayer.frame = if (urlTextFieldWidth >= locationViewWidth &&
-                                  !urlTextField.isFirstResponder)
-                                    { gradientView.bounds } else { CGRect() }
+        gradientLayer.frame = if urlTextFieldWidth >= locationViewWidth &&
+                                  !urlTextField.isFirstResponder { gradientView.bounds } else { CGRect() }
     }
 
     // MARK: - `urlTextField` Configuration
