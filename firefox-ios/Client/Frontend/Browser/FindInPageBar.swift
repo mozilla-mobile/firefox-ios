@@ -189,14 +189,6 @@ class FindInPageBar: UIView, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-<<<<<<< HEAD
-        topBorder.backgroundColor = colors.borderPrimary
-        searchText.textColor = theme.type == .light ? colors.textPrimary : colors.textInverted
-        matchCountView.textColor = colors.actionSecondary
-        previousButton.setTitleColor(colors.iconPrimary, for: .normal)
-        nextButton.setTitleColor(colors.iconPrimary, for: .normal)
-        closeButton.setTitleColor(colors.iconPrimary, for: .normal)
-=======
         backgroundColor = colors.layer1
         searchText.textColor = colors.textPrimary
         matchCountView.textColor = colors.textSecondary
@@ -204,7 +196,6 @@ class FindInPageBar: UIView, ThemeApplicable {
         closeButton.tintColor = colors.iconPrimary
         previousButton.tintColor = colors.iconPrimary
         nextButton.tintColor = colors.iconPrimary
->>>>>>> 29a01886f (Bugfix FXIOS-4398 - "Find in Page" search bar text don't respect darktheme (#19326))
     }
 }
 
