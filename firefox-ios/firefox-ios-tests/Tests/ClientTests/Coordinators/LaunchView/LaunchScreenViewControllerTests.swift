@@ -9,6 +9,7 @@ import XCTest
 final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -56,7 +57,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     }
 
     func testAddLaunchView_whenViewWillAppear() {
-        let subject = LaunchScreenViewController(coordinator: coordinatorDelegate,
+        let subject = LaunchScreenViewController(windowUUID: windowUUID, coordinator: coordinatorDelegate,
                                                  viewModel: viewModel)
         XCTAssertTrue(subject.view.subviews.isEmpty)
         subject.viewWillAppear(false)
@@ -66,7 +67,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> LaunchScreenViewController {
-        let subject = LaunchScreenViewController(coordinator: coordinatorDelegate,
+        let subject = LaunchScreenViewController(windowUUID: windowUUID, coordinator: coordinatorDelegate,
                                                  viewModel: viewModel)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

@@ -8,6 +8,7 @@ import XCTest
 
 class OnboardingButtonActionTests: XCTestCase {
     var mockDelegate: MockOnboardinCardDelegateController!
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -136,7 +137,8 @@ class OnboardingButtonActionTests: XCTestCase {
         mockDelegate = MockOnboardinCardDelegateController()
         let subject = OnboardingBasicCardViewController(
             viewModel: mockInfoModel,
-            delegate: mockDelegate)
+            delegate: mockDelegate,
+            windowUUID: windowUUID)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

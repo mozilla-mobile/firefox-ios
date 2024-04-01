@@ -7,6 +7,8 @@ import XCTest
 @testable import Client
 
 final class LaunchTypeTests: XCTestCase {
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -18,13 +20,13 @@ final class LaunchTypeTests: XCTestCase {
     }
 
     func testCanLaunch_surveyFromBrowserCoordinator() {
-        let launchType = LaunchType.survey(manager: SurveySurfaceManager())
+        let launchType = LaunchType.survey(manager: SurveySurfaceManager(windowUUID: windowUUID))
         XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
     }
 
     func testCanLaunch_surveyFromSceneCoordinator() {
-        let launchType = LaunchType.survey(manager: SurveySurfaceManager())
+        let launchType = LaunchType.survey(manager: SurveySurfaceManager(windowUUID: windowUUID))
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }

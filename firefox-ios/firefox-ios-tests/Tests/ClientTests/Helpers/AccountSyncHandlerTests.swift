@@ -11,6 +11,7 @@ class AccountSyncHandlerTests: XCTestCase {
     private var profile: MockProfile!
     private var syncManager: ClientSyncManagerSpy!
     private var queue: MockDispatchQueue!
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -82,7 +83,7 @@ private extension AccountSyncHandlerTests {
     func createTab(profile: MockProfile,
                    configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
                    urlString: String? = "www.website.com") -> Tab {
-        let tab = Tab(profile: profile, configuration: configuration)
+        let tab = Tab(profile: profile, configuration: configuration, windowUUID: windowUUID)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!

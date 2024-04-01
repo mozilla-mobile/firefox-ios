@@ -10,6 +10,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
     private var delegate: MockLaunchCoordinatorDelegate!
+    
 
     override func setUp() {
         super.setUp()
