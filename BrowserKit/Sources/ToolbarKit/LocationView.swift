@@ -141,9 +141,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private func getHost(from stringURL: String?) -> String {
-        guard let stringURL,
-              let url = URL(string: stringURL) else { return "" }
-
+        guard let stringURL, let url = URL(string: stringURL) else { return "" }
         return url.host ?? ""
     }
 
