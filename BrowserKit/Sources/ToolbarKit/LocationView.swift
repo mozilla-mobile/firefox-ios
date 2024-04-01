@@ -74,7 +74,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     func configure(_ text: String?, delegate: LocationViewDelegate) {
-        urlTextField.text = getHost(from: "https://wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwaccounts.firefox.com")
+        urlTextField.text = text
         locationViewDelegate = delegate
     }
  
