@@ -74,7 +74,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     func configure(_ text: String?, delegate: LocationViewDelegate) {
-        urlTextField.text = text
+        urlTextField.text = getHost(from: text)
         locationViewDelegate = delegate
     }
 
@@ -119,8 +119,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     private func updateGradientLayerFrame() {
         let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
         let urlTextFieldWidth = urlTextField.frame.width
-        gradientLayer.frame = if urlTextFieldWidth >= locationViewWidth &&
-                                  !urlTextField.isFirstResponder { gradientView.bounds } else { CGRect() }
+        let showGradientForLongURL = urlTextFieldWidth >= locationViewWidth && !urlTextField.isFirstResponder
+        gradientLayer.frame = if showGradientForLongURL { gradientView.bounds } else { CGRect() }
     }
 
     // MARK: - `urlTextField` Configuration
