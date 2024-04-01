@@ -13,9 +13,6 @@ struct ETPMenuUX {
         static let viewTitleLabels: UIFont = .systemFont(ofSize: 17, weight: .regular)
         static let detailsLabel: UIFont = .systemFont(ofSize: 12, weight: .regular)
         static let minorInfoLabel: UIFont = .systemFont(ofSize: 15, weight: .regular)
-        static let websiteTitleFontSize: CGFloat = 15
-        static let viewTitleLabelsFontSize: CGFloat = 15
-        static let detailsLabelFontSize: CGFloat = 10
     }
 
     struct UX {
@@ -72,11 +69,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let siteDomainLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .largeTitle,
-            size: ETPMenuUX.Fonts.websiteTitleFontSize,
-            weight: .semibold
-        )
+        label.font = FXFontStyles.Bold.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -100,11 +93,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .largeTitle,
-            size: ETPMenuUX.Fonts.viewTitleLabelsFontSize,
-            weight: .regular
-        )
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -126,11 +115,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private let toggleView: UIView = ETPSectionView(frame: .zero)
 
     private let toggleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .largeTitle,
-            size: ETPMenuUX.Fonts.viewTitleLabelsFontSize,
-            weight: .regular
-        )
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -140,11 +125,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let toggleStatusLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .largeTitle,
-            size: ETPMenuUX.Fonts.detailsLabelFontSize,
-            weight: .regular
-        )
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -154,11 +135,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     private var protectionButton: UIButton = .build { button in
         button.setTitle(.TPProtectionSettings, for: .normal)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .largeTitle,
-            size: ETPMenuUX.Fonts.viewTitleLabelsFontSize,
-            weight: .regular
-        )
+        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         button.contentHorizontalAlignment = .left
         button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
