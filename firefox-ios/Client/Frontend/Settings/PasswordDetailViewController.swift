@@ -331,8 +331,10 @@ extension PasswordDetailViewController {
         viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 self.sendLoginsDeletedTelemetry()
-                self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id).uponQueue(.main) { _ in
-                    _ = self.navigationController?.popViewController(animated: true)
+                self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
+                    DispatchQueue.main.async {
+                        _ = self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
@@ -342,9 +344,16 @@ extension PasswordDetailViewController {
 
     func onProfileDidFinishSyncing() {
         // Reload details after syncing.
-        viewModel.profile.logins.getLogin(id: viewModel.login.id).uponQueue(.main) { result in
-            if let successValue = result.successValue, let syncedLogin = successValue {
-                self.viewModel.login = syncedLogin
+        viewModel.profile.logins.getLogin(id: viewModel.login.id) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let successValue):
+                    if let syncedLogin = successValue {
+                        self?.viewModel.login = syncedLogin
+                    }
+                case .failure:
+                    break
+                }
             }
         }
     }
@@ -396,11 +405,14 @@ extension PasswordDetailViewController {
         )
 
         if updatedLogin.isValid.isSuccess {
-            viewModel.profile.logins.updateLogin(id: viewModel.login.id, login: updatedLogin).uponQueue(.main) { _ in
-                self.onProfileDidFinishSyncing()
-                // Required to get UI to reload with changed state
-                self.tableView.reloadData()
-                self.sendLoginsModifiedTelemetry()
+            viewModel.profile.logins.updateLogin(id: viewModel.login.id, login: updatedLogin) { [weak self] _ in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    self.onProfileDidFinishSyncing()
+                    // Required to get UI to reload with changed state
+                    self.tableView.reloadData()
+                    self.sendLoginsModifiedTelemetry()
+                }
             }
         }
     }
