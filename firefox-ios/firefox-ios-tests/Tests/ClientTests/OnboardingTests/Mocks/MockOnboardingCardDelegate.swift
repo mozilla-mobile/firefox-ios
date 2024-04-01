@@ -28,6 +28,7 @@ class MockOnboardinCardDelegateController: UIViewController,
 
     // Protocols under test
     var action: OnboardingActions?
+    var multipleChoiceAction: OnboardingMultipleChoiceAction?
 
     func handleBottomButtonActions(
         for action: Client.OnboardingActions,
@@ -53,6 +54,21 @@ class MockOnboardinCardDelegateController: UIViewController,
             presentPrivacyPolicy(from: cardName,
                                  selector: nil,
                                  completion: {})
+        }
+    }
+
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+        switch action {
+        case .themeDark:
+            self.multipleChoiceAction = .themeDark
+        case .themeLight:
+            self.multipleChoiceAction = .themeLight
+        case .themeSystemDefault:
+            self.multipleChoiceAction = .themeSystemDefault
+        case .toolbarBottom:
+            self.multipleChoiceAction = .toolbarBottom
+        case .toolbarTop:
+            self.multipleChoiceAction = .toolbarTop
         }
     }
 

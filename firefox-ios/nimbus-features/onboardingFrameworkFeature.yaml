@@ -59,61 +59,61 @@ features:
               onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS
-            multiple-choice-test:
-              card-type: multiple-choice
-              order: 5
-              title: Onboarding/Onboarding.Customization.Theme.Title.v123
-              body: Onboarding/Onboarding.Customization.Theme.Description.v123
-              image: themeing
-              link:
-                title: Onboarding/Onboarding.Welcome.Link.Action.v114
-                url: "https://www.mozilla.org/privacy/firefox/"
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
-                  action: forward-one-card
-                secondary:
-                  title: Onboarding/Onboarding.Welcome.Skip.v114
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
-                  image: theme-system
-                  action: theme-system-default
-                - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
-                  image: theme-light
-                  action: theme-light
-                - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
-                  image: theme-dark
-                  action: theme-dark
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
-            multiple-choice-test-two:
-              card-type: multiple-choice
-              order: 7
-              title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
-              body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
-              image: toolbar
-              link:
-                title: Onboarding/Onboarding.Welcome.Link.Action.v114
-                url: "https://www.mozilla.org/privacy/firefox/"
-              buttons:
-                primary:
-                  title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
-                  action: forward-one-card
-                secondary:
-                  title: Onboarding/Onboarding.Welcome.Skip.v114
-                  action: forward-one-card
-              multiple-choice-buttons:
-                - title: "Top"
-                  image: toolbar-top
-                  action: toolbar-top
-                - title: "Bottom"
-                  image: toolbar-bottom
-                  action: toolbar-bottom
-              onboarding-type: fresh-install
-              prerequisites:
-                - ALWAYS
+            # multiple-choice-test:
+            #   card-type: multiple-choice
+            #   order: 5
+            #   title: Onboarding/Onboarding.Customization.Theme.Title.v123
+            #   body: Onboarding/Onboarding.Customization.Theme.Description.v123
+            #   image: themeing
+            #   link:
+            #     title: Onboarding/Onboarding.Welcome.Link.Action.v114
+            #     url: "https://www.mozilla.org/privacy/firefox/"
+            #   buttons:
+            #     primary:
+            #       title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
+            #       action: forward-one-card
+            #     secondary:
+            #       title: Onboarding/Onboarding.Welcome.Skip.v114
+            #       action: forward-one-card
+            #   multiple-choice-buttons:
+            #     - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
+            #       image: theme-system
+            #       action: theme-system-default
+            #     - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
+            #       image: theme-light
+            #       action: theme-light
+            #     - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
+            #       image: theme-dark
+            #       action: theme-dark
+            #   onboarding-type: fresh-install
+            #   prerequisites:
+            #     - ALWAYS
+            # multiple-choice-test-two:
+            #   card-type: multiple-choice
+            #   order: 7
+            #   title: Onboarding/Onboarding.Welcome.Title.TreatementA.v120
+            #   body: Onboarding/Onboarding.Welcome.Description.TreatementA.v120
+            #   image: toolbar
+            #   link:
+            #     title: Onboarding/Onboarding.Welcome.Link.Action.v114
+            #     url: "https://www.mozilla.org/privacy/firefox/"
+            #   buttons:
+            #     primary:
+            #       title: Onboarding/Onboarding.Welcome.ActionTreatementA.v114
+            #       action: forward-one-card
+            #     secondary:
+            #       title: Onboarding/Onboarding.Welcome.Skip.v114
+            #       action: forward-one-card
+            #   multiple-choice-buttons:
+            #     - title: "Top"
+            #       image: toolbar-top
+            #       action: toolbar-top
+            #     - title: "Bottom"
+            #       image: toolbar-bottom
+            #       action: toolbar-bottom
+            #   onboarding-type: fresh-install
+            #   prerequisites:
+            #     - ALWAYS
             notification-permissions:
               card-type: basic
               order: 30
