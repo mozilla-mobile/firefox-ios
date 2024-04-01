@@ -4,8 +4,6 @@
 
 import Foundation
 
-struct OnboardingMultipleChoiceButtonModel: Equatable {
-    let title: String
-    let action: OnboardingMultipleChoiceAction
-    var imageID: String
+protocol OnboardingMultipleChoiceSelectionDelegate: AnyObject {
+    func updateSelectedButton(to buttonName: String)
 }
