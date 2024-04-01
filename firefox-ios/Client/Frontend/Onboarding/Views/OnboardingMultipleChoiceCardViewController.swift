@@ -16,7 +16,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 10
         static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
         static let topStackViewPaddingPhone: CGFloat = 90
-        static let choiceButtonStackViewSpacing: CGFloat = 36
+        static let choiceButtonStackViewSpacing: CGFloat = 26
         static let bottomStackViewPaddingPad: CGFloat = 32
         static let bottomStackViewPaddingPhone: CGFloat = 0
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
@@ -288,10 +288,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 topStackView.topAnchor.constraint(equalTo: contentStackView.topAnchor),
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
-
-                choiceButtonStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentStackView.leadingAnchor),
-                choiceButtonStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: 10),
-                choiceButtonStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentStackView.trailingAnchor),
 
                 bottomButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 bottomButtonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
