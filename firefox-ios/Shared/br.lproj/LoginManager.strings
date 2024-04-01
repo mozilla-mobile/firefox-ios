@@ -25,6 +25,9 @@
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
 "DeleteLoginAlert.Message.Local.v122" = "Ne c’hallit ket dizober kement-se.";
 
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Dilemel a raio ar ger-tremen diwar hoc’h holl drevnadoù goubredet.";
+
 /* Title for the prompt that appears when the user deletes a login. */
 "DeleteLoginsAlert.Title.v122" = "Dilemel ar ger-tremen?";
 

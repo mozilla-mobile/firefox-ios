@@ -1,7 +1,7 @@
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v114" = "Kcem";
 
-/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Description.v114" = "Kemmel seg wanda i tḥebseḍ s useqdec n waccaren ɣef yibenkan-nniḍen ara d-ibanen akka tura ɣef usebter-ik·im agejdan.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */

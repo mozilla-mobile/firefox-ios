@@ -634,7 +634,7 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "أُضيفت إلى قائمة القراءة";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "العلامات";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -643,10 +643,10 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "نُسخ المسار إلى الحافظة";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "التنزيلات";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "التأريخ";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
@@ -655,7 +655,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "فعّل الوضع الليلي";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "كلمات السر";
 
 /* The title for the button that lets you paste into the location bar */
@@ -664,7 +664,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ألصِق وانتقل";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "قائمة القراءة";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */

@@ -535,7 +535,7 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "ចម្លងអាសយដ្ឋាន";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ចំណាំ​";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -544,10 +544,10 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "បាន​ចម្លង​ URL ទៅ​អង្គចងចាំ";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ទាញយក";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ប្រវត្តិ";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
@@ -556,7 +556,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "បើកម៉ូតងងិត";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "ពាក្យសម្ងាត់";
 
 /* The title for the button that lets you paste into the location bar */
@@ -565,7 +565,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ដាក់ចូល & ទៅ";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "បញ្ជី​អាន​";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
