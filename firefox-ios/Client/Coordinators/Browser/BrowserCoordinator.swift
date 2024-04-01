@@ -656,7 +656,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showBackForwardList() {
         guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
-        let backForwardListVC = BackForwardListViewController(profile: profile, windowUUID: windowUUID, backForwardList: backForwardList)
+        let backForwardListVC = BackForwardListViewController(profile: profile,
+                                                              windowUUID: windowUUID,
+                                                              backForwardList: backForwardList)
         backForwardListVC.backForwardTransitionDelegate = BackForwardListAnimator()
         backForwardListVC.browserFrameInfoProvider = browserViewController
         backForwardListVC.tabManager = tabManager

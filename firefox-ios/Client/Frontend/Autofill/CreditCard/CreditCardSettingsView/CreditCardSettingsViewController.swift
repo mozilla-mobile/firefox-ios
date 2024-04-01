@@ -51,7 +51,9 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
-        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.tableViewModel, windowUUID: creditCardViewModel.windowUUID)
+        self.creditCardTableViewController = 
+        CreditCardTableViewController(viewModel: viewModel.tableViewModel,
+                                      windowUUID: creditCardViewModel.windowUUID)
 
         let emptyView = CreditCardSettingsEmptyView(toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)

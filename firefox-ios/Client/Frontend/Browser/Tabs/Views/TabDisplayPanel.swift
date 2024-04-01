@@ -21,7 +21,7 @@ class TabDisplayPanel: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var tabsState: TabsPanelState
-    private let windowUUID: WindowUUID 
+    private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: UI elements

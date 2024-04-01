@@ -416,7 +416,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        let popup = Tab(profile: profile, configuration: configuration, isPrivate: parentTab.isPrivate, windowUUID: windowUUID)
+        let popup = Tab(profile: profile,
+                        configuration: configuration,
+                        isPrivate: parentTab.isPrivate,
+                        windowUUID: windowUUID)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab

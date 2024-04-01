@@ -78,11 +78,12 @@ extension TopSitesSettingsViewController {
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
             self.windowUUID = settings.windowUUID
+            let theme = settings.themeManager.currentTheme(for: windowUUID)
             super.init(
                 title: NSAttributedString(
                     string: .Settings.Homepage.Shortcuts.Rows,
                     attributes: [
-                        NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme(for: windowUUID).colors.textPrimary
+                        NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                     ]
                 )
             )

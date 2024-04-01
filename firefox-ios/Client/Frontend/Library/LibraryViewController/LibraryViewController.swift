@@ -331,7 +331,7 @@ class LibraryViewController: UIViewController, Themeable {
         // have a seamless nav bar, if embedding the segmented control.
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        
+
         let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer3
         navigationController?.navigationBar.barTintColor = theme.colors.layer1

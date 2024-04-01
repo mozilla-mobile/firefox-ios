@@ -238,7 +238,8 @@ class SettingsCoordinator: BaseCoordinator,
 
     func pressedAddressAutofill() {
         let viewModel = AddressAutofillSettingsViewModel(profile: profile)
-        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel, windowUUID: windowUUID)
+        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel,
+                                                                   windowUUID: windowUUID)
         router.push(viewController)
         TelemetryWrapper.recordEvent(
             category: .action,

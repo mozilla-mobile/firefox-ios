@@ -324,7 +324,8 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     private func buildButtonViews() {
         multipleChoiceButtons.removeAll()
         multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
-            return OnboardingMultipleChoiceButtonView(windowUUID: windowUUID,
+            return OnboardingMultipleChoiceButtonView(
+                windowUUID: windowUUID,
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
                     info: buttonModel,
