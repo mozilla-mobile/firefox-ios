@@ -12,7 +12,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Initializer
     init(with model: OnboardingViewModel) {
         self.cardOrder = model.cards.map { $0.name }
-        self.flowType = model.cards.first?.type.rawValue ?? "unknown"
+        self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
     }
 
     // MARK: - Public methods

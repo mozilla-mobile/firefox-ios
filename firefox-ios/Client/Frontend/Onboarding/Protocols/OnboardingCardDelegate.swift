@@ -17,9 +17,10 @@ import Shared
 /// for the difference in flows that the two onboarding paths represent.
 protocol OnboardingCardDelegate: AnyObject {
     // These methods must be implemented by the object
-    func handleButtonPress(for action: OnboardingActions,
-                           from cardName: String,
-                           isPrimaryButton: Bool)
+    func handleBottomButtonActions(for action: OnboardingActions,
+                                   from cardName: String,
+                                   isPrimaryButton: Bool)
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction)
     func sendCardViewTelemetry(from cardName: String)
 
     // Implemented by default for code sharing

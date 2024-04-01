@@ -205,7 +205,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 }
 
 extension UpdateViewController: OnboardingCardDelegate {
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
@@ -250,6 +250,10 @@ extension UpdateViewController: OnboardingCardDelegate {
         default:
             break
         }
+    }
+
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+        // There is no multiple choice actions for updating
     }
 
     func sendCardViewTelemetry(from cardName: String) {

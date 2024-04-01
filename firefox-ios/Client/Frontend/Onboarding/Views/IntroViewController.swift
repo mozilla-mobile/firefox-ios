@@ -12,6 +12,7 @@ class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
                            Notifiable,
+                           FeatureFlaggable,
                            StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
@@ -167,6 +168,8 @@ class IntroViewController: UIViewController,
             guard let self else { return }
 
             introViewControllerState = state
+
+            applyTheme()
         }
     }
 
@@ -271,7 +274,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 
 // MARK: - OnboardingCardDelegate
 extension IntroViewController: OnboardingCardDelegate {
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
@@ -326,6 +329,23 @@ extension IntroViewController: OnboardingCardDelegate {
             presentPrivacyPolicy(
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
+        }
+    }
+
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+        switch action {
+        case .themeDark:
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(.dark))
+        case .themeLight:
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(.light))
+        case .themeSystemDefault:
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(true))
+        case .toolbarBottom:
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+        case .toolbarTop:
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
         }
     }
 
