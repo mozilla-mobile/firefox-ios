@@ -340,13 +340,18 @@ extension IntroViewController: OnboardingCardDelegate {
     func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
         switch action {
         case .themeDark:
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
-            store.dispatch(ThemeSettingsAction.switchManualTheme(.dark))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
+                                                                                          windowUUID: windowUUID)))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(ThemeTypeContext(themeType: .dark,
+                                                                                  windowUUID: windowUUID)))
         case .themeLight:
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
-            store.dispatch(ThemeSettingsAction.switchManualTheme(.light))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
+                                                                                          windowUUID: windowUUID)))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(ThemeTypeContext(themeType: .light,
+                                                                                  windowUUID: windowUUID)))
         case .themeSystemDefault:
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(true))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: true,
+                                                                                          windowUUID: windowUUID)))
         case .toolbarBottom:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
         case .toolbarTop:
