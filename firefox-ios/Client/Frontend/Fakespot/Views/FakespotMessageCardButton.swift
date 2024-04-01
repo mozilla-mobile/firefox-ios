@@ -55,15 +55,10 @@ class FakespotMessageCardButton: ResizableButton, ThemeApplicable {
             return
         }
 
-        updatedConfiguration.background.backgroundColor = backgroundColorNormal
-
         let transformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
             var container = incoming
             container.foregroundColor = self?.foregroundColor
-            container.font = DefaultDynamicFontHelper.preferredBoldFont(
-                withTextStyle: .callout,
-                size: UX.buttonFontSize
-            )
+            container.font = FXFontStyles.Bold.callout.scaledFont()
             return container
         }
         updatedConfiguration.titleTextAttributesTransformer = transformer

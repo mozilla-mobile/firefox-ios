@@ -129,8 +129,6 @@ class FakespotMessageCardViewModel: ObservableObject {
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
-        static let buttonFontSize: CGFloat = 16
-        static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
@@ -173,9 +171,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private lazy var iconContainerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
+        label.font = FXFontStyles.Bold.callout.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -184,9 +180,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.textColor = .white
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .subheadline,
-            size: UX.buttonFontSize)
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -237,10 +231,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                 viewModel.title,
                 viewModel.formatProgress()
             )
-            titleLabel.font = DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .subheadline,
-                size: UX.progressViewFontSize
-            )
+            titleLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
 
             viewModel.analysisProgressChanged = { [weak self] progress in
                 let progressLevel = viewModel.formatProgress(progress / 100.0)

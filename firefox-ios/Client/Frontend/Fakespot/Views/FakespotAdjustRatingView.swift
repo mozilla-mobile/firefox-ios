@@ -17,8 +17,6 @@ struct FakespotAdjustRatingViewModel {
 
 class FakespotAdjustRatingView: UIView, Notifiable, ThemeApplicable {
     private enum UX {
-        static let titleFontSize: CGFloat = 15
-        static let descriptionFontSize: CGFloat = 13
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let hStackSpacing: CGFloat = 4
         static let vStackSpacing: CGFloat = 8
@@ -33,18 +31,14 @@ class FakespotAdjustRatingView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.titleFontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.header)
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
-                                                            size: UX.descriptionFontSize,
-                                                            weight: .regular)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
     }
 
