@@ -46,6 +46,7 @@
         "FakespotTests\/testLearnMoreAboutFakespotHyperlink()",
         "FakespotTests\/testLearnMoreLink()",
         "FakespotTests\/testOptInNotificationLayout()",
+        "FakespotTests\/testPriceTagIconAndReviewCheckLandscape()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
