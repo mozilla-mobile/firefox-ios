@@ -75,22 +75,22 @@ final class PasswordManagerViewModel {
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String, completion: @escaping (([LoginRecord]) -> Void)) {
-        profile.logins.searchLoginsWithQuery(query).upon { result in
+        profile.logins.searchLoginsWithQuery(query, completionHandler: { result in
             ensureMainThread {
                 // Check any failure, Ex. database is closed
-                guard result.failureValue == nil else {
+                switch result {
+                case .success(let logins):
+                    guard let logins = logins else {
+                        completion([])
+                        return
+                    }
+                case.failure(let logins):
                     self.delegate?.loginSectionsDidUpdate()
                     completion([])
                     return
                 }
-                // Make sure logins exist
-                guard let logins = result.successValue else {
-                    completion([])
-                    return
-                }
-                completion(logins.asArray())
             }
-        }
+        })
     }
 
     func setIsDuringSearchControllerDismiss(to: Bool) {
@@ -156,12 +156,15 @@ final class PasswordManagerViewModel {
     }
 
     public func save(loginRecord: LoginEntry, completion: @escaping ((String?) -> Void)) {
-        profile.logins.addLogin(login: loginRecord).upon { result in
-            if result.isSuccess {
+        profile.logins.addLogin(login: loginRecord, completionHandler: { result in
+            switch result {
+            case .success(let encryptedLogin):
                 self.sendLoginsSavedTelemetry()
+                completion(encryptedLogin?.id)
+            case .failure(let error):
+                completion(error as? String)
             }
-            completion(result.successValue)
-        }
+        })
     }
 
     func setBreachIndexPath(indexPath: IndexPath) {
