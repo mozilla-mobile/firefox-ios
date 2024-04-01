@@ -13,7 +13,7 @@ class IntroViewController: UIViewController,
                            Themeable,
                            Notifiable,
                            FeatureFlaggable,
-                           StoreSubscriber{
+                           StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24

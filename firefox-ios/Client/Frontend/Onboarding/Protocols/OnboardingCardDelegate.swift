@@ -18,8 +18,8 @@ import Shared
 protocol OnboardingCardDelegate: AnyObject {
     // These methods must be implemented by the object
     func handleBottomButtonActions(for action: OnboardingActions,
-                           from cardName: String,
-                           isPrimaryButton: Bool)
+                                   from cardName: String,
+                                   isPrimaryButton: Bool)
     func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction)
     func sendCardViewTelemetry(from cardName: String)
 
