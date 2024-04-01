@@ -134,7 +134,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         if shouldUseTinyDeviceLayout {
             return 1.0
         } else if shouldUseSmallDeviceLayout {
-            return 1.0
+            return 0.85
         }
 
         return 1.0
@@ -190,7 +190,11 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                          after: imageView)
             topStackView.spacing = UX.stackViewSpacingWithoutLink
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                          after: descriptionLabel)
             choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
             bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
