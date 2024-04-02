@@ -9,6 +9,7 @@ import XCTest
 @testable import Client
 
 class ThemeSettingsControllerTests: XCTestCase {
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -93,7 +94,7 @@ class ThemeSettingsControllerTests: XCTestCase {
         subject.themeManager.setAutomaticBrightnessValue(userBrightness)
 
         subject.systemBrightnessChanged()
-        XCTAssertEqual(subject.themeManager.currentTheme.type, .light)
+        XCTAssertEqual(subject.themeManager.currentTheme(for: windowUUID).type, .light)
     }
 
     func testSystemBrightnessChanged_ForDarkTheme_WithRedux() {
@@ -109,7 +110,7 @@ class ThemeSettingsControllerTests: XCTestCase {
         subject.themeManager.setAutomaticBrightnessValue(userBrightness)
 
         subject.systemBrightnessChanged()
-        XCTAssertEqual(subject.themeManager.currentTheme.type, .dark)
+        XCTAssertEqual(subject.themeManager.currentTheme(for: windowUUID).type, .dark)
     }
 
     // MARK: - Private
