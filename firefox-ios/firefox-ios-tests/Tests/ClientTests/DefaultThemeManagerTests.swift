@@ -45,8 +45,7 @@ final class DefaultThemeManagerTests: XCTestCase {
         XCTAssertEqual(userDefaults.registrationDictionary.count, 3)
 
         guard let systemResult = userDefaults.registrationDictionary["prefKeySystemThemeSwitchOnOff"] as? Bool,
-              let nightModeResult = userDefaults.registrationDictionary["profile.NightModeStatus"] as? Bool,
-              let privateModeResult = userDefaults.registrationDictionary["profile.PrivateModeStatus"] as? Bool
+              let nightModeResult = userDefaults.registrationDictionary["profile.NightModeStatus"] as? Bool
         else {
             XCTFail("Failed to fetch one or more expected keys")
             return
