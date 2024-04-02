@@ -77,7 +77,6 @@ final class PasswordManagerViewModel {
     func queryLogins(_ query: String, completion: @escaping (([LoginRecord]) -> Void)) {
         profile.logins.searchLoginsWithQuery(query, completionHandler: { result in
             ensureMainThread {
-                // Check any failure, Ex. database is closed
                 switch result {
                 case .success(let logins):
                     guard let logins = logins else {
