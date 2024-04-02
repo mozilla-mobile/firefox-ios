@@ -13,6 +13,7 @@ final class TabScrollControllerTests: XCTestCase {
     var subject: TabScrollingController!
     var mockProfile: MockProfile!
     var mockGesture: UIPanGestureRecognizerMock!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     var header: BaseAlphaStackView = .build { _ in }
 
@@ -21,7 +22,7 @@ final class TabScrollControllerTests: XCTestCase {
 
         self.mockProfile = MockProfile()
         self.subject = TabScrollingController()
-        self.tab = Tab(profile: mockProfile, configuration: WKWebViewConfiguration())
+        self.tab = Tab(profile: mockProfile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         mockGesture = UIPanGestureRecognizerMock()
         DependencyHelperMock().bootstrapDependencies()

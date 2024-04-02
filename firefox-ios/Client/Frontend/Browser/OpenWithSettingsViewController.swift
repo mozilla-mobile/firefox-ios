@@ -17,9 +17,9 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     fileprivate let prefs: Prefs
     fileprivate var currentChoice: String = "mailto"
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
-        super.init()
+        super.init(windowUUID: windowUUID)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -103,7 +103,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         let cell = dequeueCellFor(indexPath: indexPath)
         let option = mailProviderSource[indexPath.row]
 
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
 
         cell.textLabel?.attributedText = tableRowTitle(option.name, enabled: option.enabled)
         cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
@@ -141,13 +141,14 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     private func tableRowTitle(_ string: String, enabled: Bool) -> NSAttributedString {
         var color: [NSAttributedString.Key: UIColor]
+        let theme = themeManager.currentTheme(for: windowUUID)
         if enabled {
             color = [
-                NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary
+                NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
             ]
         } else {
             color = [
-                NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textDisabled
+                NSAttributedString.Key.foregroundColor: theme.colors.textDisabled
             ]
         }
 

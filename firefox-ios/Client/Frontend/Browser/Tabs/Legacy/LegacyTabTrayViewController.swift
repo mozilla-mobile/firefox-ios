@@ -37,6 +37,8 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - UI Elements
     private var titleWidthConstraint: NSLayoutConstraint?
@@ -102,10 +104,11 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        syncingLabel.textColor = themeManager.currentTheme.colors.textPrimary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        syncingLabel.textColor = theme.colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = themeManager.currentTheme.colors.textPrimary
+        activityIndicator.color = theme.colors.textPrimary
         activityIndicator.startAnimating()
 
         stackView.addArrangedSubview(syncingLabel)
@@ -187,6 +190,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         self.nimbus = nimbus
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.windowUUID = tabManager.windowUUID
         self.viewModel = LegacyTabTrayViewModel(tabTrayDelegate: tabTrayDelegate,
                                                 profile: profile,
                                                 tabToFocus: tabToFocus,
@@ -507,8 +511,8 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     // MARK: - Themable
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer4
-        navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
+        view.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer4
+        navigationToolbar.barTintColor = themeManager.currentTheme(for: windowUUID).colors.layer1
     }
 }
 
@@ -620,7 +624,8 @@ extension LegacyTabTrayViewController: RemotePanelDelegate {
         let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams,
                                                                                      flowType: .emailLoginFlow,
                                                                                      referringPage: .tabTray,
-                                                                                     profile: viewModel.profile)
+                                                                                     profile: viewModel.profile,
+                                                                                     windowUUID: windowUUID)
         (controller as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
         (controller as? FirefoxAccountSignInViewController)?.shouldReload = { [weak self] in
             self?.viewModel.reloadRemoteTabs()

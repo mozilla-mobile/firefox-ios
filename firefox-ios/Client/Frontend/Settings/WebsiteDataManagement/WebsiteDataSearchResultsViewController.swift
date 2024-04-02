@@ -21,10 +21,11 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     private var currentSearchText = ""
 
     init(viewModel: WebsiteDataManagementViewModel,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
-        super.init(themeManager: themeManager, notificationCenter: notificationCenter)
+        super.init(windowUUID: windowUUID, themeManager: themeManager, notificationCenter: notificationCenter)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,7 +42,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.applyTheme(theme: themeManager.currentTheme)
+        footer.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
@@ -68,7 +69,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -83,7 +84,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
+            cell.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
         }

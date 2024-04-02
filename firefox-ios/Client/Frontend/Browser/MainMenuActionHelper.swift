@@ -67,6 +67,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager
+    var windowUUID: WindowUUID { tabManager.windowUUID }
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
@@ -397,6 +398,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getSendToDevice() -> PhotonRowActions {
+        let uuid = windowUUID
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: StandardImageIdentifiers.Large.deviceDesktopSend) { _ in
             guard let delegate = self.sendToDeviceDelegate,
@@ -404,7 +406,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
-            let themeColors = self.themeManager.currentTheme.colors
+            let themeColors = self.themeManager.currentTheme(for: uuid).colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
                                                    iconColor: themeColors.iconPrimary)
@@ -464,6 +466,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {
+        let uuid = windowUUID
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
@@ -481,7 +484,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            self.themeManager.reloadTheme()
+            self.themeManager.reloadTheme(for: uuid)
         }.items
         items.append(nightMode)
 

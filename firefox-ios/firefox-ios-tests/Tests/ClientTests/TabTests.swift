@@ -8,6 +8,7 @@ import WebKit
 
 class TabTests: XCTestCase {
     private var tabDelegate: MockLegacyTabDelegate!
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -32,14 +33,14 @@ class TabTests: XCTestCase {
 
     func testDisplayTitle_ForHomepageURL() {
         let url = URL(string: "internal://local/about/home")!
-        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
+        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
         tab.url = url
         let expectedDisplayTitle = String.AppMenu.AppMenuOpenHomePageTitleString
         XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
     }
 
     func testTabDoesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
+        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
         tab.tabDelegate = tabDelegate
         trackForMemoryLeaks(tab)
     }

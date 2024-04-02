@@ -16,12 +16,12 @@ class LaunchCoordinator: BaseCoordinator,
                          ParentCoordinatorDelegate {
     private let profile: Profile
     private let isIphone: Bool
+    let windowUUID: WindowUUID
     weak var parentCoordinator: LaunchCoordinatorDelegate?
-    private var windowUUID: WindowUUID
 
     init(router: Router,
-         profile: Profile = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
+         profile: Profile = AppContainer.shared.resolve(),
          isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.profile = profile
         self.isIphone = isIphone
@@ -52,8 +52,7 @@ class LaunchCoordinator: BaseCoordinator,
                                             profile: profile,
                                             model: onboardingModel,
                                             telemetryUtility: telemetryUtility)
-        let introViewController = IntroViewController(viewModel: introViewModel,
-                                                      windowUUID: windowUUID)
+        let introViewController = IntroViewController(viewModel: introViewModel, windowUUID: windowUUID)
         introViewController.qrCodeNavigationHandler = self
         introViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
@@ -82,7 +81,7 @@ class LaunchCoordinator: BaseCoordinator,
     // MARK: - Update
     private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
                                          isFullScreen: Bool) {
-        let updateViewController = UpdateViewController(viewModel: updateViewModel)
+        let updateViewController = UpdateViewController(viewModel: updateViewModel, windowUUID: windowUUID)
         updateViewController.qrCodeNavigationHandler = self
         updateViewController.didFinishFlow = { [weak self] in
             guard let self = self else { return }
@@ -107,7 +106,7 @@ class LaunchCoordinator: BaseCoordinator,
 
     // MARK: - Default Browser
     func presentDefaultBrowserOnboarding() {
-        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController()
+        let defaultOnboardingViewController = DefaultBrowserOnboardingViewController(windowUUID: windowUUID)
         defaultOnboardingViewController.viewModel.goToSettings = { [weak self] in
             guard let self = self else { return }
             self.parentCoordinator?.didFinishLaunch(from: self)

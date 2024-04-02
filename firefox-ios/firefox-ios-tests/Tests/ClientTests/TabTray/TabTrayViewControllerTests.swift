@@ -11,6 +11,8 @@ final class TabTrayViewControllerTests: XCTestCase {
     var delegate: MockTabTrayViewControllerDelegate!
     var navigationController: DismissableNavigationViewController!
     private var tabManager: MockTabManager!
+    // TODO: [8313] As part of post-theme update cleanup, consolidate these and use .XCTestDefaultUUID
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -116,9 +118,9 @@ final class TabTrayViewControllerTests: XCTestCase {
         let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: .XCTestDefaultUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: .XCTestDefaultUUID)
         return [
-            ThemedNavigationController(rootViewController: regularTabsPanel),
-            ThemedNavigationController(rootViewController: privateTabsPanel),
-            ThemedNavigationController(rootViewController: syncTabs)
+            ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: privateTabsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: syncTabs, windowUUID: windowUUID)
         ]
     }
 }

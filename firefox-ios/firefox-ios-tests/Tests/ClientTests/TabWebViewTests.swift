@@ -14,6 +14,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     private var navigationDelegate: MockNavigationDelegate!
     private var tabWebViewDelegate: MockTabWebViewDelegate!
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -42,14 +43,14 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testTabWebView_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: configuration)
+        let tab = Tab(profile: MockProfile(), configuration: configuration, windowUUID: windowUUID)
         tab.createWebview()
 
         trackForMemoryLeaks(tab)
     }
 
     func testTabWebView_load_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: configuration)
+        let tab = Tab(profile: MockProfile(), configuration: configuration, windowUUID: windowUUID)
         tab.createWebview()
         tab.loadRequest(URLRequest(url: URL(string: "https://www.mozilla.com")!))
 
@@ -57,7 +58,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testTabWebView_withLegacySessionData_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: configuration)
+        let tab = Tab(profile: MockProfile(), configuration: configuration, windowUUID: windowUUID)
         tab.url = URL(string: "http://yahoo.com/")!
         tab.createWebview()
 
@@ -65,14 +66,14 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     }
 
     func testTabWebView_withSessionData_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: configuration)
+        let tab = Tab(profile: MockProfile(), configuration: configuration, windowUUID: windowUUID)
         tab.createWebview(with: Data())
 
         trackForMemoryLeaks(tab)
     }
 
     func testTabWebView_withURL_doesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: configuration)
+        let tab = Tab(profile: MockProfile(), configuration: configuration, windowUUID: windowUUID)
         tab.url = URL(string: "https://www.mozilla.com")!
         tab.createWebview()
 
@@ -84,7 +85,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     func createSubject(configuration: WKWebViewConfiguration,
                        file: StaticString = #file,
                        line: UInt = #line) async throws -> TabWebView {
-        let subject = TabWebView(frame: .zero, configuration: configuration)
+        let subject = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
         try await Task.sleep(nanoseconds: sleepTime)
         subject.configure(delegate: tabWebViewDelegate, navigationDelegate: navigationDelegate)
         trackForMemoryLeaks(subject)

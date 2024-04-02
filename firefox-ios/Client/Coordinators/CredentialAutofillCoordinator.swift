@@ -17,6 +17,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     private let themeManager: ThemeManager
     private let tabManager: TabManager
     private weak var parentCoordinator: BottomSheetCardParentCoordinator?
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Inits
 
@@ -36,6 +37,10 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
     // MARK: - Methods
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func showCreditCardAutofill(creditCard: CreditCard?,
                                 decryptedCard: UnencryptedCreditCardFields?,
                                 viewType state: CreditCardBottomSheetState,
@@ -45,13 +50,14 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
-        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel)
+        let viewController = CreditCardBottomSheetViewController(viewModel: creditCardControllerViewModel,
+                                                                 windowUUID: windowUUID)
         viewController.didTapYesClosure = { [weak self] error in
             guard let self = self else { return }
             if let error = error {
                 SimpleToast().showAlertWithText(error.localizedDescription,
                                                 bottomContainer: alertContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.currentTheme())
             } else {
                 // send telemetry
                 if state == .save {
@@ -66,7 +72,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 let toastMessage: String = state == .save ? saveSuccessMessage : updateSuccessMessage
                 SimpleToast().showAlertWithText(toastMessage,
                                                 bottomContainer: alertContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.currentTheme())
                 self.parentCoordinator?.didFinish(from: self)
             }
         }
@@ -171,7 +177,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     }
 
     func showPassCodeController() {
-        let passwordController = DevicePasscodeRequiredViewController()
+        let passwordController = DevicePasscodeRequiredViewController(windowUUID: windowUUID)
         passwordController.profile = profile
         passwordController.parentType = .paymentMethods
         router.present(passwordController)

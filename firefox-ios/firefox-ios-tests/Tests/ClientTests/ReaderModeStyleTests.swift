@@ -9,6 +9,7 @@ import Common
 
 class ReaderModeStyleTests: XCTestCase {
     var themeManager: ThemeManager!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -85,32 +86,32 @@ class ReaderModeStyleTests: XCTestCase {
     // MARK: - ReaderModeTheme
 
     func test_defaultReaderModeTheme_returnsLight() {
-        themeManager.changeCurrentTheme(.light)
+        themeManager.changeCurrentTheme(.light, for: windowUUID)
         let defaultTheme = ReaderModeTheme.preferredTheme(for: nil)
         XCTAssertEqual(defaultTheme, .light, "Expected light theme (default) if not theme is selected")
     }
 
     func test_appWideThemeDark_returnsDark() {
-        themeManager.changeCurrentTheme(.dark)
+        themeManager.changeCurrentTheme(.dark, for: windowUUID)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.light)
 
         XCTAssertEqual(theme, .dark, "Expected dark theme because of the app theme")
     }
 
     func test_readerThemeSepia_returnsSepia() {
-        themeManager.changeCurrentTheme(.light)
+        themeManager.changeCurrentTheme(.light, for: windowUUID)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia)
         XCTAssertEqual(theme, .sepia, "Expected sepia theme if App theme is not dark")
     }
 
     func test_readerThemeSepiaWithAppDark_returnsSepia() {
-        themeManager.changeCurrentTheme(.dark)
+        themeManager.changeCurrentTheme(.dark, for: windowUUID)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia)
         XCTAssertEqual(theme, .dark, "Expected dark theme if App theme is dark")
     }
 
     func test_preferredColorTheme_changesFromLightToDark() {
-        themeManager.changeCurrentTheme(.dark)
+        themeManager.changeCurrentTheme(.dark, for: windowUUID)
         var readerModeStyle = ReaderModeStyle(theme: .light,
                                               fontType: .sansSerif,
                                               fontSize: .size1)

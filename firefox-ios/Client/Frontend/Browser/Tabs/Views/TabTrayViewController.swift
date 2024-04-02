@@ -143,10 +143,10 @@ class TabTrayViewController: UIViewController,
     private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        syncingLabel.textColor = themeManager.currentTheme.colors.textPrimary
+        syncingLabel.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = themeManager.currentTheme.colors.textPrimary
+        activityIndicator.color = themeManager.currentTheme(for: windowUUID).colors.textPrimary
         activityIndicator.startAnimating()
 
         stackView.addArrangedSubview(syncingLabel)
@@ -181,6 +181,7 @@ class TabTrayViewController: UIViewController,
     }
 
     private let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     init(selectedTab: TabTrayPanelType,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -296,12 +297,13 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Themeable
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
-        navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
-        deleteButton.tintColor = themeManager.currentTheme.colors.iconPrimary
-        newTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
-        doneButton.tintColor = themeManager.currentTheme.colors.iconPrimary
-        syncTabButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer1
+        navigationToolbar.barTintColor = theme.colors.layer1
+        deleteButton.tintColor = theme.colors.iconPrimary
+        newTabButton.tintColor = theme.colors.iconPrimary
+        doneButton.tintColor = theme.colors.iconPrimary
+        syncTabButton.tintColor = theme.colors.iconPrimary
     }
 
     // MARK: Private

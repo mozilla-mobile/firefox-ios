@@ -47,6 +47,8 @@ class FakespotViewController: UIViewController,
     private let windowUUID: WindowUUID
     var fakespotState: FakespotState
 
+    var currentWindowUUID: UUID? { return windowUUID }
+
     private var adView: FakespotAdView?
 
     private lazy var scrollView: UIScrollView = .build()
@@ -256,7 +258,7 @@ class FakespotViewController: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         shadowView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1

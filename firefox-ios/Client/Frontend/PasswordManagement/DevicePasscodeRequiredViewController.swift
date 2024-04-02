@@ -74,7 +74,9 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
 
     @objc
     func learnMoreButtonTapped(_ sender: UIButton) {
-        let viewController = SettingsContentViewController()
+        // TODO: [8313] Regression testing needed here
+        guard let windowUUID = (sender as ThemeUUIDIdentifiable).currentWindowUUID else { return }
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForTopic("manage-saved-passwords-firefox-ios")
         navigationController?.pushViewController(viewController, animated: true)
     }

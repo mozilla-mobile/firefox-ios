@@ -20,7 +20,10 @@ extension PhotonActionSheetProtocol {
     func presentSheetWith(viewModel: PhotonActionSheetViewModel,
                           on viewController: PresentableVC,
                           from view: UIView) {
-        let sheet = PhotonActionSheet(viewModel: viewModel)
+        // TODO: Regression testing needed here.
+        guard let uuid = view.currentWindowUUID else { return }
+
+        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: uuid)
         sheet.modalPresentationStyle = viewModel.modalStyle
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
 
@@ -66,7 +69,7 @@ extension PhotonActionSheetProtocol {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,
-                                                theme: themeManager.currentTheme)
+                                                theme: themeManager.currentTheme(for: tabManager.windowUUID))
             }
         }
 

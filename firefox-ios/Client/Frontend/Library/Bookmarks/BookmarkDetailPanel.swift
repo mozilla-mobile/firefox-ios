@@ -215,9 +215,13 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     override func applyTheme() {
         super.applyTheme()
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        tableView.backgroundColor = currentTheme().colors.layer1
     }
 
     override func reloadData() {
@@ -451,7 +455,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 cell.accessoryType = .none
             }
 
-            cell.applyTheme(theme: themeManager.currentTheme)
+            cell.applyTheme(theme: currentTheme())
             return cell
         }
 
@@ -464,7 +468,7 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
 
         cell.delegate = self
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: currentTheme())
 
         switch indexPath.row {
         case BookmarkDetailFieldsRow.title.rawValue:

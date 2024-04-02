@@ -60,28 +60,30 @@ struct ThemeSettingsState: ScreenState, Equatable {
 
         switch action {
         case ThemeSettingsAction.receivedThemeManagerValues(let themeState):
-            return themeState
+            let state = themeState.state
+            return state
 
-        case ThemeSettingsAction.toggleUseSystemAppearance(let isEnabled),
-            ThemeSettingsAction.systemThemeChanged(let isEnabled):
+        case ThemeSettingsAction.toggleUseSystemAppearance(let context),
+            ThemeSettingsAction.systemThemeChanged(let context):
             return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: isEnabled,
+                                      useSystemAppearance: context.boolValue,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
 
-        case ThemeSettingsAction.enableAutomaticBrightness(let isEnabled),
-            ThemeSettingsAction.automaticBrightnessChanged(let isEnabled):
+        case ThemeSettingsAction.enableAutomaticBrightness(let context),
+            ThemeSettingsAction.automaticBrightnessChanged(let context):
             return ThemeSettingsState(windowUUID: state.windowUUID,
                                       useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: isEnabled,
+                                      isAutomaticBrightnessEnable: context.boolValue,
                                       manualThemeSelected: state.manualThemeSelected,
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
 
-        case ThemeSettingsAction.switchManualTheme(let theme),
-            ThemeSettingsAction.manualThemeChanged(let theme):
+        case ThemeSettingsAction.switchManualTheme(let context),
+            ThemeSettingsAction.manualThemeChanged(let context):
+            let theme = context.themeType
             return ThemeSettingsState(windowUUID: state.windowUUID,
                                       useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
@@ -89,8 +91,9 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: state.systemBrightness)
 
-        case ThemeSettingsAction.updateUserBrightness(let brightnessValue),
-            ThemeSettingsAction.userBrightnessChanged(let brightnessValue):
+        case ThemeSettingsAction.updateUserBrightness(let context),
+            ThemeSettingsAction.userBrightnessChanged(let context):
+            let brightnessValue = context.floatValue
             return ThemeSettingsState(windowUUID: state.windowUUID,
                                       useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
@@ -98,7 +101,8 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                       userBrightnessThreshold: brightnessValue,
                                       systemBrightness: state.systemBrightness)
 
-        case ThemeSettingsAction.systemBrightnessChanged(let brightnessValue):
+        case ThemeSettingsAction.systemBrightnessChanged(let context):
+            let brightnessValue = context.floatValue
             return ThemeSettingsState(windowUUID: state.windowUUID,
                                       useSystemAppearance: state.useSystemAppearance,
                                       isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,

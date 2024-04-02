@@ -32,6 +32,7 @@ class IntroViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
+    var currentWindowUUID: UUID? { windowUUID }
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var introViewControllerState: OnboardingViewControllerState?
 
@@ -74,11 +75,12 @@ class IntroViewController: UIViewController,
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.userDefaults = userDefaults
         super.init(nibName: nil, bundle: nil)
 
-        self.viewModel.setupViewControllerDelegates(with: self)
+        self.viewModel.setupViewControllerDelegates(with: self, for: windowUUID)
         setupLayout()
         applyTheme()
     }
@@ -225,7 +227,7 @@ class IntroViewController: UIViewController,
 
     // MARK: - Themable
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer2
 
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
@@ -307,6 +309,7 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.updateOnboardingUserActivationEvent()
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
+                windowUUID: windowUUID,
                 with: fxaPrams,
                 selector: #selector(dismissSignInViewController),
                 completion: {
@@ -323,10 +326,12 @@ extension IntroViewController: OnboardingCardDelegate {
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
+                windowUUID: windowUUID,
                 from: cardName,
                 completionIfLastCard: { self.showNextPageCompletionForLastCard() })
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
+                windowUUID: windowUUID,
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         }
@@ -335,13 +340,18 @@ extension IntroViewController: OnboardingCardDelegate {
     func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
         switch action {
         case .themeDark:
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
-            store.dispatch(ThemeSettingsAction.switchManualTheme(.dark))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
+                                                                                          windowUUID: windowUUID)))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(ThemeTypeContext(themeType: .dark,
+                                                                                  windowUUID: windowUUID)))
         case .themeLight:
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(false))
-            store.dispatch(ThemeSettingsAction.switchManualTheme(.light))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
+                                                                                          windowUUID: windowUUID)))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(ThemeTypeContext(themeType: .light,
+                                                                                  windowUUID: windowUUID)))
         case .themeSystemDefault:
-            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(true))
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: true,
+                                                                                          windowUUID: windowUUID)))
         case .toolbarBottom:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
         case .toolbarTop:

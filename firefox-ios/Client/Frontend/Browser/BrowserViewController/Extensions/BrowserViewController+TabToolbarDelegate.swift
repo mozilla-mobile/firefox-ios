@@ -90,7 +90,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             SimpleToast().showAlertWithText(
                 .FirefoxHomepage.FeltDeletion.ToastTitle,
                 bottomContainer: self.contentContainer,
-                theme: self.themeManager.currentTheme
+                theme: self.currentTheme()
             )
         }
     }
@@ -324,7 +324,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  buttonText: .BookmarksEdit,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.currentTheme) { isButtonTapped in
+                                    theme: currentTheme()) { isButtonTapped in
                 isButtonTapped ? self.openBookmarkEditPanel() : nil
             }
             self.show(toast: toast)
@@ -333,7 +333,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.currentTheme) { [weak self] isButtonTapped in
+                                    theme: currentTheme()) { [weak self] isButtonTapped in
                 guard let self, let currentTab = tabManager.selectedTab else { return }
                 isButtonTapped ? self.addBookmark(
                     url: bookmarkURL?.absoluteString ?? currentTab.url?.absoluteString ?? "",
@@ -344,7 +344,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         default:
             SimpleToast().showAlertWithText(message,
                                             bottomContainer: contentContainer,
-                                            theme: themeManager.currentTheme)
+                                            theme: currentTheme())
         }
     }
 

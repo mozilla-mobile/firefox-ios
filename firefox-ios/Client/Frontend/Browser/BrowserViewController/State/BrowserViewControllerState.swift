@@ -72,7 +72,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
-        case PrivateModeMiddlewareAction.privateModeUpdated(let privacyState):
+        case PrivateModeMiddlewareAction.privateModeUpdated(let context):
+            let privacyState = context.boolValue
             var browserViewType = state.browserViewType
             if browserViewType != .webview {
                 browserViewType = privacyState ? .privateHomepage : .normalHomepage

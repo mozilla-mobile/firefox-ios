@@ -10,6 +10,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
     private var delegate: MockLaunchCoordinatorDelegate!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -65,7 +66,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let viewModel = UpdateViewModel(profile: profile,
                                         model: onboardingModel,
-                                        telemetryUtility: telemetryUtility)
+                                        telemetryUtility: telemetryUtility,
+                                        windowUUID: windowUUID)
         let subject = createSubject(isIphone: false)
         subject.start(with: .update(viewModel: viewModel))
 
@@ -80,7 +82,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let viewModel = UpdateViewModel(profile: profile,
                                         model: onboardingModel,
-                                        telemetryUtility: telemetryUtility)
+                                        telemetryUtility: telemetryUtility,
+                                        windowUUID: windowUUID)
         let subject = createSubject(isIphone: true)
         subject.start(with: .update(viewModel: viewModel))
 
@@ -103,7 +106,7 @@ final class LaunchCoordinatorTests: XCTestCase {
 
     // MARK: - Survey
     func testStart_surveyNoMessage_completes() throws {
-        let manager = SurveySurfaceManager()
+        let manager = SurveySurfaceManager(windowUUID: windowUUID)
         let subject = createSubject(isIphone: false)
         subject.start(with: .survey(manager: manager))
 
@@ -116,7 +119,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         let messageManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(isExpired: false)
         messageManager.message = message
-        let manager = SurveySurfaceManager(and: messageManager)
+        let manager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
         XCTAssertTrue(manager.shouldShowSurveySurface)
 
         let subject = createSubject(isIphone: false)
@@ -155,7 +158,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         let messageManager = MockGleanPlumbMessageManagerProtocol()
         let message = createMessage(isExpired: false)
         messageManager.message = message
-        let manager = SurveySurfaceManager(and: messageManager)
+        let manager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
         XCTAssertTrue(manager.shouldShowSurveySurface)
 
         let subject = createSubject(isIphone: false)
@@ -180,8 +183,8 @@ final class LaunchCoordinatorTests: XCTestCase {
                                line: UInt = #line) -> LaunchCoordinator {
         let subject = LaunchCoordinator(
             router: mockRouter,
-            profile: profile,
             windowUUID: .XCTestDefaultUUID,
+            profile: profile,
             isIphone: isIphone
         )
         trackForMemoryLeaks(subject, file: file, line: line)

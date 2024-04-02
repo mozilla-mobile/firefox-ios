@@ -28,7 +28,8 @@ class UpdateViewModelTests: XCTestCase {
         let expectation = expectation(description: "The hasAccount var has value")
 
         subject.hasSyncableAccount {
-            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                                 for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
 
             XCTAssertEqual(subject.availableCards.count, 2)
             XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
@@ -44,7 +45,8 @@ class UpdateViewModelTests: XCTestCase {
         let expectation = expectation(description: "The hasAccount var has value")
 
         subject.hasSyncableAccount {
-            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                                 for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
 
             XCTAssertEqual(subject.availableCards.count, 2)
             XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
@@ -61,7 +63,8 @@ class UpdateViewModelTests: XCTestCase {
         let expectation = expectation(description: "The hasAccount var has value")
 
         subject.hasSyncableAccount {
-            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                                 for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
 
             XCTAssertEqual(subject.shouldShowSingleCard, false)
             expectation.fulfill()
@@ -72,7 +75,8 @@ class UpdateViewModelTests: XCTestCase {
     func testHasSingleCard_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                             for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
 
         XCTAssertEqual(subject.shouldShowSingleCard, false)
     }
@@ -173,7 +177,8 @@ class UpdateViewModelTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let subject = UpdateViewModel(profile: profile,
                                       model: onboardingModel,
-                                      telemetryUtility: telemetryUtility)
+                                      telemetryUtility: telemetryUtility,
+                                      windowUUID: .XCTestDefaultUUID)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

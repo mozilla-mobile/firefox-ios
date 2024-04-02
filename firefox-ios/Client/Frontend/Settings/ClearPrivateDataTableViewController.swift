@@ -56,8 +56,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     private var clearButtonEnabled = true {
         didSet {
-            let textWarningColor = themeManager.currentTheme.colors.textWarning
-            let textDisabledColor = themeManager.currentTheme.colors.textDisabled
+            let textWarningColor = currentTheme().colors.textWarning
+            let textDisabledColor = currentTheme().colors.textDisabled
             clearButton?.textLabel?.textColor = clearButtonEnabled ? textWarningColor : textDisabledColor
         }
     }
@@ -67,11 +67,15 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         self.profile = profile
         self.tabManager = tabManager
 
-        super.init()
+        super.init(windowUUID: tabManager.windowUUID)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
     }
 
     override func viewDidLoad() {
@@ -84,13 +88,13 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.applyTheme(theme: themeManager.currentTheme)
+        footer.applyTheme(theme: currentTheme())
         tableView.tableFooterView = footer
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: currentTheme())
 
         if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
@@ -101,8 +105,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             cell.textLabel?.numberOfLines = 0
             let control = ThemedSwitch()
-            control.applyTheme(theme: themeManager.currentTheme)
-            control.onTintColor = themeManager.currentTheme.colors.actionPrimary
+            control.applyTheme(theme: currentTheme())
+            control.onTintColor = currentTheme().colors.actionPrimary
             control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
             control.isOn = toggles[indexPath.item]
             cell.accessoryView = control
@@ -111,7 +115,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         } else {
             cell.textLabel?.text = .SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
+            cell.textLabel?.textColor = currentTheme().colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection
             clearButton = cell
@@ -146,7 +150,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == sectionArrow {
-            let view = WebsiteDataManagementViewController()
+            let view = WebsiteDataManagementViewController(windowUUID: windowUUID)
             navigationController?.pushViewController(view, animated: true)
         } else if indexPath.section == sectionButton {
             let alert: UIAlertController

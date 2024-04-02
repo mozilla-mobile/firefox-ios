@@ -9,6 +9,7 @@ import Common
 
 class VersionSettingTests: XCTestCase {
     private var delegate: MockDebugSettingsDelegate!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -25,12 +26,12 @@ class VersionSettingTests: XCTestCase {
 
     func testCopyAppVersion() {
         // Given
-        let settingsTable = SettingsTableViewController(style: .grouped)
+        let settingsTable = SettingsTableViewController(style: .grouped, windowUUID: windowUUID)
         let navigationController = UINavigationController(rootViewController: settingsTable)
         let versionSetting = VersionSetting(settingsDelegate: delegate)
         versionSetting.theme = DefaultThemeManager(
             sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
-        ).currentTheme
+        ).currentTheme(for: windowUUID)
 
         // When
         versionSetting.onLongPress(navigationController)
@@ -44,7 +45,7 @@ class VersionSettingTests: XCTestCase {
 
     func testAppVersionClick() {
         // Given
-        let settingsTable = SettingsTableViewController(style: .grouped)
+        let settingsTable = SettingsTableViewController(style: .grouped, windowUUID: windowUUID)
         let navigationController = UINavigationController(rootViewController: settingsTable)
         let versionSetting = VersionSetting(settingsDelegate: delegate)
 

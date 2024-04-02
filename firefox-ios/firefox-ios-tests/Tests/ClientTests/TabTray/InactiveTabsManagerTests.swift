@@ -8,6 +8,7 @@ import XCTest
 @testable import Client
 final class InactiveTabsManagerTests: XCTestCase {
     var profile: MockProfile!
+    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     var twentyDaysOldTime: Date {
         let twentyDaysOld = Calendar.current.date(byAdding: .day, value: -20, to: Date()) ?? Date()
@@ -70,17 +71,17 @@ final class InactiveTabsManagerTests: XCTestCase {
                             amountOfInactiveTabs: Int = 0) -> [Tab] {
         var tabs = [Tab]()
         for _ in  0..<amountOfRegularTabs {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
             tabs.append(tab)
         }
 
         for _ in  0..<amountOfPrivateTabs {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), isPrivate: true)
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), isPrivate: true, windowUUID: windowUUID)
             tabs.append(tab)
         }
 
         for _ in 0..<amountOfInactiveTabs {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
             let lastExecutedDate = Calendar.current.add(numberOfDays: -15, to: Date())
             tab.lastExecutedTime = lastExecutedDate?.toTimestamp()
             tabs.append(tab)

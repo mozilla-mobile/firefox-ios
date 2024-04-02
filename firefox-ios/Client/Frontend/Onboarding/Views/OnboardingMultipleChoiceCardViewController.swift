@@ -143,12 +143,13 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     // MARK: - Initializers
     init(
         viewModel: OnboardingCardInfoModelProtocol,
-        delegate: OnboardingCardDelegate?
+        delegate: OnboardingCardDelegate?,
+        windowUUID: WindowUUID
     ) {
         self.delegate = delegate
         self.multipleChoiceButtons = []
 
-        super.init(viewModel: viewModel)
+        super.init(viewModel: viewModel, windowUUID: windowUUID)
     }
 
     required init?(coder: NSCoder) {
@@ -324,6 +325,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         multipleChoiceButtons.removeAll()
         multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
             return OnboardingMultipleChoiceButtonView(
+                windowUUID: windowUUID,
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
                     info: buttonModel,
@@ -333,6 +335,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 stateUpdateDelegate: self
             )
         })
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
     }
 
     private func updateLayout() {
@@ -345,7 +351,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
         )
         primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.currentTheme)
+        primaryButton.applyTheme(theme: currentTheme())
 
         setupSecondaryButton()
     }
@@ -364,7 +370,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
         )
         secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: themeManager.currentTheme)
+        secondaryButton.applyTheme(theme: currentTheme())
     }
 
     // MARK: - Button Actions
@@ -388,7 +394,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
     // MARK: - Themeable
     override func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
 

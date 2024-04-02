@@ -120,7 +120,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
-        let privateHomepageController = PrivateHomepageViewController(overlayManager: overlayManager)
+        let privateHomepageController = PrivateHomepageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
         privateHomepageController.parentCoordinator = self
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
@@ -331,7 +331,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
-        let navigationController = ThemedNavigationController()
+        let navigationController = ThemedNavigationController(windowUUID: windowUUID)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
@@ -656,7 +656,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showBackForwardList() {
         guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
-        let backForwardListVC = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
+        let backForwardListVC = BackForwardListViewController(profile: profile,
+                                                              windowUUID: windowUUID,
+                                                              backForwardList: backForwardList)
         backForwardListVC.backForwardTransitionDelegate = BackForwardListAnimator()
         backForwardListVC.browserFrameInfoProvider = browserViewController
         backForwardListVC.tabManager = tabManager

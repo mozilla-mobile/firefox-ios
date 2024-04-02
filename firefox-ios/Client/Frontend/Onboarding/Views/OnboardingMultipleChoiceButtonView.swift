@@ -71,6 +71,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     }
 
     // MARK: - Properties
+    let windowUUID: WindowUUID
     var viewModel: OnboardingMultipleChoiceButtonViewModel
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -80,6 +81,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
 
     // MARK: - View configuration
     init(
+        windowUUID: WindowUUID,
         frame: CGRect = .zero,
         viewModel: OnboardingMultipleChoiceButtonViewModel,
         buttonActionDelegate: OnboardingCardDelegate?,
@@ -87,6 +89,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
+        self.windowUUID = windowUUID
         self.viewModel = viewModel
         self.buttonActionDelegate = buttonActionDelegate
         self.stateUpdateDelegate = stateUpdateDelegate
@@ -168,9 +171,9 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - Theme
     func applyTheme() {
         backgroundColor = .clear
-        titleLabel.textColor = themeManager.currentTheme.colors.textPrimary
+        titleLabel.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
         imageView.layer.borderColor = if viewModel.isSelected {
-            themeManager.currentTheme.colors.actionPrimary.cgColor
+            themeManager.currentTheme(for: windowUUID).colors.actionPrimary.cgColor
         } else {
             UIColor.clear.cgColor
         }

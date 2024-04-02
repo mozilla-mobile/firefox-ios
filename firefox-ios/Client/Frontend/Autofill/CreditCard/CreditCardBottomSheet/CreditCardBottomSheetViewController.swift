@@ -37,6 +37,8 @@ class CreditCardBottomSheetViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     private var viewModel: CreditCardBottomSheetViewModel
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var didTapYesClosure: ((Error?) -> Void)?
     var didTapManageCardsClosure: (() -> Void)?
@@ -94,11 +96,13 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     // MARK: - Initializers
     init(viewModel: CreditCardBottomSheetViewModel,
+         windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
 
         self.viewModel.didUpdateCreditCard = { [weak self] in
@@ -146,7 +150,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                 a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.yesButton
             )
             yesButton.configure(viewModel: buttonViewModel)
-            yesButton.applyTheme(theme: themeManager.currentTheme)
+            yesButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
 
         contentView.addSubviews(cardTableView, buttonsContainerStackView)
@@ -306,7 +310,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         ) as? CreditCardBottomSheetHeaderView else {
             return nil
         }
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         headerView.viewModel = viewModel
         return headerView
     }
@@ -322,7 +326,7 @@ class CreditCardBottomSheetViewController: UIViewController,
             ) as? CreditCardBottomSheetFooterView else {
                 return nil
             }
-            footerView.applyTheme(theme: themeManager.currentTheme)
+            footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             if !footerView.manageCardsButton.responds(
                 to: #selector(CreditCardBottomSheetViewController.didTapManageCards)
             ) {
@@ -358,7 +362,7 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     // MARK: Themable
     func applyTheme() {
-        let currentTheme = themeManager.currentTheme.colors
+        let currentTheme = themeManager.currentTheme(for: windowUUID).colors
         view.backgroundColor = currentTheme.layer1
         cardTableView.reloadData()
     }

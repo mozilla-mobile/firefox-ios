@@ -7,6 +7,7 @@ import XCTest
 @testable import Client
 
 class HistoryPanelTests: XCTestCase {
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
@@ -88,7 +89,7 @@ class HistoryPanelTests: XCTestCase {
 
     private func createSubject() -> HistoryPanel {
         let profile = MockProfile()
-        let subject = HistoryPanel(profile: profile)
+        let subject = HistoryPanel(profile: profile, windowUUID: windowUUID)
         trackForMemoryLeaks(subject)
         return subject
     }

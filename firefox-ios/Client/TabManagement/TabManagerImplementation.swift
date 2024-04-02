@@ -334,9 +334,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                        sessionData: sessionData)
 
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+                let context = BoolValueContext(boolValue: tab.isPrivate, windowUUID: windowUUID)
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
             } else {
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(false))
+                let context = BoolValueContext(boolValue: false, windowUUID: windowUUID)
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
             }
 
             didSelectTab(url)

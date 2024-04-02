@@ -12,6 +12,7 @@ class RemoteTabsCoordinator: BaseCoordinator,
     private let profile: Profile
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private var applicationHelper: ApplicationHelper
+    let windowUUID: WindowUUID
 
     weak var parentCoordinator: ParentCoordinatorDelegate?
 
@@ -19,10 +20,12 @@ class RemoteTabsCoordinator: BaseCoordinator,
 
     init(profile: Profile,
          router: Router,
+         windowUUID: WindowUUID,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper()
     ) {
         self.profile = profile
         self.applicationHelper = applicationHelper
+        self.windowUUID = windowUUID
         super.init(router: router)
     }
 
@@ -31,7 +34,8 @@ class RemoteTabsCoordinator: BaseCoordinator,
         let fxaParams = FxALaunchParams(entrypoint: .homepanel, query: [:])
         let viewController = FirefoxAccountSignInViewController(profile: profile,
                                                                 parentType: .tabTray,
-                                                                deepLinkParams: fxaParams)
+                                                                deepLinkParams: fxaParams,
+                                                                windowUUID: windowUUID)
         fxAccountViewController = viewController
         fxAccountViewController?.qrCodeNavigationHandler = self
         let buttonItem = UIBarButtonItem(
@@ -41,7 +45,7 @@ class RemoteTabsCoordinator: BaseCoordinator,
             action: #selector(dismissFxAViewController)
         )
         fxAccountViewController?.navigationItem.leftBarButtonItem = buttonItem
-        let navController = ThemedNavigationController(rootViewController: viewController)
+        let navController = ThemedNavigationController(rootViewController: viewController, windowUUID: windowUUID)
         router.present(navController)
     }
 

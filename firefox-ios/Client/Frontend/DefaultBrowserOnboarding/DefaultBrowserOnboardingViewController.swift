@@ -44,6 +44,8 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // Orientation independent screen size
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
@@ -97,9 +99,11 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // MARK: - Inits
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -123,6 +127,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         onViewDismissed = nil
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func initialViewSetup() {
         titleLabel.text = viewModel.model?.titleText
         descriptionText.text = viewModel.model?.descriptionText[0]
@@ -137,7 +145,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.ctaButton
         )
         goToSettingsButton.configure(viewModel: goToSettingsButtonViewModel)
-        goToSettingsButton.applyTheme(theme: themeManager.currentTheme)
+        goToSettingsButton.applyTheme(theme: currentTheme())
 
         setupLayout()
     }
@@ -243,7 +251,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // MARK: Themeable
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
 
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary

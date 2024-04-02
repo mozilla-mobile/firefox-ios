@@ -36,7 +36,7 @@ class LegacyTabTrayViewModel {
                                                        profile: profile,
                                                        tabTrayDelegate: tabTrayDelegate,
                                                        tabToFocus: tabToFocus)
-        self.syncedTabsController = LegacyRemoteTabsPanel(profile: self.profile)
+        self.syncedTabsController = LegacyRemoteTabsPanel(profile: self.profile, windowUUID: tabManager.windowUUID)
         self.segmentToFocus = segmentToFocus
     }
 

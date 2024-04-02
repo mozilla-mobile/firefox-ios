@@ -55,6 +55,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
+
     weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
     // MARK: UI components
 
@@ -158,9 +161,11 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     // MARK: - View lifecycle
 
     init(viewModel: EnhancedTrackingProtectionMenuVM,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -444,7 +449,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     @objc
     func connectionDetailsTapped() {
-        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel())
+        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel(), windowUUID: windowUUID)
         detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
     }
@@ -494,12 +499,16 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             }
         }
     }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
 }
 
 // MARK: - Themable
 extension EnhancedTrackingProtectionMenuVC {
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         closeButton.backgroundColor = theme.colors.layer2

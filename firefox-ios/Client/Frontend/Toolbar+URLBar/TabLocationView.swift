@@ -51,13 +51,13 @@ class TabLocationView: UIView, FeatureFlaggable {
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
         didSet {
-            if oldValue != blockerStatus { setTrackingProtection(theme: themeManager.currentTheme) }
+            if oldValue != blockerStatus { setTrackingProtection(theme: currentTheme()) }
         }
     }
 
     var hasSecureContent = false {
         didSet {
-            if oldValue != hasSecureContent { setTrackingProtection(theme: themeManager.currentTheme) }
+            if oldValue != hasSecureContent { setTrackingProtection(theme: currentTheme()) }
         }
     }
 
@@ -430,7 +430,7 @@ class TabLocationView: UIView, FeatureFlaggable {
         case .safelisted:
             if let smallDotImage = UIImage(
                 named: StandardImageIdentifiers.Small.notificationDotFill
-            )?.withTintColor(themeManager.currentTheme.colors.iconAccentBlue) {
+            )?.withTintColor(currentTheme().colors.iconAccentBlue) {
                 let image = lockImage?.overlayWith(image: smallDotImage,
                                                    modifier: 0.4,
                                                    origin: CGPoint(x: 15, y: 15))
@@ -444,6 +444,10 @@ class TabLocationView: UIView, FeatureFlaggable {
     // Fixes: https://github.com/mozilla-mobile/firefox-ios/issues/17403
     private func hideButtons() {
         [shoppingButton, shareButton].forEach { $0.isHidden = true }
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
     }
 }
 

@@ -22,6 +22,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     private var deleteAlert: UIAlertController?
     private var selectedIndexPaths = [IndexPath]()
     private let tableView: UITableView = .build()
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { return windowUUID }
 
     weak var coordinator: PasswordManagerFlowDelegate?
 
@@ -36,12 +38,14 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     }
 
     init(profile: Profile,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
+        self.windowUUID = windowUUID
         self.viewModel = PasswordManagerViewModel(
             profile: profile,
             searchController: searchController,
-            theme: themeManager.currentTheme
+            theme: themeManager.currentTheme(for: windowUUID)
         )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.themeManager = themeManager
@@ -129,7 +133,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         viewModel.theme = theme
         loginDataSource.viewModel = viewModel
         tableView.reloadSections(IndexSet(integer: PasswordManagerListViewController.loginsSettingsSection),
@@ -263,7 +267,7 @@ private extension PasswordManagerListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-        loadingView.applyTheme(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
@@ -369,7 +373,7 @@ extension PasswordManagerListViewController: UITableViewDelegate {
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return headerView
     }
 

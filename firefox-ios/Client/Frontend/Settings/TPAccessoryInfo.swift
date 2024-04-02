@@ -23,6 +23,12 @@ class TPAccessoryInfo: ThemedTableViewController {
         listenForThemeChange(view)
     }
 
+    func currentTheme() -> Theme {
+        // TODO: [8313] Need to revisit and update to use UUID-based themeing.
+        // return themeManager.currentTheme(for: view.currentWindowUUID)
+        return themeManager.legacy_currentTheme()
+    }
+
     func headerView() -> UIView {
         let stack = UIStackView(
             frame: CGRect(
@@ -41,7 +47,9 @@ class TPAccessoryInfo: ThemedTableViewController {
             size: 13,
             weight: .semibold
         )
-        header.textColor = themeManager.currentTheme.colors.textSecondary
+
+        let theme = currentTheme()
+        header.textColor = theme.colors.textSecondary
 
         stack.addArrangedSubview(UIView())
         stack.addArrangedSubview(header)
@@ -76,7 +84,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         )
         topStack.isLayoutMarginsRelativeArrangement = true
 
-        sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
+        sep.backgroundColor = currentTheme().colors.borderPrimary
         sep.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         if let sepSuperView = sep.superview {
             sep.widthAnchor.constraint(equalTo: sepSuperView.widthAnchor).isActive = true
@@ -98,8 +106,9 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let theme = currentTheme()
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: theme)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 cell.textLabel?.text = .TPSocialBlocked
@@ -131,7 +140,7 @@ class TPAccessoryInfo: ThemedTableViewController {
                 cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
             }
         }
-        cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
+        cell.imageView?.tintColor = theme.colors.iconPrimary
         if indexPath.row == 1 {
             cell.textLabel?.font = DefaultDynamicFontHelper.preferredFont(
                 withTextStyle: .body,
@@ -142,7 +151,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
         cell.backgroundColor = .clear
-        cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
+        cell.textLabel?.textColor = theme.colors.textPrimary
         cell.selectionStyle = .none
         return cell
     }

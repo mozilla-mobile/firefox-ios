@@ -32,7 +32,11 @@ enum ReaderModeTheme: String {
 
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        guard themeManager.currentTheme.type != .dark else { return .dark }
+
+        // TODO: [8313] Revisit and update for UUID-based themeing.
+        // guard themeManager.currentTheme(for: ??).type != .dark else { return .dark }
+        guard themeManager.legacy_currentTheme().type != .dark else { return .dark }
+
         return theme ?? .light
     }
 }

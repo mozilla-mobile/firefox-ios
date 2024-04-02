@@ -10,14 +10,18 @@ class ThemedTableViewController: UITableViewController, Themeable {
     var themeManager: ThemeManager
     @objc var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { return windowUUID }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     init(style: UITableView.Style = .grouped,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(style: style)
@@ -53,7 +57,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return headerView
     }
 
@@ -65,7 +69,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
-        footerView.applyTheme(theme: themeManager.currentTheme)
+        footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return footerView
     }
 
@@ -77,8 +81,9 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 
     func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        let theme = themeManager.currentTheme(for: windowUUID)
+        tableView.separatorColor = theme.colors.borderPrimary
+        tableView.backgroundColor = theme.colors.layer1
         tableView.reloadData()
     }
 }

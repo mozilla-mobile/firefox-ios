@@ -88,8 +88,16 @@ class ShareViewController: UIViewController {
         setupUI()
     }
 
+    private func currentTheme() -> Theme {
+        // TODO: [8313] Revisit and update to use UUID based themeing.
+        // guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
+        // return themeManager.currentTheme(for: uuid)
+        return themeManager.legacy_currentTheme()
+    }
+
     func setupUI() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer2
+        let theme = currentTheme()
+        view.backgroundColor = theme.colors.layer2
         view.subviews.forEach({ $0.removeFromSuperview() })
 
         setupNavBar()
@@ -127,11 +135,12 @@ class ShareViewController: UIViewController {
     }
 
     private func setupRows() {
+        let theme = currentTheme()
         let pageInfoRow = makePageInfoRow(addTo: stackView)
         pageInfoRowTitleLabel = pageInfoRow.titleLabel
-        pageInfoRowTitleLabel?.textColor = themeManager.currentTheme.colors.textPrimary
+        pageInfoRowTitleLabel?.textColor = theme.colors.textPrimary
         pageInfoRowUrlLabel = pageInfoRow.urlLabel
-        pageInfoRowUrlLabel?.textColor = themeManager.currentTheme.colors.textPrimary
+        pageInfoRowUrlLabel?.textColor = theme.colors.textPrimary
         makeSeparator(addTo: stackView)
 
         if shareItem?.isUrlType() ?? true {
@@ -201,9 +210,10 @@ class ShareViewController: UIViewController {
     }
 
     private func makeSeparator(addTo parent: UIStackView) {
+        let theme = currentTheme()
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = themeManager.currentTheme.colors.borderPrimary
+        view.backgroundColor = theme.colors.borderPrimary
         parent.addArrangedSubview(view)
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
@@ -278,6 +288,7 @@ class ShareViewController: UIViewController {
         action: Selector,
         hasNavigation: Bool
     ) {
+        let theme = currentTheme()
         let row = UIStackView()
         row.axis = .horizontal
         row.spacing = UX.actionRowSpacingBetweenIconAndTitle
@@ -293,13 +304,13 @@ class ShareViewController: UIViewController {
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
-        icon.tintColor = themeManager.currentTheme.colors.iconPrimary
+        icon.tintColor = theme.colors.iconPrimary
         icon.translatesAutoresizingMaskIntoConstraints = false
 
         let title = UILabel()
         title.font = UX.baseFont
         title.handleLongLabels()
-        title.textColor = themeManager.currentTheme.colors.textPrimary
+        title.textColor = theme.colors.textPrimary
         title.text = label
         [icon, title].forEach { row.addArrangedSubview($0) }
         icon.widthAnchor.constraint(equalToConstant: CGFloat(UX.actionRowIconSize)).isActive = true
@@ -309,7 +320,7 @@ class ShareViewController: UIViewController {
                 image: UIImage(named: "chevronRightLarge")?.withRenderingMode(.alwaysTemplate)
             )
             navButton.contentMode = .scaleAspectFit
-            navButton.tintColor = themeManager.currentTheme.colors.textPrimary
+            navButton.tintColor = theme.colors.textPrimary
             navButton.translatesAutoresizingMaskIntoConstraints = false
             row.addArrangedSubview(navButton)
             navButton.widthAnchor.constraint(equalToConstant: 14).isActive = true
@@ -345,10 +356,11 @@ class ShareViewController: UIViewController {
     }
 
     private func makeActionDoneRow(addTo parent: UIStackView) -> (row: UIStackView, label: UILabel) {
+        let theme = currentTheme()
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addBackground(color: themeManager.currentTheme.colors.iconAction)
+        stackView.addBackground(color: theme.colors.iconAction)
         stackView.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(stackView)
         stackView.heightAnchor.constraint(equalToConstant: CGFloat(UX.pageInfoRowHeight)).isActive = true
@@ -373,9 +385,10 @@ class ShareViewController: UIViewController {
     }
 
     private func setupNavBar() {
+        let theme = currentTheme()
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = themeManager.currentTheme.colors.layer2
+        appearance.backgroundColor = theme.colors.layer2
         appearance.shadowColor = .clear
         appearance.shadowImage = UIImage()
 

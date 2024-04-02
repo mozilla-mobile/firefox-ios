@@ -7,6 +7,7 @@ import Storage
 import Shared
 
 protocol LibraryPanelContextMenu {
+    var windowUUID: WindowUUID { get }
     func getSiteDetails(for indexPath: IndexPath) -> Site?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]?
     func getShareAction(site: Site, sourceView: UIView, delegate: LibraryPanelCoordinatorDelegate?) -> PhotonRowActions
@@ -31,7 +32,8 @@ extension LibraryPanelContextMenu {
         guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
 
         let viewModel = PhotonActionSheetViewModel(actions: [actions], site: site, modalStyle: .overFullScreen)
-        let contextMenu = PhotonActionSheet(viewModel: viewModel)
+
+        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)

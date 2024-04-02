@@ -9,6 +9,7 @@ import Storage
 final class PasswordManagerCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockParentCoordinator: PasswordManagerCoordinatorDelegateMock!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -117,7 +118,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
     func testAddPassword() {
         let subject = createSubject()
-        let passwordManagerSpy = PasswordManagerListViewControllerSpy(profile: MockProfile())
+        let passwordManagerSpy = PasswordManagerListViewControllerSpy(profile: MockProfile(), windowUUID: windowUUID)
         subject.passwordManager = passwordManagerSpy
 
         subject.pressedAddPassword { _ in }
@@ -138,7 +139,7 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
 
     // MARK: - Helper
     func createSubject() -> PasswordManagerCoordinator {
-        let subject = PasswordManagerCoordinator(router: mockRouter, profile: MockProfile())
+        let subject = PasswordManagerCoordinator(router: mockRouter, profile: MockProfile(), windowUUID: windowUUID)
         subject.parentCoordinator = mockParentCoordinator
         trackForMemoryLeaks(subject)
         return subject

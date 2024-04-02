@@ -9,6 +9,7 @@ import XCTest
 class IntroViewModelTests: XCTestCase {
     var nimbusUtility: NimbusOnboardingTestingConfigUtility!
     typealias cards = NimbusOnboardingTestingConfigUtility.CardOrder
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -34,7 +35,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedNumberOfViewControllers = 3
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
         XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome.rawValue)
@@ -47,7 +48,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedNumberOfViewControllers = 3
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
         XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome.rawValue)
@@ -60,7 +61,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedNumberOfViewControllers = 2
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         XCTAssertEqual(subject.availableCards.count, expectedNumberOfViewControllers)
         XCTAssertEqual(subject.availableCards[0].viewModel.name, cards.welcome.rawValue)
@@ -73,7 +74,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedIndex = 1
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         let resultIndex = subject.getNextIndexFrom(
             currentIndex: 0,
@@ -88,7 +89,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedIndex = 2
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         let resultIndex = subject.getNextIndexFrom(
             currentIndex: 1,
@@ -102,7 +103,7 @@ class IntroViewModelTests: XCTestCase {
         nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         let resultIndex = subject.getNextIndexFrom(
             currentIndex: 2,
@@ -118,7 +119,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedIndex = 1
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         let resultIndex = subject.getNextIndexFrom(
             currentIndex: 2,
@@ -133,7 +134,7 @@ class IntroViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedIndex = 0
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         let resultIndex = subject.getNextIndexFrom(
             currentIndex: 1,
@@ -147,7 +148,7 @@ class IntroViewModelTests: XCTestCase {
         nimbusUtility.setupNimbus(withOrder: cards.welcomeNotificationSync)
         let subject = createSubject()
 
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(), for: windowUUID)
 
         let resultIndex = subject.getNextIndexFrom(
             currentIndex: 0,

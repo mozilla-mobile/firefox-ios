@@ -21,6 +21,8 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     private var logger: Logger
     weak var settingsDelegate: SettingsDelegate?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -45,10 +47,12 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
 
     // MARK: - Initializers
     init(viewModel: WallpaperSettingsViewModel,
+         windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.logger = logger
@@ -93,7 +97,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     }
 
     func applyTheme() {
-        contentView.backgroundColor = themeManager.currentTheme.colors.layer5
+        contentView.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer5
     }
 }
 
@@ -135,7 +139,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return cell
     }
 
@@ -221,7 +225,7 @@ private extension WallpaperSettingsViewController {
                                              buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button)
         let toast = ButtonToast(
             viewModel: viewModel,
-            theme: themeManager.currentTheme,
+            theme: themeManager.currentTheme(for: windowUUID),
             completion: { buttonPressed in
                 if buttonPressed { self.dismissView() }
             })

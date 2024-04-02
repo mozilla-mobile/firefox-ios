@@ -51,9 +51,9 @@ class TabTrayCoordinator: BaseCoordinator,
         let privateTabsPanel = TabDisplayPanel(isPrivateMode: true, windowUUID: windowUUID)
         let syncTabs = RemoteTabsPanel(windowUUID: windowUUID)
         return [
-            ThemedNavigationController(rootViewController: regularTabsPanel),
-            ThemedNavigationController(rootViewController: privateTabsPanel),
-            ThemedNavigationController(rootViewController: syncTabs)
+            ThemedNavigationController(rootViewController: regularTabsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: privateTabsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: syncTabs, windowUUID: windowUUID)
         ]
     }
 
@@ -67,7 +67,7 @@ class TabTrayCoordinator: BaseCoordinator,
         case .privateTabs:
             makeTabsCoordinator(navigationController: navigationController)
         case .syncedTabs:
-            makeRemoteTabsCoordinator(navigationController: navigationController)
+            makeRemoteTabsCoordinator(navigationController: navigationController, for: tabManager.windowUUID)
         }
     }
 
@@ -78,11 +78,12 @@ class TabTrayCoordinator: BaseCoordinator,
         tabCoordinator.parentCoordinator = self
     }
 
-    private func makeRemoteTabsCoordinator(navigationController: UINavigationController) {
+    private func makeRemoteTabsCoordinator(navigationController: UINavigationController, for window: WindowUUID) {
         guard !childCoordinators.contains(where: { $0 is RemoteTabsCoordinator }) else { return }
         let router = DefaultRouter(navigationController: navigationController)
         let remoteTabsCoordinator = RemoteTabsCoordinator(profile: profile,
-                                                          router: router)
+                                                          router: router,
+                                                          windowUUID: window)
         add(child: remoteTabsCoordinator)
         remoteTabsCoordinator.parentCoordinator = self
         (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator

@@ -27,14 +27,18 @@ class LegacyRemoteTabsPanel: UIViewController,
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
     var tableViewController: LegacyRemoteTabsTableViewController
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     init(profile: Profile,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile)
+        self.tableViewController = LegacyRemoteTabsTableViewController(profile: profile, windowUUID: windowUUID)
 
         super.init(nibName: nil, bundle: nil)
         notificationCenter.addObserver(self,
@@ -74,10 +78,14 @@ class LegacyRemoteTabsPanel: UIViewController,
         ])
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer4
-        tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
-        tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        view.backgroundColor = currentTheme().colors.layer4
+        tableViewController.tableView.backgroundColor =  currentTheme().colors.layer3
+        tableViewController.tableView.separatorColor = currentTheme().colors.borderPrimary
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
     }

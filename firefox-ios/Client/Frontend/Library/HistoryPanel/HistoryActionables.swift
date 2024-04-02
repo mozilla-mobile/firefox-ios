@@ -14,7 +14,8 @@ struct HistoryActionablesModel: Hashable {
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
     typealias History = String.LibraryPanel.History
 
-    let itemImage: UIImage?
+    private(set) var itemImage: UIImage?
+    let imageName: String?
     let itemTitle: String
     let itemA11yId: String
     let itemIdentity: ActionableItem
@@ -30,33 +31,20 @@ struct HistoryActionablesModel: Hashable {
         self.itemTitle = title
         self.itemA11yId = a11yId
         self.itemIdentity = itemIdentity
+        self.imageName = imageName
+    }
 
+    mutating func configureImage(for window: WindowUUID) {
         if let imageName = imageName {
             let themeManager: ThemeManager = AppContainer.shared.resolve()
-            self.itemImage = UIImage(named: imageName)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
+            self.itemImage = UIImage(named: imageName)?
+                .withTintColor(themeManager.currentTheme(for: window).colors.iconSecondary)
         } else {
             self.itemImage = nil
         }
     }
 
-    // As this section evolves (or we experiment with it), we may need to replace items within.
-    // Let's keep separate stashes of ALL and ACTIVE items.
-    static let allActionables = [
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.delete,
-                                title: History.HistoryPanelClearHistoryButtonTitle,
-                                a11yId: a11y.clearHistoryCell,
-                                itemIdentity: .clearHistory),
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.tabTray,
-                                title: History.RecentlyClosedTabsButtonTitle,
-                                a11yId: a11y.recentlyClosedCell,
-                                itemIdentity: .recentlyClosed),
-        HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.syncTabs,
-                                title: History.SyncedHistory,
-                                a11yId: a11y.syncedHistoryCell,
-                                itemIdentity: .syncHistory)
-    ]
-
-    static let activeActionables = [
+    static let activeActionables: [HistoryActionablesModel] = [
         HistoryActionablesModel(imageName: StandardImageIdentifiers.Large.tabTray,
                                 title: History.RecentlyClosedTabsButtonTitle,
                                 a11yId: a11y.recentlyClosedCell,

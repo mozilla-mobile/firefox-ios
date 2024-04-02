@@ -10,6 +10,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockApplicationHelper: MockApplicationHelper!
     private var qrDelegate: MockQRCodeViewControllerDelegate!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -76,6 +77,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
                                line: UInt = #line) -> RemoteTabsCoordinator {
         let subject = RemoteTabsCoordinator(profile: mockProfile,
                                             router: mockRouter,
+                                            windowUUID: windowUUID,
                                             applicationHelper: mockApplicationHelper)
 
         trackForMemoryLeaks(subject, file: file, line: line)
