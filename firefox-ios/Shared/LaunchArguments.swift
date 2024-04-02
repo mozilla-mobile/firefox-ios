@@ -21,6 +21,7 @@ public struct LaunchArguments {
     public static let SkipDefaultBrowserOnboarding = "SKIP_DEFAULT_BROWSER_ONBOARDING"
     public static let LoadExperiment = "LOAD_EXPERIMENT"
     public static let DisableAnimations = "DISABLE_ANIMATIONS"
+    public static let SkipSplashScreenExperiment = "SKIP_SPLASH_SCREEN_EXPERIMENT"
 
     // After the colon, put the name of the file to load from test bundle
     public static let LoadDatabasePrefix = "FIREFOX_LOAD_DB_NAMED:"

@@ -14,6 +14,11 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private lazy var splashScreenAnimation = SplashScreenAnimation()
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
+    private var shouldTriggerSplashScreenExperiment: Bool {
+        return featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly)
+        && !viewModel.getSplashScreenExperimentHasShown()
+    }
+
     init(coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
@@ -85,14 +90,15 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     // MARK: - Splash Screen
 
     private func delayStart() async throws {
-        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
+        guard shouldTriggerSplashScreenExperiment else { return }
+        viewModel.setSplashScreenExperimentHasShown()
         let position: Int = nimbusSplashScreenFeatureLayer.maximumDurationMs
         try await Task.sleep(nanoseconds: UInt64(position * 1_000_000))
     }
 
     private func setupLaunchScreen() {
         setupLayout()
-        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
+        guard shouldTriggerSplashScreenExperiment else { return }
         if !UIAccessibility.isReduceMotionEnabled {
             splashScreenAnimation.configureAnimation(with: launchScreen)
         }
