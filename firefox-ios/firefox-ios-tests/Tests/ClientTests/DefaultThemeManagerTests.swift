@@ -251,6 +251,7 @@ final class DefaultThemeManagerTests: XCTestCase {
         let subject = DefaultThemeManager(
             userDefaults: userDefaults,
             sharedContainerIdentifier: "")
+        subject.setWindow(UIWindow(frame: .zero), for: windowUUID)
         trackForMemoryLeaks(subject, file: file, line: line)
 
         return subject
