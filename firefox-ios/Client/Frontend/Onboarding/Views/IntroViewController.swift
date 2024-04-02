@@ -231,7 +231,7 @@ class IntroViewController: UIViewController,
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
         pageControl.pageIndicatorTintColor = theme.colors.formSurfaceOff
 
-        viewModel.availableCards.forEach { $0.applyTheme() }
+//        viewModel.availableCards.forEach { $0.applyTheme() }
     }
 }
 
