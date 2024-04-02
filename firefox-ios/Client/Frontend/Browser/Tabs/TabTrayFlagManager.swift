@@ -7,7 +7,6 @@ import Foundation
 /// This is a temporary struct made to manage the feature flag for convenience
 struct TabTrayFlagManager {
     static var isRefactorEnabled: Bool {
-        return true
         return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.tabTrayRefactor,
                                                                  checking: .buildOnly)
     }
