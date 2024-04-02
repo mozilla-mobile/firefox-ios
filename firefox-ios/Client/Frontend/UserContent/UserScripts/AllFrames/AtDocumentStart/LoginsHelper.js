@@ -28,116 +28,31 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       return Math.round(Math.random() * (Number.MAX_VALUE - Number.MIN_VALUE) + Number.MIN_VALUE).toString()
     },
 
+    // We need to keep track of the field that was focused by the user
+    // before the accessory view is clicked so we can yield back the focus
+    // when we autofill or cancel the bottomsheet. Webkit doesn't yield
+    // focus back to the specific field but rather to the top view.
+    activeField: null,
+
     _messages: [ "RemoteLogins:loginsFound" ],
 
     // Map from form login requests to information about that request.
     _requests: { },
 
-    _takeRequest: function(msg) {
-      var data = msg;
-      var request = this._requests[data.requestId];
-      this._requests[data.requestId] = undefined;
-      return request;
-    },
-
-    _sendRequest: function(requestData, messageData) {
-      var requestId = this._getRandomId();
-      messageData.requestId = requestId;
-      webkit.messageHandlers.loginsManagerMessageHandler.postMessage(messageData);
-
-      var self = this;
-      return new Promise(function(resolve, reject) {
-        requestData.promise = { resolve: resolve, reject: reject };
-        self._requests[requestId] = requestData;
-      });
-    },
 
     receiveMessage: function (msg) {
-      var request = this._takeRequest(msg);
       switch (msg.name) {
         case "RemoteLogins:loginsFound": {
-          request.promise.resolve({ form: request.form,
-                                    loginsFound: msg.logins});
-          break;
-        }
-
-        case "RemoteLogins:loginsAutoCompleted": {
-          request.promise.resolve(msg.logins);
+          console.log("ooooo ---- here ?? ", this.activeField.form, this.activeField)
+          this.loginsFound(this.activeField.form, msg.logins);
           break;
         }
       }
-    },
-
-    _asyncFindLogins : function (form, options) {
-      // XXX - Unlike desktop, I want to avoid doing a lookup if there is no username/password in this form
-      var fields = this._getFormFields(form, false);
-      if (!fields[0] || !fields[1]) {
-        return Promise.reject("No logins found");
-      }
-
-      fields[0].addEventListener("blur", onBlur)
-
-      var formOrigin = LoginUtils._getPasswordOrigin(form.ownerDocument.documentURI);
-      var actionOrigin = LoginUtils._getActionOrigin(form);
-      if (actionOrigin == null) {
-        return Promise.reject("Action origin is null")
-      }
-
-      // XXX - Allowing the page to set origin information in this message is a security problem. Right now its just ignored...
-      // TODO: We need to designate what type of message we're sending here...
-      var requestData = { form: form };
-      var messageData = { type: "request", formOrigin: formOrigin, actionOrigin: actionOrigin };
-      return this._sendRequest(requestData, messageData);
     },
 
     loginsFound : function (form, loginsFound) {
       var autofillForm = gAutofillForms; // && !PrivateBrowsingUtils.isContentWindowPrivate(doc.defaultView);
-      this._fillForm(form, autofillForm, false, false, false, loginsFound);
-    },
-
-    /*
-     * onUsernameInput
-     *
-     * Listens for DOMAutoComplete and blur events on an input field.
-     */
-    onUsernameInput : function(event) {
-      if (!gEnabled)
-        return;
-
-      var acInputField = event.target;
-
-      // This is probably a bit over-conservatative.
-      if (!(acInputField.ownerDocument instanceof HTMLDocument))
-        return;
-
-      if (!this._isUsernameFieldType(acInputField))
-        return;
-
-      var acForm = acInputField.form;
-      if (!acForm)
-        return;
-
-      // If the username is blank, bail out now -- we don't want
-      // fillForm() to try filling in a login without a username
-      // to filter on (bug 471906).
-      if (!acInputField.value)
-        return;
-
-      log("onUsernameInput from", event.type);
-
-      // Make sure the username field fillForm will use is the
-      // same field as the autocomplete was activated on.
-      var [usernameField, passwordField, ignored] =
-          this._getFormFields(acForm, false);
-      if (usernameField == acInputField && passwordField) {
-        var self = this;
-        this._asyncFindLogins(acForm, { showMasterPassword: false })
-            .then(function(res) {
-                self._fillForm(res.form, true, true, true, true, res.loginsFound);
-            }).then(null, log);
-      } else {
-        // Ignore the event, it's for some input we don't care about.
-      }
+      this._fillForm(form, autofillForm, true, false, false, loginsFound);
     },
 
     /*
@@ -372,6 +287,16 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       });
     },
 
+    // TODO(issam): Merge this with .setUserInput for form autofill and use that instead.
+    fillValue(field, value) {
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+      nativeInputValueSetter.call(field, value);
+
+      ["input", "change", "blur"].forEach(eventName => {
+        field.dispatchEvent(new Event(eventName, { bubbles: true }));
+      });
+    },
+
     /*
      * _fillform
      *
@@ -452,18 +377,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       // notification.  See the _notifyFoundLogins docs for possible values.
       var didntFillReason = null;
 
-      // Attach autocomplete stuff to the username field, if we have
-      // one. This is normally used to select from multiple accounts,
-      // but even with one account we should refill if the user edits.
-      // if (usernameField)
-      //    formFillService.markAsLoginManagerField(usernameField);
-
-      // Don't clobber an existing password.
-      if (passwordField.value && !clobberPassword) {
-        didntFillReason = "existingPassword";
-        return [false, foundLogins];
-      }
-
       // If the form has an autocomplete=off attribute in play, don't
       // fill in the login automatically. We check this after attaching
       // the autocomplete stuff to the username field, so the user can
@@ -495,26 +408,18 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
           var userEnteredDifferentCase = userTriggered && userNameDiffers && usernameField.value.toLowerCase() == selectedLogin.username.toLowerCase();
 
           if (!disabledOrReadOnly && !userEnteredDifferentCase && userNameDiffers) {
-            usernameField.value = selectedLogin.username;
+            this.fillValue(usernameField, selectedLogin.username);
             dispatchKeyboardEvent(usernameField, "keydown", KEYCODE_ARROW_DOWN);
             dispatchKeyboardEvent(usernameField, "keyup", KEYCODE_ARROW_DOWN);
-            if (document.activeElement !== usernameField) {
-              // Fire 'change' event to notify client-side validation on this field.
-              usernameField.dispatchEvent(new Event("change"));
-            }
             // When the keyboard steals focus and gives it back,
             // focusin is not triggered on the input it yields focus back to.
             usernameField.focus();
           }
         }
         if (passwordField.value != selectedLogin.password) {
-          passwordField.value = selectedLogin.password;
+          this.fillValue(passwordField, selectedLogin.password);
           dispatchKeyboardEvent(passwordField, "keydown", KEYCODE_ARROW_DOWN);
           dispatchKeyboardEvent(passwordField, "keyup", KEYCODE_ARROW_DOWN);
-          if (document.activeElement !== passwordField) {
-            // Fire 'change' event to notify client-side validation on this field.
-            passwordField.dispatchEvent(new Event("change"));
-          }
           // When the keyboard steals focus and gives it back,
           // focusin is not triggered on the input it yields focus back to.
           passwordField.focus();
@@ -539,6 +444,12 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     },
   }
 
+
+  function yieldFocusBackToField() {
+    LoginManagerContent.activeField?.blur();
+    LoginManagerContent.activeField?.focus();
+  }
+
   // define the field types for focus events
   const FocusFieldType = {
     username: "username",
@@ -553,6 +464,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
 
     const [username, password] = LoginManagerContent._getFormFields(form, false);
     if (password) {
+      LoginManagerContent.activeField = event.target;
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
         fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
@@ -560,7 +472,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     }
   }
 
-  document.addEventListener("focusin", (ev) => onFocusIn(ev));
+  document.addEventListener("focusin", (ev) => onFocusIn(ev), {capture: true});
     
   var LoginUtils = {
     /*
@@ -584,9 +496,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     },
   }
 
-  function onBlur(event) {
-    LoginManagerContent.onUsernameInput(event)
-  }
 
   window.addEventListener("submit", function(event) {
     try {
@@ -606,6 +515,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         // alert(ex);
       }
     };
+    this.yieldFocusBackToField = yieldFocusBackToField;
   }
 
   Object.defineProperty(window.__firefox__, "logins", {
