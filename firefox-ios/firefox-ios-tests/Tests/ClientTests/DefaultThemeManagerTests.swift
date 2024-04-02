@@ -40,9 +40,8 @@ final class DefaultThemeManagerTests: XCTestCase {
         _ = createSubject(with: userDefaults)
         let expectedSystemResult = true
         let expectedNightModeResult = false
-        let expectedPrivateModeResult = false
 
-        XCTAssertEqual(userDefaults.registrationDictionary.count, 3)
+        XCTAssertEqual(userDefaults.registrationDictionary.count, 2)
 
         guard let systemResult = userDefaults.registrationDictionary["prefKeySystemThemeSwitchOnOff"] as? Bool,
               let nightModeResult = userDefaults.registrationDictionary["profile.NightModeStatus"] as? Bool
@@ -53,7 +52,6 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         XCTAssertEqual(systemResult, expectedSystemResult)
         XCTAssertEqual(nightModeResult, expectedNightModeResult)
-        XCTAssertEqual(privateModeResult, expectedPrivateModeResult)
     }
 
     func testDTM_onInitialization_hasLightTheme() {
