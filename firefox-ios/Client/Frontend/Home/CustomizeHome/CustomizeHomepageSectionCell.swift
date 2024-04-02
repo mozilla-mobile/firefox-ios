@@ -10,15 +10,12 @@ import Shared
 class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
-    private struct UX {
-        static let buttonVerticalInset: CGFloat = 11
-        static let buttonCornerRadius: CGFloat = 4
+    // MARK: - UI Elements
+    private lazy var goToSettingsButton: SecondaryRoundedButton = .build { button in
+        button.addTarget(self, action: #selector(self.touchUpInside), for: .touchUpInside)
     }
 
-    // MARK: - UI Elements
-    private let goToSettingsButton: ActionButton = .build { button in
-        button.layer.cornerRadius = UX.buttonCornerRadius
-    }
+    private var touchUpAction: ((UIButton) -> Void)?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -53,12 +50,17 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
     }
 
     func configure(onTapAction: ((UIButton) -> Void)?, theme: Theme) {
-        let goToSettingsButtonViewModel = ActionButtonViewModel(title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
-                                                                a11yIdentifier: a11y.customizeHome,
-                                                                verticalInset: UX.buttonVerticalInset,
-                                                                touchUpAction: onTapAction)
+        touchUpAction = onTapAction
+        let goToSettingsButtonViewModel = SecondaryRoundedButtonViewModel(
+            title: .FirefoxHomepage.CustomizeHomepage.ButtonTitle,
+            a11yIdentifier: a11y.customizeHome)
         goToSettingsButton.configure(viewModel: goToSettingsButtonViewModel)
         applyTheme(theme: theme)
+    }
+
+    @objc
+    func touchUpInside(sender: UIButton) {
+        touchUpAction?(sender)
     }
 }
 
@@ -76,9 +78,7 @@ extension CustomizeHomepageSectionCell: Blurrable {
 // MARK: - ThemeApplicable
 extension CustomizeHomepageSectionCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        goToSettingsButton.backgroundColorNormal = theme.colors.layer4
-        goToSettingsButton.foregroundColorNormal = theme.colors.textPrimary
-
+        goToSettingsButton.applyTheme(theme: theme)
         adjustBlur(theme: theme)
     }
 }
