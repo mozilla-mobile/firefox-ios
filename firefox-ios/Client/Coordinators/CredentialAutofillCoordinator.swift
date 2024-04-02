@@ -155,6 +155,11 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         let viewController = SelfSizingHostingController(rootView: loginAutofillView)
 
+        viewController.controllerWillDismiss = { [weak self] in
+            guard let currentTab = self?.tabManager.selectedTab else { return }
+            LoginsHelper.yieldFocusBackToField(with: currentTab)
+        }
+
         var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
