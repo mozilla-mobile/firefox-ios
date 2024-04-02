@@ -15,6 +15,8 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
             static let checkboxDimensions: CGFloat = 24
             static let imageCornerRadius: CGFloat = 10
             static let imageBorderWidth: CGFloat = 5
+            static let stackViewSpacing: CGFloat = 7
+            static let containerViewWidth: CGFloat = 80
         }
 
         struct Images {
@@ -39,19 +41,19 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         imageView.image = UIImage(named: self.viewModel.info.imageID)
         imageView.layer.cornerRadius = UX.Measurements.imageCornerRadius
         imageView.layer.borderWidth = UX.Measurements.imageBorderWidth
-        imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.accessibilityIdentifier = "\(self.viewModel.a11yIDRoot)ImageView"
         imageView.isAccessibilityElement = false
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.numberOfLines = 0
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body, size: 13)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.text = self.viewModel.info.title
+        label.numberOfLines = 0
         label.accessibilityIdentifier = "\(self.viewModel.info.title)TitleLabel"
         label.isAccessibilityElement = false
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
     private lazy var checkboxView: UIImageView = .build { imageView in
@@ -59,6 +61,13 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         imageView.image = UIImage(named: UX.Images.notSelected)
         imageView.accessibilityIdentifier = "\(self.viewModel.a11yIDRoot)CheckboxView"
         imageView.isAccessibilityElement = false
+    }
+
+    private lazy var stackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.spacing = UX.Measurements.stackViewSpacing
     }
 
     // MARK: - Properties
@@ -98,26 +107,23 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
 
         NSLayoutConstraint.activate(
             [
-                imageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 imageView.widthAnchor.constraint(equalToConstant: UX.Measurements.imageWidth),
                 imageView.heightAnchor.constraint(equalToConstant: UX.Measurements.imageHeight),
 
-                titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-                titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
-
-                checkboxView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-                checkboxView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
                 checkboxView.widthAnchor.constraint(equalToConstant: UX.Measurements.checkboxDimensions),
                 checkboxView.heightAnchor.constraint(equalToConstant: UX.Measurements.checkboxDimensions),
-                checkboxView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+
+                stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
                 button.topAnchor.constraint(equalTo: containerView.topAnchor),
-                button.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                button.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
                 button.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-                button.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                button.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
 
+                containerView.widthAnchor.constraint(equalToConstant: UX.Measurements.containerViewWidth),
                 containerView.topAnchor.constraint(equalTo: self.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
@@ -127,9 +133,10 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     }
 
     private func addViews() {
-        containerView.addSubview(imageView)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(checkboxView)
+        stackView.addArrangedSubview(imageView)
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(checkboxView)
+        containerView.addSubview(stackView)
         containerView.addSubview(button)
         addSubview(containerView)
     }
@@ -161,6 +168,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - Theme
     func applyTheme() {
         backgroundColor = .clear
+        titleLabel.textColor = themeManager.currentTheme.colors.textPrimary
         imageView.layer.borderColor = if viewModel.isSelected {
             themeManager.currentTheme.colors.actionPrimary.cgColor
         } else {
