@@ -49,7 +49,7 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     private lazy var headerLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.title1.scaledFont()
+        label.font = FXFontStyles.Bold.title1.scaledFont()
         label.accessibilityTraits.insert(.header)
     }
 
