@@ -10,7 +10,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var mockApplicationHelper: MockApplicationHelper!
     private var qrDelegate: MockQRCodeViewControllerDelegate!
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()

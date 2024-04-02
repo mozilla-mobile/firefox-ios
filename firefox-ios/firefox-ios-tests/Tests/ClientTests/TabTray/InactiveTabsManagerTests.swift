@@ -8,7 +8,7 @@ import XCTest
 @testable import Client
 final class InactiveTabsManagerTests: XCTestCase {
     var profile: MockProfile!
-    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     var twentyDaysOldTime: Date {
         let twentyDaysOld = Calendar.current.date(byAdding: .day, value: -20, to: Date()) ?? Date()

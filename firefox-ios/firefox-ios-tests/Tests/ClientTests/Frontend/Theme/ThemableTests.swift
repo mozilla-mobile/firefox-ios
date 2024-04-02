@@ -90,7 +90,6 @@ class TestsThemeable: UIViewController, Themeable {
 
     func applyTheme() {}
     var currentWindowUUID: UUID? {
-        // TODO: Use .XCTestDefaultUUID
         return UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
     }
 }

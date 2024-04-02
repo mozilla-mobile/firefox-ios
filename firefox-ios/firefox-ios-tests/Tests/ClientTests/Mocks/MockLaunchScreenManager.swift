@@ -11,7 +11,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
     var surveySurfaceManager: SurveySurfaceManager
     var startLoadingCalled = 0
     var mockLaunchType: LaunchType?
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override init(
         windowUUID: WindowUUID,

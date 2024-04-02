@@ -9,6 +9,7 @@ import Shared
 
 class UpdateViewModelTests: XCTestCase {
     private var profile: MockProfile!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
@@ -29,7 +30,7 @@ class UpdateViewModelTests: XCTestCase {
 
         subject.hasSyncableAccount {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
-                                                 for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
+                                                 for: self.windowUUID)
 
             XCTAssertEqual(subject.availableCards.count, 2)
             XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
@@ -46,7 +47,7 @@ class UpdateViewModelTests: XCTestCase {
 
         subject.hasSyncableAccount {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
-                                                 for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
+                                                 for: self.windowUUID)
 
             XCTAssertEqual(subject.availableCards.count, 2)
             XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
@@ -64,7 +65,7 @@ class UpdateViewModelTests: XCTestCase {
 
         subject.hasSyncableAccount {
             subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
-                                                 for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
+                                                 for: self.windowUUID)
 
             XCTAssertEqual(subject.shouldShowSingleCard, false)
             expectation.fulfill()
@@ -76,7 +77,7 @@ class UpdateViewModelTests: XCTestCase {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
         subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
-                                             for: UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!)
+                                             for: self.windowUUID)
 
         XCTAssertEqual(subject.shouldShowSingleCard, false)
     }

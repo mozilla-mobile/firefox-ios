@@ -10,7 +10,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
     private var delegate: MockLaunchCoordinatorDelegate!
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
