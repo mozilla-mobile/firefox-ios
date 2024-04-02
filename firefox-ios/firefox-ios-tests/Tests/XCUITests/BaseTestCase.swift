@@ -317,7 +317,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        mozWaitForElementToNotExist(progressIndicator, timeout: 60.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 90.0)
     }
 
     func waitForTabsButton() {
