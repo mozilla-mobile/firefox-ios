@@ -13,7 +13,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let stackViewSpacingButtons: CGFloat = 16
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
-        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 10
+        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 15
         static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
         static let topStackViewPaddingPhone: CGFloat = 90
         static let choiceButtonStackViewSpacing: CGFloat = 26
