@@ -15,6 +15,8 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
             static let checkboxDimensions: CGFloat = 24
             static let imageCornerRadius: CGFloat = 10
             static let imageBorderWidth: CGFloat = 5
+            static let stackViewSpacing: CGFloat = 7
+            static let containerViewWidth: CGFloat = 80
         }
 
         struct Images {
@@ -46,7 +48,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     private lazy var titleLabel: UILabel = .build { label in
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 13)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.text = self.viewModel.info.title
         label.numberOfLines = 0
         label.accessibilityIdentifier = "\(self.viewModel.info.title)TitleLabel"
@@ -65,7 +67,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         stackView.axis = .vertical
         stackView.alignment = .center
         stackView.distribution = .equalSpacing
-        stackView.spacing = 7
+        stackView.spacing = UX.Measurements.stackViewSpacing
     }
 
     // MARK: - Properties
@@ -121,7 +123,7 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
                 button.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
                 button.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
 
-                containerView.widthAnchor.constraint(equalToConstant: 80),
+                containerView.widthAnchor.constraint(equalToConstant: UX.Measurements.containerViewWidth),
                 containerView.topAnchor.constraint(equalTo: self.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                 containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
