@@ -182,7 +182,6 @@ class BookmarksTests: BaseTestCase {
         app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 2)
         navigator.nowAt(MobileBookmarks)
-
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
         if #available (iOS 17, *) {
