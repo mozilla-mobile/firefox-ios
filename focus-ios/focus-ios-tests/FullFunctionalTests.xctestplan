@@ -32,7 +32,6 @@
         "SearchProviderTest\/testGoogleSearchProvider()",
         "SettingAppearanceTest\/testCheckSetting()",
         "SettingAppearanceTest\/testSafariIntegration()",
-        "ShortcutsTest",
         "URLValidationTest",
         "WebsiteAccessTests\/testVisitWebsite()"
       ],
