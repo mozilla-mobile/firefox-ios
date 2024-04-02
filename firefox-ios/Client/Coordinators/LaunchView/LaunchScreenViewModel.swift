@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Shared
 
 protocol LaunchFinishedLoadingDelegate: AnyObject {
     func launchWith(launchType: LaunchType)
@@ -14,18 +15,28 @@ class LaunchScreenViewModel {
     private var introScreenManager: IntroScreenManager
     private var updateViewModel: UpdateViewModel
     private var surveySurfaceManager: SurveySurfaceManager
+    private var profile: Profile
 
     weak var delegate: LaunchFinishedLoadingDelegate?
 
     init(profile: Profile = AppContainer.shared.resolve(),
          messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
          onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
+        self.profile = profile
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         self.updateViewModel = UpdateViewModel(profile: profile,
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
+    }
+
+    func getSplashScreenExperimentHasShown() -> Bool {
+        profile.prefs.boolForKey(PrefsKeys.splashScreenShownKey) ?? false
+    }
+
+    func setSplashScreenExperimentHasShown() {
+        profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
     }
 
     func startLoading(appVersion: String = AppInfo.appVersion) async {
