@@ -17,6 +17,8 @@ class JumpBackInViewModelTests: XCTestCase {
     var stubBrowserViewController: BrowserViewController!
     var adaptor: JumpBackInDataAdaptorMock!
 
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+
     let iPhone14ScreenSize = CGSize(width: 390, height: 844)
     let sleepTime: UInt64 = 100_000_000
     override func setUp() {
@@ -585,7 +587,7 @@ extension JumpBackInViewModelTests {
     func createTab(profile: MockProfile,
                    configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
                    urlString: String? = "www.website.com") -> Tab {
-        let tab = Tab(profile: profile, configuration: configuration)
+        let tab = Tab(profile: profile, configuration: configuration, windowUUID: windowUUID)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!

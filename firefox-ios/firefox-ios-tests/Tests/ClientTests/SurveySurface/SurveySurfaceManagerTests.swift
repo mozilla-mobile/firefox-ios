@@ -11,6 +11,7 @@ import UIKit
 
 class SurveySurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     override func setUp() {
         super.setUp()
@@ -109,7 +110,7 @@ extension SurveySurfaceManagerTests {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line
     ) -> SurveySurfaceManager {
-        let subject = SurveySurfaceManager(and: messageManager)
+        let subject = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

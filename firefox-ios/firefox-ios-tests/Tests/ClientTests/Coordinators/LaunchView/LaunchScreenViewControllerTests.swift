@@ -14,7 +14,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        viewModel = MockLaunchScreenViewModel(profile: MockProfile())
+        viewModel = MockLaunchScreenViewModel(windowUUID: windowUUID, profile: MockProfile())
         coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 

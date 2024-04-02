@@ -7,6 +7,7 @@ import XCTest
 @testable import Client
 
 class ReadingListPanelTests: XCTestCase {
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
@@ -32,7 +33,7 @@ class ReadingListPanelTests: XCTestCase {
 
     private func createSubject() -> ReadingListPanel {
         let profile = MockProfile()
-        let subject = ReadingListPanel(profile: profile)
+        let subject = ReadingListPanel(profile: profile, windowUUID: windowUUID)
         trackForMemoryLeaks(subject)
         return subject
     }

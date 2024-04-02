@@ -12,6 +12,7 @@ import WebKit
 class SponsoredContentFilterUtilityTests: XCTestCase {
     private static let sponsoredStandardURL = "www.test.com/?parameter&mfadid=adm"
     private let normalURL = "www.test.com/?parameter&parameter"
+    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
 
     private var profile: MockProfile!
     override func setUp() {
@@ -147,18 +148,18 @@ extension SponsoredContentFilterUtilityTests {
                     sponsoredTabsCount: Int) -> [Tab] {
         var tabs = [Tab]()
         (0..<normalTabsCount).forEach { index in
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
             tab.url = URL(string: normalURL)
             tabs.append(tab)
         }
 
         (0..<emptyURLTabsCount).forEach { index in
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
             tabs.append(tab)
         }
 
         (0..<sponsoredTabsCount).forEach { index in
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
             tab.url = URL(string: SponsoredContentFilterUtilityTests.sponsoredStandardURL)
             tabs.append(tab)
         }
