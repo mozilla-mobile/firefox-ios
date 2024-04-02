@@ -66,7 +66,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let viewModel = UpdateViewModel(profile: profile,
                                         model: onboardingModel,
-                                        telemetryUtility: telemetryUtility, windowUUID: windowUUID)
+                                        telemetryUtility: telemetryUtility,
+                                        windowUUID: windowUUID)
         let subject = createSubject(isIphone: false)
         subject.start(with: .update(viewModel: viewModel))
 
@@ -81,7 +82,8 @@ final class LaunchCoordinatorTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let viewModel = UpdateViewModel(profile: profile,
                                         model: onboardingModel,
-                                        telemetryUtility: telemetryUtility, windowUUID: windowUUID)
+                                        telemetryUtility: telemetryUtility,
+                                        windowUUID: windowUUID)
         let subject = createSubject(isIphone: true)
         subject.start(with: .update(viewModel: viewModel))
 

@@ -62,7 +62,8 @@ final class LaunchTypeTests: XCTestCase {
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
                 model: onboardingModel,
-                telemetryUtility: telemetryUtility, windowUUID: windowUUID))
+                telemetryUtility: telemetryUtility,
+                windowUUID: windowUUID))
 
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
@@ -75,7 +76,8 @@ final class LaunchTypeTests: XCTestCase {
             viewModel: UpdateViewModel(
                 profile: MockProfile(),
                 model: onboardingModel,
-                telemetryUtility: telemetryUtility, windowUUID: windowUUID))
+                telemetryUtility: telemetryUtility,
+                windowUUID: windowUUID))
 
         XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))

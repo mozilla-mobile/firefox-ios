@@ -23,7 +23,8 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         self.updateViewModel = UpdateViewModel(profile: profile,
                                                model: onboardingModel,
-                                               telemetryUtility: telemetryUtility, windowUUID: windowUUID)
+                                               telemetryUtility: telemetryUtility,
+                                               windowUUID: windowUUID)
         self.surveySurfaceManager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
         super.init(windowUUID: windowUUID)
     }
