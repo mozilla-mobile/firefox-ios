@@ -32,7 +32,7 @@ class CredentialProviderPresenter {
         if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else if let id = credentialIdentity.recordIdentifier {
-            profile.logins.getLogin(id: id).upon { [weak self] result in
+            profile.logins.getLogin(id: id, completionHandler: { [weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
@@ -46,38 +46,36 @@ class CredentialProviderPresenter {
                         self?.cancel(with: .userInteractionRequired)
                     }
                 }
-            }
+            })
         }
     }
 
     func showCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    if self.profile.logins.reopenIfClosed() != nil {
+        if self.profile.logins.reopenIfClosed() != nil {
             cancel(with: .failed)
         } else {
-            profile.logins.listLogins().upon {[weak self] result in
+            profile.logins.listLogins(completionHandler: { [weak self] result in
                 switch result {
                 case .failure:
                     self?.cancel(with: .failed)
                 case .success(let loginRecords):
-
                     var sortedLogins = loginRecords.sorted(by: <)
                     for (index, element) in sortedLogins.enumerated() {
                         if let identifier = serviceIdentifiers
                             .first?
                             .identifier.asURL?.domainURL
                             .absoluteString.titleFromHostname,
-                            element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
+                           element.passwordCredentialIdentity.serviceIdentifier.identifier.contains(identifier) {
                             sortedLogins.remove(at: index)
                             sortedLogins.insert(element, at: 0)
                         }
                     }
-
                     let dataSource = sortedLogins.map { ($0.passwordCredentialIdentity, $0.passwordCredential) }
                     DispatchQueue.main.async {
                         self?.view?.show(itemList: dataSource)
                     }
                 }
-            }
+            })
         }
     }
 
