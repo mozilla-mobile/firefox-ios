@@ -304,6 +304,7 @@ class FormAutofillHelperTests: XCTestCase {
 
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue))
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue))
+        XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormTelemetryMessageHandler.rawValue))
     }
 
     func testUserContentControllerDidReceiveScriptMessage_withCreditCardHandler() {
