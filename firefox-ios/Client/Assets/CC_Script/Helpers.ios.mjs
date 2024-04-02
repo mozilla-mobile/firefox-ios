@@ -106,7 +106,7 @@ export const XPCOMUtils = withNotImplementedError({
     prop,
     pref,
     defaultValue = null,
-    onUpdate = null,
+    onUpdate,
     transform = val => val
   ) => {
     if (!Object.keys(IOSAppConstants.prefs).includes(pref)) {
