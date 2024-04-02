@@ -21,7 +21,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
-         viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
+         viewModel: LaunchScreenViewModel? = nil,
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.coordinator = coordinator
         self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
