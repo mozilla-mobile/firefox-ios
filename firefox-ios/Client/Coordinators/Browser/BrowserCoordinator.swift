@@ -651,6 +651,10 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
+        navigationController.onViewDismissed = { [weak self] in
+            self?.didDismissTabTray(from: tabTrayCoordinator)
+        }
+
         present(navigationController)
     }
 
