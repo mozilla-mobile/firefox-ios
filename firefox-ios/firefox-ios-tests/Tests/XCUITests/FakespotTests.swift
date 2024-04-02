@@ -100,18 +100,20 @@ class FakespotTests: BaseTestCase {
         waitUntilPageLoad()
         // The price tag icon is not displayed
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        // Open a product detail page and check the address bar
-        let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
-        mozWaitForElementToExist(searchField)
-        searchField.tap()
-        searchField.typeText("Shoe")
-        mozWaitForElementToExist(app.webViews["contentView"].webViews.buttons["Search"])
-        app.webViews["contentView"].webViews.buttons["Search"].tap()
-        waitUntilPageLoad()
-        app.webViews["contentView"].links.element(boundBy: 7).tap()
-        waitUntilPageLoad()
-        // The price tag icon is not displayed
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        if #available(iOS 17, *) {
+            // Open a product detail page and check the address bar
+            let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
+            mozWaitForElementToExist(searchField)
+            searchField.tap()
+            searchField.typeText("Shoe")
+            mozWaitForElementToExist(app.webViews["contentView"].webViews.buttons["Search"])
+            app.webViews["contentView"].webViews.buttons["Search"].tap()
+            waitUntilPageLoad()
+            app.webViews["contentView"].links.element(boundBy: 7).tap()
+            waitUntilPageLoad()
+            // The price tag icon is not displayed
+            mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863

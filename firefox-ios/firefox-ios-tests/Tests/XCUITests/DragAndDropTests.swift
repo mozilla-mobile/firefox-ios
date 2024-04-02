@@ -71,17 +71,21 @@ class DragAndDropTests: BaseTestCase {
         )
         XCTAssertEqual(fourthWebsitePosition, thirdWebsite.tabName, "last tab before is not correct")
 
-        dragAndDrop(
-            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-            dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
-        )
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
+        if #available(iOS 17, *) {
+            dragAndDrop(
+                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+                dropOnElement: app.collectionViews.cells[thirdWebsite.tabName].firstMatch
+            )
 
-        let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
-        // Disabling validation on iPad. Dragging and droping action for the first and last tab is not working.
-        // This is just automation related, manually the action performs succesfully.
-        if !iPad() {
-            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsiteUnselected.tabName, secondTab: homeTabName)
-            XCTAssertEqual(thirdWebsitePosition, thirdWebsite.tabName, "last tab after is not correct")
+            let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
+            // Disabling validation on iPad. Dragging and droping action for the first and last tab is not working.
+            // This is just automation related, manually the action performs succesfully.
+            if !iPad() {
+                checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsiteUnselected.tabName, secondTab: homeTabName)
+                XCTAssertEqual(thirdWebsitePosition, thirdWebsite.tabName, "last tab after is not correct")
+            }
         }
     }
 
@@ -93,20 +97,23 @@ class DragAndDropTests: BaseTestCase {
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
 
-        // Rearrange the tabs via drag home tab and drop it on twitter tab
-        dragAndDrop(
-            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-        )
-
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-        if !iPad() {
-            XCTAssert(
-                secondWebsite.url.contains(app.textFields["url"].value! as! String),
-                "The tab has not been dropped correctly"
-            ) } else {
-                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
-            }
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
+        if #available(iOS 17, *) {
+            // Rearrange the tabs via drag home tab and drop it on twitter tab
+            dragAndDrop(
+                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+            )
+            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+            if !iPad() {
+                XCTAssert(
+                    secondWebsite.url.contains(app.textFields["url"].value! as! String),
+                    "The tab has not been dropped correctly"
+                ) } else {
+                    XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+                }
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361192
@@ -117,20 +124,24 @@ class DragAndDropTests: BaseTestCase {
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
 
-        // Drag and drop home tab from the first position to the second
-        dragAndDrop(
-            dragElement: app.collectionViews.cells["Homepage"].firstMatch,
-            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-        )
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
-        // Check that focus is kept on last website open
-        if !iPad() {
-            XCTAssert(
-                secondWebsite.url.contains(app.textFields["url"].value! as! String),
-                "The tab has not been dropped correctly"
-            ) } else {
-                XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
-            }
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
+        if #available(iOS 17, *) {
+            // Drag and drop home tab from the first position to the second
+            dragAndDrop(
+                dragElement: app.collectionViews.cells["Homepage"].firstMatch,
+                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+            )
+            checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
+            // Check that focus is kept on last website open
+            if !iPad() {
+                XCTAssert(
+                    secondWebsite.url.contains(app.textFields["url"].value! as! String),
+                    "The tab has not been dropped correctly"
+                ) } else {
+                    XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
+                }
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361193
@@ -147,22 +158,36 @@ class DragAndDropTests: BaseTestCase {
             firstTab: firstWebsite.tabName,
             secondTab: secondWebsite.tabName
         )
-        // Drag first tab on the second one
-        dragAndDrop(
-            dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-            dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
-        )
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19205
+        // https://github.com/mozilla-mobile/firefox-ios/issues/19043
+        if #available(iOS 17, *) {
+            // Drag first tab on the second one
+            dragAndDrop(
+                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
+                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+            )
+            checkTabsOrder(
+                dragAndDropTab: true,
+                firstTab: secondWebsite.tabName,
+                secondTab: firstWebsite.tabName
+            )
+            // Check that focus is kept on last website open
+            XCTAssert(
+                secondWebsite.url.contains(app.textFields["url"].value! as! String),
+                "The tab has not been dropped correctly"
+            )
 
-        checkTabsOrder(
-            dragAndDropTab: true,
-            firstTab: secondWebsite.tabName,
-            secondTab: firstWebsite.tabName
-        )
-        // Check that focus is kept on last website open
-        XCTAssert(
-            secondWebsite.url.contains(app.textFields["url"].value! as! String),
-            "The tab has not been dropped correctly"
-        )
+            checkTabsOrder(
+                dragAndDropTab: true,
+                firstTab: secondWebsite.tabName,
+                secondTab: firstWebsite.tabName
+            )
+            // Check that focus is kept on last website open
+            XCTAssert(
+                secondWebsite.url.contains(app.textFields["url"].value! as! String),
+                "The tab has not been dropped correctly"
+            )
+        }
     }
 }
 

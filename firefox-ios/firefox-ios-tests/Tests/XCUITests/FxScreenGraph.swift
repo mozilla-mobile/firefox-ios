@@ -488,11 +488,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
-            if app.buttons["Remove Test Folder"].exists {
-                app.buttons["Remove Test Folder"].tap()
-                app.buttons["Delete"].tap()
+            if #available(iOS 17, *) {
+                if app.buttons["Remove Test Folder"].exists {
+                    app.buttons["Remove Test Folder"].tap()
+                    app.buttons["Delete"].tap()
+                } else {
+                    app.buttons["Delete"].tap()
+                }
             } else {
-                app.buttons["Delete"].tap()
+                if app.buttons["Delete Test Folder"].exists {
+                    app.buttons["Delete Test Folder"].tap()
+                    app.buttons["Delete"].tap()
+                } else {
+                    app.buttons["Delete"].tap()
+                }
             }
         }
     }
@@ -624,7 +633,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // Screengraph will go back to main Settings screen. Manually tap on settings
             app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
-            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            if #unavailable(iOS 17) {
+                app.tables.buttons["Delete Mozilla Engine"].tap()
+            } else {
+                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            }
             app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         }
     }
