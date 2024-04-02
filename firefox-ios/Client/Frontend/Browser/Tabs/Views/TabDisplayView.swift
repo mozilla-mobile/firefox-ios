@@ -96,18 +96,11 @@ class TabDisplayView: UIView,
     func newState(state: TabsPanelState) {
         tabsState = state
 
-        updateCollectionViewLayout()
+        collectionView.reloadData()
 
         if let index = state.scrollToIndex {
             scrollToTab(index)
         }
-    }
-
-    private func updateCollectionViewLayout() {
-        collectionView.reloadData()
-        collectionView.collectionViewLayout.invalidateLayout()
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
     }
 
     private func scrollToTab(_ index: Int) {
