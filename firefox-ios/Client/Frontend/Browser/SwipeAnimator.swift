@@ -31,10 +31,12 @@ class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
     weak var animatingView: UIView?
 
-    fileprivate var prevOffset: CGPoint?
-    fileprivate let params: SwipeAnimationParameters
+    private var prevOffset: CGPoint?
+    private let params: SwipeAnimationParameters
 
-    fileprivate var panGestureRecogniser: UIPanGestureRecognizer!
+    private var panGestureRecogniser: UIPanGestureRecognizer!
+
+    private var isAnimating = false
 
     var containerCenter: CGPoint {
         guard let animatingView = self.animatingView else {
@@ -53,23 +55,18 @@ class SwipeAnimator: NSObject {
         animatingView.addGestureRecognizer(self.panGestureRecogniser)
         self.panGestureRecogniser.delegate = self
     }
-
-    func cancelExistingGestures() {
-        self.panGestureRecogniser.isEnabled = false
-        self.panGestureRecogniser.isEnabled = true
-    }
 }
 
 // MARK: Private Helpers
 extension SwipeAnimator {
-    fileprivate func animateBackToCenter() {
+    func animateBackToCenter() {
         UIView.animate(withDuration: params.recenterAnimationDuration, animations: {
             self.animatingView?.transform = .identity
             self.animatingView?.alpha = 1
         })
     }
 
-    fileprivate func animateAwayWithVelocity(_ velocity: CGPoint, speed: CGFloat) {
+    private func animateAwayWithVelocity(_ velocity: CGPoint, speed: CGFloat) {
         guard let animatingView = self.animatingView else { return }
 
         if !(delegate?.swipeAnimatorIsAnimateAwayEnabled(self) ?? false) {
@@ -89,11 +86,12 @@ extension SwipeAnimator {
             }, completion: { finished in
                 if finished {
                     animatingView.alpha = 0
+                    self.animateBackToCenter()
                 }
             })
     }
 
-    fileprivate func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {
+    private func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {
         let swipeWidth = animatingView?.frame.size.width ?? 1
         let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * Double.pi)
 
