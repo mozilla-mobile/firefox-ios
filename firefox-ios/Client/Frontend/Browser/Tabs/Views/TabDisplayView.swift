@@ -24,6 +24,7 @@ class TabDisplayView: UIView,
     }
 
     private(set) var tabsState: TabsPanelState
+    private var performingChainedOperations = false
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
@@ -121,6 +122,34 @@ class TabDisplayView: UIView,
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+    }
+    
+    private func performChainedOperations() {
+//        guard !performingChainedOperations,
+//              let (type, operation) = operations.popLast()
+//        else { return }
+//
+//        performingChainedOperations = true
+//        /// Fix crash related to bug from `collectionView.performBatchUpdates` when the
+//        /// collectionView is not visible the dataSource section/items differs from the actions to be perform
+//        /// which causes the crash
+//        collectionView.numberOfItems(inSection: 0)
+//        collectionView.performBatchUpdates({
+//            operation()
+//        }, completion: { [weak self] (done) in
+//            self?.performingChainedOperations = false
+//            self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+//            self?.performChainedOperations()
+//        })
+    }
+
+    private func updateWith(animationType: TabAnimationType,
+                            operation: (() -> Void)?) {
+//        if let op = operation {
+//            operations.insert((animationType, op), at: 0)
+//        }
+//
+//        performChainedOperations()
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
