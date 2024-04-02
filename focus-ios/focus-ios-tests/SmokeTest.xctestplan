@@ -31,7 +31,7 @@
         "SettingAppearanceTest\/testAddRemoveCustomDomain()",
         "SettingAppearanceTest\/testDisableAutocomplete()",
         "SettingAppearanceTest\/testOpenInSafari()",
-        "ShortcutsTest\/testAddRemoveShortcut()",
+        "PageShortcutsTest\/testAddRemoveShortcut()",
         "TrackingProtectionTest\/testInactiveSettings()",
         "UserAgentTest",
         "WebsiteAccessTests\/testAutocompleteCustomDomain()",

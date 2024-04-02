@@ -5,7 +5,7 @@
 import Foundation
 import XCTest
 
-class ShortcutsTest: BaseTestCase {
+class PageShortcutsTest: BaseTestCase {
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()
