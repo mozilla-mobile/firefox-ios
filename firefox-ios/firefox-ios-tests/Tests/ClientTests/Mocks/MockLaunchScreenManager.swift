@@ -25,6 +25,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
                                                model: onboardingModel,
                                                telemetryUtility: telemetryUtility, windowUUID: windowUUID)
         self.surveySurfaceManager = SurveySurfaceManager(windowUUID: windowUUID, and: messageManager)
+        super.init(windowUUID: windowUUID)
     }
 
     override func startLoading(appVersion: String) async {
