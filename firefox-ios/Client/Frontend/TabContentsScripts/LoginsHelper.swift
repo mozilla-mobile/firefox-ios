@@ -338,6 +338,11 @@ class LoginsHelper: TabContentScript {
                                      object: .loginsAutofilled)
     }
 
+    public static func yieldFocusBackToField(with tab: Tab) {
+        let jsFocusCallback = "window.__firefox__.logins.yieldFocusBackToField()"
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFocusCallback)
+    }
+
     // MARK: Theming System
     private func applyTheme(for views: UIView...) {
         views.forEach { view in
