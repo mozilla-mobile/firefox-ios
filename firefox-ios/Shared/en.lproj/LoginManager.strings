@@ -16,6 +16,9 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Delete";
 
+/* Toast text that appears after password delete */
+"Delete Toast" = "Password deleted";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Deselect All";
 

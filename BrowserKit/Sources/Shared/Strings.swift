@@ -6831,6 +6831,11 @@ extension String {
         tableName: "LoginManager",
         value: nil,
         comment: "Label for the button used to delete the current login.")
+    public static let LoginListDeleteToast = MZLocalizedString(
+        key: "Delete Toast",
+        tableName: "LoginManager",
+        value: nil,
+        comment: "Toast text that appears after password delete")
 }
 
 // MARK: - Login Detail

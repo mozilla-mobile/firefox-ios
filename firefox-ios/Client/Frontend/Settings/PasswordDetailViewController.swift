@@ -19,6 +19,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    var deleteHandler: (() -> Void)?
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
