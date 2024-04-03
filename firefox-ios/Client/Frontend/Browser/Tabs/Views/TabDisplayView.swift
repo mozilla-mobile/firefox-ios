@@ -123,34 +123,40 @@ class TabDisplayView: UIView,
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
-    
+
+// MARK: - move into it's own class that clearly is for the operation queue
+    var operations = [(TabAnimationType, (() -> Void))]()
+   // weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
+
     private func performChainedOperations() {
-//        guard !performingChainedOperations,
-//              let (type, operation) = operations.popLast()
-//        else { return }
-//
-//        performingChainedOperations = true
-//        /// Fix crash related to bug from `collectionView.performBatchUpdates` when the
-//        /// collectionView is not visible the dataSource section/items differs from the actions to be perform
-//        /// which causes the crash
-//        collectionView.numberOfItems(inSection: 0)
-//        collectionView.performBatchUpdates({
-//            operation()
-//        }, completion: { [weak self] (done) in
-//            self?.performingChainedOperations = false
-//            self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
-//            self?.performChainedOperations()
-//        })
+        guard !performingChainedOperations,
+              let (type, operation) = operations.popLast()
+        else { return }
+
+        performingChainedOperations = true
+        /// Fix crash related to bug from `collectionView.performBatchUpdates` when the
+        /// collectionView is not visible the dataSource section/items differs from the actions to be perform
+        /// which causes the crash
+        collectionView.numberOfItems(inSection: 0)
+        collectionView.performBatchUpdates({
+            operation()
+        }, completion: { [weak self] (done) in
+            self?.performingChainedOperations = false
+           // self?.tabDisplayCompletionDelegate?.completedAnimation(for: type)
+            self?.performChainedOperations()
+        })
     }
 
     private func updateWith(animationType: TabAnimationType,
                             operation: (() -> Void)?) {
-//        if let op = operation {
-//            operations.insert((animationType, op), at: 0)
-//        }
-//
-//        performChainedOperations()
+        if let op = operation {
+            operations.insert((animationType, op), at: 0)
+        }
+
+        performChainedOperations()
     }
+
+// END
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         // swiftlint:disable line_length
@@ -378,12 +384,16 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
-        store.dispatch(TabPanelAction.moveTab(MoveTabContext(originIndex: start.row,
-                                                             destinationIndex: end.row,
-                                                             isPrivate: tabsState.isPrivateMode,
-                                                             windowUUID: windowUUID)))
+
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
-        collectionView.moveItem(at: start, to: end)
+        updateWith(animationType: .moveTab) { [weak self] in
+            guard let self else { return }
+            store.dispatch(TabPanelAction.moveTab(MoveTabContext(originIndex: start.row,
+                                                                 destinationIndex: end.row,
+                                                                 isPrivate: tabsState.isPrivateMode,
+                                                                 windowUUID: windowUUID)))
+            collectionView.moveItem(at: start, to: end)
+        }
     }
 }
