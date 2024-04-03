@@ -84,7 +84,6 @@ extension SwipeAnimator {
             }, completion: { finished in
                 if finished {
                     animatingView.alpha = 0
-                    self.animateBackToCenter()
                 }
             })
     }
