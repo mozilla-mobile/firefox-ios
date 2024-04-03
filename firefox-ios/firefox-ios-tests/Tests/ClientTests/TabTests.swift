@@ -4,7 +4,6 @@
 
 import XCTest
 import WebKit
-import Storage
 
 @testable import Client
 
