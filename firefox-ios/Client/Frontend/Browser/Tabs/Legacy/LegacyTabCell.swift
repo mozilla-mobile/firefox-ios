@@ -168,6 +168,8 @@ class LegacyTabCell: UICollectionViewCell,
 
     // MARK: - Configure tab cell with a Tab
     func configureLegacyCellWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
+        animator?.animateBackToCenter()
+
         isSelectedTab = selected
 
         titleText.text = tab.getTabTrayTitle()

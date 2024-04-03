@@ -113,6 +113,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
             self.animator?.delegate = swipeAnimatorDelegate
         }
 
+        animator?.animateBackToCenter()
+
         titleText.text = tabModel.tabTitle
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
         isAccessibilityElement = true
