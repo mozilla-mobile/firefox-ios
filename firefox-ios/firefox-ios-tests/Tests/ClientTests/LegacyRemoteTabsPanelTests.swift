@@ -9,7 +9,7 @@ import Common
 @testable import Client
 
 class LegacyRemoteTabsPanelTests: XCTestCase {
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()

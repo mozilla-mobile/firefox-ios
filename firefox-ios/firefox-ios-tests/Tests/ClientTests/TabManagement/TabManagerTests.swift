@@ -18,7 +18,7 @@ class TabManagerTests: XCTestCase {
     var mockDiskImageStore: MockDiskImageStore!
     let webViewConfig = WKWebViewConfiguration()
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
-    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()

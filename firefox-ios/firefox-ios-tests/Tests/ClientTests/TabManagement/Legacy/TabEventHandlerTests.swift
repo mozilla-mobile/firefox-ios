@@ -10,7 +10,7 @@ import XCTest
 import Shared
 
 class TabEventHandlerTests: XCTestCase {
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     func testEventDelivery() {
         let tab = Tab(profile: MockProfile(),
                       configuration: WKWebViewConfiguration(),

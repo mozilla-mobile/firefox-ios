@@ -17,7 +17,7 @@ class FormAutofillHelperTests: XCTestCase {
     var validMockWKMessage: WKScriptMessageMock!
     var secureWebviewMock: WKWebViewMock!
     var secureFrameMock: WKFrameInfoMock!
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     let validMockPayloadJson = """
         {
           "type" : "fill-credit-card-form",

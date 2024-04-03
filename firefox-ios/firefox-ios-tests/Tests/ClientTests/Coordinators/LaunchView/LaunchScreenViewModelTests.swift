@@ -11,7 +11,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var profile: MockProfile!
     private var delegate: MockLaunchFinishedLoadingDelegate!
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()

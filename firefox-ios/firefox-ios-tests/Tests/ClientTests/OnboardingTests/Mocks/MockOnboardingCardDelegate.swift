@@ -12,7 +12,7 @@ class MockOnboardinCardDelegateController: UIViewController,
                                            OnboardingCardDelegate,
                                            OnboardingViewControllerProtocol,
                                            Themeable {
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
     // Protocol conformance

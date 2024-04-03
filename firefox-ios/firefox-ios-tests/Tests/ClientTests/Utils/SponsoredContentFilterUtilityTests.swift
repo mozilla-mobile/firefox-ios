@@ -12,7 +12,7 @@ import WebKit
 class SponsoredContentFilterUtilityTests: XCTestCase {
     private static let sponsoredStandardURL = "www.test.com/?parameter&mfadid=adm"
     private let normalURL = "www.test.com/?parameter&parameter"
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     private var profile: MockProfile!
     override func setUp() {
