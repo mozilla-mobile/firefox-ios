@@ -5905,7 +5905,6 @@ extension String {
                 tableName: "Settings",
                 value: "Autofill Addresses",
                 comment: "Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage.")
-
         }
     }
 }
