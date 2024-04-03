@@ -127,7 +127,10 @@ class TabDisplayView: UIView,
 // MARK: - move into it's own class that clearly is for the operation queue
     var operations = [(TabAnimationType, (() -> Void))]()
    // weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
-
+    private var isSelectedTabTypeEmpty: Bool {
+        return tabsState.isPrivateMode ? tabsState.isPrivateTabsEmpty : tabsState.tabs.isEmpty
+    }
+    
     private func performChainedOperations() {
         guard !performingChainedOperations,
               let (type, operation) = operations.popLast()
@@ -335,7 +338,12 @@ class TabDisplayView: UIView,
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(for tabUUID: TabUUID) {
-        store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
+        let type = isSelectedTabTypeEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
+
+        updateWith(animationType: type) { [weak self] in
+            guard let self else { return }
+            store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
+        }
     }
 
     // MARK: - SwipeAnimatorDelegate
