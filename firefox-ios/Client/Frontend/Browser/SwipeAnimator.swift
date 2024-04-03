@@ -36,8 +36,6 @@ class SwipeAnimator: NSObject {
 
     private var panGestureRecogniser: UIPanGestureRecognizer!
 
-    private var isAnimating = false
-
     var containerCenter: CGPoint {
         guard let animatingView = self.animatingView else {
             return .zero
