@@ -653,9 +653,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                     .typeText(userState.fxaUsername!)
             }
         }
+<<<<<<< HEAD
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
             app.secureTextFields.element(boundBy: 1).tap()
             app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
+=======
+        screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
+            app.secureTextFields.element(boundBy: 0).tap()
+            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+>>>>>>> 65382559e (Fix MTE-2573 - SyncUI failing tests (#19498))
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()

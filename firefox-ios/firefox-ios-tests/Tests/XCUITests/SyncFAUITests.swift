@@ -83,8 +83,13 @@ class SyncUITests: BaseTestCase {
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
+<<<<<<< HEAD
         navigator.performAction(Action.FxATypePassword)
         mozWaitForElementToExist(app.webViews.staticTexts["Repeat password"], timeout: 10)
+=======
+        navigator.performAction(Action.FxATypePasswordNewAccount)
+        XCTAssertEqual(app.secureTextFields.element(boundBy: 1).value as! String, "Repeat password")
+>>>>>>> 65382559e (Fix MTE-2573 - SyncUI failing tests (#19498))
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449603
@@ -119,13 +124,20 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnContinueButton)
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
+<<<<<<< HEAD
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
         navigator.performAction(Action.FxATypePassword)
         let passMessage = "Your password is currently hidden."
         mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
+=======
+        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 1))
+        navigator.performAction(Action.FxATypePasswordNewAccount)
+        let passMessage = "Show password"
+        mozWaitForElementToExist(app.webViews.otherElements[passMessage], timeout: 3)
+>>>>>>> 65382559e (Fix MTE-2573 - SyncUI failing tests (#19498))
         // Remove the password typed, Show (password) option should not be shown
-        app.secureTextFields.element(boundBy: 1).typeText(XCUIKeyboardKey.delete.rawValue)
-        mozWaitForElementToNotExist(app.webViews.staticTexts.buttons[passMessage])
+        app.keyboards.keys["delete"].tap()
+        mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449605
