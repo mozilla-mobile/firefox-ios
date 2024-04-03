@@ -15,4 +15,8 @@ extension EnvironmentValues {
 
         return swiftUITheme
     }
+
+    public var themeManager: ThemeManager {
+        return (AppContainer.shared.resolve() as ThemeManager)
+    }
 }

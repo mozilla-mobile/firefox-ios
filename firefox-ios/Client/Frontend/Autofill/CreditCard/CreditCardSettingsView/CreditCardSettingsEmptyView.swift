@@ -9,6 +9,7 @@ import Shared
 
 struct CreditCardSettingsEmptyView: View {
     // Theming
+    let windowUUID: WindowUUID
     @Environment(\.themeType)
     var themeVal
     @State var titleTextColor: Color = .clear
@@ -26,6 +27,7 @@ struct CreditCardSettingsEmptyView: View {
                 ScrollView {
                     VStack {
                         CreditCardAutofillToggle(
+                            windowUUID: windowUUID,
                             textColor: toggleTextColor,
                             model: toggleModel)
                         .background(Color.white)
@@ -81,6 +83,7 @@ struct CreditCardSettingsEmptyView: View {
 struct CreditCardSettingsEmptyView_Previews: PreviewProvider {
     static var previews: some View {
         let toggleModel = ToggleModel(isEnabled: true)
-        CreditCardSettingsEmptyView(toggleModel: toggleModel)
+        CreditCardSettingsEmptyView(windowUUID: .XCTestDefaultUUID,
+                                    toggleModel: toggleModel)
     }
 }

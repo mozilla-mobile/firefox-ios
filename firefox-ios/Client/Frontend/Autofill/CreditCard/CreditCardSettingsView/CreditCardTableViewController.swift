@@ -178,7 +178,9 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell()
         }
 
-        let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme(for: windowUUID).colors.textPrimary.color,
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let row = CreditCardAutofillToggle(windowUUID: windowUUID,
+                                           textColor: theme.colors.textPrimary.color,
                                            model: model)
         hostingCell.host(row, parentController: self)
         return hostingCell

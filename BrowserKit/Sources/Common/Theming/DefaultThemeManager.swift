@@ -222,7 +222,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.windows[window]?.overrideUserInterfaceStyle = style
 
         mainQueue.ensureMainThread { [weak self] in
-            self?.notificationCenter.post(name: .ThemeDidChange)
+            self?.notificationCenter.post(name: .ThemeDidChange, withObject: window)
         }
     }
 
