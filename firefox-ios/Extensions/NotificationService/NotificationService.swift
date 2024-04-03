@@ -68,7 +68,7 @@ class NotificationService: UNNotificationServiceExtension {
                 }
                 let decryptResult = try await autopush.decrypt(payload: payload)
                 guard let decryptedString = String(
-                    bytes: decryptResult.result.map { byte in UInt8(byte) },
+                    bytes: decryptResult.result.map { byte in UInt8(bitPattern: byte) },
                     encoding: .utf8
                 ) else {
                     completion(.failure(.notDecrypted))
