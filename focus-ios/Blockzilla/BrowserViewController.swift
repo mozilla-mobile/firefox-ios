@@ -1637,7 +1637,6 @@ extension BrowserViewController: SearchSuggestionsPromptViewDelegate {
 }
 
 extension BrowserViewController: LegacyWebControllerDelegate {
-
     func webControllerDidStartProvisionalNavigation(_ controller: LegacyWebController) {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
