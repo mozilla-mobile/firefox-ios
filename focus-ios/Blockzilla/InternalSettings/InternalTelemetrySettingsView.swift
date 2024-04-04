@@ -16,33 +16,33 @@ struct InternalTelemetrySettingsView {
 extension InternalTelemetrySettingsView {
     func sendPendingEventPings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=events",
-                                             invalidCharacters: false)!)
+                                              invalidCharacters: false)!)
     }
 
     func sendPendingBaselinePings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=baseline",
-                                             invalidCharacters: false)!)
+                                              invalidCharacters: false)!)
     }
 
     func sendPendingMetricsPings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=metrics",
-                                             invalidCharacters: false)!)
+                                              invalidCharacters: false)!)
     }
 
     func sendPendingDeletionRequestPings() {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?sendPing=deletion-request",
-                                             invalidCharacters: false)!)
+                                              invalidCharacters: false)!)
     }
 
     func changeLogPingsToConsole(_ value: Bool) {
         Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?logPings=\(value)",
-                                             invalidCharacters: false)!)
+                                              invalidCharacters: false)!)
     }
 
     func changeDebugViewTag(_ tag: String) {
         if let encodedTag = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryParameterAllowed) {
             Glean.shared.handleCustomUrl(url: URL(string: "focus-glean-settings://glean?debugViewTag=\(encodedTag)",
-                                                 invalidCharacters: false)!)
+                                                  invalidCharacters: false)!)
         }
     }
 }
