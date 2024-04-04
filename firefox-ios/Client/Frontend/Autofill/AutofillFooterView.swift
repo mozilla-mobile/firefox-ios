@@ -32,7 +32,6 @@ struct AutofillFooterView: View {
         self.primaryAction = primaryAction
     }
 
-
     var body: some View {
         VStack {
             Button(action: primaryAction) {

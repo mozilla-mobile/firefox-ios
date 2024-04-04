@@ -11,7 +11,6 @@ struct LoginAutofillView: View {
     @Environment(\.themeManager)
     var themeManager
 
-
     @ObservedObject var viewModel: LoginListViewModel
     @State private var backgroundColor: Color = .clear
 
