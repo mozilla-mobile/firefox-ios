@@ -241,9 +241,7 @@ class ErrorPageHelper {
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
-        guard var components = URLComponents(
-            string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"
-        ) else { return }
+        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)" ) else { return }
 
         // Page has failed to load again, just return and keep showing the existing error page.
         if let webViewUrl = webView.url,
