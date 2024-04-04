@@ -13,8 +13,8 @@ import Storage
 struct AddressListView: View {
     // MARK: - Properties
 
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager) var themeManager
     @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
 
@@ -42,10 +42,11 @@ struct AddressListView: View {
         .listRowInsets(EdgeInsets())
         .onAppear {
             viewModel.fetchAddresses()
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 

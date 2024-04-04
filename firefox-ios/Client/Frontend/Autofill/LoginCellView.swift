@@ -25,9 +25,10 @@ struct LoginCellView: View {
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
 
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager) var themeManager
+
     private(set) var login: EncryptedLogin
-    @Environment(\.themeType)
-    var theme
     private(set) var onTap: () -> Void
 
     // MARK: - Body
@@ -56,13 +57,14 @@ struct LoginCellView: View {
             }
             .padding()
         }
-        .buttonStyle(LoginButtonStyle(theme: theme.theme))
+        .buttonStyle(LoginButtonStyle(theme: themeManager.currentTheme(for: windowUUID)))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: theme.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: theme) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 

@@ -8,8 +8,8 @@ import Shared
 
 struct CreditCardSectionHeader: View {
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager) var themeManager
     @State var textColor: Color = .clear
 
     var body: some View {
@@ -25,10 +25,11 @@ struct CreditCardSectionHeader: View {
                             bottom: 8,
                             trailing: 16))
         .onAppear {
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { val in
-            applyTheme(theme: val.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
