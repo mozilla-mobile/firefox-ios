@@ -135,7 +135,8 @@
         "TrackingProtectionTests",
         "URLValidationTests",
         "UrlBarTests",
-        "WhatsNewTest"
+        "WhatsNewTest",
+        "ZoomingTests"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
