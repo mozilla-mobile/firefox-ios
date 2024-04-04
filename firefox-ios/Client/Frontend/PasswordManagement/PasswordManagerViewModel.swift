@@ -75,7 +75,7 @@ final class PasswordManagerViewModel {
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String, completion: @escaping (([LoginRecord]) -> Void)) {
-        profile.logins.searchLoginsWithQuery(query, completionHandler: { result in
+        profile.logins.searchLoginsWithQuery(query) { result in
             ensureMainThread {
                 switch result {
                 case .success(let logins):
@@ -83,13 +83,14 @@ final class PasswordManagerViewModel {
                         completion([])
                         return
                     }
-                case.failure(let logins):
+                    completion([logins])
+                case .failure:
                     self.delegate?.loginSectionsDidUpdate()
                     completion([])
                     return
                 }
             }
-        })
+        }
     }
 
     func setIsDuringSearchControllerDismiss(to: Bool) {
