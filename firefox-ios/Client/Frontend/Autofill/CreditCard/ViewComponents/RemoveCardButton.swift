@@ -10,7 +10,8 @@ import Shared
 struct RemoveCardButton: View {
     // Theming
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @State private var showAlert = false
 
     struct AlertDetails {

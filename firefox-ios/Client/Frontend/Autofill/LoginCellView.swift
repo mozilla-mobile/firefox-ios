@@ -26,7 +26,8 @@ struct LoginCellView: View {
     @State private var iconPrimary: Color = .clear
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
     private(set) var login: EncryptedLogin
     private(set) var onTap: () -> Void
@@ -112,7 +113,7 @@ struct LoginCellView_Previews: PreviewProvider {
         )
 
         // Render the LoginCellView
-        LoginCellView(login: loginRecord, onTap: {})
+        LoginCellView(windowUUID: .XCTestDefaultUUID, login: loginRecord, onTap: {})
             .padding()
     }
 }

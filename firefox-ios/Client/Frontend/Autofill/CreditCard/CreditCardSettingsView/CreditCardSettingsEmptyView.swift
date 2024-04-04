@@ -10,7 +10,8 @@ import Shared
 struct CreditCardSettingsEmptyView: View {
     // Theming
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var toggleTextColor: Color = .clear

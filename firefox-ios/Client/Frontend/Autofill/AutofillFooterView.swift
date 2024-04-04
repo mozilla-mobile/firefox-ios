@@ -15,16 +15,19 @@ struct AutofillFooterView: View {
     }
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @State private var actionPrimary: Color = .clear
 
     private let actionButtonTitle: String
     private let primaryAction: () -> Void
 
     init(
+        windowUUID: WindowUUID,
         title: String,
         primaryAction: @escaping () -> Void
     ) {
+        self.windowUUID = windowUUID
         self.actionButtonTitle = title
         self.primaryAction = primaryAction
     }
@@ -62,6 +65,7 @@ struct AutofillFooterView: View {
 
 #Preview {
     AutofillFooterView(
+        windowUUID: .XCTestDefaultUUID,
         title: "Manage Login Info",
         primaryAction: { }
     )

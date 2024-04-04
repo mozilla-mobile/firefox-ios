@@ -293,7 +293,8 @@ class CreditCardBottomSheetViewController: UIViewController,
             addPadding: numberOfCards > 1,
             didSelectAction: { [weak self] in
                 self?.handleCreditCardSelection(row: indexPath.row)
-            })
+            },
+            windowUUID: windowUUID)
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.backgroundColor = .clear
         hostingCell.contentView.backgroundColor = .clear

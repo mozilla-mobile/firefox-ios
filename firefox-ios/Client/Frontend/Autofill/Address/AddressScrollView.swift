@@ -14,7 +14,8 @@ struct AddressScrollView: View {
     // MARK: - Properties
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
     // Environment variable to access the presentation mode
@@ -28,7 +29,6 @@ struct AddressScrollView: View {
                     AddressCellView(
                         windowUUID: windowUUID,
                         address: address,
-                        themeVal: themeManager.currentTheme(for: windowUUID),
                         onTap: {
                             viewModel.handleAddressSelection(address)
                             withAnimation {

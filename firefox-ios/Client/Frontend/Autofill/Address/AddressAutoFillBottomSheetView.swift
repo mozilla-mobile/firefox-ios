@@ -11,7 +11,8 @@ struct AddressAutoFillBottomSheetView: View {
     // MARK: - Properties
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
     /// The observed object for managing the address list.
     @ObservedObject var addressListViewModel: AddressListViewModel
@@ -20,9 +21,9 @@ struct AddressAutoFillBottomSheetView: View {
 
     var body: some View {
         VStack {
-            AutofillHeaderView(title: .Addresses.BottomSheet.UseASavedAddress)
+            AutofillHeaderView(windowUUID: windowUUID, title: .Addresses.BottomSheet.UseASavedAddress)
             Spacer()
-            AddressScrollView(viewModel: addressListViewModel)
+            AddressScrollView(windowUUID: windowUUID, viewModel: addressListViewModel)
             Spacer()
         }
         .padding()

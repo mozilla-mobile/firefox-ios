@@ -7,7 +7,8 @@ import Common
 
 struct CircularProgressView: View, ThemeApplicable {
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @ObservedObject var viewModel: FakespotMessageCardViewModel
     @State private var backgroundColor: Color = .gray
     @State private var foregroundColor: Color = .blue

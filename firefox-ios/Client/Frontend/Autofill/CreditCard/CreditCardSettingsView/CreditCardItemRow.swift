@@ -17,7 +17,8 @@ struct CreditCardItemRow: View {
 
     // Theming
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var separatorColor: Color = .clear
@@ -142,19 +143,22 @@ struct CreditCardItemRow_Previews: PreviewProvider {
         CreditCardItemRow(item: creditCard,
                           isAccessibilityCategory: false,
                           shouldShowSeparator: true,
-                          addPadding: true)
+                          addPadding: true,
+                          windowUUID: .XCTestDefaultUUID)
 
         CreditCardItemRow(item: creditCard,
                           isAccessibilityCategory: true,
                           shouldShowSeparator: true,
-                          addPadding: true)
+                          addPadding: true,
+                          windowUUID: .XCTestDefaultUUID)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
             .previewDisplayName("Large")
 
         CreditCardItemRow(item: creditCard,
                           isAccessibilityCategory: false,
                           shouldShowSeparator: true,
-                          addPadding: true)
+                          addPadding: true,
+                          windowUUID: .XCTestDefaultUUID)
             .environment(\.sizeCategory, .extraSmall)
             .previewDisplayName("Small")
     }

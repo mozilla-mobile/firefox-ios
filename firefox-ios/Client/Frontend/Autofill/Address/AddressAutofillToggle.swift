@@ -15,7 +15,8 @@ struct AddressAutofillToggle: View {
     // MARK: - Theming
 
     /// The theme manager provided by the environment.
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
     /// Text color for the view.
     @State private var textColor: Color = .clear
@@ -109,6 +110,6 @@ struct AddressAutofillToggle: View {
 struct AutofillToggle_Previews: PreviewProvider {
     static var previews: some View {
         let model = ToggleModel(isEnabled: true)
-        AddressAutofillToggle(model: model)
+        AddressAutofillToggle(windowUUID: .XCTestDefaultUUID, model: model)
     }
 }

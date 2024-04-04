@@ -14,7 +14,8 @@ struct AddressCellView: View {
     // MARK: - Properties
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear

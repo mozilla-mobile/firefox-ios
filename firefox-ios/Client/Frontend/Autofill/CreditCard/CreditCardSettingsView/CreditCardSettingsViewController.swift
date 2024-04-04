@@ -165,7 +165,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
             viewModel.cardInputViewModel.creditCard = creditCard
         }
         viewModel.cardInputViewModel.updateState(state: editState)
-        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel)
+        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel, windowUUID: windowUUID)
         viewModel.cardInputViewModel.dismiss = { [weak self] status, successVal in
             DispatchQueue.main.async {
                 self?.showToast(status: status)

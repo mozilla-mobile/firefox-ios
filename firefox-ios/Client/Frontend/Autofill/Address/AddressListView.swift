@@ -14,7 +14,8 @@ struct AddressListView: View {
     // MARK: - Properties
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
 
@@ -26,8 +27,8 @@ struct AddressListView: View {
                 Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
                     ForEach(viewModel.addresses, id: \.self) { address in
                         AddressCellView(
+                            windowUUID: windowUUID,
                             address: address,
-                            themeVal: _themeVal,
                             onTap: {
                                 // TODO: PHASE - 2: FXIOS-7653 Handle action when address cell is tapped.
                             }

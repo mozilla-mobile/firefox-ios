@@ -20,12 +20,14 @@ struct AutofillHeaderView: View {
     @State private var textSecondary: Color = .clear
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
     private var title: String
     private var subtitle: String?
 
-    init(title: String, subtitle: String? = nil) {
+    init(windowUUID: WindowUUID, title: String, subtitle: String? = nil) {
+        self.windowUUID = windowUUID
         self.title = title
         self.subtitle = subtitle
     }
@@ -76,6 +78,7 @@ struct AutofillHeaderView: View {
 
 #Preview {
     AutofillHeaderView(
+        windowUUID: .XCTestDefaultUUID,
         title: "Use this login?",
         subtitle: "You’ll sign into cnn.com"
     )

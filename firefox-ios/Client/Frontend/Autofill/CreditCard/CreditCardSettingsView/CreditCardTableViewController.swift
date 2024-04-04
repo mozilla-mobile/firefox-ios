@@ -155,7 +155,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
         else { return nil }
 
         let theme = themeManager.currentTheme(for: windowUUID)
-        let headerView = CreditCardSectionHeader(textColor: theme.colors.textSecondary.color)
+        let headerView = CreditCardSectionHeader(windowUUID: windowUUID, textColor: theme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
     }
@@ -202,7 +202,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             didSelectAction: { [weak self] in
                 self?.didSelectCardAtIndex?(creditCard)
                 self?.lastSelectedIndex = indexPath
-            })
+            }, windowUUID: windowUUID)
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
         hostingCell.backgroundColor = .clear

@@ -9,7 +9,8 @@ import Shared
 struct CreditCardSectionHeader: View {
     // Theming
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @State var textColor: Color = .clear
 
     var body: some View {
@@ -41,6 +42,6 @@ struct CreditCardSectionHeader: View {
 
 struct CreditCardSectionHeader_Previews: PreviewProvider {
     static var previews: some View {
-        CreditCardSectionHeader()
+        CreditCardSectionHeader(windowUUID: .XCTestDefaultUUID)
     }
 }

@@ -13,7 +13,8 @@ struct AddressAutofillSettingsView: View {
     let windowUUID: WindowUUID
 
     /// The environment theme manager
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
     /// The observed object for managing the toggle state.
     @ObservedObject var toggleModel: ToggleModel
@@ -32,12 +33,12 @@ struct AddressAutofillSettingsView: View {
             Color.clear.edgesIgnoringSafeArea(.all)
             VStack {
                 // Address autofill toggle component
-                AddressAutofillToggle(model: toggleModel)
+                AddressAutofillToggle(windowUUID: windowUUID, model: toggleModel)
                     .padding(.top, 25)
                     .frame(maxWidth: .infinity)
 
                 // Address list view
-                AddressListView(viewModel: addressListViewModel)
+                AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
             }
             .background(viewBackground)
             .onAppear {

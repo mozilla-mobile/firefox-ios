@@ -8,7 +8,8 @@ import Common
 
 struct LoginAutofillView: View {
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
 
 
     @ObservedObject var viewModel: LoginListViewModel
@@ -17,11 +18,14 @@ struct LoginAutofillView: View {
     var body: some View {
         VStack {
             AutofillHeaderView(
+                windowUUID: windowUUID,
                 title: String.PasswordAutofill.UseSavedPasswordFromHeader,
                 subtitle: String(format: String.PasswordAutofill.SignInWithSavedPassword, viewModel.shortDisplayString)
             )
-            LoginListView(viewModel: viewModel)
+            LoginListView(windowUUID: windowUUID,
+                          viewModel: viewModel)
             AutofillFooterView(
+                windowUUID: windowUUID,
                 title: String.PasswordAutofill.ManagePasswordsButton,
                 primaryAction: viewModel.manageLoginInfoAction
             )
@@ -45,6 +49,7 @@ struct LoginAutofillView: View {
 
 #Preview {
     LoginAutofillView(
+        windowUUID: .XCTestDefaultUUID,
         viewModel: LoginListViewModel(
             tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
             loginStorage: MockLoginStorage(),

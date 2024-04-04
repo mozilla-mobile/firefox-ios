@@ -157,7 +157,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                 parentCoordinator?.didFinish(from: self)
             }
         )
-        let loginAutofillView = LoginAutofillView(viewModel: viewModel)
+        let loginAutofillView = LoginAutofillView(windowUUID: windowUUID, viewModel: viewModel)
 
         let viewController = SelfSizingHostingController(rootView: loginAutofillView)
 

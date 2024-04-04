@@ -12,7 +12,8 @@ struct LoginListView: View {
     // MARK: - Properties
 
     let windowUUID: WindowUUID
-    @Environment(\.themeManager) var themeManager
+    @Environment(\.themeManager)
+    var themeManager
     @ObservedObject var viewModel: LoginListViewModel
     @State private var customLightGray: Color = .clear
 
@@ -23,6 +24,7 @@ struct LoginListView: View {
             VStack(alignment: .leading) {
                 ForEach(viewModel.logins, id: \.self) { login in
                     LoginCellView(
+                        windowUUID: windowUUID,
                         login: login,
                         onTap: { viewModel.onLoginCellTap(login) }
                     )
@@ -50,6 +52,7 @@ struct LoginListView: View {
 struct LoginListView_Previews: PreviewProvider {
     static var previews: some View {
         LoginListView(
+            windowUUID: .XCTestDefaultUUID,
             viewModel: LoginListViewModel(
                 tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
                 loginStorage: MockLoginStorage(),
