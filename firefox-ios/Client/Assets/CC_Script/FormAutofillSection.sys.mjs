@@ -846,6 +846,10 @@ export class FormAutofillAddressSection extends FormAutofillSection {
         value =
           FormAutofillUtils.getAbbreviatedSubregionName([value, text]) || text;
       }
+    } else if (fieldDetail.fieldName == "country") {
+      // This is a temporary fix. Ideally we should have either case-insensitive comparaison of country codes
+      // or handle this elsewhere see Bug 1889234 for more context.
+      value = value.toUpperCase();
     }
     return value;
   }
