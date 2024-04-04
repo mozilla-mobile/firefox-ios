@@ -80,7 +80,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - overridden_super_call
   - vertical_parameter_alignment_on_call
   # - vertical_whitespace_closing_braces
-  # - vertical_whitespace_opening_braces
+  - vertical_whitespace_opening_braces
   - yoda_condition
 
 # These rules were originally opted into. Disabling for now to get
