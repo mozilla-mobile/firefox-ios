@@ -208,6 +208,9 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
     /// Use this to reset the application between tests.
     func resetApplication() {
+        // Clear standard user defaults
+        UserDefaults.resetStandardUserDefaults()
+
         // Clear image cache - Kingfisher
         KingfisherManager.shared.cache.clearMemoryCache()
         KingfisherManager.shared.cache.clearDiskCache()
