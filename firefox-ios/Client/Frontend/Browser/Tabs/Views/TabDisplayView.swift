@@ -102,6 +102,16 @@ class TabDisplayView: UIView,
         if let index = state.scrollToIndex {
             scrollToTab(index)
         }
+
+        if state.didTapAddTab {
+            updateWith(animationType: .addTab) { [weak self] in
+                guard let self else { return }
+
+                let isPrivate = tabsState.isPrivateMode
+                let context = AddNewTabContext(urlRequest: state.urlRequest, isPrivate: isPrivate, windowUUID: windowUUID)
+                store.dispatch(TabPanelAction.addNewTab(context))
+            }
+        }
     }
 
     private func scrollToTab(_ index: Int) {
@@ -124,13 +134,14 @@ class TabDisplayView: UIView,
         ])
     }
 
-// MARK: - move into it's own class that clearly is for the operation queue
+// MARK: - START OF OPERATION QUEUE CODE
+/* move into it's own class that clearly is for the operation queue */
+
     var operations = [(TabAnimationType, (() -> Void))]()
    // weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
     private var isSelectedTabTypeEmpty: Bool {
         return tabsState.isPrivateMode ? tabsState.isPrivateTabsEmpty : tabsState.tabs.isEmpty
     }
-    
     private func performChainedOperations() {
         guard !performingChainedOperations,
               let (type, operation) = operations.popLast()
@@ -159,7 +170,7 @@ class TabDisplayView: UIView,
         performChainedOperations()
     }
 
-// END
+// MARK: - END OF OPERATION QUEUE CODE
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         // swiftlint:disable line_length
