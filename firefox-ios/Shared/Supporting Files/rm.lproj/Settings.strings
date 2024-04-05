@@ -1,3 +1,15 @@
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "ADRESSAS MEMORISADAS";
+
+/* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
+"Addresses.Settings.Switch.Description.v124" = "Includa numers da telefon ed adressas dad e-mail";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.Switch.Title.v124" = "Memorisar ed endatar automaticamain adressas";
+
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "Utilisar in’adressa memorisada";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Agiuntar ina carta";
 
@@ -94,17 +106,29 @@
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Ulteriuras infurmaziuns davart propostas da Firefox";
 
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Maschinas da tschertgar alternativas";
+
 /* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "Resultats da tschertgas, cronologia, segnapaginas e dapli";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Maschina da tschertgar da standard";
 
+/* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
+"Settings.Search.EnginesSuggestions.Title.v124" = "Propostas da maschinas da tschertgar";
+
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "Tschertgar";
 
+/* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Description.v125" = "Mussar las propostas da maschinas da tschertgar en sesidas privatas";
+
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v122" = "Mussar propostas en il modus privat";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "Mussar en sesidas privatas";
 
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "Modus privat";
@@ -121,12 +145,33 @@
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Ulteriuras infurmaziuns davart propostas da Firefox";
 
+/* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Mussar las propostas da Firefox Suggest en sesidas privatas";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Tschertgar en la cronologia da navigaziun";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Tschertgar en ils segnapaginas";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Tschertgar en ils tabs sincronisads";
+
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Retschaiva propostas dal web en connex cun tia tschertga";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Retschaiva propostas da %@ en connex cun tia tschertga";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Propostas da %@";
 
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Propostas dal web";
+
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Sustegna %@ cun propostas occasiunalas sponsurisadas";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Propostas da sponsurs";
 
