@@ -17,7 +17,7 @@ class JumpBackInViewModelTests: XCTestCase {
     var stubBrowserViewController: BrowserViewController!
     var adaptor: JumpBackInDataAdaptorMock!
 
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     let iPhone14ScreenSize = CGSize(width: 390, height: 844)
     let sleepTime: UInt64 = 100_000_000

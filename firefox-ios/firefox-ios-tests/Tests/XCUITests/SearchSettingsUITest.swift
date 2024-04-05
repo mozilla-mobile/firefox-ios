@@ -5,7 +5,7 @@
 import XCTest
 
 let defaultSearchEngine1 = "Google"
-let defaultSearchEngine2 = "Amazon.com"
+let defaultSearchEngine2 = "Bing"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {

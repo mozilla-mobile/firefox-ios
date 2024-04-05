@@ -4,11 +4,12 @@
 
 import XCTest
 import WebKit
+
 @testable import Client
 
 class TabTests: XCTestCase {
     private var tabDelegate: MockLegacyTabDelegate!
-    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()

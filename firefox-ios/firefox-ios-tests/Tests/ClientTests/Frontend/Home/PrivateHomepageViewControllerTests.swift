@@ -7,7 +7,7 @@ import XCTest
 @testable import Client
 
 final class PrivateHomepageViewControllerTests: XCTestCase {
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override class func setUp() {
         super.setUp()

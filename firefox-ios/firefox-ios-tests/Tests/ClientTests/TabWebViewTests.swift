@@ -14,7 +14,7 @@ class TabWebViewTests: XCTestCaseRootViewController, UIGestureRecognizerDelegate
     private var navigationDelegate: MockNavigationDelegate!
     private var tabWebViewDelegate: MockTabWebViewDelegate!
     private let sleepTime: UInt64 = 1 * NSEC_PER_SEC
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()

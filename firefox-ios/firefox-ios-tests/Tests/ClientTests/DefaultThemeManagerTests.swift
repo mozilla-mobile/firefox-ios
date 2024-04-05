@@ -6,7 +6,7 @@ import XCTest
 @testable import Common
 
 final class DefaultThemeManagerTests: XCTestCase {
-    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     // MARK: - Variables
 

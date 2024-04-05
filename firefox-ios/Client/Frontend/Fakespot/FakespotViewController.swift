@@ -21,9 +21,7 @@ class FakespotViewController: UIViewController,
         static let headerTopSpacing: CGFloat = 22
         static let headerHorizontalSpacing: CGFloat = 18
         static let titleCloseSpacing: CGFloat = 16
-        static let titleLabelFontSize: CGFloat = 17
         static let titleStackSpacing: CGFloat = 8
-        static let betaLabelFontSize: CGFloat = 15
         static let betaBorderWidth: CGFloat = 2
         static let betaBorderWidthA11ySize: CGFloat = 4
         static let betaCornerRadius: CGFloat = 8
@@ -69,9 +67,7 @@ class FakespotViewController: UIViewController,
         label.text = .Shopping.SheetHeaderTitle
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: UX.titleLabelFontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
         label.accessibilityTraits.insert(.header)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -92,8 +88,7 @@ class FakespotViewController: UIViewController,
         label.text = .Shopping.SheetHeaderBetaTitle
         label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.betaLabelFontSize)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.textAlignment = .center
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderBetaLabel
     }

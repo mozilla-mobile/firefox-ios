@@ -358,6 +358,14 @@ class BaseTestCase: XCTestCase {
             nrOfSwipes += 1
         }
     }
+
+    // Coordinates added for iPhone 15 and iPad Air 15(5th generation)
+    func panScreen() {
+        let startCoordinate = app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5))
+        let endCoordinate = app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
+        startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
+        endCoordinate.press(forDuration: 0, thenDragTo: startCoordinate)
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {

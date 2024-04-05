@@ -147,7 +147,9 @@
         "TopTabsTestIphone\/testSwitchBetweenTabsToastButton()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
         "TrackingProtectionTests\/testTrackingProtection()",
-        "URLValidationTests"
+        "URLValidationTests",
+        "ZoomingTests",
+        "ZoomingTests\/testZommingActions()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

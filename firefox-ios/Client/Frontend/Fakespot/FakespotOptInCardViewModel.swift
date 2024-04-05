@@ -11,7 +11,6 @@ import ComponentLibrary
 struct FakespotOptInCardViewModel {
     private struct UX {
         static let contentStackViewPadding: CGFloat = 16
-        static let bodyLabelFontSize: CGFloat = 15
     }
 
     private let tabManager: TabManager
@@ -117,10 +116,9 @@ struct FakespotOptInCardViewModel {
     // MARK: Text methods
     var bodyText: NSAttributedString {
         let websites = orderWebsites
-        let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                          size: UX.bodyLabelFontSize)
-        let boldFont = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                  size: UX.bodyLabelFontSize)
+
+        let font = FXFontStyles.Regular.subheadline.scaledFont()
+        let boldFont = FXFontStyles.Bold.subheadline.scaledFont()
 
         let firstParagraph = if supportedTLDWebsites?.count == websites.count {
             bodyFirstParagraph

@@ -21,7 +21,8 @@ private enum RemoteCommand: String {
     // case canLinkAccount = "can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
-    case login = "fxaccounts:oauth_login"
+    case oauthLogin = "fxaccounts:oauth_login"
+    case login = "fxaccounts:login"
     case changePassword = "fxaccounts:change_password"
     case signOut = "fxaccounts:logout"
     case deleteAccount = "fxaccounts:delete_account"
@@ -92,7 +93,10 @@ class FxAWebViewModel: FeatureFlaggable {
                 // Handle authentication with either the QR code login flow, email login flow, or settings page flow
                 switch self.pageType {
                 case .emailLoginFlow:
-                    accountManager.beginAuthentication(entrypoint: "email_\(entrypoint)") { [weak self] result in
+                    accountManager.beginAuthentication(
+                        entrypoint: "email_\(entrypoint)",
+                        scopes: [OAuthScope.profile, OAuthScope.oldSync]
+                    ) { [weak self] result in
                         guard let self = self else { return }
 
                         if case .success(var url) = result {
@@ -109,7 +113,11 @@ class FxAWebViewModel: FeatureFlaggable {
                 case let .qrCode(url):
                     accountManager.beginPairingAuthentication(
                         pairingUrl: url,
-                        entrypoint: "pairing_\(entrypoint)"
+                        entrypoint: "pairing_\(entrypoint)",
+                        // We ask for the session scope because the web content never
+                        // got the session as the user never entered their email and
+                        // password
+                        scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
                     ) { [weak self] result in
                         guard let self = self else { return }
 
@@ -173,9 +181,9 @@ extension FxAWebViewModel {
     private func handleRemote(command rawValue: String, id: Int?, data: Any?, webView: WKWebView) {
         if let command = RemoteCommand(rawValue: rawValue) {
             switch command {
-            case .login:
+            case .oauthLogin:
                 if let data = data {
-                    onLogin(data: data, webView: webView)
+                    onLoginComplete(data: data, webView: webView)
                 } else {
                     onDismissController?()
                 }
@@ -199,6 +207,18 @@ extension FxAWebViewModel {
                     from: nil,
                     for: nil
                 )
+            case .login:
+                guard let data = data as? [String: Any],
+                      let sessionToken = data["sessionToken"] as? String,
+                      let email = data["email"] as? String,
+                      let uid = data["uid"] as? String,
+                      let verified = data["verified"] as? Bool
+                else { return }
+                let userData = UserData(sessionToken: sessionToken,
+                                        uid: uid,
+                                        email: email,
+                                        verified: verified)
+                profile.rustFxA.accountManager?.setUserData(userData: userData) { }
             }
         }
     }
@@ -262,7 +282,7 @@ extension FxAWebViewModel {
         runJS(webView: webView, typeId: typeId, messageId: id, command: cmd, data: data)
     }
 
-    private func onLogin(data: Any, webView: WKWebView) {
+    private func onLoginComplete(data: Any, webView: WKWebView) {
         guard let data = data as? [String: Any],
               let code = data["code"] as? String,
               let state = data["state"] as? String

@@ -55,6 +55,7 @@ let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
 let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 let CreditCardsSettings = "AutofillCreditCard"
+let PageZoom = "PageZoom"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -668,8 +669,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            app.secureTextFields.element(boundBy: 1).tap()
-            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tap()
+            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
             app.secureTextFields.element(boundBy: 0).tap()
@@ -1022,6 +1023,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
 
+    map.addScreenState(PageZoom) { screenState in
+        screenState.tap(app.buttons["FindInPage.closeButton"], to: BrowserTab)
+    }
+
     map.addScreenState(RequestDesktopSite) { _ in }
 
     map.addScreenState(RequestMobileSite) { _ in }
@@ -1127,6 +1132,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.search],
             to: FindInPage
+        )
+        screenState.tap(
+            app.tables.otherElements[StandardImageIdentifiers.Large.pageZoom],
+            to: PageZoom
         )
         // TODO: Add new state
 //        screenState.tap(

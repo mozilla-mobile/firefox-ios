@@ -221,7 +221,7 @@ class SyncNowSetting: WithAccountSetting {
 
         // Animation that loops continuously until stopped
         continuousRotateAnimation.fromValue = 0.0
-        continuousRotateAnimation.toValue = CGFloat(Double.pi)
+        continuousRotateAnimation.toValue = CGFloat(-Double.pi)
         continuousRotateAnimation.isRemovedOnCompletion = true
         continuousRotateAnimation.duration = 0.5
         continuousRotateAnimation.repeatCount = .infinity

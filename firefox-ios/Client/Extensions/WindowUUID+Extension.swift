@@ -10,7 +10,7 @@ import Foundation
 /// can be run side-by-side on iPad (once multi-window is enabled). [FXIOS-7349]
 public typealias WindowUUID = UUID
 
-extension WindowUUID {
+public extension WindowUUID {
     /// Sentinel UUID value for use when a window is unavailable or unknown.
     ///
     /// We want to enforce non-optional WindowUUIDs in the vast majority of codebase APIs.

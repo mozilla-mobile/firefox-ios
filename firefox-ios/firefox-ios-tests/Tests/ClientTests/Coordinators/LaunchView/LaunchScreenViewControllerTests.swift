@@ -9,7 +9,7 @@ import XCTest
 final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
     private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
-    let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()

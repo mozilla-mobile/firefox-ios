@@ -16,7 +16,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     var mockProfile: MockProfile!
     let sleepTime: UInt64 = 100_000_000
     let webViewConfig = WKWebViewConfiguration()
-    let windowUUID: WindowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
