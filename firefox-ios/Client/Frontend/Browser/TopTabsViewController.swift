@@ -343,7 +343,7 @@ extension TopTabsViewController: TopTabCellDelegate {
 
 extension TopTabsViewController: PrivateModeUI {
     func applyUIMode(isPrivate: Bool, theme: Theme) {
-        // TODO: Ideally we shouldn't be creating new tabs as a side-effect of updating UI theme. Investigate refactor.
+        // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates. Investigate refactor.
         topTabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 
         privateModeButton.applyTheme(theme: theme)
