@@ -29,6 +29,18 @@ class FloatValueContext: ActionContext {
     }
 }
 
+class DidTapNewTabContext: ActionContext {
+    let didTapAddTab: Bool
+    let isPrivate: Bool
+    let urlRequest: URLRequest?
+    init(didTapAddTab: Bool, isPrivate: Bool, urlRequest: URLRequest?, windowUUID: WindowUUID) {
+        self.didTapAddTab = didTapAddTab
+        self.urlRequest = urlRequest
+        self.isPrivate = isPrivate
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 class AddNewTabContext: ActionContext {
     let urlRequest: URLRequest?
     let isPrivate: Bool
@@ -110,6 +122,7 @@ class RefreshInactiveTabsContext: ActionContext {
 enum TabPanelAction: Action {
     case tabPanelDidLoad(BoolValueContext)
     case tabPanelDidAppear(BoolValueContext)
+    case didTapAddTab(DidTapNewTabContext)
     case addNewTab(AddNewTabContext)
     case closeTab(TabUUIDContext)
     case undoClose(ActionContext)
@@ -138,6 +151,7 @@ enum TabPanelAction: Action {
         switch self {
         case .tabPanelDidLoad(let context as ActionContext),
                 .tabPanelDidAppear(let context as ActionContext),
+                .didTapAddTab(let context as ActionContext),
                 .addNewTab(let context as ActionContext),
                 .closeTab(let context as ActionContext),
                 .undoClose(let context),
