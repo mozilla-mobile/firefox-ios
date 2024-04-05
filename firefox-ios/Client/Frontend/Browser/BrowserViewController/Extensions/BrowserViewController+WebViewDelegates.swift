@@ -633,14 +633,18 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)
                     return
-                } else if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
-                        if isAppInstalled {
-                            webView.reload()
-                           // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
-                        }
-                    }
                 }
+                // Removing this code, maybe temporary, because it is causing other problems
+                // like opening a native app (if is installed) every time when clicking on a link
+                // please see https://mozilla-hub.atlassian.net/browse/FXIOS-8803
+//                else if UIApplication.shared.canOpenURL(url) {
+//                    UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
+//                        if isAppInstalled {
+//                            webView.reload()
+//                           // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
+//                        }
+//                    }
+//                }
             }
 
             decisionHandler(.allow)
