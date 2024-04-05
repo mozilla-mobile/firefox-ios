@@ -28,7 +28,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testInputFieldPropertiesOnName() {
-        let inputField = CreditCardInputField(inputType: .name,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -41,7 +42,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testInputFieldPropertiesOnCard() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -54,7 +56,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testInputFieldPropertiesOnExpiration() {
-        let inputField = CreditCardInputField(inputType: .expiration,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .expiration,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -73,7 +76,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testIsNameValid() {
-        let inputField = CreditCardInputField(inputType: .name,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
         XCTAssertTrue(inputField.isNameValid(val: "Test Name"))
@@ -81,7 +85,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testIsNumberValid() {
-        let inputField = CreditCardInputField(inputType: .name,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
         XCTAssertTrue(inputField.isNumberValid(val: "4242123412341234"))
@@ -94,7 +99,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testIsExpirationValid() {
-        let inputField = CreditCardInputField(inputType: .name,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
         XCTAssertFalse(inputField.isExpirationValid(val: "123"))
@@ -103,7 +109,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testBlankNameInput() {
-        let inputField = CreditCardInputField(inputType: .name,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .name,
                                               showError: false,
                                               inputViewModel: viewModel)
         _ = inputField.updateInputValidity()
@@ -111,7 +118,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testValidCardInput() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -121,7 +129,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testInvalidShorterCardInput() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -130,7 +139,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testValidExpirationInput() {
-        let inputField = CreditCardInputField(inputType: .expiration,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .expiration,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -140,7 +150,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testInvalidShortenedExpirationInput() {
-        let inputField = CreditCardInputField(inputType: .expiration,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .expiration,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -149,7 +160,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testConcealCardNum() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -161,7 +173,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testConcealCardNumOnEmpty() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -172,7 +185,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testRevealCardNumber() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 
@@ -184,7 +198,8 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     func testRevealCardNumberOnEmpty() {
-        let inputField = CreditCardInputField(inputType: .number,
+        let inputField = CreditCardInputField(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                              inputType: .number,
                                               showError: false,
                                               inputViewModel: viewModel)
 

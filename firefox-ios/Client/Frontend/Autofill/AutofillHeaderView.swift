@@ -19,13 +19,15 @@ struct AutofillHeaderView: View {
     @State private var textPrimary: Color = .clear
     @State private var textSecondary: Color = .clear
 
-    @Environment(\.themeType)
-    var theme
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
 
     private var title: String
     private var subtitle: String?
 
-    init(title: String, subtitle: String? = nil) {
+    init(windowUUID: WindowUUID, title: String, subtitle: String? = nil) {
+        self.windowUUID = windowUUID
         self.title = title
         self.subtitle = subtitle
     }
@@ -55,10 +57,11 @@ struct AutofillHeaderView: View {
         .padding(.bottom, UX.bottomSpacing)
 
         .onAppear {
-            applyTheme(theme: theme.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: theme) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -75,6 +78,7 @@ struct AutofillHeaderView: View {
 
 #Preview {
     AutofillHeaderView(
+        windowUUID: .XCTestDefaultUUID,
         title: "Use this login?",
         subtitle: "You’ll sign into cnn.com"
     )

@@ -11,8 +11,9 @@ import Common
 struct LoginListView: View {
     // MARK: - Properties
 
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @ObservedObject var viewModel: LoginListViewModel
     @State private var customLightGray: Color = .clear
 
@@ -23,6 +24,7 @@ struct LoginListView: View {
             VStack(alignment: .leading) {
                 ForEach(viewModel.logins, id: \.self) { login in
                     LoginCellView(
+                        windowUUID: windowUUID,
                         login: login,
                         onTap: { viewModel.onLoginCellTap(login) }
                     )
@@ -33,10 +35,11 @@ struct LoginListView: View {
         }
         .task {
             await viewModel.fetchLogins()
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) {
-            applyTheme(theme: $0.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -49,6 +52,7 @@ struct LoginListView: View {
 struct LoginListView_Previews: PreviewProvider {
     static var previews: some View {
         LoginListView(
+            windowUUID: .XCTestDefaultUUID,
             viewModel: LoginListViewModel(
                 tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
                 loginStorage: MockLoginStorage(),

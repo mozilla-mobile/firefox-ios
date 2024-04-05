@@ -168,6 +168,7 @@ class FakespotViewModel {
         }
     }
 
+    let windowUUID: WindowUUID
     let shoppingProduct: ShoppingProduct
     var onStateChange: (() -> Void)?
     var shouldRecordAdsExposureEvents: (() -> Bool)?
@@ -212,7 +213,8 @@ class FakespotViewModel {
         return FakespotAdjustRatingViewModel(rating: adjustedRating)
     }
 
-    let confirmationCardViewModel = FakespotMessageCardViewModel(
+    lazy var confirmationCardViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.ConfirmationCardTitle,
         primaryActionText: .Shopping.ConfirmationCardButtonText,
@@ -221,7 +223,8 @@ class FakespotViewModel {
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.ConfirmationCard.primaryAction
     )
 
-    let noConnectionViewModel = FakespotMessageCardViewModel(
+    lazy var noConnectionViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .warning,
         title: .Shopping.WarningCardCheckNoConnectionTitle,
         description: .Shopping.WarningCardCheckNoConnectionDescription,
@@ -230,7 +233,8 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.NoConnectionCard.description
     )
 
-    let genericErrorViewModel = FakespotMessageCardViewModel(
+    lazy var genericErrorViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.InfoCardNoInfoAvailableRightNowTitle,
         description: .Shopping.InfoCardNoInfoAvailableRightNowDescription,
@@ -239,7 +243,8 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.GenericErrorInfoCard.description
     )
 
-    let notSupportedProductViewModel = FakespotMessageCardViewModel(
+    lazy var notSupportedProductViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsTitle,
         description: .Shopping.InfoCardFakespotDoesNotAnalyzeReviewsDescription,
@@ -248,7 +253,8 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.DoesNotAnalyzeReviewsInfoCard.description
     )
 
-    let notEnoughReviewsViewModel = FakespotMessageCardViewModel(
+    lazy var notEnoughReviewsViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.InfoCardNotEnoughReviewsTitle,
         description: .Shopping.InfoCardNotEnoughReviewsDescription,
@@ -257,7 +263,8 @@ class FakespotViewModel {
         a11yDescriptionIdentifier: AccessibilityIdentifiers.Shopping.NotEnoughReviewsInfoCard.description
     )
 
-    var needsAnalysisViewModel = FakespotMessageCardViewModel(
+    lazy var needsAnalysisViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .infoTransparent,
         title: .Shopping.InfoCardNeedsAnalysisTitle,
         primaryActionText: .Shopping.InfoCardNeedsAnalysisPrimaryAction,
@@ -266,7 +273,8 @@ class FakespotViewModel {
         a11yPrimaryActionIdentifier: AccessibilityIdentifiers.Shopping.NeedsAnalysisInfoCard.primaryAction
     )
 
-    let analysisProgressViewModel = FakespotMessageCardViewModel(
+    lazy var analysisProgressViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .infoLoading,
         title: .Shopping.InfoCardProgressAnalysisTitle,
         a11yCardIdentifier: AccessibilityIdentifiers.Shopping.AnalysisProgressInfoCard.card,
@@ -274,6 +282,7 @@ class FakespotViewModel {
     )
 
     lazy var reportProductInStockViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.InfoCardProductNotInStockTitle,
         description: .Shopping.InfoCardProductNotInStockDescription,
@@ -285,6 +294,7 @@ class FakespotViewModel {
     )
 
     lazy var reportingProductFeedbackViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.InfoCardReportSubmittedByCurrentUserTitle,
         description: .Shopping.InfoCardReportSubmittedByCurrentUserDescription,
@@ -294,6 +304,7 @@ class FakespotViewModel {
     )
 
     lazy var infoComingSoonCardViewModel = FakespotMessageCardViewModel(
+        windowUUID: windowUUID,
         type: .info,
         title: .Shopping.InfoCardInfoComingSoonTitle,
         description: .Shopping.InfoCardInfoComingSoonDescription,
@@ -312,6 +323,7 @@ class FakespotViewModel {
     init(shoppingProduct: ShoppingProduct,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager) {
+        self.windowUUID = tabManager.windowUUID
         self.shoppingProduct = shoppingProduct
         self.settingsCardViewModel = FakespotSettingsCardViewModel(tabManager: tabManager)
         self.reviewQualityCardViewModel = FakespotReviewQualityCardViewModel(tabManager: tabManager)
