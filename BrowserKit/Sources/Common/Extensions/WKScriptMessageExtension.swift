@@ -6,9 +6,12 @@ import WebKit
 
 public extension WKScriptMessage {
     func decodeBody<T: Decodable>(as type: T.Type) -> T? {
-        guard let dict = (body as? [String: Any]),
-              let data = try? JSONSerialization.data(withJSONObject: dict, options: [])
-        else { return nil }
-        return try? JSONDecoder().decode(type, from: data)
+        if let dict = (body as? [String: Any]), let data = try? JSONSerialization.data(withJSONObject: dict, options: []) {
+            return try? JSONDecoder().decode(type, from: data)
+        } else if let bodyString = body as? String, let data = bodyString.data(using: .utf8) {
+            return try? JSONDecoder().decode(type, from: data)
+        } else {
+            return nil
+        }
     }
 }

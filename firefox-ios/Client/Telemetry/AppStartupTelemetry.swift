@@ -50,7 +50,7 @@ final class AppStartupTelemetry {
 
     func queryAddresses() {
         profile.autofill.listAllAddresses(completion: { [weak self] addresses, error in
-            guard let addresses = addresses, !addresses.isEmpty, error == nil else { return }
+            guard let addresses = addresses, error == nil else { return }
             self?.sendAddressAutofillSavedAllTelemetry(numberOfAddresses: addresses.count)
         })
     }
