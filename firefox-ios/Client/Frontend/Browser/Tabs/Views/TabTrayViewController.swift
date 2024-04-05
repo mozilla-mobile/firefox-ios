@@ -486,14 +486,16 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func newTabButtonTapped() {
-        let context = DidTapNewTabContext(didTapAddTab: true, isPrivate: tabTrayState.isPrivateMode, urlRequest: nil, windowUUID: windowUUID)
+        let context = DidTapNewTabContext(didTapAddTab: true,
+                                          isPrivate: tabTrayState.isPrivateMode,
+                                          urlRequest: nil,
+                                          windowUUID: windowUUID)
         store.dispatch(TabPanelAction.didTapAddTab(context))
     }
 
     @objc
     private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose)
-        // TODO: FXIOS-6928 Update mode when closing tabTray
         delegate?.didFinish()
     }
 
