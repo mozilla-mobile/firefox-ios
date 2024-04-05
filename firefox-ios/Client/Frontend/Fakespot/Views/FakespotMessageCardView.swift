@@ -74,6 +74,7 @@ class FakespotMessageCardViewModel: ObservableObject {
         }
     }
 
+    let windowUUID: WindowUUID
     var type: CardType = .confirmation
     var title: String
     var description: String?
@@ -92,6 +93,7 @@ class FakespotMessageCardViewModel: ObservableObject {
     var analysisProgressChanged: ((Double) -> Void)?
 
     init(
+        windowUUID: WindowUUID,
         type: CardType,
         title: String,
         description: String? = nil,
@@ -105,6 +107,7 @@ class FakespotMessageCardViewModel: ObservableObject {
         a11yPrimaryActionIdentifier: String? = nil,
         a11yLinkActionIdentifier: String? = nil
     ) {
+        self.windowUUID = windowUUID
         self.type = type
         self.title = title
         self.description = description
@@ -241,7 +244,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                 )
             }
 
-            let swiftUICircularProgressView = CircularProgressView(viewModel: viewModel)
+            let swiftUICircularProgressView = CircularProgressView(windowUUID: viewModel.windowUUID, viewModel: viewModel)
             let circularProgressView = UIHostingController(rootView: swiftUICircularProgressView).view ?? UIView()
             circularProgressView.translatesAutoresizingMaskIntoConstraints = false
             circularProgressView.backgroundColor = .clear

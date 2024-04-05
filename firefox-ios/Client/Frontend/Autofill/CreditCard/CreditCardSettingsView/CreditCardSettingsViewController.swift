@@ -55,7 +55,8 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         CreditCardTableViewController(viewModel: viewModel.tableViewModel,
                                       windowUUID: creditCardViewModel.windowUUID)
 
-        let emptyView = CreditCardSettingsEmptyView(toggleModel: viewModel.toggleModel)
+        let emptyView = CreditCardSettingsEmptyView(windowUUID: viewModel.windowUUID,
+                                                    toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
         self.creditCardEmptyView.view.backgroundColor = .clear
 
@@ -164,7 +165,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
             viewModel.cardInputViewModel.creditCard = creditCard
         }
         viewModel.cardInputViewModel.updateState(state: editState)
-        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel)
+        creditCardEditView = CreditCardInputView(viewModel: viewModel.cardInputViewModel, windowUUID: windowUUID)
         viewModel.cardInputViewModel.dismiss = { [weak self] status, successVal in
             DispatchQueue.main.async {
                 self?.showToast(status: status)

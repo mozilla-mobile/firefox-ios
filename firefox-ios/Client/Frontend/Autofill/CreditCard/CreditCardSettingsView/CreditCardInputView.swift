@@ -13,8 +13,9 @@ struct CreditCardInputView: View {
     @State private var isBlurred = false
 
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State var backgroundColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
@@ -31,7 +32,8 @@ struct CreditCardInputView: View {
                         .foregroundColor(borderColor)
 
                     Group {
-                        CreditCardInputField(inputType: .name,
+                        CreditCardInputField(windowUUID: windowUUID,
+                                             inputType: .name,
                                              showError: !viewModel.nameIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -44,7 +46,8 @@ struct CreditCardInputView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        CreditCardInputField(inputType: .number,
+                        CreditCardInputField(windowUUID: windowUUID,
+                                             inputType: .number,
                                              showError: !viewModel.numberIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -57,7 +60,8 @@ struct CreditCardInputView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        CreditCardInputField(inputType: .expiration,
+                        CreditCardInputField(windowUUID: windowUUID,
+                                             inputType: .expiration,
                                              showError: !viewModel.expirationIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -73,7 +77,8 @@ struct CreditCardInputView: View {
                         .frame(height: 4)
 
                     if viewModel.state == .edit {
-                        RemoveCardButton(alertDetails: viewModel.removeButtonDetails)
+                        RemoveCardButton(windowUUID: windowUUID,
+                                         alertDetails: viewModel.removeButtonDetails)
                         .padding(.top, 28)
                     }
 
@@ -97,10 +102,11 @@ struct CreditCardInputView: View {
             }
             .blur(radius: isBlurred ? 10 : 0)
             .onAppear {
-                applyTheme(theme: themeVal.theme)
+                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             }
-            .onChange(of: themeVal) { val in
-                applyTheme(theme: val.theme)
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             }
             .onReceive(NotificationCenter.default.publisher(
                 for: UIApplication.willResignActiveNotification)
@@ -197,6 +203,6 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                                  creditCard: sampleCreditCard,
                                                  state: .view)
 
-        return CreditCardInputView(viewModel: viewModel)
+        return CreditCardInputView(viewModel: viewModel, windowUUID: .XCTestDefaultUUID)
     }
 }
