@@ -64,7 +64,5 @@ class MockThemeManager: ThemeManager {
 
     func setWindow(_ window: UIWindow, for uuid: UUID) { }
 
-    func legacy_currentTheme() -> Theme {
-        return currentThemeStorage
-    }
+    func windowNonspecificTheme() -> Theme { return currentThemeStorage }
 }

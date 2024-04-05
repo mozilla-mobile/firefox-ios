@@ -54,12 +54,12 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                         let readabilityResult = try readerModeCache.get(url)
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
-                        var readerModeStyle = ReaderModeStyle.default
+                        var readerModeStyle = ReaderModeStyle.defaultStyle(for: nil)
                         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-                           let style = ReaderModeStyle(dict: dict) {
+                           let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
                                 readerModeStyle = style
                         } else {
-                            readerModeStyle.theme = ReaderModeTheme.preferredTheme()
+                            readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
                         }
                         if let html = ReaderModeUtils.generateReaderContent(
                             readabilityResult,
