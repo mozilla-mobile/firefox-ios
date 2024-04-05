@@ -2027,7 +2027,6 @@ workflows:
         - scheme: Focus
         - team_id: 43AQ936H96
         - export_method: app-store
-        - configuration: FocusDebug
         title: Build Focus
     - deploy-to-itunesconnect-application-loader@1:
         inputs:
