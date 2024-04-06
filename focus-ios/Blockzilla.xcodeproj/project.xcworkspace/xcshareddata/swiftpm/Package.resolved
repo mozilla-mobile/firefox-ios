@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "472623782fc96d7e15e84b1c049ca374812fa85a",
-          "version": "58.1.0"
+          "revision": "fd5a73d20b519517a7840526266ef20901aedbcb",
+          "version": "59.0.0"
         }
       },
       {
