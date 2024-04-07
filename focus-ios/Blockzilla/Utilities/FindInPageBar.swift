@@ -4,6 +4,7 @@
 
 import UIKit
 import DesignSystem
+import Common
 
 protocol FindInPageBarDelegate: AnyObject {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String)
@@ -12,7 +13,7 @@ protocol FindInPageBarDelegate: AnyObject {
     func findInPageDidPressClose(_ findInPage: FindInPageBar)
 }
 
-class FindInPageBar: UIView {
+final class FindInPageBar: UIView {
     weak var delegate: FindInPageBarDelegate?
     private let searchText = UITextField()
     private let matchCountView = UILabel()
@@ -60,7 +61,7 @@ class FindInPageBar: UIView {
         searchText.addTarget(self, action: #selector(didTextChange), for: .editingChanged)
         searchText.textColor = .primaryText
         searchText.tintColor = .primaryText
-        searchText.font = .body16
+        searchText.font = FXFontStyles.Regular.body.scaledFont()
         searchText.autocapitalizationType = .none
         searchText.autocorrectionType = .no
         searchText.inputAssistantItem.leadingBarButtonGroups = []
@@ -72,7 +73,7 @@ class FindInPageBar: UIView {
         addSubview(searchText)
 
         matchCountView.textColor = .primaryText.withAlphaComponent(0.6)
-        matchCountView.font = .body16
+        matchCountView.font = FXFontStyles.Regular.body.scaledFont()
         matchCountView.isHidden = true
         matchCountView.accessibilityIdentifier = "FindInPage.matchCount"
         addSubview(matchCountView)
@@ -142,6 +143,7 @@ class FindInPageBar: UIView {
         }
     }
 
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
