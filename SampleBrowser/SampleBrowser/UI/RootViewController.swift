@@ -36,7 +36,7 @@ class RootViewController: UIViewController,
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
         self.themeManager = themeManager
-        self.currentWindowUUID = WindowUUID.unavailable
+        self.currentWindowUUID = UUID()
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
