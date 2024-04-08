@@ -10,11 +10,12 @@ import SiteImageView
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
+    case history
+    case bookmarks
+    case firefoxSuggestions
     case remoteTabs
     case openedTabs
-    case bookmarksAndHistory
     case searchHighlights
-    case firefoxSuggestions
 }
 
 private struct SearchViewControllerUX {
@@ -99,6 +100,7 @@ class SearchViewController: SiteTableViewController,
     private var searchHighlights = [HighlightItem]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
+    private var totalRowCount = 0
 
     var searchTelemetry: SearchTelemetry?
 
@@ -134,13 +136,13 @@ class SearchViewController: SiteTableViewController,
     static var userAgent: String?
 
     private var bookmarkSites: [Site] {
-        data.compactMap { $0 }
-            .filter { $0.bookmarked == true }
+        Array(data.compactMap { $0 }
+            .filter { $0.bookmarked == true }.prefix(1))
     }
 
     private var historySites: [Site] {
-        data.compactMap { $0 }
-            .filter { $0.bookmarked == false }
+        Array(data.compactMap { $0 }
+            .filter { $0.bookmarked == false }.prefix(1))
     }
 
     private var hasBookmarksSuggestions: Bool {
@@ -676,7 +678,7 @@ class SearchViewController: SiteTableViewController,
         let searchInContent = config.usePageContent
             && searchTerms.find { $0.count >= config.minSearchTerm } != nil
 
-        filteredOpenedTabs = currentTabs.filter { tab in
+        filteredOpenedTabs = Array(currentTabs.filter { tab in
             guard let url = tab.url,
                   !InternalURL.isValid(url: url) else {
                 return false
@@ -690,7 +692,7 @@ class SearchViewController: SiteTableViewController,
 
             let text = lines.joined(separator: "\n")
             return find(in: text)
-        }
+        }.prefix(1))
     }
 
     func searchRemoteTabs(for searchString: String) {
@@ -700,7 +702,7 @@ class SearchViewController: SiteTableViewController,
         }
 
         let currentTabs = self.remoteClientTabs
-        self.filteredRemoteClientTabs = currentTabs.filter { value in
+        self.filteredRemoteClientTabs = Array(currentTabs.filter { value in
             let tab = value.tab
 
             if InternalURL.isValid(url: tab.URL) {
@@ -721,7 +723,7 @@ class SearchViewController: SiteTableViewController,
             }
 
             return false
-        }
+        }.prefix(1))
     }
 
     private func querySuggestClient() {
@@ -762,6 +764,7 @@ class SearchViewController: SiteTableViewController,
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
             // Reload the tableView to show the new list of search suggestions.
+            self.totalRowCount = 0
             self.savedQuery = tempSearchQuery
             self.searchTelemetry?.savedQuery = tempSearchQuery
             self.tableView.reloadData()
@@ -813,13 +816,19 @@ class SearchViewController: SiteTableViewController,
             let remoteTab = self.filteredRemoteClientTabs[indexPath.row].tab
             selectedIndexPath = indexPath
             searchDelegate?.searchViewController(self, didSelectURL: remoteTab.URL, searchTerm: nil)
-        case .bookmarksAndHistory:
-            if let site = data[indexPath.row] {
-                searchTelemetry?.selectedResult = site.bookmarked ?? false ? .bookmark : .history
-                if let url = URL(string: site.url, invalidCharacters: false) {
-                    selectedIndexPath = indexPath
-                    searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
-                }
+        case .history:
+            let site = historySites[indexPath.row]
+            searchTelemetry?.selectedResult = .history
+            if let url = URL(string: site.url, invalidCharacters: false) {
+                selectedIndexPath = indexPath
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
+            }
+        case .bookmarks:
+            let site = bookmarkSites[indexPath.row]
+            searchTelemetry?.selectedResult = .bookmark
+            if let url = URL(string: site.url, invalidCharacters: false) {
+                selectedIndexPath = indexPath
+                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         case .searchHighlights:
             if let urlString = searchHighlights[indexPath.row].urlString,
@@ -864,7 +873,7 @@ class SearchViewController: SiteTableViewController,
 
         var title: String
         switch section {
-        case SearchListSection.remoteTabs.rawValue:
+        case SearchListSection.history.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
             title = searchEngines?.defaultEngine?.headerSearchTitle ?? ""
@@ -917,37 +926,34 @@ class SearchViewController: SiteTableViewController,
                         searchTelemetry?.visibleFilteredRemoteClientTabs.append(remoteTab)
                     }
                 }
-            case .bookmarksAndHistory:
-                let shouldShowBothSuggestions = model.shouldShowBookmarksSuggestions &&
-                model.shouldShowBrowsingHistorySuggestions
-                let shouldShowEitherSuggestion = model.shouldShowBookmarksSuggestions ||
-                model.shouldShowBrowsingHistorySuggestions
-
-                if featureFlags.isFeatureEnabled(
-                    .firefoxSuggestFeature,
-                    checking: .buildAndUser
-                ) && shouldShowEitherSuggestion {
-                    var site: Site?
-
-                    if shouldShowBothSuggestions {
-                        site = data[indexPath.row]
-                    } else if model.shouldShowBookmarksSuggestions {
-                        site = bookmarkSites[indexPath.row]
-                    } else if model.shouldShowBrowsingHistorySuggestions {
-                        site = historySites[indexPath.row]
-                    }
-
-                    if let site {
+            case .history:
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    if shouldShowBrowsingHistorySuggestions {
+                        let site = historySites[indexPath.row]
                         if searchTelemetry?.visibleData.contains(site) == false {
                             searchTelemetry?.visibleData.append(site)
                         }
                     }
-                } else if let site = data[indexPath.row] {
+                } else {
+                    let site = historySites[indexPath.row]
                     if searchTelemetry?.visibleData.contains(site) == false {
                         searchTelemetry?.visibleData.append(site)
                     }
                 }
-
+            case .bookmarks:
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    if shouldShowBookmarksSuggestions {
+                        let site = bookmarkSites[indexPath.row]
+                        if searchTelemetry?.visibleData.contains(site) == false {
+                            searchTelemetry?.visibleData.append(site)
+                        }
+                    }
+                } else {
+                    let site = bookmarkSites[indexPath.row]
+                    if searchTelemetry?.visibleData.contains(site) == false {
+                        searchTelemetry?.visibleData.append(site)
+                    }
+                }
             case .searchHighlights:
                 let highlightItem = searchHighlights[indexPath.row]
                 if searchTelemetry?.visibleSearchHighlights.contains(
@@ -965,40 +971,42 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let rowCount: Int
         switch SearchListSection(rawValue: section)! {
         case .searchSuggestions:
             guard let count = suggestions?.count else { return 0 }
             return count < 4 ? count : 4
         case .openedTabs:
-            return filteredOpenedTabs.count
+            rowCount = filteredOpenedTabs.count
         case .remoteTabs:
-            return if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
+            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                rowCount = shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
             } else {
-                filteredRemoteClientTabs.count
+                rowCount = filteredRemoteClientTabs.count
             }
-        case .bookmarksAndHistory:
-            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) ?
-            numberOfItemsFromData :
-            data.count
+        case .history:
+            guard featureFlags.isFeatureEnabled(
+                .firefoxSuggestFeature,
+                checking: .buildAndUser
+            ) else { return historySites.count }
+            rowCount = shouldShowBrowsingHistorySuggestions ? historySites.count : 0
+        case .bookmarks:
+            guard featureFlags.isFeatureEnabled(
+                .firefoxSuggestFeature,
+                checking: .buildAndUser
+            ) else { return bookmarkSites.count }
+            rowCount = shouldShowBookmarksSuggestions ? bookmarkSites.count : 0
         case .searchHighlights:
-            return searchHighlights.count
+            rowCount = searchHighlights.count
         case .firefoxSuggestions:
-            return firefoxSuggestions.count
+            rowCount = firefoxSuggestions.count
         }
-    }
-
-    private var numberOfItemsFromData: Int {
-        if shouldShowBookmarksSuggestions,
-           shouldShowBrowsingHistorySuggestions {
-            return data.count
-        } else if shouldShowBookmarksSuggestions {
-            return bookmarkSites.count
-        } else if shouldShowBrowsingHistorySuggestions {
-            return historySites.count
+        if totalRowCount + rowCount > 3 {
+            return 0
+        } else {
+            totalRowCount += rowCount
+            return rowCount
         }
-
-        return 0
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -1008,9 +1016,14 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         guard let section = SearchListSection(rawValue: indexPath.section) else { return }
 
-        if section == .bookmarksAndHistory,
-            let suggestion = data[indexPath.item] {
+        switch section {
+        case .bookmarks:
+            let suggestion = bookmarkSites[indexPath.item]
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
+        case .history:
+            let suggestion = historySites[indexPath.item]
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
+        default: return
         }
     }
 
@@ -1111,27 +1124,31 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
-        case .bookmarksAndHistory:
-            let shouldShowBothSuggestions = shouldShowBookmarksSuggestions &&
-            shouldShowBrowsingHistorySuggestions
-            let shouldShowEitherSuggestion = shouldShowBookmarksSuggestions ||
-            shouldShowBrowsingHistorySuggestions
-
-            if featureFlags.isFeatureEnabled(
-                .firefoxSuggestFeature,
-                checking: .buildAndUser
-            ) && shouldShowEitherSuggestion {
-                var site: Site?
-
-                if shouldShowBothSuggestions {
-                    site = data[indexPath.row]
-                } else if shouldShowBookmarksSuggestions {
-                    site = bookmarkSites[indexPath.row]
-                } else if shouldShowBrowsingHistorySuggestions {
-                    site = historySites[indexPath.row]
+        case .history:
+            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                if shouldShowBrowsingHistorySuggestions {
+                    let site = historySites[indexPath.row]
+                    configureBookmarksAndHistoryCell(
+                        twoLineCell,
+                        site.title,
+                        site.url
+                    )
+                    cell = twoLineCell
                 }
+            } else {
+                let site = historySites[indexPath.row]
+                configureBookmarksAndHistoryCell(
+                    twoLineCell,
+                    site.title,
+                    site.url
+                )
+                cell = twoLineCell
+            }
 
-                if let site {
+        case .bookmarks:
+            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                if shouldShowBookmarksSuggestions {
+                    let site = bookmarkSites[indexPath.row]
                     configureBookmarksAndHistoryCell(
                         twoLineCell,
                         site.title,
@@ -1140,7 +1157,8 @@ class SearchViewController: SiteTableViewController,
                     )
                     cell = twoLineCell
                 }
-            } else if let site = data[indexPath.row] {
+            } else {
+                let site = bookmarkSites[indexPath.row]
                 configureBookmarksAndHistoryCell(
                     twoLineCell,
                     site.title,
@@ -1204,7 +1222,7 @@ class SearchViewController: SiteTableViewController,
 
     private func shouldShowHeader(for section: Int) -> Bool {
         switch section {
-        case SearchListSection.remoteTabs.rawValue:
+        case SearchListSection.history.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
             return shouldShowSearchEngineSuggestions
@@ -1255,7 +1273,7 @@ class SearchViewController: SiteTableViewController,
 // MARK: - Keyboard shortcuts
 extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
-        let initialSection = SearchListSection.bookmarksAndHistory.rawValue
+        let initialSection = SearchListSection.history.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
             let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
             if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {
