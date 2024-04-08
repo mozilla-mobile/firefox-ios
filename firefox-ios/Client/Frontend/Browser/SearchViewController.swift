@@ -263,6 +263,7 @@ class SearchViewController: SiteTableViewController,
     /// Determines if a suggestion should be shown based on the view model's privacy mode and
     /// the specific suggestion's status.
     private func shouldShowFirefoxSuggestions(_ suggestion: Bool) -> Bool {
+        model.shouldShowPrivateModeFirefoxSuggestions = true
         return viewModel.isPrivate ?
         (suggestion && model.shouldShowPrivateModeFirefoxSuggestions) :
         suggestion
