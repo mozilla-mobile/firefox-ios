@@ -15,9 +15,7 @@ class TabTrayAnimationQueueImplementation: TabTrayAnimationQueue {
 
     func addAnimation(for collectionView: UICollectionView,
                       animation: @escaping (() -> Void)) {
-//        if let operation {
         animations.append(animation)
-       // }
         performChainedOperations(for: collectionView)
     }
 
