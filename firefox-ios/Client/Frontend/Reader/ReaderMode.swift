@@ -378,7 +378,7 @@ class ReaderMode: TabContentScript {
         }
     }
 
-    lazy var style: ReaderModeStyle = ReaderModeStyle.defaultStyle(for: tab?.windowUUID) {
+    lazy var style = ReaderModeStyle.defaultStyle(for: tab?.windowUUID) {
         didSet {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld(
