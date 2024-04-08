@@ -24,7 +24,8 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_initWithProperties_succeeds() {
-        let readerModeStyle = ReaderModeStyle(theme: .dark,
+        let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+                                              theme: .dark,
                                               fontType: .sansSerif,
                                               fontSize: .size1)
 
@@ -34,7 +35,8 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_encodingAsDictionary_succeeds() {
-        let readerModeStyle = ReaderModeStyle(theme: .dark,
+        let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+                                              theme: .dark,
                                               fontType: .sansSerif,
                                               fontSize: .size1)
 
@@ -60,7 +62,8 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_initWithDictionnary_succeeds() {
-        let readerModeStyle = ReaderModeStyle(dict: ["theme": ReaderModeTheme.dark.rawValue,
+        let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+                                              dict: ["theme": ReaderModeTheme.dark.rawValue,
                                                      "fontType": ReaderModeFontType.sansSerif.rawValue,
                                                      "fontSize": ReaderModeFontSize.size1.rawValue])
 
@@ -70,7 +73,8 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_initWithWrongDictionnary_fails() {
-        let readerModeStyle = ReaderModeStyle(dict: ["wrong": 1,
+        let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+                                              dict: ["wrong": 1,
                                                      "fontType": ReaderModeFontType.sansSerif,
                                                      "fontSize": ReaderModeFontSize.size1])
 
@@ -78,7 +82,8 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func test_initWithEmptyDictionnary_fails() {
-        let readerModeStyle = ReaderModeStyle(dict: [:])
+        let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+                                              dict: [:])
 
         XCTAssertNil(readerModeStyle)
     }
@@ -87,32 +92,33 @@ class ReaderModeStyleTests: XCTestCase {
 
     func test_defaultReaderModeTheme_returnsLight() {
         themeManager.changeCurrentTheme(.light, for: windowUUID)
-        let defaultTheme = ReaderModeTheme.preferredTheme(for: nil)
+        let defaultTheme = ReaderModeTheme.preferredTheme(for: nil, window: windowUUID)
         XCTAssertEqual(defaultTheme, .light, "Expected light theme (default) if not theme is selected")
     }
 
     func test_appWideThemeDark_returnsDark() {
         themeManager.changeCurrentTheme(.dark, for: windowUUID)
-        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.light)
+        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.light, window: windowUUID)
 
         XCTAssertEqual(theme, .dark, "Expected dark theme because of the app theme")
     }
 
     func test_readerThemeSepia_returnsSepia() {
         themeManager.changeCurrentTheme(.light, for: windowUUID)
-        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia)
+        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia, window: windowUUID)
         XCTAssertEqual(theme, .sepia, "Expected sepia theme if App theme is not dark")
     }
 
     func test_readerThemeSepiaWithAppDark_returnsSepia() {
         themeManager.changeCurrentTheme(.dark, for: windowUUID)
-        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia)
+        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia, window: windowUUID)
         XCTAssertEqual(theme, .dark, "Expected dark theme if App theme is dark")
     }
 
     func test_preferredColorTheme_changesFromLightToDark() {
         themeManager.changeCurrentTheme(.dark, for: windowUUID)
-        var readerModeStyle = ReaderModeStyle(theme: .light,
+        var readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
+                                              theme: .light,
                                               fontType: .sansSerif,
                                               fontSize: .size1)
         XCTAssertEqual(readerModeStyle.theme, .light)
@@ -122,7 +128,7 @@ class ReaderModeStyleTests: XCTestCase {
 
     func test_delegateMemoryLeak() {
         let mockReaderModeStyleViewControllerDelegate = MockDelegate()
-        let readerModeStyleViewModel = ReaderModeStyleViewModel(isBottomPresented: false)
+        let readerModeStyleViewModel = ReaderModeStyleViewModel(windowUUID: windowUUID, isBottomPresented: false)
         readerModeStyleViewModel.delegate = mockReaderModeStyleViewControllerDelegate
         trackForMemoryLeaks(readerModeStyleViewModel)
     }
@@ -130,7 +136,7 @@ class ReaderModeStyleTests: XCTestCase {
     // MARK: - Tests
 
     func testSelectTheme() {
-        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let viewModel = ReaderModeStyleViewModel(windowUUID: windowUUID, isBottomPresented: true)
 
         let theme = ReaderModeTheme.dark
         viewModel.selectTheme(theme)
@@ -139,7 +145,7 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func testSelectFontType() {
-        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let viewModel = ReaderModeStyleViewModel(windowUUID: windowUUID, isBottomPresented: true)
 
         let fontType = ReaderModeFontType.sansSerif
         viewModel.selectFontType(fontType)
@@ -148,7 +154,7 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func testReaderModeDidChangeTheme() {
-        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let viewModel = ReaderModeStyleViewModel(windowUUID: windowUUID, isBottomPresented: true)
         let mockDelegate = MockDelegate()
         viewModel.delegate = mockDelegate
 
@@ -163,7 +169,7 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func testFontSizeDidChangeSizeAction() {
-        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let viewModel = ReaderModeStyleViewModel(windowUUID: windowUUID, isBottomPresented: true)
         let mockDelegate = MockDelegate()
         viewModel.delegate = mockDelegate
 
@@ -185,7 +191,7 @@ class ReaderModeStyleTests: XCTestCase {
     }
 
     func testFontTypeDidChange() {
-        let viewModel = ReaderModeStyleViewModel(isBottomPresented: true)
+        let viewModel = ReaderModeStyleViewModel(windowUUID: windowUUID, isBottomPresented: true)
         let mockDelegate = MockDelegate()
         viewModel.delegate = mockDelegate
 
