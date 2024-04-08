@@ -70,13 +70,12 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         using cardName: String
     ) -> [String: String] {
         typealias Key = TelemetryWrapper.EventExtraKey
-        let thing = [
+        return [
             Key.cardType.rawValue: cardName,
             Key.sequenceID.rawValue: sequenceID(from: cardOrder),
             Key.sequencePosition.rawValue: sequencePosition(for: cardName, from: cardOrder),
             Key.flowType.rawValue: flowType
         ]
-        return thing
     }
 
     private func sequenceID(from sequence: [String]) -> String {
@@ -105,7 +104,6 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     private func buildAdditionalMultipleChoiceButtonTelemetryExtras(
         using buttonAction: OnboardingMultipleChoiceAction
     ) -> [String: String] {
-        let thing = [TelemetryWrapper.EventExtraKey.multipleChoiceButtonAction.rawValue: buttonAction.rawValue]
-        return thing
+        return [TelemetryWrapper.EventExtraKey.multipleChoiceButtonAction.rawValue: buttonAction.rawValue]
     }
 }
