@@ -58,7 +58,9 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         case syncedTabs
         case nonSponsored
         case sponsored
-        case privateSuggestions
+        // Disable temporary `privateSuggestions` option for Enhanced Firefox Suggest Experiment v125.
+        // https://mozilla-hub.atlassian.net/browse/FXIOS-8908
+//        case privateSuggestions
         case suggestionLearnMore
     }
 
@@ -287,20 +289,20 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                     selector: #selector(didToggleEnableSponsoredSuggestions)
                 )
 
-            case FirefoxSuggestItem.privateSuggestions.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showPrivateModeFirefoxSuggestions,
-                    defaultValue: model.shouldShowPrivateModeFirefoxSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.PrivateSessionSetting
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.PrivateSessionDescription
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleShowFirefoxSuggestionsInPrivateMode)
-                )
-                cell.isHidden = shouldHidePrivateModeFirefoxSuggestSetting
+//            case FirefoxSuggestItem.privateSuggestions.rawValue:
+//                buildSettingWith(
+//                    prefKey: PrefsKeys.SearchSettings.showPrivateModeFirefoxSuggestions,
+//                    defaultValue: model.shouldShowPrivateModeFirefoxSuggestions,
+//                    titleText: String.localizedStringWithFormat(
+//                        .Settings.Search.PrivateSessionSetting
+//                    ),
+//                    statusText: String.localizedStringWithFormat(
+//                        .Settings.Search.Suggest.PrivateSessionDescription
+//                    ),
+//                    cell: cell,
+//                    selector: #selector(didToggleShowFirefoxSuggestionsInPrivateMode)
+//                )
+//                cell.isHidden = shouldHidePrivateModeFirefoxSuggestSetting
 
             case FirefoxSuggestItem.suggestionLearnMore.rawValue:
                 cell.accessibilityLabel = String.localizedStringWithFormat(
@@ -418,16 +420,16 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return false
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath {
-        case IndexPath(
-                row: FirefoxSuggestItem.privateSuggestions.rawValue,
-                section: Section.firefoxSuggestSettings.rawValue):
-            if shouldHidePrivateModeFirefoxSuggestSetting { return 0 }
-        default: return UITableView.automaticDimension
-        }
-        return UITableView.automaticDimension
-    }
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        switch indexPath {
+//        case IndexPath(
+//                row: FirefoxSuggestItem.privateSuggestions.rawValue,
+//                section: Section.firefoxSuggestSettings.rawValue):
+//            if shouldHidePrivateModeFirefoxSuggestSetting { return 0 }
+//        default: return UITableView.automaticDimension
+//        }
+//        return UITableView.automaticDimension
+//    }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return UITableView.automaticDimension
@@ -559,42 +561,42 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         _ toggle: ThemedSwitch,
         suggestionType: FirefoxSuggestItem
     ) {
-        var shouldShowPrivateSuggestionsSetting = false
+//        var shouldShowPrivateSuggestionsSetting = false
         switch suggestionType {
         case .browsingHistory:
             model.shouldShowBrowsingHistorySuggestions = toggle.isOn
-            shouldShowPrivateSuggestionsSetting = model.shouldShowBrowsingHistorySuggestions &&
-            !model.shouldShowBookmarksSuggestions &&
-            !model.shouldShowSyncedTabsSuggestions
+//            shouldShowPrivateSuggestionsSetting = model.shouldShowBrowsingHistorySuggestions &&
+//            !model.shouldShowBookmarksSuggestions &&
+//            !model.shouldShowSyncedTabsSuggestions
         case .bookmarks:
             model.shouldShowBookmarksSuggestions = toggle.isOn
-            shouldShowPrivateSuggestionsSetting = model.shouldShowBookmarksSuggestions &&
-            !model.shouldShowBrowsingHistorySuggestions &&
-            !model.shouldShowSyncedTabsSuggestions
+//            shouldShowPrivateSuggestionsSetting = model.shouldShowBookmarksSuggestions &&
+//            !model.shouldShowBrowsingHistorySuggestions &&
+//            !model.shouldShowSyncedTabsSuggestions
         case .syncedTabs:
             model.shouldShowSyncedTabsSuggestions = toggle.isOn
-            shouldShowPrivateSuggestionsSetting = model.shouldShowSyncedTabsSuggestions &&
-            !model.shouldShowBrowsingHistorySuggestions &&
-            !model.shouldShowBookmarksSuggestions
+//            shouldShowPrivateSuggestionsSetting = model.shouldShowSyncedTabsSuggestions &&
+//            !model.shouldShowBrowsingHistorySuggestions &&
+//            !model.shouldShowBookmarksSuggestions
         default: break
         }
 
-        if shouldShowPrivateSuggestionsSetting {
-            updateCells(
-                at: [IndexPath(
-                    row: FirefoxSuggestItem.privateSuggestions.rawValue,
-                    section: Section.firefoxSuggestSettings.rawValue
-                )]
-            )
-        } else if shouldHidePrivateModeFirefoxSuggestSetting {
-            model.shouldShowPrivateModeFirefoxSuggestions = false
-            updateCells(
-                at: [IndexPath(
-                    row: FirefoxSuggestItem.privateSuggestions.rawValue,
-                    section: Section.firefoxSuggestSettings.rawValue
-                )]
-            )
-        }
+//        if shouldShowPrivateSuggestionsSetting {
+//            updateCells(
+//                at: [IndexPath(
+//                    row: FirefoxSuggestItem.privateSuggestions.rawValue,
+//                    section: Section.firefoxSuggestSettings.rawValue
+//                )]
+//            )
+//        } else if shouldHidePrivateModeFirefoxSuggestSetting {
+//            model.shouldShowPrivateModeFirefoxSuggestions = false
+//            updateCells(
+//                at: [IndexPath(
+//                    row: FirefoxSuggestItem.privateSuggestions.rawValue,
+//                    section: Section.firefoxSuggestSettings.rawValue
+//                )]
+//            )
+//        }
     }
 
     private func updateCells(at indexPaths: [IndexPath]) {
