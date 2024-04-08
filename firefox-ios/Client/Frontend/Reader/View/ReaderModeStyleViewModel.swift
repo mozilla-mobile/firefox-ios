@@ -15,9 +15,13 @@ protocol ReaderModeStyleViewModelDelegate: AnyObject {
 // MARK: - ReaderModeStyleViewModel
 
 class ReaderModeStyleViewModel {
-    public init(isBottomPresented: Bool, readerModeStyle: ReaderModeStyle = .default) {
+    public init(windowUUID: WindowUUID,
+                isBottomPresented: Bool,
+                readerModeStyle: ReaderModeStyle? = nil) {
+        let style: ReaderModeStyle = readerModeStyle ?? ReaderModeStyle.defaultStyle(for: windowUUID)
+        self.readerModeStyle = style
         self.isBottomPresented = isBottomPresented
-        self.readerModeStyle = readerModeStyle
+        self.readerModeStyle = style
     }
 
     struct UX {

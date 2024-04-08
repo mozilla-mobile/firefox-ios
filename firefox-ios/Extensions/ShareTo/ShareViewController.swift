@@ -89,10 +89,7 @@ class ShareViewController: UIViewController {
     }
 
     private func currentTheme() -> Theme {
-        // TODO: [8313] Revisit and update to use UUID based themeing.
-        // guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
-        // return themeManager.currentTheme(for: uuid)
-        return themeManager.legacy_currentTheme()
+        return themeManager.windowNonspecificTheme()
     }
 
     func setupUI() {
