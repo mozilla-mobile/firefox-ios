@@ -488,6 +488,8 @@ private extension TabLocationView {
 
 extension TabLocationView: Notifiable {
     func handleNotifications(_ notification: Notification) {
+        guard let notificationUUID = notification.object as? UUID else { return }
+        guard windowUUID == notificationUUID else { return }
         switch notification.name {
         case .FakespotViewControllerDidDismiss:
             shoppingButton.isSelected = false
