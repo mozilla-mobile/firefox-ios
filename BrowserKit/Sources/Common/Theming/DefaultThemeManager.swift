@@ -92,7 +92,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    // TODO: [8313] Need to add support for cleaning up and releasing window references on iPad when a window is closed.
+    public func windowDidClose(uuid: UUID) {
+        windows.removeValue(forKey: uuid)
+        windowThemeState.removeValue(forKey: uuid)
+    }
+
     public func setWindow(_ window: UIWindow, for uuid: UUID) {
         windows[uuid] = window
         updateSavedTheme(to: getNormalSavedTheme())
