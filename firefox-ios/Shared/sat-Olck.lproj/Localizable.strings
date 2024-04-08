@@ -694,6 +694,9 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ᱪᱷᱟᱹᱱᱤ";
 
+/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
+"LoginsList.NoLoginsFound.Description.v119" = "ᱥᱟᱺᱪᱟᱣ ᱠᱟᱱ ᱞᱚᱜᱤᱱ ᱠᱚ ᱱᱚᱰᱮ ᱫᱮᱠᱷᱟᱣᱜᱼᱟ ᱾ ᱡᱩᱫᱤ ᱟᱢ ᱵᱷᱮᱜᱟᱨ ᱥᱟᱫᱷᱚᱱ ᱨᱮ %@ ᱨᱮᱭᱟᱜ ᱵᱚᱞᱚ ᱠᱚ ᱥᱟᱺᱪᱟᱣ ᱟᱠᱟᱫᱟᱢ, ᱟᱢᱟᱜ ᱠᱷᱟᱛᱟ ᱨᱮ ᱥᱩᱦᱤ ᱮᱢ ᱢᱮ ᱾";
+
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "ᱵᱚᱞᱚ ᱠᱚ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱱᱟ";
 
