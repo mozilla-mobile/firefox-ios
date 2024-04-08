@@ -164,7 +164,10 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - Actions
     @objc
     func buttonTapped() {
-        buttonActionDelegate?.handleMultipleChoiceButtonActions(for: viewModel.info.action)
+        buttonActionDelegate?.handleMultipleChoiceButtonActions(
+            for: viewModel.info.action,
+            from: viewModel.presentingCardName
+        )
         stateUpdateDelegate?.updateSelectedButton(to: viewModel.info.title)
     }
 

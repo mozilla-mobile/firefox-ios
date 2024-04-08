@@ -329,6 +329,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
                     info: buttonModel,
+                    presentingCardName: viewModel.name,
                     a11yIDRoot: viewModel.a11yIdRoot
                 ),
                 buttonActionDelegate: delegate,
