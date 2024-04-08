@@ -5,8 +5,5 @@
 "CreditCard.SnackBar.SavedCardLabel.v112" = "يېڭى كارتا ساقلاندى";
 
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
-"CreditCard.SnackBar.UpdatedCardLabel.v112" = "كارتا ئۇچۇرى يېڭىلاندى";
-
-/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
 "CreditCard.SnackBar.UpdatedCardLabel.v122" = "كارتا ئۇچۇرى يېڭىلاندى";
 

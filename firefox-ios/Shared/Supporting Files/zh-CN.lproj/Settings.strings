@@ -17,34 +17,19 @@
 "CreditCard.Settings.EmptyListDescription.v112" = "安全保存您的卡片信息，方便下次使用。";
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
-"CreditCard.Settings.EmptyListTitle.v112" = "将信用卡保存到 %@";
-
-/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "将信用卡保存到 %@";
 
-/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "尾号 %3$@ 的 %1$@ 卡，持卡人 %2$@，有效期至 %4$@";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
-"CreditCard.Settings.NotNow.v112" = "暂时不要";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v122" = "暂时不要";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.RememberThisCard.v112" = "要记住此卡片吗？";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.RememberThisCard.v122" = "要安全地保存此信用卡吗？";
 
 /* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
-"CreditCard.Settings.UpdateThisCard.v112" = "要更新此卡片吗？";
-
-/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
 "CreditCard.Settings.UpdateThisCard.v122" = "要更新信用卡吗？";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.Yes.v112" = "是";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.Yes.v122" = "更新";
@@ -54,9 +39,6 @@
 
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "管理卡片";
-
-/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
-"CreditCards.Settings.UseASavedCard.v112" = "要使用保存的卡片吗？";
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseASavedCard.v122" = "使用保存的信用卡";
@@ -109,7 +91,7 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "备用搜索引擎";
 
-/* Footer for for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
+/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
 "Settings.Search.DefaultSearchEngine.Footer.v122" = "来自搜索关键词、历史、书签等的结果";
 
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */

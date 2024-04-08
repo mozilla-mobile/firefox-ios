@@ -1,17 +1,8 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "บันทึกข้อมูลบัตรของคุณไว้อย่างปลอดภัยด้วย %@ เพื่อให้ชำระเงินได้เร็วขึ้นครั้งต่อไป";
-
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v122" = "%@ จะเข้ารหัสหมายเลขบัตรของคุณ รหัสความปลอดภัยของคุณจะไม่ถูกบันทึก";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "ใช่";
-
-/* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "บันทึก";
-
-/* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v115" = "ต้องการจำบัตรนี้หรือไม่?";
 
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v122" = "ต้องการบันทึกบัตรนี้อย่างปลอดภัยหรือไม่?";
