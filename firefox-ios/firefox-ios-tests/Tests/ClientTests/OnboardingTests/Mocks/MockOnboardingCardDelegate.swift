@@ -60,7 +60,10 @@ class MockOnboardinCardDelegateController: UIViewController,
         }
     }
 
-    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+    func handleMultipleChoiceButtonActions(
+        for action: OnboardingMultipleChoiceAction,
+        from cardName: String
+    ) {
         switch action {
         case .themeDark:
             self.multipleChoiceAction = .themeDark

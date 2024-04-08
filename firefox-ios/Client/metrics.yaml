@@ -1192,6 +1192,38 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  multiple_choice_button_tap:
+    type: event
+    description: |
+      Records when a multiple choice button is tapped during the onboarding
+    extra_keys:
+      card_type:
+        type: string
+        description: |
+          Presented onboarding card
+      sequence_id:
+        type: string
+        description: |
+          The sequence of the cards in the current branch.
+      sequence_position:
+        type: string
+        description: |
+          The position of the card in the current branch.
+      flow_type:
+        type: string
+        description: |
+          Whether it's a fresh install or an upgrade flow
+      button_action:
+        type: string
+        description: |
+          The action that the button would lead to.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/18358
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19678
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-06-01"
   close_tap:
     type: event
     description: |

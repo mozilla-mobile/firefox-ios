@@ -337,7 +337,10 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+    func handleMultipleChoiceButtonActions(
+        for action: OnboardingMultipleChoiceAction,
+        from cardName: String
+    ) {
         switch action {
         case .themeDark:
             store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
@@ -357,6 +360,10 @@ extension IntroViewController: OnboardingCardDelegate {
         case .toolbarTop:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
         }
+        viewModel.telemetryUtility.sendMultipleChoiceButtonActionTelemetry(
+            from: cardName,
+            with: action
+        )
     }
 
     func sendCardViewTelemetry(from cardName: String) {
