@@ -524,7 +524,7 @@
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Vis førre fane";
 
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
-"InactiveTabs.TabTray.CloseButtonTitle" = "Lat att alle inaktive faner";
+"InactiveTabs.TabTray.CloseButtonTitle" = "Lat att alle uverksame faner";
 
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Større tekst";
@@ -1496,7 +1496,7 @@
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Uverksame faner";
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
-"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Faner du ikkje har vist på to veker, vert flytta til den inaktive delen.";
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Faner du ikkje har vist på to veker, vert flytta til den uverksame delen.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Fanegrupper";
@@ -1652,10 +1652,10 @@
 "Tabs.DeleteAllUndo.Title" = "%d fane attlaten/faner attlatne";
 
 /* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
-"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Vis inaktive faner";
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Vis uverksame faner";
 
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
-"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Gøym inaktive faner";
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Gøym uverksame faner";
 
 /* Accessibility Label for the tab toolbar Search button */
 "TabToolbar.Accessibility.Search.v106" = "Søk";

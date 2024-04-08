@@ -118,6 +118,9 @@
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v122" = "Паказваць прапановы ў прыватным праглядзе";
 
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "Паказваць у прыватных сеансах";
+
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "Прыватнае агляданне";
 
@@ -133,8 +136,14 @@
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Даведайцеся больш пра Firefox Suggest";
 
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Пошук у гісторыі аглядання";
+
 /* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
 "Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Шукаць у закладках";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Шукаць у сінхранізаваных картках";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Атрымлівайце прапановы з інтэрнэту, звязаныя з вашым пошукам";
