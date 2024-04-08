@@ -1223,7 +1223,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19678
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-06-01"
+    expires: "2025-01-01"
   close_tap:
     type: event
     description: |
