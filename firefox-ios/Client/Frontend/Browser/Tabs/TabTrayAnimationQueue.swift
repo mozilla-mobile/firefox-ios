@@ -29,7 +29,9 @@ class TabTrayAnimationQueueImplementation: TabTrayAnimationQueue {
         /// Fix crash related to bug from `collectionView.performBatchUpdates` when the
         /// collectionView is not visible the dataSource section/items differs from the actions to be perform
         /// which causes the crash
-        collectionView.numberOfItems(inSection: 0)
+        if collectionView.numberOfSections != 0 {
+            collectionView.numberOfItems(inSection: 0)
+        }
         collectionView.performBatchUpdates({
             animation()
         }, completion: { [weak self] (done) in
