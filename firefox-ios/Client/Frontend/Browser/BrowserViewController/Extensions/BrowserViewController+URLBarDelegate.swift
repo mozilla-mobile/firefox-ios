@@ -34,13 +34,14 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        guard !isTabTrayRefactorEnabled else {
-            navigationHandler?.showTabTray(selectedPanel: focusedSegment ?? .tabs)
-            return
+        if isTabTrayRefactorEnabled {
+            let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+            let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
+            navigationHandler?.showTabTray(selectedPanel: selectedSegment)
+        } else {
+            showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
+                                            focusedSegment: focusedSegment)
         }
-
-        showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
-                                        focusedSegment: focusedSegment)
     }
 
     private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
