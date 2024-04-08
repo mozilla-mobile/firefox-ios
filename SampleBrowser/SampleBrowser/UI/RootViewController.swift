@@ -16,6 +16,7 @@ class RootViewController: UIViewController,
                           SettingsDelegate,
                           FindInPageBarDelegate,
                           Themeable {
+    var currentWindowUUID: UUID?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -35,6 +36,7 @@ class RootViewController: UIViewController,
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
         self.themeManager = themeManager
+        self.currentWindowUUID = UUID()
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -301,7 +303,7 @@ class RootViewController: UIViewController,
 
     // MARK: Themeable
     func applyTheme() {
-        updateThemeApplicableSubviews(view)
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        updateThemeApplicableSubviews(view, for: currentWindowUUID)
+        view.backgroundColor = themeManager.currentTheme(for: currentWindowUUID).colors.layer1
     }
 }
