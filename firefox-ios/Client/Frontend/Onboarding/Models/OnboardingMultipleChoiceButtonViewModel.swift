@@ -5,6 +5,7 @@
 import Foundation
 
 class OnboardingMultipleChoiceButtonViewModel {
+    var presentingCardName: String
     var isSelected: Bool
     let info: OnboardingMultipleChoiceButtonModel
     let a11yIDRoot: String
@@ -12,10 +13,12 @@ class OnboardingMultipleChoiceButtonViewModel {
     init(
         isSelected: Bool,
         info: OnboardingMultipleChoiceButtonModel,
+        presentingCardName: String,
         a11yIDRoot: String
     ) {
         self.isSelected = isSelected
         self.info = info
+        self.presentingCardName = presentingCardName
         self.a11yIDRoot = a11yIDRoot
     }
 }
