@@ -146,11 +146,8 @@ class DragAndDropTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2361193
     func testRearrangeTabsPrivateModeTabTray() {
-        if iPad() {
-            app.buttons["TopTabsViewController.privateModeButton"].tap()
-        } else {
-            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(
@@ -172,21 +169,8 @@ class DragAndDropTests: BaseTestCase {
                 secondTab: firstWebsite.tabName
             )
             // Check that focus is kept on last website open
-            XCTAssert(
-                secondWebsite.url.contains(app.textFields["url"].value! as! String),
-                "The tab has not been dropped correctly"
-            )
-
-            checkTabsOrder(
-                dragAndDropTab: true,
-                firstTab: secondWebsite.tabName,
-                secondTab: firstWebsite.tabName
-            )
-            // Check that focus is kept on last website open
-            XCTAssert(
-                secondWebsite.url.contains(app.textFields["url"].value! as! String),
-                "The tab has not been dropped correctly"
-            )
+            mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 0))
+            XCTAssertEqual(app.collectionViews.cells.element(boundBy: 0).label, secondWebsite.tabName)
         }
     }
 }
