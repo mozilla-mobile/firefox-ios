@@ -20,7 +20,8 @@ protocol OnboardingCardDelegate: AnyObject {
     func handleBottomButtonActions(for action: OnboardingActions,
                                    from cardName: String,
                                    isPrimaryButton: Bool)
-    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction)
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction,
+                                           from cardName: String)
     func sendCardViewTelemetry(from cardName: String)
 
     // Implemented by default for code sharing
