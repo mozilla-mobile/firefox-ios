@@ -322,10 +322,12 @@ private extension PasswordManagerListViewController {
                     return nil
                 }
 
-                self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete).uponQueue(.main) { _ in
-                    self.cancelSelection()
-                    self.loadLogins()
-                    self.sendLoginsDeletedTelemetry()
+                self.viewModel.profile.logins.deleteLogins(ids: guidsToDelete) { _ in
+                    DispatchQueue.main.async {
+                        self.cancelSelection()
+                        self.loadLogins()
+                        self.sendLoginsDeletedTelemetry()
+                    }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
 
