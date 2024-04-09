@@ -25,6 +25,7 @@ public protocol ThemeManager {
     func getPrivateThemeIsOn(for window: UUID) -> Bool
     func reloadTheme(for window: UUID)
     func setWindow(_ window: UIWindow, for uuid: UUID)
+    func windowDidClose(uuid: UUID)
 
     // Theme functions for app extensions
 

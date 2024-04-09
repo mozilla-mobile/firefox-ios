@@ -64,5 +64,7 @@ class MockThemeManager: ThemeManager {
 
     func setWindow(_ window: UIWindow, for uuid: UUID) { }
 
+    func windowDidClose(uuid: UUID) { }
+
     func windowNonspecificTheme() -> Theme { return currentThemeStorage }
 }
