@@ -159,7 +159,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ) -> OnboardingButtons {
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
-                title: cardButtons.primary.title,
+                title: String(format: cardButtons.primary.title,
+                              AppName.shortName.rawValue),
                 action: cardButtons.primary.action),
             secondary: cardButtons.secondary.map {
                 OnboardingButtonInfoModel(title: $0.title, action: $0.action)
