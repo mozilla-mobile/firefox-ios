@@ -59,6 +59,22 @@ class RootViewController: UIViewController,
         applyTheme()
     }
 
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+        self.applyTheme()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+            self.applyTheme()
+        }, completion: nil)
+    }
+
     private func configureBrowserView() {
         browserVC.view.translatesAutoresizingMaskIntoConstraints = false
         add(browserVC)
