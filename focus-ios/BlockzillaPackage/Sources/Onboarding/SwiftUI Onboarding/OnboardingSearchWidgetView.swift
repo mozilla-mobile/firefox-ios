@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public struct SearchWidgetView: View {
+public struct OnboardingSearchWidgetView: View {
     let title: String
     let padding: Bool
     let background: Bool
@@ -53,7 +53,7 @@ public struct SearchWidgetView: View {
 @available(iOS 14, *)
 struct SearchWidgetView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchWidgetView(title: "Search in Focus", padding: true, background: true)
+        OnboardingSearchWidgetView(title: "Search in Focus", padding: true, background: true)
             .previewLayout(.sizeThatFits)
             .frame(width: 135, height: 135)
             .clipShape(RoundedRectangle(cornerRadius: 20))
