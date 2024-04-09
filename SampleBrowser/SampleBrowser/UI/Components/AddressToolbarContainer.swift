@@ -6,7 +6,7 @@ import Common
 import ToolbarKit
 import UIKit
 
-protocol AddressToolbarContainerDelegate {
+protocol AddressToolbarContainerDelegate: AnyObject {
     func didClickMenu()
 }
 
@@ -15,7 +15,7 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
     private lazy var regularToolbar: BrowserAddressToolbar = .build()
 
     private var addressToolbarModel: AddressToolbarModel?
-    private var delegate: AddressToolbarContainerDelegate?
+    private weak var delegate: AddressToolbarContainerDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
