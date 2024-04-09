@@ -618,6 +618,11 @@
 		8A1E3BDF28CBA81E003388C4 /* SponsoredContentFilterUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BDE28CBA81E003388C4 /* SponsoredContentFilterUtility.swift */; };
 		8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E3BE128CBACD7003388C4 /* SponsoredContentFilterUtilityTests.swift */; };
 		8A1E93EA2A3CDC6100DD540A /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1E93E92A3CDC6100DD540A /* BaseCoordinator.swift */; };
+		8A1F6C2F2BC5A62400DA6F86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */; };
+		8A1F6C302BC5A6B600DA6F86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */; };
+		8A1F6C312BC5A6BE00DA6F86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */; };
+		8A1F6C322BC5A6C400DA6F86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */; };
+		8A1F6C332BC5A6D100DA6F86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
 		8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */; };
@@ -12779,6 +12784,7 @@
 			files = (
 				047F9B2E24E1FE1F00CD7DF7 /* Assets.xcassets in Resources */,
 				D58A202C25C9D96400105D25 /* Localizable.strings in Resources */,
+				8A1F6C332BC5A6D100DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 				1D9E1FE524FEF56C006E561D /* TopSites in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -12871,6 +12877,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A1F6C312BC5A6BE00DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12899,6 +12906,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A1F6C302BC5A6B600DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 				C874FC652661367900EBE86E /* MainInterface.storyboard in Resources */,
 				C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */,
 			);
@@ -12938,6 +12946,7 @@
 				8A3345652BA499B7008C52AB /* disconnect-block-cookies-advertising.json in Resources */,
 				E1AF27442A17BCF700CE5991 /* engagementNotificationWithoutConditions.json in Resources */,
 				E69922171B94E3EF007C480D /* Licenses.html in Resources */,
+				8A1F6C2F2BC5A62400DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 				E1AF3560286DE5F800960045 /* Smoketest3.xctestplan in Resources */,
 				8A1A93592B757C7C0069C190 /* landscape.json in Resources */,
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
@@ -13004,6 +13013,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A1F6C322BC5A6C400DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
 				EBE7635920ADCB7600E27F2D /* SendTo.xcassets in Resources */,
 				F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */,
 			);
