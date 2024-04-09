@@ -32,11 +32,11 @@ class RootViewController: UIViewController,
     private var findInPageBar: FindInPageBar?
 
     // MARK: - Init
-    init(engineProvider: EngineProvider, themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(engineProvider: EngineProvider, windowUUID: UUID?, themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
         self.themeManager = themeManager
-        self.currentWindowUUID = UUID()
+        self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
