@@ -276,6 +276,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)
+                self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
             }
         }.items
 
@@ -339,6 +340,16 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                     url: bookmarkURL?.absoluteString ?? currentTab.url?.absoluteString ?? "",
                     title: title ?? currentTab.title
                 ) : nil
+            }
+            show(toast: toast)
+        case .closeTab:
+            let viewModel = ButtonToastViewModel(labelText: message,
+                                                 buttonText: .UndoString,
+                                                 textAlignment: .left)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: currentTheme()) { [weak self] isButtonTapped in
+                guard let self, let closedTab = tabManager.backupCloseTab else { return }
+                isButtonTapped ? self.tabManager.undoCloseTab(tab: closedTab.tab, position: closedTab.restorePosition) : nil
             }
             show(toast: toast)
         default:

@@ -43,6 +43,7 @@ enum MenuButtonToastAction {
     case copyUrl
     case pinPage
     case removePinPage
+    case closeTab
 }
 
 /// MainMenuActionHelper handles the main menu (hamburger menu) in the toolbar.
