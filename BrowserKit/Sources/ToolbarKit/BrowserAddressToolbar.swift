@@ -121,7 +121,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             locationContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
             locationContainer.leadingAnchor.constraint(equalTo: navigationActionStack.leadingAnchor),
             locationContainer.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
-            
+
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
             locationView.trailingAnchor.constraint(equalTo: locationContainer.trailingAnchor),
