@@ -16,13 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let rootViewController = RootViewController()
         let navigationController = UINavigationController(rootViewController: rootViewController)
 
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
+        let newWindow = UIWindow(windowScene: windowScene)
+        window = newWindow
+        newWindow.rootViewController = navigationController
+        newWindow.makeKeyAndVisible()
 
-        guard let window else { return }
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        themeManager.setWindow(window, for: defaultSampleComponentUUID)
+        themeManager.setWindow(newWindow, for: defaultSampleComponentUUID)
         themeManager.setSystemTheme(isOn: true)
     }
 }
