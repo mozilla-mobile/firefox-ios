@@ -258,7 +258,8 @@ extension UpdateViewController: OnboardingCardDelegate {
                 windowUUID: windowUUID,
                 from: cardName,
                 completionIfLastCard: { self.closeUpdate() })
-
+        case .endOndboarding:
+            closeUpdate()
         default:
             break
         }
