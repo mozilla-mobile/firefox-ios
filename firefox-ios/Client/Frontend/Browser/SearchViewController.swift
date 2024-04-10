@@ -621,9 +621,10 @@ class SearchViewController: SiteTableViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
-        coordinator.animate(alongsideTransition: { _ in
-            self.tableView.reloadData()
-            self.layoutSearchEngineScrollViewContent()
+        coordinator.animate(alongsideTransition: { [self] _ in
+            totalRowCount = 0
+            tableView.reloadData()
+            layoutSearchEngineScrollViewContent()
         }, completion: nil)
     }
 
