@@ -93,11 +93,13 @@ class FakespotViewController: UIViewController,
         label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderBetaLabel
     }
 
-    private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
-        button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-        button.accessibilityLabel = .Shopping.CloseButtonAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetCloseButton
+    private lazy var closeButton: CloseButton = .build { view in
+        let viewModel = CloseButtonViewModel(
+            a11yLabel: .Shopping.CloseButtonAccessibilityLabel,
+            a11yIdentifier: AccessibilityIdentifiers.Shopping.sheetCloseButton
+        )
+        view.configure(viewModel: viewModel)
+        view.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
     // MARK: - Initializers
