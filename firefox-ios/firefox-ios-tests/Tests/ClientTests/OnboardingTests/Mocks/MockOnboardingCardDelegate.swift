@@ -57,8 +57,8 @@ class MockOnboardinCardDelegateController: UIViewController,
             presentPrivacyPolicy(from: cardName,
                                  selector: nil,
                                  completion: {})
-        case .endOnboarding:
-            self.action = .endOnboarding
+        case .endOndboarding:
+            self.action = .endOndboarding
         }
     }
 
