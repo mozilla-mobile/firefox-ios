@@ -80,6 +80,16 @@ extension URL {
         return normalizedHost.flatMap { $0 + self.path }
     }
 
+    public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
+        let normalizedHost = URL(string: urlString)?.normalizedHost ?? urlString
+        let components = normalizedHost.split(separator: ".")
+        guard components.count >= 3 else { return (nil, normalizedHost) }
+        let subdomain = components.dropLast(2)
+                                  .joined(separator: ".")
+                                  .appending(".")
+        return (subdomain, normalizedHost)
+    }
+
     /// Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.
     /// For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
     /// :returns: The public suffix for within the given hostname.

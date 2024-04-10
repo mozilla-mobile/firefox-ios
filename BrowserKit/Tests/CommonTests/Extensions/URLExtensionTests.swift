@@ -139,6 +139,25 @@ final class URLExtensionTests: XCTestCase {
         badurls.forEach { XCTAssertNil(URL(string: $0)!.normalizedHostAndPath) }
     }
 
+    func testGetSubdomainAndHost() {
+        let testCases = [
+            ("https://www.google.com", (nil, "google.com")),
+            ("https://blog.engineering.company.com", ("blog.engineering.", "blog.engineering.company.com")),
+            ("https://long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com", ("long-extended-subdomain-name-containing-many-letters-and-dashes.", "long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com")),
+            ("http://com:org@m.canadacomputers.co.uk", ("canadacomputers.", "canadacomputers.co.uk")),
+            ("https://www.wix.com/blog/what-is-a-subdomain", (nil, "wix.com")),
+            ("nothing", (nil, "nothing")),
+            ("accounts.firefox.com", ("accounts.", "accounts.firefox.com"))
+        ]
+
+        for testCase in testCases {
+            let (urlString, expected) = testCase
+            let result = URL.getSubdomainAndHost(from: urlString)
+            XCTAssertEqual(result.subdomain, expected.0, "Unexpected subdomain for URL: \(urlString)")
+            XCTAssertEqual(result.normalizedHost, expected.1, "Unexpected normblog.engineering.company.comalized host for URL: \(urlString)")
+        }
+    }
+
     func testShortDisplayString() {
         let urls = [
             ("https://www.example.com/index.html", "example"),

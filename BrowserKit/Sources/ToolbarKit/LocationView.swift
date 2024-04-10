@@ -28,11 +28,14 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         static let horizontalSpace: CGFloat = 16
         static let gradientViewVerticalPadding: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
+        static let transitionDuration: TimeInterval = 0.3
     }
 
+    private var urlAbsolutePath: String?
     private var notifyTextChanged: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
 
+    private lazy var urlTextFieldSubdomainColor: UIColor = .systemRed
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
 
@@ -55,6 +58,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             guard urlTextField.isEditing else { return }
 
             urlTextField.text = urlTextField.text?.lowercased()
+            urlAbsolutePath = urlTextField.text
             locationViewDelegate?.locationViewDidEnterText(urlTextField.text?.lowercased() ?? "")
         }
     }
@@ -74,7 +78,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     func configure(_ text: String?, delegate: LocationViewDelegate) {
-        urlTextField.text = getHost(from: text)
+        urlTextField.text = text
+        urlAbsolutePath = urlTextField.text
         locationViewDelegate = delegate
     }
 
@@ -82,6 +87,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradientLayerFrame()
+        if !doesURLTextFieldExceedViewWidth, !urlTextField.isFirstResponder {
+            animateURLText(urlTextField, options: .transitionFlipFromLeft, textAlignment: .center)
+        } else {
+            animateURLText(urlTextField, options: .transitionFlipFromRight, textAlignment: .natural)
+        }
     }
 
     private func setupLayout() {
@@ -101,10 +111,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                 gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
                 gradientView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
 
-                urlTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
+                urlTextField.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: UX.horizontalSpace),
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
                 urlTextField.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalSpace),
                 urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
+                urlTextField.centerXAnchor.constraint(equalTo: centerXAnchor),
             ]
         )
     }
@@ -116,19 +127,35 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         gradientView.layer.addSublayer(gradientLayer)
     }
 
-    private func updateGradientLayerFrame() {
+    private var doesURLTextFieldExceedViewWidth: Bool {
+        guard let text = urlTextField.text, let font = urlTextField.font else {
+            return false
+        }
         let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
-        let urlTextFieldWidth = urlTextField.frame.width
-        let showGradientForLongURL = urlTextFieldWidth >= locationViewWidth && !urlTextField.isFirstResponder
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        let urlTextFieldWidth = text.size(withAttributes: fontAttributes).width
+        return urlTextFieldWidth >= locationViewWidth
+    }
+
+    private func updateGradientLayerFrame() {
+        let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !urlTextField.isFirstResponder
         gradientLayer.frame = if showGradientForLongURL { gradientView.bounds } else { CGRect() }
     }
 
     // MARK: - `urlTextField` Configuration
-    private func applyTruncationStyleToURLTextField() {
+    private func formatAndTruncateURLTextField() {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
-        let attributedString = NSMutableAttributedString(string: urlTextField.text ?? "")
+        let urlString = urlTextField.text ?? ""
+        let (subdomain, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
+
+        let attributedString = NSMutableAttributedString(string: normalizedHost)
+
+        if let subdomain {
+            let range = NSRange(location: 0, length: subdomain.count)
+            attributedString.addAttribute(.foregroundColor, value: urlTextFieldSubdomainColor, range: range)
+        }
         attributedString.addAttribute(
             .paragraphStyle,
             value: paragraphStyle,
@@ -140,9 +167,18 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextField.attributedText = attributedString
     }
 
-    private func getHost(from stringURL: String?) -> String {
-        guard let stringURL, let url = URL(string: stringURL) else { return "" }
-        return url.host ?? ""
+    private func animateURLText(
+        _ textField: UITextField,
+        options: UIView.AnimationOptions,
+        textAlignment: NSTextAlignment
+    ) {
+        UIView.transition(
+            with: textField,
+            duration: UX.transitionDuration,
+            options: options
+        ) {
+            textField.textAlignment = textAlignment
+        }
     }
 
     // MARK: - Selectors
@@ -153,13 +189,20 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        gradientLayer.frame = CGRect()
+        textField.text = urlAbsolutePath
+        updateGradientLayerFrame()
+        if !doesURLTextFieldExceedViewWidth {
+            animateURLText(textField, options: .transitionFlipFromRight, textAlignment: .natural)
+        }
         locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        formatAndTruncateURLTextField()
         updateGradientLayerFrame()
-        applyTruncationStyleToURLTextField()
+        if !doesURLTextFieldExceedViewWidth, !urlTextField.isFirstResponder {
+            animateURLText(textField, options: .transitionFlipFromLeft, textAlignment: .center)
+        }
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -173,6 +216,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
+        urlTextField.textColor = colors.textPrimary
+        urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
     }
 }
