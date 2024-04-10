@@ -388,6 +388,10 @@ public struct AccessibilityIdentifiers {
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
+        struct DefaultBrowser {
+            static let defaultBrowser = "DefaultBrowserSettings"
+        }
+
         struct Homepage {
             static let homeSettings = "Home"
             static let homePageNavigationBar = "Homepage"
@@ -520,6 +524,18 @@ public struct AccessibilityIdentifiers {
 
         struct OpenWithMail {
             static let title = "OpenWith.Setting"
+        }
+
+        struct OfferToOpen {
+            static let title = "showClipboardBar"
+        }
+
+        struct ShowLink {
+            static let title = "showLinkPreviews"
+        }
+
+        struct ClosePrivateTabs {
+            static let title = "settings.closePrivateTabs"
         }
 
         struct SearchBar {
