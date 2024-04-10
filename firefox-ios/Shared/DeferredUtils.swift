@@ -174,7 +174,7 @@ public func walk<T, U, S: Sequence>(
 extension Array where Element: Success {
     public func allSucceed() -> Success {
         return all(self).bind { results -> Success in
-            if let failure = results.find({ $0.isFailure }) {
+            if let failure = results.first(where: { $0.isFailure }) {
                 return deferMaybe(failure.failureValue!)
             }
 

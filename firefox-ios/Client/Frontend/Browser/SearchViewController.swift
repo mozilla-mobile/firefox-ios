@@ -677,7 +677,7 @@ class SearchViewController: SiteTableViewController,
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
         let searchInContent = config.usePageContent
-            && searchTerms.find { $0.count >= config.minSearchTerm } != nil
+        && searchTerms.contains(where: { $0.count >= config.minSearchTerm })
 
         filteredOpenedTabs = Array(currentTabs.filter { tab in
             guard let url = tab.url,

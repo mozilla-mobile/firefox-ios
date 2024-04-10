@@ -297,7 +297,7 @@ class DevicePickerViewController: UITableViewController {
         let theme = currentTheme()
         var pickedItems = [RemoteDevice]()
         for id in selectedIdentifiers {
-            if let item = devices.find({ $0.id == id }) {
+            if let item = devices.first(where: { $0.id == id }) {
                 pickedItems.append(item)
             }
         }

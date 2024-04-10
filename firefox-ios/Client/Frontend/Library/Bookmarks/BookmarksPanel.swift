@@ -345,13 +345,13 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private func backButtonView() -> UIView? {
-        let navigationBarContentView = navigationController?.navigationBar.subviews.find {
+        let navigationBarContentView = navigationController?.navigationBar.subviews.first(where: {
             $0.description.starts(with: "<_UINavigationBarContentView:")
-        }
+        })
 
-        return navigationBarContentView?.subviews.find {
+        return navigationBarContentView?.subviews.first(where: {
             $0.description.starts(with: "<_UIButtonBarButton:")
-        }
+        })
     }
 
     // MARK: - UITableViewDataSource | UITableViewDelegate
