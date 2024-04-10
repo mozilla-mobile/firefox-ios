@@ -147,7 +147,7 @@ final class URLExtensionTests: XCTestCase {
             ("http://com:org@m.canadacomputers.co.uk", ("canadacomputers.", "canadacomputers.co.uk")),
             ("https://www.wix.com/blog/what-is-a-subdomain", (nil, "wix.com")),
             ("nothing", (nil, "nothing")),
-            ("https://super-long-url-with-dashes-and-things.badssl.com/xyz-something", ("super-long-url-with-dashes-and-things.", "super-long-url-with-dashes-and-things.badssl.com"))
+            ("https://super-long-url-with-dashes-and-things.badssl.com/xyz-something", ("super-long-url-with-dashes-and-things.", "super-long-url-with-dashes-and-things.badssl.com")),
             ("accounts.firefox.com", ("accounts.", "accounts.firefox.com"))
         ]
 
