@@ -54,6 +54,11 @@ class MockOnboardinCardDelegateController: UIViewController,
             presentPrivacyPolicy(from: cardName,
                                  selector: nil,
                                  completion: {})
+<<<<<<< HEAD
+=======
+        case .endOnboarding:
+            self.action = .endOnboarding
+>>>>>>> 6d7a5de70 (Bugfix [Onboarding Customization] Fix typo (#19741))
         }
     }
 

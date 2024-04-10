@@ -329,6 +329,11 @@ extension IntroViewController: OnboardingCardDelegate {
             presentPrivacyPolicy(
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
+<<<<<<< HEAD
+=======
+        case .endOnboarding:
+            closeOnboarding()
+>>>>>>> 6d7a5de70 (Bugfix [Onboarding Customization] Fix typo (#19741))
         }
     }
 

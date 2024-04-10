@@ -246,7 +246,12 @@ extension UpdateViewController: OnboardingCardDelegate {
             presentDefaultBrowserPopup(
                 from: cardName,
                 completionIfLastCard: { self.closeUpdate() })
+<<<<<<< HEAD
 
+=======
+        case .endOnboarding:
+            closeUpdate()
+>>>>>>> 6d7a5de70 (Bugfix [Onboarding Customization] Fix typo (#19741))
         default:
             break
         }
