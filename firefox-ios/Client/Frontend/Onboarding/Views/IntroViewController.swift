@@ -334,7 +334,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 windowUUID: windowUUID,
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
-        case .endOndboarding:
+        case .endOnboarding:
             closeOnboarding()
         }
     }
