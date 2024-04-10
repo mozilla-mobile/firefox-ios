@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
-import Widget
 
 @available(iOS 14, *)
 public struct CardBannerView: View {
@@ -62,7 +61,7 @@ public struct CardBannerView: View {
     }
 
     var widget: some View {
-        SearchWidgetView(title: config.widget.title, padding: true, background: true)
+        OnboardingSearchWidgetView(title: config.widget.title, padding: true, background: true)
             .frame(width: .searchWidgetSize, height: .searchWidgetSize)
             .clipShape(RoundedRectangle(cornerRadius: 20))
             .colorScheme(.light)
