@@ -429,7 +429,7 @@ class FakespotTests: BaseTestCase {
         // Search for and open a shoe listing
         let searchAmazon = website.textFields["Search Amazon"]
         var nrOfRetries = 10
-        if !searchAmazon.exists && nrOfRetries > 10 {
+        if !searchAmazon.exists && nrOfRetries > 0 {
             navigator.openURL("https://www.amazon.com")
             waitUntilPageLoad()
             nrOfRetries -= 1
