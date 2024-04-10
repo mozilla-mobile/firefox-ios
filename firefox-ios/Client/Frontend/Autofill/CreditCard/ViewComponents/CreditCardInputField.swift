@@ -37,8 +37,9 @@ struct CreditCardInputField: View {
     }
 
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State var errorColor: Color = .clear
     @State var titleColor: Color = .clear
     @State var textFieldColor: Color = .clear
@@ -46,11 +47,13 @@ struct CreditCardInputField: View {
 
     // MARK: Init
 
-    init(inputType: CreditCardInputType,
+    init(windowUUID: WindowUUID,
+         inputType: CreditCardInputType,
          showError: Bool,
          creditCardValidator: CreditCardValidator = CreditCardValidator(),
          inputViewModel: CreditCardInputViewModel
     ) {
+        self.windowUUID = windowUUID
         self.inputType = inputType
         self.showError = showError
         self.viewModel = inputViewModel
@@ -110,10 +113,11 @@ struct CreditCardInputField: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 20)
         .onAppear {
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { val in
-            applyTheme(theme: val.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 

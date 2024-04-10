@@ -7,12 +7,7 @@ import Shared
 import Common
 
 extension EnvironmentValues {
-    public var themeType: SwiftUITheme {
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-
-        // TODO: [8313] Will be updated soon to use window-based theme.
-        let swiftUITheme = SwiftUITheme(theme: themeManager.legacy_currentTheme())
-
-        return swiftUITheme
+    public var themeManager: ThemeManager {
+        return (AppContainer.shared.resolve() as ThemeManager)
     }
 }

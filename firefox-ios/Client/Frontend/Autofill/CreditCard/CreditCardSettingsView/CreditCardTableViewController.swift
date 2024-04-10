@@ -155,7 +155,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
         else { return nil }
 
         let theme = themeManager.currentTheme(for: windowUUID)
-        let headerView = CreditCardSectionHeader(textColor: theme.colors.textSecondary.color)
+        let headerView = CreditCardSectionHeader(windowUUID: windowUUID, textColor: theme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
     }
@@ -178,7 +178,9 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell()
         }
 
-        let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme(for: windowUUID).colors.textPrimary.color,
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let row = CreditCardAutofillToggle(windowUUID: windowUUID,
+                                           textColor: theme.colors.textPrimary.color,
                                            model: model)
         hostingCell.host(row, parentController: self)
         return hostingCell
@@ -200,7 +202,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             didSelectAction: { [weak self] in
                 self?.didSelectCardAtIndex?(creditCard)
                 self?.lastSelectedIndex = indexPath
-            })
+            }, windowUUID: windowUUID)
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
         hostingCell.backgroundColor = .clear

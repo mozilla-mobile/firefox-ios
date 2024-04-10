@@ -264,7 +264,10 @@ extension UpdateViewController: OnboardingCardDelegate {
         }
     }
 
-    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+    func handleMultipleChoiceButtonActions(
+        for action: OnboardingMultipleChoiceAction,
+        from cardName: String
+    ) {
         // There is no multiple choice actions for updating
     }
 

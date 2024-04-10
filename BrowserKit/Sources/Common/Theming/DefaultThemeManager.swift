@@ -85,15 +85,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - ThemeManager
 
-    public func legacy_currentTheme() -> Theme {
-        // While we are still only allowing single-window mode on iPad we can
-        // provide the theme for the current default window for older code that
-        // has not yet been updated to use UUID-based theme.
-        guard let uuid = allWindowUUIDs.first else { assertionFailure("Unexpected empty UUID list."); return LightTheme() }
-        return currentTheme(for: uuid)
+    public func windowNonspecificTheme() -> Theme {
+        switch getNormalSavedTheme() {
+        case .dark, .privateMode: return DarkTheme()
+        case .light: return LightTheme()
+        }
     }
 
-    // TODO: [8313] Need to add support for cleaning up and releasing window references on iPad when a window is closed.
+    public func windowDidClose(uuid: UUID) {
+        windows.removeValue(forKey: uuid)
+        windowThemeState.removeValue(forKey: uuid)
+    }
+
     public func setWindow(_ window: UIWindow, for uuid: UUID) {
         windows[uuid] = window
         updateSavedTheme(to: getNormalSavedTheme())
@@ -222,7 +225,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.windows[window]?.overrideUserInterfaceStyle = style
 
         mainQueue.ensureMainThread { [weak self] in
-            self?.notificationCenter.post(name: .ThemeDidChange)
+            self?.notificationCenter.post(name: .ThemeDidChange, withObject: window)
         }
     }
 

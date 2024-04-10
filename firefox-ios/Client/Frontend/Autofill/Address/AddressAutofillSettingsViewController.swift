@@ -56,6 +56,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
         // Initialize the AddressAutofillSettingsView and its hosting controller
         let addressAutofillSettingsVC = AddressAutofillSettingsView(
+            windowUUID: windowUUID,
             toggleModel: viewModel.toggleModel,
             addressListViewModel: viewModel.addressListViewModel)
         self.addressAutofillSettingsPageView = UIHostingController(rootView: addressAutofillSettingsVC)

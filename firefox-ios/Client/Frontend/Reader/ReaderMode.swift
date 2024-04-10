@@ -30,14 +30,17 @@ enum ReaderModeTheme: String {
     case dark
     case sepia
 
-    static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
+    static func preferredTheme(for theme: ReaderModeTheme? = nil, window: WindowUUID?) -> ReaderModeTheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
 
-        // TODO: [8313] Revisit and update for UUID-based themeing.
-        // guard themeManager.currentTheme(for: ??).type != .dark else { return .dark }
-        guard themeManager.legacy_currentTheme().type != .dark else { return .dark }
+        let appTheme: Theme = {
+            guard let uuid = window else { return themeManager.windowNonspecificTheme() }
+            return themeManager.currentTheme(for: uuid)
+        }()
 
-        return theme ?? .light
+        guard appTheme.type != .dark else { return .dark }
+
+        return theme ?? ReaderModeTheme.light
     }
 }
 
@@ -136,6 +139,7 @@ enum ReaderModeFontSize: Int {
 }
 
 struct ReaderModeStyle {
+    let windowUUID: WindowUUID?
     var theme: ReaderModeTheme
     var fontType: ReaderModeFontType
     var fontSize: ReaderModeFontSize
@@ -150,14 +154,18 @@ struct ReaderModeStyle {
         return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
-    init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
+    init(windowUUID: WindowUUID?,
+         theme: ReaderModeTheme,
+         fontType: ReaderModeFontType,
+         fontSize: ReaderModeFontSize) {
+        self.windowUUID = windowUUID
         self.theme = theme
         self.fontType = fontType
         self.fontSize = fontSize
     }
 
     /// Initialize the style from a dictionary, taken from the profile. Returns nil if the object cannot be decoded.
-    init?(dict: [String: Any]) {
+    init?(windowUUID: WindowUUID?, dict: [String: Any]) {
         let themeRawValue = dict["theme"] as? String
         let fontTypeRawValue = dict["fontType"] as? String
         let fontSizeRawValue = dict["fontSize"] as? Int
@@ -172,20 +180,24 @@ struct ReaderModeStyle {
             return nil
         }
 
-        self.theme = theme ?? ReaderModeTheme.preferredTheme()
+        self.windowUUID = windowUUID
+        self.theme = theme ?? ReaderModeTheme.preferredTheme(window: windowUUID)
         self.fontType = fontType
         self.fontSize = fontSize!
     }
 
     mutating func ensurePreferredColorThemeIfNeeded() {
-        self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
+        self.theme = ReaderModeTheme.preferredTheme(for: self.theme, window: windowUUID)
     }
 
-    static let `default` = ReaderModeStyle(
-        theme: .light,
-        fontType: .sansSerif,
-        fontSize: ReaderModeFontSize.defaultSize
-    )
+    static func defaultStyle(for window: WindowUUID?) -> ReaderModeStyle {
+        return ReaderModeStyle(
+            windowUUID: window,
+            theme: .light,
+            fontType: .sansSerif,
+            fontSize: ReaderModeFontSize.defaultSize
+        )
+    }
 }
 
 /// This struct captures the response from the Readability.js code.
@@ -366,7 +378,7 @@ class ReaderMode: TabContentScript {
         }
     }
 
-    var style: ReaderModeStyle = .default {
+    lazy var style = ReaderModeStyle.defaultStyle(for: tab?.windowUUID) {
         didSet {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld(

@@ -47,6 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let sceneCoordinator = SceneCoordinator(scene: scene)
         self.sceneCoordinator = sceneCoordinator
+        self.window = sceneCoordinator.window
         sceneCoordinator.start()
         handle(connectionOptions: connectionOptions)
     }

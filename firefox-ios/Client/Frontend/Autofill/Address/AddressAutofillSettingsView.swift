@@ -9,9 +9,12 @@ import Common
 struct AddressAutofillSettingsView: View {
     // MARK: - Properties
 
-    /// The environment theme type.
-    @Environment(\.themeType)
-    var themeVal
+    /// The parent window UUID.
+    let windowUUID: WindowUUID
+
+    /// The environment theme manager
+    @Environment(\.themeManager)
+    var themeManager
 
     /// The observed object for managing the toggle state.
     @ObservedObject var toggleModel: ToggleModel
@@ -30,21 +33,21 @@ struct AddressAutofillSettingsView: View {
             Color.clear.edgesIgnoringSafeArea(.all)
             VStack {
                 // Address autofill toggle component
-                AddressAutofillToggle(model: toggleModel)
+                AddressAutofillToggle(windowUUID: windowUUID, model: toggleModel)
                     .padding(.top, 25)
                     .frame(maxWidth: .infinity)
 
                 // Address list view
-                AddressListView(viewModel: addressListViewModel)
+                AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
             }
             .background(viewBackground)
             .onAppear {
                 // Apply the theme when the view appears
-                applyTheme(theme: themeVal.theme)
+                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             }
-            .onChange(of: themeVal) { newThemeValue in
-                // Apply the theme when the theme value changes
-                applyTheme(theme: newThemeValue.theme)
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             }
         }
     }

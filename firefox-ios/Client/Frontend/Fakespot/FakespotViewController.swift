@@ -176,7 +176,7 @@ class FakespotViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        notificationCenter.post(name: .FakespotViewControllerDidAppear)
+        notificationCenter.post(name: .FakespotViewControllerDidAppear, withObject: windowUUID)
         updateModalA11y()
 
         guard !fakespotState.currentTabUUID.isEmpty,
@@ -188,7 +188,7 @@ class FakespotViewController: UIViewController,
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        notificationCenter.post(name: .FakespotViewControllerDidDismiss)
+        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: windowUUID)
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {

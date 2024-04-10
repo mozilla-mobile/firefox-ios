@@ -25,7 +25,13 @@ public protocol ThemeManager {
     func getPrivateThemeIsOn(for window: UUID) -> Bool
     func reloadTheme(for window: UUID)
     func setWindow(_ window: UIWindow, for uuid: UUID)
+    func windowDidClose(uuid: UUID)
 
-    // Temporary. Will be removed as part of [FXIOS-8313]
-    func legacy_currentTheme() -> Theme
+    // Theme functions for app extensions
+
+    /// Returns the general theme setting outside of any specific iOS window.
+    /// This is generally only meant to be used in scenarios where the UI is
+    /// presented outside the context of any particular browser window, such
+    /// as in our app extensions.
+    func windowNonspecificTheme() -> Theme
 }

@@ -438,6 +438,9 @@ enums:
       toolbar:
         description: >
           Corresponding to the fox world image
+      customize-firefox:
+        description: >
+          Corresponding to the fox window image
   OnboardingCardType:
     description: >
       The identifiers for the different types of onboarding cards.

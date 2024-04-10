@@ -84,6 +84,7 @@
 		8A6445902BA3905100759319 /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445892BA3904100759319 /* disconnect-block-content.json */; };
 		8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445872BA3904100759319 /* disconnect-block-social.json */; };
 		8A6445922BA3905100759319 /* web-fonts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A6445842BA38B8600759319 /* web-fonts.json */; };
+		8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */; };
 		A89766DA1F57DCA9008183C5 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */; };
 		B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3481A541FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift */; };
@@ -230,7 +231,6 @@
 		E5E4504D28CF4548005A01F1 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504B28CF4548005A01F1 /* TipViewController.swift */; };
 		E5E4504E28CF4548005A01F1 /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504C28CF4548005A01F1 /* TipsPageViewController.swift */; };
 		E5E4505028CF4575005A01F1 /* TipManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504F28CF4575005A01F1 /* TipManager.swift */; };
-		E5ECB99D28F3FADB00CFCC87 /* Widget in Frameworks */ = {isa = PBXBuildFile; productRef = E5ECB99C28F3FADB00CFCC87 /* Widget */; };
 		EB84F96D2093799900BA6739 /* TrackingProtectionPageStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */; };
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
@@ -687,6 +687,7 @@
 		8A6445872BA3904100759319 /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
 		8A6445882BA3904100759319 /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
 		8A6445892BA3904100759319 /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
+		8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWidgetView.swift; sourceTree = "<group>"; };
 		A847EEFA289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		A847EEFC289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		A847EEFD289A4F5A002AC855 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -1256,7 +1257,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5ECB99D28F3FADB00CFCC87 /* Widget in Frameworks */,
 				C824D2D728EEBF9100DEA5DE /* SwiftUI.framework in Frameworks */,
 				C824D2D628EEBF9100DEA5DE /* WidgetKit.framework in Frameworks */,
 			);
@@ -1440,6 +1440,7 @@
 		C824D2D828EEBF9B00DEA5DE /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				8C1B5DEC2BC43C19001B1964 /* SearchWidgetView.swift */,
 				C824D2D928EEBF9B00DEA5DE /* Widgets.swift */,
 				C824D2DB28EEBF9D00DEA5DE /* Assets.xcassets */,
 				C824D2DD28EEBF9D00DEA5DE /* Info.plist */,
@@ -2070,7 +2071,6 @@
 			);
 			name = WidgetsExtension;
 			packageProductDependencies = (
-				E5ECB99C28F3FADB00CFCC87 /* Widget */,
 			);
 			productName = FocusWidgetsExtension;
 			productReference = C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */;
@@ -2185,7 +2185,6 @@
 					};
 					166E4BFF21347D150029E2A5 = {
 						CreatedOnToolsVersion = 10.0;
-						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 1300;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -2606,6 +2605,7 @@
 			files = (
 				C824D2DA28EEBF9B00DEA5DE /* Widgets.swift in Sources */,
 				C824D2EA28EEC79000DEA5DE /* AppConfig.swift in Sources */,
+				8C1B5DEE2BC43C5E001B1964 /* SearchWidgetView.swift in Sources */,
 				C824D2E928EEC77500DEA5DE /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3626,6 +3626,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3647,6 +3648,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Focus.XCUITest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Focus XCUITests Dev";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "FOCUS DEBUG";
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -3936,7 +3938,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -4289,7 +4291,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 43AQ936H96;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -4380,13 +4382,12 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 43AQ936H96;
+				DEVELOPMENT_TEAM = 43AQ936H96;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -7184,7 +7185,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 126.0.20240403050706;
+				version = 126.0.20240410050314;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7200,7 +7201,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 58.1.0;
+				minimumVersion = 59.0.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -7216,7 +7217,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.21.0;
+				version = 8.23.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -7261,10 +7262,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
-		};
-		E5ECB99C28F3FADB00CFCC87 /* Widget */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Widget;
 		};
 		F85F7A282655AD5800395515 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

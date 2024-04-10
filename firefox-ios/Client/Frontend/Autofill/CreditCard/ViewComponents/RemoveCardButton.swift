@@ -9,8 +9,9 @@ import Shared
 
 struct RemoveCardButton: View {
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State private var showAlert = false
 
     struct AlertDetails {
@@ -57,11 +58,13 @@ struct RemoveCardButton: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 0.7)
             }.background(backgroundColor.edgesIgnoringSafeArea(.bottom))
-        }.onAppear {
-            applyTheme(theme: themeVal.theme)
         }
-        .onChange(of: themeVal) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onAppear {
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             // part of FXIOS-6797, if the app goes to the background and

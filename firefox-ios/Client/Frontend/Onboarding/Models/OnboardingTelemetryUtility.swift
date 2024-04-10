@@ -41,6 +41,21 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
                     uniquingKeysWith: { (first, _) in first }))
     }
 
+    func sendMultipleChoiceButtonActionTelemetry(
+        from cardName: String,
+        with action: OnboardingMultipleChoiceAction
+    ) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .onboardingMultipleChoiceButton,
+            value: nil,
+            extras: buildBaseTelemetryExtras(using: cardName)
+                .merging(
+                    buildAdditionalMultipleChoiceButtonTelemetryExtras(using: action),
+                    uniquingKeysWith: { (first, _) in first }))
+    }
+
     func sendDismissOnboardingTelemetry(from cardName: String) {
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -84,5 +99,11 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         using buttonAction: OnboardingActions
     ) -> [String: String] {
         return [TelemetryWrapper.EventExtraKey.buttonAction.rawValue: buttonAction.rawValue]
+    }
+
+    private func buildAdditionalMultipleChoiceButtonTelemetryExtras(
+        using buttonAction: OnboardingMultipleChoiceAction
+    ) -> [String: String] {
+        return [TelemetryWrapper.EventExtraKey.multipleChoiceButtonAction.rawValue: buttonAction.rawValue]
     }
 }
