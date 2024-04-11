@@ -25,7 +25,7 @@ extension NotificationProtocol {
 
 extension NotificationCenter: NotificationProtocol {
     public func post(name: NSNotification.Name, withObject object: Any?, withUserInfo info: Any?) {
-        let payload = (info as? [AnyHashable: Any]) ?? nil
+        let payload = (info as? [AnyHashable: Any])
         self.post(name: name, object: object, userInfo: payload)
     }
 
