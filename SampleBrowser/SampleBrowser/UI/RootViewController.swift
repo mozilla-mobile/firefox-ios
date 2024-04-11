@@ -104,8 +104,12 @@ class RootViewController: UIViewController,
             addressToolbarContainer.heightAnchor.constraint(equalToConstant: 40)
         ])
 
-        addressToolbarContainer.configure(url: nil, toolbarDelegate: self, toolbarContainerDelegate: self)
+        updateAddressToolbar(url: nil)
         _ = addressToolbarContainer.becomeFirstResponder()
+    }
+
+    private func updateAddressToolbar(url: String?) {
+        addressToolbarContainer.configure(url: url, toolbarDelegate: self, toolbarContainerDelegate: self)
     }
 
     private func configureSearchView() {
@@ -175,7 +179,7 @@ class RootViewController: UIViewController,
     }
 
     func onURLChange(url: String) {
-        addressToolbarContainer.configure(url: url, toolbarDelegate: self, toolbarContainerDelegate: self)
+        updateAddressToolbar(url: url)
     }
 
     func onFindInPage(selected: String) {
@@ -215,7 +219,7 @@ class RootViewController: UIViewController,
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {
-        addressToolbarContainer.configure(url: term, toolbarDelegate: self, toolbarContainerDelegate: self)
+        updateAddressToolbar(url: term)
         browse(to: term)
     }
 
