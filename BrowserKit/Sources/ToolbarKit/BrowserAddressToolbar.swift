@@ -22,6 +22,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     }
 
     private weak var toolbarDelegate: AddressToolbarDelegate?
+    private var theme: Theme?
 
     private lazy var navigationActionStack: UIStackView = .build()
 
@@ -59,13 +60,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
         setNeedsLayout()
         layoutIfNeeded()
-    }
-
-    // MARK: - ThemeApplicable
-    public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer2
-        locationContainer.backgroundColor = theme.colors.layerSearch
-        locationDividerView.backgroundColor = theme.colors.layer2
     }
 
     override public func becomeFirstResponder() -> Bool {
@@ -165,6 +159,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
                 button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
             ])
+
+            if let theme {
+                // As we recreate the buttons we need to apply the theme for them to be displayed correctly
+                button.applyTheme(theme: theme)
+            }
         }
     }
 
@@ -195,5 +194,13 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         guard !text.isEmpty else { return }
 
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+    }
+
+    // MARK: - ThemeApplicable
+    public func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer2
+        locationContainer.backgroundColor = theme.colors.layerSearch
+        locationDividerView.backgroundColor = theme.colors.layer2
+        self.theme = theme
     }
 }
