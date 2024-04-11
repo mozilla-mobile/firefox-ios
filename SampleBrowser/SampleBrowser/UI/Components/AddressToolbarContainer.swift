@@ -27,9 +27,10 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
     }
 
     func configure(url: String?,
+                   scrollY: Int,
                    toolbarDelegate: AddressToolbarDelegate,
                    toolbarContainerDelegate: AddressToolbarContainerDelegate) {
-        addressToolbarModel = updateModel(url: url)
+        addressToolbarModel = updateModel(url: url, scrollY: scrollY)
         guard let addressToolbarModel else { return }
 
         compactToolbar.configure(state: addressToolbarModel.state, toolbarDelegate: toolbarDelegate)
@@ -38,12 +39,14 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
     }
 
     override func becomeFirstResponder() -> Bool {
+        super.becomeFirstResponder()
         let isCompact = traitCollection.horizontalSizeClass == .compact
         let toolbar = isCompact ? compactToolbar : regularToolbar
         return toolbar.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
         let isCompact = traitCollection.horizontalSizeClass == .compact
         let toolbar = isCompact ? compactToolbar : regularToolbar
         return toolbar.resignFirstResponder()
@@ -76,7 +79,7 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
         ])
     }
 
-    private func updateModel(url: String?) -> AddressToolbarModel {
+    private func updateModel(url: String?, scrollY: Int) -> AddressToolbarModel {
         let pageActions = [ToolbarElement(
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
@@ -93,11 +96,24 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
                 self.delegate?.didClickMenu()
             })]
 
+        let shouldDisplayTopBorder = DefaultToolbarManager().shouldDisplayBorder(
+            borderPosition: .top,
+            toolbarPosition: .top,
+            isPrivate: false,
+            scrollY: scrollY)
+        let shouldDisplayBottomBorder = DefaultToolbarManager().shouldDisplayBorder(
+            borderPosition: .bottom,
+            toolbarPosition: .top,
+            isPrivate: false,
+            scrollY: scrollY)
+
         return AddressToolbarModel(
             url: url,
             navigationActions: [],
             pageActions: pageActions,
-            browserActions: browserActions)
+            browserActions: browserActions,
+            shouldDisplayTopBorder: shouldDisplayTopBorder,
+            shouldDisplayBottomBorder: shouldDisplayBottomBorder)
     }
 
     // MARK: - ThemeApplicable

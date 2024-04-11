@@ -108,7 +108,7 @@ class RootViewController: UIViewController,
     }
 
     private func updateAddressToolbar(url: String?) {
-        addressToolbarContainer.configure(url: url, toolbarDelegate: self, toolbarContainerDelegate: self)
+        addressToolbarContainer.configure(url: url, scrollY: 0, toolbarDelegate: self, toolbarContainerDelegate: self)
     }
 
     private func configureSearchView() {
