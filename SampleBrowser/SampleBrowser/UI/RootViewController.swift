@@ -100,8 +100,7 @@ class RootViewController: UIViewController,
             addressToolbarContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             addressToolbarContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             addressToolbarContainer.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
-            addressToolbarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            addressToolbarContainer.heightAnchor.constraint(equalToConstant: 40)
+            addressToolbarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         updateAddressToolbar(url: nil)
