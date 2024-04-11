@@ -346,7 +346,7 @@ class ReadingListPanel: UITableViewController,
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
+            label.font = FXFontStyles.Regular.body.scaledFont()
             label.numberOfLines = 0
             label.textColor = self.currentTheme().colors.textSecondary
         }
