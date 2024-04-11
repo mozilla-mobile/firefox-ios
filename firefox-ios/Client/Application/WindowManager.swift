@@ -132,7 +132,6 @@ final class WindowManagerImplementation: WindowManager {
     func reserveNextAvailableWindowUUID() -> WindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
         guard !AppConstants.isRunningUITests else { return WindowUUID.DefaultUITestingUUID }
-        guard !AppConstants.isRunningUnitTest else { return WindowUUID.XCTestDefaultUUID }
 
         // • If no saved windows (tab data), we generate a new UUID.
         // • If user has saved windows (tab data), we return the first available UUID
