@@ -31,7 +31,7 @@ public extension WindowUUID {
 public extension WindowUUID {
     /// Key for setting (or obtaining) the windowUUID from notification userInfo payloads
     static let userInfoKey = "windowUUID"
-    
+
     /// Convenience. Returns a Notification user info payload containing the receiving UUID.
     var userInfo: [AnyHashable: Any] {
         return [WindowUUID.userInfoKey: self]
