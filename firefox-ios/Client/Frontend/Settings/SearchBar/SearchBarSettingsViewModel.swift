@@ -36,7 +36,7 @@ extension SearchBarLocationProvider {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
         let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
 
-        return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
+        return isFeatureEnabled && !isiPad
     }
 
     var searchBarPosition: SearchBarPosition {
