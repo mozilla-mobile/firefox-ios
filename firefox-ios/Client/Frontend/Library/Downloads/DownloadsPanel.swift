@@ -249,9 +249,7 @@ class DownloadsPanel: UIViewController,
         let welcomeLabel: UILabel = .build { label in
             label.text = .TabsTray.DownloadsPanel.EmptyStateTitle
             label.textAlignment = .center
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                size: 17,
-                                                                weight: .light)
+            label.font = FXFontStyles.Regular.body.scaledFont()
             label.textColor = theme.colors.textSecondary
             label.numberOfLines = 0
             label.adjustsFontSizeToFitWidth = true
