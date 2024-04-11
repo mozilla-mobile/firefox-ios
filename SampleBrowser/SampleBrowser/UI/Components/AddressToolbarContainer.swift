@@ -13,8 +13,6 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 class AddressToolbarContainer: UIView, ThemeApplicable {
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
     private lazy var regularToolbar: BrowserAddressToolbar = .build()
-
-    private var addressToolbarModel: AddressToolbarModel?
     private weak var delegate: AddressToolbarContainerDelegate?
 
     override init(frame: CGRect) {
@@ -26,15 +24,11 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(url: String?,
-                   scrollY: Int,
+    func configure(_ model: AddressToolbarContainerModel,
                    toolbarDelegate: AddressToolbarDelegate,
                    toolbarContainerDelegate: AddressToolbarContainerDelegate) {
-        addressToolbarModel = updateModel(url: url, scrollY: scrollY)
-        guard let addressToolbarModel else { return }
-
-        compactToolbar.configure(state: addressToolbarModel.state, toolbarDelegate: toolbarDelegate)
-        regularToolbar.configure(state: addressToolbarModel.state, toolbarDelegate: toolbarDelegate)
+        compactToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
+        regularToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
         delegate = toolbarContainerDelegate
     }
 
@@ -77,43 +71,6 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
             toolbarToAdd.bottomAnchor.constraint(equalTo: bottomAnchor),
             toolbarToAdd.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
-    }
-
-    private func updateModel(url: String?, scrollY: Int) -> AddressToolbarModel {
-        let pageActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.qrCode,
-            isEnabled: true,
-            a11yLabel: "Read QR Code",
-            a11yId: "qrCodeButton",
-            onSelected: nil)]
-
-        let browserActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.appMenu,
-            isEnabled: true,
-            a11yLabel: "Open Menu",
-            a11yId: "appMenuButton",
-            onSelected: {
-                self.delegate?.didClickMenu()
-            })]
-
-        let shouldDisplayTopBorder = DefaultToolbarManager().shouldDisplayBorder(
-            borderPosition: .top,
-            toolbarPosition: .top,
-            isPrivate: false,
-            scrollY: scrollY)
-        let shouldDisplayBottomBorder = DefaultToolbarManager().shouldDisplayBorder(
-            borderPosition: .bottom,
-            toolbarPosition: .top,
-            isPrivate: false,
-            scrollY: scrollY)
-
-        return AddressToolbarModel(
-            url: url,
-            navigationActions: [],
-            pageActions: pageActions,
-            browserActions: browserActions,
-            shouldDisplayTopBorder: shouldDisplayTopBorder,
-            shouldDisplayBottomBorder: shouldDisplayBottomBorder)
     }
 
     // MARK: - ThemeApplicable

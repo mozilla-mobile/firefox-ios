@@ -108,8 +108,31 @@ class RootViewController: UIViewController,
     }
 
     private func updateAddressToolbar(url: String?) {
+        let pageActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.qrCode,
+            isEnabled: true,
+            a11yLabel: "Read QR Code",
+            a11yId: "qrCodeButton",
+            onSelected: nil)]
+
+        let browserActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            isEnabled: true,
+            a11yLabel: "Open Menu",
+            a11yId: "appMenuButton",
+            onSelected: {
+                self.didClickMenu()
+            })]
+
         // FXIOS-8947: Use scroll position
-        addressToolbarContainer.configure(url: url, scrollY: 0, toolbarDelegate: self, toolbarContainerDelegate: self)
+        let model = AddressToolbarContainerModel(
+            toolbarPosition: .top,
+            scrollY: 0,
+            isPrivate: false,
+            url: url,navigationActions: [],
+            pageActions: pageActions,
+            browserActions: browserActions)
+        addressToolbarContainer.configure(model, toolbarDelegate: self, toolbarContainerDelegate: self)
     }
 
     private func configureSearchView() {

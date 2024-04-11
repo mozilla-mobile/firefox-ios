@@ -5,13 +5,15 @@
 import Common
 import ToolbarKit
 
-struct AddressToolbarModel {
+struct AddressToolbarContainerModel {
+    let toolbarPosition: AddressToolbarPosition
+    let scrollY: Int
+    let isPrivate: Bool
     let url: String?
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
-    let shouldDisplayTopBorder: Bool
-    let shouldDisplayBottomBorder: Bool
+    var manager: ToolbarManager = DefaultToolbarManager()
 
     var state: AddressToolbarState {
         return AddressToolbarState(
@@ -21,5 +23,21 @@ struct AddressToolbarModel {
             browserActions: browserActions,
             shouldDisplayTopBorder: shouldDisplayTopBorder,
             shouldDisplayBottomBorder: shouldDisplayBottomBorder)
+    }
+
+    private var shouldDisplayTopBorder: Bool {
+        manager.shouldDisplayBorder(
+            borderPosition: .top,
+            toolbarPosition: toolbarPosition,
+            isPrivate: false,
+            scrollY: scrollY)
+    }
+
+    private var shouldDisplayBottomBorder: Bool {
+        manager.shouldDisplayBorder(
+           borderPosition: .bottom,
+           toolbarPosition: toolbarPosition,
+           isPrivate: false,
+           scrollY: scrollY)
     }
 }
