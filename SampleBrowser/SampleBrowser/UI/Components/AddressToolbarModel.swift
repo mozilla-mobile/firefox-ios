@@ -10,12 +10,16 @@ struct AddressToolbarModel {
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
+    let shouldDisplayTopBorder: Bool
+    let shouldDisplayBottomBorder: Bool
 
     var state: AddressToolbarState {
         return AddressToolbarState(
             url: url,
             navigationActions: navigationActions,
             pageActions: pageActions,
-            browserActions: browserActions)
+            browserActions: browserActions,
+            shouldDisplayTopBorder: shouldDisplayTopBorder,
+            shouldDisplayBottomBorder: shouldDisplayBottomBorder)
     }
 }
