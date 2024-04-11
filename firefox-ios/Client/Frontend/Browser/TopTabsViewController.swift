@@ -306,6 +306,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .TabsTrayDidClose:
+            guard windowUUID == notification.windowUUID else { return }
             refreshTabs()
         default:
             break
@@ -337,7 +338,7 @@ extension TopTabsViewController: TabDisplayerDelegate {
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
         topTabDisplayManager.closeActionPerformed(forCell: cell)
-        NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil)
+        NotificationCenter.default.post(name: .TopTabsTabClosed, object: nil, userInfo: windowUUID.userInfo)
     }
 }
 

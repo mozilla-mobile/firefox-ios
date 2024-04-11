@@ -541,7 +541,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         selectTab(nextSelectedTab)
 
         let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                        object: notificationObject,
+                                        userInfo: windowUUID.userInfo)
         return result
     }
 
@@ -775,7 +777,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             previousTabUUID: previousTabUUID,
             isPrivate: isPrivate
         )
-        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast,
+                                        object: nil,
+                                        userInfo: windowUUID.userInfo)
     }
 
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}

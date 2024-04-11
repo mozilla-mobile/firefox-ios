@@ -287,7 +287,9 @@ class LegacyGridTabViewController: UIViewController,
         // Ensure Firefox home page is refreshed if privacy mode was changed
         if tabManager.selectedTab?.isPrivate != isPrivate {
             let notificationObject = [Tab.privateModeKey: isPrivate]
-            NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+            NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                            object: notificationObject,
+                                            userInfo: windowUUID.userInfo)
         }
         if isPrivate {
             TelemetryWrapper.recordEvent(category: .action,
@@ -377,7 +379,7 @@ class LegacyGridTabViewController: UIViewController,
                   let tab = tabManager.normalTabs.first {
             tabManager.selectTab(tab)
             dismissTabTray()
-            notificationCenter.post(name: .TabsTrayDidClose)
+            notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         }
     }
 
@@ -413,7 +415,9 @@ class LegacyGridTabViewController: UIViewController,
                   let closedTab = self.tabManager.backupCloseTab else { return }
 
             self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
-            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed,
+                                            object: nil,
+                                            userInfo: windowUUID.userInfo)
 
             if self.tabDisplayManager.isPrivate {
                 self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
@@ -516,7 +520,7 @@ extension LegacyGridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
-                notificationCenter.post(name: .TabsTrayDidSelectHomeTab)
+                notificationCenter.post(name: .TabsTrayDidSelectHomeTab, withUserInfo: windowUUID.userInfo)
             }
             tabManager.selectTab(tab)
             dismissTabTray()
@@ -662,7 +666,7 @@ extension LegacyGridTabViewController: TabDisplayCompletionDelegate, RecentlyClo
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
-            notificationCenter.post(name: .TabsTrayDidClose)
+            notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
@@ -681,7 +685,7 @@ extension LegacyGridTabViewController {
         case .deleteTab:
             didTapToolbarDelete(sender)
         }
-        notificationCenter.post(name: .TabDataUpdated)
+        notificationCenter.post(name: .TabDataUpdated, withUserInfo: windowUUID.userInfo)
     }
 
     func didTapToolbarAddTab() {
