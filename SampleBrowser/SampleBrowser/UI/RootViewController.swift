@@ -129,7 +129,8 @@ class RootViewController: UIViewController,
             toolbarPosition: .top,
             scrollY: 0,
             isPrivate: false,
-            url: url,navigationActions: [],
+            url: url,
+            navigationActions: [],
             pageActions: pageActions,
             browserActions: browserActions)
         addressToolbarContainer.configure(model, toolbarDelegate: self, toolbarContainerDelegate: self)
