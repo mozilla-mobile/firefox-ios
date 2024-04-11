@@ -7,31 +7,59 @@ import XCTest
 import Common
 
 final class ToolbarManagerTests: XCTestCase {
-    func testDisplayToolbarWhenScrolledThenShouldDisplay() {
+    func testDisplayToolbarTopBorderWhenScrolledThenShouldNotDisplay() {
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldDisplayBorder(hasTopPlacement: true,
-                                                  isPrivate: false,
-                                                  scrollY: 10))
+        XCTAssertFalse(subject.shouldDisplayBorder(borderPosition: .top,
+                                                   toolbarPosition: .top,
+                                                   isPrivate: false,
+                                                   scrollY: 10))
     }
 
-    func testDisplayToolbarWhenBottomPlacementThenShouldDisplay() {
+    func testDisplayToolbarTopBorderWhenBottomPlacementThenShouldDisplay() {
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldDisplayBorder(hasTopPlacement: false,
+        XCTAssertTrue(subject.shouldDisplayBorder(borderPosition: .top,
+                                                  toolbarPosition: .bottom,
                                                   isPrivate: false,
                                                   scrollY: 0))
     }
 
-    func testDisplayToolbarWhenPrivateModeThenShouldDisplay() {
+    func testDisplayToolbarTopBorderWhenPrivateModeThenShouldNotDisplay() {
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldDisplayBorder(hasTopPlacement: false,
+        XCTAssertFalse(subject.shouldDisplayBorder(borderPosition: .top,
+                                                   toolbarPosition: .top,
+                                                   isPrivate: true,
+                                                   scrollY: 0))
+    }
+
+    func testDisplayToolbarTopBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
+        let subject = createSubject()
+        XCTAssertFalse(subject.shouldDisplayBorder(borderPosition: .top,
+                                                   toolbarPosition: .top,
+                                                   isPrivate: false,
+                                                   scrollY: 0))
+    }
+
+    func testDisplayToolbarBottomBorderWhenBottomPlacementThenShouldNotDisplay() {
+        let subject = createSubject()
+        XCTAssertFalse(subject.shouldDisplayBorder(borderPosition: .bottom,
+                                                   toolbarPosition: .bottom,
+                                                   isPrivate: false,
+                                                   scrollY: 0))
+    }
+
+    func testDisplayToolbarBottomBorderWhenPrivateModeThenShouldDisplay() {
+        let subject = createSubject()
+        XCTAssertTrue(subject.shouldDisplayBorder(borderPosition: .bottom,
+                                                  toolbarPosition: .bottom,
                                                   isPrivate: true,
                                                   scrollY: 0))
     }
 
-    func testDisplayToolbarWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
+    func testDisplayToolbarBottomBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
         let subject = createSubject()
-        XCTAssertFalse(subject.shouldDisplayBorder(hasTopPlacement: true,
-                                                  isPrivate: false,
+        XCTAssertFalse(subject.shouldDisplayBorder(borderPosition: .bottom,
+                                                   toolbarPosition: .top,
+                                                   isPrivate: false,
                                                    scrollY: 0))
     }
 

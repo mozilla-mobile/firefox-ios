@@ -4,18 +4,35 @@
 
 import Foundation
 
+public enum AddressToolbarBorderPosition {
+    case bottom
+    case top
+}
+
 public protocol ToolbarManager {
-    func shouldDisplayBorder(hasTopPlacement: Bool, isPrivate: Bool, scrollY: Int) -> Bool
+    /// Determines whether a border on top/bottom of the address toolbar should be displayed
+    func shouldDisplayBorder(borderPosition: AddressToolbarBorderPosition,
+                             toolbarPosition: AddressToolbarPosition,
+                             isPrivate: Bool,
+                             scrollY: Int) -> Bool
 }
 
 public class DefaultToolbarManager: ToolbarManager {
     public init() {}
 
-    public func shouldDisplayBorder(hasTopPlacement: Bool, isPrivate: Bool, scrollY: Int) -> Bool {
-        // display the border if
+    public func shouldDisplayBorder(borderPosition: AddressToolbarBorderPosition,
+                                    toolbarPosition: AddressToolbarPosition,
+                                    isPrivate: Bool,
+                                    scrollY: Int) -> Bool {
+        // display the top border if
         // - the toolbar is displayed at the bottom
+        // display the bottom border if
+        // - the toolbar is displayed at the top and the website was scrolled
         // - we are in private mode
-        // - the website was scrolled
-        return !hasTopPlacement || isPrivate || scrollY > 0
+        if borderPosition == .top {
+            return toolbarPosition == .bottom
+        } else {
+            return (toolbarPosition == .top && scrollY > 0) || isPrivate
+        }
     }
 }
