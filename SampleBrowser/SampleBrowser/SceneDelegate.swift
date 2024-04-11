@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import WebEngine
 
@@ -16,9 +17,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let baseViewController = RootViewController(engineProvider: engineProvider)
+        let windowUUID = UUID()
+        let baseViewController = RootViewController(engineProvider: engineProvider, windowUUID: windowUUID)
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = baseViewController
         window?.makeKeyAndVisible()
+
+        guard let window else { return }
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager.setWindow(window, for: windowUUID)
+        themeManager.setSystemTheme(isOn: true)
     }
 }

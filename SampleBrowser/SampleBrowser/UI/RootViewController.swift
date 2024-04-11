@@ -11,8 +11,8 @@ class RootViewController: UIViewController,
                           ToolbarDelegate,
                           NavigationDelegate,
                           AddressToolbarDelegate,
+                          AddressToolbarContainerDelegate,
                           SearchSuggestionDelegate,
-                          MenuDelegate,
                           SettingsDelegate,
                           FindInPageBarDelegate,
                           Themeable {
@@ -22,7 +22,7 @@ class RootViewController: UIViewController,
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private lazy var toolbar: BrowserToolbar = .build { _ in }
-    private lazy var searchBar: BrowserAddressToolbar =  .build { _ in }
+    private lazy var addressToolbarContainer: AddressToolbarContainer =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
         view.backgroundColor = .white
     }
@@ -32,11 +32,11 @@ class RootViewController: UIViewController,
     private var findInPageBar: FindInPageBar?
 
     // MARK: - Init
-    init(engineProvider: EngineProvider, themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(engineProvider: EngineProvider, windowUUID: UUID?, themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
         self.themeManager = themeManager
-        self.currentWindowUUID = UUID()
+        self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -59,6 +59,22 @@ class RootViewController: UIViewController,
         applyTheme()
     }
 
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+        self.applyTheme()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+            self.applyTheme()
+        }, completion: nil)
+    }
+
     private func configureBrowserView() {
         browserVC.view.translatesAutoresizingMaskIntoConstraints = false
         add(browserVC)
@@ -73,36 +89,23 @@ class RootViewController: UIViewController,
 
     private func configureSearchbar() {
         view.addSubview(statusBarFiller)
-        view.addSubview(searchBar)
+        view.addSubview(addressToolbarContainer)
 
         NSLayoutConstraint.activate([
             statusBarFiller.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarFiller.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            statusBarFiller.bottomAnchor.constraint(equalTo: searchBar.topAnchor),
+            statusBarFiller.bottomAnchor.constraint(equalTo: addressToolbarContainer.topAnchor),
             statusBarFiller.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 40)
+            addressToolbarContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            addressToolbarContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            addressToolbarContainer.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
+            addressToolbarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            addressToolbarContainer.heightAnchor.constraint(equalToConstant: 40)
         ])
 
-        let browserActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.appMenu,
-            isEnabled: true,
-            a11yLabel: "Open Menu",
-            a11yId: "appMenuButton",
-            onSelected: {
-                self.didClickMenu()
-            })]
-        let state = AddressToolbarState(
-            url: nil,
-            navigationActions: [],
-            pageActions: [],
-            browserActions: browserActions)
-        searchBar.configure(state: state, toolbarDelegate: self)
-        _ = searchBar.becomeFirstResponder()
+        addressToolbarContainer.configure(url: nil, toolbarDelegate: self, toolbarContainerDelegate: self)
+        _ = addressToolbarContainer.becomeFirstResponder()
     }
 
     private func configureSearchView() {
@@ -115,7 +118,7 @@ class RootViewController: UIViewController,
         add(searchVC)
 
         NSLayoutConstraint.activate([
-            searchVC.view.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            searchVC.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
             searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             searchVC.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
@@ -138,7 +141,7 @@ class RootViewController: UIViewController,
     // MARK: - Private
 
     private func browse(to term: String) {
-        _ = searchBar.resignFirstResponder()
+        _ = addressToolbarContainer.resignFirstResponder()
         browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
     }
@@ -172,8 +175,7 @@ class RootViewController: UIViewController,
     }
 
     func onURLChange(url: String) {
-        // ToDo: Use model here
-        // searchBar.setSearchBarText(url)
+        addressToolbarContainer.configure(url: url, toolbarDelegate: self, toolbarContainerDelegate: self)
     }
 
     func onFindInPage(selected: String) {
@@ -210,19 +212,10 @@ class RootViewController: UIViewController,
         browse(to: searchTerm)
     }
 
-    // MARK: - MenuDelegate
-
-    func didClickMenu() {
-        let settingsVC = SettingsViewController()
-        settingsVC.delegate = self
-        present(settingsVC, animated: true)
-    }
-
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {
-        // ToDo: Use model here
-        // searchBar.setSearchBarText(term)
+        addressToolbarContainer.configure(url: term, toolbarDelegate: self, toolbarContainerDelegate: self)
         browse(to: term)
     }
 
@@ -278,6 +271,13 @@ class RootViewController: UIViewController,
             findInPageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             findInPageBar.heightAnchor.constraint(equalToConstant: 46)
         ])
+    }
+
+    // MARK: - AddressToolbarContainerDelegate
+    func didClickMenu() {
+        let settingsVC = SettingsViewController()
+        settingsVC.delegate = self
+        present(settingsVC, animated: true)
     }
 
     // MARK: - FindInPageBarDelegate
