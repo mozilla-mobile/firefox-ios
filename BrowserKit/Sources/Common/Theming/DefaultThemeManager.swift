@@ -225,6 +225,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.windows[window]?.overrideUserInterfaceStyle = style
 
         mainQueue.ensureMainThread { [weak self] in
+            // TODO: [FXIOS-8939] Send UUID in userInfo payload rather than object for consistency with Client.
             self?.notificationCenter.post(name: .ThemeDidChange, withObject: window)
         }
     }
