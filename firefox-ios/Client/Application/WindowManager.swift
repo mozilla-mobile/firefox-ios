@@ -177,9 +177,9 @@ final class WindowManagerImplementation: WindowManager {
     }
 
     // MARK: - Internal Utilities
-    
-    /// When provided an unsorted list of UUIDs of available window data files on
-    /// disk, this function determines which of them should be the next to be
+
+    /// When provided a list of UUIDs of available window data files on disk,
+    /// this function determines which of them should be the next to be
     /// opened. This allows multiple windows to be restored in a sensible way.
     /// - Parameter onDiskUUIDs: on-disk UUIDs representing windows that are not
     /// already open or reserved (this is important - these UUIDs should be pre-
@@ -194,7 +194,7 @@ final class WindowManagerImplementation: WindowManager {
             return (uuid: WindowUUID(), isNew: true)
         }
 
-        guard onDiskUUIDs.isEmpty else {
+        guard !onDiskUUIDs.isEmpty else {
             return (uuid: WindowUUID(), isNew: true)
         }
 
