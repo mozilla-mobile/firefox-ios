@@ -70,7 +70,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
+        label.font = FXFontStyles.Regular.body.scaledFont()
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
