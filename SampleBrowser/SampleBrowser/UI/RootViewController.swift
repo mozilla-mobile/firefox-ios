@@ -108,6 +108,7 @@ class RootViewController: UIViewController,
     }
 
     private func updateAddressToolbar(url: String?) {
+        // FXIOS-8947: Use scroll position
         addressToolbarContainer.configure(url: url, scrollY: 0, toolbarDelegate: self, toolbarContainerDelegate: self)
     }
 
