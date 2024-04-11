@@ -124,6 +124,7 @@
         "SearchTests\/testSearchEngine()",
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
         "SettingsTests\/testImageOnOff()",
+        "SettingsTests\/testSettingsOptionSubtitles()",
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
