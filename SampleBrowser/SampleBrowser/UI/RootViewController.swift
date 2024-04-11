@@ -51,7 +51,7 @@ class RootViewController: UIViewController,
         super.viewDidLoad()
 
         configureBrowserView()
-        configureSearchbar()
+        configureAddressToolbar()
         configureSearchView()
         configureToolbar()
 
@@ -87,7 +87,7 @@ class RootViewController: UIViewController,
         browserVC.navigationDelegate = self
     }
 
-    private func configureSearchbar() {
+    private func configureAddressToolbar() {
         view.addSubview(statusBarFiller)
         view.addSubview(addressToolbarContainer)
 
