@@ -290,6 +290,7 @@ class BrowserViewController: UIViewController,
     /// open tab, and because of that we need to leave overlay state
     @objc
     func didTapUndoCloseAllTabToast(notification: Notification) {
+        guard windowUUID == notification.windowUUID else { return }
         overlayManager.switchTab(shouldCancelLoading: true)
     }
 

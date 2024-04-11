@@ -671,7 +671,7 @@ extension BrowserViewController: WKNavigationDelegate {
         let responseURL = response.url
 
         tabManager[webView]?.mimeType = response.mimeType
-        notificationCenter.post(name: .TabMimeTypeDidSet)
+        notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
 
         var request: URLRequest?
         if let url = responseURL {

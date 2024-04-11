@@ -325,7 +325,6 @@ class HistoryPanel: UIViewController,
     }
 
     func handleNotifications(_ notification: Notification) {
-        // TODO: [FXIOS-7953, 7791] Needs updates for multi-window support.
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             viewModel.removeAllData()
