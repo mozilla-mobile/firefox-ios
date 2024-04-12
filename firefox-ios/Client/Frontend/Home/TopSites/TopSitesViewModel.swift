@@ -193,6 +193,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: numberOfRows,
                                                                     interface: interface)
+        self.numberOfRows = self.topSitesDataAdaptor.numberOfRows
         numberOfItems = sectionDimension.numberOfRows * sectionDimension.numberOfTilesPerRow
         topSites = unfilteredTopSites
         if numberOfItems < unfilteredTopSites.count {
