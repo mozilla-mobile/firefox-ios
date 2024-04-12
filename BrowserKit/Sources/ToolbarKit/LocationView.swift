@@ -195,9 +195,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
     }
 
-    public func textFieldDidEndEditing(_ textField: UITextField) {
-
-    }
+    public func textFieldDidEndEditing(_ textField: UITextField) {}
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let searchText = textField.text?.lowercased(), !searchText.isEmpty else { return false }
