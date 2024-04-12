@@ -55,7 +55,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActions(state: state)
 
         self.toolbarDelegate = toolbarDelegate
-        locationView.configure(state.url?.absoluteString, delegate: self)
+        locationView.configure(state.url, delegate: self)
 
         setNeedsLayout()
         layoutIfNeeded()
@@ -141,7 +141,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActionSpacing()
     }
 
-    private func updateActions(state: AddressToolbarState) {
+    internal func updateActions(state: AddressToolbarState) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
 

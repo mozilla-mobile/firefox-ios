@@ -10,7 +10,6 @@ import ComponentLibrary
 final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
     private struct UX {
         static let cornerRadius: CGFloat = 4
-        static let ratingLetterFontSize: CGFloat = 13
         static let ratingSize: CGFloat = 24
         static let maxRatingSize: CGFloat = 58
     }
@@ -23,9 +22,7 @@ final class FakespotReliabilityScoreView: UIView, Notifiable, ThemeApplicable {
 
     private lazy var reliabilityLetterLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.ratingLetterFontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Bold.footnote.scaledFont()
     }
 
     private var ratingHeightConstraint: NSLayoutConstraint?

@@ -136,15 +136,15 @@ export class FormAutofillSection {
    * specific case. Return the original value in the default case.
    * @param {String} value
    *        The original field value.
-   * @param {Object} fieldDetail
+   * @param {Object} _fieldName
    *        A fieldDetail of the related element.
-   * @param {HTMLElement} element
+   * @param {HTMLElement} _element
    *        A element for checking converting value.
    *
    * @returns {String}
    *          A string of the converted value.
    */
-  computeFillingValue(value, fieldName, element) {
+  computeFillingValue(value, _fieldName, _element) {
     return value;
   }
 
@@ -846,6 +846,10 @@ export class FormAutofillAddressSection extends FormAutofillSection {
         value =
           FormAutofillUtils.getAbbreviatedSubregionName([value, text]) || text;
       }
+    } else if (fieldDetail.fieldName == "country") {
+      // This is a temporary fix. Ideally we should have either case-insensitive comparaison of country codes
+      // or handle this elsewhere see Bug 1889234 for more context.
+      value = value.toUpperCase();
     }
     return value;
   }

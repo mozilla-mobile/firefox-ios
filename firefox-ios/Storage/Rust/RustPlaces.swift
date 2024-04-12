@@ -238,7 +238,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return getBookmarksWithURL(url: url) >>== { bookmarks in
             let deferreds = bookmarks.map({ self.deleteBookmarkNode(guid: $0.guid) })
             return all(deferreds).bind { results in
-                if let error = results.find({ $0.isFailure })?.failureValue {
+                if let error = results.first(where: { $0.isFailure })?.failureValue {
                     return deferMaybe(error)
                 }
 

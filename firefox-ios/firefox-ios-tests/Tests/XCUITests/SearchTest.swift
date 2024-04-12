@@ -193,7 +193,6 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Google")
         changeSearchEngine(searchEngine: "eBay")
         changeSearchEngine(searchEngine: "Wikipedia")
-        changeSearchEngine(searchEngine: "Amazon.com")
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2353246

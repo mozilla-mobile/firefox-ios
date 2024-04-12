@@ -27,6 +27,9 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     /// Logger for logging messages and events.
     private let logger: Logger
 
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { return windowUUID }
+
     // MARK: Views
 
     /// Hosting controller for the empty state view in address autofill settings.
@@ -41,16 +44,19 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     ///   - notificationCenter: The NotificationCenter for handling notifications.
     ///   - logger: The Logger for logging messages and events.
     init(addressAutofillViewModel: AddressAutofillSettingsViewModel,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = addressAutofillViewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
 
         // Initialize the AddressAutofillSettingsView and its hosting controller
         let addressAutofillSettingsVC = AddressAutofillSettingsView(
+            windowUUID: windowUUID,
             toggleModel: viewModel.toggleModel,
             addressListViewModel: viewModel.addressListViewModel)
         self.addressAutofillSettingsPageView = UIHostingController(rootView: addressAutofillSettingsVC)
@@ -96,7 +102,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     /// Applies the current theme to the view.
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
     }
 }

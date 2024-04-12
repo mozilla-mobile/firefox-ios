@@ -6,8 +6,9 @@ import SwiftUI
 import Common
 
 struct CircularProgressView: View, ThemeApplicable {
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @ObservedObject var viewModel: FakespotMessageCardViewModel
     @State private var backgroundColor: Color = .gray
     @State private var foregroundColor: Color = .blue
@@ -17,13 +18,14 @@ struct CircularProgressView: View, ThemeApplicable {
     }
 
     var body: some View {
-            progressCircularView
-        .onAppear {
-            applyTheme(theme: themeVal.theme)
-        }
-        .onChange(of: themeVal) { val in
-            applyTheme(theme: val.theme)
-        }
+        progressCircularView
+            .onAppear {
+                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            }
     }
 
     @ViewBuilder private var progressCircularView: some View {

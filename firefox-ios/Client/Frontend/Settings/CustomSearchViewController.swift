@@ -31,13 +31,14 @@ class CustomSearchViewController: SettingsTableViewController {
     var successCallback: (() -> Void)?
     private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
         spinner.style = .medium
-        spinner.color = themeManager.currentTheme.colors.iconSpinner
+        spinner.color = themeManager.currentTheme(for: windowUUID).colors.iconSpinner
         spinner.hidesWhenStopped = true
     }
 
-    init(faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
+    init(windowUUID: WindowUUID,
+         faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.faviconFetcher = faviconFetcher
-        super.init()
+        super.init(windowUUID: windowUUID)
     }
 
     required init?(coder aDecoder: NSCoder) {

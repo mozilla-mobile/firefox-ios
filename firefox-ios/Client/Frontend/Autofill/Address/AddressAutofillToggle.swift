@@ -10,11 +10,13 @@ import Shared
 
 /// A SwiftUI view representing a toggle with theming for address autofill functionality.
 struct AddressAutofillToggle: View {
+    let windowUUID: WindowUUID
+
     // MARK: - Theming
 
-    /// The current theme type provided by the environment.
-    @Environment(\.themeType)
-    var themeVal
+    /// The theme manager provided by the environment.
+    @Environment(\.themeManager)
+    var themeManager
 
     /// Text color for the view.
     @State private var textColor: Color = .clear
@@ -82,11 +84,11 @@ struct AddressAutofillToggle: View {
         .background(backgroundColor)
         .onAppear {
             // Apply theme when the view appears
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { val in
-            // Reapply theme when the environment theme changes
-            applyTheme(theme: val.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -108,6 +110,6 @@ struct AddressAutofillToggle: View {
 struct AutofillToggle_Previews: PreviewProvider {
     static var previews: some View {
         let model = ToggleModel(isEnabled: true)
-        AddressAutofillToggle(model: model)
+        AddressAutofillToggle(windowUUID: .XCTestDefaultUUID, model: model)
     }
 }

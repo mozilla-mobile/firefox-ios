@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -15,8 +16,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let rootViewController = RootViewController()
         let navigationController = UINavigationController(rootViewController: rootViewController)
 
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
+        let newWindow = UIWindow(windowScene: windowScene)
+        window = newWindow
+        newWindow.rootViewController = navigationController
+        newWindow.makeKeyAndVisible()
+
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager.setWindow(newWindow, for: defaultSampleComponentUUID)
+        themeManager.setSystemTheme(isOn: true)
     }
 }

@@ -140,7 +140,7 @@ private extension TopSitesProviderImplementation {
                 return site
             }
             let domain = URL(string: site.url, invalidCharacters: false)?.shortDisplayString
-            return defaultSites.find { $0.title.lowercased() == domain } ?? site
+            return defaultSites.first(where: { $0.title.lowercased() == domain }) ?? site
         }
 
         completion(newSites)

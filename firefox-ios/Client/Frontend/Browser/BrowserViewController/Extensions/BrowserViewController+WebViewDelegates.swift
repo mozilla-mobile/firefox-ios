@@ -224,7 +224,7 @@ extension BrowserViewController: WKUIDelegate {
                         let viewModel = ButtonToastViewModel(labelText: toastLabelText,
                                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
                         let toast = ButtonToast(viewModel: viewModel,
-                                                theme: self.themeManager.currentTheme,
+                                                theme: self.currentTheme(),
                                                 completion: { buttonPressed in
                             if buttonPressed {
                                 self.tabManager.selectTab(tab)
@@ -560,7 +560,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 TimerSnackBar.showAppStoreConfirmationBar(
                     forTab: tab,
                     appStoreURL: url,
-                    theme: self.themeManager.currentTheme
+                    theme: self.currentTheme()
                 ) { _ in
                     // If a new window was opened for this URL (it will have no history), close it.
                     if tab.historyList.isEmpty {
@@ -633,13 +633,6 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)
                     return
-                } else if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { isAppInstalled in
-                        if isAppInstalled {
-                            webView.reload()
-                           // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-7524
-                        }
-                    }
                 }
             }
 
@@ -678,7 +671,7 @@ extension BrowserViewController: WKNavigationDelegate {
         let responseURL = response.url
 
         tabManager[webView]?.mimeType = response.mimeType
-        notificationCenter.post(name: .TabMimeTypeDidSet)
+        notificationCenter.post(name: .TabMimeTypeDidSet, withUserInfo: windowUUID.userInfo)
 
         var request: URLRequest?
         if let url = responseURL {
@@ -1003,9 +996,10 @@ private extension BrowserViewController {
             tab.removeSnackbar(bar)
             completion(false)
         }
-        ok.applyTheme(theme: themeManager.currentTheme)
-        cancel.applyTheme(theme: themeManager.currentTheme)
-        snackBar.applyTheme(theme: themeManager.currentTheme)
+        let theme = currentTheme()
+        ok.applyTheme(theme: theme)
+        cancel.applyTheme(theme: theme)
+        snackBar.applyTheme(theme: theme)
 
         snackBar.addButton(ok)
         snackBar.addButton(cancel)

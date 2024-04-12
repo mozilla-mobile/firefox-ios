@@ -65,7 +65,6 @@ final class WindowManagerImplementation: WindowManager {
     private let logger: Logger
     private let tabDataStore: TabDataStore
     private var _activeWindowUUID: WindowUUID?
-    private let defaultUITestingUUID = WindowUUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
 
     // MARK: - Initializer
 
@@ -105,7 +104,7 @@ final class WindowManagerImplementation: WindowManager {
 
     func reserveNextAvailableWindowUUID() -> WindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
-        guard !AppConstants.isRunningUITests else { return defaultUITestingUUID }
+        guard !AppConstants.isRunningUITests else { return WindowUUID.DefaultUITestingUUID }
 
         // • If no saved windows (tab data), we generate a new UUID.
         // • If user has saved windows (tab data), we return the first available UUID

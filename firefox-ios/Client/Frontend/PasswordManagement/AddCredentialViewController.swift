@@ -21,6 +21,8 @@ class AddCredentialViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     private var isRTLLanguage: Bool {
         UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
@@ -55,14 +57,16 @@ class AddCredentialViewController: UIViewController, Themeable {
             action: #selector(addCredential)
         )
         button.isEnabled = false
-        button.tintColor = themeManager.currentTheme.colors.actionPrimary
+        button.tintColor = themeManager.currentTheme(for: windowUUID).colors.actionPrimary
         return button
     }()
 
     init(didSaveAction: @escaping (LoginEntry) -> Void,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.didSaveAction = didSaveAction
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -156,7 +160,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme)
+            loginCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             usernameField = loginCell.descriptionLabel
             if isRTLLanguage {
                 usernameField.textAlignment = .right
@@ -170,7 +174,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme)
+            loginCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             passwordField = loginCell.descriptionLabel
             return loginCell
 
@@ -182,7 +186,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme)
+            loginCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
             websiteField = loginCell.descriptionLabel
             if isRTLLanguage {
                 websiteField.textAlignment = .right
@@ -207,7 +211,7 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 

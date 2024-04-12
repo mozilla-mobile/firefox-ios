@@ -410,13 +410,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
-        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate)
+        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        let popup = Tab(profile: profile, configuration: configuration, isPrivate: parentTab.isPrivate)
+        let popup = Tab(profile: profile,
+                        configuration: configuration,
+                        isPrivate: parentTab.isPrivate,
+                        windowUUID: windowUUID)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab
@@ -538,7 +541,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         selectTab(nextSelectedTab)
 
         let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                        object: notificationObject,
+                                        userInfo: windowUUID.userInfo)
         return result
     }
 
@@ -772,7 +777,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             previousTabUUID: previousTabUUID,
             isPrivate: isPrivate
         )
-        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast,
+                                        object: nil,
+                                        userInfo: windowUUID.userInfo)
     }
 
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}

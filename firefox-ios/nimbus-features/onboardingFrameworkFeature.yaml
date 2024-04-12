@@ -389,6 +389,9 @@ enums:
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
+      end-onboarding:
+        description: >
+          Will end the onboarding on a set card
   OnboardingInstructionsPopupActions:
     description: >
       The identifiers for the different actions available for the
@@ -438,6 +441,9 @@ enums:
       toolbar:
         description: >
           Corresponding to the fox world image
+      customize-firefox:
+        description: >
+          Corresponding to the fox window image
   OnboardingCardType:
     description: >
       The identifiers for the different types of onboarding cards.

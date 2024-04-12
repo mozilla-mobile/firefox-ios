@@ -21,7 +21,7 @@ features:
       login-autofill-status:
         description: If true, allows the user to use the login autofill feature for usernames and passwords.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: developer
         value: {
@@ -29,6 +29,6 @@ features:
         }
       - channel: beta
         value: {
-            "login-autofill-status": false
+            "login-autofill-status": true
         }
 

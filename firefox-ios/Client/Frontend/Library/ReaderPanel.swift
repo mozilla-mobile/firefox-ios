@@ -184,6 +184,8 @@ class ReadingListPanel: UITableViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -193,10 +195,12 @@ class ReadingListPanel: UITableViewController,
 
     init(
         profile: Profile,
+        windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.state = .readingList
@@ -252,6 +256,10 @@ class ReadingListPanel: UITableViewController,
 
         applyTheme()
         listenForThemeChange(view)
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
     }
 
     @objc
@@ -334,31 +342,31 @@ class ReadingListPanel: UITableViewController,
             label.textAlignment = .center
             label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
             label.adjustsFontSizeToFitWidth = true
-            label.textColor = self.themeManager.currentTheme.colors.textSecondary
+            label.textColor = self.currentTheme().colors.textSecondary
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
             label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
             label.numberOfLines = 0
-            label.textColor = self.themeManager.currentTheme.colors.textSecondary
+            label.textColor = self.currentTheme().colors.textSecondary
         }
         let readerModeImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
             imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?
                 .withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
+            imageView.tintColor = self.currentTheme().colors.textSecondary
         }
         let readingListLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingListDescription
             label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
             label.numberOfLines = 0
-            label.textColor = self.themeManager.currentTheme.colors.textSecondary
+            label.textColor = self.currentTheme().colors.textSecondary
         }
         let readingListImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
             imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
                 .withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
+            imageView.tintColor = self.currentTheme().colors.textSecondary
         }
         let emptyStateViewWrapper: UIView = .build { view in
             view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
@@ -465,7 +473,7 @@ class ReadingListPanel: UITableViewController,
             cell.title = record.title
             cell.url = URL(string: record.url, invalidCharacters: false)!
             cell.unread = record.unread
-            cell.applyTheme(theme: themeManager.currentTheme)
+            cell.applyTheme(theme: currentTheme())
         }
         return cell
     }
@@ -565,9 +573,9 @@ class ReadingListPanel: UITableViewController,
     }
 
     func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        tableView.separatorColor = currentTheme().colors.borderPrimary
+        view.backgroundColor = currentTheme().colors.layer1
+        tableView.backgroundColor = currentTheme().colors.layer1
         refreshReadingList()
     }
 }

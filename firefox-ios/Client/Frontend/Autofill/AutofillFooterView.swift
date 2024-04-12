@@ -14,21 +14,23 @@ struct AutofillFooterView: View {
         static let actionButtonBottomSpace: CGFloat = 24
     }
 
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State private var actionPrimary: Color = .clear
 
     private let actionButtonTitle: String
     private let primaryAction: () -> Void
 
     init(
+        windowUUID: WindowUUID,
         title: String,
         primaryAction: @escaping () -> Void
     ) {
+        self.windowUUID = windowUUID
         self.actionButtonTitle = title
         self.primaryAction = primaryAction
     }
-
-    @Environment(\.themeType)
-    var theme
 
     var body: some View {
         VStack {
@@ -42,10 +44,11 @@ struct AutofillFooterView: View {
             .accessibility(identifier: AccessibilityIdentifiers.Autofill.footerPrimaryAction)
         }
         .onAppear {
-            applyTheme(theme: theme.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: theme) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -61,6 +64,7 @@ struct AutofillFooterView: View {
 
 #Preview {
     AutofillFooterView(
+        windowUUID: .XCTestDefaultUUID,
         title: "Manage Login Info",
         primaryAction: { }
     )

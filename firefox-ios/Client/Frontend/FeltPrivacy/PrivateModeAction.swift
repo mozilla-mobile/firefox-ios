@@ -6,23 +6,23 @@ import Foundation
 import Redux
 
 enum PrivateModeMiddlewareAction: Action {
-    case privateModeUpdated(Bool)
+    case privateModeUpdated(BoolValueContext)
 
     var windowUUID: UUID {
-       // TODO: [8313] Use of .unavailable UUID is temporary as part of early MW refactors. WIP. 
         switch self {
-        default: return .unavailable
+        case .privateModeUpdated(let context as ActionContext):
+            return context.windowUUID
         }
     }
 }
 
 enum PrivateModeUserAction: Action {
-    case setPrivateModeTo(Bool)
+    case setPrivateModeTo(BoolValueContext)
 
     var windowUUID: UUID {
-       // TODO: [8313] Use of .unavailable UUID is temporary as part of early MW refactors. WIP.
         switch self {
-        default: return .unavailable
+        case .setPrivateModeTo(let context as ActionContext):
+            return context.windowUUID
         }
     }
 }

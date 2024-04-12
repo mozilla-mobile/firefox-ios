@@ -8,9 +8,9 @@ import Shared
 class SearchBarSettingsViewController: SettingsTableViewController {
     private let viewModel: SearchBarSettingsViewModel
 
-    init(viewModel: SearchBarSettingsViewModel) {
+    init(viewModel: SearchBarSettingsViewModel, windowUUID: WindowUUID) {
         self.viewModel = viewModel
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         title = viewModel.title
         viewModel.delegate = self

@@ -7,6 +7,8 @@ import XCTest
 @testable import Client
 
 final class PrivateHomepageViewControllerTests: XCTestCase {
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
+
     override class func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -19,7 +21,7 @@ final class PrivateHomepageViewControllerTests: XCTestCase {
 
     func testPrivateHomepageViewController_simpleCreation_hasNoLeaks() {
         let overlayManager = MockOverlayModeManager()
-        let privateHomeViewController = PrivateHomepageViewController(overlayManager: overlayManager)
+        let privateHomeViewController = PrivateHomepageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
 
         trackForMemoryLeaks(privateHomeViewController)
     }

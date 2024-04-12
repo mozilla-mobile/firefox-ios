@@ -120,7 +120,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
-        let privateHomepageController = PrivateHomepageViewController(overlayManager: overlayManager)
+        let privateHomepageController = PrivateHomepageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
         privateHomepageController.parentCoordinator = self
         guard browserViewController.embedContent(privateHomepageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
@@ -331,7 +331,7 @@ class BrowserCoordinator: BaseCoordinator,
             return // route is handled with existing child coordinator
         }
         windowManager.postWindowEvent(event: .settingsOpened, windowUUID: windowUUID)
-        let navigationController = ThemedNavigationController()
+        let navigationController = ThemedNavigationController(windowUUID: windowUUID)
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         let modalPresentationStyle: UIModalPresentationStyle = isPad ? .fullScreen: .formSheet
         navigationController.modalPresentationStyle = modalPresentationStyle
@@ -651,12 +651,18 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: tabTrayCoordinator)
         tabTrayCoordinator.start(with: selectedPanel)
 
+        navigationController.onViewDismissed = { [weak self] in
+            self?.didDismissTabTray(from: tabTrayCoordinator)
+        }
+
         present(navigationController)
     }
 
     func showBackForwardList() {
         guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else { return }
-        let backForwardListVC = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
+        let backForwardListVC = BackForwardListViewController(profile: profile,
+                                                              windowUUID: windowUUID,
+                                                              backForwardList: backForwardList)
         backForwardListVC.backForwardTransitionDelegate = BackForwardListAnimator()
         backForwardListVC.browserFrameInfoProvider = browserViewController
         backForwardListVC.tabManager = tabManager
@@ -702,7 +708,11 @@ class BrowserCoordinator: BaseCoordinator,
             // Additional cleanup performed when the current iPad window is closed.
             // This is necessary in order to ensure the BVC and other memory is freed correctly.
 
+            // Notify theme manager
+            themeManager.windowDidClose(uuid: uuid)
+
             // TODO: Revisit for [FXIOS-8064]. Disabled temporarily to avoid potential KVO crash in WebKit. (FXIOS-8416)
+            // Clean up views and ensure BVC for the window is freed
             // browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
             // browserViewController.removeFromParent()
         case .libraryOpened:

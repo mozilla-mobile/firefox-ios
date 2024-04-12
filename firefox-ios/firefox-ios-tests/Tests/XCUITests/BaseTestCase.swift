@@ -37,7 +37,8 @@ class BaseTestCase: XCTestCase {
                            LaunchArguments.DeviceName,
                            "\(LaunchArguments.ServerPort)\(serverPort)",
                            LaunchArguments.SkipContextualHints,
-                           LaunchArguments.DisableAnimations
+                           LaunchArguments.DisableAnimations,
+                           LaunchArguments.SkipSplashScreenExperiment
         ]
 
     func restartInBackground() {
@@ -317,7 +318,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        mozWaitForElementToNotExist(progressIndicator, timeout: 60.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 90.0)
     }
 
     func waitForTabsButton() {
@@ -356,6 +357,14 @@ class BaseTestCase: XCTestCase {
             usleep(1000)
             nrOfSwipes += 1
         }
+    }
+
+    // Coordinates added for iPhone 15 and iPad Air 15(5th generation)
+    func panScreen() {
+        let startCoordinate = app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5))
+        let endCoordinate = app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
+        startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
+        endCoordinate.press(forDuration: 0, thenDragTo: startCoordinate)
     }
 }
 

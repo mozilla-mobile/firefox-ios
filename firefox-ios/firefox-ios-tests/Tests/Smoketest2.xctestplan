@@ -42,6 +42,7 @@
         "FakespotTests\/testLearnMoreAboutFakespotHyperlink()",
         "FakespotTests\/testLearnMoreLink()",
         "FakespotTests\/testOptInNotificationLayout()",
+        "FakespotTests\/testPriceTagIconAndReviewCheckLandscape()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
         "FakespotTests\/testPrivacyPolicyLink()",
@@ -94,7 +95,11 @@
         "SearchTests\/testPromptPresence()",
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchWithFirefoxOption()",
-        "SettingsTests",
+        "SettingsTests\/testCopiedLinks()",
+        "SettingsTests\/testHelpOpensSUMOInTab()",
+        "SettingsTests\/testImageOnOff()",
+        "SettingsTests\/testOpenMailAppSettings()",
+        "SettingsTests\/testOpenSiriOption()",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",
@@ -116,7 +121,8 @@
         "TrackingProtectionTests\/testLockIconSecureConnection()",
         "URLValidationTests",
         "UrlBarTests",
-        "WhatsNewTest"
+        "WhatsNewTest",
+        "ZoomingTests"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

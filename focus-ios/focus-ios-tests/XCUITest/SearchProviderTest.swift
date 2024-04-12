@@ -20,19 +20,9 @@ class SearchProviderTest: BaseTestCase {
         searchProviderTestHelper(provider: "Wikipedia")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2512722
-    func testAmazonSearchProvider() throws {
-        guard #available(iOS 17, *) else {
-            throw XCTSkip("Amazon search not working in iOS 16")
-        }
-        searchProviderTestHelper(provider: "Amazon.com")
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2524588
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
-        dismissKeyboardFocusMenuSettings()
-        searchQuery("test", provider: "Amazon.com")
         dismissKeyboardFocusMenuSettings()
         searchQuery("test", provider: "DuckDuckGo")
     }
@@ -180,10 +170,6 @@ class SearchProviderTest: BaseTestCase {
 				waitForExistence(app.otherElements["mozilla at DuckDuckGo"])
 			case "Wikipedia":
 				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
-            case "Amazon.com":
-				waitForValueContains(urlbarUrltextTextField, value: "amazon.com")
-                waitForValueContains(app.webViews.textFields.element(boundBy: 0),
-                    value: searchWord)
 			default:
 				XCTFail("Invalid Search Provider")
 		}

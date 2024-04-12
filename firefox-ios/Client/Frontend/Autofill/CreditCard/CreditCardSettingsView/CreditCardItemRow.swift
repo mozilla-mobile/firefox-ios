@@ -16,8 +16,9 @@ struct CreditCardItemRow: View {
     var didSelectAction: (() -> Void)?
 
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var separatorColor: Color = .clear
@@ -96,10 +97,11 @@ struct CreditCardItemRow: View {
         .background(ClearBackgroundView())
         .padding(.vertical, addPadding ? 8 : 0)
         .onAppear {
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { val in
-            applyTheme(theme: val.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -141,19 +143,22 @@ struct CreditCardItemRow_Previews: PreviewProvider {
         CreditCardItemRow(item: creditCard,
                           isAccessibilityCategory: false,
                           shouldShowSeparator: true,
-                          addPadding: true)
+                          addPadding: true,
+                          windowUUID: .XCTestDefaultUUID)
 
         CreditCardItemRow(item: creditCard,
                           isAccessibilityCategory: true,
                           shouldShowSeparator: true,
-                          addPadding: true)
+                          addPadding: true,
+                          windowUUID: .XCTestDefaultUUID)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
             .previewDisplayName("Large")
 
         CreditCardItemRow(item: creditCard,
                           isAccessibilityCategory: false,
                           shouldShowSeparator: true,
-                          addPadding: true)
+                          addPadding: true,
+                          windowUUID: .XCTestDefaultUUID)
             .environment(\.sizeCategory, .extraSmall)
             .previewDisplayName("Small")
     }

@@ -463,7 +463,7 @@ workflows:
     - cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: |-
@@ -675,7 +675,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
     - cache-pull@2.4: {}
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
@@ -765,7 +765,7 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
     - cache-pull@2.1: {}
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: >-
@@ -853,7 +853,7 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: >-
@@ -909,7 +909,7 @@ workflows:
     - activate-ssh-key@4.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: |-
@@ -1033,7 +1033,7 @@ workflows:
     - activate-ssh-key@4.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: |-
@@ -1124,7 +1124,7 @@ workflows:
     - activate-ssh-key@4.1:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
-    - certificate-and-profile-installer@1.10: {}
+    - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
         - content: |-

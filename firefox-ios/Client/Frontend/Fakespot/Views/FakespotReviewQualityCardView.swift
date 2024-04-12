@@ -10,9 +10,7 @@ import ComponentLibrary
 // MARK: View Model
 final class FakespotReviewQualityCardViewModel {
     private struct UX {
-        static let labelFontSize: CGFloat = 15
-        static let baseFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                                     size: UX.labelFontSize)
+        static let baseFont = FXFontStyles.Regular.subheadline.scaledFont()
     }
 
     let markupUtility = MarkupAttributeUtility(baseFont: UX.baseFont)

@@ -39,11 +39,12 @@ class ContentBlockerSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
         self.settingsDelegate = settingsDelegate
+        let theme = settings.currentTheme()
         super.init(
             title: NSAttributedString(
                 string: .SettingsTrackingProtectionSectionName,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )

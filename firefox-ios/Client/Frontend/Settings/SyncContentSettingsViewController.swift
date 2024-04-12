@@ -18,11 +18,12 @@ class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
+        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .FxAManageAccount,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )
@@ -45,10 +46,11 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
+        let theme = settingsVC.themeManager.currentTheme(for: settingsVC.windowUUID)
         return NSAttributedString(
             string: .SettingsDisconnectSyncButton,
             attributes: [
-                NSAttributedString.Key.foregroundColor: settingsVC.themeManager.currentTheme.colors.textWarning
+                NSAttributedString.Key.foregroundColor: theme.colors.textWarning
             ]
         )
     }
@@ -152,8 +154,8 @@ class DeviceNameSetting: StringSetting {
 class SyncContentSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
 
-    init() {
-        super.init(style: .grouped)
+    init(windowUUID: WindowUUID) {
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .FxASettingsTitle
 

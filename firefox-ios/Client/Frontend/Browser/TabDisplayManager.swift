@@ -318,7 +318,9 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         refreshStore(evenIfHidden: false, shouldAnimate: true)
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                        object: notificationObject,
+                                        userInfo: tabManager.windowUUID.userInfo)
     }
 
     /// Find the previously selected cell, which is still displayed as selected
@@ -1070,6 +1072,7 @@ extension LegacyTabDisplayManager: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DidTapUndoCloseAllTabToast:
+            guard tabManager.windowUUID == notification.windowUUID else { return }
             refreshStore()
             collectionView.reloadData()
         default:

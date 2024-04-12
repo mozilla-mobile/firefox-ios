@@ -6,7 +6,7 @@ import Foundation
 
 @objc
 public protocol NotificationProtocol {
-    func post(name: NSNotification.Name, withObject object: Any?)
+    func post(name: NSNotification.Name, withObject object: Any?, withUserInfo info: Any?)
     func addObserver(_ observer: Any,
                      selector aSelector: Selector,
                      name aName: NSNotification.Name?,
@@ -18,14 +18,15 @@ public protocol NotificationProtocol {
 }
 
 extension NotificationProtocol {
-    public func post(name: NSNotification.Name, withObject object: Any? = nil) {
-        self.post(name: name, withObject: object)
+    public func post(name: NSNotification.Name, withObject object: Any? = nil, withUserInfo info: Any? = nil) {
+        self.post(name: name, withObject: object, withUserInfo: info)
     }
 }
 
 extension NotificationCenter: NotificationProtocol {
-    public func post(name: NSNotification.Name, withObject object: Any?) {
-        self.post(name: name, object: object)
+    public func post(name: NSNotification.Name, withObject object: Any?, withUserInfo info: Any?) {
+        let payload = (info as? [AnyHashable: Any])
+        self.post(name: name, object: object, userInfo: payload)
     }
 
     public func addObserver(name: NSNotification.Name?,

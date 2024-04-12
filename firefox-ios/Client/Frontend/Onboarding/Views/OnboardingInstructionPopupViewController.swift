@@ -72,13 +72,17 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
     var didTapButton = false
     var buttonTappedFinishFlow: (() -> Void)?
     var dismissDelegate: BottomSheetDismissProtocol?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - Initializers
     init(viewModel: OnboardingDefaultBrowserModelProtocol,
+         windowUUID: WindowUUID,
          buttonTappedFinishFlow: (() -> Void)?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.buttonTappedFinishFlow = buttonTappedFinishFlow
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -247,7 +251,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     // MARK: - Themeable
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 

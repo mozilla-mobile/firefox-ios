@@ -13,10 +13,10 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let stackViewSpacingButtons: CGFloat = 16
         static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
-        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 10
+        static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 15
         static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
         static let topStackViewPaddingPhone: CGFloat = 90
-        static let choiceButtonStackViewSpacing: CGFloat = 36
+        static let choiceButtonStackViewSpacing: CGFloat = 26
         static let bottomStackViewPaddingPad: CGFloat = 32
         static let bottomStackViewPaddingPhone: CGFloat = 0
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
@@ -134,7 +134,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         if shouldUseTinyDeviceLayout {
             return 1.0
         } else if shouldUseSmallDeviceLayout {
-            return 1.0
+            return 0.85
         }
 
         return 1.0
@@ -143,12 +143,13 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     // MARK: - Initializers
     init(
         viewModel: OnboardingCardInfoModelProtocol,
-        delegate: OnboardingCardDelegate?
+        delegate: OnboardingCardDelegate?,
+        windowUUID: WindowUUID
     ) {
         self.delegate = delegate
         self.multipleChoiceButtons = []
 
-        super.init(viewModel: viewModel)
+        super.init(viewModel: viewModel, windowUUID: windowUUID)
     }
 
     required init?(coder: NSCoder) {
@@ -190,7 +191,11 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         var bottomStackViewPadding = UX.bottomStackViewPaddingPhone
 
         if UIDevice.current.userInterfaceIdiom == .pad {
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
+                                          after: imageView)
             topStackView.spacing = UX.stackViewSpacingWithoutLink
+            topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
+                                          after: descriptionLabel)
             choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
             bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
@@ -285,10 +290,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
                 topStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 topStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
 
-                choiceButtonStackView.leadingAnchor.constraint(greaterThanOrEqualTo: contentStackView.leadingAnchor),
-                choiceButtonStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: 10),
-                choiceButtonStackView.trailingAnchor.constraint(lessThanOrEqualTo: contentStackView.trailingAnchor),
-
                 bottomButtonStackView.leadingAnchor.constraint(equalTo: contentStackView.leadingAnchor),
                 bottomButtonStackView.bottomAnchor.constraint(equalTo: contentStackView.bottomAnchor),
                 bottomButtonStackView.trailingAnchor.constraint(equalTo: contentStackView.trailingAnchor),
@@ -324,15 +325,21 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         multipleChoiceButtons.removeAll()
         multipleChoiceButtons = viewModel.multipleChoiceButtons.map({ buttonModel in
             return OnboardingMultipleChoiceButtonView(
+                windowUUID: windowUUID,
                 viewModel: OnboardingMultipleChoiceButtonViewModel(
                     isSelected: buttonModel == viewModel.multipleChoiceButtons.first,
                     info: buttonModel,
+                    presentingCardName: viewModel.name,
                     a11yIDRoot: viewModel.a11yIdRoot
                 ),
                 buttonActionDelegate: delegate,
                 stateUpdateDelegate: self
             )
         })
+    }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
     }
 
     private func updateLayout() {
@@ -345,7 +352,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
         )
         primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.currentTheme)
+        primaryButton.applyTheme(theme: currentTheme())
 
         setupSecondaryButton()
     }
@@ -364,7 +371,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
         )
         secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: themeManager.currentTheme)
+        secondaryButton.applyTheme(theme: currentTheme())
     }
 
     // MARK: - Button Actions
@@ -388,7 +395,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
 
     // MARK: - Themeable
     override func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
 

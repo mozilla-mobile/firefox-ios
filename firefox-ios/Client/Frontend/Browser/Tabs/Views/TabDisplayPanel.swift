@@ -22,6 +22,7 @@ class TabDisplayPanel: UIViewController,
     var themeObserver: NSObjectProtocol?
     var tabsState: TabsPanelState
     private let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
@@ -104,10 +105,14 @@ class TabDisplayPanel: UIViewController,
         tabDisplayView.isHidden = shouldShowEmptyView
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
-        tabDisplayView.applyTheme(theme: themeManager.currentTheme)
-        emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
+        backgroundPrivacyOverlay.backgroundColor = currentTheme().colors.layerScrim
+        tabDisplayView.applyTheme(theme: currentTheme())
+        emptyPrivateTabsView.applyTheme(currentTheme())
     }
 
     private func presentToast(toastType: ToastType,
@@ -121,7 +126,7 @@ class TabDisplayPanel: UIViewController,
                 labelText: toastType.title,
                 buttonText: toastType.buttonText)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.currentTheme,
+                                    theme: currentTheme(),
                                     completion: { buttonPressed in
                 completion(buttonPressed)
             })
@@ -140,7 +145,7 @@ class TabDisplayPanel: UIViewController,
             let toast = SimpleToast()
             toast.showAlertWithText(toastType.title,
                                     bottomContainer: view,
-                                    theme: themeManager.currentTheme,
+                                    theme: currentTheme(),
                                     bottomConstraintPadding: -toolbarHeight)
         }
     }

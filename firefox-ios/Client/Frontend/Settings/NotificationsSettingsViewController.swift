@@ -57,11 +57,12 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
     init(prefs: Prefs,
          hasAccount: Bool,
+         windowUUID: WindowUUID,
          notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.prefs = prefs
         self.hasAccount = hasAccount
         self.notificationManager = notificationManager
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
         self.title = .Settings.Notifications.Title
         self.addObservers()
 

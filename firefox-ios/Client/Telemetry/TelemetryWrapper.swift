@@ -433,6 +433,7 @@ extension TelemetryWrapper {
         case onboardingCardView = "onboarding-card-view"
         case onboardingPrimaryButton = "onboarding-card-primary-button"
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
+        case onboardingMultipleChoiceButton = "onboarding-multiple-choice-button"
         case onboardingClose = "onboarding-close"
         case onboardingWallpaperSelector = "onboarding-wallpaper-selector"
         case onboardingSelectWallpaper = "onboarding-select-wallpaper"
@@ -704,6 +705,7 @@ extension TelemetryWrapper {
         case sequencePosition = "sequence-position"
         case flowType = "flow-type"
         case buttonAction = "button-action"
+        case multipleChoiceButtonAction = "mutiple-choice-button-action"
 
         // Notification permission
         case notificationPermissionIsGranted = "is-granted"
@@ -1419,6 +1421,22 @@ extension TelemetryWrapper {
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.secondaryButtonTap.record(cardExtras)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingMultipleChoiceButton, _, let extras):
+            if let type = extras?[ExtraKey.cardType.rawValue] as? String,
+               let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
+               let action = extras?[ExtraKey.multipleChoiceButtonAction.rawValue] as? String,
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+                let cardExtras = GleanMetrics.Onboarding.MultipleChoiceButtonTapExtra(
+                    buttonAction: action,
+                    cardType: type,
+                    flowType: flowType,
+                    sequenceId: seqID,
+                    sequencePosition: seqPosition)
+                GleanMetrics.Onboarding.multipleChoiceButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

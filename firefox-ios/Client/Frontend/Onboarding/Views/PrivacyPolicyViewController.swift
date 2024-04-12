@@ -24,6 +24,8 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
     }
     private var webView: WKWebView!
     private var url: URL
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -31,10 +33,12 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 
     init(
         url: URL,
+        windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.url = url
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
 
@@ -85,7 +89,8 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 
     // MARK: - Theming
     func applyTheme() {
-        navigationItem.rightBarButtonItem?.tintColor = themeManager.currentTheme.colors.actionPrimary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        navigationItem.rightBarButtonItem?.tintColor = theme.colors.actionPrimary
     }
 }
 

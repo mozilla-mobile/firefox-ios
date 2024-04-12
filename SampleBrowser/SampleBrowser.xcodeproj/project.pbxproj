@@ -48,6 +48,8 @@
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
 		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
 		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
+		E189C24D2BB4802C0065CEF2 /* AddressToolbarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C24C2BB4802C0065CEF2 /* AddressToolbarModel.swift */; };
+		E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +95,8 @@
 		8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPage.swift; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
+		E189C24C2BB4802C0065CEF2 /* AddressToolbarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarModel.swift; sourceTree = "<group>"; };
+		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +237,8 @@
 				8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */,
 				8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */,
 				8A4602182B0FE45200FFD17F /* BrowserToolbar.swift */,
+				E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */,
+				E189C24C2BB4802C0065CEF2 /* AddressToolbarModel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -380,11 +386,13 @@
 				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
+				E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */,
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
 				1D1C32772B97EFD4006CF034 /* TelemetryHandler.swift in Sources */,
 				8A0F447F2B56FDAD00438589 /* BrowserError.swift in Sources */,
 				8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */,
 				8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */,
+				E189C24D2BB4802C0065CEF2 /* AddressToolbarModel.swift in Sources */,
 				8A0F44812B56FDEA00438589 /* SearchDataProvider.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,

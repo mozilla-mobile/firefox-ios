@@ -10,10 +10,6 @@ import ComponentLibrary
 // MARK: View
 final class FakespotOptInCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let headerLabelFontSize: CGFloat = 28
-        static let bodyLabelFontSize: CGFloat = 15
-        static let disclaimerTextLabelFontSize: CGFloat = 13
-
         static let privacyButtonInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 8, trailing: 16)
         static let termsOfUseButtonInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 16, trailing: 16)
         static let learnMoreInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 8, trailing: 0)
@@ -53,24 +49,20 @@ final class FakespotOptInCardView: UIView, ThemeApplicable {
     private lazy var headerLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: UX.headerLabelFontSize,
-                                                            weight: .medium)
+        label.font = FXFontStyles.Bold.title1.scaledFont()
         label.accessibilityTraits.insert(.header)
     }
 
     private lazy var bodyLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.bodyLabelFontSize)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
     }
 
     private lazy var disclaimerTextLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.disclaimerTextLabelFontSize)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
     }
 
     // MARK: Buttons

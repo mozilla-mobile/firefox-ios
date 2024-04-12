@@ -68,7 +68,7 @@ class UrlBarTests: BaseTestCase {
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields["url"], value: "amazon")
+        mozWaitForValueContains(app.textFields["url"], value: "bing")
     }
 
     private func tapUrlBarValidateKeyboardAndIcon() {

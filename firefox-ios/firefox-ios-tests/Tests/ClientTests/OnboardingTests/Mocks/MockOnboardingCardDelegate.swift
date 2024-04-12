@@ -12,6 +12,9 @@ class MockOnboardinCardDelegateController: UIViewController,
                                            OnboardingCardDelegate,
                                            OnboardingViewControllerProtocol,
                                            Themeable {
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var currentWindowUUID: UUID? { return windowUUID }
+
     // Protocol conformance
     var pageController = UIPageViewController()
     var pageControl = UIPageControl()
@@ -54,10 +57,15 @@ class MockOnboardinCardDelegateController: UIViewController,
             presentPrivacyPolicy(from: cardName,
                                  selector: nil,
                                  completion: {})
+        case .endOnboarding:
+            self.action = .endOnboarding
         }
     }
 
-    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+    func handleMultipleChoiceButtonActions(
+        for action: OnboardingMultipleChoiceAction,
+        from cardName: String
+    ) {
         switch action {
         case .themeDark:
             self.multipleChoiceAction = .themeDark

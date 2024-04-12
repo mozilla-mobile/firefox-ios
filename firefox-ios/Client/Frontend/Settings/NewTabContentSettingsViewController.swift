@@ -10,9 +10,9 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
     var currentChoice: NewTabPage!
     var hasHomePage = false
-    init(prefs: Prefs) {
+    init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .SettingsNewTabTitle
     }

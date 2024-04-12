@@ -17,6 +17,7 @@ class FormAutofillHelperTests: XCTestCase {
     var validMockWKMessage: WKScriptMessageMock!
     var secureWebviewMock: WKWebViewMock!
     var secureFrameMock: WKFrameInfoMock!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     let validMockPayloadJson = """
         {
           "type" : "fill-credit-card-form",
@@ -50,7 +51,7 @@ class FormAutofillHelperTests: XCTestCase {
         profile = MockProfile()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+        tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
         formAutofillHelper = FormAutofillHelper(tab: tab)
         secureWebviewMock = WKWebViewMock(URL(string: "https://foo.com")!)
         secureFrameMock = WKFrameInfoMock(webView: secureWebviewMock, frameURL: URL(string: "https://foo.com")!)
@@ -280,7 +281,7 @@ class FormAutofillHelperTests: XCTestCase {
     }
 
     func test_formAutofillHelper_foundFieldValuesClosure_doesntLeak() {
-        let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
+        let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
         let subject = FormAutofillHelper(tab: tab)
         trackForMemoryLeaks(subject)
         tab.createWebview()
@@ -304,6 +305,7 @@ class FormAutofillHelperTests: XCTestCase {
 
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormMessageHandler.rawValue))
         XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.creditCardFormMessageHandler.rawValue))
+        XCTAssertTrue(handlerNames!.contains(FormAutofillHelper.HandlerName.addressFormTelemetryMessageHandler.rawValue))
     }
 
     func testUserContentControllerDidReceiveScriptMessage_withCreditCardHandler() {
