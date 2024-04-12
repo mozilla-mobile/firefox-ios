@@ -80,6 +80,22 @@ extension URL {
         return normalizedHost.flatMap { $0 + self.path }
     }
 
+    /// Extracts the subdomain and host from a given URL string and appends a dot to the subdomain.
+    ///
+    /// This function takes a URL string as input and returns a tuple containing the subdomain and the normalized host.
+    /// If the URL string does not contain a subdomain, the function returns `nil` for the subdomain. If a subdomain is present,
+    /// it is returned with a trailing dot.
+    ///
+    /// - Parameter urlString: The URL string to extract the subdomain and host from.
+    ///
+    /// - Returns: A tuple containing the subdomain (with a trailing dot) and the normalized host. The subdomain is optional and may be `nil`.
+    ///
+    /// # Example
+    /// ```
+    /// let (subdomain, host) = getSubdomainAndHost(from: "https://docs.github.com")
+    /// print(subdomain) // Prints "docs."
+    /// print(host) // Prints "github.com"
+    /// ```
     public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
         let normalizedHost = URL(string: urlString)?.normalizedHost ?? urlString
         let components = normalizedHost.split(separator: ".")

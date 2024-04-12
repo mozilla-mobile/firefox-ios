@@ -100,17 +100,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint = locationDividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth)
         dividerWidthConstraint?.isActive = true
 
-        let navigationActionWidthAnchor = navigationActionStack.widthAnchor.constraint(equalToConstant: 0)
-        navigationActionWidthAnchor.isActive = true
-        navigationActionWidthAnchor.priority = .defaultLow
-
-        let pageActionWidthAnchor = pageActionStack.widthAnchor.constraint(equalToConstant: 0)
-        pageActionWidthAnchor.isActive = true
-        pageActionWidthAnchor.priority = .defaultLow
-
-        let browserActionWidthAnchor = browserActionStack.widthAnchor.constraint(equalToConstant: 0)
-        browserActionWidthAnchor.isActive = true
-        browserActionWidthAnchor.priority = .defaultLow
+        [navigationActionStack, pageActionStack, browserActionStack].forEach(setZeroWidthConstraint)
 
         NSLayoutConstraint.activate([
             navigationActionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
@@ -120,11 +110,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             locationContainer.topAnchor.constraint(equalTo: topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
             locationContainer.leadingAnchor.constraint(equalTo: navigationActionStack.leadingAnchor),
-            locationContainer.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
+            locationContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
-            locationView.trailingAnchor.constraint(equalTo: locationContainer.trailingAnchor),
+            locationView.trailingAnchor.constraint(equalTo: locationDividerView.leadingAnchor),
             locationView.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             locationDividerView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -154,6 +144,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
+    }
+
+    private func setZeroWidthConstraint(_ stackView: UIStackView) {
+        let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
+        widthAnchor.isActive = true
+        widthAnchor.priority = .defaultLow
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {

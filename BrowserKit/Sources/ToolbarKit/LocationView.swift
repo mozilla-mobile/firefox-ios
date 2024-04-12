@@ -35,7 +35,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     private var notifyTextChanged: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
 
-    private lazy var urlTextFieldSubdomainColor: UIColor = .systemRed
+    private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
 
@@ -59,7 +59,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
             urlTextField.text = urlTextField.text?.lowercased()
             urlAbsolutePath = urlTextField.text
-            locationViewDelegate?.locationViewDidEnterText(urlTextField.text?.lowercased() ?? "")
+            locationViewDelegate?.locationViewDidEnterText(urlTextField.text ?? "")
         }
     }
 
@@ -87,10 +87,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradientLayerFrame()
+        formatAndTruncateURLTextField()
         if !doesURLTextFieldExceedViewWidth, !urlTextField.isFirstResponder {
             animateURLText(urlTextField, options: .transitionFlipFromLeft, textAlignment: .center)
-        } else {
-            animateURLText(urlTextField, options: .transitionFlipFromRight, textAlignment: .natural)
         }
     }
 
@@ -190,7 +189,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = urlAbsolutePath
-        updateGradientLayerFrame()
         if !doesURLTextFieldExceedViewWidth {
             animateURLText(textField, options: .transitionFlipFromRight, textAlignment: .natural)
         }
@@ -198,11 +196,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        formatAndTruncateURLTextField()
-        updateGradientLayerFrame()
-        if !doesURLTextFieldExceedViewWidth, !urlTextField.isFirstResponder {
-            animateURLText(textField, options: .transitionFlipFromLeft, textAlignment: .center)
-        }
+
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
