@@ -126,7 +126,7 @@ class SearchTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2436095
-    func testCopyPasteComplete() throws {
+    func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
@@ -297,6 +297,67 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306886
+    // SmokeTest
+    func testBottomVIewURLBar() throws {
+        if iPad() {
+            throw XCTSkip("Toolbar option not available for iPad")
+        } else {
+            // Tap on toolbar bottom setting
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(ToolbarSettings)
+            navigator.performAction(Action.SelectToolbarBottom)
+            navigator.goto(HomePanelsScreen)
+
+            // URL bar is moved to the bottom of the screen
+            let customizeHomepageElement = AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage
+            let customizeHomepage = app.cells.otherElements.buttons[customizeHomepageElement]
+            let menuSettingsButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            scrollToElement(customizeHomepage)
+            mozWaitForElementToExist(customizeHomepage)
+            let urlBar = app.textFields["url"]
+            XCTAssertTrue(urlBar.isBelow(element: customizeHomepage))
+            XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+
+            // In a new tab, tap on the URL bar
+            navigator.goto(NewTabScreen)
+            urlBar.tap()
+
+            // The URL bar is focused and the keyboard is displayed
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+
+            // Open a website
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+
+            // The keyboard is dismissed and page is correctly loaded
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount == 0, "The keyboard is shown")
+            waitUntilPageLoad()
+
+            // Tap on the URL bar
+            urlBar.tap()
+
+            // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+
+            // Tap the back icon <
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+
+            // The focused is dismissed from the URL bar
+            let addressBar = app.textFields["url"]
+            XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        }
+    }
+
+    private func validateUrlHasFocusAndKeyboardIsDisplayed() {
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        let keyboardCount = app.keyboards.count
+        XCTAssert(keyboardCount > 0, "The keyboard is not shown")
+    }
+
 // TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when
 // we support feature flags for tests
 //    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {
