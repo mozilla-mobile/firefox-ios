@@ -524,7 +524,9 @@ extension LegacyTabTrayViewController: Notifiable {
             case .ProfileDidStartSyncing, .ProfileDidFinishSyncing:
                 self?.updateButtonTitle(notification)
             case .UpdateLabelOnTabClosed:
-                guard let label = self?.countLabel else { return }
+                guard let label = self?.countLabel,
+                      notification.windowUUID == self?.windowUUID
+                else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
                 self?.segmentedControlIphone.setImage(
                     UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label),
@@ -556,7 +558,7 @@ extension LegacyTabTrayViewController: UIAdaptivePresentationControllerDelegate,
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        notificationCenter.post(name: .TabsTrayDidClose)
+        notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
@@ -565,7 +567,7 @@ extension LegacyTabTrayViewController: UIAdaptivePresentationControllerDelegate,
 extension LegacyTabTrayViewController {
     @objc
     func didTapAddTab(_ sender: UIBarButtonItem) {
-        notificationCenter.post(name: .TabsTrayDidClose)
+        notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         viewModel.didTapAddTab(sender)
         self.dismiss(animated: true) {
             self.viewModel.didDismiss()
@@ -584,7 +586,7 @@ extension LegacyTabTrayViewController {
 
     @objc
     func didTapDone() {
-        notificationCenter.post(name: .TabsTrayDidClose)
+        notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         // Update Private mode when closing TabTray, if the mode toggle but
         // no tab is pressed with return to previous state
         updatePrivateUIState()

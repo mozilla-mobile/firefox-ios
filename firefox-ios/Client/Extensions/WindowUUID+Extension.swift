@@ -27,3 +27,24 @@ public extension WindowUUID {
     /// Default window UUID for UI testing.
     static let DefaultUITestingUUID = WindowUUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
 }
+
+public extension WindowUUID {
+    /// Key for setting (or obtaining) the windowUUID from notification userInfo payloads
+    static let userInfoKey = "windowUUID"
+
+    /// Convenience. Returns a Notification user info payload containing the receiving UUID.
+    var userInfo: [AnyHashable: Any] {
+        return [WindowUUID.userInfoKey: self]
+    }
+}
+
+public extension Notification {
+    /// Convenience for obtaining the windowUUID for a posted notification
+    var windowUUID: WindowUUID? {
+        guard let info = userInfo,
+        let uuid = info[WindowUUID.userInfoKey] as? WindowUUID
+        else { return nil }
+
+        return uuid
+    }
+}

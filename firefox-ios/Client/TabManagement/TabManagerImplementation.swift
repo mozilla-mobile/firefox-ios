@@ -528,6 +528,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         case UIApplication.willResignActiveNotification:
             saveAllTabData()
         case .TabMimeTypeDidSet:
+            guard windowUUID == notification.windowUUID else { return }
             updateMenuItemsForSelectedTab()
         default:
             break
