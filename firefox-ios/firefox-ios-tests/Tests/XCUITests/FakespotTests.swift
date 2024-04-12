@@ -404,11 +404,7 @@ class FakespotTests: BaseTestCase {
             app.buttons["Reload page"].tap()
             waitUntilPageLoad()
         }
-        // Workaround for iPad issue: https://github.com/mozilla-mobile/firefox-ios/issues/19346
-        if app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].exists {
-            app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
-        }
-        // Tap the shopping cart icon
+        // Tap the price tag icon
         let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
         var nrOfRetries = 4
         while !shoppingButton.exists && nrOfRetries > 0 {
