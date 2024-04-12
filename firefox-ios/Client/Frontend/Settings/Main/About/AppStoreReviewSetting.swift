@@ -11,6 +11,10 @@ class AppStoreReviewSetting: Setting {
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
 
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.RateOnAppStore.title
+    }
+
     weak var settingsDelegate: AboutSettingsDelegate?
 
     init(settingsDelegate: AboutSettingsDelegate?) {
