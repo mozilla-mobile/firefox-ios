@@ -17,7 +17,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - empty_parentheses_with_trailing_closure
   # - for_where
   # - force_try
-  # - implicit_getter
+  - implicit_getter
   # - inclusive_language
   # - invalid_swiftlint_command
   # - large_tuple
