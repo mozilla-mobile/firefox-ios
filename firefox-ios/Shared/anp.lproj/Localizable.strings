@@ -466,16 +466,16 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "पठन सूची रो जोड़लोॅ गेल";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "बुकमार्कस";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "एड्रेस कॉपी करोॅ";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "डाउनलोडस";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "इतिहास";
 
 /* The title for the button that lets you paste into the location bar */
@@ -484,7 +484,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "पेस्ट आरु गो";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "पठन सूची";
 
 /* Toast displayed to the user after a bookmark has been removed. */

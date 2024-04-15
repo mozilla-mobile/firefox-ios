@@ -1,6 +1,3 @@
 /* This value is used as the title for the select a credit card from list of available cards. */
-"CreditCard.SelectCreditCard.MainTitle.v116" = "ต้องการใช้บัตรที่บันทึกไว้หรือไม่?";
-
-/* This value is used as the title for the select a credit card from list of available cards. */
 "CreditCard.SelectCreditCard.MainTitle.v122" = "ใช้บัตรที่บันทึกไว้";
 

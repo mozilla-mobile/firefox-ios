@@ -1,15 +1,9 @@
 /* This value is used as the toast message for the saving success alert in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v116" = "S'ha actualitzat la informació de la targeta";
 
-/* This value is used as the title for the update card page */
-"CreditCard.UpdateCard.MainTitle.v115" = "Voleu actualitzar aquesta targeta?";
-
 /* This value is used as the title for the Manage Cards button from the update credit card page */
 "CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "Gestiona les targetes";
 
 /* This value is used as the title for the Not Now button in the update credit card page */
 "CreditCard.UpdateCard.NotNowButtonTitle.v115" = "Ara no";
-
-/* This value is used as the title for the button in the update credit card page */
-"CreditCard.UpdateCard.YesButtonTitle.v115" = "Sí";
 

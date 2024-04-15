@@ -1,17 +1,8 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "באפשרותך לשמור את פרטי הכרטיס שלך בצורה מאובטחת באמצעות %@ כדי לבצע צ’ק-אאוט מהר יותר בפעם הבאה.";
-
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v122" = "‏%@ מצפין את מספר הכרטיס שלך. קוד האבטחה שלך לא יישמר.";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "כן";
-
-/* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "שמירה";
-
-/* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v115" = "לזכור את הכרטיס הזה?";
 
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v122" = "לשמור את הכרטיס הזה באופן מאובטח?";
