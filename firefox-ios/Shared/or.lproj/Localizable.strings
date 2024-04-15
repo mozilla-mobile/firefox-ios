@@ -637,17 +637,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ବାଛନ୍ତୁ";
 
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "କୌଣସି ଲଗଇନ ମିଳିଲା ନାହିଁ";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "ଆପଣ ଖୋଜୁଥିବା ତଥ୍ୟର କୌଣସି ପ୍ରତ୍ୟୁତ୍ତର ମିଳିଲା ନାହିଁ";
 
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "ବାତିଲ କରନ୍ତୁ";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "ଖୋଜା ଲଗିନ";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SAVED LOGINS";
@@ -679,7 +673,7 @@
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "ଶର୍ଟକଟ ତାଲିକାରେ ଯୋଗ କରନ୍ତୁ";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ଚିହ୍ନିତ ସ୍ଥାନ";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -691,19 +685,19 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "ପ୍ରଧାନ ପୃଷ୍ଠା ପସନ୍ଦ ଅନୁସାରେ ସଜାଡ଼ନ୍ତୁ";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "ଆହରଣଗୁଡ଼ିକ";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ସହାୟତା";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ଇତିହାସ";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "ନୂଆ ଟ୍ୟାବ୍";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "ପାସ୍‌ୱାର୍ଡସମୂହ";
 
 /* The title for the button that lets you paste into the location bar */
@@ -712,7 +706,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "ଲଗାନ୍ତୁ ଏବଂ ଯାଆନ୍ତୁ";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "ପଠନ ତାଲିକା";
 
 /* Toast displayed to the user after a bookmark has been removed. */

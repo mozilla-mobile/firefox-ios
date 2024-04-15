@@ -4,6 +4,3 @@
 /* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards. */
 "Biometry.Screen.UniversalAuthenticationReason.v122" = "Ověřením získáte přístup k uloženým heslům a platebním metodám.";
 
-/* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards. */
-"Biometry.Screen.UniversalAuthenticationReasonV2.v116" = "Autentizujte se pro přístup k vašim uloženým přihlašovacím údajům a šifrovaným kartám.";
-

@@ -646,9 +646,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Barrachd fiosrachaidh";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Airson clàraidhean a-steach is faclan-faire a shàbhaladh, cuir ID aodainn, ID suathaidh no còd-faire uidheim an comas.";
-
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Lean air adhart";
 
@@ -694,20 +691,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Criathrag";
 
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "Cha deach clàradh a-steach a lorg";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Chan eil toradh ann a tha a’ freagairt ris na lorg thu.";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "Chan eil clàradh a-steach ann a tha a’ freagairt ris na lorg thu";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "Sguir dheth";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "Lorg sna clàraidhean a-steach";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "Tagh facal-faire airson a lìonadh";
@@ -742,7 +730,7 @@
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "Cuir ris na h-ath-ghoiridean";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Comharran-lìn";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -754,7 +742,7 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Gnàthaich an duilleag-dhachaigh";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Luchdaidhean a-nuas";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
@@ -766,7 +754,7 @@
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Cobhair";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "An eachdraidh";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
@@ -778,7 +766,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Cuir am modh oidhche air";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Faclan-faire";
 
 /* The title for the button that lets you paste into the location bar */
@@ -787,7 +775,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Cuir ann ⁊ tadhail air";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "An liosta leughaidh";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
@@ -1155,9 +1143,6 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Cuir %s an àite na ceist)";
-
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v112" = "Fèin-lìon cairtean-creideis";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Falamhaich dàta nan làraichean-lìn air fad";

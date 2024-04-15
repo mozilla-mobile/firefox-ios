@@ -2,9 +2,6 @@
 "CreditCard.RememberCard.SecondaryButtonTitle.v116" = "카드 정보 업데이트됨";
 
 /* This value is used as the title for the update card page */
-"CreditCard.UpdateCard.MainTitle.v115" = "이 카드를 업데이트하시겠습니까?";
-
-/* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v122" = "카드를 수정하시겠습니까?";
 
 /* This value is used as the title for the Manage Cards button from the update credit card page */
@@ -12,9 +9,6 @@
 
 /* This value is used as the title for the Not Now button in the update credit card page */
 "CreditCard.UpdateCard.NotNowButtonTitle.v115" = "나중에";
-
-/* This value is used as the title for the button in the update credit card page */
-"CreditCard.UpdateCard.YesButtonTitle.v115" = "예";
 
 /* This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card. */
 "CreditCard.UpdateCard.YesButtonTitle.v122" = "수정";

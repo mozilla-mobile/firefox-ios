@@ -2,9 +2,6 @@
 "FirefoxSync.AddressAutofillEngine.v124" = "Tansiwin";
 
 /* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v115" = "Tikerḍiwin n usmad";
-
-/* Toggle for credit cards syncing setting */
 "FirefoxSync.CreditCardsEngine.v122" = "Tarrayin n uxelleṣ";
 
 /* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */

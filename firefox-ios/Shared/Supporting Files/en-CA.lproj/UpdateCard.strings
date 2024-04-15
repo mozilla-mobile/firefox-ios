@@ -2,7 +2,7 @@
 "CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Card Information Updated";
 
 /* This value is used as the title for the update card page */
-"CreditCard.UpdateCard.MainTitle.v115" = "Update this card?";
+"CreditCard.UpdateCard.MainTitle.v122" = "Update card?";
 
 /* This value is used as the title for the Manage Cards button from the update credit card page */
 "CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "Manage cards";
@@ -10,6 +10,6 @@
 /* This value is used as the title for the Not Now button in the update credit card page */
 "CreditCard.UpdateCard.NotNowButtonTitle.v115" = "Not Now";
 
-/* This value is used as the title for the button in the update credit card page */
-"CreditCard.UpdateCard.YesButtonTitle.v115" = "Yes";
+/* This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card. */
+"CreditCard.UpdateCard.YesButtonTitle.v122" = "Update";
 

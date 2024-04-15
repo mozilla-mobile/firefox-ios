@@ -5,34 +5,19 @@
 "CreditCard.Settings.EmptyListDescription.v112" = "ඊළඟ වතාවේ ඉක්මනින් ගෙවීමට ඔබගේ පතෙහි තොරතුරු ආරක්‍ෂිතව සුරකින්න.";
 
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
-"CreditCard.Settings.EmptyListTitle.v112" = "ණයපත් %@ වෙත සුරකින්න";
-
-/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v122" = "%@ වෙත පත් සුරකින්න";
 
-/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
 "CreditCard.Settings.ListItemA11y.v118" = "%3$@ න් අවසන් වන %2$@ වෙත නිකුත් කළ %1$@ පත %4$@ දී ඉකුත් වේ";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
-"CreditCard.Settings.NotNow.v112" = "දැන් නොවේ";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v122" = "දැන් නොවේ";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.RememberThisCard.v112" = "පත මතක තබා ගන්නද?";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.RememberThisCard.v122" = "මෙම පත ආරක්‍ෂිතව සුරකින්නද?";
 
 /* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
-"CreditCard.Settings.UpdateThisCard.v112" = "පත යාවත්කාල කරන්නද?";
-
-/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
 "CreditCard.Settings.UpdateThisCard.v122" = "පත යාවත්කාල කරන්නද?";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.Yes.v112" = "ඔව්";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.Yes.v122" = "යාවත්කාලය";
@@ -42,9 +27,6 @@
 
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "පත් කළමනාකරණය";
-
-/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
-"CreditCards.Settings.UseASavedCard.v112" = "සුරැකි පතක් යොදා ගන්නද?";
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseASavedCard.v122" = "සුරැකි පත යොදාගන්න";
