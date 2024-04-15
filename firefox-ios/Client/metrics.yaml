@@ -2912,7 +2912,7 @@ logins:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19722
     data_reviews:
-      - todo
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19791
     data_sensitivity:
       - interaction
     notification_emails:
@@ -2925,7 +2925,7 @@ logins:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19722
     data_reviews:
-      - todo
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19791
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-10-01"
@@ -2936,7 +2936,7 @@ logins:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19722
     data_reviews:
-      - todo
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19791
     data_sensitivity:
       - interaction
     notification_emails:
@@ -2949,7 +2949,7 @@ logins:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19722
     data_reviews:
-      - todo
+      - https://github.com/mozilla-mobile/firefox-ios/pull/19791
     data_sensitivity:
       - interaction
     notification_emails:
