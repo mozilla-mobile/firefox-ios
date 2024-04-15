@@ -2905,6 +2905,56 @@ logins:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2024-06-01"
+  autofill_prompt_shown:
+    type: event
+    description: |
+      Password autofill prompt was shown.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19722
+    data_reviews:
+      - todo
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  autofill_prompt_expanded:
+    type: event
+    description: |
+      Password autofill prompt was expanded.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19722
+    data_reviews:
+      - todo
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  autofill_prompt_dismissed:
+    type: event
+    description: |
+      Password autofill prompt was dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19722
+    data_reviews:
+      - todo
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
+  password_detected:
+    type: event
+    description: |
+      Password was detected for a website.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19722
+    data_reviews:
+      - todo
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2024-10-01"
 # QR Code metrics
 qr_code:
   scanned:
