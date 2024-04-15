@@ -20,7 +20,7 @@ only_rules: # Only enforce these rules, ignore all others
   - implicit_getter
   # - inclusive_language
   # - invalid_swiftlint_command
-  # - large_tuple
+  - large_tuple
   # - leading_whitespace
   # - legacy_cggeometry_functions
   # - legacy_constant
