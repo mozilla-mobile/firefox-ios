@@ -19,6 +19,8 @@ only_rules: # Only enforce these rules, ignore all others
   # - force_try
   - implicit_getter
   # - inclusive_language
+  - invalid_swiftlint_command
+  # - large_tuple
   # - invalid_swiftlint_command
   - large_tuple
   # - leading_whitespace
