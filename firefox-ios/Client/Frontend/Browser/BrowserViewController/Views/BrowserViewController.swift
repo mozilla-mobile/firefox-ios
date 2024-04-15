@@ -2299,23 +2299,23 @@ extension BrowserViewController: LegacyTabDelegate {
                 theme: currentTheme()
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
-            logins.foundFieldValues = { [weak self] field, currentRequestId in
+            logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
                 Task {
                     guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
-                    guard let tabURL = tab.url else { return }
+                    guard let tabURL = tab?.url else { return }
                     let logins = (try? await self?.profile.logins.listLogins()) ?? []
                     let loginsForCurrentTab = logins.filter { login in
                         guard let recordHostnameURL = URL(string: login.hostname) else { return false }
                         return recordHostnameURL.baseDomain == tabURL.baseDomain
                     }
                     if !loginsForCurrentTab.isEmpty {
-                        tab.webView?.accessoryView.reloadViewFor(.login)
-                        tab.webView?.reloadInputViews()
+                        tab?.webView?.accessoryView.reloadViewFor(.login)
+                        tab?.webView?.reloadInputViews()
                     }
-                    tab.webView?.accessoryView.savedLoginsClosure = {
+                    tab?.webView?.accessoryView.savedLoginsClosure = {
                         Task { @MainActor [weak self] in
                             // Dismiss keyboard
-                            webView.resignFirstResponder()
+                            webView?.resignFirstResponder()
                             self?.authenticateSelectSavedLoginsClosureBottomSheet(
                                 tabURL: tabURL,
                                 currentRequestId: currentRequestId
