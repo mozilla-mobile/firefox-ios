@@ -2,9 +2,6 @@
 "FirefoxSync.AddressAutofillEngine.v124" = "Adresser";
 
 /* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v115" = "Betalingskort";
-
-/* Toggle for credit cards syncing setting */
 "FirefoxSync.CreditCardsEngine.v122" = "Betalingsmetodar";
 
 /* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */

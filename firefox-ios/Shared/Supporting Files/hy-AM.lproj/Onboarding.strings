@@ -8,13 +8,13 @@
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Անցեք *Կարգավորումներ*";
 
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.SecondLabel.v114" = "2. Հպեք *Սկզբնադիր զննարկիչ հավելված*";
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Հպեք *Սկզբնադիր դիտարկիչ հավելված*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. Ընտրեք *%@*";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
-"DefaultBrowserPopup.Title.v114" = "Փոխարկեք ձեր կանխադրված զննարկիչը";
+"DefaultBrowserPopup.Title.v114" = "Փոխարկեք ձեր սկզբնադիր դիտարկիչը";
 
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Հարմարեցնել %@-ը";
@@ -134,10 +134,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Փակեք և դուրս եկեք %@ ներբեռնումից";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "Մեր շահույթ չհետապնդող զննարկիչը օգնում է դադարեցնել ընկերություններին համացանցում ձեզ գաղտնի հետևելուց:";
+"Onboarding.Welcome.Description.TreatementA.v120" = "Մեր շահույթ չհետապնդող դիտարկիչն օգնում է դադարեցնել ընկերություններին համացանցում ձեզ գաղտնի հետևելուց:";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v120" = "Մեր շահույթ չհետապնդող զննարկիչը օգնում է դադարեցնել ընկերություններին համացանցում ձեզ գաղտնի հետևելուց:";
+"Onboarding.Welcome.Description.v120" = "Մեր շահույթ չհետապնդող դիտարկիչն օգնում է դադարեցնել ընկերություններին համացանցում ձեզ գաղտնի հետևելուց:";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Իմացեք ավելին մեր գաղտնիության ծանուցման մեջ";

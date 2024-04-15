@@ -1,14 +1,14 @@
 /* (No Comment) */
-"New Private Tab" = "Նոր Գաղտնի Ներդիր";
+"New Private Tab" = "Նոր գաղտնի ներդիր";
 
 /* (No Comment) */
-"New Tab" = "Նոր Ներդիր";
+"New Tab" = "Նոր ներդիր";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox-ն օգտագործում է ձեր խցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանյութերի համար:";
+"NSCameraUsageDescription" = "Firefox-ն օգտագործում է Ձեր տեսախցիկը՝ սկանավորելու QR կոդերը և լուսանկարելու ու տեսանկարելու համար:";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox-ը պահանջում է Face ID՝ ձեր պահպանված գաղտնաբառերը և վճարման եղանակները մուտք գործելու համար:";
+"NSFaceIDUsageDescription" = "Firefox-ը պահանջում է Face ID՝ Ձեր պահված գաղտնաբառերին և վճարման եղանակներին հասանելիություն ունենալու համար:";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը։";

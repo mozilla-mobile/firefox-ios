@@ -1,8 +1,8 @@
 /* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
-"FirefoxHomepage.FeltDeletion.Link.v122" = "Մասնավոր զննարկման տվյալները ջնջվել են";
+"FirefoxHomepage.FeltDeletion.Link.v122" = "Գաղտնի դիտարկման տվյալները ջնջվեցին";
 
 /* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
-"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@-ը ջնջում է ձեր թխուկները, պատմությունը և կայքի տվյալները, երբ փակում եք ձեր բոլոր մասնավոր պատուհանները:";
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "%@-ը ջնջում է Ձեր թխուկները, պատմությունը և կայքի տվյալները, երբ փակում եք Ձեր բոլոր գաղտնի ներդիրները:";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
 "FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Ո՞վ կարող է տեսնել իմ գործունեությունը:";
