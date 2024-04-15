@@ -115,6 +115,7 @@
         "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
+        "SearchTests\/testBottomVIewURLBar()",
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
