@@ -415,8 +415,13 @@ class FakespotViewController: UIViewController,
             return view
         case .onboarding:
             let view: FakespotOptInCardView = .build()
-            viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                self?.triggerDismiss()
+            viewModel.optInCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
+                if dismissPermanently {
+                    self?.triggerDismiss()
+                } else {
+                    store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false,
+                                                                                   windowUUID: windowUUID)))
+                }
                 guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
@@ -453,8 +458,8 @@ class FakespotViewController: UIViewController,
         case .qualityDeterminationCard:
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
-            viewModel.reviewQualityCardViewModel.dismissViewController = { [weak self] in
-                self?.triggerDismiss()
+            viewModel.reviewQualityCardViewModel.dismissViewController = {
+                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             }
             viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
                 let context = FakespotUIContext(isExpanded: state == .expanded, windowUUID: windowUUID)
@@ -467,11 +472,14 @@ class FakespotViewController: UIViewController,
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             viewModel.settingsCardViewModel.expandState = fakespotState.isSettingsExpanded ? .expanded : .collapsed
-            viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
+            viewModel.settingsCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
                 guard let self = self, let action else { return }
-
-                store.dispatch(FakespotAction.surfaceDisplayedEventSend(windowUUID.context))
-                self.triggerDismiss()
+                if dismissPermanently {
+                    self.triggerDismiss()
+                } else {
+                    store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false,
+                                                                                   windowUUID: windowUUID)))
+                }
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
@@ -501,7 +509,7 @@ class FakespotViewController: UIViewController,
                 self?.viewModel.addTab(url: adData.url)
                 self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
-                self?.triggerDismiss()
+                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
             }
             view.configure(viewModel)
             adView = view
