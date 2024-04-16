@@ -21,12 +21,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-<<<<<<< HEAD
-        static let buttonFontSize: CGFloat = 16
-        static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
-        static let descriptionFontSize: CGFloat = 17
-=======
->>>>>>> 736149075 (Refactor FXIOS-8979 [Onboarding Customization] Fix button layout for null second button (#19825))
 
         static let smallTopStackViewPadding: CGFloat = 40
 
@@ -264,41 +258,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         })
     }
 
-<<<<<<< HEAD
-    private func updateLayout() {
-        titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.body
-        imageView.image = viewModel.image
-
-        let buttonViewModel = PrimaryRoundedButtonViewModel(
-            title: viewModel.buttons.primary.title,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
-        )
-        primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.currentTheme)
-
-        setupSecondaryButton()
-    }
-
-    private func setupSecondaryButton() {
-        // To keep Title, Description aligned between cards we don't hide the button
-        // we clear the background and make disabled
-        guard let buttonTitle = viewModel.buttons.secondary?.title else {
-            secondaryButton.isUserInteractionEnabled = false
-            secondaryButton.backgroundColor = .clear
-            return
-        }
-
-        let buttonViewModel = SecondaryRoundedButtonViewModel(
-            title: buttonTitle,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
-        )
-        secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: themeManager.currentTheme)
-    }
-
-=======
->>>>>>> 736149075 (Refactor FXIOS-8979 [Onboarding Customization] Fix button layout for null second button (#19825))
     // MARK: - Button Actions
     @objc
     override func primaryAction() {
