@@ -395,6 +395,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary
 
+        primaryButton.applyTheme(theme: theme)
         setupSecondaryButton()
         setupLinkButton()
     }
