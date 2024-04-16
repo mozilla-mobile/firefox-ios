@@ -40,10 +40,8 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         guard var updatedConfiguration = configuration else { return }
 
         updatedConfiguration.background.backgroundColor = switch state {
-        case [.highlighted]:
-            highlightedBackgroundColor
-        default:
-            normalBackgroundColor
+        case [.highlighted]: highlightedBackgroundColor
+        default: normalBackgroundColor
         }
 
         updatedConfiguration.baseForegroundColor = foregroundColor
@@ -91,7 +89,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         foregroundColor = .clear
 
         // In order to have a proper height, the button needs some text. This
-        // is invisible, however, but something sensible is used as a placeholder.
+        // is invisible, but something sensible is used as a placeholder.
         updatedConfiguration.title = "Skip"
 
         configuration = updatedConfiguration
