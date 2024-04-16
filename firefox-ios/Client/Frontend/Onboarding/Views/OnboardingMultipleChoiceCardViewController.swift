@@ -394,6 +394,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
 
+        primaryButton.applyTheme(theme: theme)
         setupSecondaryButton()
 
         multipleChoiceButtons.forEach { $0.applyTheme() }
