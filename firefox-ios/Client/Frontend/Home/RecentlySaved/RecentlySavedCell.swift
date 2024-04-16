@@ -26,8 +26,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     private var heroImageView: HeroImageView = .build { _ in }
 
     let itemTitle: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.bookmarkTitleFontSize)
+        label.font = FXFontStyles.Regular.body.scaledFont().withSize(UX.bookmarkTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
     }
 
