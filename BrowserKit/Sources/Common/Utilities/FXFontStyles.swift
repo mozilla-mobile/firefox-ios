@@ -18,6 +18,7 @@ public struct FXFontStyles {
         public static let footnote = TextStyling(for: .footnote, size: 13, weight: .regular)
         public static let caption1 = TextStyling(for: .caption1, size: 12, weight: .regular)
         public static let caption2 = TextStyling(for: .caption2, size: 11, weight: .regular)
+        public static let password = TextStyling(for: .body, size: 16, weight: .regular, symbolicTraits: .traitMonoSpace)
     }
 
     public struct Bold {

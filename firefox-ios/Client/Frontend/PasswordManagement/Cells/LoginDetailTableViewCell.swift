@@ -62,8 +62,7 @@ class LoginDetailTableViewCell: UITableViewCell,
 
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
-
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.descriptionFontSize)
+        label.font = FXFontStyles.Regular.body.scaledFont().withSize(UX.descriptionFontSize)
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -74,8 +73,7 @@ class LoginDetailTableViewCell: UITableViewCell,
     }
 
     private lazy var highlightedLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
-                                                            size: UX.highlightedFontSize)
+        label.font = FXFontStyles.Regular.callout.scaledFont().withSize(UX.highlightedFontSize)
         label.numberOfLines = 0
     }
 
@@ -130,9 +128,7 @@ class LoginDetailTableViewCell: UITableViewCell,
         descriptionLabel.isUserInteractionEnabled = viewModel.isEditingFieldData
 
         if viewModel.displayDescriptionAsPassword {
-            descriptionLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                           size: 16,
-                                                                           symbolicTraits: [.traitMonoSpace])
+            descriptionLabel.font = FXFontStyles.Regular.password.scaledFont()
         }
     }
 

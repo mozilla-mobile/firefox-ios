@@ -10,15 +10,19 @@ public struct TextStyling {
     private let textStyle: UIFont.TextStyle
     private let size: CGFloat
     private let weight: UIFont.Weight
+    private let symbolicTraits: UIFontDescriptor.SymbolicTraits?
 
-    init(for textStyle: UIFont.TextStyle, size: CGFloat, weight: UIFont.Weight) {
+    init(for textStyle: UIFont.TextStyle, size: CGFloat, weight: UIFont.Weight,
+         symbolicTraits: UIFontDescriptor.SymbolicTraits? = nil) {
         self.textStyle = textStyle
         self.size = size
         self.weight = weight
+        self.symbolicTraits = symbolicTraits
     }
 
     public func scaledFont() -> UIFont {
-        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size, weight: weight)
+        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size, weight: weight,
+                                                      symbolicTraits: symbolicTraits)
     }
 
     public func systemFont() -> UIFont {
