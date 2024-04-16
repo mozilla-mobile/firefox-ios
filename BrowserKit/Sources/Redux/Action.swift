@@ -10,14 +10,22 @@ import Foundation
 /// action, including a UUID for a particular window. If an Action is truly global in
 /// nature or can't be associated with a UUID it can send either the UUID for the active
 /// window (see `WindowManager.activeWindow`) or if needed `WindowUUID.unavailable`.
-public protocol Action {
-    var windowUUID: UUID { get }
-}
+open class Action {
+    public var windowUUID: UUID
+    public var viewUUID: UUID?
+    public var actionType: ActionType
 
-extension Action {
+    public init(windowUUID: UUID, viewUUID: UUID? = nil, actionType: ActionType) {
+        self.windowUUID = windowUUID
+        self.viewUUID = viewUUID
+        self.actionType = actionType
+    }
+
     func displayString() -> String {
         let className = String(describing: Self.self)
         let actionName = String(describing: self).prefix(20)
         return "\(className).\(actionName)"
     }
 }
+
+public protocol ActionType {}
