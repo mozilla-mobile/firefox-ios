@@ -86,12 +86,6 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     public func makeButtonInvisible() {
         guard var updatedConfiguration = configuration else { return }
 
-<<<<<<< HEAD
-    public func applyTheme(theme: Theme) {
-        highlightedBackgroundColor = theme.colors.actionSecondaryHover
-        normalBackgroundColor = theme.colors.actionSecondary
-        foregroundColor = theme.colors.textOnLight
-=======
         isUserInteractionEnabled = false
         isAccessibilityElement = false
         normalBackgroundColor = .clear
@@ -103,7 +97,6 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.title = "Skip"
 
         configuration = updatedConfiguration
->>>>>>> 736149075 (Refactor FXIOS-8979 [Onboarding Customization] Fix button layout for null second button (#19825))
 
         setNeedsUpdateConfiguration()
     }
