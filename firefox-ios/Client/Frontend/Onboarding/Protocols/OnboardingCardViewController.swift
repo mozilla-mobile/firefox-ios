@@ -7,8 +7,6 @@ import Common
 import ComponentLibrary
 
 class OnboardingCardViewController: UIViewController, Themeable {
-<<<<<<< HEAD
-=======
     // MARK: - Common UX Elements
     struct SharedUX {
         static let topStackViewSpacing: CGFloat = 24
@@ -97,7 +95,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
     }
 
->>>>>>> 736149075 (Refactor FXIOS-8979 [Onboarding Customization] Fix button layout for null second button (#19825))
     // MARK: - Themeable
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
