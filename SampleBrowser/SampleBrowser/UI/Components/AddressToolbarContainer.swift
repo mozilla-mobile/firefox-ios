@@ -13,8 +13,6 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 class AddressToolbarContainer: UIView, ThemeApplicable {
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
     private lazy var regularToolbar: BrowserAddressToolbar = .build()
-
-    private var addressToolbarModel: AddressToolbarModel?
     private weak var delegate: AddressToolbarContainerDelegate?
 
     override init(frame: CGRect) {
@@ -26,24 +24,23 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(url: String?,
+    func configure(_ model: AddressToolbarContainerModel,
                    toolbarDelegate: AddressToolbarDelegate,
                    toolbarContainerDelegate: AddressToolbarContainerDelegate) {
-        addressToolbarModel = updateModel(url: url)
-        guard let addressToolbarModel else { return }
-
-        compactToolbar.configure(state: addressToolbarModel.state, toolbarDelegate: toolbarDelegate)
-        regularToolbar.configure(state: addressToolbarModel.state, toolbarDelegate: toolbarDelegate)
+        compactToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
+        regularToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
         delegate = toolbarContainerDelegate
     }
 
     override func becomeFirstResponder() -> Bool {
+        super.becomeFirstResponder()
         let isCompact = traitCollection.horizontalSizeClass == .compact
         let toolbar = isCompact ? compactToolbar : regularToolbar
         return toolbar.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
         let isCompact = traitCollection.horizontalSizeClass == .compact
         let toolbar = isCompact ? compactToolbar : regularToolbar
         return toolbar.resignFirstResponder()
@@ -74,30 +71,6 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
             toolbarToAdd.bottomAnchor.constraint(equalTo: bottomAnchor),
             toolbarToAdd.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
-    }
-
-    private func updateModel(url: String?) -> AddressToolbarModel {
-        let pageActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.qrCode,
-            isEnabled: true,
-            a11yLabel: "Read QR Code",
-            a11yId: "qrCodeButton",
-            onSelected: nil)]
-
-        let browserActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.appMenu,
-            isEnabled: true,
-            a11yLabel: "Open Menu",
-            a11yId: "appMenuButton",
-            onSelected: {
-                self.delegate?.didClickMenu()
-            })]
-
-        return AddressToolbarModel(
-            url: url,
-            navigationActions: [],
-            pageActions: pageActions,
-            browserActions: browserActions)
     }
 
     // MARK: - ThemeApplicable

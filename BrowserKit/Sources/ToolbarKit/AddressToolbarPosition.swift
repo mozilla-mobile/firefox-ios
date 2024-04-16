@@ -4,6 +4,7 @@
 
 import Foundation
 
-class Dummy {
-    var blubb: String = "Blubb"
+public enum AddressToolbarPosition {
+    case bottom
+    case top
 }
