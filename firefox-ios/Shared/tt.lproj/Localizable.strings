@@ -613,9 +613,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Логиннар";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Логиннарны һәм серсүзләрне саклау һәм автотутыру өчен, Face ID, Touch ID яки җиһаз серсүзен кабызыгыз.";
-
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
 "Logins.PasscodeRequirement.Warning" = "Firefox өчен автотутыру функциясен куллану өчен, җиһаз серсүзе кабынган булырга тиеш.";
 
@@ -648,9 +645,6 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Сөзгеч";
-
-/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
-"LoginsList.NoLoginsFound.Description.v119" = "Сакланган логиннар монда күрсәтеләчәк. Логиннарыгызны %@ эченә башка җиһаздан саклаган булсагыз, хисабыгызга керегез.";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "САКЛАНГАН ЛОГИННАР";
@@ -1047,9 +1041,6 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Сорауны %s белән алыштырыгыз)";
-
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v112" = "Кредит карталарын автотөгәлләү";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Вебсайтның барлык мәгълүматларын чистарту";

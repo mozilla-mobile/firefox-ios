@@ -5,18 +5,15 @@
 loader: taskgraph.loader.transform:loader
 
 transforms:
-    - ffios_taskgraph.transforms.bitrise:transforms
-    - taskgraph.transforms.run:transforms
-    - taskgraph.transforms.task:transforms
+    - ffios_taskgraph.transforms.bitrise
+    - taskgraph.transforms.task
 
 
 tasks:
     tests:
-        bitrise-workflow: Bitrise_Performance_Test
         description: Run Performance Tests on iOS Simulator in Bitrise
         run-on-tasks-for: []
-        treeherder:
-            symbol: bitrise-perf
-            kind: test
-            platform: ios-simulator-iphone14-16-4/opt
-            tier: 1
+        worker-type: bitrise
+        bitrise:
+            workflows:
+                - Bitrise_Performance_Test

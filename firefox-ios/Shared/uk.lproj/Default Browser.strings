@@ -32,13 +32,13 @@
 "DefaultBrowserOnboarding.Description1" = "1. Перейдіть до параметрів";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. Торкніться Програма браузера за замовчуванням";
+"DefaultBrowserOnboarding.Description2" = "2. Торкніться Типовий браузер";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. Виберіть Firefox";
 
 /* Text for the screenshot of the iOS system settings page for Firefox. */
-"DefaultBrowserOnboarding.Screenshot" = "Програма браузера за замовчуванням";
+"DefaultBrowserOnboarding.Screenshot" = "Типовий браузер";
 
 /* Menu option for setting Firefox as default browser. */
 "Settings.DefaultBrowserMenuItem" = "Встановити типовим браузером";

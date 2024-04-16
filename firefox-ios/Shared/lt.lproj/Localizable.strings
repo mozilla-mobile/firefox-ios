@@ -559,9 +559,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Sužinoti daugiau";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Norėdami įrašyti ir automatiškai užpildyti prisijungimus ir slaptažodžius, įjunkite „Face ID“, „Touch ID“ arba įrenginio apsaugos kodą.";
-
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Tęsti";
 
@@ -607,20 +604,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtras";
 
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "Prisijungimų nerasta";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Nėra jūsų paiešką atitinkančių rezultatų.";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "Nėra atitinkančių prisijungimų";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "Atsisakyti";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "Ieškoti prisijungimų";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "Pasirinkite slaptažodį užpildymui";
@@ -646,7 +634,7 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Įtraukta į skaitinių sąrašą";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Adresynas";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -655,10 +643,10 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL nukopijuotas į iškarpinę";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Atsiuntimai";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Žurnalas";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
@@ -667,7 +655,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Įjungti nakties veikseną";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Slaptažodžiai";
 
 /* The title for the button that lets you paste into the location bar */
@@ -676,7 +664,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Įdėti ir atverti";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Skaitinių sąrašas";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */

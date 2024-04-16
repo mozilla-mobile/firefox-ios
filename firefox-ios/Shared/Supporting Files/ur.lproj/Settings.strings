@@ -1,12 +1,3 @@
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
-"CreditCard.Settings.NotNow.v112" = "ابھی نہیں";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.RememberThisCard.v112" = "یہ کارڈ یاد ہے؟";
-
-/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
-"CreditCard.Settings.Yes.v112" = "ہاں";
-
 /* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
 "CreditCards.Settings.Done.v114" = "ہوگیا";
 

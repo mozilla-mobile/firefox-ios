@@ -10,7 +10,9 @@ public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
         let compactState = AddressToolbarState(url: state.url,
                                                navigationActions: state.navigationActions,
                                                pageActions: state.pageActions,
-                                               browserActions: [])
+                                               browserActions: [],
+                                               shouldDisplayTopBorder: state.shouldDisplayTopBorder,
+                                               shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
         super.updateActions(state: compactState)
     }
 }

@@ -298,12 +298,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row < 2 {
                 let searchCell = SettingsTableViewAccessoryCell(style: .value1, reuseIdentifier: "accessoryCell")
                 let autocompleteLabel = Settings.getToggle(.enableDomainAutocomplete) || Settings.getToggle(.enableCustomDomainAutocomplete) ? UIConstants.strings.autocompleteCustomEnabled : UIConstants.strings.autocompleteCustomDisabled
-                let labels: (label: String, accessoryLabel: String, identifier: String) = indexPath.row == 0 ?
+                let (label, accessoryLabel, identifier) = indexPath.row == 0 ?
                     (UIConstants.strings.settingsSearchLabel, searchEngineManager.activeEngine.name, "SettingsViewController.searchCell")
-                    :(UIConstants.strings.settingsAutocompleteSection, autocompleteLabel, "SettingsViewController.autocompleteCell")
-                searchCell.accessoryLabelText = labels.accessoryLabel
-                searchCell.labelText = labels.label
-                searchCell.accessibilityIdentifier = labels.identifier
+                    : (UIConstants.strings.settingsAutocompleteSection, autocompleteLabel, "SettingsViewController.autocompleteCell")
+
+                searchCell.accessoryLabelText = accessoryLabel
+                searchCell.labelText = label
+                searchCell.accessibilityIdentifier = identifier
                 cell = searchCell
             } else {
                 cell = setupToggleCell(indexPath: indexPath, navigationController: navigationController)

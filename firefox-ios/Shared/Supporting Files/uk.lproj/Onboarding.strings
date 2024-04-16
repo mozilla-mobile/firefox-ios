@@ -8,7 +8,7 @@
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Перейдіть до *Параметрів*";
 
 /* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"DefaultBrowserPopup.SecondLabel.v114" = "2. Торкніться *Програма браузера за замовчуванням*";
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Торкніться *Типовий браузер*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. Виберіть *%@*";

@@ -1,7 +1,4 @@
 /* Title label for the view where user can add their credit card info */
-"CreditCard.EditCard.AddCreditCardTitle.v113" = "Ajouter une carte bancaire";
-
-/* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v122" = "Ajouter une carte";
 
 /* Button label for cancelling editing of the credit card details shown in the form */
@@ -45,9 +42,6 @@
 
 /* Button label for saving the credit card details user entered in the form */
 "CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "Enregistrer";
-
-/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
-"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Enregistrer et remplir automatiquement les cartes";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Enregistrer et renseigner les moyens de paiement";

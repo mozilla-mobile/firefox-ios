@@ -548,8 +548,32 @@ public struct AccessibilityIdentifiers {
             static let title = "SendAnonymousUsageData"
         }
 
+        struct PrivacyPolicy {
+            static let title = "PrivacyPolicy"
+        }
+
         struct ShowIntroduction {
             static let title = "ShowTour"
+        }
+
+        struct SendFeedback {
+            static let title = "SendFeedback"
+        }
+
+        struct Help {
+            static let title = "Help"
+        }
+
+        struct RateOnAppStore {
+            static let title = "RateOnAppStore"
+        }
+
+        struct Licenses {
+            static let title = "Licenses"
+        }
+
+        struct YourRights {
+            static let title = "YourRights"
         }
 
         struct Siri {

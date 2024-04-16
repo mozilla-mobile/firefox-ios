@@ -1,17 +1,8 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "Sekure konservi vian kreditkartan informon per %@ por venontfoje pagi pli rapide.";
-
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v122" = "%@ ĉifras vian kreditkartan numeron. Via sekureca kodo ne estos konservita.";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "Jes";
-
-/* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "Konservi";
-
-/* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v115" = "Ĉu memori tiun ĉi karton?";
 
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v122" = "Ĉu sekure konservi tiun ĉi kreditkarton?";

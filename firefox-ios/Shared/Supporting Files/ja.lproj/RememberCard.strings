@@ -1,17 +1,8 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "%@ でカード情報を安全に保存して、次回のチェックアウトを早くします。";
-
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v122" = "%@ がカード番号を暗号化します。セキュリティコードは保存しません。";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "はい";
-
-/* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "保存";
-
-/* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v115" = "このカード情報を記憶させますか？";
 
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v122" = "このカードの情報を安全に保存しますか？";
