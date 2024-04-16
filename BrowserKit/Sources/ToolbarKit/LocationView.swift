@@ -110,11 +110,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                 gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
                 gradientView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
 
-                urlTextField.leadingAnchor.constraint(lessThanOrEqualTo: leadingAnchor, constant: UX.horizontalSpace),
+                urlTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
                 urlTextField.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalSpace),
                 urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-                urlTextField.centerXAnchor.constraint(equalTo: centerXAnchor),
             ]
         )
     }
