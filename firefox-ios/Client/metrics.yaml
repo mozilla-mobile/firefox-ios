@@ -2917,7 +2917,7 @@ logins:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2025-01-01"
   autofill_prompt_expanded:
     type: event
     description: |
@@ -2928,7 +2928,7 @@ logins:
       - https://github.com/mozilla-mobile/firefox-ios/pull/19791
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2025-01-01"
   autofill_prompt_dismissed:
     type: event
     description: |
@@ -2941,7 +2941,7 @@ logins:
       - interaction
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2024-10-01"
+    expires: "2025-01-01"
 # QR Code metrics
 qr_code:
   scanned:
