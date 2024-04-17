@@ -54,7 +54,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     private let syncedTabsButton: UIButton = .build { button in
-        button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont().withSize(UX.deviceSourceFontSize)
+        button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
