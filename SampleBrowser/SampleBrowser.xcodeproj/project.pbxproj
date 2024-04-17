@@ -49,6 +49,7 @@
 		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
 		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
 		E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */; };
+		E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */; };
 		E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */; };
 		E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */; };
 		E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */; };
@@ -98,6 +99,7 @@
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
+		E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerModel.swift; sourceTree = "<group>"; };
 		E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
 		E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainer.swift; sourceTree = "<group>"; };
 		E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainerModel.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				8A0F447C2B56FD9600438589 /* SearchModel.swift */,
 				8A0F44742B56FD5300438589 /* SearchViewModel.swift */,
 				1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */,
+				E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				8A3DB3352B5AD47500F89705 /* SettingsType.swift in Sources */,
 				8A0F44832B56FE1300438589 /* UIAlertController+Error.swift in Sources */,
 				8A4602172B0FE43A00FFD17F /* BrowserSearchBar.swift in Sources */,
+				E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */,
 				8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */,
 				8A3DB3332B5AD3EC00F89705 /* SettingsCellViewModel.swift in Sources */,
 				8A46021B2B0FE47C00FFD17F /* BrowserViewController.swift in Sources */,

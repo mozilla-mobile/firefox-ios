@@ -21,7 +21,7 @@ class RootViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private lazy var toolbar: BrowserToolbar = .build { _ in }
+    private lazy var navigationToolbar: NavigationToolbarContainer = .build { _ in }
     private lazy var addressToolbarContainer: AddressToolbarContainer =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
         view.backgroundColor = .white
@@ -31,8 +31,12 @@ class RootViewController: UIViewController,
     private var searchVC: SearchViewController
     private var findInPageBar: FindInPageBar?
 
+    private var model = RootViewControllerModel()
+
     // MARK: - Init
-    init(engineProvider: EngineProvider, windowUUID: UUID?, themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(engineProvider: EngineProvider, 
+         windowUUID: UUID?,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
         self.themeManager = themeManager
@@ -149,21 +153,26 @@ class RootViewController: UIViewController,
             searchVC.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
             searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchVC.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+            searchVC.view.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor)
         ])
     }
 
     private func configureToolbar() {
-        view.addSubview(toolbar)
+        view.addSubview(navigationToolbar)
 
         NSLayoutConstraint.activate([
-            toolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
-            toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            toolbar.topAnchor.constraint(equalTo: browserVC.view.bottomAnchor)
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor), //, constant: -20),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            navigationToolbar.topAnchor.constraint(equalTo: browserVC.view.bottomAnchor)
         ])
 
-        toolbar.toolbarDelegate = self
+        model.navigationToolbarDelegate = self
+        updateNavigationToolbar()
+    }
+
+    private func updateNavigationToolbar() {
+        navigationToolbar.configure(model.navigationToolbarContainerModel)
     }
 
     // MARK: - Private
@@ -195,11 +204,13 @@ class RootViewController: UIViewController,
     // MARK: - NavigationDelegate
 
     func onLoadingStateChange(loading: Bool) {
-        toolbar.updateReloadStopButton(loading: loading)
+        model.updateReloadStopButton(loading: loading)
+        updateNavigationToolbar()
     }
 
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
-        toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+        model.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+        updateNavigationToolbar()
     }
 
     func onURLChange(url: String) {
@@ -295,7 +306,7 @@ class RootViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             findInPageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            findInPageBar.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
+            findInPageBar.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor),
             findInPageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             findInPageBar.heightAnchor.constraint(equalToConstant: 46)
         ])
