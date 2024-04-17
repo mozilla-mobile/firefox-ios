@@ -50,6 +50,8 @@
 		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
 		E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */; };
 		E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */; };
+		E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */; };
+		E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +99,8 @@
 		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
 		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
 		E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
+		E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainer.swift; sourceTree = "<group>"; };
+		E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainerModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +243,8 @@
 				8A4602182B0FE45200FFD17F /* BrowserToolbar.swift */,
 				E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */,
 				E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */,
+				E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */,
+				E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -385,6 +391,7 @@
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
 				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
+				E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
 				E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */,
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
@@ -394,6 +401,7 @@
 				8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */,
 				E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */,
 				8A0F44812B56FDEA00438589 /* SearchDataProvider.swift in Sources */,
+				E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,
 			);
