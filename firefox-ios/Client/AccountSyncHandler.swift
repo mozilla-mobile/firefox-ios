@@ -11,13 +11,11 @@ import Common
 class AccountSyncHandler: TabEventHandler {
     private let throttler: Throttler
     private let profile: Profile
-    internal let windowUUID: WindowUUID
+    var tabEventWindowUUID: WindowUUID? { return nil }
 
     init(with profile: Profile,
-         windowUUID: WindowUUID,
          throttleTime: Double = 5.0,
          queue: DispatchQueueInterface = DispatchQueue.global()) {
-        self.windowUUID = windowUUID
         self.profile = profile
         self.throttler = Throttler(seconds: throttleTime,
                                    on: queue)

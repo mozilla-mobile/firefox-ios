@@ -564,6 +564,8 @@ extension TabLocationView: ThemeApplicable {
 }
 
 extension TabLocationView: TabEventHandler {
+    var tabEventWindowUUID: WindowUUID? { return windowUUID }
+
     func tabDidChangeContentBlocking(_ tab: Tab) {
         guard let blocker = tab.contentBlocker else { return }
 

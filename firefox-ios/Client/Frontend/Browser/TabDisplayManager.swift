@@ -860,6 +860,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension LegacyTabDisplayManager: TabEventHandler {
+    var tabEventWindowUUID: WindowUUID? { return windowUUID }
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard let indexPath = getIndexPath(tab: tab) else { return }
         refreshCell(atIndexPath: indexPath)

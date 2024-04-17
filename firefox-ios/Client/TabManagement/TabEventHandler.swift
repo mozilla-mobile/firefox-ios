@@ -42,8 +42,19 @@ import Storage
 /// 4. a TabEvent, with whatever parameters are needed.
 ///    i) a case to map the event to the event label (var label)
 ///   ii) a case to map the event to the event handler (func handle:with:)
+///
+/// ========= TabEvents & Multi-Window =========
+///
+/// Some event handlers are meant to operate in a global manner, responding to tab events
+/// across all windows (see: GlobalTabEventHandlers.swift). Other handlers may only care
+/// about tab events specific to their window. For the latter, these handlers can return
+/// their UUID value for `tabEventWindowUUID`. If so, the tab events will only be delivered
+/// if the tab's window UUID matches the handler's UUID.
+///
+/// If you wish to register a handler which responds to all tab events regardless of the
+/// window, you can return nil for the `windowUUID`.
 protocol TabEventHandler: AnyObject {
-    var windowUUID: WindowUUID { get }
+    var tabEventWindowUUID: WindowUUID? { get }
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
@@ -170,16 +181,17 @@ extension TabEventHandler {
         let wrapper = ObserverWrapper()
         wrapper.observers = events.map { [weak self] eventType in
             center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
+                guard let self else { return }
                 guard let tab = notification.object as? Tab,
                       let event = notification.userInfo?["payload"] as? TabEvent,
                       let uuid = notification.userInfo?["windowUUID"] as? WindowUUID,
-                      self?.windowUUID == uuid else {
+                      /* Handlers may return nil to respond to tab events for all windows,
+                       otherwise we only deliver tab events to handlers whose window UUID matches. */
+                      (self.tabEventWindowUUID == nil || self.tabEventWindowUUID == uuid) else {
                     return
                 }
 
-                if let me = self {
-                    event.handle(tab, with: me)
-                }
+                event.handle(tab, with: self)
             }
         }
 

@@ -8,10 +8,9 @@ import Storage
 import WebKit
 
 class MetadataParserHelper: TabEventHandler {
-    let windowUUID: WindowUUID
+    let tabEventWindowUUID: WindowUUID? = nil
 
-    init(windowUUID: WindowUUID) {
-        self.windowUUID = windowUUID
+    init() {
         register(self, forTabEvents: .didChangeURL)
     }
 

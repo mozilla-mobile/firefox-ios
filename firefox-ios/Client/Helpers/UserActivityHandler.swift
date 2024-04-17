@@ -17,11 +17,8 @@ private let searchableIndex = CSSearchableIndex.default()
 
 class UserActivityHandler {
     private let logger: Logger
-    let windowUUID: WindowUUID
 
-    init(windowUUID: WindowUUID,
-         logger: Logger = DefaultLogger.shared) {
-        self.windowUUID = windowUUID
+    init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         register(
             self,
@@ -58,6 +55,8 @@ class UserActivityHandler {
 }
 
 extension UserActivityHandler: TabEventHandler {
+    var tabEventWindowUUID: WindowUUID? { return nil }
+
     func tabDidGainFocus(_ tab: Tab) {
         tab.userActivity?.becomeCurrent()
     }
