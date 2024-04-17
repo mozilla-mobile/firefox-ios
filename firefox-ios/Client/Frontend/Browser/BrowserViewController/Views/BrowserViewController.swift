@@ -789,11 +789,6 @@ class BrowserViewController: UIViewController,
         setupMicroSurvey()
     }
 
-    private func setupMicroSurvey() {
-        guard featureFlags.isFeatureEnabled(.microSurvey, checking: .buildOnly) else { return }
-        updateMicroSurveyVisibility()
-    }
-
     private func prepareURLOnboardingContextualHint() {
         guard toolbarContextHintVC.shouldPresentHint(),
               featureFlags.isFeatureEnabled(.isToolbarCFREnabled, checking: .buildOnly)
@@ -1157,16 +1152,18 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Micro Survey
-    func updateMicroSurveyVisibility() {
+    private func setupMicroSurvey() {
+        guard featureFlags.isFeatureEnabled(.microSurvey, checking: .buildOnly) else { return }
+
         // TODO: FXIOS-8990: Create Micro Survey Surface Manager to handle showing survey prompt
-        if microSurvey == nil {
-            createMicroSurveyPrompt()
-        } else {
+        if microSurvey != nil {
             removeMicroSurveyPrompt()
         }
+
+        createMicroSurveyPrompt()
     }
 
-    func updateMicroSurveyConstraints() {
+    private func updateMicroSurveyConstraints() {
         guard let microSurvey else { return }
 
         microSurvey.translatesAutoresizingMaskIntoConstraints = false
