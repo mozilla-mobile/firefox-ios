@@ -230,6 +230,45 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2497357
+    func testAllPrivateTabsRestore() {
+        // Several tabs opened in private tabs tray. Tap on the trashcan 
+        navigator.nowAt(NewTabScreen)
+        for _ in 1...4 {
+            navigator.createNewTab(isPrivate: true)
+            if app.keyboards.element.isVisible() && !iPad() {
+                mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+                navigator.performAction(Action.CloseURLBarOpen)
+            }
+        }
+        navigator.goto(TabTray)
+        var numTab = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+        app.buttons[AccessibilityIdentifiers.TabTray.closeAllTabsButton].tap()
+
+        // Validate Close All Tabs and Cancel options
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton])
+        if !iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.deleteCancelButton])
+        }
+
+        // Tap on "Close All Tabs"
+        app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
+        // The private tabs are closed
+        numTab = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+
+        // "Undo" toast message is displayed. Tap on "Undo" button
+        mozWaitForElementToExist(app.buttons["Undo"])
+        app.buttons["Undo"].tap()
+
+        // All the private tabs are restored
+        navigator.goto(TabTray)
+        numTab = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+    }
 }
 
 fileprivate extension BaseTestCase {

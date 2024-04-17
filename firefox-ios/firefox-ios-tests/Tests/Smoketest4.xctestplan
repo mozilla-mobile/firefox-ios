@@ -105,6 +105,7 @@
         "PhotonActionSheetTests",
         "PocketTest",
         "PocketTests",
+        "PrivateBrowsingTest\/testAllPrivateTabsRestore()",
         "PrivateBrowsingTest\/testClearIndexedDB()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView()",
