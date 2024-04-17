@@ -20,7 +20,6 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        
         for delegate in delegates {
             delegate.webView?(webView, didCommit: navigation)
         }
