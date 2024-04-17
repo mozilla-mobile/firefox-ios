@@ -11,7 +11,7 @@ import Common
 class AccountSyncHandler: TabEventHandler {
     private let throttler: Throttler
     private let profile: Profile
-    var tabEventWindowUUID: WindowUUID? { return nil }
+    let tabEventWindowUUID: WindowUUID? = nil
 
     init(with profile: Profile,
          throttleTime: Double = 5.0,
