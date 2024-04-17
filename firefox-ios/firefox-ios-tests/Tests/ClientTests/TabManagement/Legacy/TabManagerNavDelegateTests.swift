@@ -166,7 +166,7 @@ private extension TabManagerNavDelegateTests {
     }
 
     func createSubject(file: StaticString = #file, line: UInt = #line) -> Subject {
-        let subject = TabManagerNavDelegate()
+        let subject = TabManagerNavDelegate(windowUUID: .XCTestDefaultUUID)
         let delegate1 = WKNavigationDelegateSpy()
         let delegate2 = WKNavigationDelegateSpy()
 

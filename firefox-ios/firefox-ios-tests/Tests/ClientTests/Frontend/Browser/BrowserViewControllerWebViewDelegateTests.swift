@@ -21,7 +21,7 @@ class BrowserViewControllerWebViewDelegateTests: XCTestCase {
         profile = MockProfile()
         tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
         subject = BrowserViewController(profile: profile, tabManager: tabManager)
-        tabManagerDelegate = TabManagerNavDelegate()
+        tabManagerDelegate = TabManagerNavDelegate(windowUUID: .XCTestDefaultUUID)
     }
 
     override func tearDown() {
