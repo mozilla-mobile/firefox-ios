@@ -29,7 +29,7 @@ class AccountSyncHandlerTests: XCTestCase {
 
     func testTabDidGainFocus_doesntSyncWithoutAccount() {
         profile.hasSyncableAccountMock = false
-        let subject = AccountSyncHandler(with: profile, windowUUID: windowUUID, queue: queue)
+        let subject = AccountSyncHandler(with: profile, queue: queue)
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)
 
@@ -37,7 +37,7 @@ class AccountSyncHandlerTests: XCTestCase {
     }
 
     func testTabDidGainFocus_syncWithAccount() {
-        let subject = AccountSyncHandler(with: profile, windowUUID: windowUUID, queue: queue)
+        let subject = AccountSyncHandler(with: profile, queue: queue)
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)
 
@@ -45,10 +45,7 @@ class AccountSyncHandlerTests: XCTestCase {
     }
 
     func testTabDidGainFocus_highThrottleTime_doesntSync() {
-        let subject = AccountSyncHandler(with: profile,
-                                         windowUUID: windowUUID,
-                                         throttleTime: 1000,
-                                         queue: DispatchQueue.global())
+        let subject = AccountSyncHandler(with: profile, throttleTime: 1000, queue: DispatchQueue.global())
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)
 
@@ -56,10 +53,7 @@ class AccountSyncHandlerTests: XCTestCase {
     }
 
     func testTabDidGainFocus_multipleThrottle_withoutWaitdoesntSync() {
-        let subject = AccountSyncHandler(with: profile,
-                                         windowUUID: windowUUID,
-                                         throttleTime: 0.2,
-                                         queue: DispatchQueue.global())
+        let subject = AccountSyncHandler(with: profile, throttleTime: 0.2, queue: DispatchQueue.global())
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)
         subject.tabDidGainFocus(tab)
@@ -71,10 +65,7 @@ class AccountSyncHandlerTests: XCTestCase {
     }
 
     func testTabDidGainFocus_multipleThrottle_withWaitSyncOnce() {
-        let subject = AccountSyncHandler(with: profile,
-                                         windowUUID: windowUUID,
-                                         throttleTime: 0.2,
-                                         queue: DispatchQueue.global())
+        let subject = AccountSyncHandler(with: profile, throttleTime: 0.2, queue: DispatchQueue.global())
         let tab = createTab(profile: profile)
         subject.tabDidGainFocus(tab)
         subject.tabDidGainFocus(tab)
