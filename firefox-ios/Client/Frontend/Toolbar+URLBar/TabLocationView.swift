@@ -46,7 +46,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var themeManager: ThemeManager = AppContainer.shared.resolve()
-    internal let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
