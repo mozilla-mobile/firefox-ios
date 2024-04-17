@@ -73,6 +73,7 @@ class BrowserViewController: UIViewController,
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
+    var microSurvey: MicroSurveyPromptView?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
@@ -331,6 +332,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
+        updateMicroSurveyConstraints()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -783,6 +785,13 @@ class BrowserViewController: UIViewController,
 
         browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
+
+        setupMicroSurvey()
+    }
+
+    private func setupMicroSurvey() {
+        guard featureFlags.isFeatureEnabled(.microSurvey, checking: .buildOnly) else { return }
+        updateMicroSurveyVisibility()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1147,6 +1156,60 @@ class BrowserViewController: UIViewController,
         browserDelegate?.show(webView: webView)
     }
 
+    // MARK: - Micro Survey
+    func updateMicroSurveyVisibility() {
+        // TODO: FXIOS-8990: Create Micro Survey Surface Manager to handle showing survey prompt
+        if microSurvey == nil {
+            createMicroSurveyPrompt()
+        } else {
+            removeMicroSurveyPrompt()
+        }
+    }
+
+    func updateMicroSurveyConstraints() {
+        guard let microSurvey else { return }
+
+        microSurvey.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(microSurvey)
+
+        if urlBar.isBottomSearchBar {
+            overKeyboardContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            bottomContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+                self.view.layoutIfNeeded()
+            })
+        }
+
+        microSurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+
+        updateViewConstraints()
+    }
+
+    private func createMicroSurveyPrompt() {
+        let viewModel = MicroSurveyViewModel(openAction: {
+            // TODO: FXIOS-8895: Create Micro Survey Modal View
+        }) {
+            // TODO: FXIOS-8898: Setup Redux to handle open and dismissing modal
+        }
+
+        self.microSurvey = MicroSurveyPromptView(viewModel: viewModel)
+
+        updateMicroSurveyConstraints()
+    }
+
+    private func removeMicroSurveyPrompt() {
+        guard let microSurvey else { return }
+        if urlBar.isBottomSearchBar {
+            overKeyboardContainer.removeArrangedView(microSurvey)
+        } else {
+            bottomContainer.removeArrangedView(microSurvey)
+        }
+
+        self.microSurvey = nil
+        updateViewConstraints()
+    }
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {

@@ -702,6 +702,7 @@
 		8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */; };
 		8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */; };
 		8A6904802B97BBAE00E30047 /* SplashScreenAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A69047F2B97BBAE00E30047 /* SplashScreenAnimation.swift */; };
+		8A6A3D472BD0390100BFDB64 /* MicroSurveyPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A3D462BD0390100BFDB64 /* MicroSurveyPrompt.swift */; };
 		8A6A796D27F773550022D6C6 /* HomepageContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */; };
 		8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */; };
 		8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */; };
@@ -5871,6 +5872,7 @@
 		8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDisclosureUtility.swift; sourceTree = "<group>"; };
 		8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCellTests.swift; sourceTree = "<group>"; };
 		8A69047F2B97BBAE00E30047 /* SplashScreenAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenAnimation.swift; sourceTree = "<group>"; };
+		8A6A3D462BD0390100BFDB64 /* MicroSurveyPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroSurveyPrompt.swift; sourceTree = "<group>"; };
 		8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageContextMenuHelper.swift; sourceTree = "<group>"; };
 		8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewTests.swift; sourceTree = "<group>"; };
@@ -9577,6 +9579,14 @@
 			path = SplashScreenAnimation;
 			sourceTree = "<group>";
 		};
+		8A6A3D452BD038EF00BFDB64 /* MicroSurvey */ = {
+			isa = PBXGroup;
+			children = (
+				8A6A3D462BD0390100BFDB64 /* MicroSurveyPrompt.swift */,
+			);
+			path = MicroSurvey;
+			sourceTree = "<group>";
+		};
 		8A7653C028A2E54800924ABF /* Pocket */ = {
 			isa = PBXGroup;
 			children = (
@@ -11931,6 +11941,7 @@
 				EBC486972195F46A00CDA48D /* InternalSchemeHandler */,
 				D05434F3225FDA3400FDE4EF /* Library */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
+				8A6A3D452BD038EF00BFDB64 /* MicroSurvey */,
 				E1FE132D29C0B334002A65FF /* NotificationSurface */,
 				C8BD875D2A0C23F500CD803A /* Onboarding */,
 				E63ED8DF1BFD254E0097D08E /* PasswordManagement */,
@@ -14356,6 +14367,7 @@
 				E633E2DA1C21EAF8001FFF6C /* PasswordDetailViewController.swift in Sources */,
 				8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */,
 				8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */,
+				8A6A3D472BD0390100BFDB64 /* MicroSurveyPrompt.swift in Sources */,
 				8A5D1CAE2A30D71A005AD35C /* ThemeSetting.swift in Sources */,
 				C82F4C2B29AE2DF1005BD116 /* NotificationsSettingsViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
