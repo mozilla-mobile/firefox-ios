@@ -388,6 +388,9 @@ extension TelemetryWrapper {
         case settingsMenuShowTour = "show-tour"
         case settingsMenuPasswords = "passwords"
         // MARK: Logins and Passwords
+        case loginsAutofillPromptDismissed = "logins-autofill-prompt-dismissed"
+        case loginsAutofillPromptExpanded = "logins-autofill-prompt-expanded"
+        case loginsAutofillPromptShown = "logins-autofill-prompt-shown"
         case loginsAutofilled = "logins-autofilled"
         case loginsAutofillFailed = "logins-autofill-failed"
         case loginsManagementAddTapped = "logins-management-add-tapped"
@@ -1058,6 +1061,12 @@ extension TelemetryWrapper {
             GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Logins and Passwords
+        case(.action, .view, .loginsAutofillPromptShown, _, _):
+            GleanMetrics.Logins.autofillPromptShown.record()
+        case(.action, .tap, .loginsAutofillPromptExpanded, _, _):
+            GleanMetrics.Logins.autofillPromptExpanded.record()
+        case(.action, .close, .loginsAutofillPromptDismissed, _, _):
+            GleanMetrics.Logins.autofillPromptDismissed.record()
         case(.action, .tap, .loginsAutofilled, _, _):
             GleanMetrics.Logins.autofilled.record()
         case(.action, .tap, .loginsAutofillFailed, _, _):
