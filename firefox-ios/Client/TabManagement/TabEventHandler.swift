@@ -47,14 +47,27 @@ import Storage
 ///
 /// Some event handlers are meant to operate in a global manner, responding to tab events
 /// across all windows (see: GlobalTabEventHandlers.swift). Other handlers may only care
-/// about tab events specific to their window. For the latter, these handlers can return
-/// their UUID value for `tabEventWindowUUID`. If so, the tab events will only be delivered
-/// if the tab's window UUID matches the handler's UUID.
-///
-/// If you wish to register a handler which responds to all tab events regardless of the
-/// window, you can return nil for the `windowUUID`.
+/// about tab events specific to their window. You may control how tab events are delivered
+/// to your handler by the response type setting for `tabEventWindowResponseType`.
+
+enum TabEventHandlerWindowResponseType {
+    /// The tab event handler will receive tab events for all windows on iPad.
+    case allWindows
+    /// The tab event handler will receive tab events only for a specific window on iPad.
+    case singleWindow(WindowUUID)
+
+    func shouldSendHandlerEvent(for tabWindowUUID: WindowUUID) -> Bool {
+        switch self {
+        case .allWindows:
+            return true
+        case .singleWindow(let targetUUID):
+            return targetUUID == tabWindowUUID
+        }
+    }
+}
+
 protocol TabEventHandler: AnyObject {
-    var tabEventWindowUUID: WindowUUID? { get }
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
@@ -185,9 +198,7 @@ extension TabEventHandler {
                 guard let tab = notification.object as? Tab,
                       let event = notification.userInfo?["payload"] as? TabEvent,
                       let uuid = notification.userInfo?["windowUUID"] as? WindowUUID,
-                      /* Handlers may return nil to respond to tab events for all windows,
-                       otherwise we only deliver tab events to handlers whose window UUID matches. */
-                      (self.tabEventWindowUUID == nil || self.tabEventWindowUUID == uuid) else {
+                self.tabEventWindowResponseType.shouldSendHandlerEvent(for: uuid) else {
                     return
                 }
 

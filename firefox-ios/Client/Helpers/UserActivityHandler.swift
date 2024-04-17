@@ -55,7 +55,7 @@ class UserActivityHandler {
 }
 
 extension UserActivityHandler: TabEventHandler {
-    var tabEventWindowUUID: WindowUUID? { return nil }
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .allWindows }
 
     func tabDidGainFocus(_ tab: Tab) {
         tab.userActivity?.becomeCurrent()

@@ -67,7 +67,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Variables
     let profile: Profile
     let windowUUID: WindowUUID
-    var tabEventWindowUUID: WindowUUID? { return windowUUID }
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
     var tabs = [Tab]()
