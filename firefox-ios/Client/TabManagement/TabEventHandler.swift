@@ -43,6 +43,7 @@ import Storage
 ///    i) a case to map the event to the event label (var label)
 ///   ii) a case to map the event to the event handler (func handle:with:)
 protocol TabEventHandler: AnyObject {
+    var windowUUID: WindowUUID { get }
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
@@ -134,7 +135,7 @@ extension TabEventLabel {
 
 extension TabEvent {
     func notification(for tab: Tab) -> Notification {
-        return Notification(name: label.name, object: tab, userInfo: ["payload": self])
+        return Notification(name: label.name, object: tab, userInfo: ["payload": self, "windowUUID": tab.windowUUID])
     }
 
     /// Use this method to post notifications to any concerned listeners.
@@ -170,8 +171,10 @@ extension TabEventHandler {
         wrapper.observers = events.map { [weak self] eventType in
             center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
                 guard let tab = notification.object as? Tab,
-                    let event = notification.userInfo?["payload"] as? TabEvent else {
-                        return
+                      let event = notification.userInfo?["payload"] as? TabEvent,
+                      let uuid = notification.userInfo?["windowUUID"] as? WindowUUID,
+                      self?.windowUUID == uuid else {
+                    return
                 }
 
                 if let me = self {

@@ -17,8 +17,11 @@ private let searchableIndex = CSSearchableIndex.default()
 
 class UserActivityHandler {
     private let logger: Logger
+    let windowUUID: WindowUUID
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(windowUUID: WindowUUID,
+         logger: Logger = DefaultLogger.shared) {
+        self.windowUUID = windowUUID
         self.logger = logger
         register(
             self,

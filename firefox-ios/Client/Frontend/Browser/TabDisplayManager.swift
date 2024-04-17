@@ -71,6 +71,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
     var tabDisplayType: TabDisplayType = .TabGrid
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let tabManager: TabManager
     private let collectionView: UICollectionView
 
