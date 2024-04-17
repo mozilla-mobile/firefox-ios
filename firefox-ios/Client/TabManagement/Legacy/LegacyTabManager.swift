@@ -162,7 +162,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     ) {
         self.windowUUID = uuid
         self.profile = profile
-        self.navDelegate = TabManagerNavDelegate(windowUUID: uuid)
+        self.navDelegate = TabManagerNavDelegate()
         self.logger = logger
 
         super.init()

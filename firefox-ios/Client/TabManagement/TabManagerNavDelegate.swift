@@ -9,11 +9,6 @@ import Shared
 // WKNavigationDelegates must implement NSObjectProtocol
 class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     fileprivate var delegates = WeakList<WKNavigationDelegate>()
-    let windowUUID: WindowUUID
-
-    init(windowUUID: WindowUUID) {
-        self.windowUUID = windowUUID
-    }
 
     func insert(_ delegate: WKNavigationDelegate) {
         delegates.insert(delegate)
