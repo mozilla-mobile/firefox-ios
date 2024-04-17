@@ -5,8 +5,5 @@
 "CreditCard.SnackBar.SavedCardLabel.v112" = "新規カード情報が保存されました";
 
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
-"CreditCard.SnackBar.UpdatedCardLabel.v112" = "カード情報が更新されました";
-
-/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
 "CreditCard.SnackBar.UpdatedCardLabel.v122" = "カード情報が更新されました";
 

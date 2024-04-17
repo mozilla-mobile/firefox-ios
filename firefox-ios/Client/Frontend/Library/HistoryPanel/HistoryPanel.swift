@@ -132,9 +132,7 @@ class HistoryPanel: UIViewController,
     lazy var welcomeLabel: UILabel = .build { label in
         label.text = self.viewModel.emptyStateText
         label.textAlignment = .center
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: 17,
-                                                            weight: .light)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }

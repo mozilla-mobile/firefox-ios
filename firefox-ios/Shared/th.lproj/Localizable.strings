@@ -646,9 +646,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "เรียนรู้เพิ่มเติม";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "หากต้องการบันทึกและป้อนการเข้าสู่ระบบและรหัสผ่านอัตโนมัติ ให้เปิดใช้งาน Face ID, Touch ID หรือรหัสผ่านของอุปกรณ์";
-
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "ดำเนินการต่อ";
 
@@ -694,23 +691,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "ตัวกรอง";
 
-/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
-"LoginsList.NoLoginsFound.Description.v119" = "การเข้าสู่ระบบที่บันทึกไว้จะแสดงที่นี่ หากคุณบันทึกการเข้าสู่ระบบลงใน %@ บนอุปกรณ์อื่น ให้ลงชื่อเข้าใช้บัญชีของคุณ";
-
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "ไม่พบการเข้าสู่ระบบ";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "ไม่มีผลลัพธ์ที่ตรงกับการค้นหาของคุณ";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "ไม่มีการเข้าสู่ระบบที่ตรงกัน";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "ยกเลิก";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "ค้นหาการเข้าสู่ระบบ";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "เลือกรหัสผ่านที่จะเติม";
@@ -745,7 +730,7 @@
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "เพิ่มทางลัด";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ที่คั่นหน้า";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -757,7 +742,7 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "ปรับแต่งหน้าแรก";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "การดาวน์โหลด";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
@@ -769,7 +754,7 @@
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ช่วยเหลือ";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ประวัติ";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
@@ -781,7 +766,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "เปิดโหมดกลางคืน";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "รหัสผ่าน";
 
 /* The title for the button that lets you paste into the location bar */
@@ -790,7 +775,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "วางแล้วไป";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "รายการอ่าน";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
@@ -1158,9 +1143,6 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (แทนที่คำสืบค้นด้วย %s)";
-
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v112" = "กรอกบัตรเครดิตอัตโนมัติ";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ล้างข้อมูลเว็บไซต์ทั้งหมด";

@@ -5,7 +5,7 @@
 "Engagement.Notification.Title.v112" = "Սկսեք ձեր առաջին որոնումը";
 
 /* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
-"Engagement.Notification.Treatment.A.Body.v114" = "%@-ում մասնավոր զննարկումը չի պահպանում ձեր տեղեկությունները և արգելափակում է թաքնված հետագծերը:";
+"Engagement.Notification.Treatment.A.Body.v114" = "%@-ում գաղտնի դիտարկումը չի պահպանում ձեր տեղեկությունները և արգելափակում է թաքնված հետագծերը:";
 
 /* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
 "Engagement.Notification.Treatment.A.Title.v114" = "Դիտարկեք առանց հետք թողնելու";

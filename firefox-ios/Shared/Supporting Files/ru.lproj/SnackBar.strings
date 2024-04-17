@@ -5,8 +5,5 @@
 "CreditCard.SnackBar.SavedCardLabel.v112" = "Новая карта сохранена";
 
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
-"CreditCard.SnackBar.UpdatedCardLabel.v112" = "Информация о карте обновлена";
-
-/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
 "CreditCard.SnackBar.UpdatedCardLabel.v122" = "Информация о карте обновлена";
 

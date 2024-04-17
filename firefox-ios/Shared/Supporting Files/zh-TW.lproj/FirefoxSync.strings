@@ -2,9 +2,6 @@
 "FirefoxSync.AddressAutofillEngine.v124" = "網址";
 
 /* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v115" = "信用卡";
-
-/* Toggle for credit cards syncing setting */
 "FirefoxSync.CreditCardsEngine.v122" = "付款方式";
 
 /* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */

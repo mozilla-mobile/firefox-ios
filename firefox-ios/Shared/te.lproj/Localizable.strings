@@ -562,7 +562,7 @@
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "చదవాల్సిన జాబితాకి చేర్చు";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "ఇష్టాంసాలు";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -571,19 +571,19 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "క్లిప్‌బోర్డునకు URL కాపీతీయబడెను";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "దింపుకోళ్ళు";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "సహాయం";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "చరిత్ర";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "కొత్త ట్యాబు";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "సంకేతపదాలు";
 
 /* The title for the button that lets you paste into the location bar */

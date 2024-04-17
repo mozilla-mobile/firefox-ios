@@ -4,6 +4,3 @@
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully */
 "CreditCard.SnackBar.SavedCardLabel.v112" = "Яңа карта сакланды";
 
-/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
-"CreditCard.SnackBar.UpdatedCardLabel.v112" = "Кредит картасы турындагы мәгълүмат яңартылды";
-
