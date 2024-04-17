@@ -25,14 +25,15 @@ struct MicroSurveyViewModel {
 class MicroSurveyPromptView: UIView, ThemeApplicable {
     private var viewModel: MicroSurveyViewModel
     struct UX {
-        static let stackSpacing: CGFloat = 16
+        static let headerStackSpacing: CGFloat = 8
+        static let stackSpacing: CGFloat = 17
         static let closeButtonSize = CGSize(width: 30, height: 30)
         static let logoSize = CGSize(width: 24, height: 24)
         static let padding = NSDirectionalEdgeInsets(
-            top: 20,
-            leading: 32,
-            bottom: -18,
-            trailing: -32
+            top: 14,
+            leading: 16,
+            bottom: -12,
+            trailing: -16
         )
     }
 
@@ -58,7 +59,7 @@ class MicroSurveyPromptView: UIView, ThemeApplicable {
         stack.distribution = .fillProportionally
         stack.axis = .horizontal
         stack.alignment = .top
-        stack.spacing = UX.stackSpacing
+        stack.spacing = UX.headerStackSpacing
     }
 
     private lazy var surveyButton: SecondaryRoundedButton = .build { button in
