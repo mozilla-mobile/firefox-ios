@@ -10,11 +10,11 @@ class TabEventHandlers {
     ///
     /// For anything that needs to react to tab events notifications (see `TabEventLabel`), the
     /// pattern is to implement a handler and specify which events to observe.
-    static func create(with profile: Profile) -> [TabEventHandler] {
+    static func create(with profile: Profile, window: WindowUUID) -> [TabEventHandler] {
         let handlers: [TabEventHandler] = [
-            UserActivityHandler(),
-            MetadataParserHelper(),
-            AccountSyncHandler(with: profile)
+            UserActivityHandler(windowUUID: window),
+            MetadataParserHelper(windowUUID: window),
+            AccountSyncHandler(with: profile, windowUUID: window)
         ]
 
         return handlers
