@@ -57,7 +57,7 @@ class RootViewController: UIViewController,
         configureBrowserView()
         configureAddressToolbar()
         configureSearchView()
-        configureToolbar()
+        configureNavigationToolbar()
 
         listenForThemeChange(view)
         applyTheme()
@@ -157,7 +157,7 @@ class RootViewController: UIViewController,
         ])
     }
 
-    private func configureToolbar() {
+    private func configureNavigationToolbar() {
         view.addSubview(navigationToolbar)
 
         NSLayoutConstraint.activate([
