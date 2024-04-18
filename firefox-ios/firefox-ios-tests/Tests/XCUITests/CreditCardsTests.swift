@@ -382,7 +382,12 @@ class CreditCardsTests: BaseTestCase {
         let cvc = app.webViews["contentView"].webViews.textFields["CVC"]
         let zip = app.webViews["contentView"].webViews.textFields["ZIP"]
         mozWaitForElementToExist(email)
-        email.tap()
+        email.tapOnApp()
+        var nrOfRetries = 3
+        while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+            email.tapOnApp()
+            nrOfRetries -= 1
+        }
         email.typeText("foo@mozilla.org")
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
@@ -395,17 +400,23 @@ class CreditCardsTests: BaseTestCase {
         expiration.typeText(expirationDate)
         cvc.tapOnApp()
         cvc.typeText("123")
-        mozWaitForElementToExist(name)
-        name.tapOnApp()
-        app.swipeUp()
         zip.tapOnApp()
+        while zip.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+            // Series of swipes are required to reach the bottom part of the webview
+            app.webViews["Web content"].swipeDown()
+            dismissSavedCardsPrompt()
+            app.webViews["Web content"].swipeUp()
+            app.webViews["Web content"].swipeUp()
+            zip.tapOnApp()
+            nrOfRetries -= 1
+        }
         zip.typeText("12345")
         name.tapOnApp()
         name.typeText(nameOnCard)
     }
 
     private func dismissSavedCardsPrompt() {
-        if app.staticTexts["TEST CARDS"].exists {
+        if app.staticTexts["Tap"].isVisible() {
             app.staticTexts["TEST CARDS"].tap()
         }
     }
