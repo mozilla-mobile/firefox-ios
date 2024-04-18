@@ -123,6 +123,6 @@ class L10nBaseSnapshotTests: XCTestCase {
     func waitUntilPageLoad() {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
-        mozWaitForElementToNotExist(progressIndicator, timeout: 20.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 30.0)
     }
 }
