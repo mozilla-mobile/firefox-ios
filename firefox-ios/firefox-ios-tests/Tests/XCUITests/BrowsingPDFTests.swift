@@ -6,10 +6,10 @@ import XCTest
 import Common
 
 let PDF_website = [
-    "url": "www.orimi.com/pdf-test.pdf",
-    "pdfValue": "www.orimi.com/pdf",
+    "url": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
+    "pdfValue": "storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "urlValue": "yukon.ca/en/educat",
-    "bookmarkLabel": "https://www.orimi.com/pdf-test.pdf",
+    "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
 class BrowsingPDFTests: BaseTestCase {
@@ -28,7 +28,7 @@ class BrowsingPDFTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307117
     // Disabled due to link not loading
     func testOpenLinkFromPDF() throws {
-        throw XCTSkip("Link inside pfd is not loading anymore")
+        // throw XCTSkip("Link inside pdf is not loading anymore")
         /*
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()

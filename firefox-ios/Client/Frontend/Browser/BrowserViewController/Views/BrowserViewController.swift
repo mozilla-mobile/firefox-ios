@@ -2311,6 +2311,11 @@ extension BrowserViewController: LegacyTabDelegate {
                     if !loginsForCurrentTab.isEmpty {
                         tab?.webView?.accessoryView.reloadViewFor(.login)
                         tab?.webView?.reloadInputViews()
+                        TelemetryWrapper.recordEvent(
+                            category: .action,
+                            method: .view,
+                            object: .loginsAutofillPromptShown
+                        )
                     }
                     tab?.webView?.accessoryView.savedLoginsClosure = {
                         Task { @MainActor [weak self] in

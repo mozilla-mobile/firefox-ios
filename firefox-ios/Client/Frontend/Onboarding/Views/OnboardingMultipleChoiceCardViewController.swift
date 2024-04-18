@@ -11,7 +11,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     struct UX {
         static let stackViewSpacingWithoutLink: CGFloat = 5
         static let stackViewSpacingButtons: CGFloat = 16
-        static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
         static let topStackViewSpacingBetweenImageAndTitle: CGFloat = 15
         static let topStackViewSpacingBetweenDescriptionAndButtons: CGFloat = 20
@@ -22,13 +21,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-        static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
-        static let descriptionFontSize: CGFloat = 17
 
-        // small device
-        static let smallTitleFontSize: CGFloat = 20
-        static let smallStackViewSpacing: CGFloat = 8
-        static let smallScrollViewVerticalPadding: CGFloat = 20
         static let smallTopStackViewPadding: CGFloat = 40
 
         static let baseImageHeight: CGFloat = 200
@@ -37,69 +30,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
     private var multipleChoiceButtons: [OnboardingMultipleChoiceButtonView]
-
-    // Adjusting layout for devices with height lower than 667
-    // including now iPhone SE 2nd generation and iPad
-    var shouldUseSmallDeviceLayout: Bool {
-        return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
-    }
-
-    // Adjusting layout for tiny devices (iPhone SE 1st generation)
-    var shouldUseTinyDeviceLayout: Bool {
-        return UIDevice().isTinyFormFactor
-    }
-
-    private lazy var scrollView: UIScrollView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    lazy var containerView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    lazy var contentContainerView: UIView = .build { stack in
-        stack.backgroundColor = .clear
-    }
-
-    lazy var topStackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .center
-        stack.distribution = .fill
-        stack.spacing = UX.topStackViewSpacing
-        stack.axis = .vertical
-    }
-
-    lazy var contentStackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-        stack.axis = .vertical
-    }
-
-    lazy var imageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
-    }
-
-    private lazy var titleLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        let fontSize = self.shouldUseSmallDeviceLayout ? UX.smallTitleFontSize : UX.titleFontSize
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                size: fontSize)
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
-        label.accessibilityTraits.insert(.header)
-    }
-
-    private lazy var descriptionLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.descriptionFontSize)
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
-    }
 
     lazy var choiceButtonStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
@@ -112,14 +42,6 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         stack.backgroundColor = .clear
         stack.distribution = .equalSpacing
         stack.axis = .vertical
-    }
-
-    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-    }
-
-    private lazy var secondaryButton: SecondaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
     }
 
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-6816
@@ -199,12 +121,12 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
             bottomButtonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
-                scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPad
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPad
             } else {
-                scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPhone
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
@@ -215,12 +137,12 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
             if shouldUseSmallDeviceLayout {
                 topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
                                               after: imageView)
-                topStackView.spacing = UX.smallStackViewSpacing
+                topStackView.spacing = SharedUX.smallStackViewSpacing
                 topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenDescriptionAndButtons,
                                               after: descriptionLabel)
                 choiceButtonStackView.spacing = UX.stackViewSpacingWithoutLink
-                bottomButtonStackView.spacing = UX.smallStackViewSpacing
-                scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
+                bottomButtonStackView.spacing = SharedUX.smallStackViewSpacing
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
                 topStackView.setCustomSpacing(UX.topStackViewSpacingBetweenImageAndTitle,
@@ -338,45 +260,9 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         })
     }
 
-    private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
-    }
-
-    private func updateLayout() {
-        titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.body
-        imageView.image = viewModel.image
-
-        let buttonViewModel = PrimaryRoundedButtonViewModel(
-            title: viewModel.buttons.primary.title,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
-        )
-        primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: currentTheme())
-
-        setupSecondaryButton()
-    }
-
-    private func setupSecondaryButton() {
-        // To keep Title, Description aligned between cards we don't hide the button
-        // we clear the background and make disabled
-        guard let buttonTitle = viewModel.buttons.secondary?.title else {
-            secondaryButton.isUserInteractionEnabled = false
-            secondaryButton.backgroundColor = .clear
-            return
-        }
-
-        let buttonViewModel = SecondaryRoundedButtonViewModel(
-            title: buttonTitle,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
-        )
-        secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: currentTheme())
-    }
-
     // MARK: - Button Actions
     @objc
-    func primaryAction() {
+    override func primaryAction() {
         delegate?.handleBottomButtonActions(
             for: viewModel.buttons.primary.action,
             from: viewModel.name,
@@ -384,7 +270,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
     }
 
     @objc
-    func secondaryAction() {
+    override func secondaryAction() {
         guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
         delegate?.handleBottomButtonActions(
@@ -399,6 +285,7 @@ class OnboardingMultipleChoiceCardViewController: OnboardingCardViewController {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
 
+        primaryButton.applyTheme(theme: theme)
         setupSecondaryButton()
 
         multipleChoiceButtons.forEach { $0.applyTheme() }
