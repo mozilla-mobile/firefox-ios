@@ -35,8 +35,6 @@ class LoginDetailTableViewCell: UITableViewCell,
                                 UITextFieldDelegate,
                                 MenuHelperLoginInterface {
     private struct UX {
-        static let highlightedFontSize: CGFloat = 12
-        static let descriptionFontSize: CGFloat = 16
         static let horizontalMargin: CGFloat = 14
         static let verticalMargin: CGFloat = 11
     }
@@ -62,7 +60,7 @@ class LoginDetailTableViewCell: UITableViewCell,
 
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
-        label.font = FXFontStyles.Regular.body.scaledFont().withSize(UX.descriptionFontSize)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -73,7 +71,7 @@ class LoginDetailTableViewCell: UITableViewCell,
     }
 
     private lazy var highlightedLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.callout.scaledFont().withSize(UX.highlightedFontSize)
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.numberOfLines = 0
     }
 
