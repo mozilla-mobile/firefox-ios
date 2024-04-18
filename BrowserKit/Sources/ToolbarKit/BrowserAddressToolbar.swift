@@ -135,8 +135,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
-            locationContainer.leadingAnchor.constraint(equalTo: navigationActionStack.leadingAnchor),
-            locationContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -176,7 +174,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private func setZeroWidthConstraint(_ stackView: UIStackView) {
         let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
         widthAnchor.isActive = true
-        widthAnchor.priority = .defaultLow
+        widthAnchor.priority = .defaultHigh
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
