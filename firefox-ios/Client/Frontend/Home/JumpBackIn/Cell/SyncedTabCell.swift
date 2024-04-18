@@ -35,7 +35,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         static let tabStackTopAnchorConstant: CGFloat = 72
         static let tabStackTopAnchorCompactPhoneConstant: CGFloat = 24
         static let itemTitleFontSize: CGFloat = 15
-        static let deviceSourceFontSize: CGFloat = 12
     }
 
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
