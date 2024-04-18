@@ -126,7 +126,7 @@ class LoginDetailTableViewCell: UITableViewCell,
         descriptionLabel.isUserInteractionEnabled = viewModel.isEditingFieldData
 
         if viewModel.displayDescriptionAsPassword {
-            descriptionLabel.font = FXFontStyles.Regular.password.scaledFont()
+            descriptionLabel.font = FXFontStyles.Regular.body.monospacedFont()
         }
     }
 
