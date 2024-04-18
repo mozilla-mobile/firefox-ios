@@ -190,6 +190,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
+        numberOfRows = topSitesDataAdaptor.numberOfRows
+        unfilteredTopSites = topSitesDataAdaptor.getTopSitesData()
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: numberOfRows,
                                                                     interface: interface)

@@ -33,6 +33,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()
+                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
             })
         }
 
