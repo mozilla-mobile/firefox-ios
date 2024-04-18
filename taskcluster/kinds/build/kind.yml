@@ -20,12 +20,6 @@ tasks:
         bitrise:
             workflows:
                 - firefox_configure_build
-        scopes:
-            - project:mobile:firefox-ios:releng:bitrise:app:firefox-ios
-            - project:mobile:firefox-ios:releng:bitrise:workflow:firefox_configure_build
-            - queue:route:checks
-            - queue:create-task:project:none
-            - queue:scheduler-id:mobile-level-1
         
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
