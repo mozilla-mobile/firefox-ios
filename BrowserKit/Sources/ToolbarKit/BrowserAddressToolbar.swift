@@ -174,7 +174,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private func setZeroWidthConstraint(_ stackView: UIStackView) {
         let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
         widthAnchor.isActive = true
-        widthAnchor.priority = .defaultLow
+        widthAnchor.priority = .defaultHigh
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {

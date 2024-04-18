@@ -98,10 +98,15 @@ extension URL {
     /// print(host) // Prints "github.com"
     /// ```
     public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
-        let normalizedHost = URL(string: urlString)?.normalizedHost ?? urlString
+        guard let url = URL(string: urlString) else { return (nil, urlString) }
+        let normalizedHost = url.normalizedHost ?? urlString
+
+        guard let publicSuffix = url.publicSuffix else { return (nil, normalizedHost) }
+        // Remove the public suffix from the components
         let components = normalizedHost.split(separator: ".")
-        guard components.count >= 3 else { return (nil, normalizedHost) }
-        let subdomain = components.dropLast(2)
+                                       .dropLast(publicSuffix.split(separator: ".").count)
+        guard components.count >= 2 else { return (nil, normalizedHost) }
+        let subdomain = components.dropLast()
                                   .joined(separator: ".")
                                   .appending(".")
         return (subdomain, normalizedHost)

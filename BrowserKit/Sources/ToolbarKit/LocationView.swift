@@ -112,7 +112,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
                 urlTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
-                urlTextField.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalSpace),
+                urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
                 urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
             ]
         )

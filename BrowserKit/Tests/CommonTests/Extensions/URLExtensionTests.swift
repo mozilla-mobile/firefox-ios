@@ -144,14 +144,15 @@ final class URLExtensionTests: XCTestCase {
             ("https://www.google.com", (nil, "google.com")),
             ("https://blog.engineering.company.com", ("blog.engineering.", "blog.engineering.company.com")),
             ("https://long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com", ("long-extended-subdomain-name-containing-many-letters-and-dashes.", "long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com")),
-            ("http://com:org@m.canadacomputers.co.uk", ("canadacomputers.", "canadacomputers.co.uk")),
+            ("http://com:org@m.canadacomputers.co.uk", (nil, "canadacomputers.co.uk")),
             ("https://www.wix.com/blog/what-is-a-subdomain", (nil, "wix.com")),
             ("nothing", (nil, "nothing")),
             ("https://super-long-url-with-dashes-and-things.badssl.com/xyz-something", ("super-long-url-with-dashes-and-things.", "super-long-url-with-dashes-and-things.badssl.com")),
-            ("accounts.firefox.com", ("accounts.", "accounts.firefox.com")),
+            ("https://accounts.firefox.com", ("accounts.", "accounts.firefox.com")),
             ("http://username:password@subdomain.example.com:8080", ("subdomain.", "subdomain.example.com")),
             ("https://example.com:8080#fragment", (nil, "example.com")),
-            ("http://username:password@subdomain.example.com:8080#fragment", ("subdomain.", "subdomain.example.com"))
+            ("http://username:password@subdomain.example.com:8080#fragment", ("subdomain.", "subdomain.example.com")),
+            ("amazon.co.uk", (nil, "amazon.co.uk"))
         ]
 
         for testCase in testCases {
