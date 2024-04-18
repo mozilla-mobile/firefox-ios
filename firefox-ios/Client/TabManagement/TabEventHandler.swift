@@ -159,7 +159,7 @@ extension TabEventLabel {
 
 extension TabEvent {
     func notification(for tab: Tab) -> Notification {
-        return Notification(name: label.name, object: tab, userInfo: ["payload": self, "windowUUID": tab.windowUUID])
+        return Notification(name: label.name, object: tab, userInfo: ["payload": self])
     }
 
     /// Use this method to post notifications to any concerned listeners.
@@ -197,8 +197,7 @@ extension TabEventHandler {
                 guard let self else { return }
                 guard let tab = notification.object as? Tab,
                       let event = notification.userInfo?["payload"] as? TabEvent,
-                      let uuid = notification.userInfo?["windowUUID"] as? WindowUUID,
-                self.tabEventWindowResponseType.shouldSendHandlerEvent(for: uuid) else {
+                      self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
                     return
                 }
 
