@@ -10,11 +10,15 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -23,8 +27,10 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     }
 
     init(rootViewController: UIViewController,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(rootViewController: rootViewController)
@@ -56,7 +62,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     }
 
     func applyTheme() {
-        setupNavigationBarAppearance(theme: themeManager.currentTheme)
+        setupNavigationBarAppearance(theme: themeManager.currentTheme(for: windowUUID))
         setNeedsStatusBarAppearanceUpdate()
     }
 }

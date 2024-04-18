@@ -27,9 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
 
-    lazy var themeManager: ThemeManager = DefaultThemeManager(
-        sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
-    )
+    lazy var themeManager: ThemeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
     lazy var notificationSurfaceManager = NotificationSurfaceManager()

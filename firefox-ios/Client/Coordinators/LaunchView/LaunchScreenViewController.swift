@@ -14,14 +14,20 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     private lazy var splashScreenAnimation = SplashScreenAnimation()
     private let nimbusSplashScreenFeatureLayer = NimbusSplashScreenFeatureLayer()
 
-    init(coordinator: LaunchFinishedLoadingDelegate,
-         viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
+    private var shouldTriggerSplashScreenExperiment: Bool {
+        return featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly)
+        && !viewModel.getSplashScreenExperimentHasShown()
+    }
+
+    init(windowUUID: WindowUUID,
+         coordinator: LaunchFinishedLoadingDelegate,
+         viewModel: LaunchScreenViewModel? = nil,
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.coordinator = coordinator
-        self.viewModel = viewModel
+        self.viewModel = viewModel ?? LaunchScreenViewModel(windowUUID: windowUUID)
         self.mainQueue = mainQueue
         super.init(nibName: nil, bundle: nil)
-        viewModel.delegate = self
+        self.viewModel.delegate = self
     }
 
     override var prefersStatusBarHidden: Bool {
@@ -85,14 +91,15 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     // MARK: - Splash Screen
 
     private func delayStart() async throws {
-        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
+        guard shouldTriggerSplashScreenExperiment else { return }
+        viewModel.setSplashScreenExperimentHasShown()
         let position: Int = nimbusSplashScreenFeatureLayer.maximumDurationMs
         try await Task.sleep(nanoseconds: UInt64(position * 1_000_000))
     }
 
     private func setupLaunchScreen() {
         setupLayout()
-        guard featureFlags.isFeatureEnabled(.splashScreen, checking: .buildOnly) else { return }
+        guard shouldTriggerSplashScreenExperiment else { return }
         if !UIAccessibility.isReduceMotionEnabled {
             splashScreenAnimation.configureAnimation(with: launchScreen)
         }

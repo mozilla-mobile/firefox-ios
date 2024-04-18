@@ -26,9 +26,6 @@ class DependencyHelper {
         let appSessionProvider: AppSessionProvider = appDelegate.appSessionManager
         AppContainer.shared.register(service: appSessionProvider)
 
-        let themeManager: ThemeManager = appDelegate.themeManager
-        AppContainer.shared.register(service: themeManager)
-
         let ratingPromptManager: RatingPromptManager = appDelegate.ratingPromptManager
         AppContainer.shared.register(service: ratingPromptManager)
 
@@ -40,6 +37,9 @@ class DependencyHelper {
 
         let windowManager: WindowManager = appDelegate.windowManager
         AppContainer.shared.register(service: windowManager)
+
+        let themeManager: ThemeManager = appDelegate.themeManager
+        AppContainer.shared.register(service: themeManager)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

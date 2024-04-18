@@ -25,6 +25,8 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
     var tableViewDelegate: RemoteTabsPanelDataSource? {
         didSet {
             tableView.dataSource = tableViewDelegate
@@ -45,9 +47,11 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
     }
 
     init(profile: Profile,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -104,9 +108,13 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
         }
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
         if let delegate = tableViewDelegate as? LegacyRemoteTabsErrorDataSource {
-            delegate.applyTheme(theme: themeManager.currentTheme)
+            delegate.applyTheme(theme: currentTheme())
         }
     }
 
@@ -156,7 +164,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
 
         let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(actionDelegate: remoteTabsPanel,
                                                                     clientAndTabs: nonEmptyClientAndTabs,
-                                                                    theme: themeManager.currentTheme)
+                                                                    theme: currentTheme())
         tabsPanelDataSource.collapsibleSectionDelegate = self
         tableViewDelegate = tabsPanelDataSource
 
@@ -210,7 +218,7 @@ class LegacyRemoteTabsTableViewController: UITableViewController, Themeable {
 
         let remoteTabsErrorView = LegacyRemoteTabsErrorDataSource(remoteTabsDelegateProvider: remoteTabsPanel,
                                                                   error: errorMessage,
-                                                                  theme: themeManager.currentTheme)
+                                                                  theme: currentTheme())
         tableViewDelegate = remoteTabsErrorView
 
         tableView.reloadData()

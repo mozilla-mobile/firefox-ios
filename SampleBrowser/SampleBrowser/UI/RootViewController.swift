@@ -3,19 +3,26 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import ToolbarKit
 import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
                           ToolbarDelegate,
                           NavigationDelegate,
-                          SearchBarDelegate,
+                          AddressToolbarDelegate,
+                          AddressToolbarContainerDelegate,
                           SearchSuggestionDelegate,
-                          MenuDelegate,
                           SettingsDelegate,
-                          FindInPageBarDelegate {
+                          FindInPageBarDelegate,
+                          Themeable {
+    var currentWindowUUID: UUID?
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
     private lazy var toolbar: BrowserToolbar = .build { _ in }
-    private lazy var searchBar: BrowserSearchBar =  .build { _ in }
+    private lazy var addressToolbarContainer: AddressToolbarContainer =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
         view.backgroundColor = .white
     }
@@ -25,10 +32,11 @@ class RootViewController: UIViewController,
     private var findInPageBar: FindInPageBar?
 
     // MARK: - Init
-
-    init(engineProvider: EngineProvider) {
+    init(engineProvider: EngineProvider, windowUUID: UUID?, themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
+        self.themeManager = themeManager
+        self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -43,9 +51,28 @@ class RootViewController: UIViewController,
         super.viewDidLoad()
 
         configureBrowserView()
-        configureSearchbar()
+        configureAddressToolbar()
         configureSearchView()
         configureToolbar()
+
+        listenForThemeChange(view)
+        applyTheme()
+    }
+
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+        self.applyTheme()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+            self.applyTheme()
+        }, completion: nil)
     }
 
     private func configureBrowserView() {
@@ -60,25 +87,53 @@ class RootViewController: UIViewController,
         browserVC.navigationDelegate = self
     }
 
-    private func configureSearchbar() {
+    private func configureAddressToolbar() {
         view.addSubview(statusBarFiller)
-        view.addSubview(searchBar)
+        view.addSubview(addressToolbarContainer)
 
         NSLayoutConstraint.activate([
             statusBarFiller.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarFiller.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            statusBarFiller.bottomAnchor.constraint(equalTo: searchBar.topAnchor),
+            statusBarFiller.bottomAnchor.constraint(equalTo: addressToolbarContainer.topAnchor),
             statusBarFiller.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            addressToolbarContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            addressToolbarContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            addressToolbarContainer.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
+            addressToolbarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        searchBar.configure(searchBarDelegate: self,
-                            menuDelegate: self)
-        searchBar.becomeFirstResponder()
+        updateAddressToolbar(url: nil)
+        _ = addressToolbarContainer.becomeFirstResponder()
+    }
+
+    private func updateAddressToolbar(url: String?) {
+        let pageActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.qrCode,
+            isEnabled: true,
+            a11yLabel: "Read QR Code",
+            a11yId: "qrCodeButton",
+            onSelected: nil)]
+
+        let browserActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            isEnabled: true,
+            a11yLabel: "Open Menu",
+            a11yId: "appMenuButton",
+            onSelected: {
+                self.didClickMenu()
+            })]
+
+        // FXIOS-8947: Use scroll position
+        let model = AddressToolbarContainerModel(
+            toolbarPosition: .top,
+            scrollY: 0,
+            isPrivate: false,
+            url: url,
+            navigationActions: [],
+            pageActions: pageActions,
+            browserActions: browserActions)
+        addressToolbarContainer.configure(model, toolbarDelegate: self, toolbarContainerDelegate: self)
     }
 
     private func configureSearchView() {
@@ -91,7 +146,7 @@ class RootViewController: UIViewController,
         add(searchVC)
 
         NSLayoutConstraint.activate([
-            searchVC.view.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            searchVC.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
             searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             searchVC.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
@@ -114,7 +169,7 @@ class RootViewController: UIViewController,
     // MARK: - Private
 
     private func browse(to term: String) {
-        searchBar.resignFirstResponder()
+        _ = addressToolbarContainer.resignFirstResponder()
         browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
     }
@@ -148,7 +203,7 @@ class RootViewController: UIViewController,
     }
 
     func onURLChange(url: String) {
-        searchBar.setSearchBarText(url)
+        updateAddressToolbar(url: url)
     }
 
     func onFindInPage(selected: String) {
@@ -182,22 +237,13 @@ class RootViewController: UIViewController,
     }
 
     func openBrowser(searchTerm: String) {
-        guard let searchText = searchBar.getSearchBarText(), !searchText.isEmpty else { return }
-        browse(to: searchText)
-    }
-
-    // MARK: - MenuDelegate
-
-    func didClickMenu() {
-        let settingsVC = SettingsViewController()
-        settingsVC.delegate = self
-        present(settingsVC, animated: true)
+        browse(to: searchTerm)
     }
 
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {
-        searchBar.setSearchBarText(term)
+        updateAddressToolbar(url: term)
         browse(to: term)
     }
 
@@ -255,6 +301,13 @@ class RootViewController: UIViewController,
         ])
     }
 
+    // MARK: - AddressToolbarContainerDelegate
+    func didClickMenu() {
+        let settingsVC = SettingsViewController()
+        settingsVC.delegate = self
+        present(settingsVC, animated: true)
+    }
+
     // MARK: - FindInPageBarDelegate
 
     func findInPage(_ findInPage: FindInPageBar, textChanged text: String) {
@@ -274,5 +327,11 @@ class RootViewController: UIViewController,
         findInPageBar?.endEditing(true)
         findInPageBar?.removeFromSuperview()
         findInPageBar = nil
+    }
+
+    // MARK: Themeable
+    func applyTheme() {
+        updateThemeApplicableSubviews(view, for: currentWindowUUID)
+        view.backgroundColor = themeManager.currentTheme(for: currentWindowUUID).colors.layer1
     }
 }

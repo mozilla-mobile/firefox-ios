@@ -70,7 +70,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_a11yroot_isUpgrade() {
         configUtility.setupNimbusWith(
-            type: .upgrade,
+            onboardingType: .upgrade,
             withPrimaryButtonAction: [.forwardOneCard, .syncSignIn])
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
@@ -94,6 +94,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         }
 
         let expectedCard = OnboardingCardInfoModel(
+            cardType: .basic,
             name: CardElementNames.name + " 1",
             order: 10,
             title: CardElementNames.title + " 1",
@@ -108,7 +109,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
                     title: CardElementNames.secondaryButtonTitle,
                     action: .forwardOneCard)),
             multipleChoiceButtons: [],
-            type: .freshInstall,
+            onboardingType: .freshInstall,
             a11yIdRoot: CardElementNames.a11yIDOnboarding,
             imageID: ImageIdentifiers.Onboarding.HeaderImages.welcomev106,
             instructionsPopup: nil)
@@ -116,7 +117,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
         XCTAssertEqual(subject.name, expectedCard.name)
         XCTAssertEqual(subject.title, expectedCard.title)
         XCTAssertEqual(subject.body, expectedCard.body)
-        XCTAssertEqual(subject.type, expectedCard.type)
+        XCTAssertEqual(subject.onboardingType, expectedCard.onboardingType)
         XCTAssertEqual(subject.image, UIImage(named: ImageIdentifiers.Onboarding.HeaderImages.welcomev106))
         XCTAssertEqual(subject.link?.title, expectedCard.link?.title)
         XCTAssertEqual(subject.link?.url, expectedCard.link?.url)
@@ -347,7 +348,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     // MARK: - Test install types
     func testLayer_cardIsReturned_WithFreshInstallType() {
-        configUtility.setupNimbusWith(type: .freshInstall)
+        configUtility.setupNimbusWith(onboardingType: .freshInstall)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .freshInstall).cards.first else {
@@ -355,11 +356,11 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.type, OnboardingType.freshInstall)
+        XCTAssertEqual(subject.onboardingType, OnboardingType.freshInstall)
     }
 
     func testLayer_cardIsReturned_WithUpdateType() {
-        configUtility.setupNimbusWith(type: .upgrade)
+        configUtility.setupNimbusWith(onboardingType: .upgrade)
         let layer = NimbusOnboardingFeatureLayer(with: MockNimbusMessagingHelperUtility())
 
         guard let subject = layer.getOnboardingModel(for: .upgrade).cards.first else {
@@ -367,7 +368,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(subject.type, OnboardingType.upgrade)
+        XCTAssertEqual(subject.onboardingType, OnboardingType.upgrade)
     }
 
     // MARK: - Test link
@@ -496,10 +497,10 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
             disqualifiers: ["NEVER"],
             image: .notifications,
             link: nil,
+            onboardingType: .freshInstall,
             order: 10,
             prerequisites: ["ALWAYS"],
-            title: "\(CardElementNames.placeholderString)",
-            type: .freshInstall)]
+            title: "\(CardElementNames.placeholderString)")]
 
         FxNimbus.shared.features.onboardingFrameworkFeature.with(initializer: { _, _ in
             OnboardingFrameworkFeature(cards: dictionary, dismissable: true)

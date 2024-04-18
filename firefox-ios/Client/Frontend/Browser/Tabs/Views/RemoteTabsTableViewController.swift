@@ -25,7 +25,8 @@ class RemoteTabsTableViewController: UITableViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     weak var remoteTabsPanel: RemoteTabsPanel?
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     private var isShowingEmptyView: Bool { state.showingEmptyState != nil }
     private let emptyView: RemoteTabsEmptyView = .build()
@@ -129,7 +130,7 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         emptyView.applyTheme(theme: theme)
         tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
@@ -137,7 +138,7 @@ class RemoteTabsTableViewController: UITableViewController,
     private func configureEmptyView() {
         guard let emptyState = state.showingEmptyState else { return }
         emptyView.configure(state: emptyState, delegate: remoteTabsPanel)
-        emptyView.applyTheme(theme: themeManager.currentTheme)
+        emptyView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
     }
 
     // MARK: - Refreshing TableView
@@ -261,7 +262,7 @@ class RemoteTabsTableViewController: UITableViewController,
         cell.descriptionLabel.text = tab.URL.absoluteString
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.URL.absoluteString))
         cell.accessoryView = nil
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
     }
 
     @objc
@@ -299,7 +300,7 @@ class RemoteTabsTableViewController: UITableViewController,
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(sectionHeaderTapped(sender:)))
         headerView.addGestureRecognizer(tapGesture)
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         /*
         * (Copied from legacy RemoteTabsClientAndTabsDataSource)
         * A note on timestamps.

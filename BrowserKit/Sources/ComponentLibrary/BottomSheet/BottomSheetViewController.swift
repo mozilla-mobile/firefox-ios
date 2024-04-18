@@ -135,13 +135,18 @@ public class BottomSheetViewController: UIViewController,
     // MARK: - Theme
 
     public func applyTheme() {
-        contentView.backgroundColor = themeManager.currentTheme.colors.layer1
+        guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
+        contentView.backgroundColor = themeManager.currentTheme(for: uuid).colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {
             dimmedBackgroundView.alpha = 0.4
             dimmedBackgroundView.backgroundColor = .black
         }
+    }
+
+    public var currentWindowUUID: UUID? {
+        return (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID
     }
 
     // MARK: - UIGestureRecognizerDelegate

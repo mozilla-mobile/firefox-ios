@@ -22,6 +22,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var settingsTitle: NSAttributedString?
     var url: URL!
@@ -90,9 +92,11 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     init(title: NSAttributedString? = nil,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.settingsTitle = title
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -153,18 +157,22 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let label: UILabel
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     private func makeInterstitialViews() -> InterstitialViews {
         let view: UIView = .build()
 
         let spinner: UIActivityIndicatorView = .build { indicatorView in
             indicatorView.style = .medium
-            indicatorView.color = self.themeManager.currentTheme.colors.iconSpinner
+            indicatorView.color = self.currentTheme().colors.iconSpinner
         }
 
         let error: UILabel = .build { label in
             if self.settingsTitle != nil {
                 label.text = .SettingsContentPageLoadError
-                label.textColor = self.themeManager.currentTheme.colors.textWarning
+                label.textColor = self.currentTheme().colors.textWarning
                 label.textAlignment = .center
             }
             label.isHidden = true
@@ -207,6 +215,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer2
+        view.backgroundColor = currentTheme().colors.layer2
     }
 }

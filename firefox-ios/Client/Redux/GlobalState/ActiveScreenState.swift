@@ -6,6 +6,7 @@ import Foundation
 import Redux
 
 enum AppScreenState: Equatable {
+    case onboardingViewController(OnboardingViewControllerState)
     case browserViewController(BrowserViewControllerState)
     case remoteTabsPanel(RemoteTabsPanelState)
     case tabsPanel(TabsPanelState)
@@ -15,6 +16,8 @@ enum AppScreenState: Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
+        case .onboardingViewController(let state):
+            return .onboardingViewController(OnboardingViewControllerState.reducer(state, action))
         case .tabPeek(let state):
             return .tabPeek(TabPeekState.reducer(state, action))
         case .themeSettings(let state):
@@ -34,6 +37,7 @@ enum AppScreenState: Equatable {
     var associatedAppScreen: AppScreen {
         switch self {
         case .browserViewController: return .browserViewController
+        case .onboardingViewController: return .onboardingViewController
         case .themeSettings: return .themeSettings
         case .tabsTray: return .tabsTray
         case .tabsPanel: return .tabsPanel
@@ -45,6 +49,7 @@ enum AppScreenState: Equatable {
     var windowUUID: WindowUUID? {
         switch self {
         case .browserViewController(let state): return state.windowUUID
+        case .onboardingViewController(let state): return state.windowUUID
         case .remoteTabsPanel(let state): return state.windowUUID
         case .tabsTray(let state): return state.windowUUID
         case .tabsPanel(let state): return state.windowUUID
@@ -82,6 +87,8 @@ struct ActiveScreensState: Equatable {
                 switch screenType {
                 case .browserViewController:
                     screens.append(.browserViewController(BrowserViewControllerState(windowUUID: uuid)))
+                case .onboardingViewController:
+                    screens.append(.onboardingViewController(OnboardingViewControllerState(windowUUID: uuid)))
                 case .remoteTabsPanel:
                     screens.append(.remoteTabsPanel(RemoteTabsPanelState(windowUUID: uuid)))
                 case .tabsTray:

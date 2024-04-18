@@ -12,7 +12,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
     // MARK: - Initializer
     init(with model: OnboardingViewModel) {
         self.cardOrder = model.cards.map { $0.name }
-        self.flowType = model.cards.first?.type.rawValue ?? "unknown"
+        self.flowType = model.cards.first?.onboardingType.rawValue ?? "unknown"
     }
 
     // MARK: - Public methods
@@ -38,6 +38,21 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             extras: buildBaseTelemetryExtras(using: cardName)
                 .merging(
                     buildAdditioalButtonTelemetryExtras(using: action),
+                    uniquingKeysWith: { (first, _) in first }))
+    }
+
+    func sendMultipleChoiceButtonActionTelemetry(
+        from cardName: String,
+        with action: OnboardingMultipleChoiceAction
+    ) {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .onboardingMultipleChoiceButton,
+            value: nil,
+            extras: buildBaseTelemetryExtras(using: cardName)
+                .merging(
+                    buildAdditionalMultipleChoiceButtonTelemetryExtras(using: action),
                     uniquingKeysWith: { (first, _) in first }))
     }
 
@@ -84,5 +99,11 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
         using buttonAction: OnboardingActions
     ) -> [String: String] {
         return [TelemetryWrapper.EventExtraKey.buttonAction.rawValue: buttonAction.rawValue]
+    }
+
+    private func buildAdditionalMultipleChoiceButtonTelemetryExtras(
+        using buttonAction: OnboardingMultipleChoiceAction
+    ) -> [String: String] {
+        return [TelemetryWrapper.EventExtraKey.multipleChoiceButtonAction.rawValue: buttonAction.rawValue]
     }
 }

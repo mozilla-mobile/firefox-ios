@@ -8,6 +8,7 @@ import XCTest
 
 class OnboardingButtonActionTests: XCTestCase {
     var mockDelegate: MockOnboardinCardDelegateController!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
@@ -102,7 +103,7 @@ class OnboardingButtonActionTests: XCTestCase {
         twoButtons: Bool = true,
         file: StaticString = #file,
         line: UInt = #line
-    ) -> OnboardingCardViewController {
+    ) -> OnboardingBasicCardViewController {
         var buttons: OnboardingButtons
         if twoButtons {
             buttons = OnboardingButtons(
@@ -120,6 +121,7 @@ class OnboardingButtonActionTests: XCTestCase {
         }
 
         let mockInfoModel = OnboardingCardInfoModel(
+            cardType: .basic,
             name: "signSync",
             order: 10,
             title: String(format: .Onboarding.Sync.Title),
@@ -127,15 +129,16 @@ class OnboardingButtonActionTests: XCTestCase {
             link: nil,
             buttons: buttons,
             multipleChoiceButtons: [],
-            type: .freshInstall,
+            onboardingType: .freshInstall,
             a11yIdRoot: AccessibilityIdentifiers.Onboarding.onboarding,
             imageID: ImageIdentifiers.Onboarding.HeaderImages.syncv106,
             instructionsPopup: nil)
 
         mockDelegate = MockOnboardinCardDelegateController()
-        let subject = OnboardingCardViewController(
+        let subject = OnboardingBasicCardViewController(
             viewModel: mockInfoModel,
-            delegate: mockDelegate)
+            delegate: mockDelegate,
+            windowUUID: windowUUID)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 

@@ -10,7 +10,6 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         static let buttonCornerRadius: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
-        static let buttonFontSize: CGFloat = 16
 
         static let contentInsets = NSDirectionalEdgeInsets(
             top: buttonVerticalInset,
@@ -29,6 +28,8 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
 
         configuration = UIButton.Configuration.filled()
         titleLabel?.adjustsFontForContentSizeCategory = true
+        isUserInteractionEnabled = true
+        isAccessibilityElement = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -36,26 +37,20 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     }
 
     override public func updateConfiguration() {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
+        guard var updatedConfiguration = configuration else { return }
 
         updatedConfiguration.background.backgroundColor = switch state {
-        case [.highlighted]:
-            highlightedBackgroundColor
-        default:
-            normalBackgroundColor
+        case [.highlighted]: highlightedBackgroundColor
+        default: normalBackgroundColor
         }
+
         updatedConfiguration.baseForegroundColor = foregroundColor
 
         let transformer = UIConfigurationTextAttributesTransformer { [weak foregroundColor] incoming in
             var container = incoming
 
             container.foregroundColor = foregroundColor
-            container.font = DefaultDynamicFontHelper.preferredBoldFont(
-                withTextStyle: .callout,
-                size: UX.buttonFontSize
-            )
+            container.font = FXFontStyles.Bold.callout.scaledFont()
             return container
         }
         updatedConfiguration.titleTextAttributesTransformer = transformer
@@ -64,9 +59,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
     }
 
     public func configure(viewModel: SecondaryRoundedButtonViewModel) {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
+        guard var updatedConfiguration = configuration else { return }
 
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
@@ -83,13 +76,38 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
+    /// To keep alignment && spacing consistent between the buttons on pages,
+    /// we must make the secondary button invisible if there is no
+    /// secondary button in the configuration.
+    public func makeButtonInvisible() {
+        guard var updatedConfiguration = configuration else { return }
+
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+        normalBackgroundColor = .clear
+        highlightedBackgroundColor = .clear
+        foregroundColor = .clear
+
+        // In order to have a proper height, the button needs some text. This
+        // is invisible, but something sensible is used as a placeholder.
+        updatedConfiguration.title = "Skip"
+
+        configuration = updatedConfiguration
+
+        setNeedsUpdateConfiguration()
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {
-        highlightedBackgroundColor = theme.colors.actionSecondaryHover
-        normalBackgroundColor = theme.colors.actionSecondary
-        foregroundColor = theme.colors.textOnLight
+        if configuration?.title == nil || !isUserInteractionEnabled {
+            makeButtonInvisible()
+        } else {
+            highlightedBackgroundColor = theme.colors.actionSecondaryHover
+            normalBackgroundColor = theme.colors.actionSecondary
+            foregroundColor = theme.colors.textPrimary
 
-        setNeedsUpdateConfiguration()
+            setNeedsUpdateConfiguration()
+        }
     }
 }

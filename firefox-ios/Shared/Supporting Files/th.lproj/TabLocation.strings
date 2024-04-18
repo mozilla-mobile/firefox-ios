@@ -26,7 +26,7 @@
 "TabLocation.ShareButton.AccessibilityLabel.v122" = "แบ่งปัน";
 
 /* Accessibility label for the shopping button in url bar */
-"TabLocation.Shopping.A11y.Label.v120" = "ตัวตรวจสอบบทวิจารณ์";
+"TabLocation.Shopping.A11y.Label.v120" = "เครื่องมือตรวจสอบบทวิจารณ์";
 
 /* Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
 "TabsButton.Accessibility.LargeContentTitle.v122" = "แสดงแท็บ: %@";

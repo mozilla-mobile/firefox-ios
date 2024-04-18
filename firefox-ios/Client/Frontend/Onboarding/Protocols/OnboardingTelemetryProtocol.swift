@@ -9,5 +9,9 @@ protocol OnboardingTelemetryProtocol: AnyObject {
     func sendButtonActionTelemetry(from cardName: String,
                                    with action: OnboardingActions,
                                    and primaryButton: Bool)
+    func sendMultipleChoiceButtonActionTelemetry(
+        from cardName: String,
+        with action: OnboardingMultipleChoiceAction
+    )
     func sendDismissOnboardingTelemetry(from cardName: String)
 }

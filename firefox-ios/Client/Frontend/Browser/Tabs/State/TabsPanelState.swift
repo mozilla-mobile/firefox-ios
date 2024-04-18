@@ -67,7 +67,8 @@ struct TabsPanelState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action {
-        case TabPanelAction.didLoadTabPanel(let context):
+        case TabPanelAction.didLoadTabPanel(let context),
+            TabPanelAction.didChangeTabPanel(let context):
             let tabsModel = context.tabDisplayModel
             let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected })
             return TabsPanelState(windowUUID: state.windowUUID,

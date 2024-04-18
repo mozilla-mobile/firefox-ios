@@ -9,6 +9,7 @@ import Shared
 
 class UpdateViewModelTests: XCTestCase {
     private var profile: MockProfile!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
@@ -28,7 +29,8 @@ class UpdateViewModelTests: XCTestCase {
         let expectation = expectation(description: "The hasAccount var has value")
 
         subject.hasSyncableAccount {
-            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                                 for: self.windowUUID)
 
             XCTAssertEqual(subject.availableCards.count, 2)
             XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
@@ -44,7 +46,8 @@ class UpdateViewModelTests: XCTestCase {
         let expectation = expectation(description: "The hasAccount var has value")
 
         subject.hasSyncableAccount {
-            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                                 for: self.windowUUID)
 
             XCTAssertEqual(subject.availableCards.count, 2)
             XCTAssertEqual(subject.availableCards[0].viewModel.name, "Name 1")
@@ -61,7 +64,8 @@ class UpdateViewModelTests: XCTestCase {
         let expectation = expectation(description: "The hasAccount var has value")
 
         subject.hasSyncableAccount {
-            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+            subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                                 for: self.windowUUID)
 
             XCTAssertEqual(subject.shouldShowSingleCard, false)
             expectation.fulfill()
@@ -72,7 +76,8 @@ class UpdateViewModelTests: XCTestCase {
     func testHasSingleCard_ForSyncAccountDisabled() {
         profile.hasSyncableAccountMock = false
         let subject = createSubject()
-        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController())
+        subject.setupViewControllerDelegates(with: MockOnboardinCardDelegateController(),
+                                             for: self.windowUUID)
 
         XCTAssertEqual(subject.shouldShowSingleCard, false)
     }
@@ -173,7 +178,8 @@ class UpdateViewModelTests: XCTestCase {
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         let subject = UpdateViewModel(profile: profile,
                                       model: onboardingModel,
-                                      telemetryUtility: telemetryUtility)
+                                      telemetryUtility: telemetryUtility,
+                                      windowUUID: .XCTestDefaultUUID)
 
         trackForMemoryLeaks(subject, file: file, line: line)
 
@@ -193,16 +199,18 @@ class UpdateViewModelTests: XCTestCase {
     func createCard(index: Int) -> OnboardingCardInfoModel {
         let buttons = OnboardingButtons(primary: OnboardingButtonInfoModel(title: "Button title \(index)",
                                                                            action: .forwardOneCard))
-        return OnboardingCardInfoModel(name: "Name \(index)",
-                                       order: index,
-                                       title: "Title \(index)",
-                                       body: "Body \(index)",
-                                       link: nil,
-                                       buttons: buttons,
-                                       multipleChoiceButtons: [],
-                                       type: .upgrade,
-                                       a11yIdRoot: "A11y id \(index)",
-                                       imageID: "Image id \(index)",
-                                       instructionsPopup: nil)
+        return OnboardingCardInfoModel(
+            cardType: .basic,
+            name: "Name \(index)",
+            order: index,
+            title: "Title \(index)",
+            body: "Body \(index)",
+            link: nil,
+            buttons: buttons,
+            multipleChoiceButtons: [],
+            onboardingType: .upgrade,
+            a11yIdRoot: "A11y id \(index)",
+            imageID: "Image id \(index)",
+            instructionsPopup: nil)
     }
 }

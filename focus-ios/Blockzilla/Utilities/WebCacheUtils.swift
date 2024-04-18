@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class WebCacheUtils {
-    static let FolderWhiteList = ["KSCrash", "io.sentry", "Snapshots"]
+    static let PermittedFolderList = ["KSCrash", "io.sentry", "Snapshots"]
 
     static func reset() {
         clearCaches()
@@ -22,7 +22,7 @@ class WebCacheUtils {
         if let cachesPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
             let contents = (try? FileManager.default.contentsOfDirectory(atPath: cachesPath)) ?? []
             for file in contents {
-                if !FolderWhiteList.contains(file) {
+                if !PermittedFolderList.contains(file) {
                     FileManager.default.removeItemAndContents(path: "\(cachesPath)/\(file)")
                 }
             }

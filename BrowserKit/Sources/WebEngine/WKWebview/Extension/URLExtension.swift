@@ -24,7 +24,7 @@ public extension URL {
         if self.isReaderModeURL || self.isSyncedReaderModeURL {
             if let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
                let queryItems = components.queryItems {
-                if let queryItem = queryItems.find({ $0.name == "url" }),
+                if let queryItem = queryItems.first(where: { $0.name == "url" }),
                    let value = queryItem.value {
                     return URL(string: value, invalidCharacters: false)?.safeEncodedUrl
                 }

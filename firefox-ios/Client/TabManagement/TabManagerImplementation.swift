@@ -334,9 +334,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                        sessionData: sessionData)
 
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(tab.isPrivate))
+                let context = BoolValueContext(boolValue: tab.isPrivate, windowUUID: windowUUID)
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
             } else {
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(false))
+                let context = BoolValueContext(boolValue: false, windowUUID: windowUUID)
+                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
             }
 
             didSelectTab(url)
@@ -459,6 +461,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     // MARK: - Inactive tabs
     override func getInactiveTabs() -> [Tab] {
+        let inactiveTabsEnabled = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.InactiveTabs)
+        guard inactiveTabsEnabled ?? true else { return [] }
         return inactiveTabsManager.getInactiveTabs(tabs: tabs)
     }
 
@@ -524,6 +528,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         case UIApplication.willResignActiveNotification:
             saveAllTabData()
         case .TabMimeTypeDidSet:
+            guard windowUUID == notification.windowUUID else { return }
             updateMenuItemsForSelectedTab()
         default:
             break

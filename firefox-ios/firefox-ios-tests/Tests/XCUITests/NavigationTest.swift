@@ -294,7 +294,11 @@ class NavigationTest: BaseTestCase {
         if !iPad() {
             mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
         }
-        mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
+        if #unavailable(iOS 17) {
+            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441500
@@ -306,7 +310,11 @@ class NavigationTest: BaseTestCase {
         if !iPad() {
             mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
         }
-        mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
+        if #unavailable(iOS 17) {
+            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441776

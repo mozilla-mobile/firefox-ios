@@ -24,22 +24,17 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
         static let letterHorizontalPadding: CGFloat = 7
         static let descriptionVerticalPadding: CGFloat = 6
         static let descriptionHorizontalPadding: CGFloat = 8
-        static let titleFontSize: CGFloat = 15
-        static let letterFontSize: CGFloat = 13
-        static let descriptionFontSize: CGFloat = 13
         static let descriptionBackgroundAlpha: CGFloat = 0.15
     }
 
     private lazy var cardContainer: ShadowCardView = .build()
     private lazy var contentView: UIView = .build()
 
-    private lazy var titleLabel: UILabel = .build { view in
-        view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                           size: UX.titleFontSize,
-                                                           weight: .semibold)
-        view.numberOfLines = 0
-        view.accessibilityTraits.insert(.header)
+    private lazy var titleLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var reliabilityScoreView: UIView = .build { view in
@@ -51,17 +46,15 @@ class FakespotReliabilityCardView: UIView, ThemeApplicable {
     private lazy var reliabilityLetterView: UIView = .build()
     private lazy var reliabilityDescriptionView: UIView = .build()
 
-    private lazy var reliabilityLetterLabel: UILabel = .build { view in
-        view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
-                                                           size: UX.letterFontSize,
-                                                           weight: .semibold)
+    private lazy var reliabilityLetterLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Bold.footnote.scaledFont()
     }
 
-    private lazy var reliabilityDescriptionLabel: UILabel = .build { view in
-        view.adjustsFontForContentSizeCategory = true
-        view.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote, size: UX.descriptionFontSize)
-        view.numberOfLines = 0
+    private lazy var reliabilityDescriptionLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
+        label.numberOfLines = 0
     }
 
     private var viewModel: FakespotReliabilityCardViewModel?

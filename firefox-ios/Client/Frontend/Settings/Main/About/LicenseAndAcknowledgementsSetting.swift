@@ -16,6 +16,10 @@ class LicenseAndAcknowledgementsSetting: Setting {
         return URL(string: "\(InternalURL.baseUrl)/\(AboutLicenseHandler.path)")
     }
 
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Licenses.title
+    }
+
     weak var settingsDelegate: AboutSettingsDelegate?
 
     init(settingsDelegate: AboutSettingsDelegate?) {

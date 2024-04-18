@@ -23,9 +23,6 @@ let package = Package(
             name: "UIComponents",
             targets: ["UIComponents"]),
         .library(
-            name: "Widget",
-            targets: ["Widget"]),
-        .library(
             name: "Licenses",
             targets: ["Licenses"])
     ],
@@ -48,7 +45,6 @@ let package = Package(
         .target(
             name: "Onboarding",
             dependencies: [
-                "Widget",
                 "DesignSystem",
                 .product(name: "SnapKit", package: "SnapKit")
             ]
@@ -59,9 +55,6 @@ let package = Package(
                 "UIComponents",
                 "DesignSystem"
             ]
-        ),
-        .target(
-            name: "Widget"
         ),
         .target(
             name: "Licenses",

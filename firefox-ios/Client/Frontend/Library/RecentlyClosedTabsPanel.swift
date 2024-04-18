@@ -29,6 +29,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     let profile: Profile
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
     private let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { return windowUUID }
 
     fileprivate lazy var tableViewController =
     RecentlyClosedTabsPanelSiteTableViewController(profile: profile, windowUUID: windowUUID)
@@ -74,7 +75,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        view.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer1
     }
 }
 
@@ -119,7 +120,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: displayURL.absoluteString))
-        twoLineCell.applyTheme(theme: themeManager.currentTheme)
+        twoLineCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return twoLineCell
     }
 

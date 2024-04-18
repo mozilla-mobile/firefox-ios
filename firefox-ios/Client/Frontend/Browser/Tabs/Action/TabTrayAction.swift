@@ -29,7 +29,7 @@ class HasSyncableAccountContext: ActionContext {
 }
 
 enum TabTrayAction: Action {
-    case tabTrayDidLoad(TabTrayPanelContext)
+    case tabTrayDidLoad(ActionContext)
     case changePanel(TabTrayPanelContext)
 
     // Middleware actions
@@ -39,7 +39,7 @@ enum TabTrayAction: Action {
 
     var windowUUID: UUID {
         switch self {
-        case .tabTrayDidLoad(let context as ActionContext),
+        case .tabTrayDidLoad(let context),
                 .changePanel(let context as ActionContext),
                 .didLoadTabTray(let context as ActionContext),
                 .dismissTabTray(let context),

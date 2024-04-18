@@ -5,28 +5,54 @@
 import Common
 import Redux
 
+class ThemeTypeContext: ActionContext {
+    let themeType: ThemeType
+    init(themeType: ThemeType, windowUUID: WindowUUID   ) {
+        self.themeType = themeType
+        super.init(windowUUID: windowUUID)
+    }
+}
+
+class ThemeSettingsStateContext: ActionContext {
+    let state: ThemeSettingsState
+    init(state: ThemeSettingsState, windowUUID: WindowUUID) {
+        self.state = state
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 enum ThemeSettingsAction: Action {
     // UI trigger actions
     case themeSettingsDidAppear(ActionContext)
-    case toggleUseSystemAppearance(Bool)
-    case enableAutomaticBrightness(Bool)
-    case switchManualTheme(ThemeType)
-    case updateUserBrightness(Float)
-    case receivedSystemBrightnessChange
+    case toggleUseSystemAppearance(BoolValueContext)
+    case enableAutomaticBrightness(BoolValueContext)
+    case switchManualTheme(ThemeTypeContext)
+    case updateUserBrightness(FloatValueContext)
+    case receivedSystemBrightnessChange(ActionContext)
 
     // Middleware trigger actions
-    case receivedThemeManagerValues(ThemeSettingsState)
-    case systemThemeChanged(Bool)
-    case automaticBrightnessChanged(Bool)
-    case manualThemeChanged(ThemeType)
-    case userBrightnessChanged(Float)
-    case systemBrightnessChanged(Float)
+    case receivedThemeManagerValues(ThemeSettingsStateContext)
+    case systemThemeChanged(BoolValueContext)
+    case automaticBrightnessChanged(BoolValueContext)
+    case manualThemeChanged(ThemeTypeContext)
+    case userBrightnessChanged(FloatValueContext)
+    case systemBrightnessChanged(FloatValueContext)
 
     var windowUUID: UUID {
-       // TODO: [8313] Use of .unavailable UUID is temporary as part of early MW refactors. WIP.
         switch self {
-        case .themeSettingsDidAppear(let context): return context.windowUUID
-        default: return .unavailable
+        case .themeSettingsDidAppear(let context),
+                .toggleUseSystemAppearance(let context as ActionContext),
+                .enableAutomaticBrightness(let context as ActionContext),
+                .switchManualTheme(let context as ActionContext),
+                .updateUserBrightness(let context as ActionContext),
+                .receivedSystemBrightnessChange(let context),
+                .receivedThemeManagerValues(let context as ActionContext),
+                .systemThemeChanged(let context as ActionContext),
+                .automaticBrightnessChanged(let context as ActionContext),
+                .manualThemeChanged(let context as ActionContext),
+                .userBrightnessChanged(let context as ActionContext),
+                .systemBrightnessChanged(let context as ActionContext):
+            return context.windowUUID
         }
     }
 }

@@ -45,12 +45,6 @@ HTMLElement.prototype.getAutocompleteInfo = function () {
   };
 };
 
-// Bug 1835024. Webkit doesn't support `checkVisibility` API
-// https://drafts.csswg.org/cssom-view-1/#dom-element-checkvisibility
-HTMLElement.prototype.checkVisibility = function (_options) {
-  throw new Error(`Not implemented: WebKit doesn't support checkVisibility `);
-};
-
 // This function  helps us debug better when an error occurs because a certain mock is missing
 const withNotImplementedError = obj =>
   new Proxy(obj, {
@@ -106,7 +100,7 @@ export const XPCOMUtils = withNotImplementedError({
     prop,
     pref,
     defaultValue = null,
-    onUpdate = null,
+    onUpdate,
     transform = val => val
   ) => {
     if (!Object.keys(IOSAppConstants.prefs).includes(pref)) {

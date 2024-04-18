@@ -204,6 +204,9 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                     .TabsTrayDidClose,
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
+                guard let uuid = notification.windowUUID,
+                      uuid == tabManager.windowUUID
+                else { return }
                 await updateTabsData()
             case .ProfileDidFinishSyncing,
                     .FirefoxAccountChanged:

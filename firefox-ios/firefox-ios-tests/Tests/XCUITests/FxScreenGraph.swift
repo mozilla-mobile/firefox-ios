@@ -27,6 +27,7 @@ let FxCreateAccount = "FxCreateAccount"
 let FxAccountManagementPage = "FxAccountManagementPage"
 let Intro_FxASigninEmail = "Intro_FxASigninEmail"
 let HomeSettings = "HomeSettings"
+let ToolbarSettings = "ToolbarSettings"
 let SiriSettings = "SiriSettings"
 let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
@@ -55,6 +56,7 @@ let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
 let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 let CreditCardsSettings = "AutofillCreditCard"
+let PageZoom = "PageZoom"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -214,6 +216,9 @@ class Action {
     static let OpenWhatsNewPage = "OpenWhatsNewPage"
     static let OpenSearchBarFromSearchButton = "OpenSearchBarFromSearchButton"
     static let CloseURLBarOpen = "CloseURLBarOpen"
+
+    static let SelectToolbarBottom = "SelectToolbarBottom"
+    static let SelectToolbarTop = "SelectToolbarTop"
 }
 
 @objcMembers
@@ -488,11 +493,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
         }
         screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
-            if app.buttons["Remove Test Folder"].exists {
-                app.buttons["Remove Test Folder"].tap()
-                app.buttons["Delete"].tap()
+            if #available(iOS 17, *) {
+                if app.buttons["Remove Test Folder"].exists {
+                    app.buttons["Remove Test Folder"].tap()
+                    app.buttons["Delete"].tap()
+                } else {
+                    app.buttons["Delete"].tap()
+                }
             } else {
-                app.buttons["Delete"].tap()
+                if app.buttons["Delete Test Folder"].exists {
+                    app.buttons["Delete Test Folder"].tap()
+                    app.buttons["Delete"].tap()
+                } else {
+                    app.buttons["Delete"].tap()
+                }
             }
         }
     }
@@ -584,6 +598,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["Tabs"], to: TabsSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
@@ -624,7 +639,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // Screengraph will go back to main Settings screen. Manually tap on settings
             app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
-            app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            if #unavailable(iOS 17) {
+                app.tables.buttons["Delete Mozilla Engine"].tap()
+            } else {
+                app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteMozillaEngine].tap()
+            }
             app.tables.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
         }
     }
@@ -655,8 +674,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            app.secureTextFields.element(boundBy: 1).tap()
-            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tap()
+            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
             app.secureTextFields.element(boundBy: 0).tap()
@@ -749,6 +768,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
             app.tables.cells.switches["Recently Saved"].tap()
+        }
+
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(ToolbarSettings) { screenState in
+        screenState.gesture(forAction: Action.SelectToolbarBottom) { UserState in
+            app.cells[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].tap()
+        }
+
+        screenState.gesture(forAction: Action.SelectToolbarTop) { UserState in
+            app.cells[AccessibilityIdentifiers.Settings.SearchBar.topSetting].tap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -1009,6 +1040,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
 
+    map.addScreenState(PageZoom) { screenState in
+        screenState.tap(app.buttons["FindInPage.closeButton"], to: BrowserTab)
+    }
+
     map.addScreenState(RequestDesktopSite) { _ in }
 
     map.addScreenState(RequestMobileSite) { _ in }
@@ -1114,6 +1149,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.search],
             to: FindInPage
+        )
+        screenState.tap(
+            app.tables.otherElements[StandardImageIdentifiers.Large.pageZoom],
+            to: PageZoom
         )
         // TODO: Add new state
 //        screenState.tap(

@@ -37,6 +37,8 @@ final class PrivateHomepageViewController:
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: Common.NotificationProtocol
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var parentCoordinator: PrivateHomepageDelegate?
 
@@ -82,23 +84,25 @@ final class PrivateHomepageViewController:
             body: String(format: .FirefoxHomepage.FeltPrivacyUI.Body, AppName.shortName.rawValue),
             link: .FirefoxHomepage.FeltPrivacyUI.Link
         )
-        messageCard.configure(with: messageCardModel, and: themeManager.currentTheme)
+        messageCard.configure(with: messageCardModel, and: themeManager.currentTheme(for: windowUUID))
         messageCard.privateBrowsingLinkTapped = learnMore
         return messageCard
     }()
 
     private lazy var homepageHeaderCell: HomepageHeaderCell = {
         let header = HomepageHeaderCell()
-        header.applyTheme(theme: themeManager.currentTheme)
+        header.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         header.configure(with: headerViewModel)
         return header
     }()
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared,
          overlayManager: OverlayModeManager
     ) {
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -195,7 +199,7 @@ final class PrivateHomepageViewController:
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         gradient.colors = theme.colors.layerHomepage.cgColors
         homepageHeaderCell.applyTheme(theme: theme)
     }

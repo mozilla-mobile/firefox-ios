@@ -38,6 +38,7 @@
         "FakespotTests\/testLearnMoreAboutFakespotHyperlink()",
         "FakespotTests\/testLearnMoreLink()",
         "FakespotTests\/testOptInNotificationLayout()",
+        "FakespotTests\/testPriceTagIconAndReviewCheckLandscape()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
         "FakespotTests\/testPrivacyPolicyLink()",
@@ -114,6 +115,7 @@
         "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
+        "SearchTests\/testBottomVIewURLBar()",
         "SearchTests\/testCopyPasteComplete()",
         "SearchTests\/testDefaultSearchEngine()",
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
@@ -134,7 +136,8 @@
         "TrackingProtectionTests",
         "URLValidationTests",
         "UrlBarTests",
-        "WhatsNewTest"
+        "WhatsNewTest",
+        "ZoomingTests"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

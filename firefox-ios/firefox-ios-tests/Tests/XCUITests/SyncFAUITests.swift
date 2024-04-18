@@ -84,7 +84,7 @@ class SyncUITests: BaseTestCase {
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePasswordNewAccount)
-        mozWaitForElementToExist(app.webViews.staticTexts["Repeat password"], timeout: 10)
+        XCTAssertEqual(app.secureTextFields.element(boundBy: 1).value as! String, "Repeat password")
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449603
@@ -121,11 +121,11 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "f"
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 1))
         navigator.performAction(Action.FxATypePasswordNewAccount)
-        let passMessage = "Your password is currently hidden."
-        mozWaitForElementToExist(app.webViews.otherElements.buttons[passMessage], timeout: 3)
+        let passMessage = "Show password"
+        mozWaitForElementToExist(app.webViews.otherElements[passMessage], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown
-        app.secureTextFields.element(boundBy: 1).typeText(XCUIKeyboardKey.delete.rawValue)
-        mozWaitForElementToNotExist(app.webViews.staticTexts.buttons[passMessage])
+        app.keyboards.keys["delete"].tap()
+        mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449605

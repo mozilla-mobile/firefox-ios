@@ -31,17 +31,13 @@ public struct FakespotActionFooterViewModel {
 
 public final class FakespotActionFooterView: UIView, ThemeApplicable {
     private struct UX {
-        static let labelSize: CGFloat = 13
-        static let buttonSize: CGFloat = 13
         static let buttonInsets = NSDirectionalEdgeInsets(top: 8, leading: 0, bottom: 17, trailing: 0)
     }
 
     private var viewModel: FakespotActionFooterViewModel?
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .footnote,
-            size: UX.labelSize)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
     }
@@ -69,7 +65,7 @@ public final class FakespotActionFooterView: UIView, ThemeApplicable {
         let linkButtonViewModel = LinkButtonViewModel(
             title: viewModel.actionTitle,
             a11yIdentifier: viewModel.a11yActionIdentifier,
-            fontSize: UX.buttonSize,
+            font: FXFontStyles.Regular.footnote.scaledFont(),
             contentInsets: UX.buttonInsets,
             contentHorizontalAlignment: .leading
         )

@@ -50,14 +50,14 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     private func makeChildPanels() -> [UINavigationController] {
         let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile),
                                             windowUUID: windowUUID)
-        let historyPanel = HistoryPanel(profile: profile)
-        let downloadsPanel = DownloadsPanel()
-        let readingListPanel = ReadingListPanel(profile: profile)
+        let historyPanel = HistoryPanel(profile: profile, windowUUID: windowUUID)
+        let downloadsPanel = DownloadsPanel(windowUUID: windowUUID)
+        let readingListPanel = ReadingListPanel(profile: profile, windowUUID: windowUUID)
         return [
-            ThemedNavigationController(rootViewController: bookmarksPanel),
-            ThemedNavigationController(rootViewController: historyPanel),
-            ThemedNavigationController(rootViewController: downloadsPanel),
-            ThemedNavigationController(rootViewController: readingListPanel)
+            ThemedNavigationController(rootViewController: bookmarksPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: historyPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: downloadsPanel, windowUUID: windowUUID),
+            ThemedNavigationController(rootViewController: readingListPanel, windowUUID: windowUUID)
         ]
     }
 

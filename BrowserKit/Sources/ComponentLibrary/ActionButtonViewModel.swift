@@ -14,7 +14,6 @@ public struct ActionButtonViewModel {
 
     public let title: String
     public let a11yIdentifier: String?
-    public let fontSize: CGFloat = 15
     public let horizontalInset: CGFloat
     public let verticalInset: CGFloat
     public var touchUpAction: ((UIButton) -> Void)?

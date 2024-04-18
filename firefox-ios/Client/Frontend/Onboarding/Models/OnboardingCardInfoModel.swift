@@ -5,6 +5,7 @@
 import Foundation
 
 struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
+    var cardType: OnboardingCardType
     var name: String
     var order: Int
     var title: String
@@ -13,7 +14,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     var link: OnboardingLinkInfoModel?
     var buttons: OnboardingButtons
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel]
-    var type: OnboardingType
+    var onboardingType: OnboardingType
     var a11yIdRoot: String
 
     var imageID: String
@@ -23,6 +24,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
     }
 
     init(
+        cardType: OnboardingCardType,
         name: String,
         order: Int,
         title: String,
@@ -30,11 +32,12 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         link: OnboardingLinkInfoModel?,
         buttons: OnboardingButtons,
         multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
-        type: OnboardingType,
+        onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
         instructionsPopup: OnboardingInstructionsPopupInfoModel?
     ) {
+        self.cardType = cardType
         self.name = name
         self.order = order
         self.title = title
@@ -43,7 +46,7 @@ struct OnboardingCardInfoModel: OnboardingCardInfoModelProtocol {
         self.link = link
         self.buttons = buttons
         self.multipleChoiceButtons = multipleChoiceButtons
-        self.type = type
+        self.onboardingType = onboardingType
         self.a11yIdRoot = a11yIdRoot
         self.instructionsPopup = instructionsPopup
     }

@@ -9,6 +9,7 @@ import Common
 @testable import Client
 
 class LegacyRemoteTabsPanelTests: XCTestCase {
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -146,7 +147,7 @@ private extension LegacyRemoteTabsPanelTests {
         profile.prefs.setBool(hasSyncEnabled, forKey: PrefsKeys.TabSyncEnabled)
         profile.hasSyncableAccountMock = hasAccount
         profile.mockClientAndTabs = clientAndTabs
-        let panel = LegacyRemoteTabsPanel(profile: profile)
+        let panel = LegacyRemoteTabsPanel(profile: profile, windowUUID: windowUUID)
         panel.viewDidLoad()
 
         trackForMemoryLeaks(panel, file: file, line: line)

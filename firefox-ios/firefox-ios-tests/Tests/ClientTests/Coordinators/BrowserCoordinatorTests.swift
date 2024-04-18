@@ -17,6 +17,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     private var applicationHelper: MockApplicationHelper!
     private var glean: MockGleanWrapper!
     private var scrollDelegate: MockStatusBarScrollDelegate!
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
@@ -277,7 +278,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testShowBackForwardList_presentsBackForwardListViewController() {
-        let mockTab = Tab(profile: profile, configuration: .init())
+        let mockTab = Tab(profile: profile, configuration: .init(), windowUUID: windowUUID)
         mockTab.url = URL(string: "https://www.google.com")
         mockTab.createWebview()
         tabManager.selectedTab = mockTab
@@ -748,7 +749,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.findAndHandle(route: .defaultBrowser(section: .tutorial))
         subject.start(with: nil)
 
-        subject.didFinishLaunch(from: LaunchCoordinator(router: mockRouter))
+        subject.didFinishLaunch(
+            from: LaunchCoordinator(
+                router: mockRouter,
+                windowUUID: .XCTestDefaultUUID
+            )
+        )
 
         XCTAssertNotNil(subject.savedRoute)
     }

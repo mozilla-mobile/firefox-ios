@@ -10,9 +10,9 @@ import IntentsUI
 class SiriSettingsViewController: SettingsTableViewController {
     let prefs: Prefs
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .SettingsSiriSectionName
     }
@@ -38,11 +38,12 @@ class SiriOpenURLSetting: Setting {
     override var accessibilityIdentifier: String? { return "SiriSettings" }
 
     init(settings: SettingsTableViewController) {
+        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsSiriOpenURL,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )

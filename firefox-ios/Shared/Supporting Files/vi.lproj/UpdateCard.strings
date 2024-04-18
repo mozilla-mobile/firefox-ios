@@ -2,9 +2,6 @@
 "CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Đã cập nhật thông tin thẻ";
 
 /* This value is used as the title for the update card page */
-"CreditCard.UpdateCard.MainTitle.v115" = "Cập nhật thẻ này?";
-
-/* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v122" = "Cập nhật thẻ?";
 
 /* This value is used as the title for the Manage Cards button from the update credit card page */
@@ -12,9 +9,6 @@
 
 /* This value is used as the title for the Not Now button in the update credit card page */
 "CreditCard.UpdateCard.NotNowButtonTitle.v115" = "Không phải bây giờ";
-
-/* This value is used as the title for the button in the update credit card page */
-"CreditCard.UpdateCard.YesButtonTitle.v115" = "Có";
 
 /* This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card. */
 "CreditCard.UpdateCard.YesButtonTitle.v122" = "Cập nhật";
