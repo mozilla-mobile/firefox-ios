@@ -64,6 +64,10 @@ class L10nBaseSnapshotTests: XCTestCase {
             usleep(10000)
         }
     }
+    
+    func waitForTabsButton() {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)
+    }
 
     private func waitFor(
         _ element: XCUIElement,
