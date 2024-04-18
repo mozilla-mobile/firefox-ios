@@ -72,7 +72,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private var websiteLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.font = FXFontStyles.Bold.caption1.scaledFont()
         label.textColor = .label
     }
 
