@@ -56,7 +56,7 @@ class DevicePickerViewController: UITableViewController {
 
     private lazy var tabTitleLabel: UILabel = .build { label in
         label.font = UX.tabTitleTextFont
-        label.textColor = self.themeManager.currentTheme.colors.textPrimary
+        label.textColor = self.currentTheme().colors.textPrimary
     }
 
     private var devices = [RemoteDevice]()
@@ -65,6 +65,7 @@ class DevicePickerViewController: UITableViewController {
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
     private var loadingState = LoadingState.loading
+
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
@@ -106,7 +107,7 @@ class DevicePickerViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: .zero)
 
         tableView.allowsSelection = true
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer2
+        tableView.backgroundColor = currentTheme().colors.layer2
         tableView.separatorStyle = .none
 
         notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate,
@@ -129,6 +130,13 @@ class DevicePickerViewController: UITableViewController {
         if let obj = notification {
             NotificationCenter.default.removeObserver(obj)
         }
+    }
+
+    private func currentTheme() -> Theme {
+        // TODO: [8313] Revisit. Needs to be updated to use UUID-based themeing.
+        // guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
+        // return themeManager.currentTheme(for: uuid)
+        return themeManager.legacy_currentTheme()
     }
 
     private func loadList() {
@@ -193,11 +201,12 @@ class DevicePickerViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell?
 
+        let theme = currentTheme()
         if !devices.isEmpty {
             if indexPath.section == 0 {
                 cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.cellIdentifier,
                                                      for: indexPath)
-                (cell as? DevicePickerTableViewHeaderCell)?.applyTheme(theme: themeManager.currentTheme)
+                (cell as? DevicePickerTableViewHeaderCell)?.applyTheme(theme: theme)
             } else if let clientCell = tableView.dequeueReusableCell(
                 withIdentifier: DevicePickerTableViewCell.cellIdentifier,
                 for: indexPath) as? DevicePickerTableViewCell {
@@ -207,15 +216,15 @@ class DevicePickerViewController: UITableViewController {
                 if let id = item.id {
                     clientCell.checked = selectedIdentifiers.contains(id)
                 }
-                clientCell.applyTheme(theme: themeManager.currentTheme)
+                clientCell.applyTheme(theme: theme)
                 cell = clientCell
             }
         } else {
             if loadingState == .loaded,
                 let hostingCell = tableView.dequeueReusableCell(
                 withIdentifier: HostingTableViewCell<HelpView>.cellIdentifier) as? HostingTableViewCell<HelpView> {
-                let textColor = themeManager.currentTheme.colors.textPrimary
-                let imageColor = themeManager.currentTheme.colors.iconPrimary
+                let textColor = theme.colors.textPrimary
+                let imageColor = theme.colors.iconPrimary
 
                 let emptyView = HelpView(textColor: textColor,
                                          imageColor: imageColor,
@@ -288,6 +297,7 @@ class DevicePickerViewController: UITableViewController {
 
     @objc
     func send() {
+        let theme = currentTheme()
         var pickedItems = [RemoteDevice]()
         for id in selectedIdentifiers {
             if let item = devices.find({ $0.id == id }) {
@@ -300,7 +310,7 @@ class DevicePickerViewController: UITableViewController {
         // Replace the Send button with a loading indicator since it takes a while to sync
         // up our changes to the server.
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(width: 25, height: 25))
-        loadingIndicator.color = themeManager.currentTheme.colors.iconSpinner
+        loadingIndicator.color = theme.colors.iconSpinner
         loadingIndicator.startAnimating()
         let customBarButton = UIBarButtonItem(customView: loadingIndicator)
         self.navigationItem.rightBarButtonItem = customBarButton

@@ -848,6 +848,10 @@ class SearchViewController: SiteTableViewController,
         return UITableView.automaticDimension
     }
 
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     override func tableView(
         _ tableView: UITableView,
         viewForHeaderInSection section: Int
@@ -870,7 +874,7 @@ class SearchViewController: SiteTableViewController,
                                                  isCollapsible: false,
                                                  collapsibleState: nil)
         headerView.configure(viewModel)
-        headerView.applyTheme(theme: themeManager.currentTheme)
+        headerView.applyTheme(theme: currentTheme())
         return headerView
     }
 
@@ -1011,14 +1015,14 @@ class SearchViewController: SiteTableViewController,
 
     override func applyTheme() {
         super.applyTheme()
-        view.backgroundColor = themeManager.currentTheme.colors.layer5
+        view.backgroundColor = currentTheme().colors.layer5
 
         // search settings icon
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
-        searchButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        searchButton.tintColor = currentTheme().colors.iconPrimary
 
-        searchEngineContainerView.layer.backgroundColor = themeManager.currentTheme.colors.layer1.cgColor
-        searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadowDefault.cgColor
+        searchEngineContainerView.layer.backgroundColor = currentTheme().colors.layer1.cgColor
+        searchEngineContainerView.layer.shadowColor = currentTheme().colors.shadowDefault.cgColor
         reloadData()
     }
 
@@ -1060,12 +1064,12 @@ class SearchViewController: SiteTableViewController,
                 oneLineCell.leftImageView.manuallySetImage(
                     UIImage(named: SearchViewControllerUX.SearchImage)?.withRenderingMode(.alwaysTemplate) ?? UIImage()
                 )
-                oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
+                oneLineCell.leftImageView.tintColor = currentTheme().colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
-                appendButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+                appendButton.tintColor = currentTheme().colors.iconPrimary
                 appendButton.sizeToFit()
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
                 cell = oneLineCell
@@ -1176,8 +1180,8 @@ class SearchViewController: SiteTableViewController,
         }
 
         // We need to set the correct theme on the cells when the initial display happens
-        oneLineCell.applyTheme(theme: themeManager.currentTheme)
-        twoLineCell.applyTheme(theme: themeManager.currentTheme)
+        oneLineCell.applyTheme(theme: currentTheme())
+        twoLineCell.applyTheme(theme: currentTheme())
         return cell
     }
 

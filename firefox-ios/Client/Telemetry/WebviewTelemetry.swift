@@ -17,6 +17,7 @@ final class WebViewLoadMeasurementTelemetry {
     func stop() {
         guard let timerId = loadTimerId else { return }
         GleanMetrics.Webview.pageLoad.stopAndAccumulate(timerId)
+        loadTimerId = nil
     }
 
     func cancel() {

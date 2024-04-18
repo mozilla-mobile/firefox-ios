@@ -44,10 +44,11 @@ class ReadabilityOperation: Operation {
         // Setup a tab, attach a Readability helper. Kick all this off on the main thread since UIKit
         // and WebKit are not safe from other threads.
 
+        let windowUUID = tab.windowUUID
         DispatchQueue.main.async(execute: { () -> Void in
             let configuration = WKWebViewConfiguration()
             // TODO: To resolve profile from DI container
-            self.tab = Tab(profile: self.profile, configuration: configuration)
+            self.tab = Tab(profile: self.profile, configuration: configuration, windowUUID: windowUUID)
             self.tab.createWebview()
             self.tab.navigationDelegate = self
 

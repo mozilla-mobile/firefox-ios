@@ -76,6 +76,11 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
+    /// The window associated with the tab (where the tab lives and will be displayed).
+    /// Currently tabs cannot be actively moved between windows on iPadOS, however this
+    /// may change in the future.
+    let windowUUID: WindowUUID
+
     var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
@@ -394,10 +399,12 @@ class Tab: NSObject, ThemeApplicable {
     init(profile: Profile,
          configuration: WKWebViewConfiguration,
          isPrivate: Bool = false,
+         windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          logger: Logger = DefaultLogger.shared) {
         self.configuration = configuration
         self.nightMode = false
+        self.windowUUID = windowUUID
         self.noImageMode = false
         self.profile = profile
         self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
@@ -450,7 +457,7 @@ class Tab: NSObject, ThemeApplicable {
         if webView == nil {
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true
-            let webView = TabWebView(frame: .zero, configuration: configuration)
+            let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
 
             webView.accessibilityLabel = .WebViewAccessibilityLabel
@@ -971,9 +978,10 @@ protocol TabWebViewDelegate: AnyObject {
 }
 
 class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
-    var accessoryView = AccessoryViewProvider()
+    lazy var accessoryView = AccessoryViewProvider(windowUUID: windowUUID)
     private var logger: Logger = DefaultLogger.shared
     private weak var delegate: TabWebViewDelegate?
+    let windowUUID: WindowUUID
 
     override var inputAccessoryView: UIView? {
         guard delegate?.tabWebViewShouldShowAccessoryView(self) ?? true else { return nil }
@@ -1012,7 +1020,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         }
     }
 
-    override init(frame: CGRect, configuration: WKWebViewConfiguration) {
+    init(frame: CGRect, configuration: WKWebViewConfiguration, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         super.init(frame: frame, configuration: configuration)
     }
 

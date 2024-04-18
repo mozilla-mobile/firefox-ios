@@ -25,6 +25,7 @@ class SiteTableViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     let profile: Profile
     let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     lazy var tableView: UITableView = .build { [weak self] table in
@@ -142,7 +143,7 @@ class SiteTableViewController: UIViewController,
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
-        cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
+        cell.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
         return cell
     }
 
@@ -156,8 +157,8 @@ class SiteTableViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
-            header.contentView.backgroundColor = themeManager.currentTheme.colors.layer1
+            header.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
+            header.contentView.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer1
         }
     }
 
@@ -183,15 +184,16 @@ class SiteTableViewController: UIViewController,
     }
 
     func applyTheme() {
-        navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
-        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.iconAction
+        let theme = themeManager.currentTheme(for: windowUUID)
+        navigationController?.navigationBar.barTintColor = theme.colors.layer1
+        navigationController?.navigationBar.tintColor = theme.colors.iconAction
         navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: themeManager.currentTheme.colors.textPrimary
+            .foregroundColor: theme.colors.textPrimary
         ]
         setNeedsStatusBarAppearanceUpdate()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
-        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.backgroundColor = theme.colors.layer1
+        tableView.separatorColor = theme.colors.borderPrimary
         tableView.reloadData()
     }
 }

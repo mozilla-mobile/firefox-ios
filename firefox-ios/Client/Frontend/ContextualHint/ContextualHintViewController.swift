@@ -25,6 +25,7 @@ class ContextualHintViewController: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    private let windowUUID: WindowUUID
 
     private var onViewSummoned: (() -> Void)?
     var onViewDismissed: (() -> Void)?
@@ -32,11 +33,15 @@ class ContextualHintViewController: UIViewController,
 
     var isPresenting = false
 
+    var currentWindowUUID: UUID? { return windowUUID }
+
     // MARK: - Initializers
     init(with viewProvider: ContextualHintViewProvider,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewProvider = viewProvider
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -184,7 +189,7 @@ class ContextualHintViewController: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         hintView.applyTheme(theme: theme)
     }
 

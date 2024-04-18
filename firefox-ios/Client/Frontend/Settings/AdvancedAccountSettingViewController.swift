@@ -72,7 +72,8 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
-        let attributes = [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary]
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
         let useStage = BoolSetting(
             prefs: prefs,
             prefKey: PrefsKeys.UseStageServer,

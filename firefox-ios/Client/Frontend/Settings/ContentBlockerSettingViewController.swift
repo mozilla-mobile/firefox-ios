@@ -11,7 +11,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
-    init(prefs: Prefs,
+    init(windowUUID: WindowUUID,
+         prefs: Prefs,
          isShownFromSettings: Bool = true) {
         self.prefs = prefs
 
@@ -19,7 +20,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             BlockingStrength(rawValue: $0)
         }) ?? .basic
 
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .SettingsTrackingProtectionSectionName
 
@@ -87,8 +88,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     }
                 })
 
+            let uuid = windowUUID
             setting.onAccessoryButtonTapped = {
-                let vc = TPAccessoryInfo()
+                let vc = TPAccessoryInfo(windowUUID: uuid)
                 vc.isStrictMode = option == .strict
                 self.navigationController?.pushViewController(vc, animated: true)
             }
@@ -146,9 +148,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             // TODO: Get a dedicated string for this.
             let title: String = .TrackerProtectionLearnMore
 
+            let theme = themeManager.currentTheme(for: windowUUID)
             let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
             var attributes = [NSAttributedString.Key: AnyObject]()
-            attributes[NSAttributedString.Key.foregroundColor] = themeManager.currentTheme.colors.actionPrimary
+            attributes[NSAttributedString.Key.foregroundColor] = theme.colors.actionPrimary
             attributes[NSAttributedString.Key.font] = font
 
             button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
@@ -173,7 +176,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
     @objc
     func moreInfoTapped() {
-        let viewController = SettingsContentViewController()
+        let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)
     }

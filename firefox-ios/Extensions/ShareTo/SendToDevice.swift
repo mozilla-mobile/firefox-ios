@@ -11,7 +11,9 @@ import Common
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
+
     private let themeManager = DefaultThemeManager(sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+
     private var profile: Profile {
         let profile = BrowserProfile(localName: "profile")
 
@@ -24,16 +26,24 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
         return profile
     }
 
+    private func currentTheme() -> Theme {
+        // TODO: [8313] Revisit and update to use UUID based themeing.
+        // guard let uuid = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return DarkTheme() }
+        // return themeManager.currentTheme(for: uuid)
+        return themeManager.legacy_currentTheme()
+    }
+
     func initialViewController() -> UIViewController {
+        let theme = currentTheme()
         guard let shareItem = sharedItem else {
             finish()
             return UIViewController()
         }
 
         let colors = SendToDeviceHelper.Colors(
-            defaultBackground: themeManager.currentTheme.colors.layer2,
-            textColor: themeManager.currentTheme.colors.textPrimary,
-            iconColor: themeManager.currentTheme.colors.iconPrimary
+            defaultBackground: theme.colors.layer2,
+            textColor: theme.colors.textPrimary,
+            iconColor: theme.colors.iconPrimary
         )
         let helper = SendToDeviceHelper(shareItem: shareItem,
                                         profile: profile,

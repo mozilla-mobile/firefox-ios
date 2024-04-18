@@ -51,8 +51,6 @@ struct FakespotHighlightsCardViewModel {
 
 class FakespotHighlightsCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let titleFontSize: CGFloat = 15
-        static let buttonFontSize: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonVerticalInset: CGFloat = 12
@@ -70,9 +68,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.titleFontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.header)
     }
@@ -209,11 +205,7 @@ class FakespotHighlightsCardView: UIView, ThemeApplicable {
 
         let highlightLabelWidth = FakespotUtils.widthOfString(
             longestReview,
-            usingFont: DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .subheadline,
-                size: UX.titleFontSize,
-                weight: .semibold
-            )
+            usingFont: FXFontStyles.Bold.subheadline.scaledFont()
         )
 
         // Calculates the width available for the highlights group view within the view's current bounds,

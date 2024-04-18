@@ -55,6 +55,7 @@ extension HomepageContextMenuProtocol {
         with sourceView: UIView?,
         sectionType: HomepageSectionType
     ) -> PhotonActionSheet? {
+        guard let windowUUID = sourceView?.currentWindowUUID else { return nil }
         guard let actions = getContextMenuActions(
             for: site,
             with: sourceView,
@@ -67,7 +68,7 @@ extension HomepageContextMenuProtocol {
             site: site,
             modalStyle: .overFullScreen
         )
-        let contextMenu = PhotonActionSheet(viewModel: viewModel)
+        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)
@@ -92,6 +93,7 @@ extension HomepageContextMenuProtocol {
         with sourceView: UIView?,
         sectionType: HomepageSectionType
     ) -> PhotonActionSheet? {
+        guard let windowUUID = sourceView?.currentWindowUUID else { return nil }
         guard let actions = getContextMenuActions(for: highlightItem,
                                                   with: sourceView,
                                                   sectionType: sectionType)
@@ -113,7 +115,7 @@ extension HomepageContextMenuProtocol {
                                                    modalStyle: .overFullScreen)
         }
 
-        let contextMenu = PhotonActionSheet(viewModel: viewModel)
+        let contextMenu = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         contextMenu.modalTransitionStyle = .crossDissolve
 
         let generator = UIImpactFeedbackGenerator(style: .heavy)

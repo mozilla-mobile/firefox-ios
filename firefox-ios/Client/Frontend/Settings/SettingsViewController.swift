@@ -15,13 +15,18 @@ class SettingsViewController: UIViewController, Themeable {
 
     var profile: Profile!
     var tabManager: TabManager!
+    let windowUUID: WindowUUID
 
-    init(profile: Profile? = nil,
+    var currentWindowUUID: UUID? { return windowUUID }
+
+    init(windowUUID: WindowUUID,
+         profile: Profile? = nil,
          tabManager: TabManager? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         self.profile = profile
         self.tabManager = tabManager
@@ -38,6 +43,7 @@ class SettingsViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        let theme = themeManager.currentTheme(for: currentWindowUUID)
+        view.backgroundColor = theme.colors.layer1
     }
 }

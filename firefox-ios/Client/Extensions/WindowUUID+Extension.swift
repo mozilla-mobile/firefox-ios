@@ -10,7 +10,7 @@ import Foundation
 /// can be run side-by-side on iPad (once multi-window is enabled). [FXIOS-7349]
 public typealias WindowUUID = UUID
 
-extension WindowUUID {
+public extension WindowUUID {
     /// Sentinel UUID value for use when a window is unavailable or unknown.
     ///
     /// We want to enforce non-optional WindowUUIDs in the vast majority of codebase APIs.
@@ -23,4 +23,7 @@ extension WindowUUID {
 
     /// Default window UUID for single-window unit tests.
     static let XCTestDefaultUUID = WindowUUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+
+    /// Default window UUID for UI testing.
+    static let DefaultUITestingUUID = WindowUUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E374451D")!
 }

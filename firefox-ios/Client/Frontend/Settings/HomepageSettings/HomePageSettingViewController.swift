@@ -38,7 +38,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
          tabManager: TabManager) {
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: tabManager.windowUUID)
         super.settingsDelegate = settingsDelegate
         self.tabManager = tabManager
 
@@ -134,7 +134,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let pocketSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme,
+            theme: themeManager.currentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
             defaultValue: true,
             titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
@@ -148,7 +148,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let recentlySavedSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme,
+            theme: themeManager.currentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection,
             defaultValue: true,
             titleText: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved
@@ -257,6 +257,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 extension HomePageSettingViewController {
     class TopSitesSettings: Setting, FeatureFlaggable {
         var profile: Profile
+        let windowUUID: WindowUUID
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var accessibilityIdentifier: String? {
@@ -273,11 +274,12 @@ extension HomePageSettingViewController {
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
+            self.windowUUID = settings.windowUUID
             super.init(title: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsPageTitle))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
-            let topSitesVC = TopSitesSettingsViewController()
+            let topSitesVC = TopSitesSettingsViewController(windowUUID: windowUUID)
             topSitesVC.profile = profile
             navigationController?.pushViewController(topSitesVC, animated: true)
         }
@@ -313,10 +315,11 @@ extension HomePageSettingViewController {
         override func onClick(_ navigationController: UINavigationController?) {
             guard wallpaperManager.canSettingsBeShown else { return }
 
+            let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
             let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
                                                        tabManager: tabManager,
-                                                       theme: settings.themeManager.currentTheme)
-            let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
+                                                       theme: theme)
+            let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: tabManager.windowUUID)
             wallpaperVC.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(wallpaperVC, animated: true)
         }

@@ -9,13 +9,14 @@ import Common
 class SyncContentSettingsViewControllerTests: XCTestCase {
     var profile: MockProfile!
     var syncContentSettingsVC: SyncContentSettingsViewController?
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        syncContentSettingsVC = SyncContentSettingsViewController()
+        syncContentSettingsVC = SyncContentSettingsViewController(windowUUID: windowUUID)
         syncContentSettingsVC?.profile = profile
     }
 

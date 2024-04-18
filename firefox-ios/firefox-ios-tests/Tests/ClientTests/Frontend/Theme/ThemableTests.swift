@@ -89,4 +89,5 @@ class TestsThemeable: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     func applyTheme() {}
+    var currentWindowUUID: UUID? { return .XCTestDefaultUUID }
 }

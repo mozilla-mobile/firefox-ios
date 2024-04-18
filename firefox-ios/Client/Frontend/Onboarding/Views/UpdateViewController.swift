@@ -23,6 +23,8 @@ class UpdateViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
 
     private lazy var closeButton: UIButton = .build { button in
@@ -50,15 +52,17 @@ class UpdateViewController: UIViewController,
     // MARK: - Initializers
     init(
         viewModel: UpdateViewModel,
+        windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.windowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
 
-        self.viewModel.setupViewControllerDelegates(with: self)
+        self.viewModel.setupViewControllerDelegates(with: self, for: windowUUID)
     }
 
     required init?(coder: NSCoder) {
@@ -153,8 +157,13 @@ class UpdateViewController: UIViewController,
     }
 
     // MARK: - Theme
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         view.backgroundColor = theme.colors.layer2
 
         viewModel.availableCards.forEach { $0.applyTheme() }
@@ -205,7 +214,7 @@ extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewContro
 }
 
 extension UpdateViewController: OnboardingCardDelegate {
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
@@ -231,6 +240,7 @@ extension UpdateViewController: OnboardingCardDelegate {
         case .syncSignIn:
             let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
             presentSignToSync(
+                windowUUID: windowUUID,
                 with: fxaParams,
                 selector: #selector(dismissSignInViewController),
                 completion: {
@@ -240,16 +250,22 @@ extension UpdateViewController: OnboardingCardDelegate {
             )
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
+                windowUUID: windowUUID,
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
+                windowUUID: windowUUID,
                 from: cardName,
                 completionIfLastCard: { self.closeUpdate() })
 
         default:
             break
         }
+    }
+
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+        // There is no multiple choice actions for updating
     }
 
     func sendCardViewTelemetry(from cardName: String) {

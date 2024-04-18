@@ -106,7 +106,7 @@ class BaseTestCaseL10n: XCTestCase {
             waitFor(progressIndicator,
                     with: "exists != true",
                     description: "Problem loading \(searchWord)",
-                timeout: finishLoadingTimeout)
+                    timeout: finishLoadingTimeout)
         }
     }
 

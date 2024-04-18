@@ -38,6 +38,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    var currentWindowUUID: UUID? { windowUUID }
+    var windowUUID: WindowUUID { tabManager.windowUUID }
 
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
@@ -115,7 +117,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
                                                        reuseID: TopTabCell.cellIdentifier,
                                                        tabDisplayType: .TopTabTray,
                                                        profile: profile,
-                                                       theme: themeManager.currentTheme)
+                                                       theme: themeManager.currentTheme(for: windowUUID))
         self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -166,14 +168,14 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let uiLargeContentViewInteraction = UILargeContentViewerInteraction()
         view.addInteraction(uiLargeContentViewInteraction)
 
-        tabsButton.applyTheme(theme: themeManager.currentTheme)
-        applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: themeManager.currentTheme)
+        tabsButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false, theme: themeManager.currentTheme(for: windowUUID))
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
 
     func applyTheme() {
-        let currentTheme = themeManager.currentTheme
+        let currentTheme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = currentTheme.colors.layer3
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
@@ -321,12 +323,13 @@ extension TopTabsViewController: TabDisplayerDelegate {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
+        let theme = themeManager.currentTheme(for: windowUUID)
         tabCell.configureLegacyCellWith(tab: tab,
                                         isSelected: isSelected,
-                                        theme: themeManager.currentTheme)
+                                        theme: theme)
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
-        tabCell.applyTheme(theme: themeManager.currentTheme)
+        tabCell.applyTheme(theme: theme)
         return tabCell
     }
 }

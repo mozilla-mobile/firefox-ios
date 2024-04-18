@@ -5,20 +5,27 @@
 import UIKit
 
 public protocol ThemeManager {
-    var currentTheme: Theme { get }
-    var window: UIWindow? { get set }
+    // Current theme
+    func currentTheme(for window: UUID?) -> Theme
 
+    // System theme and brightness settings
     var systemThemeIsOn: Bool { get }
     var automaticBrightnessIsOn: Bool { get }
     var automaticBrightnessValue: Float { get }
-
-    func changeCurrentTheme(_ newTheme: ThemeType)
     func systemThemeChanged()
     func setSystemTheme(isOn: Bool)
-    func setPrivateTheme(isOn: Bool)
     func setAutomaticBrightness(isOn: Bool)
     func setAutomaticBrightnessValue(_ value: Float)
     func brightnessChanged()
     func getNormalSavedTheme() -> ThemeType
-    func reloadTheme()
+
+    // Window management and window-specific themeing
+    func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID)
+    func setPrivateTheme(isOn: Bool, for window: UUID)
+    func getPrivateThemeIsOn(for window: UUID) -> Bool
+    func reloadTheme(for window: UUID)
+    func setWindow(_ window: UIWindow, for uuid: UUID)
+
+    // Temporary. Will be removed as part of [FXIOS-8313]
+    func legacy_currentTheme() -> Theme
 }

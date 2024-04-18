@@ -85,6 +85,7 @@ class BrowserViewController: UIViewController,
     let shoppingContextHintVC: ContextualHintViewController
     private var backgroundTabLoader: DefaultBackgroundTabLoader
     var windowUUID: WindowUUID { return tabManager.windowUUID }
+    var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
 
     // MARK: Telemetry Variables
@@ -119,7 +120,7 @@ class BrowserViewController: UIViewController,
 
     // Overlay dimming view for private mode
     lazy var privateModeDimmingView: UIView = .build { view in
-        view.backgroundColor = self.themeManager.currentTheme.colors.layerScrim
+        view.backgroundColor = self.currentTheme().colors.layerScrim
         view.accessibilityIdentifier = AccessibilityIdentifiers.PrivateMode.dimmingView
     }
 
@@ -225,17 +226,21 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
+        let windowUUID = tabManager.windowUUID
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
-        self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider)
+        self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider,
+                                                                 windowUUID: windowUUID)
         let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
                                                               with: profile)
-        shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider)
+        shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider,
+                                                             windowUUID: windowUUID)
         let dataClearanceViewProvider = ContextualHintViewProvider(
             forHintType: .dataClearance,
             with: profile
         )
-        self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider)
+        self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
+                                                                       windowUUID: windowUUID)
         self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
@@ -359,9 +364,9 @@ class BrowserViewController: UIViewController,
             toolbar.tabToolbarDelegate = self
             toolbar.applyUIMode(
                 isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                theme: themeManager.currentTheme
+                theme: currentTheme()
             )
-            toolbar.applyTheme(theme: themeManager.currentTheme)
+            toolbar.applyTheme(theme: currentTheme())
             handleMiddleButtonState(currentMiddleButtonState ?? .search)
             updateTabCountUsingTabManager(self.tabManager)
         } else {
@@ -503,7 +508,7 @@ class BrowserViewController: UIViewController,
         if NightModeHelper.isActivated(),
            !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
             NightModeHelper.turnOff(tabManager: tabManager)
-            themeManager.reloadTheme()
+            themeManager.reloadTheme(for: windowUUID)
         }
 
         NightModeHelper.cleanNightModeDefaults()
@@ -574,7 +579,7 @@ class BrowserViewController: UIViewController,
             buttonText: toast.buttonText)
         let uuid = windowUUID
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
+                                theme: currentTheme(),
                                 completion: { buttonPressed in
             if let action = toast.reduxAction(for: uuid), buttonPressed {
                 store.dispatch(action)
@@ -619,7 +624,7 @@ class BrowserViewController: UIViewController,
         overlayManager.setURLBar(urlBarView: urlBar)
 
         // Update theme of already existing views
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         header.applyTheme(theme: theme)
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
@@ -732,9 +737,9 @@ class BrowserViewController: UIViewController,
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
-        urlBar.applyTheme(theme: themeManager.currentTheme)
+        urlBar.applyTheme(theme: currentTheme())
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        urlBar.applyUIMode(isPrivate: isPrivate, theme: themeManager.currentTheme)
+        urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
 
         urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         view.addSubview(header)
@@ -1215,7 +1220,7 @@ class BrowserViewController: UIViewController,
         // No content is showing in between the bottom search bar and the searchViewController
         if isBottomSearchBar, keyboardBackdrop == nil {
             keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = themeManager.currentTheme.colors.layer1
+            keyboardBackdrop?.backgroundColor = currentTheme().colors.layer1
             view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
             keyboardBackdrop?.snp.makeConstraints { make in
                 make.edges.equalTo(view)
@@ -1553,7 +1558,8 @@ class BrowserViewController: UIViewController,
             fxaOptions,
             flowType: flowType,
             referringPage: referringPage,
-            profile: profile
+            profile: profile,
+            windowUUID: windowUUID
         )
         (vcToPresent as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = navigationHandler
         presentThemedViewController(navItemLocation: .Left,
@@ -1607,7 +1613,7 @@ class BrowserViewController: UIViewController,
            tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)
         }
-        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: themeManager.currentTheme)
+        topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
     func switchToTabForURLOrOpen(_ url: URL, uuid: String? = nil, isPrivate: Bool = false) {
@@ -2075,9 +2081,15 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: Themeable
+
+    func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        let currentTheme = themeManager.currentTheme
+        let currentTheme = currentTheme()
         statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
+        statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
@@ -2090,6 +2102,10 @@ class BrowserViewController: UIViewController,
         tabs.forEach {
             $0.applyTheme(theme: currentTheme)
         }
+
+        let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
+        let isPrivate = (currentTheme.type == .privateMode)
+        ui.forEach { $0?.applyUIMode(isPrivate: isPrivate, theme: currentTheme) }
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
@@ -2133,7 +2149,7 @@ class BrowserViewController: UIViewController,
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
+                                theme: currentTheme(),
                                 completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
@@ -2206,7 +2222,7 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
                                              descriptionText: url.absoluteDisplayString,
                                              buttonText: .GoButtonTittle)
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
+                                theme: currentTheme(),
                                 completion: { [weak self] buttonPressed in
             if buttonPressed {
                 let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
@@ -2266,7 +2282,7 @@ extension BrowserViewController: LegacyTabDelegate {
             let logins = LoginsHelper(
                 tab: tab,
                 profile: profile,
-                theme: themeManager.currentTheme
+                theme: currentTheme()
             )
             tab.addContentScript(logins, name: LoginsHelper.name())
             logins.foundFieldValues = { [weak self] field, currentRequestId in
@@ -2396,7 +2412,7 @@ extension BrowserViewController: LegacyTabDelegate {
         // the selected Tab, do nothing right now. If/when the Tab gets
         // selected later, we will show the SnackBar at that time.
         guard tab == tabManager.selectedTab else { return }
-        bar.applyTheme(theme: themeManager.currentTheme)
+        bar.applyTheme(theme: currentTheme())
         bottomContentStackView.addArrangedViewToBottom(bar, completion: {
             self.view.layoutIfNeeded()
         })
@@ -2454,7 +2470,7 @@ extension BrowserViewController: HomePanelDelegate {
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
+                                theme: currentTheme(),
                                 completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
@@ -2506,7 +2522,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile)
+        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
 
         // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
@@ -2607,12 +2623,12 @@ extension BrowserViewController: TabManagerDelegate {
                 applyTheme()
 
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: themeManager.currentTheme) }
+                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
             } else {
                 // Theme is applied to the tab and webView in the else case
                 // because in the if block is applied already to all the tabs and web views
-                tab.applyTheme(theme: themeManager.currentTheme)
-                webView.applyTheme(theme: themeManager.currentTheme)
+                tab.applyTheme(theme: currentTheme())
+                webView.applyTheme(theme: currentTheme())
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
@@ -2738,7 +2754,7 @@ extension BrowserViewController: TabManagerDelegate {
         // The toast is created from TabManager which doesn't have access to themeManager
         // The whole toast system needs some rework so as compromised solution before the rework I create the toast
         // with light theme and force apply theme with real theme before showing
-        toast.applyTheme(theme: themeManager.currentTheme)
+        toast.applyTheme(theme: currentTheme())
         show(toast: toast, afterWaiting: ButtonToast.UX.delay)
     }
 
@@ -2854,7 +2870,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 extension BrowserViewController: TabTrayDelegate {
     func tabTrayDidCloseLastTab(toast: ButtonToast) {
-        toast.applyTheme(theme: themeManager.currentTheme)
+        toast.applyTheme(theme: currentTheme())
         show(toast: toast, afterWaiting: ButtonToast.UX.delay)
     }
 
@@ -2961,7 +2977,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.contentContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.currentTheme())
             }
         }
     }

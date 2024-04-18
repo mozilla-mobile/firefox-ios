@@ -8,6 +8,7 @@ import Shared
 class OpenWithSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
     private let profile: Profile
+    private let windowUUID: WindowUUID
 
     override var accessoryView: UIImageView? {
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
@@ -36,13 +37,15 @@ class OpenWithSetting: Setting {
     init(settings: SettingsTableViewController,
          settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
+        self.windowUUID = settings.windowUUID
         self.settingsDelegate = settingsDelegate
 
+        let theme = settings.themeManager.currentTheme(for: windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsOpenWithSectionName,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )

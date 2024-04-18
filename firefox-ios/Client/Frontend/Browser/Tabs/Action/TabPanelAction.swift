@@ -21,6 +21,14 @@ class BoolValueContext: ActionContext {
     }
 }
 
+class FloatValueContext: ActionContext {
+    let floatValue: Float
+    init(floatValue: Float, windowUUID: WindowUUID) {
+        self.floatValue = floatValue
+        super.init(windowUUID: windowUUID)
+    }
+}
+
 class AddNewTabContext: ActionContext {
     let urlRequest: URLRequest?
     let isPrivate: Bool

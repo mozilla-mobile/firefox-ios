@@ -50,21 +50,25 @@ class FindInPageBar: UIView, ThemeApplicable {
     }
 
     private lazy var previousButton: UIButton = .build { button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.chevronUp)?.withRenderingMode(.alwaysTemplate),
+            for: .normal)
         button.accessibilityLabel = .FindInPagePreviousAccessibilityLabel
         button.addTarget(self, action: #selector(self.didFindPrevious), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findPreviousButton
     }
-
     private lazy var nextButton: UIButton = .build { button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.chevronDown)?.withRenderingMode(.alwaysTemplate),
+            for: .normal)
         button.accessibilityLabel = .FindInPageNextAccessibilityLabel
         button.addTarget(self, action: #selector(self.didFindNext), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findNextButton
     }
-
     private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross), for: .normal)
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Medium.cross)?.withRenderingMode(.alwaysTemplate),
+            for: .normal)
         button.accessibilityLabel = .FindInPageDoneAccessibilityLabel
         button.addTarget(self, action: #selector(self.didPressClose), for: .touchUpInside)
         button.accessibilityIdentifier = "FindInPage.close"
@@ -185,12 +189,13 @@ class FindInPageBar: UIView, ThemeApplicable {
     // MARK: - Theme Applicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
-        topBorder.backgroundColor = colors.borderPrimary
-        searchText.textColor = theme.type == .light ? colors.textPrimary : colors.textInverted
+        backgroundColor = colors.layer1
+        searchText.textColor = colors.textPrimary
         matchCountView.textColor = colors.textSecondary
-        previousButton.setTitleColor(colors.iconPrimary, for: .normal)
-        nextButton.setTitleColor(colors.iconPrimary, for: .normal)
-        closeButton.setTitleColor(colors.iconPrimary, for: .normal)
+        topBorder.backgroundColor = colors.borderPrimary
+        closeButton.tintColor = colors.iconPrimary
+        previousButton.tintColor = colors.iconPrimary
+        nextButton.tintColor = colors.iconPrimary
     }
 }
 

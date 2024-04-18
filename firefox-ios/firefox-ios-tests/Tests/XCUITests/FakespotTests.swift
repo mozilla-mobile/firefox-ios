@@ -4,6 +4,11 @@
 import XCTest
 
 class FakespotTests: BaseTestCase {
+    override func tearDown() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        super.tearDown()
+    }
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307128
     func testFakespotAvailable() {
         reachReviewChecker()
@@ -95,18 +100,20 @@ class FakespotTests: BaseTestCase {
         waitUntilPageLoad()
         // The price tag icon is not displayed
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        // Open a product detail page and check the address bar
-        let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
-        mozWaitForElementToExist(searchField)
-        searchField.tap()
-        searchField.typeText("Shoe")
-        mozWaitForElementToExist(app.webViews["contentView"].webViews.buttons["Search"])
-        app.webViews["contentView"].webViews.buttons["Search"].tap()
-        waitUntilPageLoad()
-        app.webViews["contentView"].links.element(boundBy: 7).tap()
-        waitUntilPageLoad()
-        // The price tag icon is not displayed
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        if #available(iOS 17, *) {
+            // Open a product detail page and check the address bar
+            let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
+            mozWaitForElementToExist(searchField)
+            searchField.tap()
+            searchField.typeText("Shoe")
+            mozWaitForElementToExist(app.webViews["contentView"].webViews.buttons["Search"])
+            app.webViews["contentView"].webViews.buttons["Search"].tap()
+            waitUntilPageLoad()
+            app.webViews["contentView"].links.element(boundBy: 7).tap()
+            waitUntilPageLoad()
+            // The price tag icon is not displayed
+            mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
@@ -230,6 +237,22 @@ class FakespotTests: BaseTestCase {
         // The link opens in a new tab
         waitUntilPageLoad()
         validateMozillaSupportWebpage("Privacy Notice", "privacy/firefox")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358929
+    func testPriceTagIconAndReviewCheckLandscape() {
+        // Change the device orientation to be landscape
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        // Navigate for the first time to a product detail page on amazon.com
+        loadWebsiteAndPerformSearch()
+        app.webViews["contentView"].firstMatch.images.firstMatch.tap()
+        waitUntilPageLoad()
+        // The Price tag icon is correctly displayed
+        if !app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].exists {
+            app.webViews["contentView"].firstMatch.images.firstMatch.tap()
+            waitUntilPageLoad()
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
     private func validateMozillaSupportWebpage(_ webpageTitle: String, _ url: String) {
@@ -370,6 +393,11 @@ class FakespotTests: BaseTestCase {
         loadWebsiteAndPerformSearch()
         app.swipeDown()
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
+        waitUntilPageLoad()
+        if !app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].exists {
+            app.webViews["contentView"].firstMatch.images.firstMatch.tap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+        }
 
         // Retry loading the page if page is not loading
         while app.webViews.staticTexts["Enter the characters you see below"].exists {

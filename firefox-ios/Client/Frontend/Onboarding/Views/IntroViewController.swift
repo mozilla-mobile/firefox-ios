@@ -12,6 +12,7 @@ class IntroViewController: UIViewController,
                            OnboardingViewControllerProtocol,
                            Themeable,
                            Notifiable,
+                           FeatureFlaggable,
                            StoreSubscriber {
     struct UX {
         static let closeButtonSize: CGFloat = 30
@@ -31,6 +32,7 @@ class IntroViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface
     var hasRegisteredForDefaultBrowserNotification = false
+    var currentWindowUUID: UUID? { windowUUID }
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
     private var introViewControllerState: OnboardingViewControllerState?
 
@@ -73,11 +75,12 @@ class IntroViewController: UIViewController,
         self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.userDefaults = userDefaults
         super.init(nibName: nil, bundle: nil)
 
-        self.viewModel.setupViewControllerDelegates(with: self)
+        self.viewModel.setupViewControllerDelegates(with: self, for: windowUUID)
         setupLayout()
         applyTheme()
     }
@@ -167,6 +170,8 @@ class IntroViewController: UIViewController,
             guard let self else { return }
 
             introViewControllerState = state
+
+            applyTheme()
         }
     }
 
@@ -222,13 +227,13 @@ class IntroViewController: UIViewController,
 
     // MARK: - Themable
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer2
 
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
         pageControl.pageIndicatorTintColor = theme.colors.formSurfaceOff
 
-        viewModel.availableCards.forEach { $0.applyTheme() }
+//        viewModel.availableCards.forEach { $0.applyTheme() }
     }
 }
 
@@ -271,7 +276,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 
 // MARK: - OnboardingCardDelegate
 extension IntroViewController: OnboardingCardDelegate {
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
@@ -304,6 +309,7 @@ extension IntroViewController: OnboardingCardDelegate {
             introViewModel.updateOnboardingUserActivationEvent()
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(
+                windowUUID: windowUUID,
                 with: fxaPrams,
                 selector: #selector(dismissSignInViewController),
                 completion: {
@@ -320,12 +326,36 @@ extension IntroViewController: OnboardingCardDelegate {
             DefaultApplicationHelper().openSettings()
         case .openInstructionsPopup:
             presentDefaultBrowserPopup(
+                windowUUID: windowUUID,
                 from: cardName,
                 completionIfLastCard: { self.showNextPageCompletionForLastCard() })
         case .readPrivacyPolicy:
             presentPrivacyPolicy(
+                windowUUID: windowUUID,
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
+        }
+    }
+
+    func handleMultipleChoiceButtonActions(for action: OnboardingMultipleChoiceAction) {
+        switch action {
+        case .themeDark:
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
+                                                                                          windowUUID: windowUUID)))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(ThemeTypeContext(themeType: .dark,
+                                                                                  windowUUID: windowUUID)))
+        case .themeLight:
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: false,
+                                                                                          windowUUID: windowUUID)))
+            store.dispatch(ThemeSettingsAction.switchManualTheme(ThemeTypeContext(themeType: .light,
+                                                                                  windowUUID: windowUUID)))
+        case .themeSystemDefault:
+            store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(BoolValueContext(boolValue: true,
+                                                                                          windowUUID: windowUUID)))
+        case .toolbarBottom:
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
+        case .toolbarTop:
+            featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.top)
         }
     }
 

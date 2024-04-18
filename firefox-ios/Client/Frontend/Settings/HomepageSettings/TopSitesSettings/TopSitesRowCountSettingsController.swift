@@ -10,11 +10,11 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
     var numberOfRows: Int32
     static let defaultNumberOfRows: Int32 = 2
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, windowUUID: WindowUUID) {
         self.prefs = prefs
         let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
-        super.init(style: .grouped)
+        super.init(style: .grouped, windowUUID: windowUUID)
         self.title = .Settings.Homepage.Shortcuts.RowsPageTitle
     }
 

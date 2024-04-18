@@ -83,9 +83,6 @@ struct FakespotAdViewModel: FeatureFlaggable {
 
 class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
     private enum UX {
-        static let titleFontSize: CGFloat = 15
-        static let priceFontSize: CGFloat = 13
-        static let footerFontSize: CGFloat = 13
         static let margins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         static let linkInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         static let titleBottomSpacing: CGFloat = 14
@@ -124,27 +121,21 @@ class FakespotAdView: UIView, Notifiable, ThemeApplicable, UITextViewDelegate {
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.titleFontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.header)
     }
 
     private lazy var footerLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
-                                                            size: UX.footerFontSize,
-                                                            weight: .regular)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
         label.accessibilityTraits.insert(.staticText)
     }
 
     private lazy var priceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
-                                                            size: UX.priceFontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Bold.footnote.scaledFont()
         label.numberOfLines = 0
     }
 

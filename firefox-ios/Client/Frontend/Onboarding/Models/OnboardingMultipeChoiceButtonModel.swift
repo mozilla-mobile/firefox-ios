@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct OnboardingMultipleChoiceButtonModel {
+struct OnboardingMultipleChoiceButtonModel: Equatable {
     let title: String
     let action: OnboardingMultipleChoiceAction
     var imageID: String

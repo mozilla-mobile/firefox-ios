@@ -6,8 +6,14 @@ import Common
 import Shared
 
 class MockThemeManager: ThemeManager {
-    var currentTheme: Theme = LightTheme()
+    private var currentThemeStorage: Theme = LightTheme()
+
+    func currentTheme(for window: UUID?) -> Theme {
+        return currentThemeStorage
+    }
+
     var window: UIWindow?
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     var systemThemeIsOn: Bool { return true}
 
@@ -19,14 +25,14 @@ class MockThemeManager: ThemeManager {
         return .light
     }
 
-    func changeCurrentTheme(_ newTheme: ThemeType) {
+    func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID) {
         switch newTheme {
         case .light:
-            currentTheme = LightTheme()
+            currentThemeStorage = LightTheme()
         case .dark:
-            currentTheme = DarkTheme()
+            currentThemeStorage = DarkTheme()
         case .privateMode:
-            currentTheme = PrivateModeTheme()
+            currentThemeStorage = PrivateModeTheme()
         }
     }
 
@@ -34,17 +40,19 @@ class MockThemeManager: ThemeManager {
 
     func setSystemTheme(isOn: Bool) {}
 
-    func setPrivateTheme(isOn: Bool) {}
+    func setPrivateTheme(isOn: Bool, for window: UUID) {}
+
+    func getPrivateThemeIsOn(for window: UUID) -> Bool { return false }
 
     func setAutomaticBrightness(isOn: Bool) {}
 
     func setAutomaticBrightnessValue(_ value: Float) {
         let screenLessThanPref = Float(UIScreen.main.brightness) < value
 
-        if screenLessThanPref, currentTheme.type == .light {
-            changeCurrentTheme(.dark)
-        } else if !screenLessThanPref, currentTheme.type == .dark {
-            changeCurrentTheme(.light)
+        if screenLessThanPref, currentTheme(for: windowUUID).type == .light {
+            changeCurrentTheme(.dark, for: windowUUID)
+        } else if !screenLessThanPref, currentTheme(for: windowUUID).type == .dark {
+            changeCurrentTheme(.light, for: windowUUID)
         }
     }
 
@@ -52,5 +60,11 @@ class MockThemeManager: ThemeManager {
 
     func getNormalSavedTheme() -> ThemeType { return .light }
 
-    func reloadTheme() {}
+    func reloadTheme(for window: UUID) { }
+
+    func setWindow(_ window: UIWindow, for uuid: UUID) { }
+
+    func legacy_currentTheme() -> Theme {
+        return currentThemeStorage
+    }
 }

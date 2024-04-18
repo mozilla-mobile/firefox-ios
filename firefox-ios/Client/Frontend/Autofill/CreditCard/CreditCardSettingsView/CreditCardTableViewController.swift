@@ -28,6 +28,8 @@ class CreditCardTableViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var didSelectCardAtIndex: ((_ creditCard: CreditCard) -> Void)?
     var lastSelectedIndex: IndexPath?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { return windowUUID }
 
     // MARK: View
 
@@ -56,9 +58,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
     }()
 
     init(viewModel: CreditCardTableViewModel,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
@@ -100,7 +104,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
     }
@@ -150,7 +154,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
                 ) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
-        let headerView = CreditCardSectionHeader(textColor: themeManager.currentTheme.colors.textSecondary.color)
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let headerView = CreditCardSectionHeader(textColor: theme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
     }
@@ -173,7 +178,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell()
         }
 
-        let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme.colors.textPrimary.color,
+        let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme(for: windowUUID).colors.textPrimary.color,
                                            model: model)
         hostingCell.host(row, parentController: self)
         return hostingCell
