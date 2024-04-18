@@ -25,7 +25,7 @@ class FakespotMessageCardViewModel: ObservableObject {
             case .info: return theme.colors.textOnDark
             case .infoLoading: return theme.colors.textPrimary
             case .error: return theme.colors.textPrimary
-            case .infoTransparent: return theme.colors.textOnLight
+            case .infoTransparent: return theme.colors.textPrimary
             }
         }
 
@@ -74,6 +74,7 @@ class FakespotMessageCardViewModel: ObservableObject {
         }
     }
 
+    let windowUUID: WindowUUID
     var type: CardType = .confirmation
     var title: String
     var description: String?
@@ -92,6 +93,7 @@ class FakespotMessageCardViewModel: ObservableObject {
     var analysisProgressChanged: ((Double) -> Void)?
 
     init(
+        windowUUID: WindowUUID,
         type: CardType,
         title: String,
         description: String? = nil,
@@ -105,6 +107,7 @@ class FakespotMessageCardViewModel: ObservableObject {
         a11yPrimaryActionIdentifier: String? = nil,
         a11yLinkActionIdentifier: String? = nil
     ) {
+        self.windowUUID = windowUUID
         self.type = type
         self.title = title
         self.description = description
@@ -129,9 +132,6 @@ class FakespotMessageCardViewModel: ObservableObject {
 
 final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
-        static let linkFontSize: CGFloat = 12
-        static let buttonFontSize: CGFloat = 16
-        static let progressViewFontSize: CGFloat = 15
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
         static let buttonCornerRadius: CGFloat = 13
@@ -174,9 +174,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
     private lazy var iconContainerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(
-            withTextStyle: .callout,
-            size: UX.buttonFontSize)
+        label.font = FXFontStyles.Bold.callout.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -185,9 +183,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.textColor = .white
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .subheadline,
-            size: UX.buttonFontSize)
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -238,10 +234,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                 viewModel.title,
                 viewModel.formatProgress()
             )
-            titleLabel.font = DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .subheadline,
-                size: UX.progressViewFontSize
-            )
+            titleLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
 
             viewModel.analysisProgressChanged = { [weak self] progress in
                 let progressLevel = viewModel.formatProgress(progress / 100.0)
@@ -251,7 +244,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
                 )
             }
 
-            let swiftUICircularProgressView = CircularProgressView(viewModel: viewModel)
+            let swiftUICircularProgressView = CircularProgressView(windowUUID: viewModel.windowUUID, viewModel: viewModel)
             let circularProgressView = UIHostingController(rootView: swiftUICircularProgressView).view ?? UIView()
             circularProgressView.translatesAutoresizingMaskIntoConstraints = false
             circularProgressView.backgroundColor = .clear
@@ -295,7 +288,7 @@ final class FakespotMessageCardView: UIView, ThemeApplicable, Notifiable {
             let linkButtonViewModel = LinkButtonViewModel(
                 title: linkText,
                 a11yIdentifier: viewModel.a11yLinkActionIdentifier ?? "",
-                fontSize: UX.linkFontSize,
+                font: FXFontStyles.Regular.caption1.scaledFont(),
                 contentHorizontalAlignment: .leading)
             linkButton.configure(viewModel: linkButtonViewModel)
             if linkButton.superview == nil {

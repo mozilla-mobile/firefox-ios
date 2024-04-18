@@ -107,6 +107,16 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
     }
 
+    // MARK: - Multiple Choice Buttons
+    func testSendOnboardingMultipleChoiceButton() {
+        let subject = createTelemetryUtility(for: .freshInstall)
+
+        subject.sendMultipleChoiceButtonActionTelemetry(from: CardNames.welcome.rawValue,
+                                                        with: .themeDark)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.multipleChoiceButtonTap)
+    }
+
     // MARK: - Close
     func testSendOnboardingClose_NotificationsCard() {
         let subject = createTelemetryUtility(for: .freshInstall)

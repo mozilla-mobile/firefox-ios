@@ -12,7 +12,7 @@ struct SettingDisclosureUtility {
         disclosureIndicator.image = UIImage(
             named: StandardImageIdentifiers.Large.chevronRight
         )?.withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
-        disclosureIndicator.tintColor = theme.colors.actionSecondary
+        disclosureIndicator.tintColor = theme.colors.iconSecondary
         disclosureIndicator.sizeToFit()
         return disclosureIndicator
     }

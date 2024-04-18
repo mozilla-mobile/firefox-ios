@@ -49,17 +49,22 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     }
 
     // MARK: - Variables
+
     var viewModel: EnhancedTrackingProtectionDetailsVM
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { return windowUUID }
 
     // MARK: - View Lifecycle
 
     init(with viewModel: EnhancedTrackingProtectionDetailsVM,
+         windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -179,12 +184,16 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     func closeButtonTapped() {
         self.dismiss(animated: true)
     }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
 }
 
 // MARK: - Themable
 extension EnhancedTrackingProtectionDetailsVC {
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor =  theme.colors.layer1
         siteTitleLabel.textColor = theme.colors.textPrimary

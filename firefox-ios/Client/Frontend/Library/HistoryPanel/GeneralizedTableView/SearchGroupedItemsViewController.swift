@@ -27,6 +27,9 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
     var notificationCenter: NotificationProtocol
     private var logger: Logger
 
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
+
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
         tableView.dataSource = self.diffableDatasource
@@ -61,11 +64,13 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
 
     init(viewModel: SearchGroupedItemsViewModel,
          profile: Profile,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.profile = profile
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
@@ -145,7 +150,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderWidth = 0.5
                 cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
-                cell.applyTheme(theme: self.themeManager.currentTheme)
+                cell.applyTheme(theme: self.themeManager.currentTheme(for: windowUUID))
 
                 return cell
             }
@@ -205,7 +210,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
     // MARK: - Themeable
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         tableView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1
         tableView.separatorColor = theme.colors.borderPrimary

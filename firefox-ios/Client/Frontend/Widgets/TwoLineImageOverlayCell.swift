@@ -146,7 +146,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textSecondary
         leftImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
-        accessoryView?.tintColor = theme.colors.actionSecondary
+        accessoryView?.tintColor = theme.colors.iconSecondary
         topSeparatorView.backgroundColor = theme.colors.borderPrimary
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
     }

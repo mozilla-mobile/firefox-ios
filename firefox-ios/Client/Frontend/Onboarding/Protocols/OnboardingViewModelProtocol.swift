@@ -10,7 +10,7 @@ protocol OnboardingViewModelProtocol {
     var profile: Profile { get }
     var telemetryUtility: OnboardingTelemetryProtocol { get }
 
-    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate)
+    func setupViewControllerDelegates(with delegate: OnboardingCardDelegate, for window: WindowUUID)
 }
 
 extension OnboardingViewModelProtocol {

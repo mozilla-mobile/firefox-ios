@@ -2,7 +2,7 @@
 "TodayWidget.ClosePrivateTabsButton" = "Փակել գաղտնի ներդիրները";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "Փակել գաղտնի ներդիրները";
+"TodayWidget.ClosePrivateTabsLabelV2" = "Փակել\nԳաղտնի ներդիրները";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox-ի դյուրանցումները ավելացնելք ձեր հիմնական էկրանին:";
@@ -11,7 +11,7 @@
 "TodayWidget.GoToCopiedLinkLabelV1" = "Անցնել պատճենված հղմանը";
 
 /* Go to copied link */
-"TodayWidget.GoToCopiedLinkLabelV2" = "Անցնել պատճենված հղմանը";
+"TodayWidget.GoToCopiedLinkLabelV2" = "Գնալ դեպի\nՊատճենված հղում";
 
 /* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
 "TodayWidget.MoreTabsLabel" = "+%d ավելին…";
@@ -47,7 +47,7 @@
 "TodayWidget.SearchInFirefoxV2" = "Որոնել Firefox֊ում";
 
 /* Search in private tab */
-"TodayWidget.SearchInPrivateTabLabelV2" = "Որոնել Գաղտնի ներդիրում";
+"TodayWidget.SearchInPrivateTabLabelV2" = "Որոնել\nգաղտնի ներդիրում";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryDescription" = "Հաճախակի և վերջերս այցելած կայքերին դյուրանցումներ ավելացրեք:";

@@ -53,6 +53,8 @@ class RemoteTabsPanel: UIViewController,
         unsubscribeFromRedux()
     }
 
+    var currentWindowUUID: UUID? { return windowUUID }
+
     // MARK: - Actions
 
     func tableViewControllerDidPullToRefresh() {
@@ -94,9 +96,10 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer4
-        tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
-        tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer4
+        tableViewController.tableView.backgroundColor =  theme.colors.layer3
+        tableViewController.tableView.separatorColor = theme.colors.borderPrimary
     }
 
     // MARK: - Redux

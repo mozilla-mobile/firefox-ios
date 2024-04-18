@@ -33,11 +33,13 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     var shouldReload: (() -> Void)?
 
     private let profile: Profile
+    private let windowUUID: WindowUUID
     private let deepLinkParams: FxALaunchParams
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     weak var qrCodeNavigationHandler: QRCodeNavigationHandler?
+    var currentWindowUUID: UUID? { windowUUID }
 
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
@@ -125,11 +127,13 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     init(profile: Profile,
          parentType: FxASignInParentType,
          deepLinkParams: FxALaunchParams,
+         windowUUID: WindowUUID,
          logger: Logger = DefaultLogger.shared,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
+        self.windowUUID = windowUUID
         switch parentType {
         case .appMenu:
             self.telemetryObject = .appMenu
@@ -228,12 +232,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let colors = themeManager.currentTheme.colors
+        let theme = themeManager.currentTheme(for: windowUUID)
+        let colors = theme.colors
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
         instructionsLabel.textColor = colors.textPrimary
 
-        let theme = themeManager.currentTheme
         scanButton.applyTheme(theme: theme)
         emailButton.applyTheme(theme: theme)
 
@@ -306,7 +310,8 @@ extension FirefoxAccountSignInViewController {
         _ deepLinkParams: FxALaunchParams,
         flowType: FxAPageType,
         referringPage: ReferringPage,
-        profile: Profile
+        profile: Profile,
+        windowUUID: WindowUUID
     ) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
@@ -330,13 +335,14 @@ extension FirefoxAccountSignInViewController {
             let signInVC = FirefoxAccountSignInViewController(
                 profile: profile,
                 parentType: parentType,
-                deepLinkParams: deepLinkParams
+                deepLinkParams: deepLinkParams,
+                windowUUID: windowUUID
             )
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }
 
-        let settingsTableViewController = SyncContentSettingsViewController()
+        let settingsTableViewController = SyncContentSettingsViewController(windowUUID: windowUUID)
         settingsTableViewController.profile = profile
         return settingsTableViewController
     }

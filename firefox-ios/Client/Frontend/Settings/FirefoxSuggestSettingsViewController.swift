@@ -9,8 +9,8 @@ import UIKit
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
 class FirefoxSuggestSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    init(profile: Profile) {
-        super.init(style: .grouped)
+    init(profile: Profile, windowUUID: WindowUUID) {
+        super.init(style: .grouped, windowUUID: windowUUID)
         self.profile = profile
         self.title = "Firefox Suggest"
     }
@@ -20,11 +20,12 @@ class FirefoxSuggestSettingsViewController: SettingsTableViewController, Feature
     }
 
     override func generateSettings() -> [SettingSection] {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let enabled = BoolSetting(
             with: .firefoxSuggestFeature,
             titleText: NSAttributedString(
                 string: "Enable Firefox Suggest",
-                attributes: [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary])
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
         ) { [weak self] _ in
             guard let self else { return }
             self.settings = self.generateSettings()

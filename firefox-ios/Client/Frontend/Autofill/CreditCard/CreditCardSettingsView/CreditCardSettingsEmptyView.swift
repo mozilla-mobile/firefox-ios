@@ -9,8 +9,9 @@ import Shared
 
 struct CreditCardSettingsEmptyView: View {
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State var titleTextColor: Color = .clear
     @State var subTextColor: Color = .clear
     @State var toggleTextColor: Color = .clear
@@ -26,6 +27,7 @@ struct CreditCardSettingsEmptyView: View {
                 ScrollView {
                     VStack {
                         CreditCardAutofillToggle(
+                            windowUUID: windowUUID,
                             textColor: toggleTextColor,
                             model: toggleModel)
                         .background(Color.white)
@@ -42,11 +44,11 @@ struct CreditCardSettingsEmptyView: View {
                             .accessibility(hidden: true)
                         Text(String(format: .CreditCard.Settings.EmptyListTitle,
                                     AppName.shortName.rawValue))
-                            .preferredBodyFont(size: 22)
-                            .foregroundColor(titleTextColor)
-                            .multilineTextAlignment(.center)
-                            .padding(.leading, 10)
-                            .padding(.trailing, 10)
+                        .preferredBodyFont(size: 22)
+                        .foregroundColor(titleTextColor)
+                        .multilineTextAlignment(.center)
+                        .padding(.leading, 10)
+                        .padding(.trailing, 10)
                         Text(String.CreditCard.Settings.EmptyListDescription)
                             .preferredBodyFont(size: 16)
                             .foregroundColor(subTextColor)
@@ -61,11 +63,13 @@ struct CreditCardSettingsEmptyView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-        }.onAppear {
-            applyTheme(theme: themeVal.theme)
         }
-        .onChange(of: themeVal) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onAppear {
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -81,6 +85,7 @@ struct CreditCardSettingsEmptyView: View {
 struct CreditCardSettingsEmptyView_Previews: PreviewProvider {
     static var previews: some View {
         let toggleModel = ToggleModel(isEnabled: true)
-        CreditCardSettingsEmptyView(toggleModel: toggleModel)
+        CreditCardSettingsEmptyView(windowUUID: .XCTestDefaultUUID,
+                                    toggleModel: toggleModel)
     }
 }

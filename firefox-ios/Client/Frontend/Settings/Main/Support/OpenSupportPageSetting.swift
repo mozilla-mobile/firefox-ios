@@ -10,6 +10,10 @@ import Shared
 class OpenSupportPageSetting: Setting {
     private weak var settingsDelegate: SupportSettingsDelegate?
 
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.Help.title
+    }
+
     init(delegate: SettingsDelegate?,
          theme: Theme,
          settingsDelegate: SupportSettingsDelegate?) {

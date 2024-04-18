@@ -43,7 +43,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     func start() {
         router.setRootViewController(sceneContainer, hideBar: true)
 
-        let launchScreenVC = LaunchScreenViewController(coordinator: self)
+        let launchScreenVC = LaunchScreenViewController(windowUUID: windowUUID, coordinator: self)
         router.push(launchScreenVC, animated: false)
     }
 
@@ -103,7 +103,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
                    level: .info,
                    category: .coordinator)
 
-        let launchCoordinator = LaunchCoordinator(router: router)
+        let launchCoordinator = LaunchCoordinator(router: router, windowUUID: windowUUID)
         launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
         launchCoordinator.start(with: launchType)

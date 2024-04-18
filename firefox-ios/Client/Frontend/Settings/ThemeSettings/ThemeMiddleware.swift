@@ -6,14 +6,13 @@ import Common
 import Redux
 
 protocol ThemeManagerProvider {
-    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState
+    func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState
     func toggleUseSystemAppearance(_ enabled: Bool)
     func toggleAutomaticBrightness(_ enabled: Bool)
-    func updateManualTheme(_ theme: ThemeType)
+    func updateManualTheme(_ theme: ThemeType, for window: WindowUUID)
     func updateUserBrightness(_ value: Float)
 }
 
-// TODO: [8313] Middlewares are currently handling actions globally. Need updates for multi-window. Forthcoming.
 class ThemeManagerMiddleware: ThemeManagerProvider {
     var themeManager: ThemeManager
 
@@ -22,39 +21,49 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     lazy var themeManagerProvider: Middleware<AppState> = { state, action in
+        let windowUUID = action.windowUUID
         switch action {
         case ThemeSettingsAction.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(currentThemeState))
-        case ThemeSettingsAction.toggleUseSystemAppearance(let enabled):
+            let context = ThemeSettingsStateContext(state: currentThemeState, windowUUID: windowUUID)
+            store.dispatch(ThemeSettingsAction.receivedThemeManagerValues(context))
+        case ThemeSettingsAction.toggleUseSystemAppearance(let context):
+            let enabled = context.boolValue
             self.toggleUseSystemAppearance(enabled)
-            store.dispatch(ThemeSettingsAction.systemThemeChanged(self.themeManager.systemThemeIsOn))
-        case ThemeSettingsAction.enableAutomaticBrightness(let enabled):
+            let context = BoolValueContext(boolValue: self.themeManager.systemThemeIsOn, windowUUID: windowUUID)
+            store.dispatch(ThemeSettingsAction.systemThemeChanged(context))
+        case ThemeSettingsAction.enableAutomaticBrightness(let context):
+            let enabled = context.boolValue
             self.toggleAutomaticBrightness(enabled)
             store.dispatch(
-                ThemeSettingsAction.automaticBrightnessChanged(self.themeManager.automaticBrightnessIsOn)
+                ThemeSettingsAction.automaticBrightnessChanged(
+                    BoolValueContext(boolValue: self.themeManager.automaticBrightnessIsOn, windowUUID: windowUUID)
+                )
             )
-        case ThemeSettingsAction.switchManualTheme(let theme):
-            self.updateManualTheme(theme)
-            store.dispatch(ThemeSettingsAction.manualThemeChanged(theme))
-        case ThemeSettingsAction.updateUserBrightness(let value):
+        case ThemeSettingsAction.switchManualTheme(let context):
+            let theme = context.themeType
+            self.updateManualTheme(theme, for: windowUUID)
+            store.dispatch(ThemeSettingsAction.manualThemeChanged(context))
+        case ThemeSettingsAction.updateUserBrightness(let context):
+            let value = context.floatValue
             self.updateUserBrightness(value)
-            store.dispatch(ThemeSettingsAction.userBrightnessChanged(value))
+            store.dispatch(ThemeSettingsAction.userBrightnessChanged(context))
         case ThemeSettingsAction.receivedSystemBrightnessChange:
             self.updateThemeBasedOnSystemBrightness()
             let systemBrightness = self.getScreenBrightness()
-            store.dispatch(ThemeSettingsAction.systemBrightnessChanged(systemBrightness))
-        case PrivateModeMiddlewareAction.privateModeUpdated(let newState):
-            self.toggleUsePrivateTheme(to: newState)
+            let context = FloatValueContext(floatValue: systemBrightness, windowUUID: windowUUID)
+            store.dispatch(ThemeSettingsAction.systemBrightnessChanged(context))
+        case PrivateModeMiddlewareAction.privateModeUpdated(let context):
+            let newState = context.boolValue
+            self.toggleUsePrivateTheme(to: newState, for: windowUUID)
         default:
             break
         }
     }
 
     // MARK: - Helper func
-    func getCurrentThemeManagerState(windowUUID: WindowUUID?) -> ThemeSettingsState {
-        // TODO: [8313] Revisit UUID handling, needs additional investigation.
-        ThemeSettingsState(windowUUID: windowUUID ?? WindowUUID.unavailable,
+    func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState {
+        ThemeSettingsState(windowUUID: windowUUID,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
                            manualThemeSelected: themeManager.getNormalSavedTheme(),
@@ -66,16 +75,16 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         themeManager.setSystemTheme(isOn: enabled)
     }
 
-    func toggleUsePrivateTheme(to state: Bool) {
-        themeManager.setPrivateTheme(isOn: state)
+    func toggleUsePrivateTheme(to state: Bool, for window: WindowUUID) {
+        themeManager.setPrivateTheme(isOn: state, for: window)
     }
 
     func toggleAutomaticBrightness(_ enabled: Bool) {
         themeManager.setAutomaticBrightness(isOn: enabled)
     }
 
-    func updateManualTheme(_ newTheme: ThemeType) {
-        themeManager.changeCurrentTheme(newTheme)
+    func updateManualTheme(_ newTheme: ThemeType, for window: UUID) {
+        themeManager.changeCurrentTheme(newTheme, for: window)
     }
 
     func updateUserBrightness(_ value: Float) {

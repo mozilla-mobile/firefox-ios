@@ -45,6 +45,8 @@ class PhotonActionSheet: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
@@ -63,10 +65,12 @@ class PhotonActionSheet: UIViewController, Themeable {
     // MARK: - Init
 
     init(viewModel: PhotonActionSheetViewModel,
+         windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.themeManager = themeManager
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
@@ -264,7 +268,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
 
         if viewModel.presentationStyle == .centered {
             setupBackgroundBlur()
@@ -456,7 +460,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         else { return UITableViewCell() }
 
         let actions = viewModel.actions[indexPath.section][indexPath.row]
-        cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.currentTheme)
+        cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.currentTheme(for: windowUUID))
         cell.delegate = self
 
         if viewModel.isMainMenuInverted {
@@ -483,7 +487,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = viewModel.getViewHeader(tableView: tableView, section: section)
-        (header as? ThemeApplicable)?.applyTheme(theme: themeManager.currentTheme)
+        (header as? ThemeApplicable)?.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return header
     }
 }

@@ -23,8 +23,10 @@ class PasswordManagerCoordinator: BaseCoordinator,
     let profile: Profile
     weak var passwordManager: PasswordManagerListViewController?
     weak var parentCoordinator: PasswordManagerCoordinatorDelegate?
+    let windowUUID: WindowUUID
 
-    init(router: Router, profile: Profile) {
+    init(router: Router, profile: Profile, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         self.profile = profile
         super.init(router: router)
     }
@@ -38,7 +40,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func showPasswordManager() {
-        let viewController = PasswordManagerListViewController(profile: profile)
+        let viewController = PasswordManagerListViewController(profile: profile, windowUUID: windowUUID)
         viewController.coordinator = self
         router.push(viewController) { [weak self] in
             guard let self = self else { return }
@@ -48,7 +50,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func showPasswordOnboarding() {
-        let viewController = PasswordManagerOnboardingViewController()
+        let viewController = PasswordManagerOnboardingViewController(windowUUID: windowUUID)
         viewController.coordinator = self
         router.push(viewController) { [weak self] in
             guard let self = self else { return }
@@ -57,7 +59,7 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func showDevicePassCode() {
-        let passcodeViewController = DevicePasscodeRequiredViewController()
+        let passcodeViewController = DevicePasscodeRequiredViewController(windowUUID: windowUUID)
         passcodeViewController.profile = profile
         passcodeViewController.parentType = .passwords
         router.push(passcodeViewController)
@@ -76,13 +78,13 @@ class PasswordManagerCoordinator: BaseCoordinator,
     }
 
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
-        let viewController = PasswordDetailViewController(viewModel: model)
+        let viewController = PasswordDetailViewController(viewModel: model, windowUUID: windowUUID)
         viewController.coordinator = self
         router.push(viewController)
     }
 
     func pressedAddPassword(completion: @escaping (LoginEntry) -> Void) {
-        let viewController = AddCredentialViewController(didSaveAction: completion)
+        let viewController = AddCredentialViewController(didSaveAction: completion, windowUUID: windowUUID)
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .formSheet
         passwordManager?.present(navigationController, animated: true)

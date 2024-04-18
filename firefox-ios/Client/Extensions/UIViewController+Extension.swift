@@ -61,6 +61,8 @@ extension UIViewController {
         vcBeingPresented: UIViewController,
         topTabsVisible: Bool
     ) {
+        guard let uuid = (view as ThemeUUIDIdentifiable).currentWindowUUID else { return }
+
         let vcToPresent = vcBeingPresented
         let buttonItem = UIBarButtonItem(
             title: navItemText.localizedString(),
@@ -74,7 +76,8 @@ extension UIViewController {
         case .Right:
             vcToPresent.navigationItem.rightBarButtonItem = buttonItem
         }
-        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
+        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent,
+                                                                    windowUUID: uuid)
         themedNavigationController.navigationBar.isTranslucent = false
         if topTabsVisible {
             themedNavigationController.preferredContentSize = CGSize(

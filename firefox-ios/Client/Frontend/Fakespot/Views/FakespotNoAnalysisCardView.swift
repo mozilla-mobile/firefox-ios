@@ -29,8 +29,6 @@ struct FakespotNoAnalysisCardViewModel {
 final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     private struct UX {
         static let noAnalysisImageViewSize = CGSize(width: 280, height: 108)
-        static let headlineLabelFontSize: CGFloat = 15
-        static let bodyLabelFontSize: CGFloat = 13
         static let contentStackViewSpacing: CGFloat = 8
         static let contentStackViewPadding: CGFloat = 8
         static let titleStackViewSpacing: CGFloat = 8
@@ -54,17 +52,14 @@ final class FakespotNoAnalysisCardView: UIView, ThemeApplicable {
     private lazy var headlineLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: UX.headlineLabelFontSize,
-                                                            weight: .bold)
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.accessibilityTraits.insert(.header)
     }
 
     private lazy var bodyLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.bodyLabelFontSize)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
     }
 
     private lazy var analyzerButton: PrimaryRoundedButton = .build { button in

@@ -18,6 +18,7 @@ enum CreditCardSettingsState: String, Equatable, CaseIterable {
 class CreditCardSettingsViewModel {
     var autofill: RustAutofill?
     var profile: Profile
+    let windowUUID: WindowUUID
     var appAuthenticator: AppAuthenticationProtocol?
 
     lazy var cardInputViewModel = CreditCardInputViewModel(profile: profile)
@@ -25,9 +26,11 @@ class CreditCardSettingsViewModel {
     var toggleModel: ToggleModel!
 
     public init(profile: Profile,
+                windowUUID: WindowUUID,
                 appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
+        self.windowUUID = windowUUID
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
         self.appAuthenticator = appAuthenticator

@@ -13,6 +13,10 @@ class PrivacyPolicySetting: Setting {
         return URL(string: "https://www.mozilla.org/privacy/firefox/")
     }
 
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.PrivacyPolicy.title
+    }
+
     init(theme: Theme,
          settingsDelegate: PrivacySettingsDelegate?) {
         self.settingsDelegate = settingsDelegate

@@ -80,7 +80,6 @@ class FakespotSettingsCardViewModel {
 
 final class FakespotSettingsCardView: UIView, ThemeApplicable {
     private struct UX {
-        static let headerLabelFontSize: CGFloat = 15
         static let buttonLeadingTrailingPadding: CGFloat = 8
         static let buttonTopPadding: CGFloat = 16
         static let contentStackViewSpacing: CGFloat = 16
@@ -113,8 +112,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.clipsToBounds = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.headerLabelFontSize)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
     }
 
     private lazy var recommendedProductsSwitch: UISwitch = .build { uiSwitch in

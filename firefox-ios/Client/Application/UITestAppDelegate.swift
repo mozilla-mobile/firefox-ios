@@ -184,6 +184,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             UIView.setAnimationsEnabled(false)
         }
 
+        if launchArguments.contains(LaunchArguments.SkipSplashScreenExperiment) {
+            profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
+        }
+
         self.profile = profile
         return profile
     }

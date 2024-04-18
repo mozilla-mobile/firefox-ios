@@ -388,6 +388,10 @@ public struct AccessibilityIdentifiers {
         static let tableViewController = "AppSettingsTableViewController.tableView"
         static let navigationBarItem = "AppSettingsTableViewController.navigationItem.rightBarButtonItem"
 
+        struct DefaultBrowser {
+            static let defaultBrowser = "DefaultBrowserSettings"
+        }
+
         struct Homepage {
             static let homeSettings = "Home"
             static let homePageNavigationBar = "Homepage"
@@ -522,6 +526,18 @@ public struct AccessibilityIdentifiers {
             static let title = "OpenWith.Setting"
         }
 
+        struct OfferToOpen {
+            static let title = "showClipboardBar"
+        }
+
+        struct ShowLink {
+            static let title = "showLinkPreviews"
+        }
+
+        struct ClosePrivateTabs {
+            static let title = "settings.closePrivateTabs"
+        }
+
         struct SearchBar {
             static let searchBarSetting = "SearchBarSetting"
             static let topSetting = "TopSearchBar"
@@ -532,8 +548,32 @@ public struct AccessibilityIdentifiers {
             static let title = "SendAnonymousUsageData"
         }
 
+        struct PrivacyPolicy {
+            static let title = "PrivacyPolicy"
+        }
+
         struct ShowIntroduction {
             static let title = "ShowTour"
+        }
+
+        struct SendFeedback {
+            static let title = "SendFeedback"
+        }
+
+        struct Help {
+            static let title = "Help"
+        }
+
+        struct RateOnAppStore {
+            static let title = "RateOnAppStore"
+        }
+
+        struct Licenses {
+            static let title = "Licenses"
+        }
+
+        struct YourRights {
+            static let title = "YourRights"
         }
 
         struct Siri {

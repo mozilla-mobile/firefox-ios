@@ -5,6 +5,7 @@
 import Foundation
 
 protocol OnboardingCardInfoModelProtocol {
+    var cardType: OnboardingCardType { get set }
     var name: String { get set }
     var order: Int { get set }
     var title: String { get set }
@@ -13,13 +14,14 @@ protocol OnboardingCardInfoModelProtocol {
     var link: OnboardingLinkInfoModel? { get set }
     var buttons: OnboardingButtons { get set }
     var multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel] { get set }
-    var type: OnboardingType { get set }
+    var onboardingType: OnboardingType { get set }
     var a11yIdRoot: String { get set }
     var imageID: String { get set }
 
     var image: UIImage? { get }
 
     init(
+        cardType: OnboardingCardType,
         name: String,
         order: Int,
         title: String,
@@ -27,7 +29,7 @@ protocol OnboardingCardInfoModelProtocol {
         link: OnboardingLinkInfoModel?,
         buttons: OnboardingButtons,
         multipleChoiceButtons: [OnboardingMultipleChoiceButtonModel],
-        type: OnboardingType,
+        onboardingType: OnboardingType,
         a11yIdRoot: String,
         imageID: String,
         instructionsPopup: OnboardingInstructionsPopupInfoModel?

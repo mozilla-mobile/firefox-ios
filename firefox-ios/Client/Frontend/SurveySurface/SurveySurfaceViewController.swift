@@ -36,6 +36,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var imageViewYConstraint: NSLayoutConstraint!
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // MARK: - Orientation
     override var prefersStatusBarHidden: Bool {
@@ -89,10 +91,12 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     // MARK: - View Lifecyle
-    init(viewModel: SurveySurfaceViewModel,
+    init(windowUUID: WindowUUID,
+         viewModel: SurveySurfaceViewModel,
          themeManager: ThemeManager,
          notificationCenter: NotificationProtocol
     ) {
+        self.windowUUID = windowUUID
         self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -231,8 +235,13 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     // MARK: - Themable
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
+
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = currentTheme()
 
         view.backgroundColor = theme.colors.layer2
 

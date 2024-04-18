@@ -16,26 +16,19 @@ class FakespotHighlightGroupView: UIView, ThemeApplicable, Notifiable {
         static let verticalSpace: CGFloat = 8
         static let imageSize: CGFloat = 24
         static let imageMaxSize: CGFloat = 58
-        static let titleFontSize: CGFloat = 15
-        static let highlightFontSize: CGFloat = 13
     }
 
     private lazy var itemImageView: UIImageView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .subheadline,
-            size: UX.titleFontSize,
-            weight: .semibold)
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
     }
 
     private lazy var highlightLabel: FakespotFadeLabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.highlightFontSize)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         label.numberOfLines = 0
         label.lineBreakMode = .byClipping
     }

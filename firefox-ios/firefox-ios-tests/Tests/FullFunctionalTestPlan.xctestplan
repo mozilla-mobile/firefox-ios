@@ -119,11 +119,13 @@
         "ReadingListTests\/testLoadReaderContent()",
         "ReadingListTests\/testReadingList()",
         "ScreenGraphTest\/testUserStateChanges()",
+        "SearchTests\/testBottomVIewURLBar()",
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testOpenTabsInSearchSuggestions()",
         "SearchTests\/testSearchEngine()",
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
         "SettingsTests\/testImageOnOff()",
+        "SettingsTests\/testSettingsOptionSubtitles()",
         "SiteLoadTest",
         "SyncUITests\/testAccountManagementPage()",
         "TabTraySearchTabsTests\/testSearchTabs()",
@@ -147,7 +149,9 @@
         "TopTabsTestIphone\/testSwitchBetweenTabsToastButton()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
         "TrackingProtectionTests\/testTrackingProtection()",
-        "URLValidationTests"
+        "URLValidationTests",
+        "ZoomingTests",
+        "ZoomingTests\/testZommingActions()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

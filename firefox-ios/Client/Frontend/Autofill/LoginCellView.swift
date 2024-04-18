@@ -24,11 +24,12 @@ struct LoginCellView: View {
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
-    @State private var stroke: Color = .clear
+
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
 
     private(set) var login: EncryptedLogin
-    @Environment(\.themeType)
-    var theme
     private(set) var onTap: () -> Void
 
     // MARK: - Body
@@ -57,13 +58,14 @@ struct LoginCellView: View {
             }
             .padding()
         }
-        .buttonStyle(LoginButtonStyle(theme: theme.theme))
+        .buttonStyle(LoginButtonStyle(theme: themeManager.currentTheme(for: windowUUID)))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: theme.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: theme) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -72,7 +74,6 @@ struct LoginCellView: View {
         textColor = Color(color.textPrimary)
         customLightGray = Color(color.textSecondary)
         iconPrimary = Color(color.iconPrimary)
-        stroke = Color(color.actionSecondary)
     }
 }
 
@@ -91,7 +92,7 @@ struct LoginButtonStyle: ButtonStyle {
                     style: .continuous
                 )
                 .stroke(style: StrokeStyle())
-                .foregroundColor(Color(theme.colors.actionSecondary))
+                .foregroundColor(.clear)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
@@ -112,7 +113,7 @@ struct LoginCellView_Previews: PreviewProvider {
         )
 
         // Render the LoginCellView
-        LoginCellView(login: loginRecord, onTap: {})
+        LoginCellView(windowUUID: .XCTestDefaultUUID, login: loginRecord, onTap: {})
             .padding()
     }
 }

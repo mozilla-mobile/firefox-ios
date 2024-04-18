@@ -43,7 +43,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         // error in the order naming. If a card name is misspelled, it will be ignored
         // and not included in the list of cards.
         return getOnboardingCards(
-            from: cardData.filter { $0.value.type == onboardingType },
+            from: cardData.filter { $0.value.onboardingType == onboardingType },
             withConditions: conditionTable
         )
         .sorted(by: { $0.order < $1.order })
@@ -51,6 +51,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         .enumerated()
         .map { index, card in
             return OnboardingCardInfoModel(
+                cardType: card.cardType,
                 name: card.name,
                 order: card.order,
                 title: card.title,
@@ -58,7 +59,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                 link: card.link,
                 buttons: card.buttons,
                 multipleChoiceButtons: card.multipleChoiceButtons,
-                type: card.type,
+                onboardingType: card.onboardingType,
                 a11yIdRoot: "\(card.a11yIdRoot)\(index)",
                 imageID: card.imageID,
                 instructionsPopup: card.instructionsPopup)
@@ -80,6 +81,7 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         return cardData.compactMap { cardName, cardData in
             if cardIsValid(with: cardData, using: conditionTable, and: helper) {
                 return OnboardingCardInfoModel(
+                    cardType: cardData.cardType,
                     name: cardName,
                     order: cardData.order,
                     title: String(
@@ -92,8 +94,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
                     link: getOnboardingLink(from: cardData.link),
                     buttons: getOnboardingCardButtons(from: cardData.buttons),
                     multipleChoiceButtons: getOnboardingMultipleChoiceButtons(from: cardData.multipleChoiceButtons),
-                    type: cardData.type,
-                    a11yIdRoot: cardData.type == .freshInstall ? a11yOnboarding : a11yUpgrade,
+                    onboardingType: cardData.onboardingType,
+                    a11yIdRoot: cardData.onboardingType == .freshInstall ? a11yOnboarding : a11yUpgrade,
                     imageID: getOnboardingHeaderImageID(from: cardData.image),
                     instructionsPopup: getPopupInfoModel(
                         from: cardData.instructionsPopup,
@@ -157,7 +159,8 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
     ) -> OnboardingButtons {
         return OnboardingButtons(
             primary: OnboardingButtonInfoModel(
-                title: cardButtons.primary.title,
+                title: String(format: cardButtons.primary.title,
+                              AppName.shortName.rawValue),
                 action: cardButtons.primary.action),
             secondary: cardButtons.secondary.map {
                 OnboardingButtonInfoModel(title: $0.title, action: $0.action)
@@ -195,6 +198,10 @@ class NimbusOnboardingFeatureLayer: NimbusOnboardingFeatureLayerProtocol {
         case .notifications: return ImageIdentifiers.Onboarding.HeaderImages.notification
         case .setToDock: return ImageIdentifiers.Onboarding.HeaderImages.setToDock
         case .searchWidget: return ImageIdentifiers.Onboarding.HeaderImages.searchWidget
+        // Customization experiment
+        case .themeing: return ImageIdentifiers.Onboarding.HeaderImages.theming
+        case .toolbar: return ImageIdentifiers.Onboarding.HeaderImages.toolbar
+        case .customizeFirefox: return ImageIdentifiers.Onboarding.HeaderImages.customizeFirefox
         // Challenge the Default experiment
         case .notificationsCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.notifications
         case .welcomeCtd: return ImageIdentifiers.Onboarding.ChallengeTheDefault.welcome

@@ -6,8 +6,8 @@ import Foundation
 import Shared
 
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    init() {
-        super.init(style: .grouped)
+    init(windowUUID: WindowUUID) {
+        super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .Settings.SectionTitles.TabsTitle
     }

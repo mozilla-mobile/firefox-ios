@@ -17,6 +17,7 @@ final class TabsTelemetry {
     func stopTabSwitchMeasurement() {
         guard let timerId = tabSwitchTimerId else { return }
         GleanMetrics.Tabs.tabSwitch.stopAndAccumulate(timerId)
+        tabSwitchTimerId = nil
     }
 
     static func trackTabsQuantity(tabManager: TabManager) {

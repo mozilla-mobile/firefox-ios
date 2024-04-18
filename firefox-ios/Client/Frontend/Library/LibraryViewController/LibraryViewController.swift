@@ -30,6 +30,7 @@ class LibraryViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var logger: Logger
     let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -313,14 +314,15 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func setupToolBarAppearance() {
+        let theme = themeManager.currentTheme(for: windowUUID)
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
+        standardAppearance.backgroundColor = theme.colors.layer1
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
         navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
         navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
-        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
+        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
     }
 
     func applyTheme() {
@@ -330,14 +332,15 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        view.backgroundColor = themeManager.currentTheme.colors.layer3
-        navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
-        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimary
-        navigationController?.navigationBar.backgroundColor = themeManager.currentTheme.colors.layer1
-        navigationController?.toolbar.barTintColor = themeManager.currentTheme.colors.layer1
-        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
-        segmentControlToolbar.barTintColor = themeManager.currentTheme.colors.layer1
-        segmentControlToolbar.tintColor = themeManager.currentTheme.colors.textPrimary
+        let theme = themeManager.currentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer3
+        navigationController?.navigationBar.barTintColor = theme.colors.layer1
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        navigationController?.navigationBar.backgroundColor = theme.colors.layer1
+        navigationController?.toolbar.barTintColor = theme.colors.layer1
+        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
+        segmentControlToolbar.barTintColor = theme.colors.layer1
+        segmentControlToolbar.tintColor = theme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false
 
         setNeedsStatusBarAppearanceUpdate()

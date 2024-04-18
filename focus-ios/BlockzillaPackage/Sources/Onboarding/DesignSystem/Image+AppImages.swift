@@ -13,4 +13,9 @@ public extension Image {
     static let stepOneImage = Image(systemName: "1.circle.fill")
     static let stepTwoImage = Image(systemName: "2.circle.fill")
     static let stepThreeImage = Image(systemName: "3.circle.fill")
+    static let magnifyingGlass = Image(systemName: "magnifyingglass")
+}
+
+extension Gradient {
+    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst", bundle: Bundle.module), Color("GradientSecond", bundle: Bundle.module)])
 }

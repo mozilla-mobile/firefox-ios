@@ -388,6 +388,9 @@ extension TelemetryWrapper {
         case settingsMenuShowTour = "show-tour"
         case settingsMenuPasswords = "passwords"
         // MARK: Logins and Passwords
+        case loginsAutofillPromptDismissed = "logins-autofill-prompt-dismissed"
+        case loginsAutofillPromptExpanded = "logins-autofill-prompt-expanded"
+        case loginsAutofillPromptShown = "logins-autofill-prompt-shown"
         case loginsAutofilled = "logins-autofilled"
         case loginsAutofillFailed = "logins-autofill-failed"
         case loginsManagementAddTapped = "logins-management-add-tapped"
@@ -433,6 +436,7 @@ extension TelemetryWrapper {
         case onboardingCardView = "onboarding-card-view"
         case onboardingPrimaryButton = "onboarding-card-primary-button"
         case onboardingSecondaryButton = "onboarding-card-secondary-button"
+        case onboardingMultipleChoiceButton = "onboarding-multiple-choice-button"
         case onboardingClose = "onboarding-close"
         case onboardingWallpaperSelector = "onboarding-wallpaper-selector"
         case onboardingSelectWallpaper = "onboarding-select-wallpaper"
@@ -704,6 +708,7 @@ extension TelemetryWrapper {
         case sequencePosition = "sequence-position"
         case flowType = "flow-type"
         case buttonAction = "button-action"
+        case multipleChoiceButtonAction = "mutiple-choice-button-action"
 
         // Notification permission
         case notificationPermissionIsGranted = "is-granted"
@@ -1056,6 +1061,12 @@ extension TelemetryWrapper {
             GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Logins and Passwords
+        case(.action, .view, .loginsAutofillPromptShown, _, _):
+            GleanMetrics.Logins.autofillPromptShown.record()
+        case(.action, .tap, .loginsAutofillPromptExpanded, _, _):
+            GleanMetrics.Logins.autofillPromptExpanded.record()
+        case(.action, .close, .loginsAutofillPromptDismissed, _, _):
+            GleanMetrics.Logins.autofillPromptDismissed.record()
         case(.action, .tap, .loginsAutofilled, _, _):
             GleanMetrics.Logins.autofilled.record()
         case(.action, .tap, .loginsAutofillFailed, _, _):
@@ -1419,6 +1430,22 @@ extension TelemetryWrapper {
                     sequenceId: seqID,
                     sequencePosition: seqPosition)
                 GleanMetrics.Onboarding.secondaryButtonTap.record(cardExtras)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
+        case (.action, .tap, .onboardingMultipleChoiceButton, _, let extras):
+            if let type = extras?[ExtraKey.cardType.rawValue] as? String,
+               let seqID = extras?[ExtraKey.sequenceID.rawValue] as? String,
+               let seqPosition = extras?[ExtraKey.sequencePosition.rawValue] as? String,
+               let action = extras?[ExtraKey.multipleChoiceButtonAction.rawValue] as? String,
+               let flowType = extras?[ExtraKey.flowType.rawValue] as? String {
+                let cardExtras = GleanMetrics.Onboarding.MultipleChoiceButtonTapExtra(
+                    buttonAction: action,
+                    cardType: type,
+                    flowType: flowType,
+                    sequenceId: seqID,
+                    sequencePosition: seqPosition)
+                GleanMetrics.Onboarding.multipleChoiceButtonTap.record(cardExtras)
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }

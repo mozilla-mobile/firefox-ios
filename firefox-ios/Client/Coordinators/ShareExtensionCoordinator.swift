@@ -18,6 +18,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
     private let profile: Profile
     private let alertContainer: UIView
     private weak var parentCoordinator: ParentCoordinatorDelegate?
+    private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Initializers
 
@@ -79,7 +80,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             SimpleToast().showAlertWithText(
                 .AppMenu.AppMenuCopyURLConfirmMessage,
                 bottomContainer: alertContainer,
-                theme: themeManager.currentTheme)
+                theme: themeManager.currentTheme(for: windowUUID))
             dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
@@ -94,7 +95,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             shareItem = ShareItem(url: url.absoluteString, title: nil)
         }
 
-        let themeColors = themeManager.currentTheme.colors
+        let themeColors = themeManager.currentTheme(for: windowUUID).colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconPrimary)
@@ -164,7 +165,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.alertContainer,
-                                                theme: self.themeManager.currentTheme)
+                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
             }
         }
     }

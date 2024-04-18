@@ -26,11 +26,12 @@ class HomeSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
+        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsHomePageSectionName,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary
+                    NSAttributedString.Key.foregroundColor: theme.colors.textPrimary
                 ]
             )
         )

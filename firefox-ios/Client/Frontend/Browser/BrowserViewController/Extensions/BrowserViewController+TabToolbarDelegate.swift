@@ -90,7 +90,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             SimpleToast().showAlertWithText(
                 .FirefoxHomepage.FeltDeletion.ToastTitle,
                 bottomContainer: self.contentContainer,
-                theme: self.themeManager.currentTheme
+                theme: self.currentTheme()
             )
         }
     }
@@ -276,6 +276,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)
+                self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
             }
         }.items
 
@@ -324,7 +325,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  buttonText: .BookmarksEdit,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.currentTheme) { isButtonTapped in
+                                    theme: currentTheme()) { isButtonTapped in
                 isButtonTapped ? self.openBookmarkEditPanel() : nil
             }
             self.show(toast: toast)
@@ -333,7 +334,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: themeManager.currentTheme) { [weak self] isButtonTapped in
+                                    theme: currentTheme()) { [weak self] isButtonTapped in
                 guard let self, let currentTab = tabManager.selectedTab else { return }
                 isButtonTapped ? self.addBookmark(
                     url: bookmarkURL?.absoluteString ?? currentTab.url?.absoluteString ?? "",
@@ -341,10 +342,20 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                 ) : nil
             }
             show(toast: toast)
+        case .closeTab:
+            let viewModel = ButtonToastViewModel(labelText: message,
+                                                 buttonText: .UndoString,
+                                                 textAlignment: .left)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: currentTheme()) { [weak self] isButtonTapped in
+                guard let self, let closedTab = tabManager.backupCloseTab else { return }
+                isButtonTapped ? self.tabManager.undoCloseTab(tab: closedTab.tab, position: closedTab.restorePosition) : nil
+            }
+            show(toast: toast)
         default:
             SimpleToast().showAlertWithText(message,
                                             bottomContainer: contentContainer,
-                                            theme: themeManager.currentTheme)
+                                            theme: currentTheme())
         }
     }
 

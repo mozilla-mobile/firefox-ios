@@ -27,8 +27,9 @@ class ToggleModel: ObservableObject {
 
 struct CreditCardAutofillToggle: View {
     // Theming
-    @Environment(\.themeType)
-    var themeVal
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
     @State var textColor: Color = .clear
     @State var backgroundColor: Color = .clear
     @State var toggleTintColor: Color = .clear
@@ -54,10 +55,11 @@ struct CreditCardAutofillToggle: View {
         }
         .background(backgroundColor)
         .onAppear {
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { val in
-            applyTheme(theme: val.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 
@@ -73,16 +75,19 @@ struct CreditCardAutofillToggle_Previews: PreviewProvider {
         static var previews: some View {
             let model = ToggleModel(isEnabled: true)
 
-        CreditCardAutofillToggle(textColor: .gray,
-                                 model: model)
+            CreditCardAutofillToggle(windowUUID: .XCTestDefaultUUID,
+                                     textColor: .gray,
+                                     model: model)
 
-        CreditCardAutofillToggle(textColor: .gray,
-                                 model: model)
+            CreditCardAutofillToggle(windowUUID: .XCTestDefaultUUID,
+                                     textColor: .gray,
+                                     model: model)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
             .previewDisplayName("Large")
 
-        CreditCardAutofillToggle(textColor: .gray,
-                                 model: model)
+            CreditCardAutofillToggle(windowUUID: .XCTestDefaultUUID,
+                                     textColor: .gray,
+                                     model: model)
             .environment(\.sizeCategory, .extraSmall)
             .previewDisplayName("Small")
     }

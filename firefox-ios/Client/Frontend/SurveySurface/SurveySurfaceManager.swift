@@ -14,6 +14,7 @@ protocol SurveySurfaceDelegate: AnyObject {
 
 class SurveySurfaceManager: SurveySurfaceDelegate {
     // MARK: - Properties
+    private let windowUUID: WindowUUID
     private let surveySurfaceID: MessageSurfaceId = .survey
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
@@ -30,10 +31,12 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     }
 
     // MARK: - Initialization
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          and messagingManager: GleanPlumbMessageManagerProtocol = Experiments.messaging
     ) {
+        self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.messagingManager = messagingManager
@@ -58,7 +61,8 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
         let viewModel = SurveySurfaceViewModel(with: info, delegate: self)
 
-        return SurveySurfaceViewController(viewModel: viewModel,
+        return SurveySurfaceViewController(windowUUID: windowUUID,
+                                           viewModel: viewModel,
                                            themeManager: themeManager,
                                            notificationCenter: notificationCenter)
     }

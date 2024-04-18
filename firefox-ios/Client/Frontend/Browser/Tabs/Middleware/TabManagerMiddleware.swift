@@ -22,10 +22,7 @@ class TabManagerMiddleware {
         let uuid = action.windowUUID
         switch action {
         case TabTrayAction.tabTrayDidLoad(let context):
-            let panelType = context.panelType
-            let tabTrayModel = self.getTabTrayModel(for: panelType, window: uuid)
-            let context = TabTrayModelContext(tabTrayModel: tabTrayModel, windowUUID: uuid)
-            store.dispatch(TabTrayAction.didLoadTabTray(context))
+            self.tabTrayDidLoad(for: uuid)
 
         case TabPanelAction.tabPanelDidLoad(let context):
             let isPrivate = context.boolValue
@@ -110,6 +107,14 @@ class TabManagerMiddleware {
         default:
             break
         }
+    }
+
+    private func tabTrayDidLoad(for windowUUID: WindowUUID) {
+        let isPrivate = tabManager(for: windowUUID).selectedTab?.isPrivate ?? false
+        let panelType: TabTrayPanelType = isPrivate ? .privateTabs : .tabs
+        let tabTrayModel = self.getTabTrayModel(for: panelType, window: windowUUID)
+        let context = TabTrayModelContext(tabTrayModel: tabTrayModel, windowUUID: windowUUID)
+        store.dispatch(TabTrayAction.didLoadTabTray(context))
     }
 
     private func normalTabsCountText(for windowUUID: WindowUUID) -> String {
@@ -498,7 +503,7 @@ class TabManagerMiddleware {
         let tabState = self.getTabsDisplayModel(for: isPrivate, shouldScrollToTab: false, uuid: uuid)
         if panel != .syncedTabs {
             let context = TabDisplayModelContext(tabDisplayModel: tabState, windowUUID: uuid)
-            store.dispatch(TabPanelAction.didLoadTabPanel(context))
+            store.dispatch(TabPanelAction.didChangeTabPanel(context))
         }
     }
 

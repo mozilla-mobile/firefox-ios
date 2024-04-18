@@ -13,13 +13,15 @@ import Storage
 struct AddressCellView: View {
     // MARK: - Properties
 
+    let windowUUID: WindowUUID
+    @Environment(\.themeManager)
+    var themeManager
+
     @State private var textColor: Color = .clear
     @State private var customLightGray: Color = .clear
     @State private var iconPrimary: Color = .clear
 
     private(set) var address: Address
-    @Environment(\.themeType)
-    var themeVal
     private(set) var onTap: () -> Void
 
     // MARK: - Body
@@ -52,13 +54,14 @@ struct AddressCellView: View {
             Divider().frame(height: 1)
         }
         .listRowInsets(EdgeInsets())
-        .buttonStyle(AddressButtonStyle(theme: themeVal.theme))
+        .buttonStyle(AddressButtonStyle(theme: themeManager.currentTheme(for: windowUUID)))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: themeVal.theme)
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
-        .onChange(of: themeVal) { newThemeValue in
-            applyTheme(theme: newThemeValue.theme)
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
 

@@ -34,13 +34,15 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(visible: false)
 
-        guard !isTabTrayRefactorEnabled else {
-            navigationHandler?.showTabTray(selectedPanel: focusedSegment ?? .tabs)
-            return
+        if isTabTrayRefactorEnabled {
+            let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+            let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
+            navigationHandler?.showTabTray(selectedPanel: selectedSegment)
+        } else {
+            willNavigateAway()
+            showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
+                                            focusedSegment: focusedSegment)
         }
-
-        showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
-                                        focusedSegment: focusedSegment)
     }
 
     private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
@@ -67,7 +69,7 @@ extension BrowserViewController: URLBarDelegate {
             let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                                  buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
             let toast = ButtonToast(viewModel: viewModel,
-                                    theme: self.themeManager.currentTheme,
+                                    theme: self.currentTheme(),
                                     completion: { buttonPressed in
                 if buttonPressed {
                     self.tabManager.selectTab(tab)
@@ -83,7 +85,8 @@ extension BrowserViewController: URLBarDelegate {
 
         guard self.tabTrayViewController != nil else { return }
 
-        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!)
+        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!,
+                                                                     windowUUID: windowUUID)
         navigationController.presentationController?.delegate = tabTrayViewController
 
         self.present(navigationController, animated: true, completion: nil)
@@ -226,7 +229,7 @@ extension BrowserViewController: URLBarDelegate {
             )
             SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
                                             bottomContainer: contentContainer,
-                                            theme: themeManager.currentTheme)
+                                            theme: currentTheme())
         case .failure:
             UIAccessibility.post(
                 notification: UIAccessibility.Notification.announcement,
@@ -322,7 +325,7 @@ extension BrowserViewController: URLBarDelegate {
         }
         urlBar.locationTextField?.applyUIMode(
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-            theme: self.themeManager.currentTheme
+            theme: self.currentTheme()
         )
         searchController?.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
@@ -411,7 +414,7 @@ extension BrowserViewController: URLBarDelegate {
             showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         }
 
-        urlBar.applyTheme(theme: themeManager.currentTheme)
+        urlBar.applyTheme(theme: currentTheme())
     }
 
     func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
@@ -427,7 +430,7 @@ extension BrowserViewController: URLBarDelegate {
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
 
-        urlBar.applyTheme(theme: themeManager.currentTheme)
+        urlBar.applyTheme(theme: currentTheme())
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {

@@ -30,7 +30,7 @@ extension BrowserViewController {
             greaterThanOrEqualToConstant: UIConstants.ToolbarHeight
         ).isActive = true
 
-        findInPageBar.applyTheme(theme: themeManager.currentTheme)
+        findInPageBar.applyTheme(theme: currentTheme())
 
         updateViewConstraints()
 

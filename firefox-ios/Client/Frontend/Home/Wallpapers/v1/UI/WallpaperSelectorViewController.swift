@@ -19,6 +19,8 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    let windowUUID: WindowUUID
+    var currentWindowUUID: UUID? { windowUUID }
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -61,9 +63,11 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
 
     // MARK: - Initializers
     init(viewModel: WallpaperSelectorViewModel,
+         windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
+        self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
@@ -100,7 +104,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
+        let theme = themeManager.currentTheme(for: windowUUID)
         contentView.backgroundColor = theme.colors.layer1
         headerLabel.textColor = theme.colors.textPrimary
         instructionLabel.textColor = theme.colors.textPrimary
@@ -125,7 +129,7 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
-        cell.applyTheme(theme: themeManager.currentTheme)
+        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return cell
     }
 

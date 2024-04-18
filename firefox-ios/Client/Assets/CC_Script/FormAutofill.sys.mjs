@@ -81,7 +81,9 @@ export const FormAutofill = {
     return false;
   },
   isAutofillAddressesAvailableInCountry(country) {
-    return FormAutofill._addressAutofillSupportedCountries.includes(country);
+    return FormAutofill._addressAutofillSupportedCountries.includes(
+      country.toUpperCase()
+    );
   },
   get isAutofillEnabled() {
     return this.isAutofillAddressesEnabled || this.isAutofillCreditCardsEnabled;

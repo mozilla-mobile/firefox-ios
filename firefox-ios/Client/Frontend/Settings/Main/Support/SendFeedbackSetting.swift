@@ -17,6 +17,10 @@ class SendFeedbackSetting: Setting {
         return URL(string: "https://connect.mozilla.org/")
     }
 
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.SendFeedback.title
+    }
+
     init(settingsDelegate: SupportSettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
         super.init()

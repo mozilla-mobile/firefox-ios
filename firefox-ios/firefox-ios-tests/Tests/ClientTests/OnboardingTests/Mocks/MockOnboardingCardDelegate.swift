@@ -12,6 +12,9 @@ class MockOnboardinCardDelegateController: UIViewController,
                                            OnboardingCardDelegate,
                                            OnboardingViewControllerProtocol,
                                            Themeable {
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var currentWindowUUID: UUID? { return windowUUID }
+
     // Protocol conformance
     var pageController = UIPageViewController()
     var pageControl = UIPageControl()
@@ -28,8 +31,9 @@ class MockOnboardinCardDelegateController: UIViewController,
 
     // Protocols under test
     var action: OnboardingActions?
+    var multipleChoiceAction: OnboardingMultipleChoiceAction?
 
-    func handleButtonPress(
+    func handleBottomButtonActions(
         for action: Client.OnboardingActions,
         from cardName: String,
         isPrimaryButton: Bool
@@ -53,6 +57,26 @@ class MockOnboardinCardDelegateController: UIViewController,
             presentPrivacyPolicy(from: cardName,
                                  selector: nil,
                                  completion: {})
+        case .endOnboarding:
+            self.action = .endOnboarding
+        }
+    }
+
+    func handleMultipleChoiceButtonActions(
+        for action: OnboardingMultipleChoiceAction,
+        from cardName: String
+    ) {
+        switch action {
+        case .themeDark:
+            self.multipleChoiceAction = .themeDark
+        case .themeLight:
+            self.multipleChoiceAction = .themeLight
+        case .themeSystemDefault:
+            self.multipleChoiceAction = .themeSystemDefault
+        case .toolbarBottom:
+            self.multipleChoiceAction = .toolbarBottom
+        case .toolbarTop:
+            self.multipleChoiceAction = .toolbarTop
         }
     }
 

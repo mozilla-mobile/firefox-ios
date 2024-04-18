@@ -7,9 +7,7 @@ import Shared
 import Common
 
 extension EnvironmentValues {
-    public var themeType: SwiftUITheme {
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-        let swiftUITheme = SwiftUITheme(theme: themeManager.currentTheme)
-        return swiftUITheme
+    public var themeManager: ThemeManager {
+        return (AppContainer.shared.resolve() as ThemeManager)
     }
 }

@@ -69,7 +69,8 @@ class AddressAutofillCoordinator: BaseCoordinator {
                 self.parentCoordinator?.didFinish(from: self)
             }
         }
-        let bottomSheetView = AddressAutoFillBottomSheetView(addressListViewModel: viewModel)
+        let bottomSheetView = AddressAutoFillBottomSheetView(windowUUID: tabManager.windowUUID,
+                                                             addressListViewModel: viewModel)
         let hostingController = SelfSizingHostingController(rootView: bottomSheetView)
         hostingController.controllerWillDismiss = {
             TelemetryWrapper.recordEvent(

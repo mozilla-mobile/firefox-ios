@@ -50,7 +50,8 @@ extension BrowserViewController: ReaderModeStyleViewModelDelegate {
                   readerMode.state == ReaderModeState.active
             else { continue }
 
-            readerMode.style = ReaderModeStyle(theme: newStyle.theme,
+            readerMode.style = ReaderModeStyle(windowUUID: windowUUID,
+                                               theme: newStyle.theme,
                                                fontType: ReaderModeFontType(type: newStyle.fontType.rawValue),
                                                fontSize: newStyle.fontSize)
         }
@@ -60,7 +61,7 @@ extension BrowserViewController: ReaderModeStyleViewModelDelegate {
 extension BrowserViewController {
     func updateReaderModeBar() {
         guard let readerModeBar = readerModeBar else { return }
-        readerModeBar.applyTheme(theme: themeManager.currentTheme)
+        readerModeBar.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
 
         if let url = self.tabManager.selectedTab?.url?.displayURL?.absoluteString,
            let record = profile.readingList.getRecordWithURL(url).value.successValue {
@@ -160,16 +161,17 @@ extension BrowserViewController {
     }
 
     func applyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
-        var readerModeStyle = ReaderModeStyle.default
+        var readerModeStyle = ReaderModeStyle.defaultStyle(for: windowUUID)
         if let dict = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
-           let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
+           let style = ReaderModeStyle(windowUUID: windowUUID, dict: dict as [String: AnyObject]) {
             readerModeStyle = style
         }
 
         readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
-        let viewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
+        let viewModel = ReaderModeStyleViewModel(windowUUID: windowUUID,
+                                                 isBottomPresented: isBottomSearchBar,
                                                  readerModeStyle: readerModeStyle)
-        let viewController = ReaderModeStyleViewController(viewModel: viewModel)
+        let viewController = ReaderModeStyleViewController(viewModel: viewModel, windowUUID: windowUUID)
         viewController.applyTheme(preferences, contentScript: contentScript)
     }
 }
@@ -182,16 +184,18 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                   readerMode.state == ReaderModeState.active
             else { break }
 
-            var readerModeStyle = ReaderModeStyle.default
+            var readerModeStyle = ReaderModeStyle.defaultStyle(for: windowUUID)
             if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-               let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
+               let style = ReaderModeStyle(windowUUID: windowUUID, dict: dict as [String: AnyObject]) {
                 readerModeStyle = style
             }
 
-            let readerModeViewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
+            let readerModeViewModel = ReaderModeStyleViewModel(windowUUID: windowUUID,
+                                                               isBottomPresented: isBottomSearchBar,
                                                                readerModeStyle: readerModeStyle)
             readerModeViewModel.delegate = self
-            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel)
+            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel,
+                                                                              windowUUID: windowUUID)
             readerModeStyleViewController.modalPresentationStyle = .popover
 
             let setupPopover = { [unowned self] in

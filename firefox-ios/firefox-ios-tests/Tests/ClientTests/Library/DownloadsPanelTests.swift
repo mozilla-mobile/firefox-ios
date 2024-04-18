@@ -7,6 +7,7 @@ import XCTest
 @testable import Client
 
 class DownloadsPanelTests: XCTestCase {
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
@@ -31,7 +32,7 @@ class DownloadsPanelTests: XCTestCase {
     }
 
     private func createSubject() -> DownloadsPanel {
-        let subject = DownloadsPanel()
+        let subject = DownloadsPanel(windowUUID: windowUUID)
         trackForMemoryLeaks(subject)
         return subject
     }

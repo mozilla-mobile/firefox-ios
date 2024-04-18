@@ -64,7 +64,17 @@ This reduces the total possible number of User Scripts down to four. The compile
 * `MainFrameAtDocumentEnd.js`
 * `MainFrameAtDocumentStart.js`
 
-To simplify the build process, these compiled files are checked-in to this repository. When adding or editing User Scripts, these files can be re-compiled with `webpack` manually. This requires Node.js to be installed, and all required `npm` packages can be installed by running `npm install` in the project's root directory. User Scripts can be compiled by running the following `npm` command in the root directory of the project:
+To simplify the build process, these compiled files are checked-in to this repository.
+
+To start a watcher that will compile the User Scripts on save, run the following `npm` command in the root directory of the project:
+
+```shell
+npm run dev
+```
+
+⚠️ Note: `npm run dev` will build the JS bundles in development mode with source maps, which allows tracking down lines in the source code for debugging.
+
+To create a production build of the User Scripts run the following `npm` command in the root directory of the project:
 
 ```shell
 npm run build

@@ -19,7 +19,6 @@ enum FakeReduxAction: Action {
     case setPrivateModeTo(Bool)
 
     var windowUUID: UUID {
-        // TODO: Update to use static consts on WindowUUID (.XCTestDefaultUUID)
         return UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
     }
 }
