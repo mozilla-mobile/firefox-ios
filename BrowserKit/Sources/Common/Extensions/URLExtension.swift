@@ -102,9 +102,16 @@ extension URL {
         let normalizedHost = url.normalizedHost ?? urlString
 
         guard let publicSuffix = url.publicSuffix else { return (nil, normalizedHost) }
-        // Remove the public suffix from the components
-        let components = normalizedHost.split(separator: ".")
-                                       .dropLast(publicSuffix.split(separator: ".").count)
+
+        let publicSuffixComponents = publicSuffix.split(separator: ".")
+
+        let normalizedHostWithoutSuffix = normalizedHost
+            .split(separator: ".")
+            .dropLast(publicSuffixComponents.count)
+            .joined(separator: ".")
+
+        let components = normalizedHostWithoutSuffix.split(separator: ".")
+
         guard components.count >= 2 else { return (nil, normalizedHost) }
         let subdomain = components.dropLast()
                                   .joined(separator: ".")
