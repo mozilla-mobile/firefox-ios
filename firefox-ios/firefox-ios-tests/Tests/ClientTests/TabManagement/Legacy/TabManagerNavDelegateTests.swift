@@ -90,7 +90,7 @@ class TabManagerNavDelegateTests: XCTestCase {
         subject.insert(delegate2)
         subject.webView(anyWebView(), didReceive: anyAuthenticationChallenge()) { (_, _) in }
 
-        // This message is send only to the first delegate that respond to to authentication challenge (BVC)
+        // This message is send only to the first delegate that respond to authentication challenge (BVC)
         XCTAssertEqual(delegate1.receivedMessages, [.webViewDidReceiveAuthenticationChallenge])
         XCTAssertEqual(delegate2.receivedMessages, [])
     }

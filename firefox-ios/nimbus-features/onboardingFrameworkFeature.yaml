@@ -474,7 +474,7 @@ enums:
           Will set the theme to use the system theme
       theme-dark:
         description: >
-          Will will set the theme to dark mode
+          Will set the theme to dark mode
       theme-light:
         description: >
           Will set the theme to light mode

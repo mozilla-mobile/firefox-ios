@@ -1634,7 +1634,7 @@ class InwardRhs {
     type(theType) {
         // In the future, we might also support providing a callback that receives
         // the fnode and returns a type. We couldn't reason based on these, but the
-        // use would be rather a consise way to to override part of what a previous
+        // use would be rather a consise way to override part of what a previous
         // .props() call provides.
 
         // Actually emit a given type.
