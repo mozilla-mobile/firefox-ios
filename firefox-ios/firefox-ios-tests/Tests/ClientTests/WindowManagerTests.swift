@@ -208,7 +208,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertNotEqual(requestedUUID2, savedUUID)
     }
 
-    func testOpeningAndClosingWindowsResultsInSensibleExpectedOrder() {
+    func testClosingTwoWindowsInDifferentOrdersResultsInSensibleExpectedOrderWhenOpening() {
         let subject = createSubject()
         let tabDataStore: TabDataStore = AppContainer.shared.resolve()
         let mockTabDataStore = tabDataStore as! MockTabDataStore
@@ -219,11 +219,9 @@ class WindowManagerTests: XCTestCase {
         let uuid2 = UUID()
         mockTabDataStore.injectMockTabWindowUUID(uuid2)
 
-        // Check that asking for first UUID returns the expected UUID
-        // Open a window using this UUID
+        // Open a window using UUID 1
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid1)
-        // Check that asking for another UUID returns the second UUID
-        // Open a window using this UUID
+        // Open a window using UUID 2
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
 
         // Close window 2, then window 1

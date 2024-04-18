@@ -156,7 +156,7 @@ final class WindowManagerImplementation: WindowManager {
         if result.isNew {
             // Be sure to add any brand-new windows to our ordering preferences
             var prefs = windowOrderingPriority
-            prefs.append(resultUUID)
+            prefs.insert(resultUUID, at: 0)
             windowOrderingPriority = prefs
         }
 
