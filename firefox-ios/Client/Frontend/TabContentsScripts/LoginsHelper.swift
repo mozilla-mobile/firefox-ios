@@ -207,25 +207,27 @@ class LoginsHelper: TabContentScript {
             return
         }
 
-        profile.logins.getLoginsForProtectionSpace(
-            login.protectionSpace,
+        profile.logins.getLoginsFor(
+            protectionSpace: login.protectionSpace,
             withUsername: login.username
-        ).uponQueue(.main) { res in
-            if let data = res.successValue {
-                for saved in data {
-                    if let saved = saved {
+        ) { res in
+            DispatchQueue.main.async {
+                switch res {
+                case .success(let successValue):
+                    for saved in successValue {
                         if saved.decryptedPassword == login.password {
-                            _ = self.profile.logins.use(login: saved)
+                            self.profile.logins.use(login: saved, completionHandler: { _ in })
                             return
                         }
 
                         self.promptUpdateFromLogin(login: saved, toLogin: login)
                         return
                     }
+                case .failure:
+                    break
                 }
+                self.promptSave(login)
             }
-
-            self.promptSave(login)
         }
     }
 
@@ -264,7 +266,7 @@ class LoginsHelper: TabContentScript {
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             self.sendLoginsSavedTelemetry()
-            _ = self.profile.logins.addLogin(login: login)
+            self.profile.logins.addLogin(login: login, completionHandler: { _ in })
         }
 
         applyTheme(for: dontSave, save)
@@ -305,7 +307,7 @@ class LoginsHelper: TabContentScript {
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
             self.sendLoginsModifiedTelemetry()
-            _ = self.profile.logins.updateLogin(id: old.id, login: new)
+            self.profile.logins.updateLogin(id: old.id, login: new, completionHandler: { _ in })
         }
 
         applyTheme(for: dontSave, update)

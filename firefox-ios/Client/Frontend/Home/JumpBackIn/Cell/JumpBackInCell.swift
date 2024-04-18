@@ -25,8 +25,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
         static let cellSpacing: CGFloat = 16
-        static let titleFontSize: CGFloat = 15
-        static let siteFontSize: CGFloat = 12
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
         static let websiteIconSize = CGSize(width: 24, height: 24)
@@ -62,8 +60,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline,
-                                                            size: UX.titleFontSize)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 2
     }
 
@@ -75,8 +72,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private var websiteLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                size: UX.siteFontSize)
+        label.font = FXFontStyles.Bold.caption1.scaledFont()
         label.textColor = .label
     }
 
