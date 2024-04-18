@@ -12,7 +12,6 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         static let stackViewSpacingWithLink: CGFloat = 15
         static let stackViewSpacingWithoutLink: CGFloat = 24
         static let stackViewSpacingButtons: CGFloat = 16
-        static let topStackViewSpacing: CGFloat = 24
         static let topStackViewPaddingPad: CGFloat = 70
         static let topStackViewPaddingPhone: CGFloat = 90
         static let bottomStackViewPaddingPad: CGFloat = 32
@@ -20,15 +19,10 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         static let horizontalTopStackViewPaddingPad: CGFloat = 100
         static let horizontalTopStackViewPaddingPhone: CGFloat = 24
         static let scrollViewVerticalPadding: CGFloat = 62
-        static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
         static let descriptionBoldFontSize: CGFloat = 20
-        static let descriptionFontSize: CGFloat = 17
         static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
-        static let smallTitleFontSize: CGFloat = 20
-        static let smallStackViewSpacing: CGFloat = 8
-        static let smallScrollViewVerticalPadding: CGFloat = 20
         static let smallImageViewSize = CGSize(width: 240, height: 280)
         static let smallTopStackViewPadding: CGFloat = 40
 
@@ -41,81 +35,10 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     // MARK: - Properties
     weak var delegate: OnboardingCardDelegate?
 
-    // Adjusting layout for devices with height lower than 667
-    // including now iPhone SE 2nd generation and iPad
-    var shouldUseSmallDeviceLayout: Bool {
-        return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
-    }
-
-    // Adjusting layout for tiny devices (iPhone SE 1st generation)
-    var shouldUseTinyDeviceLayout: Bool {
-        return UIDevice().isTinyFormFactor
-    }
-
-    private lazy var scrollView: UIScrollView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    lazy var containerView: UIView = .build { view in
-        view.backgroundColor = .clear
-    }
-
-    lazy var contentContainerView: UIView = .build { stack in
-        stack.backgroundColor = .clear
-    }
-
-    lazy var topStackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .center
-        stack.distribution = .fill
-        stack.spacing = UX.topStackViewSpacing
-        stack.axis = .vertical
-    }
-
-    lazy var contentStackView: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-        stack.axis = .vertical
-    }
-
-    lazy var imageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)ImageView"
-    }
-
-    private lazy var titleLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        let fontSize = self.shouldUseSmallDeviceLayout ? UX.smallTitleFontSize : UX.titleFontSize
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                size: fontSize)
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
-        label.accessibilityTraits.insert(.header)
-    }
-
-    private lazy var descriptionLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.descriptionFontSize)
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
-    }
-
     lazy var buttonStackView: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.distribution = .equalSpacing
         stack.axis = .vertical
-    }
-
-    private lazy var primaryButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
-    }
-
-    private lazy var secondaryButton: SecondaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
     }
 
     private lazy var linkButton: LinkButton = .build { button in
@@ -192,12 +115,12 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
             topStackView.spacing = stackViewSpacing()
             buttonStackView.spacing = UX.stackViewSpacingButtons
             if traitCollection.horizontalSizeClass == .regular {
-                scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPad
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPad
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPad
             } else {
-                scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.topStackViewPaddingPhone
                 horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
                 bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
@@ -206,9 +129,9 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
             horizontalTopStackViewPadding = UX.horizontalTopStackViewPaddingPhone
             bottomStackViewPadding = -UX.bottomStackViewPaddingPhone
             if shouldUseSmallDeviceLayout {
-                topStackView.spacing = UX.smallStackViewSpacing
-                buttonStackView.spacing = UX.smallStackViewSpacing
-                scrollViewVerticalPadding = UX.smallScrollViewVerticalPadding
+                topStackView.spacing = SharedUX.smallStackViewSpacing
+                buttonStackView.spacing = SharedUX.smallStackViewSpacing
+                scrollViewVerticalPadding = SharedUX.smallScrollViewVerticalPadding
                 topPadding = UX.smallTopStackViewPadding
             } else {
                 topStackView.spacing = stackViewSpacing()
@@ -310,42 +233,6 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         return UX.stackViewSpacingWithLink
     }
 
-    func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
-    }
-
-    private func updateLayout() {
-        titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.body
-        imageView.image = viewModel.image
-
-        let buttonViewModel = PrimaryRoundedButtonViewModel(
-            title: viewModel.buttons.primary.title,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)PrimaryButton"
-        )
-        primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
-
-        setupSecondaryButton()
-    }
-
-    private func setupSecondaryButton() {
-        // To keep Title, Description aligned between cards we don't hide the button
-        // we clear the background and make disabled
-        guard let buttonTitle = viewModel.buttons.secondary?.title else {
-            secondaryButton.isUserInteractionEnabled = false
-            secondaryButton.backgroundColor = .clear
-            return
-        }
-
-        let buttonViewModel = SecondaryRoundedButtonViewModel(
-            title: buttonTitle,
-            a11yIdentifier: "\(self.viewModel.a11yIdRoot)SecondaryButton"
-        )
-        secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: currentTheme())
-    }
-
     private func setupLinkButton() {
         guard let buttonTitle = viewModel.link?.title else {
             linkButton.isUserInteractionEnabled = false
@@ -364,7 +251,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
 
     // MARK: - Button Actions
     @objc
-    func primaryAction() {
+    override func primaryAction() {
         delegate?.handleBottomButtonActions(
             for: viewModel.buttons.primary.action,
             from: viewModel.name,
@@ -372,7 +259,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
     }
 
     @objc
-    func secondaryAction() {
+    override func secondaryAction() {
         guard let buttonAction = viewModel.buttons.secondary?.action else { return }
 
         delegate?.handleBottomButtonActions(
@@ -395,6 +282,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor  = theme.colors.textPrimary
 
+        primaryButton.applyTheme(theme: theme)
         setupSecondaryButton()
         setupLinkButton()
     }
