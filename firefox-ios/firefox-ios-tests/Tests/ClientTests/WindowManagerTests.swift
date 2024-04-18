@@ -227,8 +227,8 @@ class WindowManagerTests: XCTestCase {
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
 
         // Close window 2, then window 1
-        subject.windowWillClose(uuid: uuid1)
         subject.windowWillClose(uuid: uuid2)
+        subject.windowWillClose(uuid: uuid1)
 
         // Now attempt to re-open two windows in order. We expect window
         // 1 to open, then window 2
@@ -240,9 +240,9 @@ class WindowManagerTests: XCTestCase {
         // Now re-open both windows in order...
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid1)
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
-        // ...but close them in the opposite order as before
-        subject.windowWillClose(uuid: uuid2)
+        // ...but close them in the opposite order as before (close window 1, then 2)
         subject.windowWillClose(uuid: uuid1)
+        subject.windowWillClose(uuid: uuid2)
 
         // Check that the next time we open the windows the order is now reversed
         let result2_1 = subject.reserveNextAvailableWindowUUID()
