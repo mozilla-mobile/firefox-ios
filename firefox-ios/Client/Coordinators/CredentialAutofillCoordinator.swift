@@ -148,6 +148,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                     )
                 )
 
+                LoginsHelper.yieldFocusBackToField(with: currentTab)
                 router.dismiss(animated: true)
                 parentCoordinator?.didFinish(from: self)
             },
