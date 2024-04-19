@@ -71,7 +71,9 @@ extension URL {
         if let range = host.range(of: "^(www|mobile|m)\\.", options: .regularExpression) {
             host.replaceSubrange(range, with: "")
         }
-        guard host != publicSuffix else { return nil }
+        // If the host equals the public suffix, it means that the host is already normalized.
+        // Therefore, we return the original host without any modifications.
+        guard host != publicSuffix else { return components.host }
 
         return host
     }
@@ -95,7 +97,7 @@ extension URL {
     /// ```
     /// let (subdomain, host) = getSubdomainAndHost(from: "https://docs.github.com")
     /// print(subdomain) // Prints "docs."
-    /// print(host) // Prints "github.com"
+    /// print(host) // Prints "docs.github.com"
     /// ```
     public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
         guard let url = URL(string: urlString) else { return (nil, urlString) }
