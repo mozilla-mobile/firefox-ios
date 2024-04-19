@@ -18,7 +18,6 @@ class AccessoryViewProvider: UIView, Themeable {
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
-        static let doneButtonFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
@@ -65,11 +64,7 @@ class AccessoryViewProvider: UIView, Themeable {
         let button = UIButton(type: .system)
         button.setTitle(.CreditCard.Settings.Done, for: .normal)
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.doneButtonFontSize,
-            weight: .semibold
-        )
+        button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
         let barButton = UIBarButtonItem(customView: button)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return barButton
