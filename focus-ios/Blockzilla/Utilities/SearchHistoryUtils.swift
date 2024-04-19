@@ -42,7 +42,6 @@ class SearchHistoryUtils {
         for search in currentStack where search.isCurrentSearch {
             return search.text
         }
-        
         return nil
     }
 
