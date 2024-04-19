@@ -13,7 +13,7 @@ class RootViewControllerModel {
     private var canGoBack: Bool = false
     private var canGoForward: Bool = false
 
-    var navigationToolbarDelegate: ToolbarDelegate?
+    var navigationToolbarDelegate: NavigationToolbarDelegate?
 
     // MARK: - Navigation toolbar
     var navigationToolbarContainerModel: NavigationToolbarContainerModel {

@@ -8,7 +8,7 @@ import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
-                          ToolbarDelegate,
+                          NavigationToolbarDelegate,
                           NavigationDelegate,
                           AddressToolbarDelegate,
                           AddressToolbarContainerDelegate,

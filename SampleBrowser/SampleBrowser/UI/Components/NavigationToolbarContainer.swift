@@ -6,6 +6,14 @@ import Common
 import ToolbarKit
 import UIKit
 
+protocol NavigationToolbarDelegate: AnyObject {
+    func backButtonClicked()
+    func forwardButtonClicked()
+    func reloadButtonClicked()
+    func stopButtonClicked()
+    func menuButtonClicked()
+}
+
 class NavigationToolbarContainer: UIView, ThemeApplicable {
     private enum UX {
         static let toolbarHeight: CGFloat = 48
