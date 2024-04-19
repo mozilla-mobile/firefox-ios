@@ -389,12 +389,9 @@ enums:
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
-<<<<<<< HEAD
-=======
       end-onboarding:
         description: >
           Will end the onboarding on a set card
->>>>>>> 6d7a5de70 (Bugfix [Onboarding Customization] Fix typo (#19741))
   OnboardingInstructionsPopupActions:
     description: >
       The identifiers for the different actions available for the

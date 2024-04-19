@@ -39,6 +39,7 @@ extension BrowserViewController: URLBarDelegate {
             let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
             navigationHandler?.showTabTray(selectedPanel: selectedSegment)
         } else {
+            willNavigateAway()
             showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
                                             focusedSegment: focusedSegment)
         }
