@@ -41,7 +41,6 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
             actionStack.topAnchor.constraint(equalTo: topAnchor),
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
-
         ])
     }
 

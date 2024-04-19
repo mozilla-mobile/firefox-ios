@@ -162,7 +162,7 @@ class RootViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navigationToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor), //, constant: -20),
+            navigationToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navigationToolbar.topAnchor.constraint(equalTo: browserVC.view.bottomAnchor)
         ])
