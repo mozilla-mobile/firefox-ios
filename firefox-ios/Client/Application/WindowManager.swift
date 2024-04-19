@@ -27,7 +27,7 @@ protocol WindowManager {
 
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
-    
+
     /// Returns the UUIDs for all open windows, optionally also including windows that
     /// are still in the process of being configured but have not yet completed.
     /// Note: the order of the UUIDs is undefined.
