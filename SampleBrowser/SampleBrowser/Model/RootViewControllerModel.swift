@@ -10,8 +10,8 @@ class RootViewControllerModel {
     // By default the state is set to reload. We save the state to avoid setting the toolbar
     // button multiple times when a page load is in progress
     private var isReloading = false
-    private var canGoBack: Bool = false
-    private var canGoForward: Bool = false
+    private var canGoBack = false
+    private var canGoForward = false
 
     var navigationToolbarDelegate: NavigationToolbarDelegate?
     var addressToolbarDelegate: AddressToolbarContainerDelegate?
@@ -97,5 +97,4 @@ class RootViewControllerModel {
             pageActions: pageActions,
             browserActions: browserActions)
     }
-
 }

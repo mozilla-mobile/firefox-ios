@@ -8,4 +8,3 @@ import Foundation
 public protocol NavigationToolbar {
     func configure(state: NavigationToolbarState)
 }
-

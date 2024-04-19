@@ -33,11 +33,13 @@ class NavigationToolbarContainer: UIView, ThemeApplicable {
     }
 
     private var attachedKeyWindow: UIWindow? {
+        // swiftlint:disable first_where
         return UIApplication.shared.connectedScenes
             .filter { $0.activationState != .unattached }
             .first(where: { $0 is UIWindowScene })
             .flatMap({ $0 as? UIWindowScene })?.windows
             .first(where: \.isKeyWindow)
+        // swiftlint:enable first_where
     }
 
     override init(frame: CGRect) {

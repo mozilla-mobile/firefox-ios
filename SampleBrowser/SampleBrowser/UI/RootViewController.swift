@@ -34,7 +34,7 @@ class RootViewController: UIViewController,
     private var model = RootViewControllerModel()
 
     // MARK: - Init
-    init(engineProvider: EngineProvider, 
+    init(engineProvider: EngineProvider,
          windowUUID: UUID?,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
