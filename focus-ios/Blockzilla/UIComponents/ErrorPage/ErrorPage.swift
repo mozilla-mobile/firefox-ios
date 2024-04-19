@@ -12,11 +12,15 @@ class ErrorPage {
     }
 
     var data: Data {
-        let file = Bundle.main.path(forResource: "errorPage", ofType: "html")!
-
-        let page = try! String(contentsOfFile: file)
-            .replacingOccurrences(of: "%messageLong%", with: error.localizedDescription)
-            .replacingOccurrences(of: "%button%", with: UIConstants.strings.errorTryAgain)
-        return page.data(using: .utf8)!
+        guard let fileURL = Bundle.main.url(forResource: "errorPage", withExtension: "html"),
+              let fileContents = try? String(contentsOf: fileURL) else {
+            fatalError("Failed to load 'errorPage.html' from bundle.")
+        }
+        let page = fileContents.replacingOccurrences(of: "%messageLong%", with: error.localizedDescription)
+                                 .replacingOccurrences(of: "%button%", with: UIConstants.strings.errorTryAgain)
+        guard let pageData = page.data(using: .utf8) else {
+            fatalError("Failed to convert HTML string to Data.")
+        }
+        return pageData
     }
 }
