@@ -13,7 +13,6 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     }
 
     private lazy var actionStack: UIStackView = .build { view in
-        view.axis = .horizontal
         view.distribution = .equalSpacing
     }
     private var theme: Theme?
