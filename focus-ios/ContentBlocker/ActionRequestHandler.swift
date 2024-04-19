@@ -17,17 +17,31 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
             }
         }
 
-        let mergedListJSON = try! JSONSerialization.data(withJSONObject: mergedList, options: JSONSerialization.WritingOptions(rawValue: 0))
-        let attachment = NSItemProvider(item: mergedListJSON as NSSecureCoding?, typeIdentifier: kUTTypeJSON as String)
-        let item = NSExtensionItem()
-        item.attachments = [attachment]
-        context.completeRequest(returningItems: [item], completionHandler: nil)
+        do {
+            let mergedListJSON = try JSONSerialization.data(withJSONObject: mergedList, options: [])
+            let attachment = NSItemProvider(item: mergedListJSON as NSSecureCoding?, typeIdentifier: kUTTypeJSON as String)
+            let item = NSExtensionItem()
+            item.attachments = [attachment]
+            context.completeRequest(returningItems: [item], completionHandler: nil)
+        } catch {
+            print("Error serializing JSON:", error)
+            context.cancelRequest(withError: error)
+        }
     }
 
     /// Gets the dictionary form of the tracking list with the specified file name.
     private func itemsFromFile(_ name: String) -> [NSDictionary] {
-        let url = Bundle.main.url(forResource: name, withExtension: "json")
-        let data = try! Data(contentsOf: url!)
-        return try! JSONSerialization.jsonObject(with: data, options: []) as! [NSDictionary]
+        guard let url = Bundle.main.url(forResource: name, withExtension: "json") else {
+            fatalError("Failed to locate file '\(name).json'")
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [NSDictionary] else {
+                fatalError("Failed to parse JSON from file '\(name).json'")
+            }
+            return json
+        } catch {
+            fatalError("Error loading data from file '\(name).json': \(error)")
+        }
     }
 }
