@@ -14,6 +14,7 @@ class RootViewControllerModel {
     private var canGoForward: Bool = false
 
     var navigationToolbarDelegate: NavigationToolbarDelegate?
+    var addressToolbarDelegate: AddressToolbarContainerDelegate?
 
     // MARK: - Navigation toolbar
     var navigationToolbarContainerModel: NavigationToolbarContainerModel {
@@ -66,6 +67,35 @@ class RootViewControllerModel {
     func updateBackForwardButtons(canGoBack: Bool, canGoForward: Bool) {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
+    }
+
+    // MARK: - Address toolbar
+    func addressToolbarContainerModel(url: String?) -> AddressToolbarContainerModel {
+        let pageActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.qrCode,
+            isEnabled: true,
+            a11yLabel: "Read QR Code",
+            a11yId: "qrCodeButton",
+            onSelected: nil)]
+
+        let browserActions = [ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            isEnabled: true,
+            a11yLabel: "Open Menu",
+            a11yId: "appMenuButton",
+            onSelected: {
+                self.addressToolbarDelegate?.didClickMenu()
+            })]
+
+        // FXIOS-8947: Use scroll position
+        return AddressToolbarContainerModel(
+            toolbarPosition: .top,
+            scrollY: 0,
+            isPrivate: false,
+            url: url,
+            navigationActions: [],
+            pageActions: pageActions,
+            browserActions: browserActions)
     }
 
 }
