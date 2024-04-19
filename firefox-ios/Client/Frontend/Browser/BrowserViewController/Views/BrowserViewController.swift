@@ -83,7 +83,6 @@ class BrowserViewController: UIViewController,
     var toolbarContextHintVC: ContextualHintViewController
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
-    private var backgroundTabLoader: DefaultBackgroundTabLoader
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
@@ -241,7 +240,6 @@ class BrowserViewController: UIViewController,
         )
         self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
                                                                        windowUUID: windowUUID)
-        self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -497,12 +495,6 @@ class BrowserViewController: UIViewController,
 
         updateWallpaperMetadata()
         dismissModalsIfStartAtHome()
-
-        // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        // Make sure that our startup flow is completed and other tabs have been restored before we load.
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
-            self?.backgroundTabLoader.loadBackgroundTabs()
-        }
     }
 
     private func nightModeUpdates() {
