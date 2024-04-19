@@ -151,6 +151,7 @@ class Authenticator {
                 }
 
                 completionHandler(credentials)
+
             case .failure:
                 completionHandler(nil)
             }
