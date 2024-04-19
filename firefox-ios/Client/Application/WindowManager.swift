@@ -28,6 +28,13 @@ protocol WindowManager {
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
 
+    /// Returns the UUIDs for all open windows, optionally also including windows that
+    /// are still in the process of being configured but have not yet completed.
+    /// Note: the order of the UUIDs is undefined.
+    /// - Parameter includingReserved: whether to include windows that are still launching.
+    /// - Returns: a list of UUIDs. Order is undefined.
+    func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID]
+
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
     func windowWillClose(uuid: WindowUUID)
@@ -116,6 +123,10 @@ final class WindowManagerImplementation: WindowManager {
 
     func allWindowTabManagers() -> [TabManager] {
         return windows.compactMap { uuid, window in window.tabManager }
+    }
+
+    func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID] {
+        return Array(windows.keys) + (includingReserved ? reservedUUIDs : [])
     }
 
     func windowWillClose(uuid: WindowUUID) {
