@@ -79,7 +79,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
             if urlTextField.text?.isEmpty == true {
                 hideClearButton()
-            } else if urlTextField.text?.count == 1  {
+            } else if urlTextField.text?.count == 1 {
                 showClearButton()
             }
 
@@ -145,7 +145,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
                 urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
                 urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-                
+
                 clearButton.heightAnchor.constraint(equalToConstant: UX.clearButtonSize)
             ]
         )
@@ -231,8 +231,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         UIView.transition(
             with: textField,
             duration: UX.transitionDuration,
-            options: options
-        ) {
+            options: options)
+        {
             textField.textAlignment = textAlignment
         } completion: { _ in
             completion?()
@@ -259,8 +259,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.text?.isEmpty == false  ? showClearButton() : hideClearButton()
-        
+        if textField.text?.isEmpty == false { showClearButton() } else { hideClearButton() }
+
         updateGradientLayerFrame()
         DispatchQueue.main.async {
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
