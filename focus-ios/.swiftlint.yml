@@ -12,7 +12,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - control_statement
   # - duplicate_conditions
   # - dynamic_inline
-  # - empty_enum_arguments
+  - empty_enum_arguments
   # - empty_parameters
   # - empty_parentheses_with_trailing_closure
   # - for_where
