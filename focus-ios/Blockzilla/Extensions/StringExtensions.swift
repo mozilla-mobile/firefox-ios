@@ -31,7 +31,8 @@ extension String {
 
             return true
         } catch {
-            fatalError("Couldn't find data detector for type link")
+            assertionFailure("Couldn't find data detector for type link")
+            return false
         }
     }
 
