@@ -241,7 +241,7 @@ class OnboardingBasicCardViewController: OnboardingCardViewController {
         let buttonViewModel = LinkButtonViewModel(
             title: buttonTitle,
             a11yIdentifier: "\(self.viewModel.a11yIdRoot)LinkButton",
-            fontSize: FXFontStyles.Regular.callout.scaledFont(),
+            fontSize: 16,
             contentHorizontalAlignment: .center
         )
         linkButton.configure(viewModel: buttonViewModel)

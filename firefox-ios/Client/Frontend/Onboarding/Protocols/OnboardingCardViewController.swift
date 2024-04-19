@@ -19,9 +19,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let smallScrollViewVerticalPadding: CGFloat = 20
     }
 
-    let windowUUID: WindowUUID
-    var currentWindowUUID: UUID? { windowUUID }
-
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
