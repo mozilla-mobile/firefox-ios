@@ -100,7 +100,6 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         }
 
         let windowData = WindowData(id: windowUUID,
-                                    isPrimary: true,
                                     activeTabId: selectTabUUID ?? UUID(),
                                     tabData: tabsToMigrate)
 

@@ -43,6 +43,7 @@ public struct AccessibilityIdentifiers {
             static let scanQRCodeButton = "urlBar-scanQRCode"
             static let cancelButton = "urlBar-cancel"
             static let searchTextField = "address"
+            static let url = "url"
         }
 
         struct KeyboardAccessory {

@@ -415,9 +415,13 @@ class FakespotViewController: UIViewController,
             return view
         case .onboarding:
             let view: FakespotOptInCardView = .build()
-            viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-
+            viewModel.optInCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
+                if dismissPermanently {
+                    self?.triggerDismiss()
+                } else {
+                    store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false,
+                                                                                   windowUUID: windowUUID)))
+                }
                 guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
             }
@@ -468,11 +472,14 @@ class FakespotViewController: UIViewController,
         case .settingsCard:
             let view: FakespotSettingsCardView = .build()
             viewModel.settingsCardViewModel.expandState = fakespotState.isSettingsExpanded ? .expanded : .collapsed
-            viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
+            viewModel.settingsCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
                 guard let self = self, let action else { return }
-
-                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-                store.dispatch(FakespotAction.surfaceDisplayedEventSend(windowUUID.context))
+                if dismissPermanently {
+                    self.triggerDismiss()
+                } else {
+                    store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false,
+                                                                                   windowUUID: windowUUID)))
+                }
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
