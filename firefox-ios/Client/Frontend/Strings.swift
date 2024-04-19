@@ -4146,9 +4146,9 @@ extension String {
             value: "The *adjusted rating* is based only on reviews we believe to be reliable.",
             comment: "Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
-            key: "Shopping.ReviewQualityCard.Highlights.Label.v120",
+            key: "Shopping.ReviewQualityCard.Highlights.Label.v126",
             tableName: "Shopping",
-            value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
+            value: "*Highlights* are from %@ reviews within the last 80 days that we believe to be reliable.",
             comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardLearnMoreButtonTitle = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.LearnMoreButton.Title.v120",
@@ -5905,6 +5905,11 @@ extension String {
                 tableName: "Settings",
                 value: "Autofill Addresses",
                 comment: "Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage.")
+            public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
+                key: "Shopping.ReviewQualityCard.Highlights.Label.v120",
+                tableName: "Shopping",
+                value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
+                comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         }
     }
 }
