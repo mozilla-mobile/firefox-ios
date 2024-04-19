@@ -246,7 +246,7 @@ extension UpdateViewController: OnboardingCardDelegate {
             presentDefaultBrowserPopup(
                 from: cardName,
                 completionIfLastCard: { self.closeUpdate() })
-        case .endOndboarding:
+        case .endOnboarding:
             closeUpdate()
         default:
             break
