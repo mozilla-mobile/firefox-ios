@@ -151,7 +151,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         )
 
         secondaryButton.configure(viewModel: buttonViewModel)
-        secondaryButton.applyTheme(theme: currentTheme())
+        secondaryButton.applyTheme(theme: themeManager.currentTheme)
     }
 
     func applyTheme() { }
