@@ -26,7 +26,14 @@ public protocol CustomAutocompleteSource: AutocompleteSource {
 }
 
 public class CustomCompletionSource: CustomAutocompleteSource {
-    private lazy var regex = try! NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+    private lazy var regex: NSRegularExpression = {
+        do {
+            let regex = try NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+            return regex
+        } catch {
+            fatalError("Error initializing regular expression: \(error)")
+        }
+    }()
     var enableCustomDomainAutocomplete: () -> Bool
     var getCustomDomainSetting: () -> AutoCompleteSuggestions
     var setCustomDomainSetting: ([String]) -> Void
@@ -106,8 +113,15 @@ class TopDomainsCompletionSource: AutocompleteSource {
     var enabled: Bool { return  enableDomainAutocomplete() }
 
     private lazy var topDomains: [String] = {
-        let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
+        guard let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt") else {
+            fatalError("Failed to locate file 'topdomains.txt'")
+        }
+        do {
+            let fileContent = try String(contentsOfFile: filePath)
+            return fileContent.components(separatedBy: "\n")
+        } catch {
+            fatalError("Error reading file 'topdomains.txt': \(error)")
+        }
     }()
 
     func getSuggestions() -> AutoCompleteSuggestions {
