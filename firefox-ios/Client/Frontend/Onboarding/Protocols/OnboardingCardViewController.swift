@@ -119,10 +119,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
-    }
-
     func updateLayout() {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.body
@@ -145,7 +141,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         )
 
         primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        primaryButton.applyTheme(theme: themeManager.currentTheme)
     }
 
     func setupSecondaryButton() {
