@@ -72,7 +72,8 @@ final class WindowManagerImplementation: WindowManager {
     private var _activeWindowUUID: WindowUUID?
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
-    private var windowOrderingPriority: [WindowUUID] {
+    // UUIDs at the beginning of the list are prioritized over UUIDs at the end
+    private(set) var windowOrderingPriority: [WindowUUID] {
         get {
             let stored = defaults.object(forKey: WindowPrefKeys.windowOrdering)
             guard let prefs: [String] = stored as? [String] else { return [] }
@@ -119,14 +120,15 @@ final class WindowManagerImplementation: WindowManager {
 
     func windowWillClose(uuid: WindowUUID) {
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
+        updateWindow(nil, for: uuid)
 
-        // Closed windows are popped off and moved to the end of the ordering priority
+        // Closed windows are popped off and moved behind any already-open windows in the list
         var prefs = windowOrderingPriority
         prefs.removeAll(where: { $0 == uuid })
-        prefs.append(uuid)
+        let openWindows = Array(windows.keys)
+        let idx = prefs.firstIndex(where: { !openWindows.contains($0) })
+        prefs.insert(uuid, at: idx ?? prefs.count)
         windowOrderingPriority = prefs
-
-        updateWindow(nil, for: uuid)
     }
 
     func reserveNextAvailableWindowUUID() -> WindowUUID {
@@ -154,7 +156,7 @@ final class WindowManagerImplementation: WindowManager {
         if result.isNew {
             // Be sure to add any brand-new windows to our ordering preferences
             var prefs = windowOrderingPriority
-            prefs.append(resultUUID)
+            prefs.insert(resultUUID, at: 0)
             windowOrderingPriority = prefs
         }
 
