@@ -205,26 +205,37 @@ class SiriFavoriteViewController: UIViewController {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return false
         }
-        let regex = try! NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
-        var sanitizedDomain = regex.stringByReplacingMatches(in: domain, options: [], range: NSRange(location: 0, length: domain.count), withTemplate: "")
 
-        guard !sanitizedDomain.isEmpty, sanitizedDomain.contains(".") else {
+        do {
+            let regex = try NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+            var sanitizedDomain = regex.stringByReplacingMatches(in: domain, options: [], range: NSRange(location: 0, length: domain.utf16.count), withTemplate: "")
+
+            guard !sanitizedDomain.isEmpty, sanitizedDomain.contains(".") else {
+                Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
+                return false
+            }
+
+            if sanitizedDomain.hasSuffix("/") {
+                sanitizedDomain = String(sanitizedDomain.dropLast())
+            }
+
+            if !sanitizedDomain.hasPrefix("http://") && !sanitizedDomain.hasPrefix("https://") {
+                sanitizedDomain = String(format: "https://%@", sanitizedDomain)
+            }
+
+            guard let url = URL(string: sanitizedDomain) else {
+                Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
+                return false
+            }
+
+            UserDefaults.standard.set(url.absoluteString, forKey: "favoriteUrl")
+            TipManager.siriFavoriteTip = false
+            return true
+        } catch {
+            print("Error creating regular expression:", error)
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
             return false
         }
-        if sanitizedDomain.suffix(1) == "/" {
-            sanitizedDomain = String(sanitizedDomain.dropLast())
-        }
-        if !sanitizedDomain.hasPrefix("http://") && !sanitizedDomain.hasPrefix("https://") {
-            sanitizedDomain = String(format: "https://%@", sanitizedDomain)
-        }
-        guard let url = URL(string: sanitizedDomain, invalidCharacters: false) else {
-            Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()
-            return false
-        }
-        UserDefaults.standard.set(url.absoluteString, forKey: "favoriteUrl")
-        TipManager.siriFavoriteTip = false
-        return true
     }
 }
 
