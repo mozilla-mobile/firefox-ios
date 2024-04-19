@@ -493,7 +493,6 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        updateWallpaperMetadata()
         dismissModalsIfStartAtHome()
     }
 
@@ -1051,14 +1050,6 @@ class BrowserViewController: UIViewController,
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
             present(alertController, animated: true, completion: nil)
-        }
-    }
-
-    private func updateWallpaperMetadata() {
-        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
-        metadataQueue.async {
-            let wallpaperManager = WallpaperManager()
-            wallpaperManager.checkForUpdates()
         }
     }
 

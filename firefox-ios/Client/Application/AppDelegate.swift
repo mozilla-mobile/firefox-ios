@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
     private var metricKitWrapper = MetricKitWrapper()
+    private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
 
     func application(
         _ application: UIApplication,
@@ -168,6 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.profile.pollCommands(forcePoll: false)
         }
 
+        updateWallpaperMetadata()
         loadBackgroundTabs()
 
         logger.log("applicationDidBecomeActive end",
@@ -231,6 +233,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppEventQueue.wait(for: requiredEvents) { [weak self] in
             self?.isLoadingBackgroundTabs = false
             self?.backgroundTabLoader.loadBackgroundTabs()
+        }
+    }
+
+    private func updateWallpaperMetadata() {
+        wallpaperMetadataQueue.async {
+            let wallpaperManager = WallpaperManager()
+            wallpaperManager.checkForUpdates()
         }
     }
 }
