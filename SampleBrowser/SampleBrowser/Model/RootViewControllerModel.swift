@@ -33,7 +33,7 @@ class RootViewControllerModel {
                 self.navigationToolbarDelegate?.forwardButtonClicked()
             })
         let reloadButton = ToolbarElement(
-            iconName: isReloading ? "Stop" : "Reload",
+            iconName: isReloading ? StandardImageIdentifiers.Large.cross : StandardImageIdentifiers.Large.sync,
             isEnabled: isReloading,
             a11yLabel: isReloading ? "Stop loading website" : "Reload website",
             a11yId: isReloading ? "stopButton" : "reloadButton",
