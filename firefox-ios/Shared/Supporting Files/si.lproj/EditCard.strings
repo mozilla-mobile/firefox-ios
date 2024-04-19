@@ -1,7 +1,4 @@
 /* Title label for the view where user can add their credit card info */
-"CreditCard.EditCard.AddCreditCardTitle.v113" = "ණයපත යොදන්න";
-
-/* Title label for the view where user can add their credit card info */
 "CreditCard.EditCard.AddCreditCardTitle.v122" = "පත එක් කරන්න";
 
 /* Button label for cancelling editing of the credit card details shown in the form */
@@ -45,9 +42,6 @@
 
 /* Button label for saving the credit card details user entered in the form */
 "CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "සුරකින්න";
-
-/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
-"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "පත් සුරැකීම හා ස්වයං පිරවීම";
 
 /* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
 "CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "ගෙවීමේ ක්‍රම සුරකින්න හා පුරවන්න";

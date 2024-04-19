@@ -26,7 +26,7 @@ class FakespotSettingsCardViewModel {
     let footerA11yTitleIdentifier: String = a11yIds.footerTitle
     let footerA11yActionIdentifier: String = a11yIds.footerAction
     let footerActionUrl = FakespotUtils.fakespotUrl
-    var dismissViewController: ((TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
+    var dismissViewController: ((Bool, TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
     var toggleAdsEnabled: (() -> Void)?
     var onExpandStateChanged: ((CollapsibleCardView.ExpandButtonState) -> Void)?
     var expandState: CollapsibleCardView.ExpandButtonState = .collapsed
@@ -74,7 +74,7 @@ class FakespotSettingsCardViewModel {
         guard let footerActionUrl else { return }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingPoweredByFakespotLabel)
         tabManager.addTabsForURLs([footerActionUrl], zombie: false, shouldSelectTab: true)
-        dismissViewController?(.interactionWithALink)
+        dismissViewController?(false, .interactionWithALink)
     }
 }
 
@@ -231,7 +231,7 @@ final class FakespotSettingsCardView: UIView, ThemeApplicable {
         // Send settings telemetry for Fakespot
         FakespotUtils().addSettingTelemetry()
 
-        viewModel?.dismissViewController?(.optingOutOfTheFeature)
+        viewModel?.dismissViewController?(true, .optingOutOfTheFeature)
     }
 
     // MARK: - Accessibility

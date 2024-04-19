@@ -110,7 +110,7 @@
 "Bookmarks.Menu.DesktopBookmarks" = "Սեղանի էջանիշեր";
 
 /* The button to create a new bookmark */
-"Bookmarks.NewBookmark.Label" = "Նոր Էջանշան";
+"Bookmarks.NewBookmark.Label" = "Նոր էջանիշ";
 
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Նոր պանակ";
@@ -173,10 +173,10 @@
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Փոխարկել";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Նոր Ներդիր է բացվել";
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Նոր ներդիրը բացվեց";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Նոր Ներդիր է բացվել";
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "Նոր ներդիրը բացվեց";
 
 /* Context menu item for copying an image to the clipboard */
 "ContextMenu.CopyImageButtonTitle" = "Պատճենել պատկերը";
@@ -194,7 +194,7 @@
 "ContextMenu.OpenInNewTabButtonTitle" = "Բացել նոր ներդիրում";
 
 /* Context menu item for saving an image */
-"ContextMenu.SaveImageButtonTitle" = "Պահպանել պատկերը";
+"ContextMenu.SaveImageButtonTitle" = "Պահել պատկերը";
 
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Կիսվել հղումով";
@@ -263,7 +263,7 @@
 "Downloads.CancelDialog.Cancel" = "Չեղարկել";
 
 /* Alert dialog body when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Message" = "Ցանկանում եք չեղարկե՞լ այս ներբեռնումը։";
+"Downloads.CancelDialog.Message" = "Ցանկանո՞ւմ եք չեղարկել այս ներբեռնումը։";
 
 /* Button declining the cancellation of the download. */
 "Downloads.CancelDialog.Resume" = "Վերսկսել";
@@ -272,7 +272,7 @@
 "Downloads.CancelDialog.Title" = "Չեղարկել ներբեռնումը";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "Ներբեռնումը չեղարկվել է";
+"Downloads.Toast.Cancelled.LabelText" = "Ներբեռնումը չեղարկվեց";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "Ներբեռնումը ձախողվեց";
@@ -305,7 +305,7 @@
 "ErrorPages.Advanced.Button" = "Լրացուցիչ";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Զգուշացում. մենք չենք կարող հաստատել, թե արդյոք ձեր կապակցումը այս կայքին անվտանգ է:";
+"ErrorPages.AdvancedWarning1.Text" = "Զգուշացում. մենք չենք կարող հաստատել, թե արդյոք ձեր կապակցումն այս կայքին անվտանգ է:";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Դա կարող է լինել հարցակվողի կողմից սխալ կազմաձևում կամ խախտում։ Առաջ անցեք, եթե դուք ընդունում եք հնարավոր վտանգը։";
@@ -314,7 +314,7 @@
 "ErrorPages.CertWarning.Description" = "%@-ի սեփականատերը սխալ է տեղադրել իր կայքը։ Ձեր տեղեկատվությունը գողությունից պաշտպանելու համար Firefox֊ը չի միացել այս վեբ կայքին։";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "Այս միացումը անվստահելի է";
+"ErrorPages.CertWarning.Title" = "Այս կապակցումն անվստահելի է";
 
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "Վերադառնալ";
@@ -335,7 +335,7 @@
 "Firefox.HomePage.Title" = "Firefox-ի Տնային էջը";
 
 /* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
-"FirefoxHome.CustomizeHomeButton.Title" = "Հարմարեցնել տնային էջը";
+"FirefoxHome.CustomizeHomeButton.Title" = "Հարմարեցնել տնէջը";
 
 /* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
 "FirefoxHome.Pocket.DiscoverMore" = "Բացահայտեք ավելին";
@@ -383,10 +383,10 @@
 "FxA.ManageAccount" = "Կառավարել հաշիվը";
 
 /* Label when no internet is present */
-"FxA.NoInternetConnection" = "Չկա համացանցային կապակցում";
+"FxA.NoInternetConnection" = "Չկա կապակցում համացանցին";
 
 /* FxA sign in view subtitle */
-"fxa.signin.camera-signin" = "Մուտք գործեք ձեր խցիկի հետ";
+"fxa.signin.camera-signin" = "Մուտք գործեք Ձեր տեսախցիկով";
 
 /* FxA sign in view qr code instructions */
 "fxa.signin.qr-link-instruction" = "Ձեր համակարգչի վրա բացեք Firefox-ը և անցեք firefox.com/pair";
@@ -413,10 +413,10 @@
 "FxAPush_DeviceDisconnected_ThisDevice_body" = "ԱՅս սարքը հաջողությամբ կապախզվել է Firefox Սինքից:";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Սինքը կապախզված է";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Համաժամեցումը կապախզված է";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Սինքը կապախզված է";
+"FxAPush_DeviceDisconnected_title" = "Համաժամեցումը կապախզված է";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
 "FxAPush_DeviceDisconnected_UnknownDevice_body" = "Սարքը կապախզվել է Firefox Սինքից";
@@ -476,7 +476,7 @@
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Բացել Գաղտնի դիտարկմամբ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewTab" = "Բացել Նոր Ներդիր";
+"HomePanel.ContextMenu.OpenInNewTab" = "Բացել նոր ներդիրում";
 
 /* The title for the Remove context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Remove" = "Հեռացնել";
@@ -629,7 +629,7 @@
 "Licenses" = "Արտոնագրեր";
 
 /* Light theme setting in Reading View settings */
-"Light" = "Բաց";
+"Light" = "Լուսավոր";
 
 /* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "Load original page" = "Բեռնել սկզբնական էջը";
@@ -645,9 +645,6 @@
 
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Իմանալ ավելին";
-
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Մուտքագրումները և գաղտնաբառերը պահպանելու և ինքնալրացնելու համար միացրեք Face ID-ն, Touch ID-ն կամ սարքի անցակոդը:";
 
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Շարունակել";
@@ -694,23 +691,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Զտիչ";
 
-/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
-"LoginsList.NoLoginsFound.Description.v119" = "Պահված մուտքագրումները կցուցադրվեն այստեղ: Եթե ձեր մուտքագրումները պահել եք %@-ում այլ սարքում, ապա մուտք գործեք ձեր հաշիվ:";
-
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "Մուտքագրումներ չկան";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Որոնման հետ համընկնում չկա։";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "Համապատասխան մուտքագրում չկա";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "Չեղարկել";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "Որոնել մուտքագրումներ";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "Ընտրեք գաղտնաբառ լրացնելու համար";
@@ -743,9 +728,9 @@
 "Menu.AddToReadingList.Confirm" = "Ավելացվել է ընթերցման ցուցակում";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Ավելացնել դյուրանցումներին";
+"Menu.AddToShortcuts.v99" = "Հավելել դյուրանցումներին";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Էջանիշեր";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -757,19 +742,19 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Հարմարեցնել տնայինը";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Ներբեռնումներ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "Պաշտպանությունները անջատված են այս կայքի համար";
+"Menu.EnhancedTrackingProtectionOff.Title" = "Պաշտպանություններն ԱՆՋԱՏՎԱԾ են այս կայքի համար";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "Պաշտպանությունը միացված է այս կայքի համար";
+"Menu.EnhancedTrackingProtectionOn.Title" = "Պաշտպանությունները ՄԻԱՑՎԱԾ են այս կայքի համար";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Օգնություն";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Պատմություն";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
@@ -781,16 +766,16 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Միացնել Գիշերային ռեժիմը";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Գաղտնաբառեր";
 
 /* The title for the button that lets you paste into the location bar */
-"Menu.Paste.Title" = "Տեղադրել";
+"Menu.Paste.Title" = "Փակցնել";
 
 /* The title for the button that lets you paste and go to a URL */
-"Menu.PasteAndGo.Title" = "Տեղադրել և Առաջ";
+"Menu.PasteAndGo.Title" = "Փակցնել և գնալ";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Ընթերցացուցակ";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
@@ -860,7 +845,7 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Կրիպտո հանցագործները գաղտնի օգտագործում են ձեր համակարգի հաշվարկային ուժը թվային արժույթները ականապատելու համար։ Նման գրությունները չորացնում են ձեր մարտկոցը, դանդաղեցնում ձեր համակարգիչը և կարող են մեծացնել ձեր էներգիայի հաշիվը։";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Ձեր զննարկիչի և համակարգչի կարգավորումները եզակի են։ Մատնահետքերի հավաքածուները օգտագործում են այս եզակի ընտրանքներից բաղկացած շարքը՝ ձեր հաշիվը ստեղծելու համար, որը կարող է օգտագործվել ձեզ ցանցին զննելու ժամանակ հետևելու համար։";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Ձեր դիտարկիչի և համակարգչի կարգավորումները եզակի են։ Մատնահետքերի հավաքածուները օգտագործում են այս եզակի ընտրանքներից բաղկացած շարքը՝ ձեր հաշիվը ստեղծելու համար, որը կարող է օգտագործվել ձեզ ցանցին զննելու ժամանակ հետևելու համար։";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Հասարակական ցանցերը հետքեր են տեղադրում այլ կայքերում՝ ձեր ավելի ընդգրկուն նպատակային հաշիվը ստեղծելու համար։ Այս հետքերի արգելափակումը կնվազեցնի ձեր առցանց գործունեության մասին հավաքած տեղեկությունների քանակը։";
@@ -887,7 +872,7 @@
 "Navigation Toolbar" = "Ուղղորդման գործիքագոտի";
 
 /* Accessibility label for the New Tab button in the tab toolbar. */
-"New Tab" = "Նոր Ներդիր";
+"New Tab" = "Նոր ներդիր";
 
 /* Restore Tabs Negative Action */
 "No" = "Ոչ";
@@ -944,7 +929,7 @@
 "ProtectionStatus.NotSecure" = "Կապակցումն անվտանգ չէ";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "Կապակցումը ապահով է";
+"ProtectionStatus.Secure" = "Կապակցումն ապահով է";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "Որոգ որոնման որոնիչներ";
@@ -1016,7 +1001,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Տվյալը անվավեր է";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Գնացեք սարքի «Կարգավորումներ» > «Firefox»: Թույլ տվեք Firefox-ին մուտք գործել տեսախցիկ:";
+"ScanQRCode.PermissionError.Message.v100" = "Գնացեք սարքի «Կարգավորումներ» > «Firefox»: Թույլ տվեք Firefox-ին մատչել տեսախցիկին:";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Սկանավորել QR կոդը";
@@ -1091,7 +1076,7 @@
 "SendTo.Error.OK.Button" = "Լավ";
 
 /* Title of error prompt displayed when an invalid URL is shared. */
-"SendTo.Error.Title" = "Տվյալ հղումը հնարավոր չէ համօգտագործել:";
+"SendTo.Error.Title" = "Տվյալ հղումը հնարավոր չէ տարածել:";
 
 /* Title of the dialog that allows you to send a tab to a different device */
 "SendTo.NavBar.Title" = "Ուղարկել ներդիրը";
@@ -1159,9 +1144,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (հարցումը վերատեղադրեք %s-ով)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v112" = "Ինքնալրացնել բանկային քարտերը";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Մաքրել ողջ կայքի տվյալները";
 
@@ -1199,7 +1181,7 @@
 "Settings.Disconnect.DestructiveButton" = "Կապախզել";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Կապախզե՞լ Սինքը";
+"Settings.Disconnect.Title" = "Անջատե՞լ հ.-ժամեցումը";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Շեմ";
@@ -1241,10 +1223,10 @@
 "Settings.DisplayTheme.SystemTheme.SwitchTitle" = "Օգտագործել համակարգի լուսավոր/մուգ աշխատատեսակը";
 
 /* Theme picker settings section title */
-"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Հիմնապատկերի ընտրիչ";
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "Ոճի ընտրիչ";
 
 /* Title in main app settings for Theme settings */
-"Settings.DisplayTheme.Title.v2" = "Հիմնապատկեր";
+"Settings.DisplayTheme.Title.v2" = "Ոճ";
 
 /* Label used for the device name settings section. */
 "Settings.FxA.DeviceName" = "Սարքի անունը";
@@ -1310,7 +1292,7 @@
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox-ի պաստառ, սերուլյան օրինակ:";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
-"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Կանխադրված մաքուր պաստառ:";
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Սկզբնադիր մաքուր պաստառ:";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox-ի պաստառ, սերուլյան օրինակ:";
@@ -1400,7 +1382,7 @@
 "Settings.NewTab.Option.HomePage" = "Տնէջ";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
-"Settings.NewTab.SectionName" = "Նոր Ներդիր";
+"Settings.NewTab.SectionName" = "Նոր ներդիր";
 
 /* Title displayed in header of the setting panel. */
 "Settings.NewTab.Title" = "Նոր ներդիր";
@@ -1679,7 +1661,7 @@
 "TabTray.OpenNewTab.KeyCodeTitle" = "Բացել նոր ներդիրը";
 
 /* The title on the button to look at private tabs. */
-"TabTray.SegmentedControlTitles.PrivateTabs" = "Մասնավոր";
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Գաղտնի";
 
 /* The title on the button to look at synced tabs. */
 "TabTray.SegmentedControlTitles.SyncedTabs" = "Համաժամեցված";
@@ -1745,7 +1727,7 @@
 "Twitter" = "Twitter";
 
 /* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
-"UIMenuItem.PasteGo" = "Տեղադրել և Առաջ";
+"UIMenuItem.PasteGo" = "Փակցնել և գնալ";
 
 /* Search in New Tab Text selection menu item */
 "UIMenuItem.SearchWithFirefox" = "Որոնել Firefox֊-ով";

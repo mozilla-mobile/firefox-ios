@@ -42,7 +42,32 @@ import Storage
 /// 4. a TabEvent, with whatever parameters are needed.
 ///    i) a case to map the event to the event label (var label)
 ///   ii) a case to map the event to the event handler (func handle:with:)
+///
+/// ========= TabEvents & Multi-Window =========
+///
+/// Some event handlers are meant to operate in a global manner, responding to tab events
+/// across all windows (see: GlobalTabEventHandlers.swift). Other handlers may only care
+/// about tab events specific to their window. You may control how tab events are delivered
+/// to your handler by the response type setting for `tabEventWindowResponseType`.
+
+enum TabEventHandlerWindowResponseType {
+    /// The tab event handler will receive tab events for all windows on iPad.
+    case allWindows
+    /// The tab event handler will receive tab events only for a specific window on iPad.
+    case singleWindow(WindowUUID)
+
+    func shouldSendHandlerEvent(for tabWindowUUID: WindowUUID) -> Bool {
+        switch self {
+        case .allWindows:
+            return true
+        case .singleWindow(let targetUUID):
+            return targetUUID == tabWindowUUID
+        }
+    }
+}
+
 protocol TabEventHandler: AnyObject {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { get }
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
@@ -169,14 +194,14 @@ extension TabEventHandler {
         let wrapper = ObserverWrapper()
         wrapper.observers = events.map { [weak self] eventType in
             center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
+                guard let self else { return }
                 guard let tab = notification.object as? Tab,
-                    let event = notification.userInfo?["payload"] as? TabEvent else {
-                        return
+                      let event = notification.userInfo?["payload"] as? TabEvent,
+                      self.tabEventWindowResponseType.shouldSendHandlerEvent(for: tab.windowUUID) else {
+                    return
                 }
 
-                if let me = self {
-                    event.handle(tab, with: me)
-                }
+                event.handle(tab, with: self)
             }
         }
 

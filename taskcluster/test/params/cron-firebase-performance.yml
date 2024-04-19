@@ -3,6 +3,7 @@ base_repository: https://github.com/mozilla-mobile/firefox-ios
 base_rev: 0c4aebc542bf79294eab9bd485b1038676edd41c
 build_date: 1705010623
 build_number: 1
+commit_message: ""
 do_not_optimize: []
 enable_always_target: true
 existing_tasks: {}
@@ -19,6 +20,7 @@ optimize_strategies: null
 optimize_target_tasks: true
 owner: cron@noreply.mozilla.org
 project: firefox-ios
+pull_request_number: null
 pushdate: 0
 pushlog_id: '0'
 repository_type: git

@@ -38,7 +38,7 @@
 "Menu.SeeAllAction.Title" = "Տեսնել բոլորը";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
-"Menu.SharePageAction.Title" = "Համօգտագործել էջը՝…";
+"Menu.SharePageAction.Title" = "Համօգտագործել էջը՝";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
 "Menu.ViewDekstopSiteAction.Title" = "Դեսքթոփ կայքի հարցում";

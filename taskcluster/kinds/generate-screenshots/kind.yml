@@ -5,9 +5,9 @@
 loader: ffios_taskgraph.loader.screenshots_locales:loader
 
 transforms:
-    - ffios_taskgraph.transforms.bitrise:transforms
-    - taskgraph.transforms.run:transforms
-    - taskgraph.transforms.task:transforms
+    - ffios_taskgraph.transforms.generate_screenshots
+    - ffios_taskgraph.transforms.bitrise
+    - taskgraph.transforms.task
 
 kind-dependencies:
     - build
@@ -18,9 +18,12 @@ not-for-locales:
 locales-per-chunk: 6
 
 task-defaults:
-    bitrise-workflow: L10nScreenshotsTests
-    build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
     description: Generate localized screenshots by delegating the work to bitrise.io
+    worker-type: bitrise
+    bitrise:
+        workflows:
+            - L10nScreenshotsTests
+    build-derived-data-path: {artifact-reference: '<build/public/L10nBuild/l10n-screenshots-dd.zip>'}
     dependencies:
         build: build-screenshots
     index:
