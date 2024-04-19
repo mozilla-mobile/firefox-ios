@@ -6,7 +6,6 @@ import Foundation
 
 public struct WindowData: Codable {
     public let id: UUID
-    public let isPrimary: Bool
     public let activeTabId: UUID
     public let tabData: [TabData]
 
@@ -18,11 +17,9 @@ public struct WindowData: Codable {
     ///   - activeTabId: the ID of the currently selected tab
     ///   - tabData: a list of all tabs associated with the window
     public init(id: UUID,
-                isPrimary: Bool = true,
                 activeTabId: UUID,
                 tabData: [TabData]) {
         self.id = id
-        self.isPrimary = isPrimary
         self.activeTabId = activeTabId
         self.tabData = tabData
     }

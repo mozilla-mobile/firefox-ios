@@ -175,7 +175,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(website.textFields.firstMatch)
         website.textFields.firstMatch.tap()
         website.textFields.firstMatch.typeText("Shoe")
-        mozWaitForElementToExist(website.otherElements.buttons.firstMatch)
+        mozWaitForElementToExist(website.otherElements.buttons.firstMatch, timeout: 30)
         website.otherElements.buttons.element(boundBy: 1).tap()
         waitUntilPageLoad()
         website.images.firstMatch.tap()

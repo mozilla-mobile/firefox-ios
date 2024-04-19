@@ -71,6 +71,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
     var tabDisplayType: TabDisplayType = .TabGrid
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let tabManager: TabManager
     private let collectionView: UICollectionView
 
@@ -859,6 +860,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension LegacyTabDisplayManager: TabEventHandler {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard let indexPath = getIndexPath(tab: tab) else { return }
         refreshCell(atIndexPath: indexPath)

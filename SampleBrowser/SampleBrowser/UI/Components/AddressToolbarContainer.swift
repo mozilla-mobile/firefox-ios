@@ -12,7 +12,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 
 class AddressToolbarContainer: UIView, ThemeApplicable {
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
-    private lazy var regularToolbar: BrowserAddressToolbar = .build()
+    private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private weak var delegate: AddressToolbarContainerDelegate?
 
     override init(frame: CGRect) {
