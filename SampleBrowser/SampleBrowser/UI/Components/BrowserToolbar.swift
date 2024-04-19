@@ -9,6 +9,7 @@ protocol ToolbarDelegate: AnyObject {
     func forwardButtonClicked()
     func reloadButtonClicked()
     func stopButtonClicked()
+    func menuButtonClicked()
 }
 
 class BrowserToolbar: UIToolbar {

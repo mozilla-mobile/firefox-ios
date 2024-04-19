@@ -201,6 +201,10 @@ class RootViewController: UIViewController,
         browserVC.stop()
     }
 
+    func menuButtonClicked() {
+        didClickMenu()
+    }
+
     // MARK: - NavigationDelegate
 
     func onLoadingStateChange(loading: Bool) {

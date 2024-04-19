@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import ToolbarKit
 
 class RootViewControllerModel {
@@ -44,7 +45,15 @@ class RootViewControllerModel {
                     self.navigationToolbarDelegate?.reloadButtonClicked()
                 }
             })
-        let actions = [backButton, forwardButton, reloadButton]
+        let menuButton = ToolbarElement(
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            isEnabled: true,
+            a11yLabel: "Open Menu",
+            a11yId: "appMenuButton",
+            onSelected: {
+                self.navigationToolbarDelegate?.menuButtonClicked()
+            })
+        let actions = [backButton, forwardButton, reloadButton, menuButton]
 
         return NavigationToolbarContainerModel(actions: actions)
     }
