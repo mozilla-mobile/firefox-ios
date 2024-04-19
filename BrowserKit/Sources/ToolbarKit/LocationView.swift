@@ -231,8 +231,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         UIView.transition(
             with: textField,
             duration: UX.transitionDuration,
-            options: options)
-        {
+            options: options) {
             textField.textAlignment = textAlignment
         } completion: { _ in
             completion?()
