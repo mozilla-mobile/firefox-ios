@@ -7,11 +7,11 @@ import ToolbarKit
 import UIKit
 
 protocol NavigationToolbarDelegate: AnyObject {
-    func backButtonClicked()
-    func forwardButtonClicked()
-    func reloadButtonClicked()
-    func stopButtonClicked()
-    func menuButtonClicked()
+    func backButtonTapped()
+    func forwardButtonTapped()
+    func reloadButtonTapped()
+    func stopButtonTapped()
+    func menuButtonTapped()
 }
 
 class NavigationToolbarContainer: UIView, ThemeApplicable {

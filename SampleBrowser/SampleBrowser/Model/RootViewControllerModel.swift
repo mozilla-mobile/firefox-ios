@@ -24,7 +24,7 @@ class RootViewControllerModel {
             a11yLabel: "Navigate Back",
             a11yId: "backButton",
             onSelected: {
-                self.navigationToolbarDelegate?.backButtonClicked()
+                self.navigationToolbarDelegate?.backButtonTapped()
             })
         let forwardButton = ToolbarElement(
             iconName: "Forward",
@@ -32,7 +32,7 @@ class RootViewControllerModel {
             a11yLabel: "Navigate Forward",
             a11yId: "forwardButton",
             onSelected: {
-                self.navigationToolbarDelegate?.forwardButtonClicked()
+                self.navigationToolbarDelegate?.forwardButtonTapped()
             })
         let reloadButton = ToolbarElement(
             iconName: isReloading ? StandardImageIdentifiers.Large.cross : StandardImageIdentifiers.Large.sync,
@@ -41,9 +41,9 @@ class RootViewControllerModel {
             a11yId: isReloading ? "stopButton" : "reloadButton",
             onSelected: {
                 if self.isReloading {
-                    self.navigationToolbarDelegate?.stopButtonClicked()
+                    self.navigationToolbarDelegate?.stopButtonTapped()
                 } else {
-                    self.navigationToolbarDelegate?.reloadButtonClicked()
+                    self.navigationToolbarDelegate?.reloadButtonTapped()
                 }
             })
         let menuButton = ToolbarElement(
@@ -52,7 +52,7 @@ class RootViewControllerModel {
             a11yLabel: "Open Menu",
             a11yId: "appMenuButton",
             onSelected: {
-                self.navigationToolbarDelegate?.menuButtonClicked()
+                self.navigationToolbarDelegate?.menuButtonTapped()
             })
         let actions = [backButton, forwardButton, reloadButton, menuButton]
 

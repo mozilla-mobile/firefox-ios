@@ -162,23 +162,23 @@ class RootViewController: UIViewController,
 
     // MARK: - BrowserToolbarDelegate
 
-    func backButtonClicked() {
+    func backButtonTapped() {
         browserVC.goBack()
     }
 
-    func forwardButtonClicked() {
+    func forwardButtonTapped() {
         browserVC.goForward()
     }
 
-    func reloadButtonClicked() {
+    func reloadButtonTapped() {
         browserVC.reload()
     }
 
-    func stopButtonClicked() {
+    func stopButtonTapped() {
         browserVC.stop()
     }
 
-    func menuButtonClicked() {
+    func menuButtonTapped() {
         didClickMenu()
     }
 
