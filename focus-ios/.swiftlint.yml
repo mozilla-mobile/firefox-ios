@@ -8,11 +8,11 @@ only_rules: # Only enforce these rules, ignore all others
   # - comma
   # - comment_spacing
   # - compiler_protocol_init
-  # - computed_accessors_order
+  - computed_accessors_order
   # - control_statement
   # - duplicate_conditions
   # - dynamic_inline
-  # - empty_enum_arguments
+  - empty_enum_arguments
   # - empty_parameters
   # - empty_parentheses_with_trailing_closure
   # - for_where

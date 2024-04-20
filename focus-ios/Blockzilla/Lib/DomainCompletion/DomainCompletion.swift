@@ -48,6 +48,14 @@ public class CustomCompletionSource: CustomAutocompleteSource {
         self.setCustomDomainSetting = setCustomDomainSetting
     }
 
+    private func getRegex() -> NSRegularExpression {
+        do {
+            return try NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+        } catch {
+            fatalError("Invalid regex pattern")
+        }
+    }
+
     public var enabled: Bool { return enableCustomDomainAutocomplete() }
 
     public func getSuggestions() -> AutoCompleteSuggestions {
