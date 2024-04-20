@@ -9,7 +9,6 @@ import ComponentLibrary
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
     private struct UX {
-        static let fontSize: CGFloat = 19
         static let maxLabelLines: Int = 0
         static let buttonCornerRadius: CGFloat = 8
         static let defaultContentSize: CGFloat = 0
@@ -22,7 +21,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     private var onboardingMessageLabel: UILabel = . build { label in
         label.text = .Settings.Passwords.OnboardingMessage
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
+        label.font = FXFontStyles.Regular.title3.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = UX.maxLabelLines
     }
@@ -30,7 +29,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     private lazy var learnMoreButton: LinkButton = .build { button in
         button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
     }
 
     private lazy var continueButton: PrimaryRoundedButton = .build { button in
