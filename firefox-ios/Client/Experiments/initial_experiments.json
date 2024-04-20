@@ -2,6 +2,365 @@
   "data": [
     {
       "schemaVersion": "1.12.0",
+      "slug": "app-customization-in-onboarding-ios",
+      "id": "app-customization-in-onboarding-ios",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "App Customization in Onboarding (iOS)",
+      "userFacingDescription": "Include App Customization options in IOS Onboarding",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-onboarding-framework-feature-release-12",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "onboarding-framework-feature"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "onboarding",
+          "priority": "primary"
+        },
+        {
+          "slug": "default_browser",
+          "priority": "secondary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {}
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "customization-theme": {
+                    "card-type": "multiple-choice",
+                    "order": 40,
+                    "title": "Onboarding/Onboarding.Customization.Theme.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Theme.Description.v123",
+                    "image": "themeing",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      }
+                    },
+                    "multiple-choice-buttons": [
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.System.Action.v123",
+                        "image": "theme-system",
+                        "action": "theme-system-default"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Light.Action.v123",
+                        "image": "theme-light",
+                        "action": "theme-light"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Dark.Action.v123",
+                        "image": "theme-dark",
+                        "action": "theme-dark"
+                      }
+                    ],
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  },
+                  "customization-toolbar": {
+                    "card-type": "multiple-choice",
+                    "order": 41,
+                    "title": "Onboarding/Onboarding.Customization.Toolbar.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Toolbar.Description.v123",
+                    "image": "toolbar",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      }
+                    },
+                    "multiple-choice-buttons": [
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Top.Action.v123",
+                        "image": "toolbar-top",
+                        "action": "toolbar-top"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Bottom.Action.v123",
+                        "image": "toolbar-bottom",
+                        "action": "toolbar-bottom"
+                      }
+                    ],
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-b",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "customization-intro": {
+                    "card-type": "basic",
+                    "order": 41,
+                    "title": "Onboarding/Onboarding.Customization.Intro.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Intro.Description.v123",
+                    "image": "themeing",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Intro.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      },
+                      "secondary": {
+                        "title": "Onboarding/Onboarding.Customization.Intro.Skip.Action.v123",
+                        "action": "end-onboarding"
+                      }
+                    },
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  },
+                  "customization-theme": {
+                    "card-type": "multiple-choice",
+                    "order": 42,
+                    "title": "Onboarding/Onboarding.Customization.Theme.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Theme.Description.v123",
+                    "image": "themeing",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      }
+                    },
+                    "multiple-choice-buttons": [
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.System.Action.v123",
+                        "image": "theme-system",
+                        "action": "theme-system-default"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Light.Action.v123",
+                        "image": "theme-light",
+                        "action": "theme-light"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Dark.Action.v123",
+                        "image": "theme-dark",
+                        "action": "theme-dark"
+                      }
+                    ],
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  },
+                  "customization-toolbar": {
+                    "card-type": "multiple-choice",
+                    "order": 43,
+                    "title": "Onboarding/Onboarding.Customization.Toolbar.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Toolbar.Description.v123",
+                    "image": "toolbar",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      }
+                    },
+                    "multiple-choice-buttons": [
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Top.Action.v123",
+                        "image": "toolbar-top",
+                        "action": "toolbar-top"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Bottom.Action.v123",
+                        "image": "toolbar-bottom",
+                        "action": "toolbar-bottom"
+                      }
+                    ],
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-c",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "onboarding-framework-feature",
+              "enabled": true,
+              "value": {
+                "cards": {
+                  "welcome": {
+                    "link": null
+                  },
+                  "customization-intro": {
+                    "card-type": "basic",
+                    "order": 1,
+                    "title": "Onboarding/Onboarding.Customization.Intro.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Intro.Description.v123",
+                    "image": "toolbar",
+                    "link": {
+                      "title": "Onboarding/Onboarding.Welcome.Link.Action.v114",
+                      "url": "https://www.mozilla.org/privacy/firefox/"
+                    },
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Intro.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      },
+                      "secondary": {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Skip.Action.v123",
+                        "action": "forward-three-card"
+                      }
+                    },
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  },
+                  "customization-theme": {
+                    "card-type": "multiple-choice",
+                    "order": 2,
+                    "title": "Onboarding/Onboarding.Customization.Theme.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Theme.Description.v123",
+                    "image": "themeing",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      }
+                    },
+                    "multiple-choice-buttons": [
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.System.Action.v123",
+                        "image": "theme-system",
+                        "action": "theme-system-default"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Light.Action.v123",
+                        "image": "theme-light",
+                        "action": "theme-light"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Dark.Action.v123",
+                        "image": "theme-dark",
+                        "action": "theme-dark"
+                      }
+                    ],
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  },
+                  "customization-toolbar": {
+                    "card-type": "multiple-choice",
+                    "order": 3,
+                    "title": "Onboarding/Onboarding.Customization.Toolbar.Title.v123",
+                    "body": "Onboarding/Onboarding.Customization.Toolbar.Description.v123",
+                    "image": "toolbar",
+                    "buttons": {
+                      "primary": {
+                        "title": "Onboarding/Onboarding.Customization.Theme.Continue.Action.v123",
+                        "action": "forward-one-card"
+                      }
+                    },
+                    "multiple-choice-buttons": [
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Top.Action.v123",
+                        "image": "toolbar-top",
+                        "action": "toolbar-top"
+                      },
+                      {
+                        "title": "Onboarding/Onboarding.Customization.Toolbar.Bottom.Action.v123",
+                        "image": "toolbar-bottom",
+                        "action": "toolbar-bottom"
+                      }
+                    ],
+                    "onboarding-type": "fresh-install",
+                    "prerequisites": [
+                      "ALWAYS"
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true' && is_phone) && (app_version|versionCompare('125.2.0') >= 0)))",
+      "startDate": "2024-04-19",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2024-04-19T19:58:53.497219Z"
+    },
+    {
+      "schemaVersion": "1.12.0",
       "slug": "ios-dma-onboarding",
       "id": "ios-dma-onboarding",
       "arguments": {},
@@ -139,6 +498,111 @@
       "localizations": null,
       "locales": null,
       "publishedDate": null
+    },
+    {
+      "schemaVersion": "1.12.0",
+      "slug": "ios-splash-screen-timing-test-release",
+      "id": "ios-splash-screen-timing-test-release",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "iOS Splash Screen Timing Test Release",
+      "userFacingDescription": "Adds a splash screen prior to first-run onboarding and gauges the impact to retention.",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-splash-screen-release-2",
+        "start": 0,
+        "count": 10000,
+        "total": 10000
+      },
+      "featureIds": [
+        "splash-screen"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "onboarding",
+          "priority": "primary"
+        },
+        {
+          "slug": "default_browser",
+          "priority": "secondary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "splash-screen",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "maximum_duration_ms": 0
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "splash-screen",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "maximum_duration_ms": 1500
+              }
+            }
+          ]
+        },
+        {
+          "slug": "treatment-b",
+          "ratio": 1,
+          "feature": {
+            "featureId": "this-is-included-for-mobile-pre-96-support",
+            "enabled": false,
+            "value": {}
+          },
+          "features": [
+            {
+              "featureId": "splash-screen",
+              "enabled": true,
+              "value": {
+                "enabled": true,
+                "maximum_duration_ms": 2000
+              }
+            }
+          ]
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('125.2.0') >= 0)))",
+      "startDate": "2024-04-19",
+      "enrollmentEndDate": null,
+      "endDate": null,
+      "proposedDuration": 28,
+      "proposedEnrollment": 14,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false,
+      "localizations": null,
+      "locales": null,
+      "publishedDate": "2024-04-19T18:09:09.240697Z"
     }
   ]
 }

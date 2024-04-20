@@ -357,7 +357,7 @@ class TrackingProtectionViewController: UIViewController {
         let urlToDocumentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        if let installDate = (try! FileManager.default.attributesOfItem(atPath: urlToDocumentsFolder.path)[FileAttributeKey.creationDate]) as? Date {
+        if let installDate = (try? FileManager.default.attributesOfItem(atPath: urlToDocumentsFolder.path)[FileAttributeKey.creationDate]) as? Date {
             let stringDate = dateFormatter.string(from: installDate)
             return stringDate
         }
