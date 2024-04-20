@@ -26,7 +26,7 @@ public protocol CustomAutocompleteSource: AutocompleteSource {
 }
 
 public class CustomCompletionSource: CustomAutocompleteSource {
-    private lazy var regex = try! NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+    private lazy var regex = getRegex()
     var enableCustomDomainAutocomplete: () -> Bool
     var getCustomDomainSetting: () -> AutoCompleteSuggestions
     var setCustomDomainSetting: ([String]) -> Void
@@ -39,6 +39,14 @@ public class CustomCompletionSource: CustomAutocompleteSource {
         self.enableCustomDomainAutocomplete = enableCustomDomainAutocomplete
         self.getCustomDomainSetting = getCustomDomainSetting
         self.setCustomDomainSetting = setCustomDomainSetting
+    }
+
+    private func getRegex() -> NSRegularExpression {
+        do {
+            return try NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
+        } catch {
+            fatalError("Invalid regex pattern")
+        }
     }
 
     public var enabled: Bool { return enableCustomDomainAutocomplete() }
@@ -107,7 +115,11 @@ class TopDomainsCompletionSource: AutocompleteSource {
 
     private lazy var topDomains: [String] = {
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")
-        return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
+        do {
+            return try String(contentsOfFile: filePath!).components(separatedBy: "\n")
+        } catch {
+            fatalError("Invalid content in \(filePath!)")
+        }
     }()
 
     func getSuggestions() -> AutoCompleteSuggestions {

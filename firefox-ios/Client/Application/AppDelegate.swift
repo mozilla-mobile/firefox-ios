@@ -33,6 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var notificationSurfaceManager = NotificationSurfaceManager()
     lazy var tabDataStore = DefaultTabDataStore()
     lazy var windowManager = WindowManagerImplementation()
+    lazy var backgroundTabLoader: BackgroundTabLoader = {
+        return DefaultBackgroundTabLoader(tabQueue: (AppContainer.shared.resolve() as Profile).queue)
+    }()
+    private var isLoadingBackgroundTabs = false
 
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
@@ -41,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
     private var metricKitWrapper = MetricKitWrapper()
+    private let wallpaperMetadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
 
     func application(
         _ application: UIApplication,
@@ -164,6 +169,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.profile.pollCommands(forcePoll: false)
         }
 
+        updateWallpaperMetadata()
+        loadBackgroundTabs()
+
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -210,6 +218,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
         widgetManager?.writeWidgetKitTopSites()
+    }
+
+    private func loadBackgroundTabs() {
+        guard !isLoadingBackgroundTabs else { return }
+
+        // We want to ensure that both the startup flow as well as all window tab restorations
+        // are completed before we attempt to load a background tab. Reminder: we currently do
+        // not know which window will actually open the tab, that is determined by iOS because
+        // the tab is opened via `applicationHelper.open()`.
+        var requiredEvents: [AppEvent] = [.startupFlowComplete]
+        requiredEvents += windowManager.allWindowUUIDs(includingReserved: true).map { .tabRestoration($0) }
+        isLoadingBackgroundTabs = true
+        AppEventQueue.wait(for: requiredEvents) { [weak self] in
+            self?.isLoadingBackgroundTabs = false
+            self?.backgroundTabLoader.loadBackgroundTabs()
+        }
+    }
+
+    private func updateWallpaperMetadata() {
+        wallpaperMetadataQueue.async {
+            let wallpaperManager = WallpaperManager()
+            wallpaperManager.checkForUpdates()
+        }
     }
 }
 
