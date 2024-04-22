@@ -14,7 +14,6 @@ protocol FindInPageBarDelegate: AnyObject {
 }
 
 class FindInPageBar: UIView, ThemeApplicable {
-
     private static let savedTextKey = "findInPageSavedTextKey"
 
     weak var delegate: FindInPageBarDelegate?
