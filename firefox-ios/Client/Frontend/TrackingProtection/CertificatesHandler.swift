@@ -21,16 +21,16 @@ class CertificatesHandler {
 
     /// Extracts and handles the certificate chain.
     func handleCertificates() {
-        if let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] {
-            for (_, certificate) in certificateChain.enumerated() {
-                let certificateData = SecCertificateCopyData(certificate) as Data
-                do {
-                    let certificate = try Certificate(derEncoded: Array(data))
-                    certificates.append(certificate)
-                } catch {
-                }
+        guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
+            return
+        }
+        for (_, certificate) in certificateChain.enumerated() {
+            let certificateData = SecCertificateCopyData(certificate) as Data
+            do {
+                let certificate = try Certificate(derEncoded: Array(certificateData))
+                certificates.append(certificate)
+            } catch {
             }
-        } else {
         }
     }
 }
