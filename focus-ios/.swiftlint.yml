@@ -7,16 +7,16 @@ only_rules: # Only enforce these rules, ignore all others
   # - colon
   # - comma
   # - comment_spacing
-  # - compiler_protocol_init
-  # - computed_accessors_order
+  - compiler_protocol_init
+  - computed_accessors_order
   # - control_statement
   # - duplicate_conditions
   # - dynamic_inline
-  # - empty_enum_arguments
+  - empty_enum_arguments
   # - empty_parameters
   # - empty_parentheses_with_trailing_closure
   # - for_where
-  # - force_try
+  - force_try
   - implicit_getter
   - inclusive_language
   - invalid_swiftlint_command
