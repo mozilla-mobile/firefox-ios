@@ -64,7 +64,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         return tab?.mimeType == MIMEType.PDF && shouldScrollToTop
     }
 
-    private var shouldScrollToTop = false
+    var shouldScrollToTop = false
 
     private var isZoomedOut = false
     private var lastZoomedScale: CGFloat = 0
@@ -216,10 +216,6 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
         observedScrollViews.remove(scrollView)
         scrollView.removeObserver(self, forKeyPath: KVOConstants.contentSize.rawValue)
-    }
-
-    func setShouldScrollToTop() {
-        shouldScrollToTop = true
     }
 
     override func observeValue(
@@ -442,6 +438,13 @@ private extension TabScrollingController {
         }
         return 1 - abs(headerTopOffset / topScrollHeight)
     }
+
+    private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
+        scrollView.contentOffset = CGPoint(
+            x: contentOffsetBeforeAnimation.x,
+            y: y
+        )
+    }
 }
 
 extension TabScrollingController: UIGestureRecognizerDelegate {
@@ -514,12 +517,5 @@ extension TabScrollingController: UIScrollViewDelegate {
             return false
         }
         return true
-    }
-
-    func setOffset(y: CGFloat, for scrollView: UIScrollView) {
-        scrollView.contentOffset = CGPoint(
-            x: contentOffsetBeforeAnimation.x,
-            y: y
-        )
     }
 }
