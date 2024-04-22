@@ -15,7 +15,7 @@ protocol SearchBarDelegate: AnyObject {
 }
 
 protocol MenuDelegate: AnyObject {
-    func didClickMenu()
+    func didTapMenu()
 }
 
 class BrowserSearchBar: UIView, UISearchBarDelegate {
@@ -30,7 +30,7 @@ class BrowserSearchBar: UIView, UISearchBarDelegate {
     private lazy var menuButton: UIButton = .build { [self] button in
         let image = UIImage(named: "Menu")?.withTintColor(UIColor(named: "AccentColor")!)
         button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapMenu), for: .touchUpInside)
         button.backgroundColor = .systemBackground
     }
 
@@ -75,8 +75,8 @@ class BrowserSearchBar: UIView, UISearchBarDelegate {
     // MARK: - Private
 
     @objc
-    private func didClickMenu() {
-        menuDelegate?.didClickMenu()
+    private func didTapMenu() {
+        menuDelegate?.didTapMenu()
     }
 
     private func setupSearchBar() {
