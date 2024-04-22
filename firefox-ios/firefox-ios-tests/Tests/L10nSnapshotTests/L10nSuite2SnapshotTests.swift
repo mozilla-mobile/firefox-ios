@@ -178,6 +178,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToExist(website.otherElements.buttons.firstMatch, timeout: 30)
         website.otherElements.buttons.element(boundBy: 1).tap()
         waitUntilPageLoad()
+        app.swipeUp()
         mozWaitForElementToExist(website.staticTexts["Sponsored"].firstMatch)
         mozWaitForElementToExist(website.staticTexts["Options"].firstMatch)
         website.staticTexts["Options"].firstMatch.tap()
