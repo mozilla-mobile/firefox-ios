@@ -25,7 +25,8 @@ public struct SearchProviderModel {
     public static let searchProviderList = [
         SearchProviderModel(name: BasicSearchProvider.google.rawValue,
                             regexp: #"^https:\/\/www\.google\.(?:.+)\/search"#,
-                            queryParam: "q", codeParam: "client",
+                            queryParam: "q",
+                            codeParam: "client",
                             codePrefixes: ["firefox"],
                             followOnParams: ["oq", "ved", "ei"],
                             extraAdServersRegexps: [ #"^https?:\/\/www\.google(?:adservices)?\.com\/(?:pagead\/)?aclk"#, #"^(http|https):\/\/clickserve.dartsearch.net\/link\/"#]),
