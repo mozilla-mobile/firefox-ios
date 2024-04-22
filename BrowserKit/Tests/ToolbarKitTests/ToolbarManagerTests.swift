@@ -7,7 +7,8 @@ import XCTest
 import Common
 
 final class ToolbarManagerTests: XCTestCase {
-    func testDisplayToolbarTopBorderWhenScrolledThenShouldNotDisplay() {
+    // Address toolbar border
+    func testDisplayAddressToolbarTopBorderWhenScrolledThenShouldNotDisplay() {
         let subject = createSubject()
         XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .top,
                                                    toolbarPosition: .top,
@@ -15,7 +16,7 @@ final class ToolbarManagerTests: XCTestCase {
                                                    scrollY: 10))
     }
 
-    func testDisplayToolbarTopBorderWhenBottomPlacementThenShouldDisplay() {
+    func testDisplayAddressToolbarTopBorderWhenBottomPlacementThenShouldDisplay() {
         let subject = createSubject()
         XCTAssertTrue(subject.shouldDisplayAddressBorder(borderPosition: .top,
                                                   toolbarPosition: .bottom,
@@ -23,7 +24,7 @@ final class ToolbarManagerTests: XCTestCase {
                                                   scrollY: 0))
     }
 
-    func testDisplayToolbarTopBorderWhenPrivateModeThenShouldNotDisplay() {
+    func testDisplayAddressToolbarTopBorderWhenPrivateModeThenShouldNotDisplay() {
         let subject = createSubject()
         XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .top,
                                                    toolbarPosition: .top,
@@ -31,7 +32,7 @@ final class ToolbarManagerTests: XCTestCase {
                                                    scrollY: 0))
     }
 
-    func testDisplayToolbarTopBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
+    func testDisplayAddressToolbarTopBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
         let subject = createSubject()
         XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .top,
                                                    toolbarPosition: .top,
@@ -39,7 +40,7 @@ final class ToolbarManagerTests: XCTestCase {
                                                    scrollY: 0))
     }
 
-    func testDisplayToolbarBottomBorderWhenBottomPlacementThenShouldNotDisplay() {
+    func testDisplayAddressToolbarBottomBorderWhenBottomPlacementThenShouldNotDisplay() {
         let subject = createSubject()
         XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
                                                    toolbarPosition: .bottom,
@@ -47,7 +48,7 @@ final class ToolbarManagerTests: XCTestCase {
                                                    scrollY: 0))
     }
 
-    func testDisplayToolbarBottomBorderWhenPrivateModeThenShouldDisplay() {
+    func testDisplayAddressToolbarBottomBorderWhenPrivateModeThenShouldDisplay() {
         let subject = createSubject()
         XCTAssertTrue(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
                                                   toolbarPosition: .bottom,
@@ -55,12 +56,22 @@ final class ToolbarManagerTests: XCTestCase {
                                                   scrollY: 0))
     }
 
-    func testDisplayToolbarBottomBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
+    func testDisplayAddressToolbarBottomBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
         let subject = createSubject()
         XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
                                                    toolbarPosition: .top,
                                                    isPrivate: false,
                                                    scrollY: 0))
+    }
+
+    // Navigation toolbar border
+    func testDisplayNavigationToolbarBorderWhenTopPlacementThenShouldDisplay() {
+        let subject = createSubject()
+        XCTAssertTrue(subject.shouldDisplayNavigationBorder(toolbarPosition: .top))
+    }
+    func testDisplayNavigationToolbarBorderWhenBottomPlacementThenShouldNotDisplay() {
+        let subject = createSubject()
+        XCTAssertFalse(subject.shouldDisplayNavigationBorder(toolbarPosition: .bottom))
     }
 
     // MARK: - Helpers
