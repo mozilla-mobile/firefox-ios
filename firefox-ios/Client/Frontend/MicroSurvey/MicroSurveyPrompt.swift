@@ -6,14 +6,6 @@ import Common
 import Foundation
 import ComponentLibrary
 
-struct MicroSurveyViewModel {
-    // TODO: FXIOS-8987 - Add Strings
-    var title: String = "Help make printing in Firefox better. It only takes a sec."
-    var buttonText: String = "Continue"
-    var openAction: () -> Void
-    var closeAction: () -> Void
-}
-
 /*
  |----------------|
  | [Logo] Title X |
