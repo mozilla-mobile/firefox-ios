@@ -137,7 +137,7 @@ class RootViewController: UIViewController,
         let model = AddressToolbarContainerModel(
             toolbarPosition: .top,
             scrollY: 0,
-            isPrivate: false, 
+            isPrivate: false,
             locationViewModel: locationViewModel,
             navigationActions: [],
             pageActions: pageActions,

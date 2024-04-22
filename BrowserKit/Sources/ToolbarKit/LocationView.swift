@@ -312,7 +312,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         return true
     }
 
-    //MARK: - Accessibility
+    // MARK: - Accessibility
     private func configureA11yForClearButton(_ model: LocationViewModel.ClearButtonA11yViewModel) {
         clearButton.accessibilityIdentifier = model.accessibilityIdentifier
         clearButton.accessibilityHint = model.accessibilityHint
