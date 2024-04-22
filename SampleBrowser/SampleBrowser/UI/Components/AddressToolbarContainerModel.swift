@@ -9,7 +9,7 @@ struct AddressToolbarContainerModel {
     let toolbarPosition: AddressToolbarPosition
     let scrollY: Int
     let isPrivate: Bool
-    let url: String?
+    let locationViewModel: LocationViewModel
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
@@ -17,7 +17,7 @@ struct AddressToolbarContainerModel {
 
     var state: AddressToolbarState {
         return AddressToolbarState(
-            url: url,
+            locationViewModel: locationViewModel,
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
