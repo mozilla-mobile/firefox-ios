@@ -219,7 +219,11 @@ class TabManagerMiddleware {
         let model = getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true, uuid: uuid)
         store.dispatch(TabPanelAction.refreshTab(RefreshTabContext(tabDisplayModel: model, windowUUID: uuid)))
         store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-        store.dispatch(GeneralBrowserAction.showOverlay(KeyboardContext(showOverlay: true, windowUUID: uuid)))
+
+        let overlayAction = GeneralBrowserAction(showOverlay: true,
+                                                 windowUUID: uuid,
+                                                 actionType: GeneralBrowserActionType.showOverlay)
+        store.dispatch(overlayAction)
     }
 
     /// Move tab on `TabManager` array to support drag and drop
@@ -271,8 +275,10 @@ class TabManagerMiddleware {
                 store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)))
             } else if shouldDismiss {
                 store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                let toastContext = ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)
-                store.dispatch(GeneralBrowserAction.showToast(toastContext))
+                let toastAction = GeneralBrowserAction(toastType: .closedSingleTab,
+                                                       windowUUID: uuid,
+                                                       actionType: GeneralBrowserActionType.showToast)
+                store.dispatch(toastAction)
             } else {
                 store.dispatch(TabPanelAction.showToast(ToastTypeContext(toastType: .closedSingleTab, windowUUID: uuid)))
             }
@@ -318,9 +324,11 @@ class TabManagerMiddleware {
                                                                              windowUUID: uuid)))
                 } else {
                     store.dispatch(TabTrayAction.dismissTabTray(uuid.context))
-                    let context = ToastTypeContext(toastType: .closedAllTabs(count: normalCount),
-                                                   windowUUID: uuid)
-                    store.dispatch(GeneralBrowserAction.showToast(context))
+
+                    let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
+                                                           windowUUID: uuid,
+                                                           actionType: GeneralBrowserActionType.showToast)
+                    store.dispatch(toastAction)
                 }
             }
         }

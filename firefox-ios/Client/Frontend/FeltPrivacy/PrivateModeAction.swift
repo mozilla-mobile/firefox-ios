@@ -8,7 +8,7 @@ import Redux
 class PrivateModeAction: Action {
     let isPrivate: Bool?
 
-    init(isPrivate: Bool?,
+    init(isPrivate: Bool? = nil,
          windowUUID: UUID,
          actionType: ActionType) {
         self.isPrivate = isPrivate

@@ -71,35 +71,13 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
-        if let action as? FakespotAction {
+        if let action = action as? FakespotAction {
             return BrowserViewControllerState.reduceStateForFakeSpotAction(action: action, state: state)
-        } else if let action as? PrivateModeAction {
+        } else if let action = action as? PrivateModeAction {
             return BrowserViewControllerState.reduceStateForPrivateModeAction(action: action, state: state)
-        }
-
-        // TODO: Move other actions
-        switch action {
-        case GeneralBrowserAction.showToast(let context):
-            let toastType = context.toastType
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
-                toast: toastType,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType)
-        case GeneralBrowserAction.showOverlay(let context):
-            let showOverlay = context.showOverlay
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
-                showOverlay: showOverlay,
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType)
-        case GeneralBrowserAction.updateSelectedTab(let context):
-            return BrowserViewControllerState.resolveStateForUpdateSelectedTab(context, state: state)
-        default:
+        } else if let action = action as? GeneralBrowserAction {
+            return BrowserViewControllerState.reduceStateForGeneralBrowserAction(action: action, state: state)
+        } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
@@ -142,13 +120,42 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
-    static func resolveStateForUpdateSelectedTab(_ context: GeneralBrowserContext,
+    static func reduceStateForGeneralBrowserAction(action: GeneralBrowserAction,
+                                                   state: BrowserViewControllerState) -> BrowserViewControllerState {
+        switch action.actionType {
+        case GeneralBrowserAction.showToast:
+            guard let toastType = action.toastType else { return state }
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                toast: toastType,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType)
+        case GeneralBrowserAction.showOverlay:
+            let showOverlay = action.showOverlay ?? false
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                showOverlay: showOverlay,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType)
+        case GeneralBrowserAction.updateSelectedTab:
+            return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action, state: state)
+        default:
+            return state
+        }
+    }
+
+    static func resolveStateForUpdateSelectedTab(action: GeneralBrowserAction,
                                                  state: BrowserViewControllerState) -> BrowserViewControllerState {
-        let isAboutHomeURL = InternalURL(context.selectedTabURL)?.isAboutHomeURL ?? false
+        let isAboutHomeURL = InternalURL(action.selectedTabURL)?.isAboutHomeURL ?? false
         var browserViewType = BrowserViewType.normalHomepage
+        let isPrivateBrowsing = action.isPrivateBrowsing ?? false
 
         if isAboutHomeURL {
-            browserViewType = context.isPrivateBrowsing ? .privateHomepage : .normalHomepage
+            browserViewType = isPrivateBrowsing ? .privateHomepage : .normalHomepage
         } else {
             browserViewType = .webview
         }
