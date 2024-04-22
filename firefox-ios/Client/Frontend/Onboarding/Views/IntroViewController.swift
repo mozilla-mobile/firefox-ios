@@ -147,10 +147,11 @@ class IntroViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .onboardingViewController, windowUUID: windowUUID)
-        ))
-        let uuid = self.windowUUID
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .onboardingViewController)
+        store.dispatch(action)
+        let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return OnboardingViewControllerState(appState: appState, uuid: uuid)
@@ -160,9 +161,10 @@ class IntroViewController: UIViewController,
 
     // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .onboardingViewController, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .onboardingViewController)
+        store.dispatch(action)
     }
 
     func newState(state: OnboardingViewControllerState) {
