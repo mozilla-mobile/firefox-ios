@@ -7,7 +7,7 @@ import ToolbarKit
 import UIKit
 
 protocol AddressToolbarContainerDelegate: AnyObject {
-    func didClickMenu()
+    func didTapMenu()
 }
 
 class AddressToolbarContainer: UIView, ThemeApplicable {

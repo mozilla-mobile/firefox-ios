@@ -84,7 +84,7 @@ class RootViewControllerModel {
             a11yLabel: "Open Menu",
             a11yId: "appMenuButton",
             onSelected: {
-                self.addressToolbarDelegate?.didClickMenu()
+                self.addressToolbarDelegate?.didTapMenu()
             })]
 
         // FXIOS-8947: Use scroll position

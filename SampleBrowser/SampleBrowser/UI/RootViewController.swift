@@ -179,7 +179,7 @@ class RootViewController: UIViewController,
     }
 
     func menuButtonTapped() {
-        didClickMenu()
+        didTapMenu()
     }
 
     // MARK: - NavigationDelegate
@@ -294,7 +294,7 @@ class RootViewController: UIViewController,
     }
 
     // MARK: - AddressToolbarContainerDelegate
-    func didClickMenu() {
+    func didTapMenu() {
         let settingsVC = SettingsViewController()
         settingsVC.delegate = self
         present(settingsVC, animated: true)
