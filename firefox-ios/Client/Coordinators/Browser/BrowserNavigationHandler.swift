@@ -9,7 +9,8 @@ import WebKit
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
-    /// - Parameter onDismiss: An optional closure that is executed when the settings page is dismissed. This closure takes no parameters and returns no value.
+    /// - Parameter onDismiss: An optional closure that is executed when the settings page is dismissed. 
+    /// This closure takes no parameters and returns no value.
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)?)
 
     /// Asks to show a enhancedTrackingProtection page, can be a general 
