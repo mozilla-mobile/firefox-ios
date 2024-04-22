@@ -1050,6 +1050,93 @@ extension String {
     }
 }
 
+// MARK: - Micro survey
+extension String {
+    public struct Microsurvey {
+        public struct Prompt {
+            public static let TitleLabel = MZLocalizedString(
+                key: "Microsurvey.Prompt.TitleLabel.v127",
+                tableName: "Microsurvey",
+                value: "Help us make Firefox better. It only takes a minute.",
+                comment: "Describes the title on the microsurvey prompt that appears on top of our bottom toolbar.")
+            public static let TakeSurveyButton = MZLocalizedString(
+                key: "Microsurvey.Prompt.Button.v127",
+                tableName: "Microsurvey",
+                value: "Continue",
+                comment: "Describes the action on the micro survey prompt.This indicates that the user will navigate to take the survey if they tap on this button.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Prompt.Close.AccessibilityLabel.v127",
+                tableName: "Microsurvey",
+                value: "Close Survey Prompt",
+                comment: "Accessibility label for close button that dismisses the microsurvey prompt.")
+        }
+
+        public struct Survey {
+            public static let HeaderLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.HeaderLabel.v127",
+                tableName: "Microsurvey",
+                value: "Complete this survey",
+                comment: "Describes the title for the header on the microsurvey when the user is taking the survey.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.Close.AccessibilityLabel.v127",
+                tableName: "Microsurvey",
+                value: "Close Survey",
+                comment: "Accessibility label for close button that dismisses the microsurvey.")
+            public static let PrivacyPolicyLinkButtonTitle = MZLocalizedString(
+                key: "Microsurvey.Survey.PrivacyPolicyLink.v127",
+                tableName: "Microsurvey",
+                value: "Privacy notice",
+                comment: "String used to describe the title of link button that is on the survey and allows the user to navigate to our privacy policy details.")
+            public static let SubmitSurveyButton = MZLocalizedString(
+                key: "Microsurvey.Survey.Button.v127",
+                tableName: "Microsurvey",
+                value: "Submit",
+                comment: "Describes the action on the micro survey.This indicates that the user has completed the survey and tapped on the button to submit their responses.")
+
+            public struct Options {
+                public static let LikertScaleOption1 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption1.v127",
+                    tableName: "Microsurvey",
+                    value: "Very Satisfied",
+                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption2 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption2.v127",
+                    tableName: "Microsurvey",
+                    value: "Satisfied",
+                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption3 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption3.v127",
+                    tableName: "Microsurvey",
+                    value: "Neutral",
+                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption4 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption4.v127",
+                    tableName: "Microsurvey",
+                    value: "Dissatisfied",
+                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption5 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption5.v127",
+                    tableName: "Microsurvey",
+                    value: "Very Dissatisfied",
+                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+            }
+
+            public struct ConfirmationPage {
+                public static let HeaderLabel = MZLocalizedString(
+                    key: "Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127",
+                    tableName: "Microsurvey",
+                    value: "Survey complete",
+                    comment: "Describes the title for the header on the microsurvey when the user has completed the survey.")
+                public static let ConfirmationLabel = MZLocalizedString(
+                    key: "Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127",
+                    tableName: "Microsurvey",
+                    value: "Thanks for your feedback!",
+                    comment: "Describes the text shown to the user after completing the micro survey prompt.")
+            }
+        }
+    }
+}
+
 // MARK: - Onboarding screens
 extension String {
     public struct Onboarding {

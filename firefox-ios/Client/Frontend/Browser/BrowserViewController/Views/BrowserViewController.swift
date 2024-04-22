@@ -73,7 +73,7 @@ class BrowserViewController: UIViewController,
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
-    var microSurvey: MicroSurveyPromptView?
+    var microsurvey: MicrosurveyPromptView?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
@@ -330,7 +330,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
-        updateMicroSurveyConstraints()
+        updateMicrosurveyConstraints()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -777,7 +777,7 @@ class BrowserViewController: UIViewController,
         browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
 
-        setupMicroSurvey()
+        setupMicrosurvey()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1134,60 +1134,60 @@ class BrowserViewController: UIViewController,
         browserDelegate?.show(webView: webView)
     }
 
-    // MARK: - Micro Survey
-    private func setupMicroSurvey() {
-        guard featureFlags.isFeatureEnabled(.microSurvey, checking: .buildOnly) else { return }
+    // MARK: - Microsurvey
+    private func setupMicrosurvey() {
+        guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly) else { return }
 
-        // TODO: FXIOS-8990: Create Micro Survey Surface Manager to handle showing survey prompt
-        if microSurvey != nil {
-            removeMicroSurveyPrompt()
+        // TODO: FXIOS-8990: Create Microsurvey Surface Manager to handle showing survey prompt
+        if microsurvey != nil {
+            removeMicrosurveyPrompt()
         }
 
-        createMicroSurveyPrompt()
+        createMicrosurveyPrompt()
     }
 
-    private func updateMicroSurveyConstraints() {
-        guard let microSurvey else { return }
+    private func updateMicrosurveyConstraints() {
+        guard let microsurvey else { return }
 
-        microSurvey.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(microSurvey)
+        microsurvey.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(microsurvey)
 
         if urlBar.isBottomSearchBar {
-            overKeyboardContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+            overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
         } else {
-            bottomContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+            bottomContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
         }
 
-        microSurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        microsurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
 
         updateViewConstraints()
     }
 
-    private func createMicroSurveyPrompt() {
-        let viewModel = MicroSurveyViewModel(openAction: {
+    private func createMicrosurveyPrompt() {
+        let viewModel = MicrosurveyViewModel(openAction: {
             // TODO: FXIOS-8895: Create Micro Survey Modal View
         }) {
             // TODO: FXIOS-8898: Setup Redux to handle open and dismissing modal
         }
 
-        self.microSurvey = MicroSurveyPromptView(viewModel: viewModel)
+        self.microsurvey = MicrosurveyPromptView(viewModel: viewModel)
 
-        updateMicroSurveyConstraints()
+        updateMicrosurveyConstraints()
     }
 
-    private func removeMicroSurveyPrompt() {
-        guard let microSurvey else { return }
+    private func removeMicrosurveyPrompt() {
+        guard let microsurvey else { return }
         if urlBar.isBottomSearchBar {
-            overKeyboardContainer.removeArrangedView(microSurvey)
+            overKeyboardContainer.removeArrangedView(microsurvey)
         } else {
-            bottomContainer.removeArrangedView(microSurvey)
+            bottomContainer.removeArrangedView(microsurvey)
         }
 
-        self.microSurvey = nil
+        self.microsurvey = nil
         updateViewConstraints()
     }
     // MARK: - Update content
