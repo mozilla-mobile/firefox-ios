@@ -15,6 +15,9 @@ public protocol ToolbarManager {
                                     toolbarPosition: AddressToolbarPosition,
                                     isPrivate: Bool,
                                     scrollY: Int) -> Bool
+
+    /// Determines whether a border on top of the navigation toolbar should be displayed
+    func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool
 }
 
 public class DefaultToolbarManager: ToolbarManager {
@@ -34,5 +37,9 @@ public class DefaultToolbarManager: ToolbarManager {
         } else {
             return (toolbarPosition == .top && scrollY > 0) || isPrivate
         }
+    }
+
+    public func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
+        return toolbarPosition == .top
     }
 }
