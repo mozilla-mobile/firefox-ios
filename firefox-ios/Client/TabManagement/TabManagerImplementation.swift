@@ -334,13 +334,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                        previous: previous,
                                        sessionData: sessionData)
 
+            // Default to false if the feature flag is not enabled
+            var isPrivate = false
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                let context = BoolValueContext(boolValue: tab.isPrivate, windowUUID: windowUUID)
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
-            } else {
-                let context = BoolValueContext(boolValue: false, windowUUID: windowUUID)
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
+                isPrivate = tab.isPrivate
             }
+
+            let action = PrivateModeAction(isPrivate: isPrivate,
+                                           windowUUID: windowUUID,
+                                           actionType: PrivateModeActionType.setPrivateModeTo)
+            store.dispatch(action)
 
             didSelectTab(url)
             updateMenuItemsForSelectedTab()

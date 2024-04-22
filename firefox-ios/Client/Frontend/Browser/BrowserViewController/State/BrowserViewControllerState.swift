@@ -71,44 +71,20 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
+        if let action as? FakespotAction {
+            return BrowserViewControllerState.reduceStateForFakeSpotAction(action: action, state: state)
+        } else if let action as? PrivateModeAction {
+            return BrowserViewControllerState.reduceStateForPrivateModeAction(action: action, state: state)
+        }
+
+        // TODO: Move other actions
         switch action {
-        case PrivateModeMiddlewareAction.privateModeUpdated(let context):
-            let privacyState = context.boolValue
-            var browserViewType = state.browserViewType
-            if browserViewType != .webview {
-                browserViewType = privacyState ? .privateHomepage : .normalHomepage
-            }
-            return BrowserViewControllerState(
-                searchScreenState: SearchScreenState(inPrivateMode: privacyState),
-                showDataClearanceFlow: privacyState,
-                fakespotState: state.fakespotState,
-                windowUUID: state.windowUUID,
-                reloadWebView: true,
-                browserViewType: browserViewType)
-        case FakespotAction.pressedShoppingButton,
-            FakespotAction.show,
-            FakespotAction.dismiss,
-            FakespotAction.setAppearanceTo,
-            FakespotAction.settingsStateDidChange,
-            FakespotAction.reviewQualityDidChange,
-            FakespotAction.highlightsDidChange,
-            FakespotAction.tabDidChange,
-            FakespotAction.tabDidReload,
-            FakespotAction.surfaceDisplayedEventSend,
-            FakespotAction.adsImpressionEventSendFor,
-            FakespotAction.adsExposureEventSendFor:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType)
         case GeneralBrowserAction.showToast(let context):
             let toastType = context.toastType
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: state.fakespotState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
                 toast: toastType,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
@@ -117,7 +93,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: state.fakespotState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
@@ -127,11 +103,42 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: state.fakespotState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
                 showOverlay: state.showOverlay,
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
                 browserViewType: state.browserViewType)
+        }
+    }
+
+    static func reduceStateForFakeSpotAction(action: FakespotAction,
+                                             state: BrowserViewControllerState) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            showDataClearanceFlow: state.showDataClearanceFlow,
+            fakespotState: FakespotState.reducer(state.fakespotState, action),
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType)
+    }
+
+    static func reduceStateForPrivateModeAction(action: PrivateModeAction,
+                                                state: BrowserViewControllerState) -> BrowserViewControllerState {
+        switch action.actionType {
+        case PrivateModeActionType.privateModeUpdated:
+            let privacyState = action.isPrivate ?? false
+            var browserViewType = state.browserViewType
+            if browserViewType != .webview {
+                browserViewType = privacyState ? .privateHomepage : .normalHomepage
+            }
+            return BrowserViewControllerState(
+                searchScreenState: SearchScreenState(inPrivateMode: privacyState),
+                showDataClearanceFlow: privacyState,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: state.windowUUID,
+                reloadWebView: true,
+                browserViewType: browserViewType)
+        default:
+            return state
         }
     }
 
