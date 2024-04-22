@@ -15,5 +15,6 @@ tasks:
         run-on-tasks-for: []
         worker-type: bitrise
         bitrise:
+            artifact_prefix: public
             workflows:
                 - Bitrise_Performance_Test
