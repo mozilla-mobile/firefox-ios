@@ -228,7 +228,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
-        let urlString = urlTextField.text ?? ""
+        let urlString = urlAbsolutePath ?? ""
         let (subdomain, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
 
         let attributedString = NSMutableAttributedString(string: normalizedHost)
