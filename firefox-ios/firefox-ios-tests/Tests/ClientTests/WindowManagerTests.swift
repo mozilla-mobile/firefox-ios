@@ -208,7 +208,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertNotEqual(requestedUUID2, savedUUID)
     }
 
-    func testOpeningAndClosingWindowsResultsInSensibleExpectedOrder() {
+    func testClosingTwoWindowsInDifferentOrdersResultsInSensibleExpectedOrderWhenOpening() {
         let subject = createSubject()
         let tabDataStore: TabDataStore = AppContainer.shared.resolve()
         let mockTabDataStore = tabDataStore as! MockTabDataStore
@@ -219,16 +219,14 @@ class WindowManagerTests: XCTestCase {
         let uuid2 = UUID()
         mockTabDataStore.injectMockTabWindowUUID(uuid2)
 
-        // Check that asking for first UUID returns the expected UUID
-        // Open a window using this UUID
+        // Open a window using UUID 1
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid1)
-        // Check that asking for another UUID returns the second UUID
-        // Open a window using this UUID
+        // Open a window using UUID 2
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
 
         // Close window 2, then window 1
-        subject.windowWillClose(uuid: uuid1)
         subject.windowWillClose(uuid: uuid2)
+        subject.windowWillClose(uuid: uuid1)
 
         // Now attempt to re-open two windows in order. We expect window
         // 1 to open, then window 2
@@ -240,9 +238,9 @@ class WindowManagerTests: XCTestCase {
         // Now re-open both windows in order...
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid1)
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
-        // ...but close them in the opposite order as before
-        subject.windowWillClose(uuid: uuid2)
+        // ...but close them in the opposite order as before (close window 1, then 2)
         subject.windowWillClose(uuid: uuid1)
+        subject.windowWillClose(uuid: uuid2)
 
         // Check that the next time we open the windows the order is now reversed
         let result2_1 = subject.reserveNextAvailableWindowUUID()

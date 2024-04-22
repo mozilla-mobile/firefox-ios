@@ -48,11 +48,7 @@ class AccountStatusSetting: WithAccountSetting {
         return NSAttributedString(
             string: string,
             attributes: [
-                NSAttributedString.Key.font: DefaultDynamicFontHelper.preferredFont(
-                    withTextStyle: .body,
-                    size: 17,
-                    weight: .semibold
-                ),
+                NSAttributedString.Key.font: FXFontStyles.Bold.body.scaledFont(),
                 NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
         )
     }

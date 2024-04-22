@@ -862,11 +862,14 @@ extension BrowserViewController: WKNavigationDelegate {
             self,
             challenge: challenge,
             loginsHelper: loginsHelper
-        ).uponQueue(.main) { res in
-            if let credentials = res.successValue {
-                completionHandler(.useCredential, credentials.credentials)
-            } else {
-                completionHandler(.rejectProtectionSpace, nil)
+        ) { res in
+            DispatchQueue.main.async {
+                switch res {
+                case .success(let credentials):
+                    completionHandler(.useCredential, credentials.credentials)
+                case .failure:
+                    completionHandler(.rejectProtectionSpace, nil)
+                }
             }
         }
     }

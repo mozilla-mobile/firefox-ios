@@ -105,17 +105,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint = locationDividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth)
         dividerWidthConstraint?.isActive = true
 
-        let navigationActionWidthAnchor = navigationActionStack.widthAnchor.constraint(equalToConstant: 0)
-        navigationActionWidthAnchor.isActive = true
-        navigationActionWidthAnchor.priority = .defaultLow
-
-        let pageActionWidthAnchor = pageActionStack.widthAnchor.constraint(equalToConstant: 0)
-        pageActionWidthAnchor.isActive = true
-        pageActionWidthAnchor.priority = .defaultLow
-
-        let browserActionWidthAnchor = browserActionStack.widthAnchor.constraint(equalToConstant: 0)
-        browserActionWidthAnchor.isActive = true
-        browserActionWidthAnchor.priority = .defaultLow
+        [navigationActionStack, pageActionStack, browserActionStack].forEach(setZeroWidthConstraint)
 
         toolbarTopBorderHeightConstraint = toolbarTopBorderView.heightAnchor.constraint(equalToConstant: 0)
         toolbarBottomBorderHeightConstraint = toolbarBottomBorderView.heightAnchor.constraint(equalToConstant: 0)
@@ -179,6 +169,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
+    }
+
+    private func setZeroWidthConstraint(_ stackView: UIStackView) {
+        let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
+        widthAnchor.isActive = true
+        widthAnchor.priority = .defaultHigh
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
