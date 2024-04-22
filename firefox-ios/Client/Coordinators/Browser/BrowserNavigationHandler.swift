@@ -106,7 +106,7 @@ extension BrowserNavigationHandler {
         )
     }
 
-    func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
-        show(settings: settings, onDismiss: onDismiss)
+    func show(settings: Route.SettingsSection) {
+        show(settings: settings, onDismiss: nil)
     }
 }
