@@ -7,7 +7,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - colon
   # - comma
   # - comment_spacing
-  # - compiler_protocol_init
+  - compiler_protocol_init
   - computed_accessors_order
   # - control_statement
   # - duplicate_conditions
