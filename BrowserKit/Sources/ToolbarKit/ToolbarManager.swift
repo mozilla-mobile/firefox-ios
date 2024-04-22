@@ -11,19 +11,19 @@ public enum AddressToolbarBorderPosition {
 
 public protocol ToolbarManager {
     /// Determines whether a border on top/bottom of the address toolbar should be displayed
-    func shouldDisplayBorder(borderPosition: AddressToolbarBorderPosition,
-                             toolbarPosition: AddressToolbarPosition,
-                             isPrivate: Bool,
-                             scrollY: Int) -> Bool
+    func shouldDisplayAddressBorder(borderPosition: AddressToolbarBorderPosition,
+                                    toolbarPosition: AddressToolbarPosition,
+                                    isPrivate: Bool,
+                                    scrollY: Int) -> Bool
 }
 
 public class DefaultToolbarManager: ToolbarManager {
     public init() {}
 
-    public func shouldDisplayBorder(borderPosition: AddressToolbarBorderPosition,
-                                    toolbarPosition: AddressToolbarPosition,
-                                    isPrivate: Bool,
-                                    scrollY: Int) -> Bool {
+    public func shouldDisplayAddressBorder(borderPosition: AddressToolbarBorderPosition,
+                                           toolbarPosition: AddressToolbarPosition,
+                                           isPrivate: Bool,
+                                           scrollY: Int) -> Bool {
         // display the top border if
         // - the toolbar is displayed at the bottom
         // display the bottom border if

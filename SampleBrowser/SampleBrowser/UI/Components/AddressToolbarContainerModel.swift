@@ -26,7 +26,7 @@ struct AddressToolbarContainerModel {
     }
 
     private var shouldDisplayTopBorder: Bool {
-        manager.shouldDisplayBorder(
+        manager.shouldDisplayAddressBorder(
             borderPosition: .top,
             toolbarPosition: toolbarPosition,
             isPrivate: false,
@@ -34,7 +34,7 @@ struct AddressToolbarContainerModel {
     }
 
     private var shouldDisplayBottomBorder: Bool {
-        manager.shouldDisplayBorder(
+        manager.shouldDisplayAddressBorder(
            borderPosition: .bottom,
            toolbarPosition: toolbarPosition,
            isPrivate: false,
