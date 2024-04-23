@@ -341,6 +341,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
         searchInContentTelemetry = SearchInContentTelemetry()
     }
