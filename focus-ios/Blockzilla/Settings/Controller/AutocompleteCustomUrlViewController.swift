@@ -56,6 +56,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.autocompleteManageSitesLabel
 
         tableView.dataSource = self
