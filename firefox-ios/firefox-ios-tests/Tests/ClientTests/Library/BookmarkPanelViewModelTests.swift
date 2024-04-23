@@ -56,15 +56,15 @@ class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
-//        profile.reopen()
-//        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-//        let expectation = expectation(description: "Subject reloaded")
-//        subject.reloadData {
-//            XCTAssertNotNil(subject.bookmarkFolder)
-//            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Contains the local desktop folder")
-//            expectation.fulfill()
-//        }
-//        waitForExpectations(timeout: 5)
+        profile.reopen()
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Contains the local desktop folder")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
     }
 
     func testShouldReload_whenLocalDesktopFolder() {
