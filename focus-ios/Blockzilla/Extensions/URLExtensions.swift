@@ -253,7 +253,7 @@ extension URL {
     public var normalizedHost: String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
-        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false), var host = components.host, host != "" else {
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false), var host = components.host, !host.isEmpty else {
             return nil
         }
 
