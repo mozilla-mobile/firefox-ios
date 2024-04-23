@@ -314,12 +314,16 @@ extension DownloadQueue: DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?) {
         guard let error = error, let index = downloads.firstIndex(of: download) else { return }
 
-        downloadErrors[download.originWindow] = error
+        let uuid = download.originWindow
+        downloadErrors[uuid] = error
         downloads.remove(at: index)
 
         // If all downloads for the completed download's window are completed, we notify of error
-        if downloads(for: download.originWindow).isEmpty {
-            delegates.forEach { $0.delegate?.downloadQueue(self, didCompleteWithError: error) }
+        if downloads(for: uuid).isEmpty {
+            delegates.forEach {
+                guard $0.delegate?.windowUUID == uuid else { return }
+                $0.delegate?.downloadQueue(self, didCompleteWithError: error)
+            }
         }
     }
 
@@ -346,7 +350,10 @@ extension DownloadQueue: DownloadDelegate {
         let uuid = download.originWindow
         if downloads(for: uuid).isEmpty {
             let error = downloadErrors[uuid]
-            delegates.forEach { $0.delegate?.downloadQueue(self, didCompleteWithError: error) }
+            delegates.forEach {
+                guard $0.delegate?.windowUUID == uuid else { return }
+                $0.delegate?.downloadQueue(self, didCompleteWithError: error)
+            }
             downloadErrors[uuid] = nil
         }
     }
