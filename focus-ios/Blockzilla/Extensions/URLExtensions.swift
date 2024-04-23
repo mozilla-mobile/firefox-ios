@@ -32,7 +32,7 @@ private func loadEntriesFromDisk() -> TLDEntryMap? {
     }
 
     let lines = data.components(separatedBy: "\n")
-    let trimmedLines = lines.filter { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
+    let trimmedLines = lines.filter { !$0.hasPrefix("//") && $0 != "\n" && !$0.isEmpty }
 
     var entries = TLDEntryMap()
     for line in trimmedLines {
