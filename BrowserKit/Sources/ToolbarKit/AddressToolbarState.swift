@@ -6,7 +6,7 @@ import Foundation
 
 /// Defines the state for the address toolbar.
 public struct AddressToolbarState {
-    /// VIew state for the `Location View`  in the address toolbar
+    /// View state for the `Location View`  in the address toolbar
     let locationViewState: LocationViewState
 
     /// Navigation actions of the address toolbar
