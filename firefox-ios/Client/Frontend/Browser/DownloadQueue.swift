@@ -233,6 +233,11 @@ class WeakDownloadQueueDelegate {
     init(delegate: DownloadQueueDelegate? = nil) { self.delegate = delegate }
 }
 
+struct DownloadProgress {
+    var bytesDownloaded: Int64
+    var totalExpected: Int64
+}
+
 class DownloadQueue {
     var downloads: [Download]
 
@@ -242,8 +247,7 @@ class DownloadQueue {
         return downloads.isEmpty
     }
 
-    fileprivate var combinedBytesDownloaded: Int64 = 0
-    fileprivate var combinedTotalBytesExpected: Int64?
+    fileprivate var downloadProgress: [WindowUUID: DownloadProgress] = [:]
     fileprivate var downloadErrors: [WindowUUID: Error] = [:]
 
     init() {
@@ -261,20 +265,21 @@ class DownloadQueue {
 
     func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
-        // TODO: This does not work ideally when downloading files across multiple windows. Need to revisit. [8926]
-        if downloads.isEmpty {
-            combinedBytesDownloaded = 0
-            combinedTotalBytesExpected = 0
-            downloadErrors.removeAll()
+        let uuid = download.originWindow
+        if downloads(for: uuid).isEmpty {
+            downloadProgress[uuid] = nil
+            downloadErrors[uuid] = nil
         }
 
         downloads.append(download)
         download.delegate = self
 
-        if let totalBytesExpected = download.totalBytesExpected, combinedTotalBytesExpected != nil {
-            combinedTotalBytesExpected! += totalBytesExpected
+        if let totalBytesExpected = download.totalBytesExpected {
+            var progress = downloadProgress[uuid] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
+            progress.totalExpected += totalBytesExpected
+            downloadProgress[uuid] = progress
         } else {
-            combinedTotalBytesExpected = nil
+            downloadProgress[uuid] = nil
         }
 
         download.resume()
@@ -328,13 +333,13 @@ extension DownloadQueue: DownloadDelegate {
     }
 
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) {
-        combinedBytesDownloaded += bytesDownloaded
-        // TODO: Right now we show the "combined bytes" in any download toasts visible across all windows.
-        // This may be confusing; at some point we need to reevaluate how this should all work for
-        // multi-window on iPad. [FXIOS-8926]
+        var progress = downloadProgress[download.originWindow] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
+        progress.bytesDownloaded += bytesDownloaded
+        downloadProgress[download.originWindow] = progress
+
         delegates.forEach { $0.delegate?.downloadQueue(self,
-                                                       didDownloadCombinedBytes: combinedBytesDownloaded,
-                                                       combinedTotalBytesExpected: combinedTotalBytesExpected)
+                                                       didDownloadCombinedBytes: progress.bytesDownloaded,
+                                                       combinedTotalBytesExpected: progress.totalExpected)
         }
     }
 
