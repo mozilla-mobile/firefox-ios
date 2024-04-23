@@ -76,7 +76,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - last_where
   # - modifier_order
   # - multiline_arguments
-  # - opening_brace
+  - opening_brace
   # - overridden_super_call
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces
