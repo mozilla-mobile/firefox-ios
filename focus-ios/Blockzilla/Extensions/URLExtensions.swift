@@ -431,7 +431,7 @@ private extension URL {
                     .backwards,      // Search from the end.
                     .anchored]         // Stick to the end.
                 let suffixlessHost = host.replacingOccurrences(of: suffix, with: "", options: literalFromEnd, range: nil)
-                let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { $0 != "" }
+                let suffixlessTokens = suffixlessHost.components(separatedBy: ".").filter { !$0.isEmpty }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]
                 let partsString = additionalParts.joined(separator: ".")
