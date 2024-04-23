@@ -86,6 +86,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let headerView = AboutHeaderView()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         headerView.delegate = self
         navigationController?.navigationBar.tintColor = .accent
 
