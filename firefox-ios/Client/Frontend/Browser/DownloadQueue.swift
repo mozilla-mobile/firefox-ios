@@ -217,6 +217,7 @@ class BlobDownload: Download {
 }
 
 protocol DownloadQueueDelegate: AnyObject {
+    var windowUUID: WindowUUID { get }
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
     func downloadQueue(
         _ downloadQueue: DownloadQueue,
@@ -224,17 +225,12 @@ protocol DownloadQueueDelegate: AnyObject {
         combinedTotalBytesExpected: Int64?
     )
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
-    func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: DownloadError?)
+    func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?)
 }
 
 class WeakDownloadQueueDelegate {
     private(set) weak var delegate: DownloadQueueDelegate?
     init(delegate: DownloadQueueDelegate? = nil) { self.delegate = delegate }
-}
-
-struct DownloadError {
-    let error: Error
-    let windowUUID: WindowUUID
 }
 
 class DownloadQueue {
@@ -248,7 +244,7 @@ class DownloadQueue {
 
     fileprivate var combinedBytesDownloaded: Int64 = 0
     fileprivate var combinedTotalBytesExpected: Int64?
-    fileprivate var lastDownloadError: DownloadError?
+    fileprivate var downloadErrors: [WindowUUID: Error] = [:]
 
     init() {
         self.downloads = []
@@ -265,10 +261,11 @@ class DownloadQueue {
 
     func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
+        // TODO: This does not work ideally when downloading files across multiple windows. Need to revisit. [8926]
         if downloads.isEmpty {
             combinedBytesDownloaded = 0
             combinedTotalBytesExpected = 0
-            lastDownloadError = nil
+            downloadErrors.removeAll()
         }
 
         downloads.append(download)
@@ -307,17 +304,22 @@ class DownloadQueue {
     private func cleanUpDelegates() {
         delegates.removeAll(where: { $0.delegate == nil })
     }
+
+    private func downloads(for window: WindowUUID) -> [Download] {
+        return downloads.filter({ $0.originWindow == window })
+    }
 }
 
 extension DownloadQueue: DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?) {
         guard let error = error, let index = downloads.firstIndex(of: download) else { return }
 
-        lastDownloadError = DownloadError(error: error, windowUUID: download.originWindow)
+        downloadErrors[download.originWindow] = error
         downloads.remove(at: index)
 
-        if downloads.isEmpty {
-            delegates.forEach { $0.delegate?.downloadQueue(self, didCompleteWithError: lastDownloadError) }
+        // If all downloads for the completed download's window are completed, we notify of error
+        if downloads(for: download.originWindow).isEmpty {
+            delegates.forEach { $0.delegate?.downloadQueue(self, didCompleteWithError: error) }
         }
     }
 
@@ -340,8 +342,12 @@ extension DownloadQueue: DownloadDelegate {
 
         NotificationCenter.default.post(name: .FileDidDownload, object: location)
 
-        if downloads.isEmpty {
-            delegates.forEach { $0.delegate?.downloadQueue(self, didCompleteWithError: lastDownloadError) }
+        // If all downloads for the completed download's window are completed, we notify of completion
+        let uuid = download.originWindow
+        if downloads(for: uuid).isEmpty {
+            let error = downloadErrors[uuid]
+            delegates.forEach { $0.delegate?.downloadQueue(self, didCompleteWithError: error) }
+            downloadErrors[uuid] = nil
         }
     }
 }
