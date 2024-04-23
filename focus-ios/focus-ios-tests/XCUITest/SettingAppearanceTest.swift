@@ -131,7 +131,6 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Now in Safari
         let safariLabel = safariapp.textFields["Address"]
-        print(safariapp.debugDescription)
         waitForValueContains(safariLabel, value: "google")
 
         // Go back to Focus
