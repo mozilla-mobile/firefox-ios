@@ -131,6 +131,13 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct MicroSurvey {
+        struct Prompt {
+            static let closeButton = "MicroSurvey.Prompt.CloseButton"
+            static let takeSurveyButton = "MicroSurvey.Prompt.TakeSurveyButton"
+        }
+    }
+
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
         struct Homepage {
