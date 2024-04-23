@@ -118,6 +118,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.navigationBars["Settings"], timeout: 10)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574974
     func testOpenInSafari() {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)
