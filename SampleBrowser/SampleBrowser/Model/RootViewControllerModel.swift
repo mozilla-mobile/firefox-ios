@@ -56,7 +56,7 @@ class RootViewControllerModel {
             })
         let actions = [backButton, forwardButton, reloadButton, menuButton]
 
-        return NavigationToolbarContainerModel(actions: actions)
+        return NavigationToolbarContainerModel(toolbarPosition: .top, actions: actions)
     }
 
     func updateReloadStopButton(loading: Bool) {

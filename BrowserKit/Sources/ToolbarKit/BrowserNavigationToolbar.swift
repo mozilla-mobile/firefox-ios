@@ -10,11 +10,14 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let buttonSize = CGSize(width: 48, height: 48)
+        static let borderHeight: CGFloat = 1
     }
 
     private lazy var actionStack: UIStackView = .build { view in
         view.distribution = .equalSpacing
     }
+    private lazy var toolbarBorderView: UIView = .build()
+    private var toolbarBorderHeightConstraint: NSLayoutConstraint?
     private var theme: Theme?
 
     override init(frame: CGRect) {
@@ -28,15 +31,26 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
 
     public func configure(state: NavigationToolbarState) {
         updateActionStack(toolbarElements: state.actions)
+
+        // Update border
+        toolbarBorderHeightConstraint?.constant = state.shouldDisplayBorder ? UX.borderHeight : 0
     }
 
     // MARK: - Private
     private func setupLayout() {
+        addSubview(toolbarBorderView)
         addSubview(actionStack)
 
+        toolbarBorderHeightConstraint = toolbarBorderView.heightAnchor.constraint(equalToConstant: 0)
+        toolbarBorderHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
+            toolbarBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbarBorderView.topAnchor.constraint(equalTo: topAnchor),
+            toolbarBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
             actionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
-            actionStack.topAnchor.constraint(equalTo: topAnchor),
+            actionStack.topAnchor.constraint(equalTo: toolbarBorderView.bottomAnchor),
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
         ])
@@ -64,6 +78,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
+        toolbarBorderView.backgroundColor = theme.colors.borderPrimary
         self.theme = theme
     }
 }
