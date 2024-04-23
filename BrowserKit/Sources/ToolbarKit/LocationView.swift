@@ -22,30 +22,21 @@ protocol LocationViewDelegate: AnyObject {
     func locationViewShouldSearchFor(_ text: String)
 }
 
-public struct LocationViewModel {
-    public struct ClearButtonA11yViewModel {
-        public let accessibilityIdentifier: String
-        public let accessibilityHint: String
-        public let accessibilityLabel: String
-
-        public init(
-            accessibilityIdentifier: String,
-            accessibilityHint: String,
-            accessibilityLabel: String
-        ) {
-            self.accessibilityIdentifier = accessibilityIdentifier
-            self.accessibilityHint = accessibilityHint
-            self.accessibilityLabel = accessibilityLabel
-        }
-    }
-    public let clearButtonA11yViewModel: ClearButtonA11yViewModel
+public struct LocationViewState {
+    public let accessibilityIdentifier: String
+    public let accessibilityHint: String
+    public let accessibilityLabel: String
     public let url: String?
 
     public init(
-        clearButtonA11yViewModel: ClearButtonA11yViewModel,
+        accessibilityIdentifier: String,
+        accessibilityHint: String,
+        accessibilityLabel: String,
         url: String?
     ) {
-        self.clearButtonA11yViewModel = clearButtonA11yViewModel
+        self.accessibilityIdentifier = accessibilityIdentifier
+        self.accessibilityHint = accessibilityHint
+        self.accessibilityLabel = accessibilityLabel
         self.url = url
     }
 }
@@ -128,9 +119,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         return urlTextField.resignFirstResponder()
     }
 
-    func configure(_ viewModel: LocationViewModel, delegate: LocationViewDelegate) {
-        urlTextField.text = viewModel.url
-        configureA11yForClearButton(viewModel.clearButtonA11yViewModel)
+    func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
+        urlTextField.text = state.url
+        configureA11yForClearButton(state)
         urlAbsolutePath = urlTextField.text
         formatAndTruncateURLTextField()
         locationViewDelegate = delegate
@@ -313,7 +304,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     // MARK: - Accessibility
-    private func configureA11yForClearButton(_ model: LocationViewModel.ClearButtonA11yViewModel) {
+    private func configureA11yForClearButton(_ model: LocationViewState) {
         clearButton.accessibilityIdentifier = model.accessibilityIdentifier
         clearButton.accessibilityHint = model.accessibilityHint
         clearButton.accessibilityLabel = model.accessibilityLabel

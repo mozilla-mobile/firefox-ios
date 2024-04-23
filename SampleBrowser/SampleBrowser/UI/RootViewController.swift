@@ -124,13 +124,11 @@ class RootViewController: UIViewController,
                 self.didClickMenu()
             })]
 
-        let locationViewModel = LocationViewModel(
-            clearButtonA11yViewModel: LocationViewModel.ClearButtonA11yViewModel(
+        let locationViewState = LocationViewState(
                 accessibilityIdentifier: "clearButton",
                 accessibilityHint: "Double tap to clear text",
-                accessibilityLabel: "Clean"
-            ),
-            url: url
+                accessibilityLabel: "Clean",
+                url: url
         )
 
         // FXIOS-8947: Use scroll position
@@ -138,7 +136,7 @@ class RootViewController: UIViewController,
             toolbarPosition: .top,
             scrollY: 0,
             isPrivate: false,
-            locationViewModel: locationViewModel,
+            locationViewState: locationViewState,
             navigationActions: [],
             pageActions: pageActions,
             browserActions: browserActions)
