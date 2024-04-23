@@ -19,6 +19,11 @@ class TabManagerMiddleware {
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
+
+        if let action = action as? TabPeekAction {
+            resolveTabPeekActions(action: action, state: state)
+        }
+
         let uuid = action.windowUUID
         switch action {
         case TabTrayAction.tabTrayDidLoad(let context):
@@ -82,28 +87,34 @@ class TabManagerMiddleware {
         case RemoteTabsPanelAction.openSelectedURL(let context):
             self.openSelectedURL(url: context.url, windowUUID: uuid)
 
-        case TabPeekAction.didLoadTabPeek(let context):
-            let tabID = context.tabUUID
-            self.didLoadTabPeek(tabID: tabID, uuid: uuid)
+        default:
+            break
+        }
+    }
 
-        case TabPeekAction.addToBookmarks(let context):
-            let tabID = context.tabUUID
-            self.addToBookmarks(with: tabID, uuid: uuid)
+    private func resolveTabPeekActions(action: TabPeekAction, state: AppState) {
+        guard let tabUUID = action.tabUUID else { return }
+        switch action.actionType {
+        case TabPeekAction.didLoadTabPeek:
+            didLoadTabPeek(tabID: tabUUID, uuid: action.windowUUID)
 
-        case TabPeekAction.sendToDevice(let context):
-            let tabID = context.tabUUID
-            self.sendToDevice(tabID: tabID, uuid: uuid)
+        case TabPeekAction.addToBookmarks:
+            addToBookmarks(with: tabUUID, uuid: action.windowUUID)
 
-        case TabPeekAction.copyURL(let context):
-            let tabID = context.tabUUID
-            self.copyURL(tabID: tabID, uuid: uuid)
+        case TabPeekAction.sendToDevice:
+            sendToDevice(tabID: tabUUID, uuid: action.windowUUID)
 
-        case TabPeekAction.closeTab(let context):
+        case TabPeekAction.copyURL:
+            copyURL(tabID: tabUUID, uuid: action.windowUUID)
+
+        case TabPeekAction.closeTab:
+            // TODO: verify if this works for closing a tab from an unselected tab panel
             guard let tabsState = state.screenState(TabsPanelState.self,
                                                     for: .tabsPanel,
                                                     window: action.windowUUID) else { return }
-            self.tabPeekCloseTab(with: context.tabUUID, uuid: uuid, isPrivate: tabsState.isPrivateMode)
-
+            tabPeekCloseTab(with: tabUUID,
+                            uuid: action.windowUUID,
+                            isPrivate: tabsState.isPrivateMode)
         default:
             break
         }
