@@ -52,7 +52,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
     func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {}
 
-    func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: DownloadError?) {
+    func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
         guard let downloadToast = self.downloadToast,
               let download = downloadToast.downloads.first,
               download.originWindow == windowUUID
@@ -63,7 +63,7 @@ extension BrowserViewController: DownloadQueueDelegate {
             downloadToast.dismiss(false)
 
             // We only care about download errors specific to our window's downloads
-            if error == nil || error?.windowUUID != uuid {
+            if error == nil {
                 let viewModel = ButtonToastViewModel(labelText: download.filename,
                                                      imageName: StandardImageIdentifiers.Large.checkmark,
                                                      buttonText: .DownloadsButtonTitle)
