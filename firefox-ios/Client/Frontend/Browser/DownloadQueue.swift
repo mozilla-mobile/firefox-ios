@@ -256,7 +256,7 @@ class DownloadQueue {
     }
 
     func removeDelegate(_ delegate: DownloadQueueDelegate) {
-        delegates.removeAll(where: { $0.delegate === delegate || $0.delegate == nil }) 
+        delegates.removeAll(where: { $0.delegate === delegate || $0.delegate == nil })
     }
 
     func enqueue(_ download: Download) {
