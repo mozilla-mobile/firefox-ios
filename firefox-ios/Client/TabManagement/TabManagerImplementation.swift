@@ -245,7 +245,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func generateTabDataForSaving() -> [TabData] {
-        let tabData = tabs.map { tab in
+        let tabData = normalTabs.map { tab in
             let oldTabGroupData = tab.metadataManager?.tabGroupData
             let state = TabGroupTimerState(rawValue: oldTabGroupData?.tabHistoryCurrentState ?? "")
             let groupData = TabGroupData(searchTerm: oldTabGroupData?.tabAssociatedSearchTerm,
@@ -287,6 +287,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func saveCurrentTabSessionData() {
         guard let selectedTab = self.selectedTab,
+              !selectedTab.isPrivate,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
         else { return }
