@@ -132,6 +132,7 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
+        let thisWindowUUID = windowUUID
         completionHandler(
             UIContextMenuConfiguration(
                 identifier: nil,
@@ -743,7 +744,8 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             // Open our helper and cancel this response from the webview.
-            if let downloadViewModel = downloadHelper.downloadViewModel(okAction: downloadAction) {
+            if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
+                                                                        okAction: downloadAction) {
                 presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBar)
             }
             decisionHandler(.cancel)
