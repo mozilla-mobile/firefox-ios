@@ -64,7 +64,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                      shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
 
         self.toolbarDelegate = toolbarDelegate
-        locationView.configure(state.url, delegate: self)
+        locationView.configure(state.locationViewState, delegate: self)
 
         setNeedsLayout()
         layoutIfNeeded()

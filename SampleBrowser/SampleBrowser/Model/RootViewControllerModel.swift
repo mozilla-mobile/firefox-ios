@@ -87,12 +87,19 @@ class RootViewControllerModel {
                 self.addressToolbarDelegate?.didTapMenu()
             })]
 
+        let locationViewState = LocationViewState(
+                accessibilityIdentifier: "clearButton",
+                accessibilityHint: "Double tap to clear text",
+                accessibilityLabel: "Clean",
+                url: url
+        )
+
         // FXIOS-8947: Use scroll position
         return AddressToolbarContainerModel(
             toolbarPosition: .top,
             scrollY: 0,
             isPrivate: false,
-            url: url,
+            locationViewState: locationViewState,
             navigationActions: [],
             pageActions: pageActions,
             browserActions: browserActions)
