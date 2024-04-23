@@ -9,6 +9,7 @@ class SettingAppearanceTest: BaseTestCase {
 
     // Smoketest
     // Check for the basic appearance of the Settings Menu
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394976
     func testCheckSetting() {
         dismissURLBarFocused()
 
@@ -106,14 +107,15 @@ class SettingAppearanceTest: BaseTestCase {
         reviewCell.tap()
         waitForExistence(safariApp, timeout: 10)
         XCTAssert(safariApp.state == .runningForeground)
-        // Commenting this part due to error re-launching the app
-        /* safariApp.terminate()
+
+        safariApp.terminate()
         XCUIDevice.shared.press(.home)
+
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
         app.activate()
-        waitForExistence(app.navigationBars["Settings"], timeout: 10)*/
+        waitForExistence(app.navigationBars["Settings"], timeout: 10)
     }
 
     func testOpenInSafari() {
@@ -122,27 +124,26 @@ class SettingAppearanceTest: BaseTestCase {
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        let safariButton = app.collectionViews.cells.element(boundBy: 5)
+        let safariButton = app.collectionViews.buttons["Open in Default Browser"]
         waitForExistence(safariButton)
         safariButton.tap()
 
         // Now in Safari
-        let safariLabel = safariapp.otherElements["Address"]
-        if #unavailable(iOS 15.0) {
-            waitForValueContains(safariLabel, value: "google")
-        }
+        let safariLabel = safariapp.textFields["Address"]
+        print(safariapp.debugDescription)
+        waitForValueContains(safariLabel, value: "google")
 
         // Go back to Focus
-        // Commenting this part out since this issue is common when coming back to the app
-        // Failed to launch org.mozilla.ios.Focus: The operation couldn’t be completed. Application cannot be launched because it has outstanding termination assertions.
-        // app.activate()
+        app.activate()
 
         // Now back to Focus
-        // waitForWebPageLoad()
-        // app.buttons["URLBar.deleteButton"].tap()
-        // waitForExistence(app.staticTexts["Your browsing history has been erased."])
+        waitForWebPageLoad()
+        waitForExistence(app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
+        waitForExistence(app.staticTexts["Browsing history cleared"])
     }
-
+    
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574975
     func testDisableAutocomplete() {
         dismissURLBarFocused()
 
@@ -171,6 +172,7 @@ class SettingAppearanceTest: BaseTestCase {
         toggle.tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574976
     func testAddRemoveCustomDomain() {
         dismissURLBarFocused()
         // Navigate to Settings
@@ -225,6 +227,7 @@ class SettingAppearanceTest: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569297
     func testSafariIntegration() {
         dismissURLBarFocused()
 
