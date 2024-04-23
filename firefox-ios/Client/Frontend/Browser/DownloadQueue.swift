@@ -333,13 +333,16 @@ extension DownloadQueue: DownloadDelegate {
     }
 
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) {
-        var progress = downloadProgress[download.originWindow] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
+        let uuid = download.originWindow
+        var progress = downloadProgress[uuid] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
         progress.bytesDownloaded += bytesDownloaded
-        downloadProgress[download.originWindow] = progress
+        downloadProgress[uuid] = progress
 
-        delegates.forEach { $0.delegate?.downloadQueue(self,
-                                                       didDownloadCombinedBytes: progress.bytesDownloaded,
-                                                       combinedTotalBytesExpected: progress.totalExpected)
+        delegates.forEach {
+            guard $0.delegate?.windowUUID == uuid else { return }
+            $0.delegate?.downloadQueue(self,
+                                       didDownloadCombinedBytes: progress.bytesDownloaded,
+                                       combinedTotalBytesExpected: progress.totalExpected)
         }
     }
 
