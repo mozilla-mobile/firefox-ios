@@ -44,9 +44,6 @@ extension BrowserViewController: DownloadQueueDelegate {
         didDownloadCombinedBytes combinedBytesDownloaded: Int64,
         combinedTotalBytesExpected: Int64?
     ) {
-        // For now, each window handles its downloads independently. For 'combined bytes' this is a bit messy
-        // since it will be combining downloads across multiple different windows. For now we update the toasts
-        // across all windows using this combined bytes total. This will likely be revisited soon. [FXIOS-8926]
         downloadToast?.combinedBytesDownloaded = combinedBytesDownloaded
     }
 
