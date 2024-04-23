@@ -911,6 +911,8 @@ extension BrowserViewController: WKNavigationDelegate {
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
 
+        scrollController.shouldScrollToTop = true
+
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
             updateFakespot(tab: tab, isReload: true)

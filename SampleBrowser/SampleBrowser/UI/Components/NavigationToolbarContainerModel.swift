@@ -6,9 +6,15 @@ import Common
 import ToolbarKit
 
 struct NavigationToolbarContainerModel {
+    let toolbarPosition: AddressToolbarPosition
     let actions: [ToolbarElement]
+    var manager: ToolbarManager = DefaultToolbarManager()
 
     var state: NavigationToolbarState {
-        return NavigationToolbarState(actions: actions)
+        return NavigationToolbarState(actions: actions, shouldDisplayBorder: shouldDisplayBorder)
+    }
+
+    private var shouldDisplayBorder: Bool {
+        manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 }
