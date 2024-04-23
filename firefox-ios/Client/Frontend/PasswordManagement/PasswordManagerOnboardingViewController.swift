@@ -11,8 +11,6 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     private struct UX {
         static let maxLabelLines: Int = 0
         static let buttonCornerRadius: CGFloat = 8
-        static let defaultContentSize: CGFloat = 0
-        static let leadingContentSize: CGFloat = 15
         static let standardSpacing: CGFloat = 20
         static let continueButtonHeight: CGFloat = 44
         static let buttonHorizontalPadding: CGFloat = 35
@@ -21,7 +19,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     private var onboardingMessageLabel: UILabel = . build { label in
         label.text = .Settings.Passwords.OnboardingMessage
-        label.font = FXFontStyles.Regular.title3.scaledFont()
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = UX.maxLabelLines
     }
@@ -35,10 +33,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.defaultContentSize,
-                                                                      leading: UX.leadingContentSize,
-                                                                      bottom: UX.defaultContentSize,
-                                                                      trailing: UX.defaultContentSize)
+        button.configuration?.titleAlignment = .center
         button.addTarget(self, action: #selector(self.proceedButtonTapped), for: .touchUpInside)
     }
 
