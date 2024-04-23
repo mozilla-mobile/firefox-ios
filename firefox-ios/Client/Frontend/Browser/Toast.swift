@@ -14,7 +14,6 @@ class Toast: UIView, ThemeApplicable {
         static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
         static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
         static let toastAnimationDuration = 0.5
-        static let fontSize: CGFloat = 15
     }
 
     var animationConstraint: NSLayoutConstraint?

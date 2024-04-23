@@ -326,7 +326,7 @@ class BrowserCoordinator: BaseCoordinator,
         return true
     }
 
-    private func handleSettings(with section: Route.SettingsSection) {
+    private func handleSettings(with section: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
@@ -344,6 +344,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         navigationController.onViewDismissed = { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
+            onDismiss?()
         }
         present(navigationController)
     }
@@ -435,9 +436,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserNavigationHandler
 
-    func show(settings: Route.SettingsSection) {
+    func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         presentWithModalDismissIfNeeded {
-            self.handleSettings(with: settings)
+            self.handleSettings(with: settings, onDismiss: onDismiss)
         }
     }
 
