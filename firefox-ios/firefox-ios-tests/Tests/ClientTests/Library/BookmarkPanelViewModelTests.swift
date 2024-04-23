@@ -56,7 +56,6 @@ class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
-        throw XCTSkip("Skipped until fixed with FXIOS-7721 #17219")
 //        profile.reopen()
 //        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 //        let expectation = expectation(description: "Subject reloaded")
