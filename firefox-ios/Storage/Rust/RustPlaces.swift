@@ -9,6 +9,7 @@ import Shared
 
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
+    func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
 }
 
 public protocol HistoryMetadataObserver {
