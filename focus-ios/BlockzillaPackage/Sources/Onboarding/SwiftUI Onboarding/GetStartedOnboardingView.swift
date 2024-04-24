@@ -99,11 +99,16 @@ internal extension OnboardingViewModel {
         config: GetStartedOnboardingViewConfig(
             title: "Welcome to Firefox Focus",
             subtitle: "Fast. Private. No distractions.",
-            buttonTitle: "Get Started"),
+            buttonTitle: "Get Started"
+        ),
         defaultBrowserConfig: DefaultBrowserViewConfig(
             title: "Focus isn't like other browsers",
             firstSubtitle: "We clear your history when you close the app for extra privacy",
             secondSubtitle: "Make Focus your default to protect your data with every link you open.",
             topButtonTitle: "Set as Default Browser",
-            bottomButtonTitle: "Skip"), dismissAction: {}, telemetry: { _ in })
+            bottomButtonTitle: "Skip"
+        ),
+        dismissAction: {},
+        telemetry: { _ in }
+    )
 }

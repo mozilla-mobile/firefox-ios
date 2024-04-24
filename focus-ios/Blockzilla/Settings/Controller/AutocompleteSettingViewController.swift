@@ -29,6 +29,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.settingsAutocompleteSection
         navigationController?.navigationBar.tintColor = .accent
 

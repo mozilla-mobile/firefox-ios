@@ -382,7 +382,9 @@ class BrowserViewController: UIViewController {
                 anchoredBy: self.urlBar.textFieldAnchor,
                 sourceRect: CGRect(
                     x: self.urlBar.textFieldAnchor.bounds.minX,
-                    y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
+                    y: self.urlBar.textFieldAnchor.bounds.maxY,
+                    width: 0,
+                    height: 0
                 ),
                 body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
                 dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
@@ -803,22 +805,26 @@ class BrowserViewController: UIViewController {
 
         clearBrowser()
 
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
-            screenshotView.snp.remakeConstraints { make in
-                make.centerX.equalTo(self.mainContainerView)
-                make.top.equalTo(self.mainContainerView.snp.bottom)
-                make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
-            }
+        UIView.animate(
+            withDuration: UIConstants.layout.deleteAnimationDuration,
+            animations: {
+                screenshotView.snp.remakeConstraints { make in
+                    make.centerX.equalTo(self.mainContainerView)
+                    make.top.equalTo(self.mainContainerView.snp.bottom)
+                    make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
+                }
             screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
-        }, completion: { _ in
-            self.urlBar.activateTextField()
-            Toast(text: UIConstants.strings.eraseMessage).show()
-            screenshotView.removeFromSuperview()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.onboardingEventsHandler.send(.clearTapped)
+            },
+            completion: { _ in
+                self.urlBar.activateTextField()
+                Toast(text: UIConstants.strings.eraseMessage).show()
+                screenshotView.removeFromSuperview()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.onboardingEventsHandler.send(.clearTapped)
+                }
             }
-        })
+        )
 
         userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
         let interaction = INInteraction(intent: eraseIntent, response: nil)
@@ -1714,7 +1720,6 @@ extension BrowserViewController: LegacyWebControllerDelegate {
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
 
-
         urlBarViewModel.loadingProgres = estimatedProgress
     }
 
@@ -1853,32 +1858,44 @@ extension BrowserViewController: LegacyWebControllerDelegate {
 
         scrollBarState = .animating
 
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapsedState = .extended
-            self.urlBarTopConstraint.update(offset: 0)
-            self.toolbarBottomConstraint.update(inset: 0)
-            scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
-            self.scrollBarOffsetAlpha = 0
-            self.view.layoutIfNeeded()
-        }, completion: { _ in
-            self.scrollBarState = .expanded
-        })
+        UIView.animate(
+            withDuration: UIConstants.layout.urlBarTransitionAnimationDuration,
+            delay: 0,
+            options: .allowUserInteraction,
+            animations: {
+                self.urlBar.collapsedState = .extended
+                self.urlBarTopConstraint.update(offset: 0)
+                self.toolbarBottomConstraint.update(inset: 0)
+                scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
+                self.scrollBarOffsetAlpha = 0
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                self.scrollBarState = .expanded
+            }
+        )
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
     private func hideToolbars() {
         let scrollView = webViewController.scrollView
         scrollBarState = .animating
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapsedState = .collapsed
-            self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
-            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
-            scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
-            self.scrollBarOffsetAlpha = 1
-            self.view.layoutIfNeeded()
-        }, completion: { _ in
-            self.scrollBarState = .collapsed
-        })
+        UIView.animate(
+            withDuration: UIConstants.layout.urlBarTransitionAnimationDuration,
+            delay: 0,
+            options: .allowUserInteraction,
+            animations: {
+                self.urlBar.collapsedState = .collapsed
+                self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
+                self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
+                scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
+                self.scrollBarOffsetAlpha = 1
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                self.scrollBarState = .collapsed
+            }
+        )
     }
 
     private func snapToolbars(scrollView: UIScrollView) {

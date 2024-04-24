@@ -308,6 +308,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     }
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.titleLabel.text = nil
     }
 }

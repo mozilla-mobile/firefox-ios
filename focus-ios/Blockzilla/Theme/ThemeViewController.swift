@@ -64,6 +64,7 @@ class ThemeViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.theme
         navigationController?.navigationBar.tintColor = .accent
 

@@ -161,6 +161,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
