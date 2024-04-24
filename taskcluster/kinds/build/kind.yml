@@ -24,7 +24,7 @@ tasks:
                 - firefox_configure_build
         optimization:
             skip-unless-changed:
-                - "taskcluster/kinds/build/kind.yml"
+                - taskcluster/kinds/build/kind.yml
 
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
