@@ -52,7 +52,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - unused_optional_binding
   # - unused_setter_value
   # - vertical_parameter_alignment
-  # - vertical_whitespace
+  - vertical_whitespace
   # - void_function_in_ternary
   # - void_return
   # - file_header
