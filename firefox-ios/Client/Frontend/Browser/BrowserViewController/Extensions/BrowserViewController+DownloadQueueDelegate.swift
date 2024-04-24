@@ -55,7 +55,6 @@ extension BrowserViewController: DownloadQueueDelegate {
               download.originWindow == windowUUID
         else { return }
 
-        let uuid = windowUUID
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
 

@@ -132,7 +132,6 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
-        let thisWindowUUID = windowUUID
         completionHandler(
             UIContextMenuConfiguration(
                 identifier: nil,
