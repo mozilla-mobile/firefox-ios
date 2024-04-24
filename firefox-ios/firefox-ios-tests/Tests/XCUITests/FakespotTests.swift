@@ -21,7 +21,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
-    // Smoketest
     func testReviewQualityCheckBottomSheetUI() {
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
@@ -68,7 +67,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358924
-    // Smoketest
     func testAcceptTheRejectedOptInNotification() {
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
@@ -117,7 +115,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
-    // Smoketest
     func testSettingsSectionUI() {
         // Navigate to a product detail page
         reachReviewChecker()

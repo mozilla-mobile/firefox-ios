@@ -26,6 +26,7 @@
         "CreditCardsTests\/testErrorStatesCreditCards()",
         "CreditCardsTests\/testManageCreditCardsOption()",
         "CreditCardsTests\/testSaveThisCardPrompt()",
+        "CreditCardsTests\/testUpdatePrompt()",
         "CreditCardsTests\/testVerifyThatMultipleCardsCanBeAdded()",
         "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",
         "DataManagementTests",
