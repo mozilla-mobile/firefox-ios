@@ -351,6 +351,82 @@ class SearchTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306942
+    func testSearchSuggestions() {
+        // Tap on URL Bar and type "g"
+        navigator.nowAt(NewTabScreen)
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+
+        // Tap on the "Append Arrow button"
+        app.tables.buttons["appendUpLarge"].firstMatch.tap()
+
+        // The search suggestion fills the URL bar but does not conduct the search
+        let urlBarAddress = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
+        waitForValueContains(urlBarAddress, value: "google")
+        XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
+
+        // Delete the text and type "g"
+        mozWaitForElementToExist(app.buttons["Clear text"])
+        app.buttons["Clear text"].tap()
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+
+        // Tap on the text letter "g"
+        app.tables.cells.firstMatch.tap()
+        waitUntilPageLoad()
+
+        // The search is conducted through the default search engine
+        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        waitForValueContains(urlBar, value: "www.google.com/search?q=")
+
+        // Disable "Show search suggestions" from Settings and type text in a new tab
+        createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
+
+        // No search suggestions are displayed
+        // Firefox suggest adds 2 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 2, isSwitchOn: false)
+
+        // Enable "Show search suggestions" from Settings and type text in a new tab
+        app.tables.cells.firstMatch.tap()
+        waitUntilPageLoad()
+        createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: true)
+
+        // Search suggestions are displayed
+        // Firefox suggest adds 2 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 6, isSwitchOn: true)
+    }
+
+    private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
+        let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
+        mozWaitForElementToExist(showSearchSuggestions)
+        let switchValue = showSearchSuggestions.value
+        if switchValue as? String == "0", true && turnOnSwitch == true {
+            showSearchSuggestions.tap()
+        } else if switchValue as? String == "1", true && turnOnSwitch == false {
+            showSearchSuggestions.tap()
+        }
+    }
+
+    private func createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: Bool) {
+        navigator.goto(SearchSettings)
+        turnOnOffSearchSuggestions(turnOnSwitch: turnOnSwitch)
+        navigator.goto(NewTabScreen)
+        navigator.createNewTab()
+        navigator.nowAt(NewTabScreen)
+    }
+
+    private func typeTextAndValidateSearchSuggestions(text: String, totalSuggestedSearches: Int, isSwitchOn: Bool) {
+        typeOnSearchBar(text: text)
+        // Search suggestions are shown
+        if isSwitchOn {
+            mozWaitForElementToExist(app.staticTexts["Google Search"])
+            mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
+        } else {
+            mozWaitForElementToNotExist(app.staticTexts["Google Search"])
+            mozWaitForElementToNotExist(app.tables.cells.staticTexts["g"])
+        }
+        XCTAssertEqual(app.tables.cells.count, totalSuggestedSearches)
+    }
+
     private func validateUrlHasFocusAndKeyboardIsDisplayed() {
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)

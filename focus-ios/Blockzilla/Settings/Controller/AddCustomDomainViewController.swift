@@ -59,6 +59,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.autocompleteAddCustomUrl
         navigationController?.navigationBar.tintColor = .accent
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))

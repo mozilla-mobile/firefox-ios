@@ -13,10 +13,13 @@ class ErrorPage {
 
     var data: Data {
         let file = Bundle.main.path(forResource: "errorPage", ofType: "html")!
-
-        let page = try! String(contentsOfFile: file)
-            .replacingOccurrences(of: "%messageLong%", with: error.localizedDescription)
-            .replacingOccurrences(of: "%button%", with: UIConstants.strings.errorTryAgain)
-        return page.data(using: .utf8)!
+        do {
+            let page = try String(contentsOfFile: file)
+                .replacingOccurrences(of: "%messageLong%", with: error.localizedDescription)
+                .replacingOccurrences(of: "%button%", with: UIConstants.strings.errorTryAgain)
+            return page.data(using: .utf8)!
+        } catch {
+           fatalError("Invalid content in \(file)")
+        }
     }
 }

@@ -53,6 +53,9 @@ final class NimbusFeatureFlagLayer {
         case .loginAutofill:
             return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
 
+        case .microSurvey:
+            return checkMicroSurveyFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
@@ -256,6 +259,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkReduxSearchSettingsFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.reduxSearchSettingsFeature.value()
+        return config.enabled
+    }
+
+    private func checkMicroSurveyFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.microSurveyFeature.value()
+
         return config.enabled
     }
 

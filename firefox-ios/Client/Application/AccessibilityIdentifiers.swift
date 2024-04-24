@@ -131,6 +131,13 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct MicroSurvey {
+        struct Prompt {
+            static let closeButton = "MicroSurvey.Prompt.CloseButton"
+            static let takeSurveyButton = "MicroSurvey.Prompt.TakeSurveyButton"
+        }
+    }
+
     struct PrivateMode {
         static let dimmingView = "PrivateMode.DimmingView"
         struct Homepage {
@@ -441,6 +448,7 @@ public struct AccessibilityIdentifiers {
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
             static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
+            static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
         }
 
         struct AdvancedAccountSettings {

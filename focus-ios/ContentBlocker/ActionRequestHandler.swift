@@ -17,17 +17,25 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
             }
         }
 
-        let mergedListJSON = try! JSONSerialization.data(withJSONObject: mergedList, options: JSONSerialization.WritingOptions(rawValue: 0))
-        let attachment = NSItemProvider(item: mergedListJSON as NSSecureCoding?, typeIdentifier: kUTTypeJSON as String)
-        let item = NSExtensionItem()
-        item.attachments = [attachment]
-        context.completeRequest(returningItems: [item], completionHandler: nil)
+        do {
+            let mergedListJSON = try JSONSerialization.data(withJSONObject: mergedList, options: JSONSerialization.WritingOptions(rawValue: 0))
+            let attachment = NSItemProvider(item: mergedListJSON as NSSecureCoding?, typeIdentifier: kUTTypeJSON as String)
+            let item = NSExtensionItem()
+            item.attachments = [attachment]
+            context.completeRequest(returningItems: [item], completionHandler: nil)
+        } catch {
+            fatalError("Invalid json list \(mergedList)")
+        }
     }
 
     /// Gets the dictionary form of the tracking list with the specified file name.
     private func itemsFromFile(_ name: String) -> [NSDictionary] {
         let url = Bundle.main.url(forResource: name, withExtension: "json")
-        let data = try! Data(contentsOf: url!)
-        return try! JSONSerialization.jsonObject(with: data, options: []) as! [NSDictionary]
+        do {
+            let data = try Data(contentsOf: url!)
+            return try JSONSerialization.jsonObject(with: data, options: []) as! [NSDictionary]
+        } catch {
+            fatalError("Invalid data at \(url!)")
+        }
     }
 }

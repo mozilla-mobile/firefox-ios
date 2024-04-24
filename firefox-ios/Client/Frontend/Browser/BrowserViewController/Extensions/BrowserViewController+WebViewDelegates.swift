@@ -862,11 +862,14 @@ extension BrowserViewController: WKNavigationDelegate {
             self,
             challenge: challenge,
             loginsHelper: loginsHelper
-        ).uponQueue(.main) { res in
-            if let credentials = res.successValue {
-                completionHandler(.useCredential, credentials.credentials)
-            } else {
-                completionHandler(.rejectProtectionSpace, nil)
+        ) { res in
+            DispatchQueue.main.async {
+                switch res {
+                case .success(let credentials):
+                    completionHandler(.useCredential, credentials.credentials)
+                case .failure:
+                    completionHandler(.rejectProtectionSpace, nil)
+                }
             }
         }
     }
@@ -907,6 +910,8 @@ extension BrowserViewController: WKNavigationDelegate {
         // can be correctly shown on beside the URL bar
         tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
+
+        scrollController.shouldScrollToTop = true
 
         if tabManager.selectedTab === tab {
             updateUIForReaderHomeStateForTab(tab, focusUrlBar: true)
@@ -1043,19 +1048,25 @@ private extension BrowserViewController {
     func handleServerTrust(challenge: URLAuthenticationChallenge,
                            completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-        // If this is a certificate challenge, see if the certificate has previously been
-        // accepted by the user.
-        let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
+        DispatchQueue.global(qos: .userInitiated).async {
+            // If this is a certificate challenge, see if the certificate has previously been
+            // accepted by the user.
+            let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
 
-        guard let trust = challenge.protectionSpace.serverTrust,
-              let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
-              profile.certStore.containsCertificate(cert[0], forOrigin: origin)
-        else {
-            completionHandler(.performDefaultHandling, nil)
-            return
+            guard let trust = challenge.protectionSpace.serverTrust,
+                  let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
+                  self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
+            else {
+                DispatchQueue.main.async {
+                    completionHandler(.performDefaultHandling, nil)
+                }
+                return
+            }
+
+            DispatchQueue.main.async {
+                completionHandler(.useCredential, URLCredential(trust: trust))
+            }
         }
-
-        completionHandler(.useCredential, URLCredential(trust: trust))
     }
 
     func updateObservationReferral(metadataManager: LegacyTabMetadataManager, url: String?, isPrivate: Bool) {

@@ -13,7 +13,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func didChangeZoomLevel()
 }
 
-class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
+final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     // MARK: - Constants
 
     private struct UX {
@@ -31,7 +31,6 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
         static let separatorHeightMultiplier = 0.74
-        static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
     }
@@ -74,9 +73,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private lazy var zoomLevel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
-                                                            size: UX.fontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true

@@ -224,9 +224,13 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     private func addScript(forResource resource: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly mainFrameOnly: Bool) {
-        let source = try! String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
-        let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-        browserView.configuration.userContentController.addUserScript(script)
+        do {
+            let source = try String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
+            let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+            browserView.configuration.userContentController.addUserScript(script)
+        } catch {
+            fatalError("Invalid data in file \(resource)")
+        }
     }
 
     private func setupTrackingProtectionScripts() {
@@ -337,6 +341,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
         searchInContentTelemetry = SearchInContentTelemetry()
     }
