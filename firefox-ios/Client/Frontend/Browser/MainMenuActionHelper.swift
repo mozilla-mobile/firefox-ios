@@ -467,7 +467,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {
-        let uuid = windowUUID
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
@@ -477,7 +476,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             iconString: StandardImageIdentifiers.Large.nightMode,
             isEnabled: nightModeEnabled
         ) { _ in
-            NightModeHelper.toggle(tabManager: self.tabManager)
+            NightModeHelper.toggle()
 
             if NightModeHelper.isActivated() {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
@@ -485,7 +484,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            self.themeManager.reloadTheme(for: uuid)
+            let windowManager: WindowManager = AppContainer.shared.resolve()
+            let allWindowUUIDS = windowManager.allWindowUUIDs(includingReserved: false)
+            allWindowUUIDS.forEach { uuid in
+                self.themeManager.reloadTheme(for: uuid)
+            }
         }.items
         items.append(nightMode)
 
