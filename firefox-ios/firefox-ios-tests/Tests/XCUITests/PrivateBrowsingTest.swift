@@ -95,7 +95,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.goto(SettingsScreen)
-        
+
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
         /*
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
@@ -169,7 +169,7 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307011
     func testClearIndexedDB() {
         navigator.nowAt(NewTabScreen)
-        
+
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
         /*
         enableClosePrivateBrowsingOptionWhenLeaving()
@@ -350,7 +350,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
-        
+
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
         /*
         enableClosePrivateBrowsingOptionWhenLeaving()
