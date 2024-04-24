@@ -127,9 +127,8 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.currentTheme(for: windowUUID).colors
-        learnMoreButton.setTitleColor(currentTheme.actionPrimary, for: .normal)
-        continueButton.backgroundColor = currentTheme.actionPrimary
-        continueButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        learnMoreButton.applyTheme(theme: currentTheme)
+        continueButton.applyTheme(theme: currentTheme)
     }
 }

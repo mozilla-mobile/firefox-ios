@@ -81,7 +81,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.currentTheme(for: windowUUID).colors
-        learnMoreButton.setTitleColor(currentTheme.actionPrimary, for: .normal)
+        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        learnMoreButton.applyTheme(theme: currentTheme)
     }
 }
