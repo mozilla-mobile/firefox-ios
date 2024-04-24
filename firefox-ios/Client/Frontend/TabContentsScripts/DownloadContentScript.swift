@@ -64,6 +64,7 @@ class DownloadContentScript: TabContentScript {
               let data = Bytes.decodeBase64(base64String)
         else { return }
 
+        let windowUUID = tab?.windowUUID ?? (AppContainer.shared.resolve() as WindowManager).activeWindow
         defer {
             notificationCenter.post(name: .PendingBlobDownloadAddedToQueue, withObject: nil)
             DownloadContentScript.blobUrlForDownload = nil
@@ -89,7 +90,7 @@ class DownloadContentScript: TabContentScript {
             }
         }
 
-        let download = BlobDownload(filename: filename, mimeType: mimeType, size: size, data: data)
+        let download = BlobDownload(originWindow: windowUUID, filename: filename, mimeType: mimeType, size: size, data: data)
         downloadQueue.enqueue(download)
     }
 }
