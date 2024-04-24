@@ -25,6 +25,7 @@ class BookmarksPanelViewModel {
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
+         bookmarkHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
