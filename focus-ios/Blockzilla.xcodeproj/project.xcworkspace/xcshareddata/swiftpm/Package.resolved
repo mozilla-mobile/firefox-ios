@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "fd5a73d20b519517a7840526266ef20901aedbcb",
-          "version": "59.0.0"
+          "revision": "227b9d80062eb6921963fac1899a25fff6babe02",
+          "version": "60.0.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "0fe66bab085afa96d86bdb801392a63c3b9c2a4a",
-          "version": "127.0.20240424050255"
+          "revision": "86be6a173c32ee2403f3cd61bbdb8c39c6e0152b",
+          "version": "127.0.20240424134628"
         }
       },
       {
