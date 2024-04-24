@@ -22,14 +22,11 @@ tasks:
         bitrise:
             workflows:
                 - firefox_configure_build
-        optimization:
-            skip-unless-changed:
-                - "firefox-ios/**"
-                - "BrowserKit/**"
-                - "bitrise.yml"
-                - ".swiftlint"
-                - "taskcluster/**"
         
+        #optimization:
+        #    skip-unless-changed:
+        #        - "taskcluster/**"
+
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
         attributes:
