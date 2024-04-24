@@ -15,6 +15,11 @@ tasks:
         attributes:
             chunk_locales: ["en-US"]
         run-on-tasks-for: []
+        treeherder:
+            symbol: B(screenshots)
+            kind: build
+            tier: 1
+            platform: ios/opt
         worker-type: bitrise
         bitrise:
             artifact_prefix: public
