@@ -26,17 +26,23 @@ public struct LocationViewState {
     public let accessibilityIdentifier: String
     public let accessibilityHint: String
     public let accessibilityLabel: String
+    public let urlTextFieldPlaceholder: String
+    public let searchEngineImageName: String
     public let url: String?
 
     public init(
         accessibilityIdentifier: String,
         accessibilityHint: String,
         accessibilityLabel: String,
+        urlTextFieldPlaceholder: String,
+        searchEngineImageName: String,
         url: String?
     ) {
         self.accessibilityIdentifier = accessibilityIdentifier
         self.accessibilityHint = accessibilityHint
         self.accessibilityLabel = accessibilityLabel
+        self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
+        self.searchEngineImageName = searchEngineImageName
         self.url = url
     }
 }
@@ -83,7 +89,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private lazy var urlTextField: UITextField = .build { [self] urlTextField in
         urlTextField.accessibilityIdentifier = "url"
-        urlTextField.placeholder = "Search or enter address"
         urlTextField.backgroundColor = .clear
         urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
         urlTextField.adjustsFontForContentSizeCategory = true
@@ -137,9 +142,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
-        urlTextField.text = state.url
+        searchEngineImageView.image = UIImage(named: state.searchEngineImageName)
+        configureURLTextField(state)
         configureA11yForClearButton(state)
-        urlAbsolutePath = urlTextField.text
         formatAndTruncateURLTextField()
         locationViewDelegate = delegate
     }
@@ -269,6 +274,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     // MARK: - `urlTextField` Configuration
+    private func configureURLTextField(_ state: LocationViewState) {
+        urlTextField.text = state.url
+        urlTextField.placeholder = state.urlTextFieldPlaceholder
+        urlAbsolutePath = urlTextField.text
+    }
+
     private func formatAndTruncateURLTextField() {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
@@ -371,10 +382,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     // MARK: - Accessibility
-    private func configureA11yForClearButton(_ model: LocationViewState) {
-        clearButton.accessibilityIdentifier = model.accessibilityIdentifier
-        clearButton.accessibilityHint = model.accessibilityHint
-        clearButton.accessibilityLabel = model.accessibilityLabel
+    private func configureA11yForClearButton(_ state: LocationViewState) {
+        clearButton.accessibilityIdentifier = state.accessibilityIdentifier
+        clearButton.accessibilityHint = state.accessibilityHint
+        clearButton.accessibilityLabel = state.accessibilityLabel
     }
 
     // MARK: - ThemeApplicable
