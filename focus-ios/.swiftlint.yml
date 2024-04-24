@@ -6,7 +6,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - closure_parameter_position
   # - colon
   # - comma
-  # - comment_spacing
+  - comment_spacing
   - compiler_protocol_init
   - computed_accessors_order
   # - control_statement
