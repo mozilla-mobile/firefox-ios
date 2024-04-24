@@ -20,6 +20,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 40, height: 40)
+        static let locationHeight: CGFloat = 44
     }
 
     private weak var toolbarDelegate: AddressToolbarDelegate?
@@ -135,6 +136,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
+            locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
