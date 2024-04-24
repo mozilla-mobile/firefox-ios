@@ -71,10 +71,15 @@ final class NimbusFeatureFlagLayer {
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
+
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
+
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
+
+        case .toolbarRefactor:
+            return checkToolbarRefactorFeature(from: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -145,6 +150,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
         return config.enabled
     }
 
