@@ -448,6 +448,7 @@ public struct AccessibilityIdentifiers {
             static let deleteMozillaEngine = "Remove Mozilla Engine"
             static let deleteButton = "Delete"
             static let disableSearchSuggestsInPrivateMode = "PrivateMode.DisableSearchSuggests"
+            static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
         }
 
         struct AdvancedAccountSettings {
