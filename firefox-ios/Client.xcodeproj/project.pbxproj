@@ -1448,6 +1448,7 @@
 		E177989A2BD7D44200F6F0EB /* ToolbarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17798992BD7D44200F6F0EB /* ToolbarState.swift */; };
 		E177989C2BD7D48500F6F0EB /* ToolbarAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E177989B2BD7D48500F6F0EB /* ToolbarAction.swift */; };
 		E177989E2BD7D75A00F6F0EB /* ToolbarMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = E177989D2BD7D75A00F6F0EB /* ToolbarMiddleware.swift */; };
+		E17798A02BD8043800F6F0EB /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E177989F2BD8043800F6F0EB /* ToolbarKit */; };
 		E17BE4C42A94BA6900C5124E /* FakespotHighlightGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */; };
 		E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */; };
 		E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */; };
@@ -8004,6 +8005,7 @@
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				F8324A7C2649A5A5007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
+				E17798A02BD8043800F6F0EB /* ToolbarKit in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
@@ -12496,6 +12498,7 @@
 				8AF2D0FB2A5F272A00C7DD69 /* ComponentLibrary */,
 				8AB30EC72B6C038600BD9A9B /* Lottie */,
 				AB2AC6622BCFD0A200022AAB /* X509 */,
+				E177989F2BD8043800F6F0EB /* ToolbarKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -21853,6 +21856,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
 			productName = MappaMundi;
+		};
+		E177989F2BD8043800F6F0EB /* ToolbarKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ToolbarKit;
 		};
 		F8DEACC42A3D43DA00C3B19D /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
