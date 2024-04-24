@@ -95,6 +95,9 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.goto(SettingsScreen)
+        
+        // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
+        /*
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
         while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
@@ -155,6 +158,7 @@ class PrivateBrowsingTest: BaseTestCase {
             app.cells.staticTexts["Internet for people, not profit — Mozilla. Currently selected tab."]
         )
         checkOpenTabsAfterClosingPrivateMode()
+        */
     }
 
     /* Loads a page that checks if an db file exists already. It uses indexedDB on both the main document,
@@ -165,6 +169,9 @@ class PrivateBrowsingTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307011
     func testClearIndexedDB() {
         navigator.nowAt(NewTabScreen)
+        
+        // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
+        /*
         enableClosePrivateBrowsingOptionWhenLeaving()
 
         func checkIndexedDBIsCreated() {
@@ -182,6 +189,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         checkIndexedDBIsCreated()
+         */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307007
@@ -342,12 +350,16 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        
+        // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
+        /*
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         checkOpenTabsAfterClosingPrivateMode()
+        */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307009
