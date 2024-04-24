@@ -13,6 +13,11 @@ tasks:
     tests:
         description: Run Performance Tests on iOS Simulator in Bitrise
         run-on-tasks-for: []
+        treeherder:
+            symbol: bitrise-perf
+            kind: test
+            platform: ios-simulator-iphone14-16-4/opt
+            tier: 1
         worker-type: bitrise
         bitrise:
             artifact_prefix: public
