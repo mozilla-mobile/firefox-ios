@@ -1217,7 +1217,6 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: This step is to build, archive and upload Firefox Release and Beta
-
   Bitrise_Performance_Test:
     steps:
     - cache-pull@2.1:
