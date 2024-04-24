@@ -6,7 +6,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - closure_parameter_position
   # - colon
   # - comma
-  # - comment_spacing
+  - comment_spacing
   - compiler_protocol_init
   - computed_accessors_order
   # - control_statement
@@ -14,7 +14,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - dynamic_inline
   - empty_enum_arguments
   - empty_parameters
-  # - empty_parentheses_with_trailing_closure
+  - empty_parentheses_with_trailing_closure
   # - for_where
   - force_try
   - implicit_getter
@@ -52,7 +52,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - unused_optional_binding
   # - unused_setter_value
   # - vertical_parameter_alignment
-  # - vertical_whitespace
+  - vertical_whitespace
   # - void_function_in_ternary
   # - void_return
   # - file_header
@@ -63,7 +63,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - contains_over_filter_count
   # - contains_over_filter_is_empty
   - contains_over_first_not_nil
-  # - contains_over_range_nil_comparison
+  - contains_over_range_nil_comparison
   # - empty_collection_literal
   # - empty_count
   - empty_string

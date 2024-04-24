@@ -1714,7 +1714,6 @@ extension BrowserViewController: LegacyWebControllerDelegate {
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
 
-
         urlBarViewModel.loadingProgres = estimatedProgress
     }
 
