@@ -28,6 +28,7 @@ tasks:
                 - "BrowserKit/**"
                 - "bitrise.yml"
                 - ".swiftlint"
+                - "taskcluster/**"
         
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
