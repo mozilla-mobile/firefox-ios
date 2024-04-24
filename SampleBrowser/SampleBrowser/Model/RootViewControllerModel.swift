@@ -92,7 +92,7 @@ class RootViewControllerModel {
                 accessibilityHint: "Double tap to clear text",
                 accessibilityLabel: "Clean",
                 urlTextFieldPlaceholder: "Search or enter address",
-                searchEngineImageName: "",
+                searchEngineImageName: "bingSearchEngine",
                 url: url
         )
 
