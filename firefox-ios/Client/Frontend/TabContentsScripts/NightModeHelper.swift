@@ -25,7 +25,9 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        // Do nothing.
+        guard let webView = message.frameInfo.webView else { return }
+        let jsCallback = "window.__firefox__.NightMode.setEnabled(\(NightModeHelper.isActivated()))"
+        webView.evaluateJavascriptInDefaultContentWorld(jsCallback)
     }
 
     static func toggle(
