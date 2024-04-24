@@ -58,7 +58,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - file_header
   # - redundant_type_annotation
   # - attributes
-  # - closing_brace
+  - closing_brace
   # - closure_end_indentation
   # - contains_over_filter_count
   # - contains_over_filter_is_empty
