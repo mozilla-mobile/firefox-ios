@@ -501,7 +501,7 @@ class BrowserViewController: UIViewController,
     private func nightModeUpdates() {
         if NightModeHelper.isActivated(),
            !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff(tabManager: tabManager)
+            NightModeHelper.turnOff()
             themeManager.reloadTheme(for: windowUUID)
         }
 
