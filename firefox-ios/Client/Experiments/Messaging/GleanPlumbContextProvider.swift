@@ -13,6 +13,7 @@ class GleanPlumbContextProvider {
         case isDefaultBrowser = "is_default_browser"
         case isInactiveNewUser = "is_inactive_new_user"
         case allowedTipsNotifications = "allowed_tips_notifications"
+        case numberOfAppLaunches = "number_of_app_launches"
     }
 
     struct Constant {
@@ -21,6 +22,11 @@ class GleanPlumbContextProvider {
     }
 
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
+    private var profile: Profile
+
+    init(profile: Profile = AppContainer.shared.resolve()) {
+        self.profile = profile
+    }
 
     private var todaysDate: String {
         let dateFormatter = DateFormatter()
@@ -30,6 +36,10 @@ class GleanPlumbContextProvider {
 
     private var isDefaultBrowser: Bool {
         return userDefaults.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
+    }
+
+    private var numberOfAppLaunches: Int32 {
+        return profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
     }
 
     var isInactiveNewUser: Bool {
@@ -62,6 +72,7 @@ class GleanPlumbContextProvider {
         return [ContextKey.todayDate.rawValue: todaysDate,
                 ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser,
                 ContextKey.isInactiveNewUser.rawValue: isInactiveNewUser,
+                ContextKey.numberOfAppLaunches.rawValue: numberOfAppLaunches,
                 ContextKey.allowedTipsNotifications.rawValue: allowedTipsNotifications]
     }
 }
