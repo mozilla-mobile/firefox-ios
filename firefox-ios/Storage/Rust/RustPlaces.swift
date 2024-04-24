@@ -10,6 +10,13 @@ import Shared
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
+    func updateBookmarkNode(
+        guid: GUID,
+        parentGUID: GUID?,
+        position: UInt32?,
+        title: String?,
+        url: String?
+    ) -> Success
 }
 
 public protocol HistoryMetadataObserver {
