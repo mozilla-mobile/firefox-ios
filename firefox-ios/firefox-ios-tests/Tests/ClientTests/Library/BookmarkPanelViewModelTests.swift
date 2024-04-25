@@ -139,7 +139,7 @@ class BookmarksPanelViewModelTests: XCTestCase {
 extension BookmarksPanelViewModelTests {
     func createSubject(guid: GUID) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
-                                                bookmarkHandler: profile.places,
+                                                bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
         trackForMemoryLeaks(viewModel)
         return viewModel

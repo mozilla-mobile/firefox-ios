@@ -63,7 +63,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
                    navigationController: UINavigationController?,
                    logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
-                                                bookmarkHandler: profile.places,
+                                                bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
         let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         nextController.title = .Bookmarks.Menu.DesktopBookmarks

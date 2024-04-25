@@ -305,7 +305,7 @@ private extension BookmarksPanelTests {
     func createPanel() -> SpyBookmarksPanel {
         let profile = MockProfile()
         let viewModel = BookmarksPanelViewModel(profile: profile,
-                                                bookmarkHandler: profile.places,
+                                                bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: "TestGuid")
         viewModel.bookmarkFolder = LocalDesktopFolder()
         return SpyBookmarksPanel(viewModel: viewModel, windowUUID: .XCTestDefaultUUID)

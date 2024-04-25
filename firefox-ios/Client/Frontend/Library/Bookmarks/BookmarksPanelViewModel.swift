@@ -20,17 +20,17 @@ class BookmarksPanelViewModel {
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
-    private var bookmarkHandler: BookmarksHandler
+    private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
     private var logger: Logger
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
-         bookmarkHandler: BookmarksHandler,
+         bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
-        self.bookmarkHandler = bookmarkHandler
+        self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.logger = logger
     }
