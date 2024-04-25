@@ -16,7 +16,7 @@ struct DefaultApplicationHelper: ApplicationHelper {
     func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
     }
-    
+
     /// Convenience. Opens a URL with the application.
     ///
     /// On iPadOS if more than one window is open, iOS will
@@ -25,7 +25,7 @@ struct DefaultApplicationHelper: ApplicationHelper {
     func open(_ url: URL) {
         UIApplication.shared.open(url)
     }
-    
+
     /// Opens a URL within a specific target window (UIScene).
     ///
     /// Opens a URL within a specific window on iPadOS, identified
