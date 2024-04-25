@@ -20,6 +20,7 @@ class BookmarksPanelViewModel {
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
+    private var bookmarkHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
     private var logger: Logger
 
@@ -29,6 +30,7 @@ class BookmarksPanelViewModel {
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.bookmarkHandler = bookmarkHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.logger = logger
     }
