@@ -132,8 +132,8 @@ class BookmarksPanelViewModel {
 
     /// Subfolder data case happens when we select a folder created by a user
     private func setupSubfolderData(completion: @escaping () -> Void) {
-        profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID,
-                                        recursive: false).uponQueue(.main) { result in
+        bookmarksHandler.getBookmarksTree(rootGUID: bookmarkFolderGUID,
+                                          recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 self.logger.log("Sublfolder data setup failed \(String(describing: result.failureValue))",
                                 level: .debug,
