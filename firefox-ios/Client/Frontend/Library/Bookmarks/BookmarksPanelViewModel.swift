@@ -71,7 +71,11 @@ class BookmarksPanelViewModel {
         }
 
         let newIndex = getNewIndex(from: destinationIndexPath.row)
-        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(newIndex))
+        _ = bookmarksHandler.updateBookmarkNode(guid: bookmarkNode.guid,
+                                                parentGUID: nil,
+                                                position: UInt32(newIndex),
+                                                title: nil,
+                                                url: nil)
 
         bookmarkNodes.remove(at: sourceIndexPath.row)
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
