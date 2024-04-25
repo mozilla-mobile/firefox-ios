@@ -36,13 +36,13 @@ struct DefaultApplicationHelper: ApplicationHelper {
     ///   - url: the URL to open.
     ///   - inWindow: the UUID of the window to open the URL.
     func open(_ url: URL, inWindow: WindowUUID) {
-        let targetScene = UIApplication.shared.connectedScenes.contains(where: {
+        let foundTargetScene = UIApplication.shared.connectedScenes.contains(where: {
             guard let delegate = $0.delegate as? SceneDelegate,
                   delegate.sceneCoordinator?.windowUUID == inWindow else { return false }
             delegate.handleOpenURL(url)
             return true
         })
-        if targetScene == nil {
+        if !foundTargetScene {
             open(url)
         }
     }
