@@ -19,7 +19,7 @@ struct DefaultApplicationHelper: ApplicationHelper {
 
     /// Convenience. Opens a URL with the application.
     ///
-    /// On iPadOS if more than one window is open, iOS will
+    /// On iPadOS if more than one window is open, the OS will
     /// determine which UIScene the URL is delivered to.
     /// - Parameter url: the URL to open.
     func open(_ url: URL) {
