@@ -69,8 +69,8 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         // use configuration.background.backgroundColor without any transformation
         updatedConfiguration.background.backgroundColorTransformer = nil
         updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
-        subviews.first?.layer.cornerRadius = UX.buttonCornerRadius
         updatedConfiguration.cornerStyle = .fixed
+        addCornerRadiusForVisualEffectView(radiusSize: UX.buttonCornerRadius)
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
