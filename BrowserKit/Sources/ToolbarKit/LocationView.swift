@@ -20,6 +20,13 @@ protocol LocationViewDelegate: AnyObject {
     ///
     /// - Parameter text: The text for which the location view should search.
     func locationViewShouldSearchFor(_ text: String)
+
+    /// Called to determine the display text for a given URL in the location view.
+    ///
+    /// - Parameter url: The URL for which to determine the display text.
+    /// - Returns: A tuple containing the display text as an optional String and a Boolean value
+    /// indicating whether the text represents a search query (true) or a URL (false).
+    func locationViewDisplayTextForURL(_ url: URL?) -> (String?, Bool)
 }
 
 public struct LocationViewState {
@@ -277,18 +284,22 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         if textField.text?.isEmpty == false { showClearButton() } else { hideClearButton() }
 
+        let url = URL(string: textField.text ?? "")
+        // In a future task, we can use `locationText` and `isSearchQuery` tuple values for additional functionality.
+        guard let (_, _) = locationViewDelegate?.locationViewDisplayTextForURL(url) else { return }
+
         updateGradientLayerFrame()
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = self.urlAbsolutePath
+            textField.text = urlAbsolutePath
             textField.selectAll(nil)
         }
 
         animateURLText(textField, options: .transitionFlipFromRight, textAlignment: .natural) {
             textField.textAlignment = .natural
         }
-        locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
+        locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
