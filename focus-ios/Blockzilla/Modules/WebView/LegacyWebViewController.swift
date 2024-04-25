@@ -440,7 +440,7 @@ extension LegacyWebViewController: WKNavigationDelegate {
 
         switch navigationAction.navigationType {
             case .backForward:
-                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
+                let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
                 if navigatingBack {
                     delegate?.webControllerDidNavigateBack(self)
                 } else {
