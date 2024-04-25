@@ -114,7 +114,8 @@ class TooltipView: UIView {
             ])
     }
 
-    @objc func didTapTooltipDismissButton() {
+    @objc
+    func didTapTooltipDismissButton() {
         delegate?.didTapTooltipDismissButton()
     }
 }

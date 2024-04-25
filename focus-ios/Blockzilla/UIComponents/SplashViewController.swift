@@ -93,7 +93,8 @@ class SplashViewController: UIViewController {
         authButton.isHidden = state == .default
     }
 
-    @objc private func showAuth() {
+    @objc
+    private func showAuth() {
         state = .default
         Task {
             await authenticationManager.authenticateWithBiometrics()

@@ -134,7 +134,8 @@ public class ShortcutView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func didTap() {
+    @objc
+    private func didTap() {
         viewModel.send(action: .tapped)
     }
 }

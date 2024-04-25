@@ -197,7 +197,8 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         KVOConstants.allCases.forEach { browserView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
-    @objc private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
+    @objc
+    private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
         DispatchQueue.main.async {
             self.browserView.configuration.userContentController.removeAllContentRuleLists()
             blockLists.forEach(self.browserView.configuration.userContentController.add)
@@ -216,7 +217,8 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         scrollView.refreshControl?.addTarget(self, action: #selector(reloadPage), for: .valueChanged)
     }
 
-    @objc private func reloadPage() {
+    @objc
+    private func reloadPage() {
         reload()
         DispatchQueue.main.async {
             self.scrollView.refreshControl?.endRefreshing()
