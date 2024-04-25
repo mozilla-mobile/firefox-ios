@@ -74,7 +74,7 @@ only_rules: # Only enforce these rules, ignore all others
   - duplicate_imports
   - duplicate_enum_cases
   # - last_where
-  # - modifier_order
+  - modifier_order
   - multiline_arguments
   - opening_brace
   - overridden_super_call
