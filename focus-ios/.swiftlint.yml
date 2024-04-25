@@ -56,7 +56,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - void_function_in_ternary
   # - void_return
   # - file_header
-  # - redundant_type_annotation
+  - redundant_type_annotation
   # - attributes
   - closing_brace
   # - closure_end_indentation
