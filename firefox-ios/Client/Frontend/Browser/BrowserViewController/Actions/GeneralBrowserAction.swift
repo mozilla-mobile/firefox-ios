@@ -11,14 +11,18 @@ class GeneralBrowserAction: Action {
     let toastType: ToastType?
     let showOverlay: Bool?
 
-    init(selectedTabURL: URL? = nil, 
+    init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
-         showOverlay: Bool? = nil) {
+         showOverlay: Bool? = nil,
+         windowUUID: UUID,
+         actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
         self.toastType = toastType
         self.showOverlay = showOverlay
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 

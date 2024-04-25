@@ -19,7 +19,6 @@ class TabManagerMiddleware {
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
-
         if let action = action as? TabPeekAction {
             resolveTabPeekActions(action: action, state: state)
         }

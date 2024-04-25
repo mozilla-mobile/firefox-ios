@@ -57,9 +57,10 @@ class TabPeekViewController: UIViewController,
     // MARK: - Private helper methods
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .tabPeek, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .tabPeek)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -69,10 +70,10 @@ class TabPeekViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .tabPeek, windowUUID: windowUUID)
-        ))
-        store.unsubscribe(self)
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .tabPeek)
+        store.dispatch(action)
     }
 
     private func setupWithScreenshot() {
@@ -98,8 +99,9 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekAddToBookmarks,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
                                     identifier: nil) { [weak self] _ in
-                let action = TabPeekAction(tabUUID: self?.tab.tabUUID,
-                                           windowUUID: self?.windowUUID,
+                guard let self else { return }
+                let action = TabPeekAction(tabUUID: self.tab.tabUUID,
+                                           windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.addToBookmarks)
                 store.dispatch(action)
                 return
@@ -109,9 +111,10 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(
                 title: .AppMenu.TouchActions.SendToDeviceTitle,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
-                identifier: nil)  { [weak self] _ in
-                    let action = TabPeekAction(tabUUID: self?.tab.tabUUID,
-                                               windowUUID: self?.windowUUID,
+                identifier: nil) { [weak self] _ in
+                    guard let self else { return }
+                    let action = TabPeekAction(tabUUID: self.tab.tabUUID,
+                                               windowUUID: self.windowUUID,
                                                actionType: TabPeekActionType.sendToDevice)
                     store.dispatch(action)
                     return
@@ -121,8 +124,9 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekCopyUrl,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
                                     identifier: nil) { [weak self] _ in
-                let action = TabPeekAction(tabUUID: self?.tab.tabUUID,
-                                           windowUUID: self?.windowUUID,
+                guard let self else { return }
+                let action = TabPeekAction(tabUUID: self.tab.tabUUID,
+                                           windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.copyURL)
                 store.dispatch(action)
                 return
@@ -132,8 +136,9 @@ class TabPeekViewController: UIViewController,
             actions.append(UIAction(title: .TabPeekCloseTab,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
                                     identifier: nil) { [weak self] _ in
-                let action = TabPeekAction(tabUUID: self?.tab.tabUUID,
-                                           windowUUID: self?.windowUUID,
+                guard let self else { return }
+                let action = TabPeekAction(tabUUID: self.tab.tabUUID,
+                                           windowUUID: self.windowUUID,
                                            actionType: TabPeekActionType.closeTab)
                 store.dispatch(action)
                 return

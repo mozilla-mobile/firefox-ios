@@ -374,9 +374,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                           isPrivateBrowsing: selectedTab?.isPrivate ?? false,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
-        let context = GeneralBrowserContext(selectedTabURL: url,
-                                            isPrivateBrowsing: selectedTab?.isPrivate ?? false,
-                                            windowUUID: windowUUID)
         store.dispatch(action)
     }
 

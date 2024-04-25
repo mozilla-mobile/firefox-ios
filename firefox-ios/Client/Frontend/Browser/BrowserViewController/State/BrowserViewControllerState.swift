@@ -123,7 +123,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     static func reduceStateForGeneralBrowserAction(action: GeneralBrowserAction,
                                                    state: BrowserViewControllerState) -> BrowserViewControllerState {
         switch action.actionType {
-        case GeneralBrowserAction.showToast:
+        case GeneralBrowserActionType.showToast:
             guard let toastType = action.toastType else { return state }
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -132,7 +132,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: toastType,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
-        case GeneralBrowserAction.showOverlay:
+        case GeneralBrowserActionType.showOverlay:
             let showOverlay = action.showOverlay ?? false
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -141,8 +141,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
-        case GeneralBrowserAction.updateSelectedTab:
-            return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action, state: state)
+        case GeneralBrowserActionType.updateSelectedTab:
+            return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action: action, state: state)
         default:
             return state
         }

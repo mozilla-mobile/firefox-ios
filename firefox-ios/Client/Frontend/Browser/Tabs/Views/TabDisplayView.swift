@@ -23,6 +23,7 @@ class TabDisplayView: UIView,
         case tabs
     }
 
+    let panelType: TabTrayPanelType
     private(set) var tabsState: TabsPanelState
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
@@ -79,7 +80,10 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState, windowUUID: WindowUUID) {
+    public init(panelType: TabTrayPanelType,
+                state: TabsPanelState,
+                windowUUID: WindowUUID) {
+        self.panelType = panelType
         self.tabsState = state
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
