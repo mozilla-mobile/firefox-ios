@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Shared
 
 class BookmarksHandlerMock: BookmarksHandler {
     var getRecentBookmarksCallCount = 0
@@ -16,5 +17,17 @@ class BookmarksHandlerMock: BookmarksHandler {
 
     func callGetRecentBookmarksCompletion(with results: [BookmarkItemData]) {
         getRecentBookmarksCompletion?(results)
+    }
+
+    func getBookmarksTree(rootGUID: Shared.GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
+        Deferred<Maybe<BookmarkNodeData?>>()
+    }
+
+    func updateBookmarkNode(guid: Shared.GUID,
+                            parentGUID: Shared.GUID?,
+                            position: UInt32?,
+                            title: String?,
+                            url: String?) -> Success {
+        succeed()
     }
 }
