@@ -98,6 +98,12 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         setNeedsUpdateConfiguration()
     }
 
+    func addCornerRadiusForVisualEffectView(radiusSize: CGFloat) {
+        for subview in self.subviews where subview is UIVisualEffectView {
+            subview.layer.cornerRadius = radiusSize
+        }
+    }
+
     // MARK: ThemeApplicable
 
     public func applyTheme(theme: Theme) {

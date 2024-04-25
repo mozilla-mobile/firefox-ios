@@ -68,10 +68,4 @@ open class ResizableButton: UIButton {
     private func updateContentInsets() {
         configuration?.contentInsets = buttonEdgeInsets
     }
-
-    func addCornerRadiusForVisualEffectView(radiusSize: CGFloat) {
-        for subview in self.subviews where subview is UIVisualEffectView {
-            subview.layer.cornerRadius = radiusSize
-        }
-    }
 }
