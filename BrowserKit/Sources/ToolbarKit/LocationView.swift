@@ -285,14 +285,15 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         if textField.text?.isEmpty == false { showClearButton() } else { hideClearButton() }
 
         let url = URL(string: textField.text ?? "")
-        // In a future task, we can use `locationText` and `isSearchQuery` tuple values for additional functionality.
-        guard let (_, _) = locationViewDelegate?.locationViewDisplayTextForURL(url) else { return }
+        guard let (locationText, isSearchQuery) = locationViewDelegate?.locationViewDisplayTextForURL(url) else { return }
 
         updateGradientLayerFrame()
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = urlAbsolutePath
+            // This is a provisional implementation. 
+            // It will be replaced with a different one when it will be integrated into the `Client`.
+            textField.text = ((locationText != nil) && isSearchQuery) ? locationText : urlAbsolutePath
             textField.selectAll(nil)
         }
 

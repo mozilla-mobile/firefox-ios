@@ -234,7 +234,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     }
 
     func locationViewDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
-        (nil, false)
+        // For now, we return as default:
+        return (nil, false)
     }
 
     // MARK: - ThemeApplicable
