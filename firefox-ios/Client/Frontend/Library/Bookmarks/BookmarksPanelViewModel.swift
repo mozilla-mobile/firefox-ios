@@ -96,7 +96,7 @@ class BookmarksPanelViewModel {
     }
 
     private func setupMobileFolderData(completion: @escaping () -> Void) {
-        profile.places
+        bookmarksHandler
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
                 guard let mobileFolder = result.successValue as? BookmarkFolderData else {
