@@ -70,7 +70,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         // Resume previously stopped downloads for, and on, THIS scene only.
-        downloadQueue.resumeAll()
+        if let uuid = sceneCoordinator?.windowUUID {
+            downloadQueue.resumeAll(for: uuid)
+        }
     }
 
     // MARK: - Transitioning to Background
@@ -80,7 +82,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to reduce the scene's memory usage, clear claims to resources & dependencies / services.
     /// UIKit takes a snapshot of the scene for the app switcher after this method returns.
     func sceneDidEnterBackground(_ scene: UIScene) {
-        downloadQueue.pauseAll()
+        if let uuid = sceneCoordinator?.windowUUID {
+            downloadQueue.pauseAll(for: uuid)
+        }
     }
 
     // MARK: - Opening URLs

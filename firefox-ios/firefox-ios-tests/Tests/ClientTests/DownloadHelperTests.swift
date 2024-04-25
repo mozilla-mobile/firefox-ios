@@ -142,7 +142,7 @@ class DownloadHelperTests: XCTestCase {
             forceDownload: false
         )
 
-        let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
+        let downloadViewModel = subject?.downloadViewModel(windowUUID: .XCTestDefaultUUID, okAction: { _ in })
 
         XCTAssertNil(downloadViewModel)
     }
@@ -157,7 +157,7 @@ class DownloadHelperTests: XCTestCase {
             forceDownload: false
         )
 
-        let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
+        let downloadViewModel = subject?.downloadViewModel(windowUUID: .XCTestDefaultUUID, okAction: { _ in })
 
         XCTAssertEqual(downloadViewModel!.title!, "some-image.jpg")
     }
@@ -171,7 +171,7 @@ class DownloadHelperTests: XCTestCase {
             forceDownload: false
         )
 
-        let downloadViewModel = subject?.downloadViewModel(okAction: { _ in })
+        let downloadViewModel = subject?.downloadViewModel(windowUUID: .XCTestDefaultUUID, okAction: { _ in })
 
         XCTAssertEqual(downloadViewModel!.closeButtonTitle, .CancelString)
     }

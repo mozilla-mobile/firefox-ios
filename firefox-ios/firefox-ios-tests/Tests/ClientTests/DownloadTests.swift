@@ -10,7 +10,7 @@ class DownloadTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        download = Download()
+        download = Download(originWindow: .XCTestDefaultUUID)
     }
 
     override func tearDown() {
