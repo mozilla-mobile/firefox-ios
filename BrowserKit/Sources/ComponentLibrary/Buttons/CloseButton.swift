@@ -18,6 +18,7 @@ public class CloseButton: UIButton {
         super.init(frame: frame)
 
         setImage(UIImage(named: UX.crossCircleImage), for: .normal)
+        setupConstraints()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -25,6 +26,7 @@ public class CloseButton: UIButton {
     }
 
     private func setupConstraints() {
+        translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
             self.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
