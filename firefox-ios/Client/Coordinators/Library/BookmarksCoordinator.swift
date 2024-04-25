@@ -60,7 +60,9 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
     // MARK: - BookmarksCoordinatorDelegate
 
     func start(from folder: FxBookmarkNode) {
-        let viewModel = BookmarksPanelViewModel(profile: profile, bookmarkHandler: profile.places, bookmarkFolderGUID: folder.guid)
+        let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarkHandler: profile.places,
+                                                bookmarkFolderGUID: folder.guid)
         let controller = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         controller.bookmarkCoordinatorDelegate = self
         controller.libraryPanelDelegate = parentCoordinator
