@@ -209,7 +209,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                 ),
                 searchEngineButton.trailingAnchor.constraint(
                     equalTo: searchEngineContentView.trailingAnchor,
-                    constant:  -UX.searchEngineButtonPadding
+                    constant: -UX.searchEngineButtonPadding
                 ),
                 searchEngineButton.topAnchor.constraint(
                     equalTo: searchEngineContentView.topAnchor,
@@ -368,7 +368,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         notifyTextChanged?()
     }
 
-    @objc 
+    @objc
     func didTapSearchButton() {
         locationViewDelegate?.locationViewDidTapSearchButton()
     }
