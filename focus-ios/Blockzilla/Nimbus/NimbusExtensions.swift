@@ -53,7 +53,7 @@ extension Nimbus {
     /// - Returns: The path in a String or nil if the support directory could not be found.
     static func defaultDatabasePath() -> String? {
         let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-        if paths.count == 0 {
+        if paths.isEmpty {
             return nil
         }
         return paths[0].appendingPathComponent(NimbusDefaultDatabaseName).path

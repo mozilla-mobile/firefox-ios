@@ -429,7 +429,7 @@ class OverlayView: UIView {
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
             }
             if let lastSearchButton = searchButtonGroup.last {
-                if searchButtonGroup.count >= 0 && !lastSearchButton.isHidden {
+                if searchButtonGroup.isEmpty && !lastSearchButton.isHidden {
                     make.top.equalTo(lastSearchButton.snp.bottom)
                 } else {
                     make.top.equalTo(topBorder.snp.bottom)
