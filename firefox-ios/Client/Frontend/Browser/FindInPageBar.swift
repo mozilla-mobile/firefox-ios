@@ -14,10 +14,6 @@ protocol FindInPageBarDelegate: AnyObject {
 }
 
 class FindInPageBar: UIView, ThemeApplicable {
-    private struct UX {
-        static let fontSize: CGFloat = 16
-    }
-
     private static let savedTextKey = "findInPageSavedTextKey"
 
     weak var delegate: FindInPageBarDelegate?
@@ -26,7 +22,7 @@ class FindInPageBar: UIView, ThemeApplicable {
 
     private lazy var searchText: UITextField = .build { textField in
         textField.addTarget(self, action: #selector(self.didTextChange), for: .editingChanged)
-        textField.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
+        textField.font = FXFontStyles.Regular.callout.scaledFont()
         textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textField.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         textField.adjustsFontForContentSizeCategory = true
@@ -41,7 +37,7 @@ class FindInPageBar: UIView, ThemeApplicable {
     }
 
     private lazy var matchCountView: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout, size: UX.fontSize)
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.isHidden = true
         label.accessibilityIdentifier = "FindInPage.matchCount"
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)

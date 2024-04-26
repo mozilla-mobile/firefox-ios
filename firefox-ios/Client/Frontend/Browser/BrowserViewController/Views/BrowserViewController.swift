@@ -271,7 +271,7 @@ class BrowserViewController: UIViewController,
         screenshotHelper = ScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
-        downloadQueue.delegate = self
+        downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             // Ensure we call into didBecomeActive at least once during startup flow (if needed)
@@ -501,7 +501,7 @@ class BrowserViewController: UIViewController,
     private func nightModeUpdates() {
         if NightModeHelper.isActivated(),
            !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff(tabManager: tabManager)
+            NightModeHelper.turnOff()
             themeManager.reloadTheme(for: windowUUID)
         }
 

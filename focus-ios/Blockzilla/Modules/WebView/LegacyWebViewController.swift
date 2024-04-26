@@ -341,6 +341,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
         searchInContentTelemetry = SearchInContentTelemetry()
     }
@@ -439,7 +440,7 @@ extension LegacyWebViewController: WKNavigationDelegate {
 
         switch navigationAction.navigationType {
             case .backForward:
-                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
+                let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
                 if navigatingBack {
                     delegate?.webControllerDidNavigateBack(self)
                 } else {

@@ -105,6 +105,7 @@ class SiriFavoriteViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.edgesForExtendedLayout = []
         setUpInputUI()
         setUpEditUI()
