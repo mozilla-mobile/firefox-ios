@@ -24,7 +24,8 @@ protocol LocationViewDelegate: AnyObject {
     /// Called to determine the display text for a given URL in the location view.
     ///
     /// - Parameter url: The URL for which to determine the display text.
-    /// - Returns: The display text as an optional String. If the URL is nil or cannot be converted to a display text, returns nil.
+    /// - Returns: The display text as an optional String. If the URL is nil
+    ///  or cannot be converted to a display text, returns nil.
     func locationViewDisplayTextForURL(_ url: URL?) -> String?
 }
 
