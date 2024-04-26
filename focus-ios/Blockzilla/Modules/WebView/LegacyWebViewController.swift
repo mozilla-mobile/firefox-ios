@@ -538,8 +538,7 @@ extension LegacyWebViewController: WKUIDelegate {
 
         // If URL is a file:// when web application calls window.open() or fails validation, prevent loading
         guard let url = navigationAction.request.url,
-              let validatedURL = URIFixup.getURL(entry: url.absoluteString),
-              url.scheme != "file" else {
+              let validatedURL = URIFixup.getURL(entry: url.absoluteString) else {
             return nil
         }
 
