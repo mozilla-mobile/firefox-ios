@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Common
 import UIKit
 
@@ -28,8 +27,8 @@ public class CloseButton: UIButton {
     private func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
-            self.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
+            heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
+            widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
         ])
     }
 
