@@ -54,7 +54,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - vertical_parameter_alignment
   - vertical_whitespace
   # - void_function_in_ternary
-  # - void_return
+  - void_return
   # - file_header
   - redundant_type_annotation
   # - attributes
