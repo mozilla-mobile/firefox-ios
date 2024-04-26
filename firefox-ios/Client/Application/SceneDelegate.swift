@@ -56,6 +56,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
+        // For now, we explicitly cancel downloads for windows that are closed.
+        // On iPhone this will happen during app termination, for iPad it will
+        // occur on termination or when a window is disconnected/closed by iPadOS
+        downloadQueue.cancelAll(for: sceneCoordinator.windowUUID)
+
         // Notify WindowManager that window is closing
         (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
     }
