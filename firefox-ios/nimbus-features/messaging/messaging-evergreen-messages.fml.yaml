@@ -53,3 +53,22 @@ import:
                 action: OPEN_URL
                 action-params:
                   url: https://www.macrumors.com
+
+              # Serves as an example of how microsurveys may look like
+              microsurvey-message:
+                surface: microsurvey
+                style: MICROSURVEY
+                trigger-if-all:
+                  - ALWAYS
+                title: "Firefox Survey"
+                text: "What is your favorite firefox feature?"
+                button-label: "Continue"
+                microsurveyConfig:
+                  target-feature: printing
+                  options:
+                    - "Very Disatisfied"
+                    - "Disatisfied"
+                    - "Neutral"
+                    - "Satisfied"
+                    - "Very Satisfied"
+
