@@ -1057,18 +1057,18 @@ extension String {
             public static let TitleLabel = MZLocalizedString(
                 key: "Microsurvey.Prompt.TitleLabel.v127",
                 tableName: "Microsurvey",
-                value: "Help us make Firefox better. It only takes a minute.",
-                comment: "Describes the title on the microsurvey prompt that appears on top of our bottom toolbar.")
+                value: "Help us make %@ better. It only takes a minute.",
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name.")
             public static let TakeSurveyButton = MZLocalizedString(
                 key: "Microsurvey.Prompt.Button.v127",
                 tableName: "Microsurvey",
                 value: "Continue",
-                comment: "Describes the action on the micro survey prompt.This indicates that the user will navigate to take the survey if they tap on this button.")
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "Microsurvey.Prompt.Close.AccessibilityLabel.v127",
                 tableName: "Microsurvey",
                 value: "Close Survey Prompt",
-                comment: "Accessibility label for close button that dismisses the microsurvey prompt.")
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt.")
         }
 
         public struct Survey {
@@ -1076,49 +1076,49 @@ extension String {
                 key: "Microsurvey.Survey.HeaderLabel.v127",
                 tableName: "Microsurvey",
                 value: "Complete this survey",
-                comment: "Describes the title for the header on the microsurvey when the user is taking the survey.")
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "Microsurvey.Survey.Close.AccessibilityLabel.v127",
                 tableName: "Microsurvey",
                 value: "Close Survey",
-                comment: "Accessibility label for close button that dismisses the microsurvey.")
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
             public static let PrivacyPolicyLinkButtonTitle = MZLocalizedString(
                 key: "Microsurvey.Survey.PrivacyPolicyLink.v127",
                 tableName: "Microsurvey",
                 value: "Privacy notice",
-                comment: "String used to describe the title of link button that is on the survey and allows the user to navigate to our privacy policy details.")
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details.")
             public static let SubmitSurveyButton = MZLocalizedString(
                 key: "Microsurvey.Survey.Button.v127",
                 tableName: "Microsurvey",
                 value: "Submit",
-                comment: "Describes the action on the micro survey.This indicates that the user has completed the survey and tapped on the button to submit their responses.")
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses.")
 
             public struct Options {
                 public static let LikertScaleOption1 = MZLocalizedString(
                     key: "Microsurvey.Survey.Options.LikertScaleOption1.v127",
                     tableName: "Microsurvey",
                     value: "Very Satisfied",
-                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption2 = MZLocalizedString(
                     key: "Microsurvey.Survey.Options.LikertScaleOption2.v127",
                     tableName: "Microsurvey",
                     value: "Satisfied",
-                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption3 = MZLocalizedString(
                     key: "Microsurvey.Survey.Options.LikertScaleOption3.v127",
                     tableName: "Microsurvey",
                     value: "Neutral",
-                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption4 = MZLocalizedString(
                     key: "Microsurvey.Survey.Options.LikertScaleOption4.v127",
                     tableName: "Microsurvey",
                     value: "Dissatisfied",
-                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption5 = MZLocalizedString(
                     key: "Microsurvey.Survey.Options.LikertScaleOption5.v127",
                     tableName: "Microsurvey",
                     value: "Very Dissatisfied",
-                    comment: "On the micro survey, the string is used to describe one of the options that the user can select to answer the survey.")
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
             }
 
             public struct ConfirmationPage {
@@ -1126,12 +1126,12 @@ extension String {
                     key: "Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127",
                     tableName: "Microsurvey",
                     value: "Survey complete",
-                    comment: "Describes the title for the header on the microsurvey when the user has completed the survey.")
+                    comment: "On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey.")
                 public static let ConfirmationLabel = MZLocalizedString(
                     key: "Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127",
                     tableName: "Microsurvey",
                     value: "Thanks for your feedback!",
-                    comment: "Describes the text shown to the user after completing the micro survey prompt.")
+                    comment: "On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey.")
             }
         }
     }

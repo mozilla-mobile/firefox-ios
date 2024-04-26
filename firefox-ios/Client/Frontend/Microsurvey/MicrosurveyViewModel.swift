@@ -3,11 +3,15 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 struct MicrosurveyViewModel {
     // TODO: FXIOS-8990 - Mobile Messaging Structure
     // Title + button text can come from mobile messaging; but has a hardcoded string as fallback
-    var title: String = .Microsurvey.Prompt.TitleLabel
+    var title: String = String(
+        format: .Microsurvey.Prompt.TitleLabel,
+        AppName.shortName.rawValue
+    )
     var buttonText: String = .Microsurvey.Prompt.TakeSurveyButton
     var openAction: () -> Void
     var closeAction: () -> Void
