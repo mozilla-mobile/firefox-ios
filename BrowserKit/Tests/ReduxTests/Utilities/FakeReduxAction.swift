@@ -13,12 +13,10 @@ class FakeReduxAction: Action {
     init(counterValue: Int? = nil,
          privateMode: Bool? = nil,
          windowUUID: UUID,
-         viewUUID: UUID? = nil,
          actionType: ActionType) {
         self.counterValue = counterValue
         self.privateMode = privateMode
         super.init(windowUUID: windowUUID,
-                   viewUUID: viewUUID,
                    actionType: actionType)
     }
 }

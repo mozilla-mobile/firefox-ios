@@ -12,12 +12,10 @@ import Foundation
 /// window (see `WindowManager.activeWindow`) or if needed `WindowUUID.unavailable`.
 open class Action {
     public var windowUUID: UUID
-    public var viewUUID: UUID?
     public var actionType: ActionType
 
-    public init(windowUUID: UUID, viewUUID: UUID? = nil, actionType: ActionType) {
+    public init(windowUUID: UUID, actionType: ActionType) {
         self.windowUUID = windowUUID
-        self.viewUUID = viewUUID
         self.actionType = actionType
     }
 

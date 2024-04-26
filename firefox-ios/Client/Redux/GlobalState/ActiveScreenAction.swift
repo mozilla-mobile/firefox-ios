@@ -9,12 +9,10 @@ class ScreenAction: Action {
     let screen: AppScreen
 
     init(windowUUID: UUID,
-         viewUUID: UUID? = nil,
          actionType: ActionType,
          screen: AppScreen) {
         self.screen = screen
         super.init(windowUUID: windowUUID,
-                   viewUUID: viewUUID,
                    actionType: actionType)
     }
 }
