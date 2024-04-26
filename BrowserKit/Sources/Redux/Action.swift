@@ -4,12 +4,7 @@
 
 import Foundation
 
-/// Are a declarative way of describing a state change. Actions don’t contain any code,
-/// they are consumed by the store and forwarded to reducers. Are used to express intended
-/// state changes. Actions include a context object that includes information about the
-/// action, including a UUID for a particular window. If an Action is truly global in
-/// nature or can't be associated with a UUID it can send either the UUID for the active
-/// window (see `WindowManager.activeWindow`) or if needed `WindowUUID.unavailable`.
+/// Used to describe an action that can be dispatched by the redux store
 open class Action {
     public var windowUUID: UUID
     public var actionType: ActionType
