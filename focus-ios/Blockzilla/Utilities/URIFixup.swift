@@ -15,6 +15,14 @@ class URIFixup {
             return nil
         }
 
+        // Check if the URL string does not start with "file://". 
+        // If it starts with "file://", return nil, indicating that this function
+        // does not handle local file URLs, resulting in a search
+
+        guard !trimmed.lowercased().hasPrefix("file://") else {
+            return nil
+        }
+
         // Check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
         // Also check with a regular expression if there is a port in the url
