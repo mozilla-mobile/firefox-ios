@@ -12,10 +12,6 @@ protocol CredentialPasscodeRequirementViewControllerDelegate: AnyObject {
 
 class CredentialPasscodeRequirementViewController: UIViewController {
     private struct UX {
-        static let titleFontSize: CGFloat = 32
-        static let taglineFontSize: CGFloat = 20
-        static let warningFontSize: CGFloat = 18
-        static let cancelButtonFontSize: CGFloat = 17
         static let cancelButtonCornerRadius: CGFloat = 8
     }
     var delegate: CredentialPasscodeRequirementViewControllerDelegate?
@@ -30,7 +26,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTitle2
-        label.font = UIFont.systemFont(ofSize: UX.titleFontSize, weight: .bold)
+        label.font = FXFontStyles.Bold.largeTitle.systemFont()
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -40,7 +36,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = .LoginsWelcomeViewTagline
-        label.font = UIFont.systemFont(ofSize: UX.taglineFontSize)
+        label.font = FXFontStyles.Regular.title3.systemFont()
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -49,7 +45,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     private lazy var warningLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: UX.warningFontSize)
+        label.font = FXFontStyles.Regular.body.systemFont()
         label.text = .LoginsPasscodeRequirementWarning
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -61,8 +57,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = UX.cancelButtonCornerRadius
         button.setTitle(.CancelString, for: .normal)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                             size: UX.cancelButtonFontSize)
+        button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
         button.addTarget(self, action: #selector(self.cancelButtonTapped), for: .touchUpInside)
     }
 
