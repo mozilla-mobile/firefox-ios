@@ -6,23 +6,26 @@ import Shared
 import Common
 import Storage
 
+protocol WindowTabsSyncCoordinatorDelegate: AnyObject {
+    /// Returns a collection of all tab managers for which tabs
+    /// should be collected for syncing with the user's profile.
+    func tabManagers() -> [TabManager]
+}
+
 final class WindowTabsSyncCoordinator {
     private struct Timing {
         static let throttleDelay = 0.5
         static let dbInsertionDelay = 0.1
     }
     private let throttler = Throttler(seconds: Timing.throttleDelay)
-    // TODO: This creates a retain cycle. Currently doesn't matter since it's a global ubiquitous instance though.
-    private let windowManager: WindowManager
+    weak var delegate: WindowTabsSyncCoordinatorDelegate?
     private let profile: Profile
     private let logger: Logger
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared,
-         windowManager: WindowManager = AppContainer.shared.resolve()) {
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger
-        self.windowManager = windowManager
     }
 
     func syncTabsToProfile() {
@@ -32,8 +35,9 @@ final class WindowTabsSyncCoordinator {
     // MARK: - Utility
 
     private func performSync() {
+        guard let delegate else { return }
         // This work is performed on the main thread to avoid potential threading issues with the tab collections
-        let allTabManagers = windowManager.allWindowTabManagers()
+        let allTabManagers = delegate.tabManagers()
         let windowCount = allTabManagers.count
         let normalTabs = allTabManagers.flatMap({ $0.normalTabs })
         let inactiveTabs = Set(allTabManagers.flatMap({ $0.inactiveTabs }))

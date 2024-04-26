@@ -54,7 +54,7 @@ protocol WindowManager {
     /// - Parameter event: the event that occurred and any associated metadata.
     /// - Parameter windowUUID: the UUID of the window triggering the event.
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID)
-    
+
     /// Signals the WindowManager to store tabs (across all windows) on the default Profile.
     func storeTabs()
 }
@@ -65,7 +65,7 @@ struct AppWindowInfo {
     weak var sceneCoordinator: SceneCoordinator?
 }
 
-final class WindowManagerImplementation: WindowManager {
+final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinatorDelegate {
     enum WindowPrefKeys {
         static let windowOrdering = "windowOrdering"
     }
@@ -80,7 +80,7 @@ final class WindowManagerImplementation: WindowManager {
     private let tabDataStore: TabDataStore
     private let defaults: UserDefaultsInterface
     private var _activeWindowUUID: WindowUUID?
-    private lazy var tabSyncCoordinator = WindowTabsSyncCoordinator()
+    private let tabSyncCoordinator = WindowTabsSyncCoordinator()
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
     // UUIDs at the beginning of the list are prioritized over UUIDs at the end
@@ -104,6 +104,7 @@ final class WindowManagerImplementation: WindowManager {
         self.logger = logger
         self.tabDataStore = tabDataStore
         self.defaults = userDefaults
+        tabSyncCoordinator.delegate = self
     }
 
     // MARK: - Public API
@@ -194,6 +195,12 @@ final class WindowManagerImplementation: WindowManager {
 
     func storeTabs() {
         tabSyncCoordinator.syncTabsToProfile()
+    }
+
+    // MARK: - WindowTabSyncCoordinatorDelegate
+
+    func tabManagers() -> [TabManager] {
+        return allWindowTabManagers()
     }
 
     // MARK: - Internal Utilities
