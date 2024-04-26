@@ -55,7 +55,8 @@ class ThemeSettingsControllerTests: XCTestCase {
         XCTAssertFalse(subject.isAutoBrightnessOn)
     }
 
-    func testUpdateToLightManualTheme_WithRedux() {
+    @MainActor
+    func testUpdateToLightManualTheme_WithRedux() async throws {
         let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
@@ -65,18 +66,21 @@ class ThemeSettingsControllerTests: XCTestCase {
         // Select Light theme
         subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 2))
 
+        try await Task.sleep(nanoseconds: 100)
+
         XCTAssertEqual(subject.manualThemeType, ThemeType.light)
     }
 
-    func testUpdateToDarkManualTheme_WithRedux() {
+    @MainActor
+    func testUpdateToDarkManualTheme_WithRedux() async throws {
         let subject = createSubject()
         let themeSwitch = createUseSystemThemeSwitch(isOn: false)
         subject.systemThemeSwitchValueChanged(control: themeSwitch)
         let tableView = UITableView()
-        // Select to Manual theme row
-        subject.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 1))
         // Select Dark theme
         subject.tableView(tableView, didSelectRowAt: IndexPath(row: 1, section: 2))
+
+        try await Task.sleep(nanoseconds: 100)
 
         XCTAssertEqual(subject.manualThemeType, ThemeType.dark)
     }
