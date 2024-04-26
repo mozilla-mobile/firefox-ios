@@ -3383,6 +3383,9 @@
 		4342787B293E0A9C008F9B08 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/TabsTray.strings"; sourceTree = "<group>"; };
 		4342AE172AEFC797000A27BB /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Shopping.strings; sourceTree = "<group>"; };
 		434307522BA85AA8009155D5 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/BottomSheet.strings; sourceTree = "<group>"; };
+		434330B12BDBEB28008AD80C /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/BottomSheet.strings; sourceTree = "<group>"; };
+		434330B22BDBEB28008AD80C /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/ContextualHints.strings; sourceTree = "<group>"; };
+		434330B32BDBEB28008AD80C /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tt; path = tt.lproj/Credentials.strings; sourceTree = "<group>"; };
 		43433C472B8394830052B8E0 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/KeyboardAccessory.strings"; sourceTree = "<group>"; };
 		43433C482B8394830052B8E0 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/PasswordAutofill.strings"; sourceTree = "<group>"; };
 		434341F82A2DF9FB00D08DF6 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Footer.strings; sourceTree = "<group>"; };
@@ -15998,6 +16001,7 @@
 				4313B9112BCD4591007473A4 /* pl */,
 				43A2FD552BCD45C5004981E9 /* rm */,
 				43CE859E2BCD467D00EFFAA4 /* th */,
+				434330B12BDBEB28008AD80C /* tt */,
 			);
 			name = BottomSheet.strings;
 			sourceTree = "<group>";
@@ -16876,6 +16880,7 @@
 				43CEB4582B680459000F85A9 /* pt-PT */,
 				439FC0602B95EB76006568A6 /* gl */,
 				432792652BB192FD001707B5 /* en-CA */,
+				434330B22BDBEB28008AD80C /* tt */,
 			);
 			name = ContextualHints.strings;
 			sourceTree = "<group>";
@@ -16996,6 +17001,7 @@
 				439FC0622B95EB76006568A6 /* gl */,
 				432792672BB192FD001707B5 /* en-CA */,
 				438D48872BCD44730052F1E1 /* kab */,
+				434330B32BDBEB28008AD80C /* tt */,
 			);
 			name = Credentials.strings;
 			sourceTree = "<group>";

@@ -185,7 +185,7 @@
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "我們使用來自 %1$@ by %2$@ 的 AI 技術來分析商品評論的可靠程度。此分析僅協助您判斷商品評論品質，而非商品本身的品質。";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*重點資訊*是根據過去 80 天中，我們相信是可靠的 %1@ 評論所整理出的資訊。";
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*重點資訊*是根據過去 80 天中，我們相信是可靠的 %1@ 筆評論所整理出的資訊。";
 
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "我們如何判斷評論品質";
