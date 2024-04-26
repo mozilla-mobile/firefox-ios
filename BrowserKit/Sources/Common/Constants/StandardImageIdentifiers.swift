@@ -22,6 +22,7 @@ public struct StandardImageIdentifiers {
         public static let crossCircleFill = "crossCircleFillMedium"
         public static let cross = "crossMedium"
         public static let nightMode = "nightModeMedium"
+        public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let starFill = "starFillMedium"
         public static let starOneHalfFill = "starOneHalfFillMedium"
         public static let sun = "sunMedium"

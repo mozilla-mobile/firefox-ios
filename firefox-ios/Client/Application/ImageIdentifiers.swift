@@ -28,7 +28,6 @@ public struct ImageIdentifiers {
     public static let menuWarningMask = "warning-mask"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
-    public static let privateModeBadge = "privateModeBadge"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
     public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"

@@ -225,7 +225,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     let windowUUID: WindowUUID
 
     fileprivate lazy var privateModeBadge = BadgeWithBackdrop(
-        imageName: ImageIdentifiers.privateModeBadge,
+        imageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
         isPrivateBadge: true
     )
 
