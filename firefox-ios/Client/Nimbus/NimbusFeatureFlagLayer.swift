@@ -263,7 +263,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.nightModeFeature.value()
+        let config = nimbus.features.microsurveyFeature.value()
 
         return config.enabled
     }
