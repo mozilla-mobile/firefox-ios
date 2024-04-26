@@ -185,7 +185,7 @@
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "Vi använder AI-teknik från %1$@ av %2$@ för att kontrollera tillförlitligheten av produktrecensioner. Detta hjälper dig bara att bedöma recensionens kvalitet, inte produktkvaliteten.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Höjdpunkter* kommer från %1@ recensioner inom de senaste 80 dagarna som vi anser vara tillförlitliga.";
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Höjdpunkter* kommer från %1@ recensioner under de senaste 80 dagarna som vi anser vara tillförlitliga.";
 
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Hur vi bestämmer recensionens kvalitet";
