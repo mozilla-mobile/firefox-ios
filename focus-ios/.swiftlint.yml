@@ -59,7 +59,7 @@ only_rules: # Only enforce these rules, ignore all others
   - redundant_type_annotation
   # - attributes
   - closing_brace
-  # - closure_end_indentation
+  - closure_end_indentation
   - contains_over_filter_count
   # - contains_over_filter_is_empty
   - contains_over_first_not_nil
