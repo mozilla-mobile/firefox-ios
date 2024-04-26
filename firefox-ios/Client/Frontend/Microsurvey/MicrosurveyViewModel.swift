@@ -8,7 +8,7 @@ import Shared
 struct MicrosurveyViewModel {
     // TODO: FXIOS-8990 - Mobile Messaging Structure
     // Title + button text can come from mobile messaging; but has a hardcoded string as fallback
-    var title: String = String(
+    var title = String(
         format: .Microsurvey.Prompt.TitleLabel,
         AppName.shortName.rawValue
     )
