@@ -15,6 +15,7 @@ class ButtonsViewController: UIViewController, Themeable {
     private lazy var primaryButton: PrimaryRoundedButton = .build { _ in }
     private lazy var secondaryButton: SecondaryRoundedButton = .build { _ in }
     private lazy var linkButton: LinkButton = .build { _ in }
+    private lazy var closeButton: CloseButton = .build { _ in }
     private lazy var enabledOnSwitch: PaddedSwitch = .build { _ in }
     private lazy var enabledOffSwitch: PaddedSwitch = .build { _ in }
     private lazy var disabledOnSwitch: PaddedSwitch = .build { _ in }
@@ -59,6 +60,11 @@ class ButtonsViewController: UIViewController, Themeable {
                                                       a11yIdentifier: "a11yLink")
         linkButton.configure(viewModel: linkButtonViewModel)
 
+        let closeButtonViewModel = CloseButtonViewModel(
+            a11yLabel: "This is a close button",
+            a11yIdentifier: "a11yCloseButton")
+        closeButton.configure(viewModel: closeButtonViewModel)
+
         let paddedSwitchViewModelOnEnabled = PaddedSwitchViewModel(theme: themeManager.currentTheme,
                                                                    isEnabled: true,
                                                                    isOn: true,
@@ -97,6 +103,7 @@ class ButtonsViewController: UIViewController, Themeable {
         buttonStackView.addArrangedSubview(primaryButton)
         buttonStackView.addArrangedSubview(secondaryButton)
         buttonStackView.addArrangedSubview(linkButton)
+        buttonStackView.addArrangedSubview(closeButton)
 
         buttonStackView.addArrangedSubview(offSwitchView)
         offSwitchView.addSubview(enabledOffSwitch)
