@@ -128,7 +128,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
                                              actionType: ThemeSettingsViewActionType.receivedSystemBrightnessChange)
         store.dispatch(action)
 
-        // TODO: Remove?
         brightnessChanged()
     }
 
