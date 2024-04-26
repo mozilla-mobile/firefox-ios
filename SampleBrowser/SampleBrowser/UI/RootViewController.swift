@@ -232,6 +232,10 @@ class RootViewController: UIViewController,
         browse(to: searchTerm)
     }
 
+    func shouldDisplayTextForURL(_ url: URL?) -> String? {
+        return nil
+    }
+
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {

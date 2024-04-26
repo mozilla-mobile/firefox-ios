@@ -233,9 +233,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
     }
 
-    func locationViewDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
-        // For now, we return as default:
-        return (nil, false)
+    func locationViewDisplayTextForURL(_ url: URL?) -> String? {
+        toolbarDelegate?.shouldDisplayTextForURL(url)
     }
 
     // MARK: - ThemeApplicable
