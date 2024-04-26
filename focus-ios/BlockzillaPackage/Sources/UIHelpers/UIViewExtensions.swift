@@ -9,17 +9,23 @@ public extension UIView {
     func animateHidden(_ hidden: Bool, duration: TimeInterval, completion: (() -> Void)? = nil) {
         self.isHidden = false
 
-        UIView.transition(with: self, duration: duration, options: .beginFromCurrentState, animations: {
-            self.alpha = hidden ? 0 : 1
-        }, completion: { finished in
-            // Only update the hidden state if the animation finished.
-            // Otherwise, a new animation may have started on top of this one, in which case
-            // that animation will set the final state.
-            if finished {
-                self.isHidden = hidden
+        UIView.transition(
+            with: self,
+            duration: duration,
+            options: .beginFromCurrentState,
+            animations: {
+                self.alpha = hidden ? 0 : 1
+            },
+            completion: { finished in
+                // Only update the hidden state if the animation finished.
+                // Otherwise, a new animation may have started on top of this one, in which case
+                // that animation will set the final state.
+                if finished {
+                    self.isHidden = hidden
+                }
+                completion?()
             }
-            completion?()
-        })
+        )
     }
 
     func applyGradient(colors: [UIColor]) {

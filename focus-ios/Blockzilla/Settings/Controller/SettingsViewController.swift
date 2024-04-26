@@ -525,7 +525,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
-        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != [] }[0].values.filter { $0.toggle == sender }[0]
+        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender }.isEmpty == false }[0].values.filter { $0.toggle == sender }[0]
 
         func updateSetting() {
             Settings.set(sender.isOn, forToggle: toggle.setting)

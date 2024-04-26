@@ -13,6 +13,11 @@ tasks:
     tests:
         description: Run Performance Tests on Physical Devices in Firebase
         run-on-tasks-for: []
+        treeherder:
+            symbol: firebase-perf
+            kind: test
+            platform: ios-physical-iphone14pro-16-6/opt
+            tier: 1
         worker-type: bitrise
         bitrise:
             artifact_prefix: public

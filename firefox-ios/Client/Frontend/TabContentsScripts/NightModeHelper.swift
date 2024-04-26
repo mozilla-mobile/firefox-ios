@@ -25,26 +25,29 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        // Do nothing.
+        guard let webView = message.frameInfo.webView else { return }
+        let jsCallback = "window.__firefox__.NightMode.setEnabled(\(NightModeHelper.isActivated()))"
+        webView.evaluateJavascriptInDefaultContentWorld(jsCallback)
     }
 
     static func toggle(
-        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        tabManager: TabManager
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         let isActive = userDefaults.bool(forKey: NightModeKeys.Status)
-        setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
+        setNightMode(userDefaults, enabled: !isActive)
     }
 
     static func setNightMode(
         _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        tabManager: TabManager,
         enabled: Bool
     ) {
         userDefaults.set(enabled, forKey: NightModeKeys.Status)
-        for tab in tabManager.tabs {
-            tab.nightMode = enabled
-            tab.webView?.scrollView.indicatorStyle = enabled ? .white : .default
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        for tabManager in windowManager.allWindowTabManagers() {
+            for tab in tabManager.tabs {
+                tab.nightMode = enabled
+                tab.webView?.scrollView.indicatorStyle = enabled ? .white : .default
+            }
         }
     }
 
@@ -56,12 +59,12 @@ class NightModeHelper: TabContentScript, FeatureFlaggable {
     // These functions are only here to help with the night mode experiment
     // and will be removed once a decision from that experiment is reached.
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-8475
+    // Reminder: Any future refactors for 8475 need to work with multi-window.
     static func turnOff(
-        _ userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        tabManager: TabManager
+        _ userDefaults: UserDefaultsInterface = UserDefaults.standard
     ) {
         guard isActivated() else { return }
-        setNightMode(userDefaults, tabManager: tabManager, enabled: false)
+        setNightMode(userDefaults, enabled: false)
     }
 
     static func cleanNightModeDefaults(
