@@ -210,7 +210,7 @@ class RootViewController: UIViewController,
         findInPageBar?.totalResults = totalResults
     }
 
-    // MARK: - SearchBarDelegate
+    // MARK: - AddressToolbarDelegate
 
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
