@@ -2763,6 +2763,11 @@ extension BrowserViewController: TabManagerDelegate {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
+
+        // Show the Toolbar if a link from the current tab, open another tab
+        if placeNextToParentTab {
+            scrollController.showToolbars(animated: false)
+        }
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {

@@ -91,6 +91,8 @@ class RootViewControllerModel {
                 accessibilityIdentifier: "clearButton",
                 accessibilityHint: "Double tap to clear text",
                 accessibilityLabel: "Clean",
+                urlTextFieldPlaceholder: "Search or enter address",
+                searchEngineImageName: "bingSearchEngine",
                 url: url
         )
 
