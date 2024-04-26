@@ -6,10 +6,10 @@ import UIKit
 import Common
 
 /// Simple address toolbar implementation.
-/// +-------------+------------+-----------------------+----------+------+
-/// | navigation  | indicators | url       [ page    ] | browser  | menu |
-/// |   actions   |            |           [ actions ] | actions  |      |
-/// +-------------+------------+-----------------------+----------+------+
+/// +-------------+------------+-----------------------+----------+
+/// | navigation  | indicators | url       [ page    ] | browser  |
+/// |   actions   |            |           [ actions ] | actions  |
+/// +-------------+------------+-----------------------+----------+
 public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
