@@ -70,7 +70,7 @@ only_rules: # Only enforce these rules, ignore all others
   - empty_xctest_method
   - explicit_init
   - first_where
-  # - discouraged_assert
+  - discouraged_assert
   - duplicate_imports
   - duplicate_enum_cases
   # - last_where
