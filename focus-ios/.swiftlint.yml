@@ -73,7 +73,7 @@ only_rules: # Only enforce these rules, ignore all others
   - discouraged_assert
   - duplicate_imports
   - duplicate_enum_cases
-  # - last_where
+  - last_where
   - modifier_order
   - multiline_arguments
   - opening_brace
