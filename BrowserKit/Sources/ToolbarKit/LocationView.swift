@@ -291,8 +291,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            // This is a provisional implementation. 
-            // It will be replaced with a different one when it will be integrated into the `Client`.
             textField.text = ((locationText != nil) && isSearchQuery) ? locationText : urlAbsolutePath
             textField.selectAll(nil)
         }
