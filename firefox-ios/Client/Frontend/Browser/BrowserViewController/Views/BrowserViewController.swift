@@ -1590,8 +1590,10 @@ class BrowserViewController: UIViewController,
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             let urlRequest = URLRequest(url: url)
             if TabTrayFlagManager.isRefactorEnabled {
-                let context = AddNewTabContext(urlRequest: urlRequest, isPrivate: false, windowUUID: self.windowUUID)
-                store.dispatch(TabPanelAction.addNewTab(context))
+                let action = TabPanelViewAction(panelType: .tabs,
+                                                windowUUID: self.windowUUID,
+                                                actionType: TabPanelViewActionType.addNewTab)
+                store.dispatch(action)
             } else {
                 self.tabManager.addTab(urlRequest)
             }

@@ -125,7 +125,7 @@ class TabDisplayPanel: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction(for: windowUUID) != nil {
+        if toastType.reduxAction(for: windowUUID, panelType: panelType) != nil {
             let viewModel = ButtonToastViewModel(
                 labelText: toastType.title,
                 buttonText: toastType.buttonText)
@@ -194,7 +194,7 @@ class TabDisplayPanel: UIViewController,
                                             actionType: TabPanelViewActionType.hideUndoToast)
             store.dispatch(action)
             presentToast(toastType: toastType) { undoClose in
-                if let action = toastType.reduxAction(for: uuid), undoClose {
+                if let action = toastType.reduxAction(for: uuid, panelType: self.panelType), undoClose {
                     store.dispatch(action)
                 }
                 self.shownToast = nil

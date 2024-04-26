@@ -5,7 +5,7 @@
 import Redux
 
 class TabTrayAction: Action {
-    let panelType: TabTrayPanelType
+    let panelType: TabTrayPanelType?
     let tabTrayModel: TabTrayModel?
     let hasSyncableAccount: Bool?
 
