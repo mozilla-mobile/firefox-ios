@@ -19,8 +19,18 @@ class BookmarksHandlerMock: BookmarksHandler {
         getRecentBookmarksCompletion?(results)
     }
 
+    var responseForBookmarksTree: Maybe<BookmarkNodeData?> = Maybe(success: BookmarkFolderData(guid: "1",
+                                                                                               dateAdded: Int64(Date().toTimestamp()),
+                                                                                               lastModified: Int64(Date().toTimestamp()),
+                                                                                               parentGUID: "123",
+                                                                                               position: 0,
+                                                                                               title: "bookmarkfolder",
+                                                                                               childGUIDs: [],
+                                                                                               children: nil))
     func getBookmarksTree(rootGUID: Shared.GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>> {
-        Deferred<Maybe<BookmarkNodeData?>>()
+        let deferred = Deferred<Maybe<BookmarkNodeData?>>()
+        deferred.fill(responseForBookmarksTree)
+        return deferred
     }
 
     func updateBookmarkNode(guid: Shared.GUID,
