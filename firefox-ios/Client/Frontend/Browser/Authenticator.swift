@@ -55,9 +55,9 @@ class Authenticator {
             findMatchingCredentialsForChallenge(
                 challenge,
                 fromLoginsProvider: loginsHelper.logins
-            ) { credentials in
+            ) { credentials, isSuccess in
                 DispatchQueue.main.async {
-                    guard let credentials = credentials else {
+                    guard isSuccess else {
                         sendLoginsAutofillFailedTelemetry()
                         completionHandler(.failure(
                             LoginRecordError(description: "Unknown error when finding credentials")
@@ -90,13 +90,13 @@ class Authenticator {
         _ challenge: URLAuthenticationChallenge,
         fromLoginsProvider loginsProvider: RustLogins,
         logger: Logger = DefaultLogger.shared,
-        completionHandler: @escaping (URLCredential?) -> Void
+        completionHandler: @escaping (URLCredential?, _ isSuccess: Bool) -> Void
     ) {
         loginsProvider.getLoginsFor(protectionSpace: challenge.protectionSpace, withUsername: nil) { result in
             switch result {
             case .success(let logins):
                 guard logins.count >= 1 else {
-                    completionHandler(nil)
+                    completionHandler(nil, true)
                     return
                 }
 
@@ -133,9 +133,9 @@ class Authenticator {
                     loginsProvider.updateLogin(id: login.id, login: new) { result in
                         switch result {
                         case .success:
-                            completionHandler(credentials)
+                            completionHandler(credentials, true)
                         case .failure:
-                            completionHandler(nil)
+                            completionHandler(nil, false)
                         }
                     }
                     return
@@ -150,10 +150,10 @@ class Authenticator {
                                category: .webview)
                 }
 
-                completionHandler(credentials)
+                completionHandler(credentials, true)
 
             case .failure:
-                completionHandler(nil)
+                completionHandler(nil, false)
             }
         }
     }
