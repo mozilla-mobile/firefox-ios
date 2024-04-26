@@ -17,7 +17,7 @@ class URIFixup {
 
         // Check if the URL string does not start with "file://". 
         // If it starts with "file://", return nil, indicating that this function
-        // does not handle local file URLs, resulting in a google search
+        // does not handle local file URLs, resulting in a search
 
         guard !trimmed.lowercased().hasPrefix("file://") else {
             return nil
