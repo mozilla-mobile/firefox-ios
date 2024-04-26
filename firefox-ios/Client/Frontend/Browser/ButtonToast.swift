@@ -21,8 +21,6 @@ class ButtonToast: Toast {
         static let buttonPadding: CGFloat = 10
         static let buttonBorderRadius: CGFloat = 5
         static let buttonBorderWidth: CGFloat = 1
-        static let titleFontSize: CGFloat = 15
-        static let descriptionFontSize: CGFloat = 13
         static let widthOffset: CGFloat = 20
     }
 
@@ -41,22 +39,19 @@ class ButtonToast: Toast {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                size: UX.titleFontSize)
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                size: UX.descriptionFontSize)
+        label.font = FXFontStyles.Bold.footnote.scaledFont()
         label.numberOfLines = 0
     }
 
     private var roundedButton: UIButton = .build { button in
         button.layer.cornerRadius = UX.buttonBorderRadius
         button.layer.borderWidth = UX.buttonBorderWidth
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                         size: Toast.UX.fontSize)
+        button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
         button.titleLabel?.numberOfLines = 1
         button.titleLabel?.lineBreakMode = .byClipping
         button.titleLabel?.adjustsFontSizeToFitWidth = true

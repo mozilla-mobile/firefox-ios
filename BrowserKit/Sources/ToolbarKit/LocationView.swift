@@ -22,25 +22,64 @@ protocol LocationViewDelegate: AnyObject {
     func locationViewShouldSearchFor(_ text: String)
 }
 
+public struct LocationViewState {
+    public let accessibilityIdentifier: String
+    public let accessibilityHint: String
+    public let accessibilityLabel: String
+    public let url: String?
+
+    public init(
+        accessibilityIdentifier: String,
+        accessibilityHint: String,
+        accessibilityLabel: String,
+        url: String?
+    ) {
+        self.accessibilityIdentifier = accessibilityIdentifier
+        self.accessibilityHint = accessibilityHint
+        self.accessibilityLabel = accessibilityLabel
+        self.url = url
+    }
+}
+
 class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     // MARK: - Properties
     private enum UX {
-        static let horizontalSpace: CGFloat = 16
+        static let horizontalSpace: CGFloat = 8
         static let gradientViewVerticalPadding: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
+        static let clearButtonSize: CGFloat = 40
+        static let transitionDuration: TimeInterval = 0.3
     }
 
+    private var urlAbsolutePath: String?
     private var notifyTextChanged: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
 
+    private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
+
+    private var clearButtonWidthConstraint: NSLayoutConstraint?
+    private var gradientViewWidthConstraint: NSLayoutConstraint?
+
+    private lazy var clearButton: UIButton = .build { button in
+        button.setImage(
+            UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)?.withRenderingMode(.alwaysTemplate),
+            for: .normal
+        )
+        button.addTarget(self, action: #selector(self.clearURLText), for: .touchUpInside)
+    }
 
     private lazy var urlTextField: UITextField = .build { urlTextField in
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.backgroundColor = .clear
         urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
         urlTextField.adjustsFontForContentSizeCategory = true
+        let isRightToLeft = Locale.characterDirection(forLanguage: Locale.preferredLanguages.first ?? "") == .rightToLeft
+        urlTextField.leftView = isRightToLeft ? self.clearButton : nil
+        urlTextField.rightView = isRightToLeft ? nil : self.clearButton
+        urlTextField.leftViewMode = isRightToLeft ? .whileEditing : .never
+        urlTextField.rightViewMode = isRightToLeft ? .never : .whileEditing
         urlTextField.delegate = self
     }
 
@@ -54,8 +93,15 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
 
+            if urlTextField.text?.isEmpty == true {
+                hideClearButton()
+            } else {
+                showClearButton()
+            }
+
             urlTextField.text = urlTextField.text?.lowercased()
-            locationViewDelegate?.locationViewDidEnterText(urlTextField.text?.lowercased() ?? "")
+            urlAbsolutePath = urlTextField.text
+            locationViewDelegate?.locationViewDidEnterText(urlTextField.text ?? "")
         }
     }
 
@@ -73,19 +119,31 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         return urlTextField.resignFirstResponder()
     }
 
-    func configure(_ text: String?, delegate: LocationViewDelegate) {
-        urlTextField.text = getHost(from: text)
+    func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
+        urlTextField.text = state.url
+        configureA11yForClearButton(state)
+        urlAbsolutePath = urlTextField.text
+        formatAndTruncateURLTextField()
         locationViewDelegate = delegate
     }
 
     // MARK: - Layout
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        DispatchQueue.main.async { [self] in
+            formatAndTruncateURLTextField()
+            performURLTextFieldAnimationIfPossible()
+        }
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradientLayerFrame()
+        performURLTextFieldAnimationIfPossible()
     }
 
     private func setupLayout() {
-        addSubviews(urlTextField, gradientView)
+        addSubviews(urlTextField, gradientView, clearButton)
 
         NSLayoutConstraint.activate(
             [
@@ -98,13 +156,14 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                     constant: -UX.gradientViewVerticalPadding
                 ),
                 gradientView.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor),
-                gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
                 gradientView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
 
                 urlTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
-                urlTextField.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -UX.horizontalSpace),
+                urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
                 urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+                clearButton.heightAnchor.constraint(equalToConstant: UX.clearButtonSize)
             ]
         )
     }
@@ -116,19 +175,59 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         gradientView.layer.addSublayer(gradientLayer)
     }
 
-    private func updateGradientLayerFrame() {
+    private var doesURLTextFieldExceedViewWidth: Bool {
+        guard let text = urlTextField.text, let font = urlTextField.font else {
+            return false
+        }
         let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
-        let urlTextFieldWidth = urlTextField.frame.width
-        let showGradientForLongURL = urlTextFieldWidth >= locationViewWidth && !urlTextField.isFirstResponder
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        let urlTextFieldWidth = text.size(withAttributes: fontAttributes).width
+        return urlTextFieldWidth >= locationViewWidth
+    }
+
+    private func updateGradientLayerFrame() {
+        let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !urlTextField.isFirstResponder
         gradientLayer.frame = if showGradientForLongURL { gradientView.bounds } else { CGRect() }
     }
 
+    private func updateClearButtonWidthConstraint(to widthConstant: CGFloat) {
+        clearButtonWidthConstraint?.isActive = false
+        clearButtonWidthConstraint = clearButton.widthAnchor.constraint(equalToConstant: widthConstant)
+        clearButtonWidthConstraint?.isActive = true
+    }
+
+    private func updateGradientViewWidthConstraint(to widthConstant: CGFloat) {
+        gradientViewWidthConstraint?.isActive = false
+        gradientViewWidthConstraint = gradientView.widthAnchor.constraint(equalToConstant: widthConstant)
+        gradientViewWidthConstraint?.isActive = true
+    }
+
+    private func showClearButton() {
+        clearButton.isHidden = false
+        updateClearButtonWidthConstraint(to: UX.clearButtonSize)
+        updateGradientViewWidthConstraint(to: 0)
+    }
+
+    private func hideClearButton() {
+        clearButton.isHidden = true
+        updateClearButtonWidthConstraint(to: 0)
+        updateGradientViewWidthConstraint(to: UX.gradientViewWidth)
+    }
+
     // MARK: - `urlTextField` Configuration
-    private func applyTruncationStyleToURLTextField() {
+    private func formatAndTruncateURLTextField() {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
-        let attributedString = NSMutableAttributedString(string: urlTextField.text ?? "")
+        let urlString = urlAbsolutePath ?? ""
+        let (subdomain, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
+
+        let attributedString = NSMutableAttributedString(string: normalizedHost)
+
+        if let subdomain {
+            let range = NSRange(location: 0, length: subdomain.count)
+            attributedString.addAttribute(.foregroundColor, value: urlTextFieldSubdomainColor, range: range)
+        }
         attributedString.addAttribute(
             .paragraphStyle,
             value: paragraphStyle,
@@ -140,12 +239,35 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextField.attributedText = attributedString
     }
 
-    private func getHost(from stringURL: String?) -> String {
-        guard let stringURL, let url = URL(string: stringURL) else { return "" }
-        return url.host ?? ""
+    private func animateURLText(
+        _ textField: UITextField,
+        options: UIView.AnimationOptions,
+        textAlignment: NSTextAlignment,
+        completion: (() -> Void)? = nil
+    ) {
+        UIView.transition(
+            with: textField,
+            duration: UX.transitionDuration,
+            options: options) {
+            textField.textAlignment = textAlignment
+        } completion: { _ in
+            completion?()
+        }
+    }
+
+    private func performURLTextFieldAnimationIfPossible() {
+        if !doesURLTextFieldExceedViewWidth, !urlTextField.isFirstResponder {
+            animateURLText(urlTextField, options: .transitionFlipFromLeft, textAlignment: .center)
+        }
     }
 
     // MARK: - Selectors
+    @objc
+    private func clearURLText() {
+        urlTextField.text = ""
+        notifyTextChanged?()
+    }
+
     @objc
     func textDidChange(_ textField: UITextField) {
         notifyTextChanged?()
@@ -153,13 +275,24 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        gradientLayer.frame = CGRect()
+        if textField.text?.isEmpty == false { showClearButton() } else { hideClearButton() }
+
+        updateGradientLayerFrame()
+        DispatchQueue.main.async {
+            // `attributedText` property is set to nil to remove all formatting and truncation set before.
+            textField.attributedText = nil
+            textField.text = self.urlAbsolutePath
+            textField.selectAll(nil)
+        }
+
+        animateURLText(textField, options: .transitionFlipFromRight, textAlignment: .natural) {
+            textField.textAlignment = .natural
+        }
         locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        updateGradientLayerFrame()
-        applyTruncationStyleToURLTextField()
+        hideClearButton()
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -170,9 +303,19 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         return true
     }
 
+    // MARK: - Accessibility
+    private func configureA11yForClearButton(_ model: LocationViewState) {
+        clearButton.accessibilityIdentifier = model.accessibilityIdentifier
+        clearButton.accessibilityHint = model.accessibilityHint
+        clearButton.accessibilityLabel = model.accessibilityLabel
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: any Common.Theme) {
         let colors = theme.colors
+        urlTextField.textColor = colors.textPrimary
+        urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
+        clearButton.tintColor = colors.iconPrimary
     }
 }

@@ -8,6 +8,10 @@ import Shared
 
 extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
+        // For now, each window handles its downloads independently; ignore any messages for other windows' downloads.
+        let uuid = windowUUID
+        guard download.originWindow == uuid else { return }
+
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
             let downloadToast = DownloadToast(download: download,
@@ -19,7 +23,7 @@ extension BrowserViewController: DownloadQueueDelegate {
 
                 // Handle download cancellation
                 if buttonPressed, !downloadQueue.isEmpty {
-                    downloadQueue.cancelAll()
+                    downloadQueue.cancelAll(for: uuid)
 
                     SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
                                                     bottomContainer: self.contentContainer,
@@ -47,12 +51,14 @@ extension BrowserViewController: DownloadQueueDelegate {
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
         guard let downloadToast = self.downloadToast,
-              let download = downloadToast.downloads.first
+              let download = downloadToast.downloads.first,
+              download.originWindow == windowUUID
         else { return }
 
         DispatchQueue.main.async {
             downloadToast.dismiss(false)
 
+            // We only care about download errors specific to our window's downloads
             if error == nil {
                 let viewModel = ButtonToastViewModel(labelText: download.filename,
                                                      imageName: StandardImageIdentifiers.Large.checkmark,

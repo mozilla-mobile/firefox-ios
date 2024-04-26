@@ -6,17 +6,17 @@ only_rules: # Only enforce these rules, ignore all others
   # - closure_parameter_position
   # - colon
   # - comma
-  # - comment_spacing
-  # - compiler_protocol_init
-  # - computed_accessors_order
+  - comment_spacing
+  - compiler_protocol_init
+  - computed_accessors_order
   # - control_statement
   # - duplicate_conditions
   # - dynamic_inline
-  # - empty_enum_arguments
-  # - empty_parameters
-  # - empty_parentheses_with_trailing_closure
+  - empty_enum_arguments
+  - empty_parameters
+  - empty_parentheses_with_trailing_closure
   # - for_where
-  # - force_try
+  - force_try
   - implicit_getter
   - inclusive_language
   - invalid_swiftlint_command
@@ -28,7 +28,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - legacy_hashing
   # - legacy_nsgeometry_functions
   # - mark
-  # - no_space_in_method_call
+  - no_space_in_method_call
   # - ns_number_init_as_function_reference
   # - operator_whitespace
   # - orphaned_doc_comment
@@ -52,32 +52,32 @@ only_rules: # Only enforce these rules, ignore all others
   # - unused_optional_binding
   # - unused_setter_value
   # - vertical_parameter_alignment
-  # - vertical_whitespace
+  - vertical_whitespace
   # - void_function_in_ternary
   # - void_return
   # - file_header
-  # - redundant_type_annotation
+  - redundant_type_annotation
   # - attributes
-  # - closing_brace
-  # - closure_end_indentation
-  # - contains_over_filter_count
+  - closing_brace
+  - closure_end_indentation
+  - contains_over_filter_count
   # - contains_over_filter_is_empty
-  # - contains_over_first_not_nil
-  # - contains_over_range_nil_comparison
-  # - empty_collection_literal
+  - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
+  - empty_collection_literal
   # - empty_count
-  # - empty_string
-  # - empty_xctest_method
-  # - explicit_init
-  # - first_where
-  # - discouraged_assert
-  # - duplicate_imports
-  # - duplicate_enum_cases
-  # - last_where
-  # - modifier_order
-  # - multiline_arguments
-  # - opening_brace
-  # - overridden_super_call
+  - empty_string
+  - empty_xctest_method
+  - explicit_init
+  - first_where
+  - discouraged_assert
+  - duplicate_imports
+  - duplicate_enum_cases
+  - last_where
+  - modifier_order
+  - multiline_arguments
+  - opening_brace
+  - overridden_super_call
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
@@ -120,6 +120,7 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Sync/Generated/Metrics.swift
   - firefox-ios/Storage/Generated/Metrics.swift
   - firefox-ios/ThirdParty
+  - focus-ios-tests/tools/Localizations
   - test-fixtures/tmp
   - firefox-ios/firefox-ios-tests/Tests/UITests/
   - l10n-screenshots-dd/

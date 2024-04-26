@@ -26,10 +26,8 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307117
-    // Disabled due to link not loading
-    func testOpenLinkFromPDF() throws {
-        // throw XCTSkip("Link inside pdf is not loading anymore")
-        /*
+    // Smoketest
+    func testOpenLinkFromPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
 
@@ -42,7 +40,6 @@ class BrowsingPDFTests: BaseTestCase {
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
         mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
-         */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307118
@@ -78,6 +75,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307120
+    // Smoketest
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -110,6 +108,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307121
+    // Smoketest
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()

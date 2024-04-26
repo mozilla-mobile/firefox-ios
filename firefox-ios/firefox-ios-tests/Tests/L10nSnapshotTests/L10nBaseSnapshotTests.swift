@@ -65,6 +65,10 @@ class L10nBaseSnapshotTests: XCTestCase {
         }
     }
 
+    func waitForTabsButton() {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)
+    }
+
     private func waitFor(
         _ element: XCUIElement,
         with predicateString: String,
@@ -119,6 +123,6 @@ class L10nBaseSnapshotTests: XCTestCase {
     func waitUntilPageLoad() {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
-        mozWaitForElementToNotExist(progressIndicator, timeout: 20.0)
+        mozWaitForElementToNotExist(progressIndicator, timeout: 30.0)
     }
 }

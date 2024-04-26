@@ -73,6 +73,7 @@ class BrowserViewController: UIViewController,
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
+    var microSurvey: MicroSurveyPromptView?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
@@ -83,7 +84,6 @@ class BrowserViewController: UIViewController,
     var toolbarContextHintVC: ContextualHintViewController
     var dataClearanceContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
-    private var backgroundTabLoader: DefaultBackgroundTabLoader
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
     private var observedWebViews = WeakList<WKWebView>()
@@ -241,7 +241,6 @@ class BrowserViewController: UIViewController,
         )
         self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
                                                                        windowUUID: windowUUID)
-        self.backgroundTabLoader = DefaultBackgroundTabLoader(tabQueue: profile.queue)
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -272,7 +271,7 @@ class BrowserViewController: UIViewController,
         screenshotHelper = ScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
-        downloadQueue.delegate = self
+        downloadQueue.addDelegate(self)
         let tabWindowUUID = tabManager.windowUUID
         AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabWindowUUID)]) { [weak self] in
             // Ensure we call into didBecomeActive at least once during startup flow (if needed)
@@ -331,6 +330,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
+        updateMicroSurveyConstraints()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -495,20 +495,13 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
-        updateWallpaperMetadata()
         dismissModalsIfStartAtHome()
-
-        // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        // Make sure that our startup flow is completed and other tabs have been restored before we load.
-        AppEventQueue.wait(for: [.startupFlowComplete, .tabRestoration(tabManager.windowUUID)]) { [weak self] in
-            self?.backgroundTabLoader.loadBackgroundTabs()
-        }
     }
 
     private func nightModeUpdates() {
         if NightModeHelper.isActivated(),
            !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
-            NightModeHelper.turnOff(tabManager: tabManager)
+            NightModeHelper.turnOff()
             themeManager.reloadTheme(for: windowUUID)
         }
 
@@ -783,6 +776,8 @@ class BrowserViewController: UIViewController,
 
         browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
+
+        setupMicroSurvey()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1062,14 +1057,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func updateWallpaperMetadata() {
-        let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue")
-        metadataQueue.async {
-            let wallpaperManager = WallpaperManager()
-            wallpaperManager.checkForUpdates()
-        }
-    }
-
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
@@ -1147,6 +1134,62 @@ class BrowserViewController: UIViewController,
         browserDelegate?.show(webView: webView)
     }
 
+    // MARK: - Micro Survey
+    private func setupMicroSurvey() {
+        guard featureFlags.isFeatureEnabled(.microSurvey, checking: .buildOnly) else { return }
+
+        // TODO: FXIOS-8990: Create Micro Survey Surface Manager to handle showing survey prompt
+        if microSurvey != nil {
+            removeMicroSurveyPrompt()
+        }
+
+        createMicroSurveyPrompt()
+    }
+
+    private func updateMicroSurveyConstraints() {
+        guard let microSurvey else { return }
+
+        microSurvey.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(microSurvey)
+
+        if urlBar.isBottomSearchBar {
+            overKeyboardContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+                self.view.layoutIfNeeded()
+            })
+        } else {
+            bottomContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+                self.view.layoutIfNeeded()
+            })
+        }
+
+        microSurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+
+        updateViewConstraints()
+    }
+
+    private func createMicroSurveyPrompt() {
+        let viewModel = MicroSurveyViewModel(openAction: {
+            // TODO: FXIOS-8895: Create Micro Survey Modal View
+        }) {
+            // TODO: FXIOS-8898: Setup Redux to handle open and dismissing modal
+        }
+
+        self.microSurvey = MicroSurveyPromptView(viewModel: viewModel)
+
+        updateMicroSurveyConstraints()
+    }
+
+    private func removeMicroSurveyPrompt() {
+        guard let microSurvey else { return }
+        if urlBar.isBottomSearchBar {
+            overKeyboardContainer.removeArrangedView(microSurvey)
+        } else {
+            bottomContainer.removeArrangedView(microSurvey)
+        }
+
+        self.microSurvey = nil
+        updateViewConstraints()
+    }
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
@@ -2720,6 +2763,11 @@ extension BrowserViewController: TabManagerDelegate {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
+
+        // Show the Toolbar if a link from the current tab, open another tab
+        if placeNextToParentTab {
+            scrollController.showToolbars(animated: false)
+        }
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {

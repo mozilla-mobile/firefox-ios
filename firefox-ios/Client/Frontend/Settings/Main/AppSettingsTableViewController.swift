@@ -283,15 +283,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings += [
-            BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.currentTheme(for: windowUUID),
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
-        ]
-
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme(for: windowUUID),

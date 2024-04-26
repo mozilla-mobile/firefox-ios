@@ -14,7 +14,7 @@ RUN apk add --no-cache python3 py3-pip py3-setuptools && \
     ln -sf python3 /usr/bin/python
 
 # Setup other dependencies
-RUN apk add bash git
+RUN apk add bash coreutils git
 
 # %include-run-task
 

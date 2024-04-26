@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import Shared
 
 protocol DownloadDelegate: AnyObject {
     func download(_ download: Download, didCompleteWithError error: Error?)
@@ -16,16 +17,18 @@ class Download: NSObject {
 
     fileprivate(set) var filename: String
     fileprivate(set) var mimeType: String
+    let originWindow: WindowUUID
 
     fileprivate(set) var isComplete = false
 
     fileprivate(set) var totalBytesExpected: Int64?
     fileprivate(set) var bytesDownloaded: Int64
 
-    override init() {
+    init(originWindow: WindowUUID) {
         self.filename = "unknown"
         self.mimeType = "application/octet-stream"
 
+        self.originWindow = originWindow
         self.bytesDownloaded = 0
 
         super.init()
@@ -83,7 +86,10 @@ class HTTPDownload: Download {
         return string.components(separatedBy: allowed.inverted).joined()
      }
 
-    init?(cookieStore: WKHTTPCookieStore, preflightResponse: URLResponse, request: URLRequest) {
+    init?(originWindow: WindowUUID,
+          cookieStore: WKHTTPCookieStore,
+          preflightResponse: URLResponse,
+          request: URLRequest) {
         self.cookieStore = cookieStore
         self.preflightResponse = preflightResponse
 
@@ -99,7 +105,7 @@ class HTTPDownload: Download {
         guard let scheme = self.request.url?.scheme else { return nil }
         guard scheme == "http" || scheme == "https" else { return nil }
 
-        super.init()
+        super.init(originWindow: originWindow)
 
         if let filename = preflightResponse.suggestedFilename {
             self.filename = HTTPDownload.stripUnicode(fromFilename: filename)
@@ -182,10 +188,10 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
 class BlobDownload: Download {
     private let data: Data
 
-    init(filename: String, mimeType: String, size: Int64, data: Data) {
+    init(originWindow: WindowUUID, filename: String, mimeType: String, size: Int64, data: Data) {
         self.data = data
 
-        super.init()
+        super.init(originWindow: originWindow)
 
         self.filename = filename
         self.mimeType = mimeType
@@ -211,6 +217,7 @@ class BlobDownload: Download {
 }
 
 protocol DownloadQueueDelegate: AnyObject {
+    var windowUUID: WindowUUID { get }
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
     func downloadQueue(
         _ downloadQueue: DownloadQueue,
@@ -221,60 +228,90 @@ protocol DownloadQueueDelegate: AnyObject {
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?)
 }
 
+class WeakDownloadQueueDelegate {
+    private(set) weak var delegate: DownloadQueueDelegate?
+    init(delegate: DownloadQueueDelegate? = nil) { self.delegate = delegate }
+}
+
+struct DownloadProgress {
+    var bytesDownloaded: Int64
+    var totalExpected: Int64
+}
+
 class DownloadQueue {
     var downloads: [Download]
 
-    weak var delegate: DownloadQueueDelegate?
+    private var delegates = [WeakDownloadQueueDelegate]()
 
     var isEmpty: Bool {
         return downloads.isEmpty
     }
 
-    fileprivate var combinedBytesDownloaded: Int64 = 0
-    fileprivate var combinedTotalBytesExpected: Int64?
-    fileprivate var lastDownloadError: Error?
+    fileprivate var downloadProgress: [WindowUUID: DownloadProgress] = [:]
+    fileprivate var downloadErrors: [WindowUUID: Error] = [:]
 
     init() {
         self.downloads = []
     }
 
+    func addDelegate(_ delegate: DownloadQueueDelegate) {
+        self.cleanUpDelegates()
+        delegates.append(WeakDownloadQueueDelegate(delegate: delegate))
+    }
+
+    func removeDelegate(_ delegate: DownloadQueueDelegate) {
+        delegates.removeAll(where: { $0.delegate === delegate || $0.delegate == nil })
+    }
+
     func enqueue(_ download: Download) {
         // Clear the download stats if the queue was empty at the start.
-        if downloads.isEmpty {
-            combinedBytesDownloaded = 0
-            combinedTotalBytesExpected = 0
-            lastDownloadError = nil
+        let uuid = download.originWindow
+        if downloads(for: uuid).isEmpty {
+            downloadProgress[uuid] = nil
+            downloadErrors[uuid] = nil
         }
 
         downloads.append(download)
         download.delegate = self
 
-        if let totalBytesExpected = download.totalBytesExpected, combinedTotalBytesExpected != nil {
-            combinedTotalBytesExpected! += totalBytesExpected
+        if let totalBytesExpected = download.totalBytesExpected {
+            var progress = downloadProgress[uuid] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
+            progress.totalExpected += totalBytesExpected
+            downloadProgress[uuid] = progress
         } else {
-            combinedTotalBytesExpected = nil
+            downloadProgress[uuid] = nil
         }
 
         download.resume()
-        delegate?.downloadQueue(self, didStartDownload: download)
+        delegates.forEach { $0.delegate?.downloadQueue(self, didStartDownload: download) }
     }
 
-    func cancelAll() {
-        for download in downloads where !download.isComplete {
+    func cancelAll(for window: WindowUUID) {
+        for download in downloads where !download.isComplete && download.originWindow == window {
             download.cancel()
         }
     }
 
-    func pauseAll() {
-        for download in downloads where !download.isComplete {
+    func pauseAll(for window: WindowUUID) {
+        for download in downloads where !download.isComplete && download.originWindow == window {
             download.pause()
         }
     }
 
-    func resumeAll() {
-        for download in downloads where !download.isComplete {
+    func resumeAll(for window: WindowUUID) {
+        for download in downloads where !download.isComplete && download.originWindow == window {
             download.resume()
         }
+    }
+
+    // MARK: - Utility
+
+    private func cleanUpDelegates() {
+        delegates.removeAll(where: { $0.delegate == nil })
+    }
+
+    private func downloads(for window: WindowUUID) -> [Download] {
+        return downloads.filter({ $0.originWindow == window })
     }
 }
 
@@ -282,33 +319,50 @@ extension DownloadQueue: DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?) {
         guard let error = error, let index = downloads.firstIndex(of: download) else { return }
 
-        lastDownloadError = error
+        let uuid = download.originWindow
+        downloadErrors[uuid] = error
         downloads.remove(at: index)
 
-        if downloads.isEmpty {
-            delegate?.downloadQueue(self, didCompleteWithError: lastDownloadError)
+        // If all downloads for the completed download's window are completed, we notify of error
+        if downloads(for: uuid).isEmpty {
+            delegates.forEach {
+                guard $0.delegate?.windowUUID == uuid else { return }
+                $0.delegate?.downloadQueue(self, didCompleteWithError: error)
+            }
         }
     }
 
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) {
-        combinedBytesDownloaded += bytesDownloaded
-        delegate?.downloadQueue(
-            self,
-            didDownloadCombinedBytes: combinedBytesDownloaded,
-            combinedTotalBytesExpected: combinedTotalBytesExpected
-        )
+        let uuid = download.originWindow
+        var progress = downloadProgress[uuid] ?? DownloadProgress(bytesDownloaded: 0, totalExpected: 0)
+        progress.bytesDownloaded += bytesDownloaded
+        downloadProgress[uuid] = progress
+
+        delegates.forEach {
+            guard $0.delegate?.windowUUID == uuid else { return }
+            $0.delegate?.downloadQueue(self,
+                                       didDownloadCombinedBytes: progress.bytesDownloaded,
+                                       combinedTotalBytesExpected: progress.totalExpected)
+        }
     }
 
     func download(_ download: Download, didFinishDownloadingTo location: URL) {
         guard let index = downloads.firstIndex(of: download) else { return }
 
         downloads.remove(at: index)
-        delegate?.downloadQueue(self, download: download, didFinishDownloadingTo: location)
+        delegates.forEach { $0.delegate?.downloadQueue(self, download: download, didFinishDownloadingTo: location) }
 
         NotificationCenter.default.post(name: .FileDidDownload, object: location)
 
-        if downloads.isEmpty {
-            delegate?.downloadQueue(self, didCompleteWithError: lastDownloadError)
+        // If all downloads for the completed download's window are completed, we notify of completion
+        let uuid = download.originWindow
+        if downloads(for: uuid).isEmpty {
+            let error = downloadErrors[uuid]
+            delegates.forEach {
+                guard $0.delegate?.windowUUID == uuid else { return }
+                $0.delegate?.downloadQueue(self, didCompleteWithError: error)
+            }
+            downloadErrors[uuid] = nil
         }
     }
 }

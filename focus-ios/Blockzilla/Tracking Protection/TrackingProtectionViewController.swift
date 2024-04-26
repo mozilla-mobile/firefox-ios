@@ -357,7 +357,7 @@ class TrackingProtectionViewController: UIViewController {
         let urlToDocumentsFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last!
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        if let installDate = (try! FileManager.default.attributesOfItem(atPath: urlToDocumentsFolder.path)[FileAttributeKey.creationDate]) as? Date {
+        if let installDate = (try? FileManager.default.attributesOfItem(atPath: urlToDocumentsFolder.path)[FileAttributeKey.creationDate]) as? Date {
             let stringDate = dateFormatter.string(from: installDate)
             return stringDate
         }
@@ -365,10 +365,10 @@ class TrackingProtectionViewController: UIViewController {
     }
 
     private func getNumberOfTrackersBlocked() -> String {
-        let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
+        let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        return formatter.string(from: numberOfTrackersBlocked) ?? "0"
+        return formatter.string(from: NSNumber(value: numberOfTrackersBlocked)) ?? "0"
     }
 
     private func toggleProtection(isOn: Bool) {

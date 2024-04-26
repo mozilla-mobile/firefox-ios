@@ -14,6 +14,7 @@ class SafariInstructionsViewController: UIViewController {
     }()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = .accent
 
