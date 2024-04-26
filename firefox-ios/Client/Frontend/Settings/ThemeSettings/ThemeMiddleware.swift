@@ -21,8 +21,28 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     lazy var themeManagerProvider: Middleware<AppState> = { state, action in
-        guard let action = action as? ThemeSettingsViewAction else { return }
+
         let windowUUID = action.windowUUID
+
+        if let action = action as? ThemeSettingsViewAction {
+            self.resolveThemeSettingsViewActionType(action: action, state: state)
+        } else if let action = action as? PrivateModeAction {
+            self.resolvePrivateModeAction(action: action, state: state)
+        }
+    }
+
+    private func resolvePrivateModeAction(action: PrivateModeAction, state: AppState) {
+        switch action.actionType {
+        case PrivateModeActionType.privateModeUpdated:
+            guard let isPrivate = action.isPrivate else { return }
+            self.toggleUsePrivateTheme(to: isPrivate, for: windowUUID)
+
+        default:
+            break
+        }
+    }
+
+    private func resolveThemeSettingsViewActionType(action: ThemeSettingsViewActionType, state: AppState) {
         switch action.actionType {
         case ThemeSettingsViewActionType.themeSettingsDidAppear:
             let currentThemeState = self.getCurrentThemeManagerState(windowUUID: windowUUID)
@@ -81,10 +101,6 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
                 actionType: ThemeSettingsMiddlewareActionType.systemBrightnessChanged)
             store.dispatch(action)
 
-            // TODO: Will never get hit
-//        case PrivateModeMiddlewareAction.privateModeUpdated(let context):
-//            let newState = context.boolValue
-//            self.toggleUsePrivateTheme(to: newState, for: windowUUID)
         default:
             break
         }
