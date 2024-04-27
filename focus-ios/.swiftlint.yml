@@ -5,7 +5,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - closure_spacing
   # - closure_parameter_position
   # - colon
-  # - comma
+  - comma
   - comment_spacing
   - compiler_protocol_init
   - computed_accessors_order
