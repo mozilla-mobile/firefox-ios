@@ -233,6 +233,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
     }
 
+    func locationViewDisplayTextForURL(_ url: URL?) -> String? {
+        toolbarDelegate?.shouldDisplayTextForURL(url)
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2

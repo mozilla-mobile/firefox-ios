@@ -20,28 +20,47 @@ protocol LocationViewDelegate: AnyObject {
     ///
     /// - Parameter text: The text for which the location view should search.
     func locationViewShouldSearchFor(_ text: String)
+
+    /// Called to determine the display text for a given URL in the location view.
+    ///
+    /// - Parameter url: The URL for which to determine the display text.
+    /// - Returns: The display text as an optional String. If the URL is nil
+    ///  or cannot be converted to a display text, returns nil.
+    func locationViewDisplayTextForURL(_ url: URL?) -> String?
 }
 
 public struct LocationViewState {
-    public let accessibilityIdentifier: String
-    public let accessibilityHint: String
-    public let accessibilityLabel: String
+    public let clearButtonA11yId: String
+    public let clearButtonA11yHint: String
+    public let clearButtonA11yLabel: String
+
+    public let searchEngineImageViewA11yId: String
+    public let searchEngineImageViewA11yLabel: String
+
     public let urlTextFieldPlaceholder: String
+    public let urlTextFieldA11yLabel: String
+
     public let searchEngineImageName: String
     public let url: String?
 
     public init(
-        accessibilityIdentifier: String,
-        accessibilityHint: String,
-        accessibilityLabel: String,
+        clearButtonA11yId: String,
+        clearButtonA11yHint: String,
+        clearButtonA11yLabel: String,
+        searchEngineImageViewA11yId: String,
+        searchEngineImageViewA11yLabel: String,
         urlTextFieldPlaceholder: String,
+        urlTextFieldA11yLabel: String,
         searchEngineImageName: String,
         url: String?
     ) {
-        self.accessibilityIdentifier = accessibilityIdentifier
-        self.accessibilityHint = accessibilityHint
-        self.accessibilityLabel = accessibilityLabel
+        self.clearButtonA11yId = clearButtonA11yId
+        self.clearButtonA11yHint = clearButtonA11yHint
+        self.clearButtonA11yLabel = clearButtonA11yLabel
+        self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
+        self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
         self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
+        self.urlTextFieldA11yLabel = urlTextFieldA11yLabel
         self.searchEngineImageName = searchEngineImageName
         self.url = url
     }
@@ -85,6 +104,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.layer.cornerRadius = UX.searchEngineImageViewCornerRadius
+        imageView.isAccessibilityElement = true
     }
 
     private lazy var urlTextField: UITextField = .build { [self] urlTextField in
@@ -144,7 +164,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
         searchEngineImageView.image = UIImage(named: state.searchEngineImageName)
         configureURLTextField(state)
-        configureA11yForClearButton(state)
+        configureA11y(state)
         formatAndTruncateURLTextField()
         locationViewDelegate = delegate
     }
@@ -378,13 +398,16 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         showSearchEngineButton()
         updateGradientLayerFrame()
 
-        DispatchQueue.main.async {
+        let url = URL(string: textField.text ?? "")
+        let queryText = locationViewDelegate?.locationViewDisplayTextForURL(url)
+
+        DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = self.urlAbsolutePath
+            textField.text = (queryText != nil) ? queryText : urlAbsolutePath
             textField.selectAll(nil)
         }
-        locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
+        locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
@@ -402,10 +425,15 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     // MARK: - Accessibility
-    private func configureA11yForClearButton(_ state: LocationViewState) {
-        clearButton.accessibilityIdentifier = state.accessibilityIdentifier
-        clearButton.accessibilityHint = state.accessibilityHint
-        clearButton.accessibilityLabel = state.accessibilityLabel
+    private func configureA11y(_ state: LocationViewState) {
+        clearButton.accessibilityIdentifier = state.clearButtonA11yId
+        clearButton.accessibilityHint = state.clearButtonA11yHint
+        clearButton.accessibilityLabel = state.clearButtonA11yLabel
+
+        searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
+        searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
+
+        urlTextField.accessibilityLabel = state.urlTextFieldA11yLabel
     }
 
     // MARK: - ThemeApplicable
