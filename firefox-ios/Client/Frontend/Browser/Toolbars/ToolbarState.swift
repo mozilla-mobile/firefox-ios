@@ -19,6 +19,16 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     struct ActionState: Equatable {
+        enum ActionType {
+            case back
+            case forward
+            case home
+            case search
+            case tabs
+            case menu
+        }
+
+        var actionType: ActionType
         var iconName: String
         var isEnabled: Bool
         var a11yLabel: String

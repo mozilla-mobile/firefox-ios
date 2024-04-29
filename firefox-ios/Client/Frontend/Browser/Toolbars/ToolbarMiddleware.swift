@@ -37,15 +37,28 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func loadNavigationToolbarElements() -> [ToolbarState.ActionState] {
         var elements = [ToolbarState.ActionState]()
-        elements.append(ToolbarState.ActionState(iconName: StandardImageIdentifiers.Large.back,
+        elements.append(ToolbarState.ActionState(actionType: .back,
+                                                 iconName: StandardImageIdentifiers.Large.back,
                                                  isEnabled: false,
                                                  a11yLabel: .TabToolbarBackAccessibilityLabel,
                                                  a11yId: AccessibilityIdentifiers.Toolbar.backButton))
-        elements.append(ToolbarState.ActionState(iconName: StandardImageIdentifiers.Large.forward,
+        elements.append(ToolbarState.ActionState(actionType: .forward,
+                                                 iconName: StandardImageIdentifiers.Large.forward,
                                                  isEnabled: false,
                                                  a11yLabel: .TabToolbarForwardAccessibilityLabel,
                                                  a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
-        elements.append(ToolbarState.ActionState(iconName: StandardImageIdentifiers.Large.appMenu,
+        elements.append(ToolbarState.ActionState(actionType: .home,
+                                                 iconName: StandardImageIdentifiers.Large.home,
+                                                 isEnabled: true,
+                                                 a11yLabel: .TabToolbarHomeAccessibilityLabel,
+                                                 a11yId: AccessibilityIdentifiers.Toolbar.homeButton))
+        elements.append(ToolbarState.ActionState(actionType: .tabs,
+                                                 iconName: StandardImageIdentifiers.Large.tabTray, // correct image
+                                                 isEnabled: true,
+                                                 a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+                                                 a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
+        elements.append(ToolbarState.ActionState(actionType: .menu,
+                                                 iconName: StandardImageIdentifiers.Large.appMenu,
                                                  isEnabled: true,
                                                  a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
                                                  a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
@@ -59,17 +72,4 @@ class ToolbarMiddleware: FeatureFlaggable {
         let toolbarState = browserState.toolbarState
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
     }
-
-//    private var addressToolbarPosition: AddressToolbarPosition {
-//        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-//        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
-//
-//        guard isFeatureEnabled && !isiPad else { return .top }
-//
-//        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-//            return .bottom
-//        }
-//
-//        return position == .bottom ? .bottom : .top
-//    }
 }
