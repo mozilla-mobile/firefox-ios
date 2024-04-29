@@ -93,7 +93,7 @@ class RootViewControllerModel {
                 clearButtonA11yLabel: "Clean",
                 searchEngineImageViewA11yId: "searchEngine",
                 searchEngineImageViewA11yLabel: "Search engine icon",
-                urlTextFieldPlaceholder: "Search or enter address", 
+                urlTextFieldPlaceholder: "Search or enter address",
                 urlTextFieldA11yLabel: "Address Bar",
                 searchEngineImageName: "bingSearchEngine",
                 url: url
