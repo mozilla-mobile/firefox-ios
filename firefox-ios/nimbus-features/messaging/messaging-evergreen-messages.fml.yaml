@@ -60,14 +60,14 @@ import:
                 style: MICROSURVEY
                 trigger-if-all:
                   - NEVER
-                title: "Help make printing in Firefox better. It only takes a sec."
+                title: Microsurvey/Microsurvey.Prompt.TitleLabel.v127
                 text: "How satisfied are you with printing in Firefox?" # Should not show this message if this is nil
-                button-label: "Continue"
+                button-label: Microsurvey/Microsurvey.Prompt.TakeSurveyButton.v127
                 microsurveyConfig:
                   target-feature: printing
                   options:
-                    - "Very Satisfied"
-                    - "Satisfied"
-                    - "Neutral"
-                    - "Dissatisfied"
-                    - "Very Dissatisfied"
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption1.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption2.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption3.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption4.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption5.v127

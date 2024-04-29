@@ -198,7 +198,7 @@ objects:
         default: Unknown # Should not be defaulted
       options:
         description: The list of survey options to present to the user.
-        type: List<String>
+        type: List<Text>
         default: [] # Should not be defaulted
 
 enums:
