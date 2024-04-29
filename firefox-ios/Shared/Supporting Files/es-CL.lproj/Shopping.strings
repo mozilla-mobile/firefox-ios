@@ -187,6 +187,9 @@
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "Los *puntos destacados* provienen de reseñas de %1@ de los últimos 80 días que creemos que son confiables.";
 
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "Los *puntos destacados* provienen de reseñas de %@ de los últimos 80 días que creemos que son confiables.";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Cómo determinamos la calidad de las reseñas";
 
