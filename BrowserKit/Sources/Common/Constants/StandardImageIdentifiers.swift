@@ -45,6 +45,7 @@ public struct StandardImageIdentifiers {
         public static let chevronRight = "chevronRightLarge"
         public static let chevronUp = "chevronUpLarge"
         public static let clipboard = "clipboardLarge"
+        public static let cloud = "cloudLarge"
         public static let competitiveness = "competitivenessLarge"
         public static let creditCard = "creditCardLarge"
         public static let criticalFill = "criticalFillLarge"

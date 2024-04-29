@@ -18,7 +18,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
-        static let imageSize = CGSize(width: 90, height: 60)
+        static let imageSize = CGSize(width: 90, height: 90)
     }
 
     weak var delegate: RemoteTabsEmptyViewDelegate?
@@ -28,7 +28,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
         stackView.spacing = UX.paddingInBetweenItems
         stackView.alignment = .center
     }
@@ -72,7 +72,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
                    delegate: RemoteTabsEmptyViewDelegate?) {
         self.delegate = delegate
 
-        emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
+        emptyStateImageView.image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.cloud)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         instructionsLabel.text = state.localizedString()
 
@@ -94,6 +94,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(instructionsLabel)
         stackView.addArrangedSubview(signInButton)
+        stackView.setCustomSpacing(0, after: emptyStateImageView)
         addSubview(stackView)
 
         NSLayoutConstraint.activate([
@@ -114,7 +115,7 @@ class RemoteTabsEmptyView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        emptyStateImageView.tintColor = theme.colors.textPrimary
+        emptyStateImageView.tintColor = theme.colors.iconDisabled
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
         signInButton.applyTheme(theme: theme)

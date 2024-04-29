@@ -10,7 +10,6 @@ import Foundation
 /// Sing the song if you must.
 public struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
-    public static let emptySyncImageName = "emptySync"
     public static let firefoxFavicon = "faviconFox"
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"

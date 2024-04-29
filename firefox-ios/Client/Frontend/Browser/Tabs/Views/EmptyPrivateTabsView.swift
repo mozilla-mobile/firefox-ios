@@ -122,7 +122,7 @@ class EmptyPrivateTabsView: UIView {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
         learnMoreButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
-        iconImageView.tintColor = theme.colors.indicatorActive
+        iconImageView.tintColor = theme.colors.iconDisabled
     }
 
     @objc

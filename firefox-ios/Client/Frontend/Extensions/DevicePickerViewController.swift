@@ -234,7 +234,7 @@ class DevicePickerViewController: UITableViewController {
                 let hostingCell = tableView.dequeueReusableCell(
                 withIdentifier: HostingTableViewCell<HelpView>.cellIdentifier) as? HostingTableViewCell<HelpView> {
                 let textColor = theme.colors.textPrimary
-                let imageColor = theme.colors.iconPrimary
+                let imageColor = theme.colors.iconDisabled
 
                 let emptyView = HelpView(textColor: textColor,
                                          imageColor: imageColor,
