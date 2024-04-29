@@ -131,10 +131,10 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
-    struct MicroSurvey {
+    struct Microsurvey {
         struct Prompt {
-            static let closeButton = "MicroSurvey.Prompt.CloseButton"
-            static let takeSurveyButton = "MicroSurvey.Prompt.TakeSurveyButton"
+            static let closeButton = "Microsurvey.Prompt.CloseButton"
+            static let takeSurveyButton = "Microsurvey.Prompt.TakeSurveyButton"
         }
     }
 

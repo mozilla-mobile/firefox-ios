@@ -124,7 +124,7 @@ extension Deferred {
 }
 
 public func all<T>(_ deferreds: [Deferred<T>]) -> Deferred<[T]> {
-    if deferreds.count == 0 {
+    if deferreds.isEmpty {
         return Deferred(value: [])
     }
 

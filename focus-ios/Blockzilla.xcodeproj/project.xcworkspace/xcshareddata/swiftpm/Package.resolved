@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "07c033d94478c0f32157fe6affed5f5e4c8d1924",
-          "version": "127.0.20240425134916"
+          "revision": "67ea48dede8487276ccd6531f9da29ca793c11cc",
+          "version": "127.0.20240427050414"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "937dce13c2600cc42112c480d04f84899e08e9cc",
-          "version": "8.23.0"
+          "revision": "38f4f70d07117b9f958a76b1bff278c2f29ffe0e",
+          "version": "8.21.0"
         }
       },
       {
