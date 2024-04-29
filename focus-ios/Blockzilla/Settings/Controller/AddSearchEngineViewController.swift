@@ -135,6 +135,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
         title = UIConstants.strings.AddSearchEngineTitle
 

@@ -24,9 +24,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         static let buttonCornerRadius: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
-        static let buttonFontSize: CGFloat = 16
-        static let signInLabelFontSize: CGFloat = 20
-        static let descriptionFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
@@ -66,8 +63,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = .FxASignin_Subtitle
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                size: UX.signInLabelFontSize)
+        label.font = FXFontStyles.Bold.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -80,8 +76,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: UX.signInLabelFontSize)
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
@@ -89,8 +84,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
 
-                let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                                  size: UX.signInLabelFontSize)
+                let font = FXFontStyles.Regular.headline.scaledFont()
+
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: font)

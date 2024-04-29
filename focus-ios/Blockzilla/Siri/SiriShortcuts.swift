@@ -62,14 +62,14 @@ class SiriShortcuts {
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
                 // First, check for userActivity, which is for shortcuts that work in the foreground
-                var foundShortcut = voiceShortcuts.filter { (attempt) in
+                var foundShortcut = voiceShortcuts.first(where: { (attempt) in
                     attempt.shortcut.userActivity?.activityType == type.rawValue
-                }.first
+                })
                 // Next, check for intent, which is used for shortcuts that work in the background
                 if type == SiriShortcuts.activityType.erase && foundShortcut == nil {
-                    foundShortcut = voiceShortcuts.filter { (attempt) in
+                    foundShortcut = voiceShortcuts.first(where: { (attempt) in
                         attempt.shortcut.intent as? EraseIntent != nil
-                    }.first
+                    })
                 }
                 completion(foundShortcut != nil)
             }
@@ -102,13 +102,13 @@ class SiriShortcuts {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
-                var foundShortcut = voiceShortcuts.filter { (attempt) in
+                var foundShortcut = voiceShortcuts.first(where: { (attempt) in
                     attempt.shortcut.userActivity?.activityType == activityType.rawValue
-                }.first
+                })
                 if activityType == SiriShortcuts.activityType.erase && foundShortcut == nil {
-                    foundShortcut = voiceShortcuts.filter { (attempt) in
+                    foundShortcut = voiceShortcuts.first(where: { (attempt) in
                         attempt.shortcut.intent as? EraseIntent != nil
-                    }.first
+                    })
                 }
                 if let foundShortcut = foundShortcut {
                     self.displayEditSiri(for: foundShortcut, in: viewController)

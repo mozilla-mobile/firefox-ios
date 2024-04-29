@@ -154,7 +154,10 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             },
             manageLoginInfoAction: { [weak self] in
                 guard let self else { return }
-                parentCoordinator?.show(settings: .password)
+                parentCoordinator?.show(settings: .password, onDismiss: {
+                    guard let currentTab = self.tabManager.selectedTab else { return }
+                    LoginsHelper.yieldFocusBackToField(with: currentTab)
+                })
                 parentCoordinator?.didFinish(from: self)
             }
         )

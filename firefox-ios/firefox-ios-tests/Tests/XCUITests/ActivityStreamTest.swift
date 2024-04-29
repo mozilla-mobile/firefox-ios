@@ -253,7 +253,6 @@ class ActivityStreamTest: BaseTestCase {
         app.collectionViews.cells.element(boundBy: 3).press(forDuration: 1)
         // Verify options given
         let ContextMenuTable = app.tables["Context Menu"]
-        print(app.debugDescription)
         mozWaitForElementToExist(ContextMenuTable)
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["pinLarge"])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements["plusLarge"])

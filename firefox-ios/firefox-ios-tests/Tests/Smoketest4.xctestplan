@@ -123,6 +123,7 @@
         "SearchTests\/testDoNotShowSuggestionsWhenEnteringURL()",
         "SearchTests\/testPromptPresence()",
         "SearchTests\/testSearchIconOnAboutHome()",
+        "SearchTests\/testSearchSuggestions()",
         "SearchTests\/testSearchWithFirefoxOption()",
         "SettingsTests",
         "SiteLoadTest",

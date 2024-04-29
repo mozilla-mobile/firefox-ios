@@ -56,6 +56,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.autocompleteManageSitesLabel
 
         tableView.dataSource = self
@@ -64,7 +65,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = !domains.isEmpty
         tableView.reloadData()
     }
 
@@ -82,7 +83,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
         navigationItem.setHidesBackButton(tableView.isEditing, animated: true)
         updateEmptyStateView()
-        navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || domains.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || !domains.isEmpty
     }
 
     @objc private func updateEmptyStateView() {
@@ -178,7 +179,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = !domains.isEmpty
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -206,7 +207,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDelegate {
 
 extension AutocompleteCustomUrlViewController: AddCustomDomainViewControllerDelegate {
     func addCustomDomainViewControllerDidFinish(_ viewController: AddCustomDomainViewController) {
-        navigationItem.rightBarButtonItem?.isEnabled = domains.count > 0
+        navigationItem.rightBarButtonItem?.isEnabled = !domains.isEmpty
         tableView.reloadData()
     }
 }

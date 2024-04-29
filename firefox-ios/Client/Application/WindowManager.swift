@@ -28,6 +28,13 @@ protocol WindowManager {
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
 
+    /// Returns the UUIDs for all open windows, optionally also including windows that
+    /// are still in the process of being configured but have not yet completed.
+    /// Note: the order of the UUIDs is undefined.
+    /// - Parameter includingReserved: whether to include windows that are still launching.
+    /// - Returns: a list of UUIDs. Order is undefined.
+    func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID]
+
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
     func windowWillClose(uuid: WindowUUID)
@@ -72,7 +79,8 @@ final class WindowManagerImplementation: WindowManager {
     private var _activeWindowUUID: WindowUUID?
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
-    private var windowOrderingPriority: [WindowUUID] {
+    // UUIDs at the beginning of the list are prioritized over UUIDs at the end
+    private(set) var windowOrderingPriority: [WindowUUID] {
         get {
             let stored = defaults.object(forKey: WindowPrefKeys.windowOrdering)
             guard let prefs: [String] = stored as? [String] else { return [] }
@@ -117,16 +125,21 @@ final class WindowManagerImplementation: WindowManager {
         return windows.compactMap { uuid, window in window.tabManager }
     }
 
+    func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID] {
+        return Array(windows.keys) + (includingReserved ? reservedUUIDs : [])
+    }
+
     func windowWillClose(uuid: WindowUUID) {
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
+        updateWindow(nil, for: uuid)
 
-        // Closed windows are popped off and moved to the end of the ordering priority
+        // Closed windows are popped off and moved behind any already-open windows in the list
         var prefs = windowOrderingPriority
         prefs.removeAll(where: { $0 == uuid })
-        prefs.append(uuid)
+        let openWindows = Array(windows.keys)
+        let idx = prefs.firstIndex(where: { !openWindows.contains($0) })
+        prefs.insert(uuid, at: idx ?? prefs.count)
         windowOrderingPriority = prefs
-
-        updateWindow(nil, for: uuid)
     }
 
     func reserveNextAvailableWindowUUID() -> WindowUUID {
@@ -154,7 +167,7 @@ final class WindowManagerImplementation: WindowManager {
         if result.isNew {
             // Be sure to add any brand-new windows to our ordering preferences
             var prefs = windowOrderingPriority
-            prefs.append(resultUUID)
+            prefs.insert(resultUUID, at: 0)
             windowOrderingPriority = prefs
         }
 

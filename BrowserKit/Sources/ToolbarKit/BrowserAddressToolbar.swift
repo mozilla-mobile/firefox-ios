@@ -64,7 +64,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                      shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
 
         self.toolbarDelegate = toolbarDelegate
-        locationView.configure(state.url, delegate: self)
+        locationView.configure(state.locationViewState, delegate: self)
 
         setNeedsLayout()
         layoutIfNeeded()
@@ -231,6 +231,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         guard !text.isEmpty else { return }
 
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+    }
+
+    func locationViewDisplayTextForURL(_ url: URL?) -> String? {
+        toolbarDelegate?.shouldDisplayTextForURL(url)
     }
 
     // MARK: - ThemeApplicable
