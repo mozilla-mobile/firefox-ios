@@ -257,16 +257,16 @@ class TabTrayViewController: UIViewController,
                                         actionType: ScreenActionType.showScreen,
                                         screen: .tabsTray)
         store.dispatch(screenAction)
-
-        let action = TabTrayAction(windowUUID: windowUUID,
-                                   actionType: TabTrayActionType.tabTrayDidLoad)
-        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return TabTrayState(appState: appState, uuid: uuid)
             })
         })
+
+        let action = TabTrayAction(windowUUID: windowUUID,
+                                   actionType: TabTrayActionType.tabTrayDidLoad)
+        store.dispatch(action)
     }
 
     func unsubscribeFromRedux() {

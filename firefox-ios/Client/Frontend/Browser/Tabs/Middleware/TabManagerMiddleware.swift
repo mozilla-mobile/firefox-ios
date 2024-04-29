@@ -72,8 +72,7 @@ class TabManagerMiddleware {
     private func resolveTabTrayActions(action: TabTrayAction, state: AppState) {
         switch action.actionType {
         case TabTrayActionType.tabTrayDidLoad:
-            guard let panelType = action.panelType else { return }
-            tabTrayDidLoad(for: action.windowUUID, panelType: panelType)
+            tabTrayDidLoad(for: action.windowUUID, panelType: action.panelType)
 
         case TabTrayActionType.changePanel:
             guard let panelType = action.panelType else { return }
@@ -143,7 +142,12 @@ class TabManagerMiddleware {
         }
     }
 
-    private func tabTrayDidLoad(for windowUUID: WindowUUID, panelType: TabTrayPanelType) {
+    private func tabTrayDidLoad(for windowUUID: WindowUUID, panelType: TabTrayPanelType?) {
+        let tabManager = tabManager(for: windowUUID)
+        let isPrivateModeActive = tabManager.selectedTab?.isPrivate ?? false
+
+        // If no panelType is provided then fallback to whichever tab is currently selected
+        let panelType = panelType ?? (isPrivateModeActive ? .privateTabs : .tabs)
         let tabTrayModel = self.getTabTrayModel(for: panelType, window: windowUUID)
         let action = TabTrayAction(tabTrayModel: tabTrayModel,
                                    windowUUID: windowUUID,
