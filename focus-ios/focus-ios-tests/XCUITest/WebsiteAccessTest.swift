@@ -60,6 +60,7 @@ class WebsiteAccessTests: BaseTestCase {
         checkForHomeScreen()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
     func testDisableAutocomplete() {
         let urlTextField = app.urlTextField
         let searchSuggestionsOverlay = app.searchSuggestionsOverlay
@@ -75,7 +76,8 @@ class WebsiteAccessTests: BaseTestCase {
         waitForExistence(searchSuggestionsOverlay)
         XCTAssertEqual(urlTextField.value as? String, "mozilla")
     }
-
+ 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
     func testReEnableAutoComplete() {
         let urlTextField = app.urlTextField
         let searchSuggestionsOverlay = app.searchSuggestionsOverlay
@@ -93,6 +95,7 @@ class WebsiteAccessTests: BaseTestCase {
         XCTAssertEqual(urlTextField.value as? String, "mozilla.org/")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
     func testAutocompleteCustomDomain() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
@@ -141,5 +144,14 @@ class WebsiteAccessTests: BaseTestCase {
 
         // Finish Editing
         app.navigationBars.buttons["editButton"].tap()
+        manageSitesBackButton.tap()
+        app.navigationBars.buttons["Settings"].tap()
+        app.buttons["SettingsViewController.doneButton"].tap()
+
+        // Verify the URL bar only display what you type
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("getfire")
+        waitForValueContains(searchOrEnterAddressTextField, value: "getfire")
+        XCTAssertTrue(searchOrEnterAddressTextField.value as? String == "getfire")
     }
 }
