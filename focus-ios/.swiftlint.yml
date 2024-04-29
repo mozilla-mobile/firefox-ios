@@ -36,7 +36,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - protocol_property_accessors_order
   # - redundant_discardable_let
   # - redundant_objc_attribute
-  # - redundant_optional_initialization
+  - redundant_optional_initialization
   # - redundant_string_enum_value
   # - redundant_void_return
   # - return_arrow_whitespace
