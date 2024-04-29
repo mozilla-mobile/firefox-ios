@@ -2,7 +2,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - line_length
   # - blanket_disable_command
   # - class_delegate_protocol
-  # - closure_spacing
+  - closure_spacing
   # - closure_parameter_position
   # - colon
   - comma
@@ -36,7 +36,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - protocol_property_accessors_order
   # - redundant_discardable_let
   # - redundant_objc_attribute
-  # - redundant_optional_initialization
+  - redundant_optional_initialization
   - redundant_string_enum_value
   # - redundant_void_return
   # - return_arrow_whitespace
@@ -48,7 +48,7 @@ only_rules: # Only enforce these rules, ignore all others
   - trailing_whitespace
   - unavailable_condition
   - unneeded_override
-  # - unneeded_synthesized_initializer
+  - unneeded_synthesized_initializer
   - unused_optional_binding
   - unused_setter_value
   - vertical_parameter_alignment
