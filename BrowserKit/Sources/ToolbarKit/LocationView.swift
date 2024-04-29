@@ -20,6 +20,13 @@ protocol LocationViewDelegate: AnyObject {
     ///
     /// - Parameter text: The text for which the location view should search.
     func locationViewShouldSearchFor(_ text: String)
+
+    /// Called to determine the display text for a given URL in the location view.
+    ///
+    /// - Parameter url: The URL for which to determine the display text.
+    /// - Returns: The display text as an optional String. If the URL is nil
+    ///  or cannot be converted to a display text, returns nil.
+    func locationViewDisplayTextForURL(_ url: URL?) -> String?
 }
 
 public struct LocationViewState {
@@ -378,13 +385,16 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         showSearchEngineButton()
         updateGradientLayerFrame()
 
-        DispatchQueue.main.async {
+        let url = URL(string: textField.text ?? "")
+        let queryText = locationViewDelegate?.locationViewDisplayTextForURL(url)
+
+        DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = self.urlAbsolutePath
+            textField.text = (queryText != nil) ? queryText : urlAbsolutePath
             textField.selectAll(nil)
         }
-        locationViewDelegate?.locationViewDidBeginEditing(textField.text?.lowercased() ?? "")
+        locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
