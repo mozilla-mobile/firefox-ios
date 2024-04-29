@@ -156,8 +156,8 @@ class SearchProviderTest: BaseTestCase {
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
 
-		// Check the correct site is reached
-		switch provider {
+        // Check the correct site is reached
+        switch provider {
         case "Google":
             waitForValueContains(urlbarUrltextTextField, value: "google.com")
             if app.webViews.textFields["Search"].exists {
