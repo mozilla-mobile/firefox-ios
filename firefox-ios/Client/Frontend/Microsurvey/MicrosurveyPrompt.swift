@@ -14,8 +14,8 @@ import ComponentLibrary
  |----------------|
  */
 
-class MicroSurveyPromptView: UIView, ThemeApplicable {
-    private var viewModel: MicroSurveyViewModel
+class MicrosurveyPromptView: UIView, ThemeApplicable {
+    private var viewModel: MicrosurveyViewModel
     struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
@@ -41,8 +41,8 @@ class MicroSurveyPromptView: UIView, ThemeApplicable {
     }
 
     private lazy var closeButton: UIButton = .build { button in
-        // TODO: FXIOS-8987 - Add accessibility labels
-        button.accessibilityIdentifier = AccessibilityIdentifiers.MicroSurvey.Prompt.closeButton
+        button.accessibilityLabel = .Microsurvey.Prompt.CloseButtonAccessibilityLabel
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Prompt.closeButton
         button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
         button.addTarget(self, action: #selector(self.closeMicroSurvey), for: .touchUpInside)
     }
@@ -74,7 +74,7 @@ class MicroSurveyPromptView: UIView, ThemeApplicable {
         viewModel.openAction()
     }
 
-    init(viewModel: MicroSurveyViewModel) {
+    init(viewModel: MicrosurveyViewModel) {
         self.viewModel = viewModel
         super.init(frame: .zero)
         setupView()
@@ -113,7 +113,7 @@ class MicroSurveyPromptView: UIView, ThemeApplicable {
         titleLabel.text = viewModel.title
         let roundedButtonViewModel = SecondaryRoundedButtonViewModel(
             title: viewModel.buttonText,
-            a11yIdentifier: AccessibilityIdentifiers.MicroSurvey.Prompt.takeSurveyButton
+            a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton
         )
         surveyButton.configure(viewModel: roundedButtonViewModel)
     }
