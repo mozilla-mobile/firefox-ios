@@ -147,7 +147,7 @@ class SearchProviderTest: BaseTestCase {
         app.buttons["Done"].tap()
 	}
 
-	private func doSearch(searchWord: String, provider: String) {
+    private func doSearch(searchWord: String, provider: String) {
         let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         let cancelButton = app.buttons["URLBar.cancelButton"]
         urlbarUrltextTextField.tap()
