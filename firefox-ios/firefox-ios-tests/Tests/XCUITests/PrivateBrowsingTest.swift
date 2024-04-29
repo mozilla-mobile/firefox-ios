@@ -247,11 +247,12 @@ fileprivate extension BaseTestCase {
     }
 
     func checkOpenTabsAfterClosingPrivateMode() {
+        // The private tab is not loger closed after "Close Private Tabs" has been removed
         let numPrivTabsAfterClosing = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(
             numPrivTabsAfterClosing,
-            0,
-            "The number of tabs is not correct, the private tab should have been closed"
+            1,
+            "The number of tabs is not correct"
         )
     }
 

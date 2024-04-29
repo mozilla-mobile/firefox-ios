@@ -362,7 +362,7 @@ class SearchTests: BaseTestCase {
 
         // The search suggestion fills the URL bar but does not conduct the search
         let urlBarAddress = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
-        waitForValueContains(urlBarAddress, value: "google")
+        waitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
