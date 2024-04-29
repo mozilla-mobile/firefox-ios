@@ -192,9 +192,9 @@ objects:
         Attributes relating to microsurvey messaging.
     fields:
       target-feature:
-        type: TargetFeature
+        type: MicrosurveyTargetFeature
         description: >
-            The type of the feature the survey is targeted for.
+          The type of feature the microsurvey is targeted.
         default: Unknown # Should not be defaulted
       options:
         description: The list of survey options to present to the user.
@@ -226,12 +226,11 @@ enums:
       show-none:
         description: The surface should show no message.
 
-  TargetFeature:
+  MicrosurveyTargetFeature:
     description: >
-      For microsurveys, we would like to have a message tell us which target feature it is associated with.
-      This is a label that matches across both Android and iOS.
+      The specific feature the microsurvey is for. This is a label that matches across both Android and iOS.
     variants:
       printing:
-        description: The target feature for this message is related to the printing feature.
+        description: The printing feature.
       Unknown:
-        description: The message does not have a target feature.
+        description: No target feature set. Only used in an invalid experiment configuration.

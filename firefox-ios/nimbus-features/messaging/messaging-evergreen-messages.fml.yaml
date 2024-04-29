@@ -59,16 +59,15 @@ import:
                 surface: microsurvey
                 style: MICROSURVEY
                 trigger-if-all:
-                  - ALWAYS
-                title: "Firefox Survey"
-                text: "What is your favorite firefox feature?"
+                  - NEVER
+                title: "Help make printing in Firefox better. It only takes a sec."
+                text: "How satisfied are you with printing in Firefox?" # Should not show this message if this is nil
                 button-label: "Continue"
                 microsurveyConfig:
                   target-feature: printing
                   options:
-                    - "Very Disatisfied"
-                    - "Disatisfied"
-                    - "Neutral"
-                    - "Satisfied"
                     - "Very Satisfied"
-
+                    - "Satisfied"
+                    - "Neutral"
+                    - "Disatisfied"
+                    - "Very Disatisfied"
