@@ -628,7 +628,7 @@
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
 		8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */; };
 		8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */; };
-		8A28F3FD2BD6B7A400A93410 /* MicroSurveyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A28F3FC2BD6B7A400A93410 /* MicroSurveyViewModel.swift */; };
+		8A28F3FD2BD6B7A400A93410 /* MicrosurveyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A28F3FC2BD6B7A400A93410 /* MicrosurveyViewModel.swift */; };
 		8A2B1A5D28216C4D0061216B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5A28216C4C0061216B /* Debug.xcconfig */; };
 		8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5B28216C4C0061216B /* Common.xcconfig */; };
 		8A2B1A5F28216C4D0061216B /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5C28216C4D0061216B /* Release.xcconfig */; };
@@ -704,7 +704,7 @@
 		8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */; };
 		8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */; };
 		8A6904802B97BBAE00E30047 /* SplashScreenAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A69047F2B97BBAE00E30047 /* SplashScreenAnimation.swift */; };
-		8A6A3D472BD0390100BFDB64 /* MicroSurveyPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A3D462BD0390100BFDB64 /* MicroSurveyPrompt.swift */; };
+		8A6A3D472BD0390100BFDB64 /* MicrosurveyPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A3D462BD0390100BFDB64 /* MicrosurveyPrompt.swift */; };
 		8A6A796D27F773550022D6C6 /* HomepageContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */; };
 		8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */; };
 		8A6E13982A71BA4E00A88FA8 /* TabWebViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */; };
@@ -5801,7 +5801,7 @@
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
 		8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageHeroImageViewModel.swift; sourceTree = "<group>"; };
 		8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanRemoveQuickActionBookmarkTests.swift; sourceTree = "<group>"; };
-		8A28F3FC2BD6B7A400A93410 /* MicroSurveyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroSurveyViewModel.swift; sourceTree = "<group>"; };
+		8A28F3FC2BD6B7A400A93410 /* MicrosurveyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewModel.swift; sourceTree = "<group>"; };
 		8A2B1A5A28216C4C0061216B /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5B28216C4C0061216B /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5C28216C4D0061216B /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Configuration/Release.xcconfig; sourceTree = "<group>"; };
@@ -5878,7 +5878,7 @@
 		8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDisclosureUtility.swift; sourceTree = "<group>"; };
 		8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCellTests.swift; sourceTree = "<group>"; };
 		8A69047F2B97BBAE00E30047 /* SplashScreenAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenAnimation.swift; sourceTree = "<group>"; };
-		8A6A3D462BD0390100BFDB64 /* MicroSurveyPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroSurveyPrompt.swift; sourceTree = "<group>"; };
+		8A6A3D462BD0390100BFDB64 /* MicrosurveyPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyPrompt.swift; sourceTree = "<group>"; };
 		8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageContextMenuHelper.swift; sourceTree = "<group>"; };
 		8A6B77CB2811C468001110D2 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabWebViewTests.swift; sourceTree = "<group>"; };
@@ -9587,13 +9587,13 @@
 			path = SplashScreenAnimation;
 			sourceTree = "<group>";
 		};
-		8A6A3D452BD038EF00BFDB64 /* MicroSurvey */ = {
+		8A6A3D452BD038EF00BFDB64 /* Microsurvey */ = {
 			isa = PBXGroup;
 			children = (
-				8A6A3D462BD0390100BFDB64 /* MicroSurveyPrompt.swift */,
-				8A28F3FC2BD6B7A400A93410 /* MicroSurveyViewModel.swift */,
+				8A6A3D462BD0390100BFDB64 /* MicrosurveyPrompt.swift */,
+				8A28F3FC2BD6B7A400A93410 /* MicrosurveyViewModel.swift */,
 			);
-			path = MicroSurvey;
+			path = Microsurvey;
 			sourceTree = "<group>";
 		};
 		8A7653C028A2E54800924ABF /* Pocket */ = {
@@ -11959,7 +11959,7 @@
 				EBC486972195F46A00CDA48D /* InternalSchemeHandler */,
 				D05434F3225FDA3400FDE4EF /* Library */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
-				8A6A3D452BD038EF00BFDB64 /* MicroSurvey */,
+				8A6A3D452BD038EF00BFDB64 /* Microsurvey */,
 				E1FE132D29C0B334002A65FF /* NotificationSurface */,
 				C8BD875D2A0C23F500CD803A /* Onboarding */,
 				E63ED8DF1BFD254E0097D08E /* PasswordManagement */,
@@ -13772,7 +13772,7 @@
 				C8680C5728BFDF7F00BC902A /* WallpaperThumbnailUtility.swift in Sources */,
 				C23889DF2A4EFCE500429673 /* ShareExtensionCoordinator.swift in Sources */,
 				8AE80BBE2891C21A00BC12EA /* JumpBackInSyncedTab.swift in Sources */,
-				8A28F3FD2BD6B7A400A93410 /* MicroSurveyViewModel.swift in Sources */,
+				8A28F3FD2BD6B7A400A93410 /* MicrosurveyViewModel.swift in Sources */,
 				8C6F94652A972EB300415FF6 /* FakespotAdjustRatingView.swift in Sources */,
 				8A3EF7FD2A2FCFAC00796E3A /* AppReviewPromptSetting.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
@@ -14391,7 +14391,7 @@
 				E633E2DA1C21EAF8001FFF6C /* PasswordDetailViewController.swift in Sources */,
 				8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */,
 				8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */,
-				8A6A3D472BD0390100BFDB64 /* MicroSurveyPrompt.swift in Sources */,
+				8A6A3D472BD0390100BFDB64 /* MicrosurveyPrompt.swift in Sources */,
 				8A5D1CAE2A30D71A005AD35C /* ThemeSetting.swift in Sources */,
 				C82F4C2B29AE2DF1005BD116 /* NotificationsSettingsViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
