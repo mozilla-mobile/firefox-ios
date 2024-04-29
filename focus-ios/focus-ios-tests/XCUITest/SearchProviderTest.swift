@@ -132,7 +132,7 @@ class SearchProviderTest: BaseTestCase {
         XCTAssertFalse(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"].exists)
     }
 
-	private func changeSearchProvider(provider: String) {
+    private func changeSearchProvider(provider: String) {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
@@ -141,11 +141,11 @@ class SearchProviderTest: BaseTestCase {
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
-		app.tables.cells["SettingsViewController.searchCell"].tap()
+        app.tables.cells["SettingsViewController.searchCell"].tap()
         waitForExistence(app.tables.staticTexts[provider], timeout: 5)
-		app.tables.staticTexts[provider].tap()
+        app.tables.staticTexts[provider].tap()
         app.buttons["Done"].tap()
-	}
+    }
 
     private func doSearch(searchWord: String, provider: String) {
         let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
