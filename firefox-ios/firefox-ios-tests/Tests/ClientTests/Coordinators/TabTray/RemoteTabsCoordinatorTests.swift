@@ -47,7 +47,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.presentFxAccountSettings()
 
-        XCTAssertEqual(mockApplicationHelper.openURLCalled, 1)
+        XCTAssertEqual(mockApplicationHelper.openURLInWindowCalled, 1)
     }
 
     func testPresentQRCode() {

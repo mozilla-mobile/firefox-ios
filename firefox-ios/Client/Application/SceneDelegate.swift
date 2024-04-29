@@ -98,15 +98,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         // Configure the route with the latest browsing state.
-        routeBuilder.configure(
-            isPrivate: UserDefaults.standard.bool(
-                forKey: PrefsKeys.LastSessionWasPrivate
-            ),
-            prefs: profile.prefs
-        )
-        guard let url = URLContexts.first?.url,
-              let route = routeBuilder.makeRoute(url: url) else { return }
-        handle(route: route)
+        guard let url = URLContexts.first?.url else { return }
+        handleOpenURL(url)
     }
 
     // MARK: - Continuing User Activities
@@ -132,6 +125,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
                                                  tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
         else { return }
+        handle(route: route)
+    }
+
+    func handleOpenURL(_ url: URL) {
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
+        guard let route = routeBuilder.makeRoute(url: url) else { return }
         handle(route: route)
     }
 
