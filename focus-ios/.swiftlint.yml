@@ -43,7 +43,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - statement_position
   # - switch_case_alignment
   - syntactic_sugar
-  # - trailing_newline
+  - trailing_newline
   - trailing_semicolon
   - trailing_whitespace
   - unavailable_condition
