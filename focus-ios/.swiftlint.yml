@@ -49,7 +49,7 @@ only_rules: # Only enforce these rules, ignore all others
   - unavailable_condition
   # - unneeded_override
   # - unneeded_synthesized_initializer
-  # - unused_optional_binding
+  - unused_optional_binding
   # - unused_setter_value
   # - vertical_parameter_alignment
   - vertical_whitespace
