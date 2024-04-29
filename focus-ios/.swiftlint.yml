@@ -2,7 +2,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - line_length
   # - blanket_disable_command
   # - class_delegate_protocol
-  # - closure_spacing
+  - closure_spacing
   # - closure_parameter_position
   # - colon
   - comma
