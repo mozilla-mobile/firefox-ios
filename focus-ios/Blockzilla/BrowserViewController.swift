@@ -659,39 +659,39 @@ class BrowserViewController: UIViewController {
                 guard let self = self else { return }
 
                 switch action {
-                    case .contextMenuTap(let anchor):
-                        self.updateFindInPageVisibility(visible: false)
-                        self.presentContextMenu(from: anchor)
+                case .contextMenuTap(let anchor):
+                    self.updateFindInPageVisibility(visible: false)
+                    self.presentContextMenu(from: anchor)
 
-                    case .backButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.goBack()
+                case .backButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.goBack()
 
-                    case .forwardButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.goForward()
+                case .forwardButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.goForward()
 
-                    case .deleteButtonTap:
-                        self.updateFindInPageVisibility(visible: false)
-                        self.resetBrowser()
-                        self.urlBarViewModel.resetToDefaults()
+                case .deleteButtonTap:
+                    self.updateFindInPageVisibility(visible: false)
+                    self.resetBrowser()
+                    self.urlBarViewModel.resetToDefaults()
 
-                    case .shieldIconButtonTap:
-                        self.urlBarDidTapShield(self.urlBar)
+                case .shieldIconButtonTap:
+                    self.urlBarDidTapShield(self.urlBar)
 
-                    case .stopButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.stop()
+                case .stopButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.stop()
 
-                    case .reloadButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.reload()
+                case .reloadButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.reload()
 
-                    case .dragInteractionStarted:
-                        GleanMetrics.UrlInteraction.dragStarted.record()
+                case .dragInteractionStarted:
+                    GleanMetrics.UrlInteraction.dragStarted.record()
 
-                    case .pasteAndGo:
-                        GleanMetrics.UrlInteraction.pasteAndGo.record()
+                case .pasteAndGo:
+                    GleanMetrics.UrlInteraction.pasteAndGo.record()
                 }
             }.store(in: &cancellables)
     }
@@ -886,12 +886,12 @@ class BrowserViewController: UIViewController {
 
         // Increment the threshold by 50 so the user is not constantly pestered with review requests
         switch threshold {
-            case 14:
-                UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
-            case 64:
-                UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
-            default:
-                break
+        case 14:
+            UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        case 64:
+            UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        default:
+            break
         }
 
         if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {

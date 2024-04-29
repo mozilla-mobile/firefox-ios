@@ -528,9 +528,9 @@ class URLBar: UIView {
             .removeDuplicates()
             .map { trackingProtectionStatus -> UIImage in
                 switch trackingProtectionStatus {
-                    case .on: return .trackingProtectionOn
-                    case .off: return .trackingProtectionOff
-                    case .connectionNotSecure: return .connectionNotSecure
+                case .on: return .trackingProtectionOn
+                case .off: return .trackingProtectionOff
+                case .connectionNotSecure: return .connectionNotSecure
                 }
             }
             .sink(receiveValue: { [shieldIcon] image in

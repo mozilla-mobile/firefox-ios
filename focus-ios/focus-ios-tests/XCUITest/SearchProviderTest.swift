@@ -158,20 +158,20 @@ class SearchProviderTest: BaseTestCase {
 
 		// Check the correct site is reached
 		switch provider {
-			case "Google":
-                waitForValueContains(urlbarUrltextTextField, value: "google.com")
-                if app.webViews.textFields["Search"].exists {
-                    waitForValueContains(app.webViews.textFields["Search"], value: searchWord)
-                } else if app.webViews.otherElements["Search"].exists {
-                    waitForValueContains(app.webViews.otherElements["Search"], value: searchWord)
-                }
-           case "DuckDuckGo":
-				waitForValueContains(urlbarUrltextTextField, value: "duckduckgo.com")
-				waitForExistence(app.otherElements["mozilla at DuckDuckGo"])
-			case "Wikipedia":
-				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
-			default:
-				XCTFail("Invalid Search Provider")
-		}
+        case "Google":
+            waitForValueContains(urlbarUrltextTextField, value: "google.com")
+            if app.webViews.textFields["Search"].exists {
+                waitForValueContains(app.webViews.textFields["Search"], value: searchWord)
+            } else if app.webViews.otherElements["Search"].exists {
+                waitForValueContains(app.webViews.otherElements["Search"], value: searchWord)
+            }
+        case "DuckDuckGo":
+            waitForValueContains(urlbarUrltextTextField, value: "duckduckgo.com")
+            waitForExistence(app.otherElements["mozilla at DuckDuckGo"])
+        case "Wikipedia":
+            waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
+        default:
+            XCTFail("Invalid Search Provider")
+        }
 	}
 }
