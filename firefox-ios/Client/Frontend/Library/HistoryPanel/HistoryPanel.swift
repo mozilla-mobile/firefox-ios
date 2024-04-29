@@ -580,7 +580,7 @@ class HistoryPanel: UIViewController,
 
     private func applyEmptyStateViewTheme(_ theme: Theme) {
         welcomeLabel.textColor = theme.colors.textSecondary
-        emptyStateOverlayBackgroundColorView?.backgroundColor = self.currentTheme().colors.layer1
+        emptyStateOverlayBackgroundColorView?.backgroundColor = theme.colors.layer1
     }
 
     private func createEmptyStateOverlayView() -> UIView {
