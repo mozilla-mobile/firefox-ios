@@ -1762,6 +1762,8 @@ class BrowserViewController: UIViewController,
 
         guard let webView = tab.webView else { return }
 
+        self.screenshotHelper.takeScreenshot(tab)
+
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
