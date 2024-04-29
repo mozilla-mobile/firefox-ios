@@ -148,10 +148,10 @@ class SearchProviderTest: BaseTestCase {
 	}
 
 	private func doSearch(searchWord: String, provider: String) {
-		let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
+        let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         let cancelButton = app.buttons["URLBar.cancelButton"]
-		urlbarUrltextTextField.tap()
-		urlbarUrltextTextField.typeText(searchWord)
+        urlbarUrltextTextField.tap()
+        urlbarUrltextTextField.typeText(searchWord)
         app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
@@ -173,5 +173,5 @@ class SearchProviderTest: BaseTestCase {
         default:
             XCTFail("Invalid Search Provider")
         }
-	}
+    }
 }
