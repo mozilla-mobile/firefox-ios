@@ -4,13 +4,27 @@
 
 import Common
 import Redux
+import ToolbarKit
+
+class ToolbarNavigationModelContext: ActionContext {
+    let actions: [ToolbarState.ActionState]
+    let displayBorder: Bool
+
+    init(actions: [ToolbarState.ActionState],
+         displayBorder: Bool,
+         windowUUID: WindowUUID) {
+        self.actions = actions
+        self.displayBorder = displayBorder
+        super.init(windowUUID: windowUUID)
+    }
+}
 
 enum ToolbarAction: Action {
-    case test(ActionContext)
+    case didLoadToolbars(ToolbarNavigationModelContext)
 
     var windowUUID: UUID {
         switch self {
-        case .test(let context as ActionContext):
+        case .didLoadToolbars(let context):
             return context.windowUUID
         }
     }

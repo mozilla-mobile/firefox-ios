@@ -4,22 +4,72 @@
 
 import Common
 import Redux
+import ToolbarKit
 
-class ToolbarMiddleware {
+class ToolbarMiddleware: FeatureFlaggable {
     private let profile: Profile
+    private let manager: ToolbarManager
     private let logger: Logger
 
     init(profile: Profile = AppContainer.shared.resolve(),
+         manager: ToolbarManager = DefaultToolbarManager(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.manager = manager
         self.logger = logger
     }
 
-    lazy var toolbarProvider: Middleware<AppState> = { state, action in
+    lazy var toolbarProvider: Middleware<AppState> = { [self] state, action in
         let uuid = action.windowUUID
         switch action {
+        case GeneralBrowserAction.browserDidLoad(let context):
+            let actions = self.loadNavigationToolbarElements()
+            let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
+            let context = ToolbarNavigationModelContext(actions: actions,
+                                                        displayBorder: displayBorder,
+                                                        windowUUID: uuid)
+            store.dispatch(ToolbarAction.didLoadToolbars(context))
+
         default:
             break
         }
     }
+
+    private func loadNavigationToolbarElements() -> [ToolbarState.ActionState] {
+        var elements = [ToolbarState.ActionState]()
+        elements.append(ToolbarState.ActionState(iconName: StandardImageIdentifiers.Large.back,
+                                                 isEnabled: false,
+                                                 a11yLabel: .TabToolbarBackAccessibilityLabel,
+                                                 a11yId: AccessibilityIdentifiers.Toolbar.backButton))
+        elements.append(ToolbarState.ActionState(iconName: StandardImageIdentifiers.Large.forward,
+                                                 isEnabled: false,
+                                                 a11yLabel: .TabToolbarForwardAccessibilityLabel,
+                                                 a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
+        elements.append(ToolbarState.ActionState(iconName: StandardImageIdentifiers.Large.appMenu,
+                                                 isEnabled: true,
+                                                 a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+                                                 a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+        return elements
+    }
+
+    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: UUID) -> Bool {
+        guard let browserState = state.screenState(BrowserViewControllerState.self,
+                                                   for: .browserViewController,
+                                                   window: windowUUID) else { return false }
+        let toolbarState = browserState.toolbarState
+        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
+    }
+
+//    private var addressToolbarPosition: AddressToolbarPosition {
+//        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+//        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
+//
+//        guard isFeatureEnabled && !isiPad else { return .top }
+//
+//        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
+//            return .bottom
+//        }
+//
+//        return position == .bottom ? .bottom : .top
+//    }
 }

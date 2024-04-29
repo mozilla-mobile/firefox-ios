@@ -18,12 +18,15 @@ class GeneralBrowserContext: ActionContext {
 }
 
 enum GeneralBrowserAction: Action {
+    case browserDidLoad(BoolValueContext)
     case showToast(ToastTypeContext)
     case showOverlay(KeyboardContext)
     case updateSelectedTab(GeneralBrowserContext)
 
     var windowUUID: UUID {
         switch self {
+        case .browserDidLoad(let context as ActionContext):
+            return context.windowUUID
         case .showToast(let context as ActionContext):
             return context.windowUUID
         case .showOverlay(let context as ActionContext):

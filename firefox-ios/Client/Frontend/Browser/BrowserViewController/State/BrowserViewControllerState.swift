@@ -10,6 +10,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     let windowUUID: WindowUUID
     var searchScreenState: SearchScreenState
     var showDataClearanceFlow: Bool
+    var toolbarState: ToolbarState
     var fakespotState: FakespotState
     var toast: ToastType?
     var showOverlay: Bool
@@ -28,6 +29,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         self.init(searchScreenState: bvcState.searchScreenState,
                   showDataClearanceFlow: bvcState.showDataClearanceFlow,
+                  toolbarState: bvcState.toolbarState,
                   fakespotState: bvcState.fakespotState,
                   toast: bvcState.toast,
                   showOverlay: bvcState.showOverlay,
@@ -40,6 +42,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.init(
             searchScreenState: SearchScreenState(),
             showDataClearanceFlow: false,
+            toolbarState: ToolbarState(windowUUID: windowUUID),
             fakespotState: FakespotState(windowUUID: windowUUID),
             toast: nil,
             showOverlay: false,
@@ -50,6 +53,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     init(
         searchScreenState: SearchScreenState,
         showDataClearanceFlow: Bool,
+        toolbarState: ToolbarState,
         fakespotState: FakespotState,
         toast: ToastType? = nil,
         showOverlay: Bool = false,
@@ -59,6 +63,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     ) {
         self.searchScreenState = searchScreenState
         self.showDataClearanceFlow = showDataClearanceFlow
+        self.toolbarState = toolbarState
         self.fakespotState = fakespotState
         self.toast = toast
         self.windowUUID = windowUUID
@@ -81,6 +86,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: SearchScreenState(inPrivateMode: privacyState),
                 showDataClearanceFlow: privacyState,
+                toolbarState: state.toolbarState,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 reloadWebView: true,
@@ -100,6 +106,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: state.toolbarState,
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
@@ -108,6 +115,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: state.toolbarState,
                 fakespotState: state.fakespotState,
                 toast: toastType,
                 windowUUID: state.windowUUID,
@@ -117,16 +125,27 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: state.toolbarState,
                 fakespotState: state.fakespotState,
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
         case GeneralBrowserAction.updateSelectedTab(let context):
             return BrowserViewControllerState.resolveStateForUpdateSelectedTab(context, state: state)
+        case ToolbarAction.didLoadToolbars(let context):
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: ToolbarState.reducer(state.toolbarState, action),
+                fakespotState: state.fakespotState,
+                showOverlay: state.showOverlay,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType)
         default:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: state.toolbarState,
                 fakespotState: state.fakespotState,
                 showOverlay: state.showOverlay,
                 windowUUID: state.windowUUID,
@@ -149,6 +168,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
             showDataClearanceFlow: state.showDataClearanceFlow,
+            toolbarState: state.toolbarState,
             fakespotState: state.fakespotState,
             showOverlay: state.showOverlay,
             windowUUID: state.windowUUID,
