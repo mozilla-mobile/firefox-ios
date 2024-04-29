@@ -48,7 +48,7 @@ only_rules: # Only enforce these rules, ignore all others
   - trailing_whitespace
   - unavailable_condition
   - unneeded_override
-  # - unneeded_synthesized_initializer
+  - unneeded_synthesized_initializer
   - unused_optional_binding
   - unused_setter_value
   - vertical_parameter_alignment
