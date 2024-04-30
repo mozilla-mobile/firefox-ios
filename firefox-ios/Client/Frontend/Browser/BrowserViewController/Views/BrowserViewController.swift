@@ -509,19 +509,23 @@ class BrowserViewController: UIViewController,
     }
 
     private func dismissModalsIfStartAtHome() {
-        if tabManager.startAtHomeCheck() {
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-            guard presentedViewController != nil else { return }
-            dismissVC()
-        }
+        guard tabManager.startAtHomeCheck() else { return }
+        let action = FakespotAction(isExpanded: false,
+                                    windowUUID: windowUUID,
+                                    actionType: FakespotActionType.setAppearanceTo)
+        store.dispatch(action)
+
+        guard presentedViewController != nil else { return }
+        dismissVC()
     }
 
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .browserViewController)
+        store.dispatch(action)
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -531,9 +535,10 @@ class BrowserViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .browserViewController)
+        store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
@@ -1585,8 +1590,10 @@ class BrowserViewController: UIViewController,
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             let urlRequest = URLRequest(url: url)
             if TabTrayFlagManager.isRefactorEnabled {
-                let context = AddNewTabContext(urlRequest: urlRequest, isPrivate: false, windowUUID: self.windowUUID)
-                store.dispatch(TabPanelAction.addNewTab(context))
+                let action = TabPanelViewAction(panelType: .tabs,
+                                                windowUUID: self.windowUUID,
+                                                actionType: TabPanelViewActionType.addNewTab)
+                store.dispatch(action)
             } else {
                 self.tabManager.addTab(urlRequest)
             }
@@ -1847,18 +1854,26 @@ class BrowserViewController: UIViewController,
               let url = webView.url
         else {
             // We're on homepage or a blank tab
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
+            let action = FakespotAction(isExpanded: false,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.setAppearanceTo)
+            store.dispatch(action)
             return
         }
 
-        store.dispatch(FakespotAction.tabDidChange(FakespotTabContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
+        let action = FakespotAction(tabUUID: tab.tabUUID,
+                                    windowUUID: windowUUID,
+                                    actionType: FakespotActionType.tabDidChange)
+        store.dispatch(action)
         let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
         let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-
+            let action = FakespotAction(isExpanded: false,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.setAppearanceTo)
+            store.dispatch(action)
             // Quick fix: make sure to sidebar is hidden when opened from deep-link
             // Relates to FXIOS-7844
             contentStackView.hideSidebar(self)
@@ -1866,8 +1881,11 @@ class BrowserViewController: UIViewController,
         }
 
         if isReload, let productId = product.product?.id {
-            let context = FakespotProductContext(productId: productId, tabUUID: tab.tabUUID, windowUUID: windowUUID)
-           store.dispatch(FakespotAction.tabDidReload(context))
+            let action = FakespotAction(tabUUID: tab.tabUUID,
+                                        productId: productId,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.tabDidReload)
+            store.dispatch(action)
         }
 
         // Do not update Fakespot when we are not on a selected tab
@@ -1887,7 +1905,10 @@ class BrowserViewController: UIViewController,
                   fakespotState.sidebarOpenForiPadLandscape,
                   UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: true, windowUUID: windowUUID)))
+            let action = FakespotAction(isExpanded: true,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.setAppearanceTo)
+            store.dispatch(action)
         }
     }
 
