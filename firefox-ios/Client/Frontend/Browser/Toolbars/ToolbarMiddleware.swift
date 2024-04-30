@@ -20,18 +20,35 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     lazy var toolbarProvider: Middleware<AppState> = { [self] state, action in
+        if let action = action as? GeneralBrowserAction {
+        }
+
+
         let uuid = action.windowUUID
         switch action {
-        case GeneralBrowserAction.browserDidLoad(let context):
+        case GeneralBrowserAction.browserDidLoad:
             let actions = self.loadNavigationToolbarElements()
             let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
             let context = ToolbarNavigationModelContext(actions: actions,
                                                         displayBorder: displayBorder,
                                                         windowUUID: uuid)
-            store.dispatch(ToolbarAction.didLoadToolbars(context))
+            store.dispatch(ToolbarActionType.didLoadToolbars)
 
         default:
             break
+        }
+    }
+
+    private func resolveGeneralBrowserActions(action: GeneralBrowserAction, state: AppState) {
+        switch action.actionType {
+        case .browserDidLoad:
+            let actions = self.loadNavigationToolbarElements()
+            let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
+            let context = ToolbarNavigationModelContext(actions: actions,
+                                                        displayBorder: displayBorder,
+                                                        windowUUID: uuid)
+            store.dispatch(ToolbarActionType.didLoadToolbars)
+
         }
     }
 

@@ -20,14 +20,17 @@ class BookmarksPanelViewModel {
     let bookmarkFolderGUID: GUID
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
+    private var bookmarksHandler: BookmarksHandler
     private var flashLastRowOnNextReload = false
     private var logger: Logger
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
+         bookmarksHandler: BookmarksHandler,
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.bookmarksHandler = bookmarksHandler
         self.bookmarkFolderGUID = bookmarkFolderGUID
         self.logger = logger
     }
@@ -68,7 +71,11 @@ class BookmarksPanelViewModel {
         }
 
         let newIndex = getNewIndex(from: destinationIndexPath.row)
-        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(newIndex))
+        _ = bookmarksHandler.updateBookmarkNode(guid: bookmarkNode.guid,
+                                                parentGUID: nil,
+                                                position: UInt32(newIndex),
+                                                title: nil,
+                                                url: nil)
 
         bookmarkNodes.remove(at: sourceIndexPath.row)
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
@@ -89,7 +96,7 @@ class BookmarksPanelViewModel {
     }
 
     private func setupMobileFolderData(completion: @escaping () -> Void) {
-        profile.places
+        bookmarksHandler
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
                 guard let mobileFolder = result.successValue as? BookmarkFolderData else {
@@ -125,8 +132,8 @@ class BookmarksPanelViewModel {
 
     /// Subfolder data case happens when we select a folder created by a user
     private func setupSubfolderData(completion: @escaping () -> Void) {
-        profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID,
-                                        recursive: false).uponQueue(.main) { result in
+        bookmarksHandler.getBookmarksTree(rootGUID: bookmarkFolderGUID,
+                                          recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
                 self.logger.log("Sublfolder data setup failed \(String(describing: result.failureValue))",
                                 level: .debug,

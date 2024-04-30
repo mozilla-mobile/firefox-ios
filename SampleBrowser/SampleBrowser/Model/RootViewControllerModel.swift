@@ -88,10 +88,13 @@ class RootViewControllerModel {
             })]
 
         let locationViewState = LocationViewState(
-                accessibilityIdentifier: "clearButton",
-                accessibilityHint: "Double tap to clear text",
-                accessibilityLabel: "Clean",
+                clearButtonA11yId: "clearButton",
+                clearButtonA11yHint: "Double tap to clear text",
+                clearButtonA11yLabel: "Clean",
+                searchEngineImageViewA11yId: "searchEngine",
+                searchEngineImageViewA11yLabel: "Search engine icon",
                 urlTextFieldPlaceholder: "Search or enter address",
+                urlTextFieldA11yLabel: "Address Bar",
                 searchEngineImageName: "bingSearchEngine",
                 url: url
         )

@@ -253,24 +253,27 @@ class TabTrayViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
-        ))
-        let context = ActionContext(windowUUID: windowUUID)
-        store.dispatch(TabTrayAction.tabTrayDidLoad(context))
+        let screenAction = ScreenAction(windowUUID: windowUUID,
+                                        actionType: ScreenActionType.showScreen,
+                                        screen: .tabsTray)
+        store.dispatch(screenAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
                 return TabTrayState(appState: appState, uuid: uuid)
             })
         })
+
+        let action = TabTrayAction(windowUUID: windowUUID,
+                                   actionType: TabTrayActionType.tabTrayDidLoad)
+        store.dispatch(action)
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .tabsTray, windowUUID: windowUUID)
-        ))
-        store.unsubscribe(self)
+        let screenAction = ScreenAction(windowUUID: windowUUID,
+                                        actionType: ScreenActionType.closeScreen,
+                                        screen: .tabsTray)
+        store.dispatch(screenAction)
     }
 
     func newState(state: TabTrayState) {
@@ -457,13 +460,19 @@ class TabTrayViewController: UIViewController,
               tabTrayState.selectedPanel != panelType else { return }
 
         setupOpenPanel(panelType: panelType)
-        let context = TabTrayPanelContext(panelType: panelType, windowUUID: windowUUID)
-        store.dispatch(TabTrayAction.changePanel(context))
+
+        let action = TabTrayAction(panelType: panelType,
+                                   windowUUID: windowUUID,
+                                   actionType: TabTrayActionType.changePanel)
+        store.dispatch(action)
     }
 
     @objc
     private func deleteTabsButtonTapped() {
-        store.dispatch(TabPanelAction.closeAllTabs(windowUUID.context))
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.closeAllTabs)
+        store.dispatch(action)
     }
 
     private func showCloseAllConfirmation() {
@@ -481,24 +490,30 @@ class TabTrayViewController: UIViewController,
     }
 
     private func confirmCloseAll() {
-        store.dispatch(TabPanelAction.confirmCloseAllTabs(windowUUID.context))
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.confirmCloseAllTabs)
+        store.dispatch(action)
     }
 
     @objc
     private func newTabButtonTapped() {
-        let context = AddNewTabContext(urlRequest: nil, isPrivate: tabTrayState.isPrivateMode, windowUUID: windowUUID)
-        store.dispatch(TabPanelAction.addNewTab(context))
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.addNewTab)
+        store.dispatch(action)
     }
 
     @objc
     private func doneButtonTapped() {
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
-        // TODO: FXIOS-6928 Update mode when closing tabTray
         delegate?.didFinish()
     }
 
     @objc
     private func syncTabsTapped() {
-        store.dispatch(RemoteTabsPanelAction.refreshTabs(windowUUID.context))
+        let action = RemoteTabsPanelAction(windowUUID: windowUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshTabs)
+        store.dispatch(action)
     }
 }

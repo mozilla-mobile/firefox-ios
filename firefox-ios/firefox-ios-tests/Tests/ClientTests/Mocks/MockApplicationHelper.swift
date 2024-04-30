@@ -8,6 +8,7 @@ import UIKit
 class MockApplicationHelper: ApplicationHelper {
     var openSettingsCalled = 0
     var openURLCalled = 0
+    var openURLInWindowCalled = 0
     var lastOpenURL: URL?
 
     func openSettings() {
@@ -16,6 +17,11 @@ class MockApplicationHelper: ApplicationHelper {
 
     func open(_ url: URL) {
         openURLCalled += 1
+        lastOpenURL = url
+    }
+
+    func open(_ url: URL, inWindow: WindowUUID) {
+        openURLInWindowCalled += 1
         lastOpenURL = url
     }
 }
