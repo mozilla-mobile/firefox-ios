@@ -30,7 +30,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - mark
   - no_space_in_method_call
   # - ns_number_init_as_function_reference
-  # - operator_whitespace
+  - operator_whitespace
   - orphaned_doc_comment
   # - private_over_fileprivate
   # - protocol_property_accessors_order
