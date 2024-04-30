@@ -165,7 +165,9 @@ extension BrowserViewController: URLBarDelegate {
                 )
             },
             andActionForButton: {
-                store.dispatch(FakespotAction.show(windowUUID.context))
+                let action = FakespotAction(windowUUID: windowUUID,
+                                            actionType: FakespotActionType.show)
+                store.dispatch(action)
             },
             overlayState: overlayManager)
     }
