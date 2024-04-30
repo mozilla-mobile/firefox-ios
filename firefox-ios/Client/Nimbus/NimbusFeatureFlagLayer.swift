@@ -53,8 +53,8 @@ final class NimbusFeatureFlagLayer {
         case .loginAutofill:
             return checkNimbusForLoginAutofill(for: featureID, from: nimbus)
 
-        case .microSurvey:
-            return checkMicroSurveyFeature(from: nimbus)
+        case .microsurvey:
+            return checkMicrosurveyFeature(from: nimbus)
 
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
@@ -262,8 +262,8 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
-    private func checkMicroSurveyFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.microSurveyFeature.value()
+    private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.microsurveyFeature.value()
 
         return config.enabled
     }

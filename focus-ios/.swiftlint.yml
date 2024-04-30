@@ -2,10 +2,10 @@ only_rules: # Only enforce these rules, ignore all others
   # - line_length
   # - blanket_disable_command
   # - class_delegate_protocol
-  # - closure_spacing
+  - closure_spacing
   # - closure_parameter_position
   # - colon
-  # - comma
+  - comma
   - comment_spacing
   - compiler_protocol_init
   - computed_accessors_order
@@ -31,29 +31,29 @@ only_rules: # Only enforce these rules, ignore all others
   - no_space_in_method_call
   # - ns_number_init_as_function_reference
   # - operator_whitespace
-  # - orphaned_doc_comment
+  - orphaned_doc_comment
   # - private_over_fileprivate
   # - protocol_property_accessors_order
   # - redundant_discardable_let
   # - redundant_objc_attribute
-  # - redundant_optional_initialization
+  - redundant_optional_initialization
   # - redundant_string_enum_value
-  # - redundant_void_return
+  - redundant_void_return
   # - return_arrow_whitespace
   # - statement_position
   # - switch_case_alignment
   - syntactic_sugar
-  # - trailing_newline
-  # - trailing_semicolon
+  - trailing_newline
+  - trailing_semicolon
   - trailing_whitespace
   - unavailable_condition
-  # - unneeded_override
-  # - unneeded_synthesized_initializer
+  - unneeded_override
+  - unneeded_synthesized_initializer
   - unused_optional_binding
-  # - unused_setter_value
-  # - vertical_parameter_alignment
+  - unused_setter_value
+  - vertical_parameter_alignment
   - vertical_whitespace
-  # - void_function_in_ternary
+  - void_function_in_ternary
   - void_return
   # - file_header
   - redundant_type_annotation
