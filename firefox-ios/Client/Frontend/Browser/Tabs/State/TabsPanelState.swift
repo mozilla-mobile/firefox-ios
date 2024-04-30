@@ -13,6 +13,8 @@ struct TabsPanelState: ScreenState, Equatable {
     var toastType: ToastType?
     var windowUUID: WindowUUID
     var scrollToIndex: Int?
+    var didTapAddTab: Bool
+    var urlRequest: URLRequest?
 
     var isPrivateTabsEmpty: Bool {
         guard isPrivateMode else { return false }
@@ -33,7 +35,9 @@ struct TabsPanelState: ScreenState, Equatable {
                   inactiveTabs: panelState.inactiveTabs,
                   isInactiveTabsExpanded: panelState.isInactiveTabsExpanded,
                   toastType: panelState.toastType,
-                  scrollToIndex: panelState.scrollToIndex)
+                  scrollToIndex: panelState.scrollToIndex,
+                  didTapAddTab: panelState.didTapAddTab,
+                  urlRequest: panelState.urlRequest)
     }
 
     init(windowUUID: WindowUUID, isPrivateMode: Bool = false) {
@@ -43,7 +47,9 @@ struct TabsPanelState: ScreenState, Equatable {
             tabs: [TabModel](),
             inactiveTabs: [InactiveTabsModel](),
             isInactiveTabsExpanded: false,
-            toastType: nil)
+            toastType: nil,
+            didTapAddTab: false,
+            urlRequest: nil)
     }
 
     init(windowUUID: WindowUUID,
@@ -52,7 +58,9 @@ struct TabsPanelState: ScreenState, Equatable {
          inactiveTabs: [InactiveTabsModel],
          isInactiveTabsExpanded: Bool,
          toastType: ToastType? = nil,
-         scrollToIndex: Int? = nil) {
+         scrollToIndex: Int? = nil,
+         didTapAddTab: Bool = false,
+         urlRequest: URLRequest? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
         self.inactiveTabs = inactiveTabs
@@ -60,6 +68,8 @@ struct TabsPanelState: ScreenState, Equatable {
         self.toastType = toastType
         self.windowUUID = windowUUID
         self.scrollToIndex = scrollToIndex
+        self.didTapAddTab = didTapAddTab
+        self.urlRequest = urlRequest
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -118,6 +128,17 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   toastType: type)
+
+//        case TabPanelAction.didTapAddTab:
+//        let didTapNewTab = context.didTapAddTab
+//        let urlRequest = context.urlRequest
+//        let isPrivateMode = context.isPrivate
+//        return TabsPanelState(windowUUID: state.windowUUID,
+//        isPrivateMode: isPrivateMode,
+//        tabs: state.tabs,
+//        inactiveTabs: state.inactiveTabs,
+//        isInactiveTabsExpanded: state.isInactiveTabsExpanded,
+//        didTapAddTab: didTapNewTab)
 
         default:
             return TabsPanelState(windowUUID: state.windowUUID,
