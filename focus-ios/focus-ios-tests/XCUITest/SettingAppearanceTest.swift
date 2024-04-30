@@ -131,7 +131,12 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Now in Safari
         let safariLabel = safariapp.textFields["Address"]
-        waitForValueContains(safariLabel, value: "google")
+        // iPad Safari cannot access the URL bar. 
+        // Let's ensure that Safari exists at the very least.
+        waitForExistence(safariapp)
+        if !iPad() {
+            waitForValueContains(safariLabel, value: "google")
+        }
 
         // Go back to Focus
         app.activate()
