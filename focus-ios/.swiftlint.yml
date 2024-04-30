@@ -32,7 +32,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - ns_number_init_as_function_reference
   - operator_whitespace
   - orphaned_doc_comment
-  # - private_over_fileprivate
+  - private_over_fileprivate
   # - protocol_property_accessors_order
   # - redundant_discardable_let
   - redundant_objc_attribute
