@@ -31,7 +31,9 @@
         "RequestDesktopTest\/testActivityMenuRequestDesktopItem()",
         "SearchProviderTest\/testGoogleSearchProvider()",
         "SettingAppearanceTest\/testCheckSetting()",
-        "SettingAppearanceTest\/testSafariIntegration()",
+        "SettingAppearanceTest\/testVisitWebsite()",
+        "SettingTest\/testCheckSetting()",
+        "SettingTest\/testSafariIntegration()",
         "URLValidationTest",
         "WebsiteAccessTests\/testVisitWebsite()"
       ],
