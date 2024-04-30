@@ -74,7 +74,9 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ThemeSettingsAction.themeSettingsDidAppear(windowUUID.context))
+        let action = ThemeSettingsViewAction(windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.themeSettingsDidAppear)
+        store.dispatch(action)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -84,10 +86,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .themeSettings, windowUUID: windowUUID)
-        ))
-        store.unsubscribe(self)
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .themeSettings)
+        store.dispatch(action)
     }
 
     func newState(state: ThemeSettingsState) {
@@ -99,8 +101,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     // MARK: - UI actions
     @objc
     func systemThemeSwitchValueChanged(control: UISwitch) {
-        let context = BoolValueContext(boolValue: control.isOn, windowUUID: windowUUID)
-        store.dispatch(ThemeSettingsAction.toggleUseSystemAppearance(context))
+        let action = ThemeSettingsViewAction(useSystemAppearance: control.isOn,
+                                             windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
+        store.dispatch(action)
 
         // Switch animation must begin prior to scheduling table view update animation
         // (or the switch will be auto-synchronized to the slower tableview animation
@@ -120,7 +124,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func systemBrightnessChanged() {
         guard themeState.isAutomaticBrightnessEnabled else { return }
 
-        store.dispatch(ThemeSettingsAction.receivedSystemBrightnessChange(windowUUID.context))
+        let action = ThemeSettingsViewAction(windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.receivedSystemBrightnessChange)
+        store.dispatch(action)
+
         brightnessChanged()
     }
 
@@ -135,8 +142,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     func sliderValueChanged(control: UISlider, event: UIEvent) {
         guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
-        let context = FloatValueContext(floatValue: control.value, windowUUID: windowUUID)
-        store.dispatch(ThemeSettingsAction.updateUserBrightness(context))
+        let action = ThemeSettingsViewAction(userBrightness: control.value,
+                                             windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.updateUserBrightness)
+        store.dispatch(action)
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
@@ -289,8 +298,10 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
 
     // MARK: - Helper functions
     private func toggleAutomaticBrightness(isOn: Bool) {
-        let context = BoolValueContext(boolValue: isOn, windowUUID: windowUUID)
-        store.dispatch(ThemeSettingsAction.enableAutomaticBrightness(context))
+        let action = ThemeSettingsViewAction(automaticBrightnessEnabled: isOn,
+                                             windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.enableAutomaticBrightness)
+        store.dispatch(action)
 
         tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
         tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
@@ -301,9 +312,11 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func changeManualTheme(isLightTheme: Bool) {
-        let themeName: ThemeType = isLightTheme ? .light : .dark
-        let context = ThemeTypeContext(themeType: themeName, windowUUID: windowUUID)
-        store.dispatch(ThemeSettingsAction.switchManualTheme(context))
+        let theme: ThemeType = isLightTheme ? .light : .dark
+        let action = ThemeSettingsViewAction(manualThemeType: theme,
+                                             windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.switchManualTheme)
+        store.dispatch(action)
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,

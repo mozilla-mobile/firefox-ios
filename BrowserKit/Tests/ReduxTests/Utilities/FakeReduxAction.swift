@@ -6,19 +6,30 @@ import XCTest
 
 @testable import Redux
 
-enum FakeReduxAction: Action {
+class FakeReduxAction: Action {
+    let counterValue: Int?
+    let privateMode: Bool?
+
+    init(counterValue: Int? = nil,
+         privateMode: Bool? = nil,
+         windowUUID: UUID,
+         actionType: ActionType) {
+        self.counterValue = counterValue
+        self.privateMode = privateMode
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
+    }
+}
+
+enum FakeReduxActionType: ActionType {
     // User action
     case requestInitialValue
     case increaseCounter
     case decreaseCounter
 
     // Middleware actions
-    case initialValueLoaded(Int)
-    case counterIncreased(Int)
-    case counterDecreased(Int)
-    case setPrivateModeTo(Bool)
-
-    var windowUUID: UUID {
-        return UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
-    }
+    case initialValueLoaded
+    case counterIncreased
+    case counterDecreased
+    case setPrivateModeTo
 }

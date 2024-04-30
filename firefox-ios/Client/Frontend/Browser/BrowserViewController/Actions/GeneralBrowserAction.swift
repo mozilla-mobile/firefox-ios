@@ -5,31 +5,29 @@
 import Foundation
 import Redux
 
-class GeneralBrowserContext: ActionContext {
+class GeneralBrowserAction: Action {
     let selectedTabURL: URL?
-    let isPrivateBrowsing: Bool
-    init(selectedTabURL: URL?,
-         isPrivateBrowsing: Bool,
-         windowUUID: WindowUUID) {
+    let isPrivateBrowsing: Bool?
+    let toastType: ToastType?
+    let showOverlay: Bool?
+
+    init(selectedTabURL: URL? = nil,
+         isPrivateBrowsing: Bool? = nil,
+         toastType: ToastType? = nil,
+         showOverlay: Bool? = nil,
+         windowUUID: UUID,
+         actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
-        super.init(windowUUID: windowUUID)
+        self.toastType = toastType
+        self.showOverlay = showOverlay
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-enum GeneralBrowserAction: Action {
-    case showToast(ToastTypeContext)
-    case showOverlay(KeyboardContext)
-    case updateSelectedTab(GeneralBrowserContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .showToast(let context as ActionContext):
-            return context.windowUUID
-        case .showOverlay(let context as ActionContext):
-            return context.windowUUID
-        case .updateSelectedTab(let context as ActionContext):
-            return context.windowUUID
-        }
-    }
+enum GeneralBrowserActionType: ActionType {
+    case showToast
+    case showOverlay
+    case updateSelectedTab
 }
