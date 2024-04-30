@@ -10,7 +10,7 @@ only_rules: # Only enforce these rules, ignore all others
   - compiler_protocol_init
   - computed_accessors_order
   # - control_statement
-  # - duplicate_conditions
+  - duplicate_conditions
   # - dynamic_inline
   - empty_enum_arguments
   - empty_parameters
