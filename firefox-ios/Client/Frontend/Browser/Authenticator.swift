@@ -55,22 +55,23 @@ class Authenticator {
             findMatchingCredentialsForChallenge(
                 challenge,
                 fromLoginsProvider: loginsHelper.logins
-            ) { credentials, isSuccess in
+            ) { result in
                 DispatchQueue.main.async {
-                    guard isSuccess else {
+                    switch result {
+                    case .success(let credentials):
+                        self.promptForUsernamePassword(
+                            viewController,
+                            credentials: credentials,
+                            protectionSpace: challenge.protectionSpace,
+                            loginsHelper: loginsHelper,
+                            completionHandler: completionHandler
+                        )
+                    case .failure:
                         sendLoginsAutofillFailedTelemetry()
                         completionHandler(.failure(
                             LoginRecordError(description: "Unknown error when finding credentials")
                         ))
-                        return
                     }
-                    self.promptForUsernamePassword(
-                        viewController,
-                        credentials: credentials,
-                        protectionSpace: challenge.protectionSpace,
-                        loginsHelper: loginsHelper,
-                        completionHandler: completionHandler
-                    )
                 }
             }
             return
@@ -90,13 +91,13 @@ class Authenticator {
         _ challenge: URLAuthenticationChallenge,
         fromLoginsProvider loginsProvider: RustLogins,
         logger: Logger = DefaultLogger.shared,
-        completionHandler: @escaping (URLCredential?, _ isSuccess: Bool) -> Void
+        completionHandler: @escaping (Result<URLCredential?, Error>) -> Void
     ) {
         loginsProvider.getLoginsFor(protectionSpace: challenge.protectionSpace, withUsername: nil) { result in
             switch result {
             case .success(let logins):
                 guard logins.count >= 1 else {
-                    completionHandler(nil, true)
+                    completionHandler(.success(nil))
                     return
                 }
 
@@ -133,9 +134,9 @@ class Authenticator {
                     loginsProvider.updateLogin(id: login.id, login: new) { result in
                         switch result {
                         case .success:
-                            completionHandler(credentials, true)
-                        case .failure:
-                            completionHandler(nil, false)
+                            completionHandler(.success(credentials))
+                        case .failure(let error):
+                            completionHandler(.failure(error))
                         }
                     }
                     return
@@ -150,10 +151,10 @@ class Authenticator {
                                category: .webview)
                 }
 
-                completionHandler(credentials, true)
+                completionHandler(.success(credentials))
 
-            case .failure:
-                completionHandler(nil, false)
+            case .failure(let error):
+                completionHandler(.failure(error))
             }
         }
     }
