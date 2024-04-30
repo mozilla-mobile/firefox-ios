@@ -275,7 +275,7 @@ class SettingAppearanceTest: BaseTestCase {
         waitForExistence(app.navigationBars["Settings"], timeout: 15)
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
     }
-    
+
     func setUrlAutoCompleteTo(desiredAutoCompleteState: String) {
         let homeViewSettingsButton = app.homeViewSettingsButton
         let settingsButton = app.settingsButton
