@@ -38,6 +38,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
                    navigationController: UINavigationController?,
                    logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
         let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
