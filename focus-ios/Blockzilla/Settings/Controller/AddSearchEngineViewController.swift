@@ -4,7 +4,7 @@
 
 import UIKit
 
-protocol AddSearchEngineDelegate {
+protocol AddSearchEngineDelegate: AnyObject {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String)
 }
 

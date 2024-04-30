@@ -392,7 +392,7 @@ extension AppDelegate: ModalDelegate {
     }
 }
 
-protocol ModalDelegate {
+protocol ModalDelegate: AnyObject {
     func presentModal(viewController: UIViewController, animated: Bool)
     func presentSheet(viewController: UIViewController)
     func dismiss(animated: Bool)
