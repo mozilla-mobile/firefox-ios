@@ -1,17 +1,8 @@
 /* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "Mentse biztonságosan kártyaadatait a %@ segítségével, hogy legközelebb gyorsabban tudjon fizetni.";
-
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
 "CreditCard.RememberCard.Header.v122" = "A %@ titkosítja a kártyaszámát. A biztonsági kód nem lesz mentve.";
 
 /* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "Igen";
-
-/* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "Mentés";
-
-/* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v115" = "Emlékszik erre a kártyára?";
 
 /* This value is used as the title for the remember credit card page */
 "CreditCard.RememberCard.MainTitle.v122" = "Elmenti biztonságosan ezt a kártyát?";

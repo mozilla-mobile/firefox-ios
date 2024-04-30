@@ -40,14 +40,14 @@ class PasswordManagerTableViewCell: ThemedTableViewCell {
     }()
 
     lazy var hostnameLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title1, size: 16.0)
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
         label.setContentHuggingPriority(.required, for: .vertical)
     }
 
     lazy var usernameLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .title2, size: 14.0)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 1
         label.adjustsFontForContentSizeCategory = true
     }

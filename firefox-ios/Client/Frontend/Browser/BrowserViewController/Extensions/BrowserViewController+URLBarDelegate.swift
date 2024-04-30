@@ -39,6 +39,7 @@ extension BrowserViewController: URLBarDelegate {
             let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
             navigationHandler?.showTabTray(selectedPanel: selectedSegment)
         } else {
+            willNavigateAway()
             showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
                                             focusedSegment: focusedSegment)
         }
@@ -164,7 +165,9 @@ extension BrowserViewController: URLBarDelegate {
                 )
             },
             andActionForButton: {
-                store.dispatch(FakespotAction.show(windowUUID.context))
+                let action = FakespotAction(windowUUID: windowUUID,
+                                            actionType: FakespotActionType.show)
+                store.dispatch(action)
             },
             overlayState: overlayManager)
     }

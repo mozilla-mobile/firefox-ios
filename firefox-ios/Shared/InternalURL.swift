@@ -64,7 +64,7 @@ public struct InternalURL {
             components.queryItems = []
         }
 
-        if var item = components.queryItems?.find({ Param.uuidkey.matches($0.name) }) {
+        if var item = components.queryItems?.first(where: { Param.uuidkey.matches($0.name) }) {
             item.value = InternalURL.uuid
         } else {
             components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: InternalURL.uuid))

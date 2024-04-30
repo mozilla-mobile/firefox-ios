@@ -106,8 +106,11 @@ extension TabManager {
     }
 
     func removeTab(_ tab: Tab) {
+        let uuid = windowUUID
         removeTab(tab) {
-            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed,
+                                            object: nil,
+                                            userInfo: uuid.userInfo)
         }
     }
 

@@ -46,7 +46,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var themeManager: ThemeManager = AppContainer.shared.resolve()
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
@@ -333,7 +333,9 @@ class TabLocationView: UIView, FeatureFlaggable {
     func didPressShoppingButton(_ button: UIButton) {
         button.isSelected = true
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        store.dispatch(FakespotAction.pressedShoppingButton(windowUUID.context))
+        let action = FakespotAction(windowUUID: windowUUID,
+                                    actionType: FakespotActionType.pressedShoppingButton)
+        store.dispatch(action)
     }
 
     @objc
@@ -488,6 +490,8 @@ private extension TabLocationView {
 
 extension TabLocationView: Notifiable {
     func handleNotifications(_ notification: Notification) {
+        guard let notificationUUID = notification.object as? UUID else { return }
+        guard windowUUID == notificationUUID else { return }
         switch notification.name {
         case .FakespotViewControllerDidDismiss:
             shoppingButton.isSelected = false
@@ -562,6 +566,8 @@ extension TabLocationView: ThemeApplicable {
 }
 
 extension TabLocationView: TabEventHandler {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
+
     func tabDidChangeContentBlocking(_ tab: Tab) {
         guard let blocker = tab.contentBlocker else { return }
 

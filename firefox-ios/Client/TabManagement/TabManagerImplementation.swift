@@ -245,7 +245,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     }
 
     private func generateTabDataForSaving() -> [TabData] {
-        let tabData = tabs.map { tab in
+        let tabData = normalTabs.map { tab in
             let oldTabGroupData = tab.metadataManager?.tabGroupData
             let state = TabGroupTimerState(rawValue: oldTabGroupData?.tabHistoryCurrentState ?? "")
             let groupData = TabGroupData(searchTerm: oldTabGroupData?.tabAssociatedSearchTerm,
@@ -287,6 +287,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     private func saveCurrentTabSessionData() {
         guard let selectedTab = self.selectedTab,
+              !selectedTab.isPrivate,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
         else { return }
@@ -333,13 +334,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                        previous: previous,
                                        sessionData: sessionData)
 
+            // Default to false if the feature flag is not enabled
+            var isPrivate = false
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                let context = BoolValueContext(boolValue: tab.isPrivate, windowUUID: windowUUID)
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
-            } else {
-                let context = BoolValueContext(boolValue: false, windowUUID: windowUUID)
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
+                isPrivate = tab.isPrivate
             }
+
+            let action = PrivateModeAction(isPrivate: isPrivate,
+                                           windowUUID: windowUUID,
+                                           actionType: PrivateModeActionType.setPrivateModeTo)
+            store.dispatch(action)
 
             didSelectTab(url)
             updateMenuItemsForSelectedTab()
@@ -366,10 +370,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
         AppEventQueue.completed(.selectTab(url, windowUUID))
-        let context = GeneralBrowserContext(selectedTabURL: url,
-                                            isPrivateBrowsing: selectedTab?.isPrivate ?? false,
-                                            windowUUID: windowUUID)
-        store.dispatch(GeneralBrowserAction.updateSelectedTab(context))
+        let action = GeneralBrowserAction(selectedTabURL: url,
+                                          isPrivateBrowsing: selectedTab?.isPrivate ?? false,
+                                          windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.updateSelectedTab)
+        store.dispatch(action)
     }
 
     @MainActor
@@ -528,6 +533,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         case UIApplication.willResignActiveNotification:
             saveAllTabData()
         case .TabMimeTypeDidSet:
+            guard windowUUID == notification.windowUUID else { return }
             updateMenuItemsForSelectedTab()
         default:
             break

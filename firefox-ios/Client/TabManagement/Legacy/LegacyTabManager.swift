@@ -65,9 +65,9 @@ struct BackupCloseTab {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
     // MARK: - Variables
-    private let tabEventHandlers: [TabEventHandler]
     let profile: Profile
     let windowUUID: WindowUUID
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
     var tabs = [Tab]()
@@ -163,11 +163,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.windowUUID = uuid
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
-        self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
         super.init()
 
+        GlobalTabEventHandlers.configure(with: profile)
         register(self, forTabEvents: .didSetScreenshot)
 
         addNavigationDelegate(self)
@@ -541,7 +541,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         selectTab(nextSelectedTab)
 
         let notificationObject = [Tab.privateModeKey: nextSelectedTab?.isPrivate ?? true]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                        object: notificationObject,
+                                        userInfo: windowUUID.userInfo)
         return result
     }
 
@@ -775,7 +777,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             previousTabUUID: previousTabUUID,
             isPrivate: isPrivate
         )
-        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast,
+                                        object: nil,
+                                        userInfo: windowUUID.userInfo)
     }
 
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}

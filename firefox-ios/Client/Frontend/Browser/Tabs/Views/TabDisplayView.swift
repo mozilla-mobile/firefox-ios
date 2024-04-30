@@ -23,6 +23,7 @@ class TabDisplayView: UIView,
         case tabs
     }
 
+    let panelType: TabTrayPanelType
     private(set) var tabsState: TabsPanelState
     private var performingChainedOperations = false
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
@@ -81,9 +82,11 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    public init(state: TabsPanelState,
+    public init(panelType: TabTrayPanelType,
+                state: TabsPanelState,
                 windowUUID: WindowUUID,
                 animationQueue: TabTrayAnimationQueue = TabTrayAnimationQueueImplementation()) {
+        self.panelType = panelType
         self.tabsState = state
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
@@ -111,9 +114,10 @@ class TabDisplayView: UIView,
             animationQueue.addAnimation(for: collectionView) { [weak self] in
                 guard let self else { return }
 
-                let isPrivate = tabsState.isPrivateMode
-                let context = AddNewTabContext(urlRequest: state.urlRequest, isPrivate: isPrivate, windowUUID: windowUUID)
-                store.dispatch(TabPanelAction.addNewTab(context))
+                let action = TabPanelViewAction(panelType: self.panelType,
+                                                windowUUID: self.windowUUID,
+                                                actionType: TabPanelViewActionType.addNewTab)
+                store.dispatch(action)
             }
         }
     }
@@ -183,8 +187,11 @@ class TabDisplayView: UIView,
 
     func deleteInactiveTab(for index: Int) {
         let inactiveTabs = tabsState.inactiveTabs[index]
-        let context = TabUUIDContext(tabUUID: inactiveTabs.tabUUID, windowUUID: windowUUID)
-        store.dispatch(TabPanelAction.closeInactiveTabs(context))
+        let action = TabPanelViewAction(panelType: panelType,
+                                        tabUUID: inactiveTabs.tabUUID,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.closeInactiveTabs)
+        store.dispatch(action)
     }
 
     // MARK: UICollectionViewDataSource
@@ -243,9 +250,11 @@ class TabDisplayView: UIView,
                 if let theme = theme {
                     footerView.applyTheme(theme: theme)
                 }
-                let context = windowUUID.context
                 footerView.buttonClosure = {
-                    store.dispatch(TabPanelAction.closeAllInactiveTabs(context))
+                    let action = TabPanelViewAction(panelType: self.panelType,
+                                                    windowUUID: self.windowUUID,
+                                                    actionType: TabPanelViewActionType.closeAllInactiveTabs)
+                    store.dispatch(action)
                 }
                 return footerView
             }
@@ -288,10 +297,18 @@ class TabDisplayView: UIView,
         switch getTabDisplay(for: indexPath.section) {
         case .inactiveTabs:
             let tabUUID = tabsState.inactiveTabs[indexPath.row].tabUUID
-            store.dispatch(TabPanelAction.selectTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
+            let action = TabPanelViewAction(panelType: panelType,
+                                            tabUUID: tabUUID,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.selectTab)
+            store.dispatch(action)
         case .tabs:
             let tabUUID = tabsState.tabs[indexPath.row].tabUUID
-            store.dispatch(TabPanelAction.selectTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
+            let action = TabPanelViewAction(panelType: panelType,
+                                            tabUUID: tabUUID,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.selectTab)
+            store.dispatch(action)
         }
     }
 
@@ -309,7 +326,10 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        store.dispatch(TabPanelAction.toggleInactiveTabs(windowUUID.context))
+        let action = TabPanelViewAction(panelType: panelType,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.toggleInactiveTabs)
+        store.dispatch(action)
         collectionView.collectionViewLayout.invalidateLayout()
     }
 
@@ -317,7 +337,11 @@ class TabDisplayView: UIView,
     func tabCellDidClose(for tabUUID: TabUUID) {
         animationQueue.addAnimation(for: collectionView) { [weak self] in
             guard let self else { return }
-            store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tabUUID, windowUUID: windowUUID)))
+            let action = TabPanelViewAction(panelType: panelType,
+                                            tabUUID: tabUUID,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.closeTab)
+            store.dispatch(action)
         }
     }
 
@@ -327,7 +351,11 @@ class TabDisplayView: UIView,
               let indexPath = collectionView.indexPath(for: tabCell) else { return }
 
         let tab = tabsState.tabs[indexPath.item]
-        store.dispatch(TabPanelAction.closeTab(TabUUIDContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
+        let action = TabPanelViewAction(panelType: panelType,
+                                        tabUUID: tab.tabUUID,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.closeTab)
+        store.dispatch(action)
         UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
                              argument: String.TabTrayClosingTabAccessibilityMessage)
     }
@@ -368,14 +396,20 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
 
+        let moveTabData = MoveTabData(originIndex: start.row,
+                                      destinationIndex: end.row,
+                                      isPrivate: tabsState.isPrivateMode)
+
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
         animationQueue.addAnimation(for: collectionView) { [weak self] in
             guard let self else { return }
-            store.dispatch(TabPanelAction.moveTab(MoveTabContext(originIndex: start.row,
-                                                                 destinationIndex: end.row,
-                                                                 isPrivate: tabsState.isPrivateMode,
-                                                                 windowUUID: windowUUID)))
+            let action = TabPanelViewAction(panelType: panelType,
+                                            moveTabData: moveTabData,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.moveTab)
+
+            store.dispatch(action)
             collectionView.moveItem(at: start, to: end)
         }
     }

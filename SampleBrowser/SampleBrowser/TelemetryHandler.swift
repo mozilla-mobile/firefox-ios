@@ -20,7 +20,7 @@ final class TelemetryHandler: EngineTelemetryProxy {
             print("Telemetry event triggered: Page load finished.")
         case .pageLoadCancelled:
             print("Telemetry event triggered: Page load cancelled.")
-        case .trackAdsFoundOnPage(let providerName, let adUrls):
+        case .trackAdsFoundOnPage(let providerName, _):
             print("Telemetry event triggered: Track ads found on page \(providerName).")
         case .trackAdsClickedOnPage(let providerName):
             print("Telemetry event triggered: Track ads clicked on page \(providerName).")

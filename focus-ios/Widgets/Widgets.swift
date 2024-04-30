@@ -5,7 +5,6 @@
 import WidgetKit
 import SwiftUI
 import Intents
-import Widget
 
 struct Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
@@ -60,10 +59,6 @@ struct FocusWidgets_Previews: PreviewProvider {
         FocusWidgetsEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
-}
-
-fileprivate extension Gradient {
-    static let quickAccessWidget = Gradient(colors: [Color("GradientFirst"), Color("GradientSecond")])
 }
 
 fileprivate extension String {

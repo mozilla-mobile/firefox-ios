@@ -51,10 +51,10 @@ class TPStatsBlocklistChecker {
         }
 
         // Not supported yet in Focus
-        let whitelistRegex = [NSRegularExpression]()
+        let permittedListRegex = [NSRegularExpression]()
 
         DispatchQueue.global().async {
-            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledLists.contains($0) ? $0 : nil })
+            deferred.fill(blockLists.urlIsInList(url, permittedDomains: permittedListRegex).flatMap { return enabledLists.contains($0) ? $0 : nil })
         }
         return deferred
     }
@@ -154,7 +154,7 @@ private class TPStatsBlocklists {
                 }
 
                 guard let loc = filter.range(of: standardPrefix) else {
-                    assert(false, "url-filter code needs updating for new list format")
+                    assertionFailure("url-filter code needs updating for new list format")
                     return
                 }
                 let baseDomain = filter[loc.upperBound...].replacingOccurrences(of: "\\.", with: ".")
@@ -184,7 +184,7 @@ private class TPStatsBlocklists {
         }
     }
 
-    func urlIsInList(_ url: URL, whitelistedDomains: [NSRegularExpression]) -> BlocklistName? {
+    func urlIsInList(_ url: URL, permittedDomains: [NSRegularExpression]) -> BlocklistName? {
         let resourceString = url.absoluteString
         let resourceRange = NSRange(location: 0, length: resourceString.count)
 
@@ -203,9 +203,9 @@ private class TPStatsBlocklists {
                 }
 
                 // Check the whitelist.
-                if let baseDomain = url.baseDomain, !whitelistedDomains.isEmpty {
+                if let baseDomain = url.baseDomain, !permittedDomains.isEmpty {
                     let range = NSRange(location: 0, length: baseDomain.count)
-                    for ignoreDomain in whitelistedDomains {
+                    for ignoreDomain in permittedDomains {
                         if ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
                             return nil
                         }

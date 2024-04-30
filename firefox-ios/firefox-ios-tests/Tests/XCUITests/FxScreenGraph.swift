@@ -27,6 +27,7 @@ let FxCreateAccount = "FxCreateAccount"
 let FxAccountManagementPage = "FxAccountManagementPage"
 let Intro_FxASigninEmail = "Intro_FxASigninEmail"
 let HomeSettings = "HomeSettings"
+let ToolbarSettings = "ToolbarSettings"
 let SiriSettings = "SiriSettings"
 let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
@@ -215,6 +216,9 @@ class Action {
     static let OpenWhatsNewPage = "OpenWhatsNewPage"
     static let OpenSearchBarFromSearchButton = "OpenSearchBarFromSearchButton"
     static let CloseURLBarOpen = "CloseURLBarOpen"
+
+    static let SelectToolbarBottom = "SelectToolbarBottom"
+    static let SelectToolbarTop = "SelectToolbarTop"
 }
 
 @objcMembers
@@ -594,6 +598,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["Tabs"], to: TabsSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.SearchBar.searchBarSetting], to: ToolbarSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
@@ -669,8 +674,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            app.secureTextFields.element(boundBy: 0).tap()
-            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 1).tap()
+            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
             app.secureTextFields.element(boundBy: 0).tap()
@@ -763,6 +768,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
             app.tables.cells.switches["Recently Saved"].tap()
+        }
+
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(ToolbarSettings) { screenState in
+        screenState.gesture(forAction: Action.SelectToolbarBottom) { UserState in
+            app.cells[AccessibilityIdentifiers.Settings.SearchBar.bottomSetting].tap()
+        }
+
+        screenState.gesture(forAction: Action.SelectToolbarTop) { UserState in
+            app.cells[AccessibilityIdentifiers.Settings.SearchBar.topSetting].tap()
         }
 
         screenState.backAction = navigationControllerBackAction

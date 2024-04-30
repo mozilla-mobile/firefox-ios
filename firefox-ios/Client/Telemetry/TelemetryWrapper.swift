@@ -45,9 +45,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
     static let shared = TelemetryWrapper()
 
-    // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
-    var defaultTabManager: TabManager?
-
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
     // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
@@ -152,10 +149,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
-        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-        if let count = defaultTabManager?.count {
-            GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
-        }
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let tabCount = windowManager.allWindowTabManagers().map({ $0.count }).reduce(0, +)
+        GleanMetrics.Tabs.cumulativeCount.add(Int32(tabCount))
 
         // Record other preference settings.
         // If the setting exists at the key location, use that value. Otherwise record the default
@@ -388,6 +384,9 @@ extension TelemetryWrapper {
         case settingsMenuShowTour = "show-tour"
         case settingsMenuPasswords = "passwords"
         // MARK: Logins and Passwords
+        case loginsAutofillPromptDismissed = "logins-autofill-prompt-dismissed"
+        case loginsAutofillPromptExpanded = "logins-autofill-prompt-expanded"
+        case loginsAutofillPromptShown = "logins-autofill-prompt-shown"
         case loginsAutofilled = "logins-autofilled"
         case loginsAutofillFailed = "logins-autofill-failed"
         case loginsManagementAddTapped = "logins-management-add-tapped"
@@ -1058,6 +1057,12 @@ extension TelemetryWrapper {
             GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Logins and Passwords
+        case(.action, .view, .loginsAutofillPromptShown, _, _):
+            GleanMetrics.Logins.autofillPromptShown.record()
+        case(.action, .tap, .loginsAutofillPromptExpanded, _, _):
+            GleanMetrics.Logins.autofillPromptExpanded.record()
+        case(.action, .close, .loginsAutofillPromptDismissed, _, _):
+            GleanMetrics.Logins.autofillPromptDismissed.record()
         case(.action, .tap, .loginsAutofilled, _, _):
             GleanMetrics.Logins.autofilled.record()
         case(.action, .tap, .loginsAutofillFailed, _, _):

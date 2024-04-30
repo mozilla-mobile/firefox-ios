@@ -71,6 +71,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
     var tabDisplayType: TabDisplayType = .TabGrid
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let tabManager: TabManager
     private let collectionView: UICollectionView
 
@@ -318,7 +319,9 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         refreshStore(evenIfHidden: false, shouldAnimate: true)
 
         let notificationObject = [Tab.privateModeKey: isPrivate]
-        NotificationCenter.default.post(name: .TabsPrivacyModeChanged, object: notificationObject)
+        NotificationCenter.default.post(name: .TabsPrivacyModeChanged,
+                                        object: notificationObject,
+                                        userInfo: tabManager.windowUUID.userInfo)
     }
 
     /// Find the previously selected cell, which is still displayed as selected
@@ -857,6 +860,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension LegacyTabDisplayManager: TabEventHandler {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard let indexPath = getIndexPath(tab: tab) else { return }
         refreshCell(atIndexPath: indexPath)
@@ -1070,6 +1075,7 @@ extension LegacyTabDisplayManager: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DidTapUndoCloseAllTabToast:
+            guard tabManager.windowUUID == notification.windowUUID else { return }
             refreshStore()
             collectionView.reloadData()
         default:

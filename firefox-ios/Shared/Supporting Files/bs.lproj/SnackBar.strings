@@ -5,8 +5,5 @@
 "CreditCard.SnackBar.SavedCardLabel.v112" = "Nova kartica je sačuvana";
 
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
-"CreditCard.SnackBar.UpdatedCardLabel.v112" = "Informacije o kartici su ažurirane";
-
-/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
 "CreditCard.SnackBar.UpdatedCardLabel.v122" = "Informacije o kartici su ažurirane";
 

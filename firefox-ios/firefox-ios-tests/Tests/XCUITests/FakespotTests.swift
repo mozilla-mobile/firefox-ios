@@ -21,7 +21,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
-    // Smoketest
     func testReviewQualityCheckBottomSheetUI() {
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
@@ -68,7 +67,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358924
-    // Smoketest
     func testAcceptTheRejectedOptInNotification() {
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
@@ -117,7 +115,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
-    // Smoketest
     func testSettingsSectionUI() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -404,10 +401,6 @@ class FakespotTests: BaseTestCase {
             app.buttons["Reload page"].tap()
             waitUntilPageLoad()
         }
-        // Workaround for iPad issue: https://github.com/mozilla-mobile/firefox-ios/issues/19346
-        if app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].exists {
-            app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
-        }
         // Tap the shopping cart icon
         let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]
         var nrOfRetries = 4
@@ -429,7 +422,7 @@ class FakespotTests: BaseTestCase {
         // Search for and open a shoe listing
         let searchAmazon = website.textFields["Search Amazon"]
         var nrOfRetries = 10
-        if !searchAmazon.exists && nrOfRetries > 10 {
+        if !searchAmazon.exists && nrOfRetries > 0 {
             navigator.openURL("https://www.amazon.com")
             waitUntilPageLoad()
             nrOfRetries -= 1

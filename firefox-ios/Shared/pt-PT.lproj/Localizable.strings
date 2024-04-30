@@ -646,9 +646,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Saber mais";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Para guardar e preencher automaticamente credenciais e palavras-passe, ative o Face ID, Touch ID ou um código do dispositivo.";
-
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Continuar";
 
@@ -694,23 +691,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrar";
 
-/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
-"LoginsList.NoLoginsFound.Description.v119" = "As credenciais guardadas serão apresentadas aqui. Se guardou as suas credenciais no %@ de um outro dispositivo, inicie sessão na sua conta.";
-
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "Não foram encontradas credenciais";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Não foram encontrados resultados que correspondam à sua pesquisa.";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "Sem credenciais coincidentes";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "Cancelar";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "Pesquisar credenciais";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "Selecione uma palavra-passe para preencher";
@@ -745,7 +730,7 @@
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "Adicionar aos Atalhos";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Marcadores";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -757,7 +742,7 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Personalizar página inicial";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Transferências";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
@@ -769,7 +754,7 @@
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Ajuda";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Histórico";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
@@ -781,7 +766,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Ligar modo noturno";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Palavras-passe";
 
 /* The title for the button that lets you paste into the location bar */
@@ -790,7 +775,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Colar e ir";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Lista de leitura";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
@@ -1158,9 +1143,6 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Substitua a pesquisa com %s)";
-
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v112" = "Autopreenchimento de Cartões de Crédito";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Limpar todos os dados de websites";

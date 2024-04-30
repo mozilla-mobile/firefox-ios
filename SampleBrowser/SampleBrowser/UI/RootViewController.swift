@@ -8,11 +8,11 @@ import UIKit
 
 // Holds toolbar, search bar, search and browser VCs
 class RootViewController: UIViewController,
-                          ToolbarDelegate,
+                          NavigationToolbarDelegate,
                           NavigationDelegate,
                           AddressToolbarDelegate,
+                          AddressToolbarContainerDelegate,
                           SearchSuggestionDelegate,
-                          MenuDelegate,
                           SettingsDelegate,
                           FindInPageBarDelegate,
                           Themeable {
@@ -21,8 +21,8 @@ class RootViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
-    private lazy var toolbar: BrowserToolbar = .build { _ in }
-    private lazy var searchBar: BrowserAddressToolbar =  .build { _ in }
+    private lazy var navigationToolbar: NavigationToolbarContainer = .build { _ in }
+    private lazy var addressToolbarContainer: AddressToolbarContainer =  .build { _ in }
     private lazy var statusBarFiller: UIView =  .build { view in
         view.backgroundColor = .white
     }
@@ -31,12 +31,16 @@ class RootViewController: UIViewController,
     private var searchVC: SearchViewController
     private var findInPageBar: FindInPageBar?
 
+    private var model = RootViewControllerModel()
+
     // MARK: - Init
-    init(engineProvider: EngineProvider, themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(engineProvider: EngineProvider,
+         windowUUID: UUID?,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.browserVC = BrowserViewController(engineProvider: engineProvider)
         self.searchVC = SearchViewController()
         self.themeManager = themeManager
-        self.currentWindowUUID = UUID()
+        self.currentWindowUUID = windowUUID
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = .black
     }
@@ -51,12 +55,28 @@ class RootViewController: UIViewController,
         super.viewDidLoad()
 
         configureBrowserView()
-        configureSearchbar()
+        configureAddressToolbar()
         configureSearchView()
-        configureToolbar()
+        configureNavigationToolbar()
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+        self.applyTheme()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            // toolbar buttons for other trait collections might not have been in the hierarchy and didn't get the theme yet
+            self.applyTheme()
+        }, completion: nil)
     }
 
     private func configureBrowserView() {
@@ -71,38 +91,30 @@ class RootViewController: UIViewController,
         browserVC.navigationDelegate = self
     }
 
-    private func configureSearchbar() {
+    private func configureAddressToolbar() {
         view.addSubview(statusBarFiller)
-        view.addSubview(searchBar)
+        view.addSubview(addressToolbarContainer)
 
         NSLayoutConstraint.activate([
             statusBarFiller.topAnchor.constraint(equalTo: view.topAnchor),
             statusBarFiller.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            statusBarFiller.bottomAnchor.constraint(equalTo: searchBar.topAnchor),
+            statusBarFiller.bottomAnchor.constraint(equalTo: addressToolbarContainer.topAnchor),
             statusBarFiller.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchBar.heightAnchor.constraint(equalToConstant: 40)
+            addressToolbarContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            addressToolbarContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            addressToolbarContainer.bottomAnchor.constraint(equalTo: browserVC.view.topAnchor),
+            addressToolbarContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        let browserActions = [ToolbarElement(
-            iconName: StandardImageIdentifiers.Large.appMenu,
-            isEnabled: true,
-            a11yLabel: "Open Menu",
-            a11yId: "appMenuButton",
-            onSelected: {
-                self.didClickMenu()
-            })]
-        let state = AddressToolbarState(
-            url: nil,
-            navigationActions: [],
-            pageActions: [],
-            browserActions: browserActions)
-        searchBar.configure(state: state, toolbarDelegate: self)
-        _ = searchBar.becomeFirstResponder()
+        model.addressToolbarDelegate = self
+        updateAddressToolbar(url: nil)
+        _ = addressToolbarContainer.becomeFirstResponder()
+    }
+
+    private func updateAddressToolbar(url: String?) {
+        let model = model.addressToolbarContainerModel(url: url)
+        addressToolbarContainer.configure(model, toolbarDelegate: self)
     }
 
     private func configureSearchView() {
@@ -115,65 +127,75 @@ class RootViewController: UIViewController,
         add(searchVC)
 
         NSLayoutConstraint.activate([
-            searchVC.view.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            searchVC.view.topAnchor.constraint(equalTo: addressToolbarContainer.bottomAnchor),
             searchVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchVC.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+            searchVC.view.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor)
         ])
     }
 
-    private func configureToolbar() {
-        view.addSubview(toolbar)
+    private func configureNavigationToolbar() {
+        view.addSubview(navigationToolbar)
 
         NSLayoutConstraint.activate([
-            toolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
-            toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            toolbar.topAnchor.constraint(equalTo: browserVC.view.bottomAnchor)
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationToolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            navigationToolbar.topAnchor.constraint(equalTo: browserVC.view.bottomAnchor)
         ])
 
-        toolbar.toolbarDelegate = self
+        model.navigationToolbarDelegate = self
+        updateNavigationToolbar()
+    }
+
+    private func updateNavigationToolbar() {
+        navigationToolbar.configure(model.navigationToolbarContainerModel)
     }
 
     // MARK: - Private
 
     private func browse(to term: String) {
-        _ = searchBar.resignFirstResponder()
+        _ = addressToolbarContainer.resignFirstResponder()
         browserVC.loadUrlOrSearch(SearchTerm(term: term))
         searchVC.remove()
     }
 
     // MARK: - BrowserToolbarDelegate
 
-    func backButtonClicked() {
+    func backButtonTapped() {
         browserVC.goBack()
     }
 
-    func forwardButtonClicked() {
+    func forwardButtonTapped() {
         browserVC.goForward()
     }
 
-    func reloadButtonClicked() {
+    func reloadButtonTapped() {
         browserVC.reload()
     }
 
-    func stopButtonClicked() {
+    func stopButtonTapped() {
         browserVC.stop()
+    }
+
+    func menuButtonTapped() {
+        didTapMenu()
     }
 
     // MARK: - NavigationDelegate
 
     func onLoadingStateChange(loading: Bool) {
-        toolbar.updateReloadStopButton(loading: loading)
+        model.updateReloadStopButton(loading: loading)
+        updateNavigationToolbar()
     }
 
     func onNavigationStateChange(canGoBack: Bool, canGoForward: Bool) {
-        toolbar.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+        model.updateBackForwardButtons(canGoBack: canGoBack, canGoForward: canGoForward)
+        updateNavigationToolbar()
     }
 
     func onURLChange(url: String) {
-        // ToDo: Use model here
-        // searchBar.setSearchBarText(url)
+        updateAddressToolbar(url: url)
     }
 
     func onFindInPage(selected: String) {
@@ -188,7 +210,7 @@ class RootViewController: UIViewController,
         findInPageBar?.totalResults = totalResults
     }
 
-    // MARK: - SearchBarDelegate
+    // MARK: - AddressToolbarDelegate
 
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
@@ -210,19 +232,14 @@ class RootViewController: UIViewController,
         browse(to: searchTerm)
     }
 
-    // MARK: - MenuDelegate
-
-    func didClickMenu() {
-        let settingsVC = SettingsViewController()
-        settingsVC.delegate = self
-        present(settingsVC, animated: true)
+    func shouldDisplayTextForURL(_ url: URL?) -> String? {
+        return nil
     }
 
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {
-        // ToDo: Use model here
-        // searchBar.setSearchBarText(term)
+        updateAddressToolbar(url: term)
         browse(to: term)
     }
 
@@ -274,10 +291,17 @@ class RootViewController: UIViewController,
 
         NSLayoutConstraint.activate([
             findInPageBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            findInPageBar.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
+            findInPageBar.bottomAnchor.constraint(equalTo: navigationToolbar.topAnchor),
             findInPageBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             findInPageBar.heightAnchor.constraint(equalToConstant: 46)
         ])
+    }
+
+    // MARK: - AddressToolbarContainerDelegate
+    func didTapMenu() {
+        let settingsVC = SettingsViewController()
+        settingsVC.delegate = self
+        present(settingsVC, animated: true)
     }
 
     // MARK: - FindInPageBarDelegate

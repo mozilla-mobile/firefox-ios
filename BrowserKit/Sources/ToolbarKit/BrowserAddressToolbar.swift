@@ -10,19 +10,22 @@ import Common
 /// | navigation  | indicators | url       [ page    ] | browser  | menu |
 /// |   actions   |            |           [ actions ] | actions  |      |
 /// +-------------+------------+-----------------------+----------+------+
-/// +------------------------progress------------------------------------+
 public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
+        static let verticalEdgeSpace: CGFloat = 8
         static let horizontalSpace: CGFloat = 8
         static let cornerRadius: CGFloat = 8
         static let dividerWidth: CGFloat = 4
+        static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 40, height: 40)
     }
 
     private weak var toolbarDelegate: AddressToolbarDelegate?
+    private var theme: Theme?
 
+    private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
 
     private lazy var locationContainer: UIView = .build { view in
@@ -36,10 +39,14 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         view.spacing = UX.actionSpacing
     }
     private lazy var browserActionStack: UIStackView = .build()
+    private lazy var toolbarTopBorderView: UIView = .build()
+    private lazy var toolbarBottomBorderView: UIView = .build()
 
     private var leadingBrowserActionConstraint: NSLayoutConstraint?
     private var leadingLocationContainerConstraint: NSLayoutConstraint?
     private var dividerWidthConstraint: NSLayoutConstraint?
+    private var toolbarTopBorderHeightConstraint: NSLayoutConstraint?
+    private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -53,19 +60,14 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     public func configure(state: AddressToolbarState,
                           toolbarDelegate: AddressToolbarDelegate) {
         updateActions(state: state)
+        updateBorder(shouldDisplayTopBorder: state.shouldDisplayTopBorder,
+                     shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
 
         self.toolbarDelegate = toolbarDelegate
-        locationView.configure(state.url?.absoluteString, delegate: self)
+        locationView.configure(state.locationViewState, delegate: self)
 
         setNeedsLayout()
         layoutIfNeeded()
-    }
-
-    // MARK: - ThemeApplicable
-    public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer2
-        locationContainer.backgroundColor = theme.colors.layerSearch
-        locationDividerView.backgroundColor = theme.colors.layer2
     }
 
     override public func becomeFirstResponder() -> Bool {
@@ -78,14 +80,17 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
     // MARK: - Private
     private func setupLayout() {
-        addSubview(navigationActionStack)
+        addSubview(toolbarContainerView)
+        addSubview(toolbarTopBorderView)
+        addSubview(toolbarBottomBorderView)
 
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
         locationContainer.addSubview(pageActionStack)
 
-        addSubview(locationContainer)
-        addSubview(browserActionStack)
+        toolbarContainerView.addSubview(navigationActionStack)
+        toolbarContainerView.addSubview(locationContainer)
+        toolbarContainerView.addSubview(browserActionStack)
 
         leadingLocationContainerConstraint = navigationActionStack.trailingAnchor.constraint(
             equalTo: locationContainer.leadingAnchor,
@@ -100,25 +105,36 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint = locationDividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth)
         dividerWidthConstraint?.isActive = true
 
-        let navigationActionWidthAnchor = navigationActionStack.widthAnchor.constraint(equalToConstant: 0)
-        navigationActionWidthAnchor.isActive = true
-        navigationActionWidthAnchor.priority = .defaultLow
+        [navigationActionStack, pageActionStack, browserActionStack].forEach(setZeroWidthConstraint)
 
-        let pageActionWidthAnchor = pageActionStack.widthAnchor.constraint(equalToConstant: 0)
-        pageActionWidthAnchor.isActive = true
-        pageActionWidthAnchor.priority = .defaultLow
-
-        let browserActionWidthAnchor = browserActionStack.widthAnchor.constraint(equalToConstant: 0)
-        browserActionWidthAnchor.isActive = true
-        browserActionWidthAnchor.priority = .defaultLow
+        toolbarTopBorderHeightConstraint = toolbarTopBorderView.heightAnchor.constraint(equalToConstant: 0)
+        toolbarBottomBorderHeightConstraint = toolbarBottomBorderView.heightAnchor.constraint(equalToConstant: 0)
+        toolbarTopBorderHeightConstraint?.isActive = true
+        toolbarBottomBorderHeightConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            navigationActionStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalEdgeSpace),
-            navigationActionStack.topAnchor.constraint(equalTo: topAnchor),
-            navigationActionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolbarContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
+                                                      constant: UX.verticalEdgeSpace),
+            toolbarContainerView.bottomAnchor.constraint(equalTo: toolbarBottomBorderView.bottomAnchor,
+                                                         constant: -UX.verticalEdgeSpace),
+            toolbarContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
-            locationContainer.topAnchor.constraint(equalTo: topAnchor),
-            locationContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbarTopBorderView.topAnchor.constraint(equalTo: topAnchor),
+            toolbarTopBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            toolbarBottomBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbarBottomBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbarBottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            navigationActionStack.leadingAnchor.constraint(equalTo: toolbarContainerView.leadingAnchor,
+                                                           constant: UX.horizontalEdgeSpace),
+            navigationActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
+            navigationActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
+
+            locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
+            locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -133,15 +149,16 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             pageActionStack.trailingAnchor.constraint(equalTo: locationContainer.trailingAnchor),
             pageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
-            browserActionStack.topAnchor.constraint(equalTo: topAnchor),
-            browserActionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
-            browserActionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+            browserActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
+            browserActionStack.trailingAnchor.constraint(equalTo: toolbarContainerView.trailingAnchor,
+                                                         constant: -UX.horizontalEdgeSpace),
+            browserActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
         ])
 
         updateActionSpacing()
     }
 
-    private func updateActions(state: AddressToolbarState) {
+    internal func updateActions(state: AddressToolbarState) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
 
@@ -152,6 +169,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
+    }
+
+    private func setZeroWidthConstraint(_ stackView: UIStackView) {
+        let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
+        widthAnchor.isActive = true
+        widthAnchor.priority = .defaultHigh
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
@@ -165,6 +188,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 button.widthAnchor.constraint(equalToConstant: UX.buttonSize.width),
                 button.heightAnchor.constraint(equalToConstant: UX.buttonSize.height),
             ])
+
+            if let theme {
+                // As we recreate the buttons we need to apply the theme for them to be displayed correctly
+                button.applyTheme(theme: theme)
+            }
         }
     }
 
@@ -182,6 +210,14 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint?.constant = hasPageActions ? UX.dividerWidth : 0
     }
 
+    private func updateBorder(shouldDisplayTopBorder: Bool, shouldDisplayBottomBorder: Bool) {
+        let topBorderHeight = shouldDisplayTopBorder ? UX.borderHeight : 0
+        toolbarTopBorderHeightConstraint?.constant = topBorderHeight
+
+        let bottomBorderHeight = shouldDisplayBottomBorder ? UX.borderHeight : 0
+        toolbarBottomBorderHeightConstraint?.constant = bottomBorderHeight
+    }
+
     // MARK: - LocationViewDelegate
     func locationViewDidEnterText(_ text: String) {
         toolbarDelegate?.searchSuggestions(searchTerm: text)
@@ -195,5 +231,19 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         guard !text.isEmpty else { return }
 
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+    }
+
+    func locationViewDisplayTextForURL(_ url: URL?) -> String? {
+        toolbarDelegate?.shouldDisplayTextForURL(url)
+    }
+
+    // MARK: - ThemeApplicable
+    public func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer2
+        locationContainer.backgroundColor = theme.colors.layerSearch
+        locationDividerView.backgroundColor = theme.colors.layer2
+        toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
+        toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
+        self.theme = theme
     }
 }

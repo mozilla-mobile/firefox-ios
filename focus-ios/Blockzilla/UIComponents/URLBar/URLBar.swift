@@ -838,25 +838,29 @@ class URLBar: UIView {
             backgroundColor = .clear
         }
 
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            self.layoutIfNeeded()
+        UIView.animate(
+            withDuration: UIConstants.layout.urlBarTransitionAnimationDuration,
+            animations: {
+                self.layoutIfNeeded()
 
-            if self.inBrowsingMode && !self.isIPadRegularDimensions {
-                self.updateURLBorderConstraints()
-            }
+                if self.inBrowsingMode && !self.isIPadRegularDimensions {
+                    self.updateURLBorderConstraints()
+                }
 
-            self.urlBarBackgroundView.snp.remakeConstraints { make in
-                make.edges.equalToSuperview().inset(showBackgroundView ? UIConstants.layout.urlBarBorderInset : 1)
-            }
+                self.urlBarBackgroundView.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview().inset(showBackgroundView ? UIConstants.layout.urlBarBorderInset : 1)
+                }
 
-            self.urlBarBorderView.backgroundColor = borderColor
-        }, completion: { finished in
-            if finished {
-                if let isEmpty = self.urlTextField.text?.isEmpty {
-                    self.displayClearButton(shouldDisplay: !isEmpty)
+                self.urlBarBorderView.backgroundColor = borderColor
+            },
+            completion: { finished in
+                if finished {
+                    if let isEmpty = self.urlTextField.text?.isEmpty {
+                        self.displayClearButton(shouldDisplay: !isEmpty)
+                    }
                 }
             }
-        })
+        )
     }
 
     func updateURLBorderConstraints() {
@@ -1083,7 +1087,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         }
 
         // When text.characters.count == 0, it is the HomeView
-        if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
+        if let text = autocompleteTextField.text, !isEditing, text.isEmpty {
             shouldPresent = true
         }
 

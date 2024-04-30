@@ -9,6 +9,14 @@ import Shared
 
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
+    func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
+    func updateBookmarkNode(
+        guid: GUID,
+        parentGUID: GUID?,
+        position: UInt32?,
+        title: String?,
+        url: String?
+    ) -> Success
 }
 
 public protocol HistoryMetadataObserver {
@@ -238,7 +246,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return getBookmarksWithURL(url: url) >>== { bookmarks in
             let deferreds = bookmarks.map({ self.deleteBookmarkNode(guid: $0.guid) })
             return all(deferreds).bind { results in
-                if let error = results.find({ $0.isFailure })?.failureValue {
+                if let error = results.first(where: { $0.isFailure })?.failureValue {
                     return deferMaybe(error)
                 }
 

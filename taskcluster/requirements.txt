@@ -214,6 +214,10 @@ mozilla-repo-urls==0.1.1 \
     --hash=sha256:30510d3519479aa70211145d0ac9cf6e2fadcb8d30fa3b196bb957bd773502ba \
     --hash=sha256:7364da790751db2a060eb45adbf1d7db89a145ed279ba235f3425db9dd255915
     # via taskcluster-taskgraph
+mozilla-taskgraph==1.5.0 \
+    --hash=sha256:7399b51a0b25dc9d2617fc10aa1fca656a08b4198918f7a7d15a75c4353e45ef \
+    --hash=sha256:f472faf8705402ead88dae4f439da1d80def25eb60bfa69c4911a04f57075e34
+    # via -r requirements.in
 pygments==2.17.2 \
     --hash=sha256:b27c2826c47d0f3219f29554824c30c5e8945175d888647acd804ddd04af846c \
     --hash=sha256:da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367
@@ -256,6 +260,7 @@ pyyaml==6.0.1 \
     --hash=sha256:8d4e9c88387b0f5c7d5f281e55304de64cf7f9c0021a3525bd3b1c542da3b0e4 \
     --hash=sha256:9046c58c4395dff28dd494285c82ba00b546adfc7ef001486fbf0324bc174fba \
     --hash=sha256:9eb6caa9a297fc2c2fb8862bc5370d0303ddba53ba97e71f08023b6cd73d16a8 \
+    --hash=sha256:a08c6f0fe150303c1c6b71ebcd7213c2858041a7e01975da3a99aed1e7a378ef \
     --hash=sha256:a0cd17c15d3bb3fa06978b4e8958dcdc6e0174ccea823003a106c7d4d7899ac5 \
     --hash=sha256:afd7e57eddb1a54f0f1a974bc4391af8bcce0b444685d936840f125cf046d5bd \
     --hash=sha256:b1275ad35a5d18c62a7220633c913e1b42d44b46ee12554e5fd39c70a243d6a3 \
@@ -302,10 +307,12 @@ slugid==2.0.0 \
     --hash=sha256:a950d98b72691178bdd4d6c52743c4a2aa039207cf7a97d71060a111ff9ba297 \
     --hash=sha256:aec8b0e01c4ad32e38e12d609eab3ec912fd129aaf6b2ded0199b56a5f8fd67c
     # via taskcluster-taskgraph
-taskcluster-taskgraph==7.1.0 \
-    --hash=sha256:7274765492eb3a5bc60901a7e8b0e7b0a9907921357c9dd66099541500a716a3 \
-    --hash=sha256:d794850df1aa8b0bb2250e8e9c0ad92917f6147de80d50d5f28c6c6713c7912d
-    # via -r requirements.in
+taskcluster-taskgraph==8.0.1 \
+    --hash=sha256:14500bc703f64eb002c0cd505caaf2d34ffc0ae66d109b108e738661da1ae09c \
+    --hash=sha256:21387537bbebab2a7b1890d03e20e49379bdda65efd45ca7fb8d01f5c29e1797
+    # via
+    #   -r requirements.in
+    #   mozilla-taskgraph
 taskcluster-urls==13.0.1 \
     --hash=sha256:5e25e7e6818e8877178b175ff43d2e6548afad72694aa125f404a7329ece0973 \
     --hash=sha256:b25e122ecec249c4299ac7b20b08db76e3e2025bdaeb699a9d444556de5fd367 \

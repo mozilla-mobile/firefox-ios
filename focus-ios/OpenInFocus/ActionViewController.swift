@@ -125,10 +125,16 @@ class ActionViewController: SLComposeServiceViewController {
 
 extension ActionViewController {
     func finish(afterDelay: TimeInterval = 0) {
-        UIView.animate(withDuration: 0.2, delay: afterDelay, options: [], animations: {
-            self.view.alpha = 0
-        }, completion: { _ in
-            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            delay: afterDelay,
+            options: [],
+            animations: {
+                self.view.alpha = 0
+            },
+            completion: { _ in
+                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+            }
+        )
     }
 }

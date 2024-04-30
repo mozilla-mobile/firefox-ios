@@ -1,0 +1,41 @@
+name: Build and Run Autofill Automation
+permissions: read-all
+on:
+    pull_request:
+      paths:
+        - 'firefox-ios/Client/Assets/CC_Script/**'
+    push:
+      branches: ['main']
+      paths:
+        - 'firefox-ios/Client/Assets/CC_Script/**'
+jobs:
+  build:
+    runs-on: macos-13
+    timeout-minutes: 40
+    strategy:
+      matrix:
+        python-version: [3.9]
+        xcode: ["15.2"]
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Clone repository
+          run: |
+            git clone https://github.com/issammani/test-playwright.git
+        - name: Install node
+          uses: actions/setup-node@v4
+          with:
+           node-version: 18
+        - run: |
+            echo "Install dependencies and run tests"
+            npm i
+            npm install --save concurrently
+            npm i -D @playwright/test
+
+            cd test-playwright
+            echo "Install playwright"
+            npx playwright install
+            
+            echo "Run tests"
+            npm test

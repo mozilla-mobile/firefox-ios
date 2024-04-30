@@ -621,9 +621,10 @@ class SearchViewController: SiteTableViewController,
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
-        coordinator.animate(alongsideTransition: { _ in
-            self.tableView.reloadData()
-            self.layoutSearchEngineScrollViewContent()
+        coordinator.animate(alongsideTransition: { [self] _ in
+            totalRowCount = 0
+            tableView.reloadData()
+            layoutSearchEngineScrollViewContent()
         }, completion: nil)
     }
 
@@ -676,7 +677,7 @@ class SearchViewController: SiteTableViewController,
         // Searching within the content will get annoying, so only start searching
         // in content when there are at least one word with more than 3 letters in.
         let searchInContent = config.usePageContent
-            && searchTerms.find { $0.count >= config.minSearchTerm } != nil
+        && searchTerms.contains(where: { $0.count >= config.minSearchTerm })
 
         filteredOpenedTabs = Array(currentTabs.filter { tab in
             guard let url = tab.url,

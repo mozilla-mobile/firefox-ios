@@ -187,6 +187,9 @@
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "ਪਿਛਲੇ 80 ਦਿਨਾਂ ਵਿੱਚ %1@ ਰੀਵਿਊਆਂ ਵਿੱਚੋਂ *ਹਾਈਲਾਈਟ* ਹਨ, ਜੋ ਸਾਨੂੰ ਜਾਪਦਾ ਹੈ ਕਿ ਭਰੋਸੇਯੋਗ ਹਨ।";
 
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "ਪਿਛਲੇ 80 ਦਿਨਾਂ ਵਿੱਚ %@ ਪੜਤਾਲਾਂ ਤੋਂ *ਹਾਈਲਾਈਟ*, ਜਿਹਨਾਂ ਉੱਤੇ ਸਾਨੂੰ ਲੱਗਦਾ ਕਿ ਭਰੋਸੇਯੋਗ ਹਨ।";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "ਅਸੀਂ ਰੀਵਿਊ ਦੀ ਕੁਆਲਟੀ ਕਿਵੇਂ ਪਤਾ ਕਰਦੇ ਹਾਂ";
 

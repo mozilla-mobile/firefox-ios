@@ -148,12 +148,16 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                     )
                 )
 
+                LoginsHelper.yieldFocusBackToField(with: currentTab)
                 router.dismiss(animated: true)
                 parentCoordinator?.didFinish(from: self)
             },
             manageLoginInfoAction: { [weak self] in
                 guard let self else { return }
-                parentCoordinator?.show(settings: .password)
+                parentCoordinator?.show(settings: .password, onDismiss: {
+                    guard let currentTab = self.tabManager.selectedTab else { return }
+                    LoginsHelper.yieldFocusBackToField(with: currentTab)
+                })
                 parentCoordinator?.didFinish(from: self)
             }
         )
@@ -164,6 +168,11 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         viewController.controllerWillDismiss = { [weak self] in
             guard let currentTab = self?.tabManager.selectedTab else { return }
             LoginsHelper.yieldFocusBackToField(with: currentTab)
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .close,
+                object: .loginsAutofillPromptDismissed
+            )
         }
 
         var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
@@ -174,6 +183,11 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             childViewController: viewController
         )
         router.present(bottomSheetVC)
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .loginsAutofillPromptExpanded
+        )
     }
 
     func showPassCodeController() {

@@ -27,7 +27,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var dismissFakespotSidebarCalled = 0
     var updateFakespotSidebarCalled = 0
 
-    func show(settings: Route.SettingsSection) {
+    func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
     }
 

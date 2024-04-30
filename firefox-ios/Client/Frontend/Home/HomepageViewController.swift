@@ -150,7 +150,7 @@ class HomepageViewController:
         super.viewWillAppear(animated)
         viewModel.recordViewAppeared()
 
-        notificationCenter.post(name: .ShowHomepage)
+        notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
         notificationCenter.post(name: .HistoryUpdated)
 
         applyTheme()
@@ -849,6 +849,7 @@ extension HomepageViewController: Notifiable {
 
             switch notification.name {
             case .TabsPrivacyModeChanged:
+                guard windowUUID == notification.windowUUID else { return }
                 self.adjustPrivacySensitiveSections(notification: notification)
 
             case .HomePanelPrefsChanged,

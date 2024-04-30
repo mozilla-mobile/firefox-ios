@@ -126,7 +126,7 @@ class SearchTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2436095
-    func testCopyPasteComplete() throws {
+    func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
@@ -297,6 +297,143 @@ class SearchTests: BaseTestCase {
         waitForTabsButton()
         validateSearchSuggestionText(typeText: "localhost")
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306886
+    // SmokeTest
+    func testBottomVIewURLBar() throws {
+        if iPad() {
+            throw XCTSkip("Toolbar option not available for iPad")
+        } else {
+            // Tap on toolbar bottom setting
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(ToolbarSettings)
+            navigator.performAction(Action.SelectToolbarBottom)
+            navigator.goto(HomePanelsScreen)
+
+            // URL bar is moved to the bottom of the screen
+            let customizeHomepageElement = AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage
+            let customizeHomepage = app.cells.otherElements.buttons[customizeHomepageElement]
+            let menuSettingsButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            scrollToElement(customizeHomepage)
+            mozWaitForElementToExist(customizeHomepage)
+            let urlBar = app.textFields["url"]
+            XCTAssertTrue(urlBar.isBelow(element: customizeHomepage))
+            XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
+
+            // In a new tab, tap on the URL bar
+            navigator.goto(NewTabScreen)
+            urlBar.tap()
+
+            // The URL bar is focused and the keyboard is displayed
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+
+            // Open a website
+            navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+
+            // The keyboard is dismissed and page is correctly loaded
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount == 0, "The keyboard is shown")
+            waitUntilPageLoad()
+
+            // Tap on the URL bar
+            urlBar.tap()
+
+            // The URL bar is focused, Top Sites panel is displayed and the keyboard pops-up
+            validateUrlHasFocusAndKeyboardIsDisplayed()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+
+            // Tap the back icon <
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+
+            // The focused is dismissed from the URL bar
+            let addressBar = app.textFields["url"]
+            XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        }
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306942
+    func testSearchSuggestions() {
+        // Tap on URL Bar and type "g"
+        navigator.nowAt(NewTabScreen)
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+
+        // Tap on the "Append Arrow button"
+        app.tables.buttons["appendUpLarge"].firstMatch.tap()
+
+        // The search suggestion fills the URL bar but does not conduct the search
+        let urlBarAddress = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
+        waitForValueContains(urlBarAddress, value: "g")
+        XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
+
+        // Delete the text and type "g"
+        mozWaitForElementToExist(app.buttons["Clear text"])
+        app.buttons["Clear text"].tap()
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+
+        // Tap on the text letter "g"
+        app.tables.cells.firstMatch.tap()
+        waitUntilPageLoad()
+
+        // The search is conducted through the default search engine
+        let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        waitForValueContains(urlBar, value: "www.google.com/search?q=")
+
+        // Disable "Show search suggestions" from Settings and type text in a new tab
+        createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
+
+        // No search suggestions are displayed
+        // Firefox suggest adds 2 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 2, isSwitchOn: false)
+
+        // Enable "Show search suggestions" from Settings and type text in a new tab
+        app.tables.cells.firstMatch.tap()
+        waitUntilPageLoad()
+        createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: true)
+
+        // Search suggestions are displayed
+        // Firefox suggest adds 2 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 6, isSwitchOn: true)
+    }
+
+    private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
+        let showSearchSuggestions = app.switches[AccessibilityIdentifiers.Settings.Search.showSearchSuggestions]
+        mozWaitForElementToExist(showSearchSuggestions)
+        let switchValue = showSearchSuggestions.value
+        if switchValue as? String == "0", true && turnOnSwitch == true {
+            showSearchSuggestions.tap()
+        } else if switchValue as? String == "1", true && turnOnSwitch == false {
+            showSearchSuggestions.tap()
+        }
+    }
+
+    private func createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: Bool) {
+        navigator.goto(SearchSettings)
+        turnOnOffSearchSuggestions(turnOnSwitch: turnOnSwitch)
+        navigator.goto(NewTabScreen)
+        navigator.createNewTab()
+        navigator.nowAt(NewTabScreen)
+    }
+
+    private func typeTextAndValidateSearchSuggestions(text: String, totalSuggestedSearches: Int, isSwitchOn: Bool) {
+        typeOnSearchBar(text: text)
+        // Search suggestions are shown
+        if isSwitchOn {
+            mozWaitForElementToExist(app.staticTexts["Google Search"])
+            mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
+        } else {
+            mozWaitForElementToNotExist(app.staticTexts["Google Search"])
+            mozWaitForElementToNotExist(app.tables.cells.staticTexts["g"])
+        }
+        XCTAssertEqual(app.tables.cells.count, totalSuggestedSearches)
+    }
+
+    private func validateUrlHasFocusAndKeyboardIsDisplayed() {
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        let keyboardCount = app.keyboards.count
+        XCTAssert(keyboardCount > 0, "The keyboard is not shown")
+    }
+
 // TODO: Add UI Tests back when felt privay simplified UI feature flag is enabled or when
 // we support feature flags for tests
 //    func testPrivateModeSearchSuggestsOnOffAndGeneralSearchSuggestsOn() {

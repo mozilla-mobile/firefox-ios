@@ -15,6 +15,10 @@ class YourRightsSetting: Setting {
         return URL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
     }
 
+    override var accessibilityIdentifier: String? {
+        return AccessibilityIdentifiers.Settings.YourRights.title
+    }
+
     weak var settingsDelegate: AboutSettingsDelegate?
 
     init(settingsDelegate: AboutSettingsDelegate?) {
