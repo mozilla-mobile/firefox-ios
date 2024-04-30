@@ -183,7 +183,8 @@ class FakespotViewController: UIViewController,
               fakespotState.sendSurfaceDisplayedTelemetryEvent
         else { return }
         viewModel.recordBottomSheetDisplayed(presentationController)
-        let action = FakespotAction(windowUUID: windowUUID,
+        let action = FakespotAction(isExpanded: true,
+                                    windowUUID: windowUUID,
                                     actionType: FakespotActionType.surfaceDisplayedEventSend)
         store.dispatch(action)
     }
