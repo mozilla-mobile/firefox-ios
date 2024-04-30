@@ -64,7 +64,7 @@ struct TabDisplayOrder: Codable {
 
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
-    var performingChainedOperations = false
+    private var performingChainedOperations = false
     var inactiveViewModel: LegacyInactiveTabViewModel?
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
