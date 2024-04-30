@@ -56,7 +56,7 @@ class RemoteTabsCoordinator: BaseCoordinator,
         parentCoordinator?.didFinish(from: self)
         let urlString = URL.mozInternalScheme + "://deep-link?url=/settings/fxa"
         guard let url = URL(string: urlString) else { return }
-        applicationHelper.open(url)
+        applicationHelper.open(url, inWindow: windowUUID)
     }
 
     @objc

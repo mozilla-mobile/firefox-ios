@@ -70,7 +70,7 @@ extension String {
                 extendedChars.append(Int(c.value))
             }
         }
-        if extendedChars.count == 0 {
+        if extendedChars.isEmpty {
             return output
         }
         if d > 0 {

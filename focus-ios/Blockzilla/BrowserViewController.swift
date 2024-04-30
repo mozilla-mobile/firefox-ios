@@ -1482,7 +1482,11 @@ extension BrowserViewController: PhotonActionSheetDelegate {
 
     // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
     func photonActionSheetDidToggleProtection(enabled: Bool) {
-        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
 
         TipManager.sitesNotWorkingTip = false
 
@@ -1502,7 +1506,11 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: TrackingProtectionDelegate {
     // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
     func trackingProtectionDidToggleProtection(enabled: Bool) {
-        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
 
         TipManager.sitesNotWorkingTip = false
 

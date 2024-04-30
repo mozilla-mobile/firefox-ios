@@ -1,6 +1,6 @@
-# The configuration for the microSurveyFeature feature
+# The configuration for the microsurveyFeature feature
 features:
-  micro-survey-feature:
+  microsurvey-feature:
     description: >
         A feature that shows the microsurvey for users to interact with and submit responses.
     variables:

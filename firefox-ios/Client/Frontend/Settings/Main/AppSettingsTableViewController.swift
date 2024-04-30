@@ -375,7 +375,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
         guard let url = URL(string: urlString) else { return }
-        applicationHelper.open(url)
+        applicationHelper.open(url, inWindow: windowUUID)
     }
 
     func pressedFirefoxSuggest() {
