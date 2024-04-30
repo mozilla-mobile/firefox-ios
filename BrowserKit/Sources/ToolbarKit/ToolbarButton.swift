@@ -6,15 +6,16 @@ import Common
 import UIKit
 
 class ToolbarButton: UIButton, ThemeApplicable {
-    public struct UX {
-        public static let verticalInset: CGFloat = 8
-        public static let horizontalInset: CGFloat = 8
+    private struct UX {
+        static let verticalInset: CGFloat = 8
+        static let horizontalInset: CGFloat = 8
+        static let badgeIconSize = CGSize(width: 20, height: 20)
     }
 
-    var foregroundColorNormal: UIColor = .clear
-    var foregroundColorHighlighted: UIColor = .clear
-    var foregroundColorDisabled: UIColor = .clear
-    var backgroundColorNormal: UIColor = .clear
+    private var foregroundColorNormal: UIColor = .clear
+    private var foregroundColorHighlighted: UIColor = .clear
+    private var foregroundColorDisabled: UIColor = .clear
+    private var backgroundColorNormal: UIColor = .clear
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,6 +33,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
 
         let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
+        if let badgeName = element.badgeImageName {
+            addBadgeIcon(imageName: badgeName)
+        }
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
@@ -72,6 +76,19 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
+    }
+
+    private func addBadgeIcon(imageName: String) {
+        let badgeImageView = UIImageView(image: UIImage(named: imageName))
+        badgeImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(badgeImageView)
+        NSLayoutConstraint.activate([
+            badgeImageView.widthAnchor.constraint(equalToConstant: UX.badgeIconSize.width),
+            badgeImageView.heightAnchor.constraint(equalToConstant: UX.badgeIconSize.height),
+            badgeImageView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            badgeImageView.bottomAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 
     // MARK: ThemeApplicable
