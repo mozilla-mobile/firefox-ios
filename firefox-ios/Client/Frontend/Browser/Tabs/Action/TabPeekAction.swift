@@ -4,34 +4,29 @@
 
 import Redux
 
-class TabPeekModelContext: ActionContext {
-    let tabPeekModel: TabPeekModel
-    init(tabPeekModel: TabPeekModel, windowUUID: WindowUUID) {
+class TabPeekAction: Action {
+    let tabUUID: TabUUID?
+    let tabPeekModel: TabPeekModel?
+
+    init(tabUUID: TabUUID? = nil,
+         tabPeekModel: TabPeekModel? = nil,
+         windowUUID: UUID,
+         actionType: ActionType) {
+        self.tabUUID = tabUUID
         self.tabPeekModel = tabPeekModel
-        super.init(windowUUID: windowUUID)
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-enum TabPeekAction: Action {
+enum TabPeekActionType: ActionType {
     // MARK: - View Actions
-    case didLoadTabPeek(TabUUIDContext)
-    case addToBookmarks(TabUUIDContext)
-    case sendToDevice(TabUUIDContext)
-    case copyURL(TabUUIDContext)
-    case closeTab(TabUUIDContext)
+    case didLoadTabPeek
+    case addToBookmarks
+    case sendToDevice
+    case copyURL
+    case closeTab
 
     // MARK: - Middleware Actions
-    case loadTabPeek(TabPeekModelContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .didLoadTabPeek(let context as ActionContext),
-                .addToBookmarks(let context as ActionContext),
-                .sendToDevice(let context as ActionContext),
-                .copyURL(let context as ActionContext),
-                .closeTab(let context as ActionContext),
-                .loadTabPeek(let context as ActionContext):
-            return context.windowUUID
-        }
-    }
+    case loadTabPeek
 }

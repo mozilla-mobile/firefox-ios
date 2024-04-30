@@ -10,7 +10,7 @@ only_rules: # Only enforce these rules, ignore all others
   - compiler_protocol_init
   - computed_accessors_order
   # - control_statement
-  # - duplicate_conditions
+  - duplicate_conditions
   # - dynamic_inline
   - empty_enum_arguments
   - empty_parameters
@@ -31,14 +31,14 @@ only_rules: # Only enforce these rules, ignore all others
   - no_space_in_method_call
   # - ns_number_init_as_function_reference
   # - operator_whitespace
-  # - orphaned_doc_comment
+  - orphaned_doc_comment
   # - private_over_fileprivate
   # - protocol_property_accessors_order
   - redundant_discardable_let
-  # - redundant_objc_attribute
+  - redundant_objc_attribute
   - redundant_optional_initialization
   # - redundant_string_enum_value
-  # - redundant_void_return
+  - redundant_void_return
   # - return_arrow_whitespace
   # - statement_position
   # - switch_case_alignment
