@@ -39,7 +39,7 @@ only_rules: # Only enforce these rules, ignore all others
   - redundant_optional_initialization
   # - redundant_string_enum_value
   - redundant_void_return
-  # - return_arrow_whitespace
+  - return_arrow_whitespace
   # - statement_position
   # - switch_case_alignment
   - syntactic_sugar
