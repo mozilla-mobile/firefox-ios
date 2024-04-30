@@ -56,16 +56,15 @@ class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
-        throw XCTSkip("Skipped until fixed with FXIOS-7721 #17219")
-//        profile.reopen()
-//        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
-//        let expectation = expectation(description: "Subject reloaded")
-//        subject.reloadData {
-//            XCTAssertNotNil(subject.bookmarkFolder)
-//            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Contains the local desktop folder")
-//            expectation.fulfill()
-//        }
-//        waitForExpectations(timeout: 5)
+        profile.reopen()
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Contains the local desktop folder")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
     }
 
     func testShouldReload_whenLocalDesktopFolder() {
@@ -140,6 +139,7 @@ class BookmarksPanelViewModelTests: XCTestCase {
 extension BookmarksPanelViewModelTests {
     func createSubject(guid: GUID) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarksHandler: BookmarksHandlerMock(),
                                                 bookmarkFolderGUID: guid)
         trackForMemoryLeaks(viewModel)
         return viewModel
