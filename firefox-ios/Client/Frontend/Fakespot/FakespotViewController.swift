@@ -417,20 +417,11 @@ class FakespotViewController: UIViewController,
             return view
         case .onboarding:
             let view: FakespotOptInCardView = .build()
-<<<<<<< HEAD
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-=======
-            viewModel.optInCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
-                if dismissPermanently {
-                    self?.triggerDismiss()
-                } else {
-                    let appearanceAction = FakespotAction(isExpanded: false,
-                                                          windowUUID: windowUUID,
-                                                          actionType: FakespotActionType.setAppearanceTo)
-                                                          store.dispatch(appearanceAction)
-                }
->>>>>>> 703293606 (Refactor FXIOS-8971 Tweaks to redux actions (#19823))
+                let appearanceAction = FakespotAction(isExpanded: false,
+                                                      windowUUID: windowUUID,
+                                                      actionType: FakespotActionType.setAppearanceTo)
+                store.dispatch(appearanceAction)
 
                 guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
@@ -491,20 +482,10 @@ class FakespotViewController: UIViewController,
             viewModel.settingsCardViewModel.expandState = fakespotState.isSettingsExpanded ? .expanded : .collapsed
             viewModel.settingsCardViewModel.dismissViewController = { [weak self] action in
                 guard let self = self, let action else { return }
-<<<<<<< HEAD
-
-                store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-                store.dispatch(FakespotAction.surfaceDisplayedEventSend(windowUUID.context))
-=======
-                if dismissPermanently {
-                    self.triggerDismiss()
-                } else {
-                    let surfanceDisplayedAction = FakespotAction(isExpanded: false,
-                                                                 windowUUID: windowUUID,
-                                                                 actionType: FakespotActionType.surfaceDisplayedEventSend)
-                                                                 store.dispatch(surfanceDisplayedAction)
-                }
->>>>>>> 703293606 (Refactor FXIOS-8971 Tweaks to redux actions (#19823))
+                let surfanceDisplayedAction = FakespotAction(isExpanded: false,
+                                                             windowUUID: windowUUID,
+                                                             actionType: FakespotActionType.surfaceDisplayedEventSend)
+                store.dispatch(surfanceDisplayedAction)
                 viewModel.recordDismissTelemetry(by: action)
             }
             viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
