@@ -6,6 +6,8 @@ import UIKit
 
 @testable import Redux
 
+let windowUUID = UUID(uuidString: "D9D9D9D9-D9D9-D9D9-D9D9-CD68A019860B")!
+
 class FakeReduxViewController: UIViewController, StoreSubscriber {
     typealias SubscriberStateType = FakeReduxState
 
@@ -27,7 +29,9 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
 
     func subscribeToRedux() {
         store.subscribe(self)
-        store.dispatch(FakeReduxAction.requestInitialValue)
+
+        let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.requestInitialValue)
+        store.dispatch(action)
     }
 
     func unsubscribeFromRedux() {
@@ -42,14 +46,19 @@ class FakeReduxViewController: UIViewController, StoreSubscriber {
     // MARK: - Helper functions
 
     func increaseCounter() {
-        store.dispatch(FakeReduxAction.increaseCounter)
+        let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.increaseCounter)
+        store.dispatch(action)
     }
 
     func decreaseCounter() {
-        store.dispatch(FakeReduxAction.decreaseCounter)
+        let action = FakeReduxAction(windowUUID: windowUUID, actionType: FakeReduxActionType.decreaseCounter)
+        store.dispatch(action)
     }
 
     func setPrivateMode(to value: Bool) {
-        store.dispatch(FakeReduxAction.setPrivateModeTo(value))
+        let action = FakeReduxAction(privateMode: value,
+                                     windowUUID: windowUUID,
+                                     actionType: FakeReduxActionType.setPrivateModeTo)
+        store.dispatch(action)
     }
 }
