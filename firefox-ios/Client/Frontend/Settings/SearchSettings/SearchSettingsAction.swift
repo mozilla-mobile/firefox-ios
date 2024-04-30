@@ -4,9 +4,4 @@
 
 import Redux
 
-enum SearchSettingsAction: Action {
-    var windowUUID: UUID {
-        // TODO: Once actions are implemented, include ActionContext as an associated value and return UUID.
-        return .unavailable
-    }
-}
+class SearchSettingsAction: Action {}

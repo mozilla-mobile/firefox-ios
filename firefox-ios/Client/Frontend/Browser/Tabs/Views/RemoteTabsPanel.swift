@@ -66,7 +66,9 @@ class RemoteTabsPanel: UIViewController,
     private func refreshTabs() {
         // Ensure we do not already have a refresh in progress
         guard state.refreshState != .refreshing else { return }
-        store.dispatch(RemoteTabsPanelAction.refreshTabs(windowUUID.context))
+        let action = RemoteTabsPanelAction(windowUUID: windowUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshTabs)
+        store.dispatch(action)
     }
 
     // MARK: - View & Layout
@@ -105,9 +107,14 @@ class RemoteTabsPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(ScreenActionContext(screen: .remoteTabsPanel,
-                                                                               windowUUID: windowUUID)))
-        store.dispatch(RemoteTabsPanelAction.panelDidAppear(windowUUID.context))
+        let showScreenAction = ScreenAction(windowUUID: windowUUID,
+                                            actionType: ScreenActionType.showScreen,
+                                            screen: .remoteTabsPanel)
+        store.dispatch(showScreenAction)
+
+        let didAppearAction = RemoteTabsPanelAction(windowUUID: windowUUID,
+                                                    actionType: RemoteTabsPanelActionType.panelDidAppear)
+        store.dispatch(didAppearAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -117,10 +124,10 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .remoteTabsPanel, windowUUID: windowUUID)
-        ))
-        store.unsubscribe(self)
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .remoteTabsPanel)
+        store.dispatch(action)
     }
 
     func newState(state: RemoteTabsPanelState) {
@@ -155,7 +162,9 @@ class RemoteTabsPanel: UIViewController,
     }
 
     private func handleOpenSelectedURL(_ url: URL) {
-        let context = URLActionContext(url: url, windowUUID: windowUUID)
-        store.dispatch(RemoteTabsPanelAction.openSelectedURL(context))
+        let action = RemoteTabsPanelAction(url: url,
+                                           windowUUID: windowUUID,
+                                           actionType: RemoteTabsPanelActionType.openSelectedURL)
+        store.dispatch(action)
     }
 }
