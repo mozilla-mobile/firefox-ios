@@ -25,12 +25,15 @@ class RemoteTabsPanelMiddleware {
 
     lazy var remoteTabsPanelProvider: Middleware<AppState> = { [self] state, action in
         let uuid = action.windowUUID
-        switch action {
-        case RemoteTabsPanelAction.panelDidAppear:
+        guard let action = action as? RemoteTabsPanelAction else { return }
+        switch action.actionType {
+        case RemoteTabsPanelActionType.panelDidAppear:
             self.getSyncState(window: uuid)
-            let context = HasSyncableAccountContext(hasSyncableAccount: self.hasSyncableAccount, windowUUID: uuid)
-            store.dispatch(TabTrayAction.firefoxAccountChanged(context))
-        case RemoteTabsPanelAction.refreshTabs:
+            let accountChangeAction = TabTrayAction(hasSyncableAccount: self.hasSyncableAccount,
+                                                    windowUUID: uuid,
+                                                    actionType: TabTrayActionType.firefoxAccountChanged)
+            store.dispatch(accountChangeAction)
+        case RemoteTabsPanelActionType.refreshTabs:
             self.getSyncState(window: uuid)
         default:
             break
@@ -41,22 +44,28 @@ class RemoteTabsPanelMiddleware {
     private func getSyncState(window: WindowUUID) {
         ensureMainThread { [self] in
             guard self.hasSyncableAccount else {
-                let context = RemoteTabsRefreshDidFailContext(reason: .notLoggedIn, windowUUID: window)
-                store.dispatch(RemoteTabsPanelAction.refreshDidFail(context))
+                let action = RemoteTabsPanelAction(reason: .notLoggedIn,
+                                                   windowUUID: window,
+                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
+                store.dispatch(action)
                 return
             }
 
             let syncEnabled = (profile.prefs.boolForKey(PrefsKeys.TabSyncEnabled) == true)
             guard syncEnabled else {
-                let context = RemoteTabsRefreshDidFailContext(reason: .syncDisabledByUser, windowUUID: window)
-                store.dispatch(RemoteTabsPanelAction.refreshDidFail(context))
+                let action = RemoteTabsPanelAction(reason: .syncDisabledByUser,
+                                                   windowUUID: window,
+                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
+                store.dispatch(action)
                 return
             }
 
             // If above checks have succeeded, we know we can perform the tab refresh. We
             // need to update the State to .refreshing since there are implications for being
             // in the middle of a refresh (pull-to-refresh shouldn't trigger a new update etc.)
-            store.dispatch(RemoteTabsPanelAction.refreshDidBegin(window.context))
+            let action = RemoteTabsPanelAction(windowUUID: window,
+                                               actionType: RemoteTabsPanelActionType.refreshDidBegin)
+            store.dispatch(action)
 
             getRemoteTabs(window: window)
         }
@@ -65,13 +74,17 @@ class RemoteTabsPanelMiddleware {
     private func getRemoteTabs(window: WindowUUID) {
         profile.getClientsAndTabs { result in
             guard let clientAndTabs = result else {
-                let context = RemoteTabsRefreshDidFailContext(reason: .failedToSync, windowUUID: window)
-                store.dispatch(RemoteTabsPanelAction.refreshDidFail(context))
+                let action = RemoteTabsPanelAction(reason: .failedToSync,
+                                                   windowUUID: window,
+                                                   actionType: RemoteTabsPanelActionType.refreshDidFail)
+                store.dispatch(action)
                 return
             }
 
-            let context = RemoteTabsRefreshSuccessContext(clientAndTabs: clientAndTabs, windowUUID: window)
-            store.dispatch(RemoteTabsPanelAction.refreshDidSucceed(context))
+            let action = RemoteTabsPanelAction(clientAndTabs: clientAndTabs,
+                                               windowUUID: window,
+                                               actionType: RemoteTabsPanelActionType.refreshDidSucceed)
+            store.dispatch(action)
         }
     }
 
@@ -96,9 +109,10 @@ class RemoteTabsPanelMiddleware {
             // This update occurs independently of any specific window, so for now we send `.unavailable`
             // as the window UUID. Reducers responding to these types of messages need to use care not to
             // propagate that UUID in any subsequent actions or state changes.
-            let uuid = WindowUUID.unavailable
-            let context = HasSyncableAccountContext(hasSyncableAccount: hasSyncableAccount, windowUUID: uuid)
-            store.dispatch(TabTrayAction.firefoxAccountChanged(context))
+            let accountChangeAction = TabTrayAction(hasSyncableAccount: hasSyncableAccount,
+                                                    windowUUID: WindowUUID.unavailable,
+                                                    actionType: TabTrayActionType.firefoxAccountChanged)
+            store.dispatch(accountChangeAction)
         default: break
         }
     }
