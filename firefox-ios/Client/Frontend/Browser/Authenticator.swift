@@ -48,12 +48,32 @@ class Authenticator {
             return findMatchingCredentialsForChallenge(
                 challenge,
                 fromLoginsProvider: loginsHelper.logins
+<<<<<<< HEAD
             ).bindQueue(.main) { result in
                 guard let credentials = result.successValue else {
                     sendLoginsAutofillFailedTelemetry()
                     return deferMaybe(
                         result.failureValue ?? LoginRecordError(description: "Unknown error when finding credentials")
                     )
+=======
+            ) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let credentials):
+                        self.promptForUsernamePassword(
+                            viewController,
+                            credentials: credentials,
+                            protectionSpace: challenge.protectionSpace,
+                            loginsHelper: loginsHelper,
+                            completionHandler: completionHandler
+                        )
+                    case .failure:
+                        sendLoginsAutofillFailedTelemetry()
+                        completionHandler(.failure(
+                            LoginRecordError(description: "Unknown error when finding credentials")
+                        ))
+                    }
+>>>>>>> 27af7041b (Bugfix FXIOS-9014 ⁃ Unauthorized access for http authentication prompt (#20021))
                 }
                 return self.promptForUsernamePassword(
                     viewController,
@@ -76,6 +96,7 @@ class Authenticator {
     static func findMatchingCredentialsForChallenge(
         _ challenge: URLAuthenticationChallenge,
         fromLoginsProvider loginsProvider: RustLogins,
+<<<<<<< HEAD
         logger: Logger = DefaultLogger.shared
     ) -> Deferred<Maybe<URLCredential?>> {
         return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
@@ -84,6 +105,73 @@ class Authenticator {
             let logins = cursor.compactMap {
                 // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
                 return $0?.formSubmitUrl == nil && $0?.httpRealm != nil ? $0 : nil
+=======
+        logger: Logger = DefaultLogger.shared,
+        completionHandler: @escaping (Result<URLCredential?, Error>) -> Void
+    ) {
+        loginsProvider.getLoginsFor(protectionSpace: challenge.protectionSpace, withUsername: nil) { result in
+            switch result {
+            case .success(let logins):
+                guard logins.count >= 1 else {
+                    completionHandler(.success(nil))
+                    return
+                }
+
+                let logins = logins.compactMap {
+                    // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
+                    return $0.formSubmitUrl == nil && $0.httpRealm != nil ? $0 : nil
+                }
+                var credentials: URLCredential?
+
+                // It is possible that we might have duplicate entries since we match against host and scheme://host.
+                // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
+                if logins.count > 1 {
+                    credentials = (logins.first(where: { login in
+                        (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`)
+                        && !login.hasMalformedHostname
+                    }))?.credentials
+
+                    let malformedGUIDs: [GUID] = logins.compactMap { login in
+                        if login.hasMalformedHostname {
+                            return login.id
+                        }
+                        return nil
+                    }
+                    loginsProvider.deleteLogins(ids: malformedGUIDs) { _ in }
+                }
+
+                // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
+                // saved in a previous iteration of the app so we need to migrate it. We only care about the
+                // the username/password so we can rewrite the scheme to be correct.
+                else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
+                    let login = logins[0]
+                    credentials = login.credentials
+                    let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
+                    loginsProvider.updateLogin(id: login.id, login: new) { result in
+                        switch result {
+                        case .success:
+                            completionHandler(.success(credentials))
+                        case .failure(let error):
+                            completionHandler(.failure(error))
+                        }
+                    }
+                    return
+                }
+
+                // Found a single entry that matches the scheme and host - good to go.
+                else if logins.count == 1 {
+                    credentials = logins[0].credentials
+                } else {
+                    logger.log("No logins found for Authenticator",
+                               level: .info,
+                               category: .webview)
+                }
+
+                completionHandler(.success(credentials))
+
+            case .failure(let error):
+                completionHandler(.failure(error))
+>>>>>>> 27af7041b (Bugfix FXIOS-9014 ⁃ Unauthorized access for http authentication prompt (#20021))
             }
             var credentials: URLCredential?
 
