@@ -163,6 +163,11 @@ objects:
         type: Option<ExperimentSlug>
         description: The experiment slug that this message is involved in.
         default: null
+        
+      microsurveyConfig:
+        type: Option<MicrosurveyConfig>
+        description: Optional configuration data for a microsurvey.
+        default: null
 
   StyleData:
     description: >
@@ -182,6 +187,20 @@ objects:
           before it is expired.
         default: 5
 
+  MicrosurveyConfig:
+    description: >
+        Attributes relating to microsurvey messaging.
+    fields:
+      target-feature:
+        type: MicrosurveyTargetFeature
+        description: >
+          The type of feature the microsurvey is targeted.
+        default: Unknown # Should not be defaulted
+      options:
+        description: The list of survey options to present to the user.
+        type: List<Text>
+        default: [] # Should not be defaulted
+
 enums:
   MessageSurfaceId:
     description: >
@@ -192,6 +211,8 @@ enums:
         description: This is the card that appears at the top on the Firefox Home Page.
       survey:
         description: This is a full-page that appears providing a survey to the user.
+      microsurvey:
+        description: This is a microsurvey that appears on top of the bottom toolbar to the user.
       notification:
         description: This is a local notification send to the user periodically with tips and updates.
       Unknown:
@@ -204,3 +225,12 @@ enums:
         description: The next eligible message should be shown.
       show-none:
         description: The surface should show no message.
+
+  MicrosurveyTargetFeature:
+    description: >
+      The specific feature the microsurvey is for. This is a label that matches across both Android and iOS.
+    variants:
+      printing:
+        description: The printing feature.
+      Unknown:
+        description: No target feature set. Only used in an invalid experiment configuration.
