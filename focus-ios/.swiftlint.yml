@@ -4,7 +4,7 @@ only_rules: # Only enforce these rules, ignore all others
   # - class_delegate_protocol
   - closure_spacing
   # - closure_parameter_position
-  # - colon
+  - colon
   - comma
   - comment_spacing
   - compiler_protocol_init
