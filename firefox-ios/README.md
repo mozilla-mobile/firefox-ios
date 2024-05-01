@@ -29,7 +29,6 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
     ```
 1. Install Node.js dependencies, build user scripts and update content blocker:
     ```shell
-    cd firefox-ios
     sh ./bootstrap.sh
     ```
 1. Open the `Client.xcodeproj` under the `firefox-ios` folder in Xcode.
