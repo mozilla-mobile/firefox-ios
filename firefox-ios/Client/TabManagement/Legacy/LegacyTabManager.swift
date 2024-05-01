@@ -849,21 +849,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         storeChanges()
     }
 
-//    func legacyUndoCloseTab(tab: Tab, position: Int?) {
-//        if let index = position {
-//            tabs.insert(tab, at: index)
-//        } else {
-//            tabs.append(tab)
-//        }
-//
-//        delegates.forEach { $0.get()?.tabManagerUpdateCount() }
-//        storeChanges()
-//
-//        // Select previous selected tab
-//        let tabUUID = selectedTab?.tabUUID
-
-//    }
-
     func undoCloseTab() {
         guard let backupCloseTab = self.backupCloseTab else { return }
 
