@@ -24,22 +24,22 @@ only_rules: # Only enforce these rules, ignore all others
   # - leading_whitespace
   # - legacy_cggeometry_functions
   # - legacy_constant
-  # - legacy_constructor
+  - legacy_constructor
   # - legacy_hashing
-  # - legacy_nsgeometry_functions
+  - legacy_nsgeometry_functions
   - mark
   - no_space_in_method_call
-  # - ns_number_init_as_function_reference
-  # - operator_whitespace
+  - ns_number_init_as_function_reference
+  - operator_whitespace
   - orphaned_doc_comment
-  # - private_over_fileprivate
+  - private_over_fileprivate
   # - protocol_property_accessors_order
   # - redundant_discardable_let
   - redundant_objc_attribute
   - redundant_optional_initialization
   # - redundant_string_enum_value
   - redundant_void_return
-  # - return_arrow_whitespace
+  - return_arrow_whitespace
   # - statement_position
   # - switch_case_alignment
   - syntactic_sugar
