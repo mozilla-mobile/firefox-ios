@@ -87,7 +87,7 @@ class MockTabManager: TabManager {
 
     func undoCloseAllTabs() {}
 
-    func undoCloseTab(tab: Client.Tab, position: Int?) {}
+    func undoCloseTab() {}
 
     func getTabFor(_ url: URL) -> Tab? {
         return nil
