@@ -34,7 +34,7 @@ only_rules: # Only enforce these rules, ignore all others
   - orphaned_doc_comment
   - private_over_fileprivate
   # - protocol_property_accessors_order
-  # - redundant_discardable_let
+  - redundant_discardable_let
   - redundant_objc_attribute
   - redundant_optional_initialization
   - redundant_string_enum_value
