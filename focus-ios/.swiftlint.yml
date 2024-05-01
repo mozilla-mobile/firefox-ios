@@ -27,7 +27,7 @@ only_rules: # Only enforce these rules, ignore all others
   - legacy_constructor
   # - legacy_hashing
   - legacy_nsgeometry_functions
-  # - mark
+  - mark
   - no_space_in_method_call
   - ns_number_init_as_function_reference
   - operator_whitespace
