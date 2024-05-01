@@ -236,15 +236,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let subtitle: String
 
         switch authenticationManager.biometricType {
-            case .faceID:
-                label = UIConstants.strings.labelFaceIDLogin
-                subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
-            case .touchID:
-                label = UIConstants.strings.labelTouchIDLogin
-                subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
-            default:
-                // Unknown biometric type
-                return nil
+        case .faceID:
+            label = UIConstants.strings.labelFaceIDLogin
+            subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
+        case .touchID:
+            label = UIConstants.strings.labelTouchIDLogin
+            subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
+        default:
+            // Unknown biometric type
+            return nil
         }
 
         let toggle = BlockerToggle(label: label, setting: SettingsToggle.biometricLogin, subtitle: subtitle)
