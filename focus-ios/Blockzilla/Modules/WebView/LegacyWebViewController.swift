@@ -439,17 +439,17 @@ extension LegacyWebViewController: WKNavigationDelegate {
         }
 
         switch navigationAction.navigationType {
-            case .backForward:
-                let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
-                if navigatingBack {
-                    delegate?.webControllerDidNavigateBack(self)
-                } else {
-                    delegate?.webControllerDidNavigateForward(self)
-                }
-            case .reload:
-                delegate?.webControllerDidReload(self)
-            default:
-                break
+        case .backForward:
+            let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
+            if navigatingBack {
+                delegate?.webControllerDidNavigateBack(self)
+            } else {
+                delegate?.webControllerDidNavigateForward(self)
+            }
+        case .reload:
+            delegate?.webControllerDidReload(self)
+        default:
+            break
         }
 
         currentBackForwardItem = webView.backForwardList.currentItem

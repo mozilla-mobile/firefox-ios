@@ -41,7 +41,7 @@ only_rules: # Only enforce these rules, ignore all others
   - redundant_void_return
   - return_arrow_whitespace
   # - statement_position
-  # - switch_case_alignment
+  - switch_case_alignment
   - syntactic_sugar
   - trailing_newline
   - trailing_semicolon
