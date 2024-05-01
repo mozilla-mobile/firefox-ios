@@ -43,10 +43,10 @@ class DomainCompletionTests: XCTestCase {
                 setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
             )
             switch sut.add(suggestion: $0) {
-                case .failure(let error):
-                    XCTAssertEqual(error, .duplicateDomain)
-                case .success:
-                    XCTFail()
+            case .failure(let error):
+                XCTAssertEqual(error, .duplicateDomain)
+            case .success:
+                XCTFail()
             }
         }
     }
@@ -59,10 +59,10 @@ class DomainCompletionTests: XCTestCase {
             setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
         )
         switch sut.remove(at: 0) {
-            case .failure:
-                XCTFail()
-            case .success:
-                XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
+        case .failure:
+            XCTFail()
+        case .success:
+            XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
         }
     }
 
@@ -74,10 +74,10 @@ class DomainCompletionTests: XCTestCase {
             setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
         )
         switch sut.add(suggestion: TEST_NO_PERIOD) {
-            case .failure(let error):
-                XCTAssertEqual(error, .invalidUrl)
-            case .success:
-                XCTFail()
+        case .failure(let error):
+            XCTAssertEqual(error, .invalidUrl)
+        case .success:
+            XCTFail()
         }
     }
 
@@ -89,11 +89,11 @@ class DomainCompletionTests: XCTestCase {
             setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
         )
         switch sut.add(suggestion: domain) {
-            case .failure:
-                XCTFail()
-            case .success:
-                let domains = Settings.getCustomDomainSetting()
-                XCTAssertEqual(domains.count, 1)
+        case .failure:
+            XCTFail()
+        case .success:
+            let domains = Settings.getCustomDomainSetting()
+            XCTAssertEqual(domains.count, 1)
         }
     }
 }
