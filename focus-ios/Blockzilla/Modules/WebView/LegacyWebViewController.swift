@@ -55,9 +55,9 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     private enum KVOConstants: String, CaseIterable {
-        case URL = "URL"
-        case canGoBack = "canGoBack"
-        case canGoForward = "canGoForward"
+        case URL
+        case canGoBack
+        case canGoForward
     }
 
     weak var delegate: LegacyWebControllerDelegate?
