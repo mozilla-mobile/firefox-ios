@@ -202,6 +202,7 @@ final class PrivateHomepageViewController:
         let theme = themeManager.currentTheme(for: windowUUID)
         gradient.colors = theme.colors.layerHomepage.cgColors
         homepageHeaderCell.applyTheme(theme: theme)
+        privateMessageCardCell.applyTheme(theme: theme)
     }
 
     private func learnMore() {

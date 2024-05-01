@@ -77,14 +77,14 @@ class SplashViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { state in
                 switch state {
-                    case .loggedin:
-                        break
+                case .loggedin:
+                    break
 
-                    case .loggedout:
-                        self.state = .default
+                case .loggedout:
+                    self.state = .default
 
-                    case .canceled:
-                        self.state = .needsAuth
+                case .canceled:
+                    self.state = .needsAuth
                 }
             }
     }
