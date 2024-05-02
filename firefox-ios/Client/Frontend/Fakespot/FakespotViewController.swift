@@ -423,7 +423,7 @@ class FakespotViewController: UIViewController,
                 if dismissPermanently {
                     self?.triggerDismiss()
                 } else {
-                    let appearanceAction = FakespotAction(isExpanded: false,
+                    let appearanceAction = FakespotAction(isOpen: false,
                                                           windowUUID: windowUUID,
                                                           actionType: FakespotActionType.setAppearanceTo)
                                                           store.dispatch(appearanceAction)
@@ -468,7 +468,7 @@ class FakespotViewController: UIViewController,
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
-                let action = FakespotAction(isExpanded: false,
+                let action = FakespotAction(isOpen: false,
                                             windowUUID: windowUUID,
                                             actionType: FakespotActionType.setAppearanceTo)
                 store.dispatch(action)
@@ -527,7 +527,7 @@ class FakespotViewController: UIViewController,
                 self?.viewModel.addTab(url: adData.url)
                 self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
-                let action = FakespotAction(isExpanded: false,
+                let action = FakespotAction(isOpen: false,
                                             windowUUID: windowUUID,
                                             actionType: FakespotActionType.setAppearanceTo)
                 store.dispatch(action)
