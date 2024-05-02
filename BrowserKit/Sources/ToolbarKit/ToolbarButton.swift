@@ -9,6 +9,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private struct UX {
         static let verticalInset: CGFloat = 8
         static let horizontalInset: CGFloat = 8
+        static let badgeImageViewBorderWidth: CGFloat = 1.5
+        static let badgeImageViewCornerRadius: CGFloat = 10
         static let badgeIconSize = CGSize(width: 20, height: 20)
     }
 
@@ -16,6 +18,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private var foregroundColorHighlighted: UIColor = .clear
     private var foregroundColorDisabled: UIColor = .clear
     private var backgroundColorNormal: UIColor = .clear
+
+    private var badgeImageView: UIImageView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,7 +83,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     private func addBadgeIcon(imageName: String) {
-        let badgeImageView = UIImageView(image: UIImage(named: imageName))
+        badgeImageView = UIImageView(image: UIImage(named: imageName))
+        guard let badgeImageView else { return }
+        badgeImageView.layer.borderWidth = UX.badgeImageViewBorderWidth
+        badgeImageView.layer.borderColor = UIColor.white.cgColor
+        badgeImageView.layer.cornerRadius = UX.badgeImageViewCornerRadius
+        badgeImageView.clipsToBounds = true
         badgeImageView.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(badgeImageView)
@@ -96,6 +105,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         foregroundColorNormal = theme.colors.iconPrimary
         foregroundColorHighlighted = theme.colors.iconPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
+        badgeImageView?.layer.borderColor = theme.colors.borderPrimary.cgColor
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
     }
