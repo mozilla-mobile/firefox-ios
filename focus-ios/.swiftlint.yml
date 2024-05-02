@@ -25,7 +25,7 @@ only_rules: # Only enforce these rules, ignore all others
   - legacy_cggeometry_functions
   # - legacy_constant
   - legacy_constructor
-  # - legacy_hashing
+  - legacy_hashing
   - legacy_nsgeometry_functions
   - mark
   - no_space_in_method_call
