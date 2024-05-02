@@ -510,7 +510,7 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         guard tabManager.startAtHomeCheck() else { return }
-        let action = FakespotAction(isExpanded: false,
+        let action = FakespotAction(isOpen: false,
                                     windowUUID: windowUUID,
                                     actionType: FakespotActionType.setAppearanceTo)
         store.dispatch(action)
@@ -1859,7 +1859,7 @@ class BrowserViewController: UIViewController,
               let url = webView.url
         else {
             // We're on homepage or a blank tab
-            let action = FakespotAction(isExpanded: false,
+            let action = FakespotAction(isOpen: false,
                                         windowUUID: windowUUID,
                                         actionType: FakespotActionType.setAppearanceTo)
             store.dispatch(action)
@@ -1875,7 +1875,7 @@ class BrowserViewController: UIViewController,
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
-            let action = FakespotAction(isExpanded: false,
+            let action = FakespotAction(isOpen: false,
                                         windowUUID: windowUUID,
                                         actionType: FakespotActionType.setAppearanceTo)
             store.dispatch(action)
@@ -1910,7 +1910,7 @@ class BrowserViewController: UIViewController,
                   fakespotState.sidebarOpenForiPadLandscape,
                   UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
-            let action = FakespotAction(isExpanded: true,
+            let action = FakespotAction(isOpen: true,
                                         windowUUID: windowUUID,
                                         actionType: FakespotActionType.setAppearanceTo)
             store.dispatch(action)
