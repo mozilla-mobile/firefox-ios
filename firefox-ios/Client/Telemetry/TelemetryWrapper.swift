@@ -354,6 +354,7 @@ extension TelemetryWrapper {
         case tabNormalQuantity = "normal-tab-quantity"
         case tabPrivateQuantity = "private-tab-quantity"
         case tabInactiveQuantity = "inactive-tab-quantity"
+        case iPadWindowCount = "ipad-window-count"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -648,6 +649,7 @@ extension TelemetryWrapper {
         case isRestoreTabsStarted = "is-restore-tabs-started"
         case recordSearchLocation = "recordSearchLocation"
         case recordSearchEngineID = "recordSearchEngineID"
+        case windowCount = "windowCount"
 
         case preference = "pref"
         case preferenceChanged = "to"
