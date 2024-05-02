@@ -98,8 +98,6 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         setNeedsUpdateConfiguration()
     }
 
-    // changing the corner radius for the subview, in this case UIVisualEffectView.
-    // maybe there can be another way to change the corner for the subview.
     func addCornerRadiusForVisualEffectView(radiusSize: CGFloat) {
         // Note: changing the corner radius for the subview, in this case UIVisualEffectView
         // is required for certain cases where UIVisualEffectView doesn't update with super view radius change
