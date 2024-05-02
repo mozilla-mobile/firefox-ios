@@ -64,7 +64,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                      shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
 
         self.toolbarDelegate = toolbarDelegate
-        locationView.configure(state.url, delegate: self)
+        locationView.configure(state.locationViewState, delegate: self)
 
         setNeedsLayout()
         layoutIfNeeded()
@@ -105,17 +105,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint = locationDividerView.widthAnchor.constraint(equalToConstant: UX.dividerWidth)
         dividerWidthConstraint?.isActive = true
 
-        let navigationActionWidthAnchor = navigationActionStack.widthAnchor.constraint(equalToConstant: 0)
-        navigationActionWidthAnchor.isActive = true
-        navigationActionWidthAnchor.priority = .defaultLow
-
-        let pageActionWidthAnchor = pageActionStack.widthAnchor.constraint(equalToConstant: 0)
-        pageActionWidthAnchor.isActive = true
-        pageActionWidthAnchor.priority = .defaultLow
-
-        let browserActionWidthAnchor = browserActionStack.widthAnchor.constraint(equalToConstant: 0)
-        browserActionWidthAnchor.isActive = true
-        browserActionWidthAnchor.priority = .defaultLow
+        [navigationActionStack, pageActionStack, browserActionStack].forEach(setZeroWidthConstraint)
 
         toolbarTopBorderHeightConstraint = toolbarTopBorderView.heightAnchor.constraint(equalToConstant: 0)
         toolbarBottomBorderHeightConstraint = toolbarBottomBorderView.heightAnchor.constraint(equalToConstant: 0)
@@ -181,6 +171,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActionSpacing()
     }
 
+    private func setZeroWidthConstraint(_ stackView: UIStackView) {
+        let widthAnchor = stackView.widthAnchor.constraint(equalToConstant: 0)
+        widthAnchor.isActive = true
+        widthAnchor.priority = .defaultHigh
+    }
+
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         stackView.removeAllArrangedViews()
         toolbarElements.forEach { toolbarElement in
@@ -235,6 +231,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         guard !text.isEmpty else { return }
 
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+    }
+
+    func locationViewDisplayTextForURL(_ url: URL?) -> String? {
+        toolbarDelegate?.shouldDisplayTextForURL(url)
     }
 
     // MARK: - ThemeApplicable

@@ -26,8 +26,8 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307117
-    // Disabled due to link not loading
-    func testOpenLinkFromPDF() throws {
+    // Smoketest
+    func testOpenLinkFromPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
 
@@ -75,6 +75,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307120
+    // Smoketest
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -107,6 +108,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307121
+    // Smoketest
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()

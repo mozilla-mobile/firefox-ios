@@ -56,10 +56,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.glean = glean
         super.init(router: router)
 
-        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
-        TelemetryWrapper.shared.defaultTabManager = tabManager
-
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
         tabManager.addDelegate(self)
@@ -326,7 +322,7 @@ class BrowserCoordinator: BaseCoordinator,
         return true
     }
 
-    private func handleSettings(with section: Route.SettingsSection) {
+    private func handleSettings(with section: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
@@ -344,6 +340,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         navigationController.onViewDismissed = { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
+            onDismiss?()
         }
         present(navigationController)
     }
@@ -435,9 +432,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserNavigationHandler
 
-    func show(settings: Route.SettingsSection) {
+    func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         presentWithModalDismissIfNeeded {
-            self.handleSettings(with: settings)
+            self.handleSettings(with: settings, onDismiss: onDismiss)
         }
     }
 

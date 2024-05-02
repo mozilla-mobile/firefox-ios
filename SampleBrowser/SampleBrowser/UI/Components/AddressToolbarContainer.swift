@@ -7,13 +7,12 @@ import ToolbarKit
 import UIKit
 
 protocol AddressToolbarContainerDelegate: AnyObject {
-    func didClickMenu()
+    func didTapMenu()
 }
 
 class AddressToolbarContainer: UIView, ThemeApplicable {
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
-    private weak var delegate: AddressToolbarContainerDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -25,11 +24,9 @@ class AddressToolbarContainer: UIView, ThemeApplicable {
     }
 
     func configure(_ model: AddressToolbarContainerModel,
-                   toolbarDelegate: AddressToolbarDelegate,
-                   toolbarContainerDelegate: AddressToolbarContainerDelegate) {
+                   toolbarDelegate: AddressToolbarDelegate) {
         compactToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
         regularToolbar.configure(state: model.state, toolbarDelegate: toolbarDelegate)
-        delegate = toolbarContainerDelegate
     }
 
     override func becomeFirstResponder() -> Bool {

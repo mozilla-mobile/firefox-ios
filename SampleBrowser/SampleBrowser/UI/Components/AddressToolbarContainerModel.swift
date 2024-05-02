@@ -9,7 +9,7 @@ struct AddressToolbarContainerModel {
     let toolbarPosition: AddressToolbarPosition
     let scrollY: Int
     let isPrivate: Bool
-    let url: String?
+    let locationViewState: LocationViewState
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
@@ -17,7 +17,7 @@ struct AddressToolbarContainerModel {
 
     var state: AddressToolbarState {
         return AddressToolbarState(
-            url: url,
+            locationViewState: locationViewState,
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
@@ -26,7 +26,7 @@ struct AddressToolbarContainerModel {
     }
 
     private var shouldDisplayTopBorder: Bool {
-        manager.shouldDisplayBorder(
+        manager.shouldDisplayAddressBorder(
             borderPosition: .top,
             toolbarPosition: toolbarPosition,
             isPrivate: false,
@@ -34,7 +34,7 @@ struct AddressToolbarContainerModel {
     }
 
     private var shouldDisplayBottomBorder: Bool {
-        manager.shouldDisplayBorder(
+        manager.shouldDisplayAddressBorder(
            borderPosition: .bottom,
            toolbarPosition: toolbarPosition,
            isPrivate: false,

@@ -436,10 +436,10 @@ class NavigationTest: BaseTestCase {
         app.buttons["Open in New Tab"].tap()
         // A new tab loading the article page should open
         navigator.goto(TabTray)
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"])
         let numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         XCTAssertTrue(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain.").exists)
-        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441773

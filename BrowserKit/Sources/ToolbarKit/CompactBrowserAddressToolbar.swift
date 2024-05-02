@@ -7,7 +7,7 @@ import UIKit
 public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
     override internal func updateActions(state: AddressToolbarState) {
         // In compact mode no browser actions will be displayed
-        let compactState = AddressToolbarState(url: state.url,
+        let compactState = AddressToolbarState(locationViewState: state.locationViewState,
                                                navigationActions: state.navigationActions,
                                                pageActions: state.pageActions,
                                                browserActions: [],

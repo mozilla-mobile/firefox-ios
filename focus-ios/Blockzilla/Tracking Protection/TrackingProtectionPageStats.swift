@@ -154,7 +154,7 @@ private class TPStatsBlocklists {
                 }
 
                 guard let loc = filter.range(of: standardPrefix) else {
-                    assert(false, "url-filter code needs updating for new list format")
+                    assertionFailure("url-filter code needs updating for new list format")
                     return
                 }
                 let baseDomain = filter[loc.upperBound...].replacingOccurrences(of: "\\.", with: ".")

@@ -23,13 +23,16 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 // Add a small delay to allow the stylesheets to load and avoid flicker.
                 let delayTime = DispatchTime.now() + Double(Int64(200 * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)
                 DispatchQueue.main.asyncAfter(deadline: delayTime) {
-                    UIView.transition(from: self.interstitialView, to: self.webView,
-                                      duration: 0.5,
-                                      options: .transitionCrossDissolve,
-                                      completion: { finished in
-                                        self.interstitialView.removeFromSuperview()
-                                        self.interstitialSpinnerView.stopAnimating()
-                    })
+                    UIView.transition(
+                        from: self.interstitialView,
+                        to: self.webView,
+                        duration: 0.5,
+                        options: .transitionCrossDissolve,
+                        completion: { finished in
+                            self.interstitialView.removeFromSuperview()
+                            self.interstitialSpinnerView.stopAnimating()
+                        }
+                    )
                 }
             }
         }
@@ -42,13 +45,16 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 // Add a small delay to allow the stylesheets to load and avoid flicker.
                 let delayTime = DispatchTime.now() + Double(Int64(200 * Double(NSEC_PER_MSEC))) / Double(NSEC_PER_SEC)
                 DispatchQueue.main.asyncAfter(deadline: delayTime) {
-                    UIView.transition(from: self.interstitialSpinnerView, to: self.interstitialErrorView,
-                                      duration: 0.5,
-                                      options: .transitionCrossDissolve,
-                                      completion: { finished in
-                                        self.interstitialSpinnerView.removeFromSuperview()
-                                        self.interstitialSpinnerView.stopAnimating()
-                    })
+                    UIView.transition(
+                        from: self.interstitialSpinnerView,
+                        to: self.interstitialErrorView,
+                        duration: 0.5,
+                        options: .transitionCrossDissolve,
+                        completion: { finished in
+                            self.interstitialSpinnerView.removeFromSuperview()
+                            self.interstitialSpinnerView.stopAnimating()
+                        }
+                    )
                 }
             }
         }

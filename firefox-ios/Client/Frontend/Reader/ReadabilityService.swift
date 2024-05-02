@@ -19,7 +19,7 @@ class ReadabilityOperation: Operation {
     var url: URL
     var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?
-    var tab: Tab!
+    var tab: Tab?
     var readerModeCache: ReaderModeCache
     private var logger: Logger
 
@@ -44,22 +44,26 @@ class ReadabilityOperation: Operation {
         // Setup a tab, attach a Readability helper. Kick all this off on the main thread since UIKit
         // and WebKit are not safe from other threads.
 
-        let windowUUID = tab.windowUUID
         DispatchQueue.main.async(execute: { () -> Void in
             let configuration = WKWebViewConfiguration()
             // TODO: To resolve profile from DI container
-            self.tab = Tab(profile: self.profile, configuration: configuration, windowUUID: windowUUID)
-            self.tab.createWebview()
-            self.tab.navigationDelegate = self
 
-            let readerMode = ReaderMode(tab: self.tab)
+            // TODO: Revisit window UUID here for multi-window [FXIOS-9043]
+            let windowUUID = (AppContainer.shared.resolve() as WindowManager).activeWindow
+
+            let tab = Tab(profile: self.profile, configuration: configuration, windowUUID: windowUUID)
+            self.tab = tab
+            tab.createWebview()
+            tab.navigationDelegate = self
+
+            let readerMode = ReaderMode(tab: tab)
             readerMode.delegate = self
-            self.tab.addContentScript(readerMode, name: ReaderMode.name())
+            tab.addContentScript(readerMode, name: ReaderMode.name())
 
             // Load the page in the webview. This either fails with a navigation error, or we
             // get a readability callback. Or it takes too long, in which case the semaphore
             // times out. The script on the page will retry every 500ms for 10 seconds.
-            self.tab.loadRequest(URLRequest(url: self.url))
+            tab.loadRequest(URLRequest(url: self.url))
         })
         let timeout = DispatchTime.now() + .seconds(10)
         if semaphore.wait(timeout: timeout) == .timedOut {

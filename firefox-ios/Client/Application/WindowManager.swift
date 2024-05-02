@@ -28,6 +28,13 @@ protocol WindowManager {
     /// Convenience. Returns all TabManagers for all open windows.
     func allWindowTabManagers() -> [TabManager]
 
+    /// Returns the UUIDs for all open windows, optionally also including windows that
+    /// are still in the process of being configured but have not yet completed.
+    /// Note: the order of the UUIDs is undefined.
+    /// - Parameter includingReserved: whether to include windows that are still launching.
+    /// - Returns: a list of UUIDs. Order is undefined.
+    func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID]
+
     /// Signals the WindowManager that a window was closed.
     /// - Parameter uuid: the ID of the window.
     func windowWillClose(uuid: WindowUUID)
@@ -47,6 +54,9 @@ protocol WindowManager {
     /// - Parameter event: the event that occurred and any associated metadata.
     /// - Parameter windowUUID: the UUID of the window triggering the event.
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID)
+
+    /// Signals the WindowManager to store tabs (across all windows) on the default Profile.
+    func storeTabs()
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -55,7 +65,7 @@ struct AppWindowInfo {
     weak var sceneCoordinator: SceneCoordinator?
 }
 
-final class WindowManagerImplementation: WindowManager {
+final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinatorDelegate {
     enum WindowPrefKeys {
         static let windowOrdering = "windowOrdering"
     }
@@ -70,9 +80,11 @@ final class WindowManagerImplementation: WindowManager {
     private let tabDataStore: TabDataStore
     private let defaults: UserDefaultsInterface
     private var _activeWindowUUID: WindowUUID?
+    private let tabSyncCoordinator = WindowTabsSyncCoordinator()
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
-    private var windowOrderingPriority: [WindowUUID] {
+    // UUIDs at the beginning of the list are prioritized over UUIDs at the end
+    private(set) var windowOrderingPriority: [WindowUUID] {
         get {
             let stored = defaults.object(forKey: WindowPrefKeys.windowOrdering)
             guard let prefs: [String] = stored as? [String] else { return [] }
@@ -92,6 +104,7 @@ final class WindowManagerImplementation: WindowManager {
         self.logger = logger
         self.tabDataStore = tabDataStore
         self.defaults = userDefaults
+        tabSyncCoordinator.delegate = self
     }
 
     // MARK: - Public API
@@ -117,16 +130,21 @@ final class WindowManagerImplementation: WindowManager {
         return windows.compactMap { uuid, window in window.tabManager }
     }
 
+    func allWindowUUIDs(includingReserved: Bool) -> [WindowUUID] {
+        return Array(windows.keys) + (includingReserved ? reservedUUIDs : [])
+    }
+
     func windowWillClose(uuid: WindowUUID) {
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
+        updateWindow(nil, for: uuid)
 
-        // Closed windows are popped off and moved to the end of the ordering priority
+        // Closed windows are popped off and moved behind any already-open windows in the list
         var prefs = windowOrderingPriority
         prefs.removeAll(where: { $0 == uuid })
-        prefs.append(uuid)
+        let openWindows = Array(windows.keys)
+        let idx = prefs.firstIndex(where: { !openWindows.contains($0) })
+        prefs.insert(uuid, at: idx ?? prefs.count)
         windowOrderingPriority = prefs
-
-        updateWindow(nil, for: uuid)
     }
 
     func reserveNextAvailableWindowUUID() -> WindowUUID {
@@ -154,7 +172,7 @@ final class WindowManagerImplementation: WindowManager {
         if result.isNew {
             // Be sure to add any brand-new windows to our ordering preferences
             var prefs = windowOrderingPriority
-            prefs.append(resultUUID)
+            prefs.insert(resultUUID, at: 0)
             windowOrderingPriority = prefs
         }
 
@@ -173,6 +191,16 @@ final class WindowManagerImplementation: WindowManager {
                 coordinator.coordinatorHandleWindowEvent(event: event, uuid: windowUUID)
             }
         }
+    }
+
+    func storeTabs() {
+        tabSyncCoordinator.syncTabsToProfile()
+    }
+
+    // MARK: - WindowTabSyncCoordinatorDelegate
+
+    func tabManagers() -> [TabManager] {
+        return allWindowTabManagers()
     }
 
     // MARK: - Internal Utilities

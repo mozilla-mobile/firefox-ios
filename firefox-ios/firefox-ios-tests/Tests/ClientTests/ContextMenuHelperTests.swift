@@ -17,6 +17,7 @@ class ContextMenuHelperTests: XCTestCase {
         profile = MockProfile()
 
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        DependencyHelperMock().bootstrapDependencies()
 
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
@@ -25,6 +26,7 @@ class ContextMenuHelperTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         profile = nil
+        AppContainer.shared.reset()
     }
 
     func testHistoryHighlightsTelemetry() {

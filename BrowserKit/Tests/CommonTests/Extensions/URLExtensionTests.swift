@@ -107,6 +107,12 @@ final class URLExtensionTests: XCTestCase {
         XCTAssertEqual(url!.fragment!, "h=dupes%7CData%20%26%20BI%20Services%20Team%7C")
     }
 
+    func testNormalizedHostReturnsOriginalHost() {
+        let url = URL(string: "https://mobile.co.uk")!
+        let host = url.normalizedHost
+        XCTAssertEqual(host, "mobile.co.uk")
+    }
+
     func testIPv6Domain() {
         let url = URL(string: "http://[::1]/foo/bar")!
         XCTAssertTrue(url.isIPv6)
@@ -137,6 +143,31 @@ final class URLExtensionTests: XCTestCase {
 
         goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.normalizedHostAndPath, $0.1) }
         badurls.forEach { XCTAssertNil(URL(string: $0)!.normalizedHostAndPath) }
+    }
+
+    func testGetSubdomainAndHost() {
+        let testCases = [
+            ("https://www.google.com", (nil, "google.com")),
+            ("https://blog.engineering.company.com", ("blog.engineering.", "blog.engineering.company.com")),
+            ("https://long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com", ("long-extended-subdomain-name-containing-many-letters-and-dashes.", "long-extended-subdomain-name-containing-many-letters-and-dashes.badssl.com")),
+            ("http://com:org@m.canadacomputers.co.uk", (nil, "canadacomputers.co.uk")),
+            ("https://www.wix.com/blog/what-is-a-subdomain", (nil, "wix.com")),
+            ("nothing", (nil, "nothing")),
+            ("https://super-long-url-with-dashes-and-things.badssl.com/xyz-something", ("super-long-url-with-dashes-and-things.", "super-long-url-with-dashes-and-things.badssl.com")),
+            ("https://accounts.firefox.com", ("accounts.", "accounts.firefox.com")),
+            ("http://username:password@subdomain.example.com:8080", ("subdomain.", "subdomain.example.com")),
+            ("https://example.com:8080#fragment", (nil, "example.com")),
+            ("http://username:password@subdomain.example.com:8080#fragment", ("subdomain.", "subdomain.example.com")),
+            ("https://www.amazon.co.uk", (nil, "amazon.co.uk")),
+            ("https://mobile.co.uk", (nil, "mobile.co.uk"))
+        ]
+
+        for testCase in testCases {
+            let (urlString, expected) = testCase
+            let result = URL.getSubdomainAndHost(from: urlString)
+            XCTAssertEqual(result.subdomain, expected.0, "Unexpected subdomain for URL: \(urlString)")
+            XCTAssertEqual(result.normalizedHost, expected.1, "Unexpected normalized host for URL: \(urlString)")
+        }
     }
 
     func testShortDisplayString() {
