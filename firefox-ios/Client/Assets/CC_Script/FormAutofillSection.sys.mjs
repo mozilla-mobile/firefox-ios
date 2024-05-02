@@ -413,6 +413,7 @@ export class FormAutofillSection {
         profile[`${fieldDetail.fieldName}-formatted`] ||
         profile[fieldDetail.fieldName] ||
         "";
+
       if (HTMLSelectElement.isInstance(element)) {
         // Unlike text input, select element is always previewed even if
         // the option is already selected.

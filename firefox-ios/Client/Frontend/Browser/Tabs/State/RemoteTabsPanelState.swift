@@ -89,19 +89,20 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
+              let action = action as? RemoteTabsPanelAction else { return state }
 
-        switch action {
-        case RemoteTabsPanelAction.refreshDidBegin:
+        switch action.actionType {
+        case RemoteTabsPanelActionType.refreshDidBegin:
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .refreshing,
                                                 allowsRefresh: state.allowsRefresh,
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: state.showingEmptyState)
             return newState
-        case RemoteTabsPanelAction.refreshDidFail(let context):
+        case RemoteTabsPanelActionType.refreshDidFail:
+            guard let reason = action.reason else { return state }
             // Refresh failed. Show error empty state.
-            let reason = context.reason
             let allowsRefresh = reason.allowsRefresh
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .idle,
@@ -109,12 +110,12 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 clientAndTabs: state.clientAndTabs,
                                                 showingEmptyState: reason)
             return newState
-        case RemoteTabsPanelAction.refreshDidSucceed(let context):
-            let newClientAndTabs = context.clientAndTabs
+        case RemoteTabsPanelActionType.refreshDidSucceed:
+            guard let clientAndTabs = action.clientAndTabs else { return state }
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .idle,
                                                 allowsRefresh: true,
-                                                clientAndTabs: newClientAndTabs,
+                                                clientAndTabs: clientAndTabs,
                                                 showingEmptyState: nil)
             return newState
         default:
