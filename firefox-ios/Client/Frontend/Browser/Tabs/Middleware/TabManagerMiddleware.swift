@@ -301,9 +301,10 @@ class TabManagerMiddleware {
     /// - Parameters:
     ///   - tabUUID: UUID of the tab to be closed/removed
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
-    private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID) async -> Bool {
+    private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
-        let isLastTab = tabManager.normalTabs.count == 1
+        let isLastTab = isPrivate ? tabManager.privateTabs.count == 1 : tabManager.normalTabs.count == 1
+
         await tabManager.removeTab(tabUUID)
         return isLastTab
     }
@@ -312,7 +313,7 @@ class TabManagerMiddleware {
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         Task {
-            let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid)
+            let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
             await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {

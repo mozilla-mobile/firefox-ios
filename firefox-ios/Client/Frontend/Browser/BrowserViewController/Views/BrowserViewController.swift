@@ -1807,6 +1807,11 @@ class BrowserViewController: UIViewController,
 
         self.screenshotHelper.takeScreenshot(tab)
 
+        // when navigate in tab, if the tab mime type is pdf, we should scroll to top
+        if tab.mimeType == MIMEType.PDF {
+            tab.shouldScrollToTop = true
+        }
+
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)

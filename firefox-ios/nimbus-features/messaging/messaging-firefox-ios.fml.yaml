@@ -63,7 +63,7 @@ import:
               DEFAULT:
                 priority: 50
                 max-display-count: 5
-              MICRO_SURVEY:
+              MICROSURVEY:
                 priority: 50
                 max-display-count: 5
               NOTIFICATION:

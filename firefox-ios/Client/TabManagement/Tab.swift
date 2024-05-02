@@ -126,6 +126,8 @@ class Tab: NSObject, ThemeApplicable {
     var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
     var hasHomeScreenshot = false
+    var shouldScrollToTop = false
+
     private var logger: Logger
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
