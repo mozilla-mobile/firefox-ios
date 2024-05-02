@@ -82,8 +82,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState.reduceStateForPrivateModeAction(action: action, state: state)
         } else if let action = action as? GeneralBrowserAction {
             return BrowserViewControllerState.reduceStateForGeneralBrowserAction(action: action, state: state)
-        } else if let action = action as? ToolbarModelAction {
-            return BrowserViewControllerState.reduceStateForToolbarModelAction(action: action, state: state)
+        } else if let action = action as? ToolbarAction {
+            return BrowserViewControllerState.reduceStateForToolbarAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -160,8 +160,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
     }
 
-    static func reduceStateForToolbarModelAction(action: ToolbarModelAction,
-                                                 state: BrowserViewControllerState) -> BrowserViewControllerState {
+    static func reduceStateForToolbarAction(action: ToolbarAction,
+                                            state: BrowserViewControllerState) -> BrowserViewControllerState {
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
             return BrowserViewControllerState(

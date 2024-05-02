@@ -73,7 +73,7 @@ struct ToolbarState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-              let action = action as? ToolbarModelAction
+              let action = action as? ToolbarAction
         else { return state }
 
         switch action.actionType {

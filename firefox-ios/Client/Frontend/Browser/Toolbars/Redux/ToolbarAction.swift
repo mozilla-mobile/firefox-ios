@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-class ToolbarModelAction: Action {
+class ToolbarAction: Action {
     let actions: [ToolbarState.ActionState]
     let displayBorder: Bool
 

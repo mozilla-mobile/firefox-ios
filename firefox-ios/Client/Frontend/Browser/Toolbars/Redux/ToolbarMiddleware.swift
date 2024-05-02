@@ -33,10 +33,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             let actions = self.loadNavigationToolbarElements()
             let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
 
-            let action = ToolbarModelAction(actions: actions,
-                                            displayBorder: displayBorder,
-                                            windowUUID: uuid,
-                                            actionType: ToolbarActionType.didLoadToolbars)
+            let action = ToolbarAction(actions: actions,
+                                       displayBorder: displayBorder,
+                                       windowUUID: uuid,
+                                       actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
 
         default:
