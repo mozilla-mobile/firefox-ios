@@ -418,23 +418,11 @@ class FakespotViewController: UIViewController,
             return view
         case .onboarding:
             let view: FakespotOptInCardView = .build()
-<<<<<<< HEAD
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
-                let appearanceAction = FakespotAction(isExpanded: false,
+                let appearanceAction = FakespotAction(isOpen: false,
                                                       windowUUID: windowUUID,
                                                       actionType: FakespotActionType.setAppearanceTo)
                 store.dispatch(appearanceAction)
-=======
-            viewModel.optInCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
-                if dismissPermanently {
-                    self?.triggerDismiss()
-                } else {
-                    let appearanceAction = FakespotAction(isOpen: false,
-                                                          windowUUID: windowUUID,
-                                                          actionType: FakespotActionType.setAppearanceTo)
-                                                          store.dispatch(appearanceAction)
-                }
->>>>>>> e461716fa (Bugfix Fix fakespot (#20130))
 
                 guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)

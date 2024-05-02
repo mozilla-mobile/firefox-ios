@@ -5,11 +5,7 @@ set -e
 BUILD_LOG_FILE="$1"
 TYPE_LOG_FILE="$2"
 THRESHOLD_UNIT_TEST=9
-<<<<<<< HEAD
-THRESHOLD_XCUITEST=9
-=======
 THRESHOLD_XCUITEST=13
->>>>>>> e461716fa (Bugfix Fix fakespot (#20130))
 
 WARNING_COUNT=$(grep -E -v "SourcePackages/checkouts" "$BUILD_LOG_FILE" | grep -E "(^|:)[0-9]+:[0-9]+:|warning:|ld: warning:|<unknown>:0: warning:|fatal|===" | uniq | wc -l)
 
