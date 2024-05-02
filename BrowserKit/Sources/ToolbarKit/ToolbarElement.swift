@@ -11,6 +11,9 @@ public struct ToolbarElement {
     /// Whether the toolbar element can be interacted with
     let isEnabled: Bool
 
+    /// Indicates whether the toolbar element has a long press gesture recognizer
+    let hasLongPressGestureRecognizer: Bool
+
     /// Accessibility label of the toolbar element
     let a11yLabel: String
 
@@ -24,11 +27,13 @@ public struct ToolbarElement {
     // can therefor not be used outside of the ToolbarKit
     public init(iconName: String,
                 isEnabled: Bool,
+                hasLongPressGestureRecognizer: Bool = false,
                 a11yLabel: String,
                 a11yId: String,
                 onSelected: (() -> Void)?) {
         self.iconName = iconName
         self.isEnabled = isEnabled
+        self.hasLongPressGestureRecognizer = hasLongPressGestureRecognizer
         self.onSelected = onSelected
         self.a11yLabel = a11yLabel
         self.a11yId = a11yId

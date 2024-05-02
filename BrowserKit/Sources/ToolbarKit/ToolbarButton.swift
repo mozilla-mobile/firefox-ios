@@ -30,6 +30,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         guard var config = configuration else {
             return
         }
+        configureLongPressGestureRecognizerIfNeeded(for: element)
 
         let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
         let action = UIAction(title: element.a11yLabel,
@@ -72,6 +73,26 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
+    }
+
+    private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement) {
+        if element.hasLongPressGestureRecognizer {
+            let longPressRecognizer = UILongPressGestureRecognizer(
+                target: self,
+                action: #selector(handleLongPress)
+            )
+            addGestureRecognizer(longPressRecognizer)
+        }
+    }
+
+    //MARK: Selectors
+    @objc
+    private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            // Handle the long press
+        }
     }
 
     // MARK: ThemeApplicable
