@@ -922,7 +922,12 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
-
+        case(.information, .background, .iPadWindowCount, _, let extras):
+            if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
+                GleanMetrics.Windows.ipadWindowCount.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)

@@ -5540,3 +5540,18 @@ fx_suggest:
     expires: never
     send_in_pings:
       - fx-suggest
+
+# Window (iPad) metrics
+windows:
+  ipad_window_count:
+    type: quantity
+    description: |
+      A snapshot of how many windows the user has opened on iPad.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20102
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20133
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+    unit: quantity of iPad windows
