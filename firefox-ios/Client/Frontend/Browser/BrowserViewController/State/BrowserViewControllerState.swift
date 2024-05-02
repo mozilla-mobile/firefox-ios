@@ -81,7 +81,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                fakespotState: state.fakespotState,
                 showOverlay: state.showOverlay,
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
@@ -111,7 +111,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: SearchScreenState(inPrivateMode: privacyState),
                 showDataClearanceFlow: privacyState,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 reloadWebView: true,
                 browserViewType: browserViewType)
@@ -128,7 +128,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                fakespotState: state.fakespotState,
                 toast: toastType,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)
@@ -137,7 +137,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                fakespotState: state.fakespotState,
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType)

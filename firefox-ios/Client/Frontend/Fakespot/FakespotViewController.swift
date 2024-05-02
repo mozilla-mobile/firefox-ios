@@ -418,11 +418,23 @@ class FakespotViewController: UIViewController,
             return view
         case .onboarding:
             let view: FakespotOptInCardView = .build()
+<<<<<<< HEAD
             viewModel.optInCardViewModel.dismissViewController = { [weak self] action in
                 let appearanceAction = FakespotAction(isExpanded: false,
                                                       windowUUID: windowUUID,
                                                       actionType: FakespotActionType.setAppearanceTo)
                 store.dispatch(appearanceAction)
+=======
+            viewModel.optInCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
+                if dismissPermanently {
+                    self?.triggerDismiss()
+                } else {
+                    let appearanceAction = FakespotAction(isOpen: false,
+                                                          windowUUID: windowUUID,
+                                                          actionType: FakespotActionType.setAppearanceTo)
+                                                          store.dispatch(appearanceAction)
+                }
+>>>>>>> e461716fa (Bugfix Fix fakespot (#20130))
 
                 guard let self = self, let action else { return }
                 viewModel.recordDismissTelemetry(by: action)
@@ -463,7 +475,7 @@ class FakespotViewController: UIViewController,
             let reviewQualityCardView: FakespotReviewQualityCardView = .build()
             viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
             viewModel.reviewQualityCardViewModel.dismissViewController = {
-                let action = FakespotAction(isExpanded: false,
+                let action = FakespotAction(isOpen: false,
                                             windowUUID: windowUUID,
                                             actionType: FakespotActionType.setAppearanceTo)
                 store.dispatch(action)
@@ -518,7 +530,7 @@ class FakespotViewController: UIViewController,
                 self?.viewModel.addTab(url: adData.url)
                 self?.viewModel.recordSurfaceAdsClickedTelemetry()
                 self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
-                let action = FakespotAction(isExpanded: false,
+                let action = FakespotAction(isOpen: false,
                                             windowUUID: windowUUID,
                                             actionType: FakespotActionType.setAppearanceTo)
                 store.dispatch(action)
