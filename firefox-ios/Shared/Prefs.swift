@@ -176,11 +176,6 @@ public struct PrefsKeys {
     public static let splashScreenShownKey = "splashScreenShownKey"
 }
 
-public struct PrefsDefaults {
-    public static let ChineseHomePageURL = "https://mobile.firefoxchina.cn/?ios"
-    public static let ChineseNewTabDefault = "HomePage"
-}
-
 public protocol Prefs {
     func getBranchPrefix() -> String
     func branch(_ branch: String) -> Prefs
