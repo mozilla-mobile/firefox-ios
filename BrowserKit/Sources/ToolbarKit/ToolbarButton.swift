@@ -85,7 +85,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
     }
 
-    //MARK: Selectors
+    // MARK: - Selectors
     @objc
     private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
@@ -95,7 +95,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
     }
 
-    // MARK: ThemeApplicable
+    // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.iconPrimary
         foregroundColorHighlighted = theme.colors.iconPrimary
