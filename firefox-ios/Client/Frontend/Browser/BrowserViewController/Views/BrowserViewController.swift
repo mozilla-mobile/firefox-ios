@@ -540,10 +540,11 @@ class BrowserViewController: UIViewController,
                                   screen: .browserViewController)
         store.dispatch(action)
 
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        store.dispatch(GeneralBrowserAction.browserDidLoad(BoolValueContext(boolValue: isPrivate,
-                                                                            windowUUID: windowUUID)))
-                                                                            
+        let browserAction = GeneralBrowserMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+        store.dispatch(browserAction)
+
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in

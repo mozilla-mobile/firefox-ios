@@ -72,13 +72,15 @@ struct ToolbarState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
+              let action = action as? ToolbarModelAction
+        else { return state }
 
-        switch action {
-        case ToolbarAction.didLoadToolbars(let context):
+        switch action.actionType {
+        case ToolbarActionType.didLoadToolbars:
             var state = state
-            state.navigationToolbar.actions = context.actions
-            state.navigationToolbar.displayBorder = context.displayBorder
+            state.navigationToolbar.actions = action.actions
+            state.navigationToolbar.displayBorder = action.displayBorder
             return state
 
         default:

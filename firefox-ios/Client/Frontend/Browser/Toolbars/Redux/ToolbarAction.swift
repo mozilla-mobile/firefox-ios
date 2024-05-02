@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-class ToolbarNavigationModelAction: Action {
+class ToolbarModelAction: Action {
     let actions: [ToolbarState.ActionState]
     let displayBorder: Bool
 
@@ -21,5 +21,5 @@ class ToolbarNavigationModelAction: Action {
 }
 
 enum ToolbarActionType: ActionType {
-    case didLoadToolbars(ToolbarNavigationModelAction)
+    case didLoadToolbars
 }

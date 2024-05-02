@@ -20,35 +20,27 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     lazy var toolbarProvider: Middleware<AppState> = { [self] state, action in
-        if let action = action as? GeneralBrowserAction {
-        }
-
-
-        let uuid = action.windowUUID
-        switch action {
-        case GeneralBrowserAction.browserDidLoad:
-            let actions = self.loadNavigationToolbarElements()
-            let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
-            let context = ToolbarNavigationModelContext(actions: actions,
-                                                        displayBorder: displayBorder,
-                                                        windowUUID: uuid)
-            store.dispatch(ToolbarActionType.didLoadToolbars)
-
-        default:
-            break
+        if let action = action as? GeneralBrowserMiddlewareAction {
+            self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
         }
     }
 
-    private func resolveGeneralBrowserActions(action: GeneralBrowserAction, state: AppState) {
+    private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
+        let uuid = action.windowUUID
+
         switch action.actionType {
-        case .browserDidLoad:
+        case GeneralBrowserMiddlewareActionType.browserDidLoad:
             let actions = self.loadNavigationToolbarElements()
             let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
-            let context = ToolbarNavigationModelContext(actions: actions,
-                                                        displayBorder: displayBorder,
-                                                        windowUUID: uuid)
-            store.dispatch(ToolbarActionType.didLoadToolbars)
 
+            let action = ToolbarModelAction(actions: actions,
+                                            displayBorder: displayBorder,
+                                            windowUUID: uuid,
+                                            actionType: ToolbarActionType.didLoadToolbars)
+            store.dispatch(action)
+
+        default:
+            break
         }
     }
 

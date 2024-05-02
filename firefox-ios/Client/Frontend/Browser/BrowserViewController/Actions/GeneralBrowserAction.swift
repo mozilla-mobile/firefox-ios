@@ -27,8 +27,14 @@ class GeneralBrowserAction: Action {
 }
 
 enum GeneralBrowserActionType: ActionType {
-	case browserDidLoad
     case showToast
     case showOverlay
     case updateSelectedTab
+}
+
+class GeneralBrowserMiddlewareAction: Action {
+}
+
+enum GeneralBrowserMiddlewareActionType: ActionType {
+    case browserDidLoad
 }

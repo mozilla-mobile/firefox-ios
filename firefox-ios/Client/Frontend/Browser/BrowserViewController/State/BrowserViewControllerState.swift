@@ -82,6 +82,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState.reduceStateForPrivateModeAction(action: action, state: state)
         } else if let action = action as? GeneralBrowserAction {
             return BrowserViewControllerState.reduceStateForGeneralBrowserAction(action: action, state: state)
+        } else if let action = action as? ToolbarModelAction {
+            return BrowserViewControllerState.reduceStateForToolbarModelAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -153,6 +155,23 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType)
         case GeneralBrowserActionType.updateSelectedTab:
             return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action: action, state: state)
+        default:
+            return state
+        }
+    }
+
+    static func reduceStateForToolbarModelAction(action: ToolbarModelAction,
+                                                 state: BrowserViewControllerState) -> BrowserViewControllerState {
+        switch action.actionType {
+        case ToolbarActionType.didLoadToolbars:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: ToolbarState.reducer(state.toolbarState, action),
+                fakespotState: state.fakespotState,
+                showOverlay: state.showOverlay,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType)
         default:
             return state
         }
