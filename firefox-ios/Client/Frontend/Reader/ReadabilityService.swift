@@ -48,7 +48,8 @@ class ReadabilityOperation: Operation {
             let configuration = WKWebViewConfiguration()
             // TODO: To resolve profile from DI container
 
-            let tab = Tab(profile: self.profile, configuration: configuration, windowUUID: .unavailable)
+            let windowManager: WindowManager = AppContainer.shared.resolve()
+            let tab = Tab(profile: self.profile, configuration: configuration, windowUUID: windowManager.activeWindow)
             self.tab = tab
             tab.createWebview()
             tab.navigationDelegate = self
