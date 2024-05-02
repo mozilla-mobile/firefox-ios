@@ -21,7 +21,7 @@ only_rules: # Only enforce these rules, ignore all others
   - inclusive_language
   - invalid_swiftlint_command
   - large_tuple
-  # - leading_whitespace
+  - leading_whitespace
   - legacy_cggeometry_functions
   # - legacy_constant
   - legacy_constructor
