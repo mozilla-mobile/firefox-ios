@@ -16,6 +16,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
     private var tabsTelemetry = TabsTelemetry()
+    private let windowManager: WindowManager
     var notificationCenter: NotificationProtocol
     var inactiveTabsManager: InactiveTabsManagerProtocol
 
@@ -33,18 +34,20 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager()) {
-            self.tabDataStore = tabDataStore
-            self.tabSessionStore = tabSessionStore
-            self.imageStore = imageStore
-            self.tabMigration = tabMigration
-            self.notificationCenter = notificationCenter
-            self.inactiveTabsManager = inactiveTabsManager
-            super.init(profile: profile, uuid: uuid)
+         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
+         windowManager: WindowManager = AppContainer.shared.resolve()) {
+        self.tabDataStore = tabDataStore
+        self.tabSessionStore = tabSessionStore
+        self.imageStore = imageStore
+        self.tabMigration = tabMigration
+        self.notificationCenter = notificationCenter
+        self.inactiveTabsManager = inactiveTabsManager
+        self.windowManager = windowManager
+        super.init(profile: profile, uuid: uuid)
 
-            setupNotifications(forObserver: self,
-                               observing: [UIApplication.willResignActiveNotification,
-                                           .TabMimeTypeDidSet])
+        setupNotifications(forObserver: self,
+                           observing: [UIApplication.willResignActiveNotification,
+                                       .TabMimeTypeDidSet])
     }
 
     // MARK: - Restore tabs
@@ -280,7 +283,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
-        saveTabs(toProfile: profile, normalTabs, inactiveTabs)
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.storeTabs()
         preserveTabs()
         saveCurrentTabSessionData()
     }

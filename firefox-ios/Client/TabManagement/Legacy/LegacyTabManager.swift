@@ -298,21 +298,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
     }
 
-    func saveTabs(toProfile profile: Profile, _ tabs: [Tab], _ inactiveTabs: [Tab]) {
-        let inactiveTabs = Set(inactiveTabs)
-        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.compactMap {
-            let inactive = inactiveTabs.contains($0)
-            return Tab.toRemoteTab($0, inactive: inactive)
-        }
-
-        // Don't insert into the DB immediately. We tend to contend with more important
-        // work like querying for top sites.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            profile.storeTabs(storedTabs)
-        }
-    }
-
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func storeChanges() { fatalError("should never be called") }
 
