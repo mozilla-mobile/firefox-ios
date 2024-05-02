@@ -11,6 +11,7 @@ import Common
 class AccountSyncHandler: TabEventHandler {
     private let throttler: Throttler
     private let profile: Profile
+    let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .allWindows
 
     init(with profile: Profile,
          throttleTime: Double = 5.0,

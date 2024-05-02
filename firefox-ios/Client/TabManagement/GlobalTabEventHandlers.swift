@@ -5,18 +5,21 @@
 import Foundation
 import Shared
 
-class TabEventHandlers {
-    /// Create handlers that observe specified tab events.
+class GlobalTabEventHandlers {
+    private static var globalHandlers: [TabEventHandler] = []
+
+    /// Creates and configures the client's global TabEvent handlers. These handlers are created
+    /// singularly for the entire app and respond to tab events across all windows. If the handlers
+    /// have already been created this function does nothing.
     ///
     /// For anything that needs to react to tab events notifications (see `TabEventLabel`), the
     /// pattern is to implement a handler and specify which events to observe.
-    static func create(with profile: Profile) -> [TabEventHandler] {
-        let handlers: [TabEventHandler] = [
+    static func configure(with profile: Profile) {
+        guard globalHandlers.isEmpty else { return }
+        globalHandlers = [
             UserActivityHandler(),
             MetadataParserHelper(),
             AccountSyncHandler(with: profile)
         ]
-
-        return handlers
     }
 }

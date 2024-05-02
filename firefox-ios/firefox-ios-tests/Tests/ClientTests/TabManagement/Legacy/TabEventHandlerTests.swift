@@ -82,6 +82,8 @@ class DummyHandler: TabEventHandler {
     // of individual tab state.
     var isFocused: Bool?
 
+    let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .singleWindow(.XCTestDefaultUUID)
+
     init() {
          register(self, forTabEvents: .didGainFocus, .didLoseFocus)
     }
