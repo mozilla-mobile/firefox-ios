@@ -60,7 +60,7 @@ class LoginDetailTableViewCell: UITableViewCell,
 
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -126,7 +126,7 @@ class LoginDetailTableViewCell: UITableViewCell,
         descriptionLabel.isUserInteractionEnabled = viewModel.isEditingFieldData
 
         if viewModel.displayDescriptionAsPassword {
-            descriptionLabel.font = FXFontStyles.Regular.body.monospacedFont()
+            descriptionLabel.font = FXFontStyles.Bold.subheadline.monospacedFont()
         }
     }
 
