@@ -11,15 +11,17 @@ struct FakeReduxState: StateType, Equatable {
     var isInPrivateMode = false
 
     static let reducer: Reducer<Self> = { state, action in
-        switch action {
-        case FakeReduxAction.initialValueLoaded(let value),
-            FakeReduxAction.counterIncreased(let value),
-            FakeReduxAction.counterDecreased(let value):
-            return FakeReduxState(counter: value,
+        guard let action = action as? FakeReduxAction else { return state }
+
+        switch action.actionType {
+        case FakeReduxActionType.initialValueLoaded,
+            FakeReduxActionType.counterIncreased,
+            FakeReduxActionType.counterDecreased:
+            return FakeReduxState(counter: action.counterValue ?? state.counter,
                                   isInPrivateMode: state.isInPrivateMode)
-        case FakeReduxAction.setPrivateModeTo(let value):
+        case FakeReduxActionType.setPrivateModeTo:
             return FakeReduxState(counter: state.counter,
-                                  isInPrivateMode: value)
+                                  isInPrivateMode: action.privateMode ?? state.isInPrivateMode)
         default:
             return state
         }

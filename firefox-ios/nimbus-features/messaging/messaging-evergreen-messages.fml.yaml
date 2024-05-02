@@ -53,3 +53,21 @@ import:
                 action: OPEN_URL
                 action-params:
                   url: https://www.macrumors.com
+
+              # Serves as an example of how microsurveys may look like
+              microsurvey-message:
+                surface: microsurvey
+                style: MICROSURVEY
+                trigger-if-all:
+                  - NEVER
+                title: Microsurvey/Microsurvey.Prompt.TitleLabel.v127
+                text: "How satisfied are you with printing in Firefox?" # Should not show this message if this is nil
+                button-label: Microsurvey/Microsurvey.Prompt.TakeSurveyButton.v127
+                microsurveyConfig:
+                  target-feature: printing
+                  options:
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption1.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption2.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption3.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption4.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption5.v127

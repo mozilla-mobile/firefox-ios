@@ -17,6 +17,7 @@ class TabDisplayPanel: UIViewController,
         static let undoToastDuration = DispatchTimeInterval.seconds(3)
     }
 
+    let panelType: TabTrayPanelType
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -26,7 +27,9 @@ class TabDisplayPanel: UIViewController,
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
-        let view = TabDisplayView(state: self.tabsState, windowUUID: windowUUID)
+        let view = TabDisplayView(panelType: self.panelType,
+                                  state: self.tabsState,
+                                  windowUUID: windowUUID)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -42,6 +45,7 @@ class TabDisplayPanel: UIViewController,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.panelType = isPrivateMode ? .privateTabs : .tabs
         self.tabsState = TabsPanelState(windowUUID: windowUUID, isPrivateMode: isPrivateMode)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
@@ -121,7 +125,7 @@ class TabDisplayPanel: UIViewController,
             currentToast.dismiss(false)
         }
 
-        if toastType.reduxAction(for: windowUUID) != nil {
+        if toastType.reduxAction(for: windowUUID, panelType: panelType) != nil {
             let viewModel = ButtonToastViewModel(
                 labelText: toastType.title,
                 buttonText: toastType.buttonText)
@@ -153,11 +157,15 @@ class TabDisplayPanel: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .tabsPanel, windowUUID: windowUUID)
-        ))
-        store.dispatch(TabPanelAction.tabPanelDidLoad(BoolValueContext(boolValue: tabsState.isPrivateMode,
-                                                                       windowUUID: windowUUID)))
+        let screenAction = ScreenAction(windowUUID: windowUUID,
+                                        actionType: ScreenActionType.showScreen,
+                                        screen: .tabsPanel)
+        store.dispatch(screenAction)
+
+        let didLoadAction = TabPanelViewAction(panelType: panelType,
+                                               windowUUID: windowUUID,
+                                               actionType: TabPanelViewActionType.tabPanelDidLoad)
+        store.dispatch(didLoadAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -167,10 +175,10 @@ class TabDisplayPanel: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .tabsPanel, windowUUID: windowUUID)
-        ))
-        store.unsubscribe(self)
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .tabsPanel)
+        store.dispatch(action)
     }
 
     func newState(state: TabsPanelState) {
@@ -178,11 +186,15 @@ class TabDisplayPanel: UIViewController,
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
         let uuid = windowUUID
+
         // Avoid showing toast multiple times
         if let toastType = tabsState.toastType {
-            store.dispatch(TabPanelAction.hideUndoToast(windowUUID.context))
+            let action = TabPanelViewAction(panelType: panelType,
+                                            windowUUID: windowUUID,
+                                            actionType: TabPanelViewActionType.hideUndoToast)
+            store.dispatch(action)
             presentToast(toastType: toastType) { undoClose in
-                if let action = toastType.reduxAction(for: uuid), undoClose {
+                if let action = toastType.reduxAction(for: uuid, panelType: self.panelType), undoClose {
                     store.dispatch(action)
                 }
                 self.shownToast = nil
@@ -193,8 +205,10 @@ class TabDisplayPanel: UIViewController,
     // MARK: EmptyPrivateTabsViewDelegate
 
     func didTapLearnMore(urlRequest: URLRequest) {
-        let context = URLRequestContext(urlRequest: urlRequest, windowUUID: windowUUID)
-        store.dispatch(TabPanelAction.learnMorePrivateMode(context))
+        let action = TabPanelViewAction(panelType: panelType,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.learnMorePrivateMode)
+        store.dispatch(action)
     }
 }
 

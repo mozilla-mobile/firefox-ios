@@ -22,6 +22,7 @@ class Throttler {
 
     // This debounces; the task will not happen unless a duration of delay passes since the function was called
     func throttle(completion: @escaping () -> Void) {
+        // TODO: [FXIOS-9050] This can potentially infinitely delay the enqueued work which is not ideal.
         task.cancel()
         task = DispatchWorkItem { completion() }
 

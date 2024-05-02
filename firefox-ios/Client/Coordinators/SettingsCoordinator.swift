@@ -328,9 +328,10 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .themeSettings, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .themeSettings)
+        store.dispatch(action)
         router.push(ThemeSettingsController(windowUUID: windowUUID))
     }
 

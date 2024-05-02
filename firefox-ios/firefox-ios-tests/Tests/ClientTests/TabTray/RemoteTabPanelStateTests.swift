@@ -28,8 +28,9 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         let reducer = remoteTabsPanelReducer()
 
-        let context = WindowUUID.XCTestDefaultUUID.context
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshTabs(context))
+        let action = RemoteTabsPanelAction(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshTabs)
+        let newState = reducer(initialState, action)
 
         // Refresh should fail since Profile.hasSyncableAccount
         // is false for unit test, expected state is .idle
@@ -44,8 +45,10 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.clientAndTabs.count, 0)
 
-        let context = RemoteTabsRefreshSuccessContext(clientAndTabs: testTabs, windowUUID: .XCTestDefaultUUID)
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidSucceed(context))
+        let action = RemoteTabsPanelAction(clientAndTabs: testTabs,
+                                           windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshDidSucceed)
+        let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.clientAndTabs.count, 1)
         XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
@@ -55,8 +58,10 @@ final class RemoteTabPanelStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
 
-        let context = RemoteTabsRefreshDidFailContext(reason: .failedToSync, windowUUID: .XCTestDefaultUUID)
-        let newState = reducer(initialState, RemoteTabsPanelAction.refreshDidFail(context))
+        let action = RemoteTabsPanelAction(reason: .failedToSync,
+                                           windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshDidFail)
+        let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.idle)
         XCTAssertNotNil(newState.showingEmptyState)

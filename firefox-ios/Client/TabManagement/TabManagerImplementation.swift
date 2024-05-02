@@ -16,6 +16,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private let imageStore: DiskImageStore?
     private let tabMigration: TabMigrationUtility
     private var tabsTelemetry = TabsTelemetry()
+    private let windowManager: WindowManager
     var notificationCenter: NotificationProtocol
     var inactiveTabsManager: InactiveTabsManagerProtocol
 
@@ -33,18 +34,20 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager()) {
-            self.tabDataStore = tabDataStore
-            self.tabSessionStore = tabSessionStore
-            self.imageStore = imageStore
-            self.tabMigration = tabMigration
-            self.notificationCenter = notificationCenter
-            self.inactiveTabsManager = inactiveTabsManager
-            super.init(profile: profile, uuid: uuid)
+         inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
+         windowManager: WindowManager = AppContainer.shared.resolve()) {
+        self.tabDataStore = tabDataStore
+        self.tabSessionStore = tabSessionStore
+        self.imageStore = imageStore
+        self.tabMigration = tabMigration
+        self.notificationCenter = notificationCenter
+        self.inactiveTabsManager = inactiveTabsManager
+        self.windowManager = windowManager
+        super.init(profile: profile, uuid: uuid)
 
-            setupNotifications(forObserver: self,
-                               observing: [UIApplication.willResignActiveNotification,
-                                           .TabMimeTypeDidSet])
+        setupNotifications(forObserver: self,
+                           observing: [UIApplication.willResignActiveNotification,
+                                       .TabMimeTypeDidSet])
     }
 
     // MARK: - Restore tabs
@@ -280,7 +283,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
-        saveTabs(toProfile: profile, normalTabs, inactiveTabs)
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.storeTabs()
         preserveTabs()
         saveCurrentTabSessionData()
     }
@@ -334,13 +338,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                                        previous: previous,
                                        sessionData: sessionData)
 
+            // Default to false if the feature flag is not enabled
+            var isPrivate = false
             if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                let context = BoolValueContext(boolValue: tab.isPrivate, windowUUID: windowUUID)
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
-            } else {
-                let context = BoolValueContext(boolValue: false, windowUUID: windowUUID)
-                store.dispatch(PrivateModeUserAction.setPrivateModeTo(context))
+                isPrivate = tab.isPrivate
             }
+
+            let action = PrivateModeAction(isPrivate: isPrivate,
+                                           windowUUID: windowUUID,
+                                           actionType: PrivateModeActionType.setPrivateModeTo)
+            store.dispatch(action)
 
             didSelectTab(url)
             updateMenuItemsForSelectedTab()
@@ -367,10 +374,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
         AppEventQueue.completed(.selectTab(url, windowUUID))
-        let context = GeneralBrowserContext(selectedTabURL: url,
-                                            isPrivateBrowsing: selectedTab?.isPrivate ?? false,
-                                            windowUUID: windowUUID)
-        store.dispatch(GeneralBrowserAction.updateSelectedTab(context))
+        let action = GeneralBrowserAction(selectedTabURL: url,
+                                          isPrivateBrowsing: selectedTab?.isPrivate ?? false,
+                                          windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.updateSelectedTab)
+        store.dispatch(action)
     }
 
     @MainActor

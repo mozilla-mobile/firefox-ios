@@ -64,7 +64,7 @@ struct TabDisplayOrder: Codable {
 
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
-    var performingChainedOperations = false
+    private var performingChainedOperations = false
     var inactiveViewModel: LegacyInactiveTabViewModel?
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
@@ -426,7 +426,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     func undoCloseTab(tab: Tab, index: Int?) {
-        tabManager.undoCloseTab(tab: tab, position: index)
+        tabManager.undoCloseTab()
         _ = profile.recentlyClosedTabs.popFirstTab()
 
         refreshStore { [weak self] in
@@ -549,7 +549,10 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 // MARK: - InactiveTabsDelegate
 extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
     func closeInactiveTab(_ tab: Tab, index: Int) {
-        tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
+        tabManager.backupCloseTab = BackupCloseTab(
+            tab: tab,
+            restorePosition: index,
+            isSelected: false)
         removeSingleInactiveTab(tab)
 
         cfrDelegate?.presentUndoSingleToast { [weak self] undoButtonPressed in
@@ -622,7 +625,7 @@ extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
     }
 
     private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
-        tabManager.undoCloseTab(tab: tab, position: index)
+        tabManager.undoCloseTab()
         inactiveViewModel?.inactiveTabs.insert(tab, at: index)
 
         if inactiveViewModel?.inactiveTabs.count == 1 {
