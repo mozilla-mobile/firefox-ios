@@ -283,8 +283,7 @@ private extension XCUIElementQuery {
         return self.containing(isNetworkLoadingIndicator)
     }
 
-    @MainActor
-    var deviceStatusBars: XCUIElementQuery {
+    @MainActor var deviceStatusBars: XCUIElementQuery {
         guard let app = Snapshot.app else {
             fatalError("XCUIApplication is not set. Please call setupSnapshot(app) before snapshot().")
         }

@@ -19,7 +19,8 @@ class Debouncer {
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(triggerCompletion), userInfo: nil, repeats: false)
     }
 
-    @objc private func triggerCompletion() {
+    @objc
+    private func triggerCompletion() {
         guard let timer = timer, timer.isValid else { return }
         completion?()
     }
