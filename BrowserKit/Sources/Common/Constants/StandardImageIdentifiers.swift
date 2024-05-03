@@ -26,6 +26,7 @@ public struct StandardImageIdentifiers {
         public static let starFill = "starFillMedium"
         public static let starOneHalfFill = "starOneHalfFillMedium"
         public static let sun = "sunMedium"
+        public static let sunFill = "sunFillMedium"
     }
 
     // Icon size 24x24
