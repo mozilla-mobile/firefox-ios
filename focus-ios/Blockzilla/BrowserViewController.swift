@@ -337,8 +337,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: self.urlBar.shieldIconAnchor,
                     sourceRect: CGRect(x: self.urlBar.shieldIconAnchor.bounds.midX, y: self.urlBar.shieldIconAnchor.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
-                    dismiss: {
-                        [unowned self] in self.onboardingEventsHandler.route = nil
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil
                         self.onboardingEventsHandler.send(.showTrash)
                     }
                 )
