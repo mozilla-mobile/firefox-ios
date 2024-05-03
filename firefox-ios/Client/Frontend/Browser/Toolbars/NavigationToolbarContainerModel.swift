@@ -8,19 +8,28 @@ import ToolbarKit
 struct NavigationToolbarContainerModel {
     let actions: [ToolbarElement]
     let displayBorder: Bool
+    let windowUUID: UUID
 
     var navigationToolbarState: NavigationToolbarState {
         return NavigationToolbarState(actions: actions, shouldDisplayBorder: displayBorder)
     }
 
-    init(state: ToolbarState) {
+    init(state: ToolbarState, windowUUID: UUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.actions = state.navigationToolbar.actions.map { action in
-            ToolbarElement(iconName: action.iconName,
-                           isEnabled: action.isEnabled,
-                           a11yLabel: action.a11yLabel,
-                           a11yId: action.a11yId,
-                           onSelected: nil)
+            ToolbarElement(
+                iconName: action.iconName,
+                isEnabled: action.isEnabled,
+                a11yLabel: action.a11yLabel,
+                a11yId: action.a11yId,
+                onSelected: { button in
+                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         gestureType: .tap,
+                                                         windowUUID: windowUUID,
+                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
+                    store.dispatch(action)
+            })
         }
+        self.windowUUID = windowUUID
     }
 }

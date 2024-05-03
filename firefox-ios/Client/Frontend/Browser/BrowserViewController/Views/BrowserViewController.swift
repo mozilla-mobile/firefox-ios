@@ -588,6 +588,8 @@ class BrowserViewController: UIViewController,
             if state.showOverlay == true {
                 overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
             }
+
+            updateToolbarActions()
         }
     }
 
@@ -1601,6 +1603,23 @@ class BrowserViewController: UIViewController,
         urlBar.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
         navigationToolbar.updatePageStatus(isPage)
+    }
+
+    private func updateToolbarActions() {
+        didTabOnHome()
+    }
+
+    func didTabOnHome() {
+        guard browserViewControllerState?.navigateToHome == true else { return }
+
+        updateZoomPageBarVisibility(visible: false)
+        let page = NewTabAccessors.getHomePage(self.profile.prefs)
+        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+        } else if let homePanelURL = page.url {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
+        }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
     }
 
     // MARK: Opening New Tabs

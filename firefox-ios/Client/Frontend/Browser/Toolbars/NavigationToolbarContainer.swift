@@ -65,7 +65,8 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     }
 
     private func updateModel(toolbarState: ToolbarState) {
-        self.model = NavigationToolbarContainerModel(state: toolbarState)
+        guard let windowUUID else { return }
+        self.model = NavigationToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
 
         guard let model else { return }
         toolbar.configure(state: model.navigationToolbarState)

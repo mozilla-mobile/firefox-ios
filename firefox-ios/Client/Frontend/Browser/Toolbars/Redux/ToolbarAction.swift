@@ -7,11 +7,11 @@ import Redux
 import ToolbarKit
 
 class ToolbarAction: Action {
-    let actions: [ToolbarState.ActionState]
-    let displayBorder: Bool
+    let actions: [ToolbarState.ActionState]?
+    let displayBorder: Bool?
 
-    init(actions: [ToolbarState.ActionState],
-         displayBorder: Bool,
+    init(actions: [ToolbarState.ActionState]? = nil,
+         displayBorder: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.actions = actions
@@ -22,4 +22,22 @@ class ToolbarAction: Action {
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
+}
+
+class ToolbarMiddlewareAction: Action {
+    let buttonType: ToolbarState.ActionState.ActionType?
+    let gestureType: ToolbarButtonGesture?
+
+    init(buttonType: ToolbarState.ActionState.ActionType? = nil,
+         gestureType: ToolbarButtonGesture? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.buttonType = buttonType
+        self.gestureType = gestureType
+        super.init(windowUUID: windowUUID, actionType: actionType)
+    }
+}
+
+enum ToolbarMiddlewareActionType: ActionType {
+    case didTapButton
 }

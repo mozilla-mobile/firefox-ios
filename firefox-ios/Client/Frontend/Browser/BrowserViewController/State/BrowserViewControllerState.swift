@@ -16,6 +16,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var showOverlay: Bool
     var reloadWebView: Bool
     var browserViewType: BrowserViewType
+    var navigateToHome: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -35,7 +36,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   showOverlay: bvcState.showOverlay,
                   windowUUID: bvcState.windowUUID,
                   reloadWebView: bvcState.reloadWebView,
-                  browserViewType: bvcState.browserViewType)
+                  browserViewType: bvcState.browserViewType,
+                  navigateToHome: bvcState.navigateToHome)
     }
 
     init(windowUUID: WindowUUID) {
@@ -47,7 +49,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             toast: nil,
             showOverlay: false,
             windowUUID: windowUUID,
-            browserViewType: .normalHomepage)
+            browserViewType: .normalHomepage,
+            navigateToHome: false)
     }
 
     init(
@@ -59,7 +62,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         showOverlay: Bool = false,
         windowUUID: WindowUUID,
         reloadWebView: Bool = false,
-        browserViewType: BrowserViewType
+        browserViewType: BrowserViewType,
+        navigateToHome: Bool = false
     ) {
         self.searchScreenState = searchScreenState
         self.showDataClearanceFlow = showDataClearanceFlow
@@ -70,6 +74,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.showOverlay = showOverlay
         self.reloadWebView = reloadWebView
         self.browserViewType = browserViewType
+        self.navigateToHome = navigateToHome
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -93,7 +98,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showOverlay: state.showOverlay,
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
-                browserViewType: state.browserViewType)
+                browserViewType: state.browserViewType,
+                navigateToHome: state.navigateToHome)
         }
     }
 
@@ -105,7 +111,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             toolbarState: state.toolbarState,
             fakespotState: FakespotState.reducer(state.fakespotState, action),
             windowUUID: state.windowUUID,
-            browserViewType: state.browserViewType)
+            browserViewType: state.browserViewType,
+            navigateToHome: state.navigateToHome)
     }
 
     static func reduceStateForPrivateModeAction(action: PrivateModeAction,
@@ -124,7 +131,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
                 windowUUID: state.windowUUID,
                 reloadWebView: true,
-                browserViewType: browserViewType)
+                browserViewType: browserViewType,
+                navigateToHome: state.navigateToHome)
         default:
             return state
         }
@@ -142,7 +150,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
                 toast: toastType,
                 windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType)
+                browserViewType: state.browserViewType,
+                navigateToHome: state.navigateToHome)
         case GeneralBrowserActionType.showOverlay:
             let showOverlay = action.showOverlay ?? false
             return BrowserViewControllerState(
@@ -152,9 +161,23 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: FakespotState.reducer(state.fakespotState, action),
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType)
+                browserViewType: state.browserViewType,
+                navigateToHome: state.navigateToHome)
         case GeneralBrowserActionType.updateSelectedTab:
             return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action: action, state: state)
+        case GeneralBrowserActionType.goToHomepage:
+            let showHomepage = action.navigateToHome ?? false
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: state.toolbarState,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                showMenu: state.showMenu,
+                navigateToHome: showHomepage)
+
         default:
             return state
         }
@@ -171,7 +194,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 fakespotState: state.fakespotState,
                 showOverlay: state.showOverlay,
                 windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType)
+                browserViewType: state.browserViewType,
+                navigateToHome: state.navigateToHome)
         default:
             return state
         }
@@ -197,6 +221,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             showOverlay: state.showOverlay,
             windowUUID: state.windowUUID,
             reloadWebView: true,
-            browserViewType: browserViewType)
+            browserViewType: browserViewType,
+            navigateToHome: state.navigateToHome)
     }
 }

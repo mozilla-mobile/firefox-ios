@@ -78,9 +78,10 @@ struct ToolbarState: ScreenState, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
+            guard let actions = action.actions, let displayBorder = action.displayBorder else { return state }
             var state = state
-            state.navigationToolbar.actions = action.actions
-            state.navigationToolbar.displayBorder = action.displayBorder
+            state.navigationToolbar.actions = actions
+            state.navigationToolbar.displayBorder = displayBorder
             return state
 
         default:

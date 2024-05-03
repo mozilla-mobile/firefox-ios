@@ -22,6 +22,8 @@ class ToolbarMiddleware: FeatureFlaggable {
     lazy var toolbarProvider: Middleware<AppState> = { [self] state, action in
         if let action = action as? GeneralBrowserMiddlewareAction {
             self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
+        } else if let action = action as? ToolbarMiddlewareAction {
+            self.resolveToolbarMiddlewareActions(action: action, state: state)
         }
     }
 
@@ -41,6 +43,26 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         default:
             break
+        }
+    }
+
+    private func resolveToolbarMiddlewareActions(action: ToolbarMiddlewareAction, state: AppState) {
+        switch action.actionType {
+        case ToolbarMiddlewareActionType.didTapButton:
+            resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
+
+        default:
+            break
+        }
+    }
+
+    private func resolveToolbarMiddlewareButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let buttonType = action.buttonType, let gestureType = action.gestureType else { return }
+
+        let uuid = action.windowUUID
+        switch gestureType {
+        case .tap: handleToolbarButtonTapActions(actionType: buttonType, windowUUID: uuid)
+        case .longPress: handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
         }
     }
 
@@ -80,5 +102,32 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: windowUUID) else { return false }
         let toolbarState = browserState.toolbarState
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
+    }
+
+    private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: UUID) {
+        switch actionType {
+        case .menu:
+            let action = GeneralBrowserAction(showMenu: true,
+                                              windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showMenu)
+            store.dispatch(action)
+
+        case .home:
+            let action = GeneralBrowserAction(navigateToHome: true,
+                                              windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.goToHomepage)
+            store.dispatch(action)
+
+        default:
+            break
+        }
+    }
+
+    private func handleToolbarButtonLongPressActions(actionType: ToolbarState.ActionState.ActionType,
+                                                     windowUUID: UUID) {
+        switch actionType {
+        default:
+            break
+        }
     }
 }
