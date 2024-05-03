@@ -29,7 +29,8 @@ class SafariInstructionsViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(updateEnabledState), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
-    @objc func updateEnabledState() {
+    @objc
+    func updateEnabledState() {
         detector.detectEnabled(view) { enabled in
             if enabled {
                 self.navigationController!.popViewController(animated: true)
