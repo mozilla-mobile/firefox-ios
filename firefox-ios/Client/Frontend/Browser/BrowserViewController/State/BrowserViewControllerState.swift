@@ -175,7 +175,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: state.toast,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                showMenu: state.showMenu,
                 navigateToHome: showHomepage)
 
         default:

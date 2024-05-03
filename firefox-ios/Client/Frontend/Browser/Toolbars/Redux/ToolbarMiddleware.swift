@@ -106,12 +106,6 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: UUID) {
         switch actionType {
-        case .menu:
-            let action = GeneralBrowserAction(showMenu: true,
-                                              windowUUID: windowUUID,
-                                              actionType: GeneralBrowserActionType.showMenu)
-            store.dispatch(action)
-
         case .home:
             let action = GeneralBrowserAction(navigateToHome: true,
                                               windowUUID: windowUUID,

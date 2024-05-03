@@ -22,7 +22,7 @@ struct NavigationToolbarContainerModel {
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,
                 a11yId: action.a11yId,
-                onSelected: { button in
+                onSelected: {
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          gestureType: .tap,
                                                          windowUUID: windowUUID,
