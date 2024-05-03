@@ -348,8 +348,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { [weak self] isButtonTapped in
-                guard let self, let closedTab = tabManager.backupCloseTab else { return }
-                isButtonTapped ? self.tabManager.undoCloseTab(tab: closedTab.tab, position: closedTab.restorePosition) : nil
+                guard let self,
+                        tabManager.backupCloseTab != nil,
+                        isButtonTapped
+                else { return }
+                self.tabManager.undoCloseTab()
             }
             show(toast: toast)
         default:

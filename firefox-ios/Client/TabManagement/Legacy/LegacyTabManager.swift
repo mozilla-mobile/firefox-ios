@@ -60,6 +60,7 @@ enum SwitchPrivacyModeResult {
 struct BackupCloseTab {
     var tab: Tab
     var restorePosition: Int?
+    var isSelected: Bool
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
@@ -295,21 +296,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 tab.close()
                 TabEvent.post(.didClose, for: tab)
             }
-        }
-    }
-
-    func saveTabs(toProfile profile: Profile, _ tabs: [Tab], _ inactiveTabs: [Tab]) {
-        let inactiveTabs = Set(inactiveTabs)
-        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.compactMap {
-            let inactive = inactiveTabs.contains($0)
-            return Tab.toRemoteTab($0, inactive: inactive)
-        }
-
-        // Don't insert into the DB immediately. We tend to contend with more important
-        // work like querying for top sites.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            profile.storeTabs(storedTabs)
         }
     }
 
@@ -582,10 +568,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         let tab = tabs[index]
         let viableTabsIndex = deletedIndexForViableTabs(tab)
         if TabTrayFlagManager.isRefactorEnabled {
-            backupCloseTab = BackupCloseTab(tab: tab, restorePosition: viableTabsIndex)
+            backupCloseTab = BackupCloseTab(
+                tab: tab,
+                restorePosition: viableTabsIndex,
+                isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         self.removeTab(tab, flushToDisk: true)
         self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+
+        // TODO: FXIOS-9084 This is not ideal, follow up in this ticket to make tab selection reasonably synchronous
+        try? await Task.sleep(nanoseconds: NSEC_PER_SEC/10)
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -608,7 +600,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return
         }
 
-        backupCloseTab = BackupCloseTab(tab: tab, restorePosition: removalIndex)
+        backupCloseTab = BackupCloseTab(tab: tab,
+                                        restorePosition: removalIndex,
+                                        isSelected: selectedTab?.tabUUID == tab.tabUUID)
         let prevCount = count
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
@@ -647,7 +641,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         if let tab = selectedTab, tab.isPrivate == isPrivateMode {
             backupCloseTab = BackupCloseTab(tab: tab,
-                                            restorePosition: tabs.firstIndex(of: tab))
+                                            restorePosition: tabs.firstIndex(of: tab),
+                                            isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         backupCloseTabs = tabs
         for tab in currentModeTabs {
@@ -854,24 +849,21 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         storeChanges()
     }
 
-    func undoCloseTab(tab: Tab, position: Int?) {
-        if let index = position {
-            tabs.insert(tab, at: index)
+    func undoCloseTab() {
+        guard let backupCloseTab = self.backupCloseTab else { return }
+
+        if let index = backupCloseTab.restorePosition {
+            tabs.insert(backupCloseTab.tab, at: index)
         } else {
-            tabs.append(tab)
+            tabs.append(backupCloseTab.tab)
+        }
+
+        if backupCloseTab.isSelected {
+            self.selectTab(backupCloseTab.tab)
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         storeChanges()
-
-        // Select previous selected tab
-        let tabUUID = selectedTab?.tabUUID
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) {
-            if let tabUUID = tabUUID,
-               let tabToSelect = self.tabs.first(where: { $0.tabUUID == tabUUID }) {
-                self.selectTab(tabToSelect)
-            }
-        }
     }
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.

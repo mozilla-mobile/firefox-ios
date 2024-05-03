@@ -416,8 +416,10 @@ class FakespotViewModel {
                 reportAdEvent(eventName: .trustedDealsPlacement, aidvs: productAds.map(\.aid))
             }
 
-            let context = FakespotProductContext(productId: productId, tabUUID: nil, windowUUID: windowUUID)
-            store.dispatch(FakespotAction.adsExposureEventSendFor(context))
+            let action = FakespotAction(productId: productId,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.adsExposureEventSendFor)
+            store.dispatch(action)
         } catch {
             state = .error(error)
         }
@@ -554,8 +556,10 @@ class FakespotViewModel {
         stopTimer()
 
         guard let productId = shoppingProduct.product?.id else { return }
-        let context = FakespotProductContext(productId: productId, tabUUID: nil, windowUUID: tabManager.windowUUID)
-        store.dispatch(FakespotAction.adsImpressionEventSendFor(context))
+        let action = FakespotAction(productId: productId,
+                                    windowUUID: windowUUID,
+                                    actionType: FakespotActionType.adsImpressionEventSendFor)
+        store.dispatch(action)
         isViewVisible = false
     }
 

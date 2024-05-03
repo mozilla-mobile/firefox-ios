@@ -131,7 +131,7 @@ class AdsTelemetryHelper {
     }
 
     func trackClickedAds(with nextURL: URL?) {
-        if adsTelemetryUrlList.count > 0, let adUrl = nextURL?.absoluteString {
+        if !adsTelemetryUrlList.isEmpty, let adUrl = nextURL?.absoluteString {
             if adsTelemetryUrlList.contains(adUrl) {
                 if !adsProviderName.isEmpty {
                     trackAdsClickedOnPage(providerName: adsProviderName)

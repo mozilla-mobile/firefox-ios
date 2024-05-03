@@ -55,9 +55,9 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     private enum KVOConstants: String, CaseIterable {
-        case URL = "URL"
-        case canGoBack = "canGoBack"
-        case canGoForward = "canGoForward"
+        case URL
+        case canGoBack
+        case canGoForward
     }
 
     weak var delegate: LegacyWebControllerDelegate?
@@ -439,17 +439,17 @@ extension LegacyWebViewController: WKNavigationDelegate {
         }
 
         switch navigationAction.navigationType {
-            case .backForward:
-                let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
-                if navigatingBack {
-                    delegate?.webControllerDidNavigateBack(self)
-                } else {
-                    delegate?.webControllerDidNavigateForward(self)
-                }
-            case .reload:
-                delegate?.webControllerDidReload(self)
-            default:
-                break
+        case .backForward:
+            let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
+            if navigatingBack {
+                delegate?.webControllerDidNavigateBack(self)
+            } else {
+                delegate?.webControllerDidNavigateForward(self)
+            }
+        case .reload:
+            delegate?.webControllerDidReload(self)
+        default:
+            break
         }
 
         currentBackForwardItem = webView.backForwardList.currentItem

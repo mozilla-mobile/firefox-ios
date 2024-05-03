@@ -210,7 +210,7 @@ class RootViewController: UIViewController,
         findInPageBar?.totalResults = totalResults
     }
 
-    // MARK: - SearchBarDelegate
+    // MARK: - AddressToolbarDelegate
 
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
@@ -230,6 +230,10 @@ class RootViewController: UIViewController,
 
     func openBrowser(searchTerm: String) {
         browse(to: searchTerm)
+    }
+
+    func shouldDisplayTextForURL(_ url: URL?) -> String? {
+        return nil
     }
 
     // MARK: - SearchViewDelegate

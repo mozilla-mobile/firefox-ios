@@ -153,7 +153,13 @@ extension ThemeViewController: SystemThemeDelegate {
         configureStyle(for: isEnabled ? .device : .light)
         themeManager.set(isEnabled ? .device : .light)
         tableView.beginUpdates()
-        isEnabled ? tableView.deleteSections([1], with: .fade) :  tableView.insertSections([1], with: .fade)
+
+        if isEnabled {
+            tableView.deleteSections([1], with: .fade)
+        } else {
+            tableView.insertSections([1], with: .fade)
+        }
+
         tableView.endUpdates()
     }
 }

@@ -73,7 +73,7 @@ class BrowserViewController: UIViewController,
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
     var zoomPageBar: ZoomPageBar?
-    var microSurvey: MicroSurveyPromptView?
+    var microsurvey: MicrosurveyPromptView?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing = false
@@ -330,7 +330,7 @@ class BrowserViewController: UIViewController,
         updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
-        updateMicroSurveyConstraints()
+        updateMicrosurveyConstraints()
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -427,9 +427,7 @@ class BrowserViewController: UIViewController,
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
-        // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
-        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
+        logTelemetryForAppDidEnterBackground()
     }
 
     @objc
@@ -509,19 +507,23 @@ class BrowserViewController: UIViewController,
     }
 
     private func dismissModalsIfStartAtHome() {
-        if tabManager.startAtHomeCheck() {
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-            guard presentedViewController != nil else { return }
-            dismissVC()
-        }
+        guard tabManager.startAtHomeCheck() else { return }
+        let action = FakespotAction(isOpen: false,
+                                    windowUUID: windowUUID,
+                                    actionType: FakespotActionType.setAppearanceTo)
+        store.dispatch(action)
+
+        guard presentedViewController != nil else { return }
+        dismissVC()
     }
 
     // MARK: - Redux
 
     func subscribeToRedux() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .browserViewController)
+        store.dispatch(action)
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -531,9 +533,10 @@ class BrowserViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        store.dispatch(ActiveScreensStateAction.closeScreen(
-            ScreenActionContext(screen: .browserViewController, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .browserViewController)
+        store.dispatch(action)
         // Note: actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
@@ -777,7 +780,7 @@ class BrowserViewController: UIViewController,
         browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
 
-        setupMicroSurvey()
+        setupMicrosurvey()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1134,60 +1137,60 @@ class BrowserViewController: UIViewController,
         browserDelegate?.show(webView: webView)
     }
 
-    // MARK: - Micro Survey
-    private func setupMicroSurvey() {
-        guard featureFlags.isFeatureEnabled(.microSurvey, checking: .buildOnly) else { return }
+    // MARK: - Microsurvey
+    private func setupMicrosurvey() {
+        guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly) else { return }
 
-        // TODO: FXIOS-8990: Create Micro Survey Surface Manager to handle showing survey prompt
-        if microSurvey != nil {
-            removeMicroSurveyPrompt()
+        // TODO: FXIOS-8990: Create Microsurvey Surface Manager to handle showing survey prompt
+        if microsurvey != nil {
+            removeMicrosurveyPrompt()
         }
 
-        createMicroSurveyPrompt()
+        createMicrosurveyPrompt()
     }
 
-    private func updateMicroSurveyConstraints() {
-        guard let microSurvey else { return }
+    private func updateMicrosurveyConstraints() {
+        guard let microsurvey else { return }
 
-        microSurvey.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(microSurvey)
+        microsurvey.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(microsurvey)
 
         if urlBar.isBottomSearchBar {
-            overKeyboardContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+            overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
         } else {
-            bottomContainer.addArrangedViewToTop(microSurvey, animated: false, completion: {
+            bottomContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
         }
 
-        microSurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        microsurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
 
         updateViewConstraints()
     }
 
-    private func createMicroSurveyPrompt() {
-        let viewModel = MicroSurveyViewModel(openAction: {
+    private func createMicrosurveyPrompt() {
+        let viewModel = MicrosurveyViewModel(openAction: {
             // TODO: FXIOS-8895: Create Micro Survey Modal View
         }) {
             // TODO: FXIOS-8898: Setup Redux to handle open and dismissing modal
         }
 
-        self.microSurvey = MicroSurveyPromptView(viewModel: viewModel)
+        self.microsurvey = MicrosurveyPromptView(viewModel: viewModel)
 
-        updateMicroSurveyConstraints()
+        updateMicrosurveyConstraints()
     }
 
-    private func removeMicroSurveyPrompt() {
-        guard let microSurvey else { return }
+    private func removeMicrosurveyPrompt() {
+        guard let microsurvey else { return }
         if urlBar.isBottomSearchBar {
-            overKeyboardContainer.removeArrangedView(microSurvey)
+            overKeyboardContainer.removeArrangedView(microsurvey)
         } else {
-            bottomContainer.removeArrangedView(microSurvey)
+            bottomContainer.removeArrangedView(microsurvey)
         }
 
-        self.microSurvey = nil
+        self.microsurvey = nil
         updateViewConstraints()
     }
     // MARK: - Update content
@@ -1585,8 +1588,10 @@ class BrowserViewController: UIViewController,
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             let urlRequest = URLRequest(url: url)
             if TabTrayFlagManager.isRefactorEnabled {
-                let context = AddNewTabContext(urlRequest: urlRequest, isPrivate: false, windowUUID: self.windowUUID)
-                store.dispatch(TabPanelAction.addNewTab(context))
+                let action = TabPanelViewAction(panelType: .tabs,
+                                                windowUUID: self.windowUUID,
+                                                actionType: TabPanelViewActionType.addNewTab)
+                store.dispatch(action)
             } else {
                 self.tabManager.addTab(urlRequest)
             }
@@ -1798,6 +1803,13 @@ class BrowserViewController: UIViewController,
 
         guard let webView = tab.webView else { return }
 
+        self.screenshotHelper.takeScreenshot(tab)
+
+        // when navigate in tab, if the tab mime type is pdf, we should scroll to top
+        if tab.mimeType == MIMEType.PDF {
+            tab.shouldScrollToTop = true
+        }
+
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL) && !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
@@ -1845,18 +1857,26 @@ class BrowserViewController: UIViewController,
               let url = webView.url
         else {
             // We're on homepage or a blank tab
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
+            let action = FakespotAction(isOpen: false,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.setAppearanceTo)
+            store.dispatch(action)
             return
         }
 
-        store.dispatch(FakespotAction.tabDidChange(FakespotTabContext(tabUUID: tab.tabUUID, windowUUID: windowUUID)))
+        let action = FakespotAction(tabUUID: tab.tabUUID,
+                                    windowUUID: windowUUID,
+                                    actionType: FakespotActionType.tabDidChange)
+        store.dispatch(action)
         let isFeatureEnabled = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI)
         let environment = isFeatureEnabled ? FakespotEnvironment.staging : .prod
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: false, windowUUID: windowUUID)))
-
+            let action = FakespotAction(isOpen: false,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.setAppearanceTo)
+            store.dispatch(action)
             // Quick fix: make sure to sidebar is hidden when opened from deep-link
             // Relates to FXIOS-7844
             contentStackView.hideSidebar(self)
@@ -1864,8 +1884,11 @@ class BrowserViewController: UIViewController,
         }
 
         if isReload, let productId = product.product?.id {
-            let context = FakespotProductContext(productId: productId, tabUUID: tab.tabUUID, windowUUID: windowUUID)
-           store.dispatch(FakespotAction.tabDidReload(context))
+            let action = FakespotAction(tabUUID: tab.tabUUID,
+                                        productId: productId,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.tabDidReload)
+            store.dispatch(action)
         }
 
         // Do not update Fakespot when we are not on a selected tab
@@ -1885,7 +1908,10 @@ class BrowserViewController: UIViewController,
                   fakespotState.sidebarOpenForiPadLandscape,
                   UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
-            store.dispatch(FakespotAction.setAppearanceTo(BoolValueContext(boolValue: true, windowUUID: windowUUID)))
+            let action = FakespotAction(isOpen: true,
+                                        windowUUID: windowUUID,
+                                        actionType: FakespotActionType.setAppearanceTo)
+            store.dispatch(action)
         }
     }
 
@@ -2170,6 +2196,24 @@ class BrowserViewController: UIViewController,
 
     var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
+    }
+
+    // MARK: - Telemetry
+
+    private func logTelemetryForAppDidEnterBackground() {
+        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
+        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let windowManager: WindowManager = AppContainer.shared.resolve()
+            let windowCountExtras = [
+                TelemetryWrapper.EventExtraKey.windowCount.rawValue: Int64(windowManager.windows.count)
+            ]
+            TelemetryWrapper.recordEvent(category: .information,
+                                         method: .background,
+                                         object: .iPadWindowCount,
+                                         extras: windowCountExtras)
+        }
     }
 
     // MARK: - LibraryPanelDelegate
