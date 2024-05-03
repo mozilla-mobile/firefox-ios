@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import ComponentLibrary
 
 enum ParentControllerType {
     case passwords
@@ -12,24 +13,22 @@ enum ParentControllerType {
 }
 
 class DevicePasscodeRequiredViewController: SettingsViewController {
-    private var warningLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 17)
-        label.text = .LoginsDevicePasscodeRequiredMessage
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
+    private struct UX {
+        static let maxLabelLines: Int = 0
+        static let standardSpacing: CGFloat = 20
+    }
 
-    private lazy var learnMoreButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private var warningLabel: UILabel = .build { label in
+        label.text = .LoginsDevicePasscodeRequiredMessage
+        label.font = FXFontStyles.Regular.callout.scaledFont()
+        label.textAlignment = .center
+        label.numberOfLines = UX.maxLabelLines
+    }
+
+    private lazy var learnMoreButton: LinkButton = .build { button in
         button.setTitle(.LoginsDevicePasscodeRequiredLearnMoreButtonTitle, for: .normal)
-        button.addTarget(self, action: #selector(learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 19)
-        return button
-    }()
+        button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
+    }
 
     var parentType: ParentControllerType = .passwords
 
@@ -43,11 +42,11 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
             [
                 warningLabel.leadingAnchor.constraint(
                     equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                    constant: 20
+                    constant: UX.standardSpacing
                 ),
                 warningLabel.trailingAnchor.constraint(
                     equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                    constant: -20
+                    constant: -UX.standardSpacing
                 ),
                 warningLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 warningLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
@@ -55,7 +54,7 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
                 learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                 learnMoreButton.topAnchor.constraint(
                     equalTo: warningLabel.safeAreaLayoutGuide.bottomAnchor,
-                    constant: 20
+                    constant: UX.standardSpacing
                 )
             ]
         )
@@ -77,5 +76,12 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         let viewController = SettingsContentViewController(windowUUID: windowUUID)
         viewController.url = SupportUtils.URLForTopic("manage-saved-passwords-firefox-ios")
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+
+        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        learnMoreButton.applyTheme(theme: currentTheme)
     }
 }

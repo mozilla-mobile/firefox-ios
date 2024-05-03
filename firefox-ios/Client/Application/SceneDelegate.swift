@@ -56,6 +56,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
+        // For now, we explicitly cancel downloads for windows that are closed.
+        // On iPhone this will happen during app termination, for iPad it will
+        // occur on termination or when a window is disconnected/closed by iPadOS
+        downloadQueue.cancelAll(for: sceneCoordinator.windowUUID)
+
         // Notify WindowManager that window is closing
         (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
     }
@@ -70,7 +75,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         // Resume previously stopped downloads for, and on, THIS scene only.
-        downloadQueue.resumeAll()
+        if let uuid = sceneCoordinator?.windowUUID {
+            downloadQueue.resumeAll(for: uuid)
+        }
     }
 
     // MARK: - Transitioning to Background
@@ -80,7 +87,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to reduce the scene's memory usage, clear claims to resources & dependencies / services.
     /// UIKit takes a snapshot of the scene for the app switcher after this method returns.
     func sceneDidEnterBackground(_ scene: UIScene) {
-        downloadQueue.pauseAll()
+        if let uuid = sceneCoordinator?.windowUUID {
+            downloadQueue.pauseAll(for: uuid)
+        }
     }
 
     // MARK: - Opening URLs
@@ -94,15 +103,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         // Configure the route with the latest browsing state.
-        routeBuilder.configure(
-            isPrivate: UserDefaults.standard.bool(
-                forKey: PrefsKeys.LastSessionWasPrivate
-            ),
-            prefs: profile.prefs
-        )
-        guard let url = URLContexts.first?.url,
-              let route = routeBuilder.makeRoute(url: url) else { return }
-        handle(route: route)
+        guard let url = URLContexts.first?.url else { return }
+        handleOpenURL(url)
     }
 
     // MARK: - Continuing User Activities
@@ -128,6 +130,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
                                                  tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
         else { return }
+        handle(route: route)
+    }
+
+    func handleOpenURL(_ url: URL) {
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
+        guard let route = routeBuilder.makeRoute(url: url) else { return }
         handle(route: route)
     }
 

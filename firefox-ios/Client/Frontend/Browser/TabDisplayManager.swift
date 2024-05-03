@@ -64,13 +64,14 @@ struct TabDisplayOrder: Codable {
 
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
-    var performingChainedOperations = false
+    private var performingChainedOperations = false
     var inactiveViewModel: LegacyInactiveTabViewModel?
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
     var tabDisplayType: TabDisplayType = .TabGrid
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let tabManager: TabManager
     private let collectionView: UICollectionView
 
@@ -859,6 +860,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension LegacyTabDisplayManager: TabEventHandler {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard let indexPath = getIndexPath(tab: tab) else { return }
         refreshCell(atIndexPath: indexPath)

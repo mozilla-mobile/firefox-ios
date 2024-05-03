@@ -208,6 +208,47 @@ class WindowManagerTests: XCTestCase {
         XCTAssertNotEqual(requestedUUID2, savedUUID)
     }
 
+    func testClosingTwoWindowsInDifferentOrdersResultsInSensibleExpectedOrderWhenOpening() {
+        let subject = createSubject()
+        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
+        let mockTabDataStore = tabDataStore as! MockTabDataStore
+        mockTabDataStore.resetMockTabWindowUUIDs()
+
+        let uuid1 = UUID()
+        mockTabDataStore.injectMockTabWindowUUID(uuid1)
+        let uuid2 = UUID()
+        mockTabDataStore.injectMockTabWindowUUID(uuid2)
+
+        // Open a window using UUID 1
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid1)
+        // Open a window using UUID 2
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
+
+        // Close window 2, then window 1
+        subject.windowWillClose(uuid: uuid2)
+        subject.windowWillClose(uuid: uuid1)
+
+        // Now attempt to re-open two windows in order. We expect window
+        // 1 to open, then window 2
+        let result1 = subject.reserveNextAvailableWindowUUID()
+        let result2 = subject.reserveNextAvailableWindowUUID()
+        XCTAssertEqual(result1, uuid1)
+        XCTAssertEqual(result2, uuid2)
+
+        // Now re-open both windows in order...
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid1)
+        subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: uuid2)
+        // ...but close them in the opposite order as before (close window 1, then 2)
+        subject.windowWillClose(uuid: uuid1)
+        subject.windowWillClose(uuid: uuid2)
+
+        // Check that the next time we open the windows the order is now reversed
+        let result2_1 = subject.reserveNextAvailableWindowUUID()
+        let result2_2 = subject.reserveNextAvailableWindowUUID()
+        XCTAssertEqual(result2_1, uuid2)
+        XCTAssertEqual(result2_2, uuid1)
+    }
+
     // MARK: - Test Subject
 
     private func createSubject() -> WindowManager {

@@ -64,7 +64,6 @@ final class TabFileManagerTests: XCTestCase {
     func createMockWindow() -> WindowData {
         let tabs = createMockTabs()
         return WindowData(id: defaultTestTabWindowUUID,
-                          isPrimary: true,
                           activeTabId: tabs[0].id,
                           tabData: tabs)
     }

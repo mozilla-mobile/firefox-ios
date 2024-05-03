@@ -161,6 +161,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
@@ -235,15 +236,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let subtitle: String
 
         switch authenticationManager.biometricType {
-            case .faceID:
-                label = UIConstants.strings.labelFaceIDLogin
-                subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
-            case .touchID:
-                label = UIConstants.strings.labelTouchIDLogin
-                subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
-            default:
-                // Unknown biometric type
-                return nil
+        case .faceID:
+            label = UIConstants.strings.labelFaceIDLogin
+            subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
+        case .touchID:
+            label = UIConstants.strings.labelTouchIDLogin
+            subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
+        default:
+            // Unknown biometric type
+            return nil
         }
 
         let toggle = BlockerToggle(label: label, setting: SettingsToggle.biometricLogin, subtitle: subtitle)
@@ -524,7 +525,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     @objc private func toggleSwitched(_ sender: UISwitch) {
-        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != [] }[0].values.filter { $0.toggle == sender }[0]
+        let toggle = toggles.values.filter { $0.values.contains(where: { $0.toggle == sender }) }[0].values.filter { $0.toggle == sender }[0]
 
         func updateSetting() {
             Settings.set(sender.isOn, forToggle: toggle.setting)

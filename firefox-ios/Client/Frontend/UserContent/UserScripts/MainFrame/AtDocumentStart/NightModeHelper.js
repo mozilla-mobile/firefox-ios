@@ -129,6 +129,6 @@ Object.defineProperty(window.__firefox__.NightMode, "setEnabled", {
   }
 });
 
-window.addEventListener("DOMContentLoaded", function() {
-  window.__firefox__.NightMode.setEnabled(window.__firefox__.NightMode.enabled);
+window.addEventListener("pageshow",  () => {
+  webkit.messageHandlers.NightMode.postMessage({ state: "ready" });
 });

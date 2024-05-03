@@ -96,6 +96,7 @@
         "SearchTests\/testSearchEngine()",
         "SearchTests\/testSearchIconOnAboutHome()",
         "SearchTests\/testSearchStartAfterTypingTwoWords()",
+        "SearchTests\/testSearchSuggestions()",
         "SearchTests\/testSearchWithFirefoxOption()",
         "SettingsTests\/testCopiedLinks()",
         "SettingsTests\/testHelpOpensSUMOInTab()",

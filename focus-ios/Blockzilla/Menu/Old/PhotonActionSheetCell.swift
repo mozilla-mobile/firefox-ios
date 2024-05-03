@@ -67,6 +67,7 @@ class PhotonActionSheetCell: UITableViewCell {
     }()
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()

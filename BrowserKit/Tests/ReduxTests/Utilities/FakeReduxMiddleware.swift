@@ -5,26 +5,33 @@
 import Foundation
 
 @testable import Redux
+
 class FakeReduxMiddleware {
     lazy var fakeProvider: Middleware<FakeReduxState> = { state, action in
-        switch action {
-        case FakeReduxAction.requestInitialValue:
+        switch action.actionType {
+        case FakeReduxActionType.requestInitialValue:
             let initialValue = self.generateInitialValue()
-            DispatchQueue.main.async {
-                store.dispatch(FakeReduxAction.initialValueLoaded(initialValue))
-            }
-        case FakeReduxAction.increaseCounter:
+            let action = FakeReduxAction(counterValue: initialValue,
+                                         windowUUID: windowUUID,
+                                         actionType: FakeReduxActionType.initialValueLoaded)
+            store.dispatch(action)
+
+        case FakeReduxActionType.increaseCounter:
             let existingValue = state.counter
             let newValue = self.increaseCounter(currentValue: existingValue)
-            DispatchQueue.main.async {
-                store.dispatch(FakeReduxAction.counterIncreased(newValue))
-            }
-        case FakeReduxAction.decreaseCounter:
+            let action = FakeReduxAction(counterValue: newValue,
+                                         windowUUID: windowUUID,
+                                         actionType: FakeReduxActionType.counterIncreased)
+            store.dispatch(action)
+
+        case FakeReduxActionType.decreaseCounter:
             let existingValue = state.counter
             let newValue = self.decreaseCounter(currentValue: existingValue)
-            DispatchQueue.main.async {
-                store.dispatch(FakeReduxAction.counterDecreased(newValue))
-            }
+            let action = FakeReduxAction(counterValue: newValue,
+                                         windowUUID: windowUUID,
+                                         actionType: FakeReduxActionType.counterDecreased)
+            store.dispatch(action)
+
         default:
            break
         }

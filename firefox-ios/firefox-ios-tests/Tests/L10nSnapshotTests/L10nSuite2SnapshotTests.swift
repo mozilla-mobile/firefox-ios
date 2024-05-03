@@ -167,18 +167,21 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     @MainActor
     func testFakespotAvailable() throws {
-        navigator.openURL("https://www.amazon.com")
+        navigator.openURL("https://www.walmart.com")
         waitUntilPageLoad()
 
         // Search for and open a shoe listing
         let website = app.webViews["contentView"].firstMatch
-        mozWaitForElementToExist(website.textFields.firstMatch)
-        website.textFields.firstMatch.tap()
-        website.textFields.firstMatch.typeText("Shoe")
-        mozWaitForElementToExist(website.otherElements.buttons.firstMatch)
+        mozWaitForElementToExist(website.searchFields["Search"])
+        website.searchFields["Search"].tap()
+        website.searchFields["Search"].typeText("end table")
+        mozWaitForElementToExist(website.otherElements.buttons.firstMatch, timeout: 30)
         website.otherElements.buttons.element(boundBy: 1).tap()
         waitUntilPageLoad()
-        website.images.firstMatch.tap()
+        app.swipeUp()
+        mozWaitForElementToExist(website.staticTexts["Sponsored"].firstMatch)
+        mozWaitForElementToExist(website.staticTexts["Options"].firstMatch)
+        website.staticTexts["Options"].firstMatch.tap()
 
         // Tap the shopping cart icon
         waitUntilPageLoad()

@@ -713,7 +713,7 @@
 "Mark as Unread" = "סימון כלא נקרא";
 
 /* Toast displayed to the user after a bookmark has been added. */
-"Menu.AddBookmark.Confirm" = "נוספה סימניה";
+"Menu.AddBookmark.Confirm" = "נוספה סימנייה";
 
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "הוספה";

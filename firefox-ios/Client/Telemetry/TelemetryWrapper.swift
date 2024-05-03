@@ -45,9 +45,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
     static let shared = TelemetryWrapper()
 
-    // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
-    var defaultTabManager: TabManager?
-
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
     // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
@@ -152,10 +149,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
-        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-        if let count = defaultTabManager?.count {
-            GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
-        }
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let tabCount = windowManager.allWindowTabManagers().map({ $0.count }).reduce(0, +)
+        GleanMetrics.Tabs.cumulativeCount.add(Int32(tabCount))
 
         // Record other preference settings.
         // If the setting exists at the key location, use that value. Otherwise record the default

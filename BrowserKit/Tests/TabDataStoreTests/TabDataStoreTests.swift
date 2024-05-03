@@ -239,7 +239,6 @@ final class TabDataStoreTests: XCTestCase {
     func createMockWindow(uuid: UUID) -> WindowData {
         let tabs = createMockTabs()
         return WindowData(id: uuid,
-                          isPrimary: true,
                           activeTabId: tabs[0].id,
                           tabData: tabs)
     }

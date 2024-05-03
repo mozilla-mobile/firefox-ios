@@ -1050,6 +1050,93 @@ extension String {
     }
 }
 
+// MARK: - Micro survey
+extension String {
+    public struct Microsurvey {
+        public struct Prompt {
+            public static let TitleLabel = MZLocalizedString(
+                key: "Microsurvey.Prompt.TitleLabel.v127",
+                tableName: "Microsurvey",
+                value: "Help us make %@ better. It only takes a minute.",
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name.")
+            public static let TakeSurveyButton = MZLocalizedString(
+                key: "Microsurvey.Prompt.Button.v127",
+                tableName: "Microsurvey",
+                value: "Continue",
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Prompt.Close.AccessibilityLabel.v127",
+                tableName: "Microsurvey",
+                value: "Close Survey Prompt",
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt.")
+        }
+
+        public struct Survey {
+            public static let HeaderLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.HeaderLabel.v127",
+                tableName: "Microsurvey",
+                value: "Complete this survey",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.Close.AccessibilityLabel.v127",
+                tableName: "Microsurvey",
+                value: "Close Survey",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
+            public static let PrivacyPolicyLinkButtonTitle = MZLocalizedString(
+                key: "Microsurvey.Survey.PrivacyPolicyLink.v127",
+                tableName: "Microsurvey",
+                value: "Privacy notice",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details.")
+            public static let SubmitSurveyButton = MZLocalizedString(
+                key: "Microsurvey.Survey.Button.v127",
+                tableName: "Microsurvey",
+                value: "Submit",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses.")
+
+            public struct Options {
+                public static let LikertScaleOption1 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption1.v127",
+                    tableName: "Microsurvey",
+                    value: "Very Satisfied",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption2 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption2.v127",
+                    tableName: "Microsurvey",
+                    value: "Satisfied",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption3 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption3.v127",
+                    tableName: "Microsurvey",
+                    value: "Neutral",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption4 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption4.v127",
+                    tableName: "Microsurvey",
+                    value: "Dissatisfied",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption5 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption5.v127",
+                    tableName: "Microsurvey",
+                    value: "Very Dissatisfied",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+            }
+
+            public struct ConfirmationPage {
+                public static let HeaderLabel = MZLocalizedString(
+                    key: "Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127",
+                    tableName: "Microsurvey",
+                    value: "Survey complete",
+                    comment: "On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey.")
+                public static let ConfirmationLabel = MZLocalizedString(
+                    key: "Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127",
+                    tableName: "Microsurvey",
+                    value: "Thanks for your feedback!",
+                    comment: "On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey.")
+            }
+        }
+    }
+}
+
 // MARK: - Onboarding screens
 extension String {
     public struct Onboarding {
@@ -4146,9 +4233,9 @@ extension String {
             value: "The *adjusted rating* is based only on reviews we believe to be reliable.",
             comment: "Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
-            key: "Shopping.ReviewQualityCard.Highlights.Label.v120",
+            key: "Shopping.ReviewQualityCard.Highlights.Label.v126",
             tableName: "Shopping",
-            value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
+            value: "*Highlights* are from %@ reviews within the last 80 days that we believe to be reliable.",
             comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         public static let ReviewQualityCardLearnMoreButtonTitle = MZLocalizedString(
             key: "Shopping.ReviewQualityCard.LearnMoreButton.Title.v120",
@@ -5905,6 +5992,11 @@ extension String {
                 tableName: "Settings",
                 value: "Autofill Addresses",
                 comment: "Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage.")
+            public static let ReviewQualityCardHighlightsLabel = MZLocalizedString(
+                key: "Shopping.ReviewQualityCard.Highlights.Label.v120",
+                tableName: "Shopping",
+                value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
+                comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
         }
     }
 }

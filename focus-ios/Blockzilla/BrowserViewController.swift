@@ -382,7 +382,9 @@ class BrowserViewController: UIViewController {
                 anchoredBy: self.urlBar.textFieldAnchor,
                 sourceRect: CGRect(
                     x: self.urlBar.textFieldAnchor.bounds.minX,
-                    y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
+                    y: self.urlBar.textFieldAnchor.bounds.maxY,
+                    width: 0,
+                    height: 0
                 ),
                 body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
                 dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
@@ -657,39 +659,39 @@ class BrowserViewController: UIViewController {
                 guard let self = self else { return }
 
                 switch action {
-                    case .contextMenuTap(let anchor):
-                        self.updateFindInPageVisibility(visible: false)
-                        self.presentContextMenu(from: anchor)
+                case .contextMenuTap(let anchor):
+                    self.updateFindInPageVisibility(visible: false)
+                    self.presentContextMenu(from: anchor)
 
-                    case .backButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.goBack()
+                case .backButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.goBack()
 
-                    case .forwardButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.goForward()
+                case .forwardButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.goForward()
 
-                    case .deleteButtonTap:
-                        self.updateFindInPageVisibility(visible: false)
-                        self.resetBrowser()
-                        self.urlBarViewModel.resetToDefaults()
+                case .deleteButtonTap:
+                    self.updateFindInPageVisibility(visible: false)
+                    self.resetBrowser()
+                    self.urlBarViewModel.resetToDefaults()
 
-                    case .shieldIconButtonTap:
-                        self.urlBarDidTapShield(self.urlBar)
+                case .shieldIconButtonTap:
+                    self.urlBarDidTapShield(self.urlBar)
 
-                    case .stopButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.stop()
+                case .stopButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.stop()
 
-                    case .reloadButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.reload()
+                case .reloadButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.reload()
 
-                    case .dragInteractionStarted:
-                        GleanMetrics.UrlInteraction.dragStarted.record()
+                case .dragInteractionStarted:
+                    GleanMetrics.UrlInteraction.dragStarted.record()
 
-                    case .pasteAndGo:
-                        GleanMetrics.UrlInteraction.pasteAndGo.record()
+                case .pasteAndGo:
+                    GleanMetrics.UrlInteraction.pasteAndGo.record()
                 }
             }.store(in: &cancellables)
     }
@@ -803,22 +805,26 @@ class BrowserViewController: UIViewController {
 
         clearBrowser()
 
-        UIView.animate(withDuration: UIConstants.layout.deleteAnimationDuration, animations: {
-            screenshotView.snp.remakeConstraints { make in
-                make.centerX.equalTo(self.mainContainerView)
-                make.top.equalTo(self.mainContainerView.snp.bottom)
-                make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
-            }
+        UIView.animate(
+            withDuration: UIConstants.layout.deleteAnimationDuration,
+            animations: {
+                screenshotView.snp.remakeConstraints { make in
+                    make.centerX.equalTo(self.mainContainerView)
+                    make.top.equalTo(self.mainContainerView.snp.bottom)
+                    make.size.equalTo(self.mainContainerView).multipliedBy(0.9)
+                }
             screenshotView.alpha = 0
             self.mainContainerView.layoutIfNeeded()
-        }, completion: { _ in
-            self.urlBar.activateTextField()
-            Toast(text: UIConstants.strings.eraseMessage).show()
-            screenshotView.removeFromSuperview()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.onboardingEventsHandler.send(.clearTapped)
+            },
+            completion: { _ in
+                self.urlBar.activateTextField()
+                Toast(text: UIConstants.strings.eraseMessage).show()
+                screenshotView.removeFromSuperview()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.onboardingEventsHandler.send(.clearTapped)
+                }
             }
-        })
+        )
 
         userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
         let interaction = INInteraction(intent: eraseIntent, response: nil)
@@ -880,12 +886,12 @@ class BrowserViewController: UIViewController {
 
         // Increment the threshold by 50 so the user is not constantly pestered with review requests
         switch threshold {
-            case 14:
-                UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
-            case 64:
-                UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
-            default:
-                break
+        case 14:
+            UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        case 64:
+            UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        default:
+            break
         }
 
         if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
@@ -1476,7 +1482,11 @@ extension BrowserViewController: PhotonActionSheetDelegate {
 
     // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
     func photonActionSheetDidToggleProtection(enabled: Bool) {
-        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
 
         TipManager.sitesNotWorkingTip = false
 
@@ -1496,7 +1506,11 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: TrackingProtectionDelegate {
     // FXIOS-8643 - #19166 ⁃ Integrate content blocking in Focus iOS
     func trackingProtectionDidToggleProtection(enabled: Bool) {
-        enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
+        if enabled {
+            webViewController.enableTrackingProtection()
+        } else {
+            webViewController.disableTrackingProtection()
+        }
 
         TipManager.sitesNotWorkingTip = false
 
@@ -1714,7 +1728,6 @@ extension BrowserViewController: LegacyWebControllerDelegate {
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
 
-
         urlBarViewModel.loadingProgres = estimatedProgress
     }
 
@@ -1853,32 +1866,44 @@ extension BrowserViewController: LegacyWebControllerDelegate {
 
         scrollBarState = .animating
 
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapsedState = .extended
-            self.urlBarTopConstraint.update(offset: 0)
-            self.toolbarBottomConstraint.update(inset: 0)
-            scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
-            self.scrollBarOffsetAlpha = 0
-            self.view.layoutIfNeeded()
-        }, completion: { _ in
-            self.scrollBarState = .expanded
-        })
+        UIView.animate(
+            withDuration: UIConstants.layout.urlBarTransitionAnimationDuration,
+            delay: 0,
+            options: .allowUserInteraction,
+            animations: {
+                self.urlBar.collapsedState = .extended
+                self.urlBarTopConstraint.update(offset: 0)
+                self.toolbarBottomConstraint.update(inset: 0)
+                scrollView.bounds.origin.y += self.scrollBarOffsetAlpha * UIConstants.layout.urlBarHeight
+                self.scrollBarOffsetAlpha = 0
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                self.scrollBarState = .expanded
+            }
+        )
     }
 
     // FXIOS-8642 - #19165 ⁃ Integrate scroll controller delegate with Focus iOS
     private func hideToolbars() {
         let scrollView = webViewController.scrollView
         scrollBarState = .animating
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
-            self.urlBar.collapsedState = .collapsed
-            self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
-            self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
-            scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
-            self.scrollBarOffsetAlpha = 1
-            self.view.layoutIfNeeded()
-        }, completion: { _ in
-            self.scrollBarState = .collapsed
-        })
+        UIView.animate(
+            withDuration: UIConstants.layout.urlBarTransitionAnimationDuration,
+            delay: 0,
+            options: .allowUserInteraction,
+            animations: {
+                self.urlBar.collapsedState = .collapsed
+                self.urlBarTopConstraint.update(offset: -UIConstants.layout.urlBarHeight + UIConstants.layout.collapsedUrlBarHeight)
+                self.toolbarBottomConstraint.update(offset: UIConstants.layout.browserToolbarHeight + self.view.safeAreaInsets.bottom)
+                scrollView.bounds.origin.y += (self.scrollBarOffsetAlpha - 1) * UIConstants.layout.urlBarHeight
+                self.scrollBarOffsetAlpha = 1
+                self.view.layoutIfNeeded()
+            },
+            completion: { _ in
+                self.scrollBarState = .collapsed
+            }
+        )
     }
 
     private func snapToolbars(scrollView: UIScrollView) {

@@ -156,10 +156,11 @@ class TipManager {
 
     /// Return a string representing the trackers tip. It will include the current number of trackers blocked, formatted as a decimal.
     func shareTrackersDescription() -> String {
-        let numberOfTrackersBlocked = NSNumber(integerLiteral: UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey))
+        let numberOfTrackersBlocked = UserDefaults.standard.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        return String(format: .shareTrackersTipDescription, formatter.string(from: numberOfTrackersBlocked) ?? "0")
+        let formattedNumber = formatter.string(from: NSNumber(value: numberOfTrackersBlocked)) ?? "0"
+        return String(format: .shareTrackersTipDescription, formattedNumber)
     }
 
     private var shareTrackersTip: Tip {

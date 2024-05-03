@@ -65,9 +65,9 @@ struct BackupCloseTab {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
     // MARK: - Variables
-    private let tabEventHandlers: [TabEventHandler]
     let profile: Profile
     let windowUUID: WindowUUID
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
     var isRestoringTabs = false
     var tabRestoreHasFinished = false
     var tabs = [Tab]()
@@ -163,11 +163,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.windowUUID = uuid
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
-        self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
         super.init()
 
+        GlobalTabEventHandlers.configure(with: profile)
         register(self, forTabEvents: .didSetScreenshot)
 
         addNavigationDelegate(self)
@@ -295,21 +295,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 tab.close()
                 TabEvent.post(.didClose, for: tab)
             }
-        }
-    }
-
-    func saveTabs(toProfile profile: Profile, _ tabs: [Tab], _ inactiveTabs: [Tab]) {
-        let inactiveTabs = Set(inactiveTabs)
-        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.compactMap {
-            let inactive = inactiveTabs.contains($0)
-            return Tab.toRemoteTab($0, inactive: inactive)
-        }
-
-        // Don't insert into the DB immediately. We tend to contend with more important
-        // work like querying for top sites.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-            profile.storeTabs(storedTabs)
         }
     }
 

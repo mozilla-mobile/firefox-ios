@@ -9,11 +9,8 @@ import ComponentLibrary
 
 class PasswordManagerOnboardingViewController: SettingsViewController {
     private struct UX {
-        static let fontSize: CGFloat = 19
         static let maxLabelLines: Int = 0
         static let buttonCornerRadius: CGFloat = 8
-        static let defaultContentSize: CGFloat = 0
-        static let leadingContentSize: CGFloat = 15
         static let standardSpacing: CGFloat = 20
         static let continueButtonHeight: CGFloat = 44
         static let buttonHorizontalPadding: CGFloat = 35
@@ -22,7 +19,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
 
     private var onboardingMessageLabel: UILabel = . build { label in
         label.text = .Settings.Passwords.OnboardingMessage
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
+        label.font = FXFontStyles.Regular.callout.scaledFont()
         label.textAlignment = .center
         label.numberOfLines = UX.maxLabelLines
     }
@@ -30,17 +27,13 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     private lazy var learnMoreButton: LinkButton = .build { button in
         button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
         button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
     }
 
     private lazy var continueButton: PrimaryRoundedButton = .build { button in
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.defaultContentSize,
-                                                                      leading: UX.leadingContentSize,
-                                                                      bottom: UX.defaultContentSize,
-                                                                      trailing: UX.defaultContentSize)
+        button.configuration?.titleAlignment = .center
         button.addTarget(self, action: #selector(self.proceedButtonTapped), for: .touchUpInside)
     }
 
@@ -134,9 +127,8 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.currentTheme(for: windowUUID).colors
-        learnMoreButton.setTitleColor(currentTheme.actionPrimary, for: .normal)
-        continueButton.backgroundColor = currentTheme.actionPrimary
-        continueButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        learnMoreButton.applyTheme(theme: currentTheme)
+        continueButton.applyTheme(theme: currentTheme)
     }
 }

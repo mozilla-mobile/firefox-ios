@@ -92,7 +92,7 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Slå på varsler";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Når du er inlogget og synkronisert, er du tryggere. %@ krypterer passordene, bokmerkene og mer.";
+"Onboarding.Sync.Description.v120" = "Når du er innlogget og synkronisert, er du tryggere. %@ krypterer passordene, bokmerkene og mer.";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@ krypterer passordene, bokmerkene og mer når du er synkronisert.";
