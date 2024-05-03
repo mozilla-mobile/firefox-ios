@@ -1604,11 +1604,13 @@ class BrowserViewController: UIViewController,
     }
 
     private func updateToolbarActions() {
+        guard isToolbarRefactorEnabled else { return }
         didTabOnHome()
     }
 
     func didTabOnHome() {
-        guard browserViewControllerState?.navigateToHome == true else { return }
+        let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateToHome == true
+        guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
 
         updateZoomPageBarVisibility(visible: false)
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
@@ -1618,6 +1620,12 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+
+        guard isToolbarRefactorEnabled else { return }
+        let action = GeneralBrowserAction(navigateToHome: false,
+                                          windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.goToHomepage)
+        store.dispatch(action)
     }
 
     // MARK: Opening New Tabs
