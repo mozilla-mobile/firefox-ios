@@ -25,7 +25,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     private var heroImageView: HeroImageView = .build { _ in }
 
     let itemTitle: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
 
