@@ -26,7 +26,8 @@ public struct TextStyling {
     }
 
     public func monospacedFont() -> UIFont {
-        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle, size: size,
+        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle,
+                                                      size: size,
                                                       symbolicTraits: [.traitMonoSpace])
     }
 }
