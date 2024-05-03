@@ -21,11 +21,11 @@ only_rules: # Only enforce these rules, ignore all others
   - inclusive_language
   - invalid_swiftlint_command
   - large_tuple
-  # - leading_whitespace
+  - leading_whitespace
   - legacy_cggeometry_functions
-  # - legacy_constant
+  - legacy_constant
   - legacy_constructor
-  # - legacy_hashing
+  - legacy_hashing
   - legacy_nsgeometry_functions
   - mark
   - no_space_in_method_call
@@ -33,14 +33,14 @@ only_rules: # Only enforce these rules, ignore all others
   - operator_whitespace
   - orphaned_doc_comment
   - private_over_fileprivate
-  # - protocol_property_accessors_order
+  - protocol_property_accessors_order
   - redundant_discardable_let
   - redundant_objc_attribute
   - redundant_optional_initialization
   - redundant_string_enum_value
   - redundant_void_return
   - return_arrow_whitespace
-  # - statement_position
+  - statement_position
   - switch_case_alignment
   - syntactic_sugar
   - trailing_newline

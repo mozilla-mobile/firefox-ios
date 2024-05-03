@@ -6,15 +6,18 @@ import Common
 import Redux
 
 class FakespotAction: Action {
+    let isOpen: Bool?
     let isExpanded: Bool?
     let tabUUID: TabUUID?
     let productId: String?
 
-    init(isExpanded: Bool? = nil,
+    init(isOpen: Bool? = nil,
+         isExpanded: Bool? = nil,
          tabUUID: TabUUID? = nil,
          productId: String? = nil,
          windowUUID: UUID,
          actionType: ActionType) {
+        self.isOpen = isOpen
         self.isExpanded = isExpanded
         self.tabUUID = tabUUID
         self.productId = productId

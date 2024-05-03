@@ -440,9 +440,7 @@ class BrowserViewController: UIViewController,
         // Formerly these calls were run during AppDelegate.didEnterBackground(), but we have
         // individual TabManager instances for each BVC, so we perform these here instead.
         tabManager.preserveTabs()
-        // TODO: [FXIOS-7856] Some additional updates for telemetry forthcoming, once iPad multi-window is enabled.
-        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
-        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
+        logTelemetryForAppDidEnterBackground()
     }
 
     @objc
@@ -523,7 +521,7 @@ class BrowserViewController: UIViewController,
 
     private func dismissModalsIfStartAtHome() {
         guard tabManager.startAtHomeCheck() else { return }
-        let action = FakespotAction(isExpanded: false,
+        let action = FakespotAction(isOpen: false,
                                     windowUUID: windowUUID,
                                     actionType: FakespotActionType.setAppearanceTo)
         store.dispatch(action)
@@ -1906,7 +1904,7 @@ class BrowserViewController: UIViewController,
               let url = webView.url
         else {
             // We're on homepage or a blank tab
-            let action = FakespotAction(isExpanded: false,
+            let action = FakespotAction(isOpen: false,
                                         windowUUID: windowUUID,
                                         actionType: FakespotActionType.setAppearanceTo)
             store.dispatch(action)
@@ -1922,7 +1920,7 @@ class BrowserViewController: UIViewController,
         let product = ShoppingProduct(url: url, client: FakespotClient(environment: environment))
 
         guard product.product != nil, !tab.isPrivate else {
-            let action = FakespotAction(isExpanded: false,
+            let action = FakespotAction(isOpen: false,
                                         windowUUID: windowUUID,
                                         actionType: FakespotActionType.setAppearanceTo)
             store.dispatch(action)
@@ -1957,7 +1955,7 @@ class BrowserViewController: UIViewController,
                   fakespotState.sidebarOpenForiPadLandscape,
                   UIDevice.current.userInterfaceIdiom == .pad {
             // Sidebar should be displayed, display Fakespot
-            let action = FakespotAction(isExpanded: true,
+            let action = FakespotAction(isOpen: true,
                                         windowUUID: windowUUID,
                                         actionType: FakespotActionType.setAppearanceTo)
             store.dispatch(action)
@@ -2245,6 +2243,24 @@ class BrowserViewController: UIViewController,
 
     var isPreferSwitchToOpenTabOverDuplicateFeatureEnabled: Bool {
         featureFlags.isFeatureEnabled(.preferSwitchToOpenTabOverDuplicate, checking: .buildOnly)
+    }
+
+    // MARK: - Telemetry
+
+    private func logTelemetryForAppDidEnterBackground() {
+        SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
+        TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let windowManager: WindowManager = AppContainer.shared.resolve()
+            let windowCountExtras = [
+                TelemetryWrapper.EventExtraKey.windowCount.rawValue: Int64(windowManager.windows.count)
+            ]
+            TelemetryWrapper.recordEvent(category: .information,
+                                         method: .background,
+                                         object: .iPadWindowCount,
+                                         extras: windowCountExtras)
+        }
     }
 
     // MARK: - LibraryPanelDelegate
