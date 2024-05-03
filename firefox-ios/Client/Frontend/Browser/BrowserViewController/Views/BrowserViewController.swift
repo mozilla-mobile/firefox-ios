@@ -751,7 +751,9 @@ class BrowserViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if !displayedRestoreTabsAlert && crashedLastLaunch() {
+        // Skip the 'restore tabs' alert on iPad; this avoids some potential UX issues with multi-window. [FXIOS-9079]
+        let iPadDevice = UIDevice.current.userInterfaceIdiom == .pad
+        if !iPadDevice && !displayedRestoreTabsAlert && crashedLastLaunch() {
             logger.log("The application crashed on last session",
                        level: .info,
                        category: .lifecycle)
