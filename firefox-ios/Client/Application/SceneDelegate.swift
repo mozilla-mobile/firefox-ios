@@ -63,6 +63,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Notify WindowManager that window is closing
         (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
+        self.sceneCoordinator?.removeAllChildren()
+        self.sceneCoordinator = nil
     }
 
     // MARK: - Transitioning to Foreground

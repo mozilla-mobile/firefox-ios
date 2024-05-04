@@ -423,11 +423,12 @@ class HomepageViewController:
             anchor: view,
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: {
-                self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController)
+            presentedUsing: { [weak self] in
+                guard let jumpInVC = self?.jumpBackInContextualHintViewController else { return }
+                self?.presentContextualHint(contextualHintViewController: jumpInVC)
             },
             sourceRect: rect,
-            andActionForButton: { self.openTabsSettings() },
+            andActionForButton: { [weak self] in self?.openTabsSettings() },
             overlayState: overlayManager)
     }
 
@@ -442,8 +443,9 @@ class HomepageViewController:
             anchor: cell.getContextualHintAnchor(),
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: {
-                self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController)
+            presentedUsing: { [weak self] in
+                guard let hintVC = self?.syncTabContextualHintViewController else { return }
+                self?.presentContextualHint(contextualHintViewController: hintVC)
             },
             overlayState: overlayManager)
     }

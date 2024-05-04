@@ -794,8 +794,8 @@ class BrowserViewController: UIViewController,
             anchor: urlBar,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
-            presentedUsing: { self.presentContextualHint() },
-            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .toolbar) },
+            presentedUsing: { [weak self] in self?.presentContextualHint() },
+            andActionForButton: { [weak self] in self?.homePanelDidRequestToOpenSettings(at: .toolbar) },
             overlayState: overlayManager)
     }
 
