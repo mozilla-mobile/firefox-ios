@@ -114,9 +114,9 @@ class ContextualHintViewController: UIViewController,
 
     private func performAction() {
         self.viewProvider.sendTelemetryEvent(for: .performAction)
-        self.dismiss(animated: true) { [weak self] in
-            self?.onActionTapped?()
-            self?.onActionTapped = nil
+        self.dismiss(animated: true) {
+            self.onActionTapped?()
+            self.onActionTapped = nil
         }
     }
 
