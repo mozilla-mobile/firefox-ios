@@ -424,8 +424,8 @@ class HomepageViewController:
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { [weak self] in
-                guard let jumpInVC = self?.jumpBackInContextualHintViewController else { return }
-                self?.presentContextualHint(contextualHintViewController: jumpInVC)
+                guard let self else { return }
+                self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController)
             },
             sourceRect: rect,
             andActionForButton: { [weak self] in self?.openTabsSettings() },
@@ -444,8 +444,8 @@ class HomepageViewController:
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { [weak self] in
-                guard let hintVC = self?.syncTabContextualHintViewController else { return }
-                self?.presentContextualHint(contextualHintViewController: hintVC)
+                guard let self else { return }
+                self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController)
             },
             overlayState: overlayManager)
     }
