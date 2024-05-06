@@ -827,7 +827,7 @@ class BrowserViewController: UIViewController,
         view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
-//        adjustURLBarHeightBasedOnLocationViewHeight()
+        adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
@@ -2997,18 +2997,18 @@ extension BrowserViewController: KeyboardHelperDelegate {
         updateViewConstraints()
     }
 
-//    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-//        keyboardState = state
-//        updateViewConstraints()
-//
-//        UIView.animate(
-//            withDuration: state.animationDuration,
-//            delay: 0,
-//            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
-//            animations: {
-//                self.bottomContentStackView.layoutIfNeeded()
-//            })
-//    }
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        keyboardState = state
+        updateViewConstraints()
+
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomContentStackView.layoutIfNeeded()
+            })
+    }
 
     private func finishEditionMode() {
         // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
