@@ -598,6 +598,8 @@ open class BrowserProfile: Profile {
                     case .tabReceived(_, let tabData):
                         let url = tabData.entries.last?.url ?? ""
                         return URL(string: url, invalidCharacters: false)
+                    case .tabsClosed:
+                        return nil
                     }
                 }
                 self.sendTabDelegate?.openSendTabs(for: urls)
