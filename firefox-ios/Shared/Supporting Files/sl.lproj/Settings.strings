@@ -28,6 +28,9 @@
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.RememberThisCard.v122" = "Želite varno shraniti to kartico?";
 
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v122" = "Posodobim kartico?";
+
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
 "CreditCard.Settings.Yes.v122" = "Posodobi";
 
@@ -45,6 +48,9 @@
 
 /* Settings section title for the old Firefox account */
 "FxA.FirefoxAccount.v119" = "Račun";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v126" = "Naslovi";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "Plačilna sredstva";
