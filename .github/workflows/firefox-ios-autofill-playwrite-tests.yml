@@ -26,7 +26,6 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
         - name: Get the current github action name
-          if: always()
           run: |
             github_action_name="Update credential provider script"
             echo "github_action_name=$github_action_name" >> $GITHUB_ENV
@@ -49,8 +48,8 @@ jobs:
             
             echo "Run tests"
             npm test
-        - name: Send custom JSON data to Slack workflow
-          if: always()
+        - name: Send Slack notification if tests fail
+          if: '!cancelled()'
           id: slack
           uses: slackapi/slack-github-action@v1.26.0
           with:
