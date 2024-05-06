@@ -711,11 +711,11 @@ class BrowserCoordinator: BaseCoordinator,
             // Clean up views and ensure BVC for the window is freed
             browserViewController.view.endEditing(true)
             browserViewController.dismissUrlBar()
-            self.homepageViewController?.view.removeFromSuperview()
-            self.homepageViewController?.removeFromParent()
-            self.homepageViewController = nil
-            self.browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            self.browserViewController.removeFromParent()
+            homepageViewController?.view.removeFromSuperview()
+            homepageViewController?.removeFromParent()
+            homepageViewController = nil
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
