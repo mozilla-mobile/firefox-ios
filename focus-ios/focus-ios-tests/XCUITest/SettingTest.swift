@@ -301,6 +301,7 @@ class SettingTest: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2584834
     func testVisitWebsite() {
         dismissURLBarFocused()
 
