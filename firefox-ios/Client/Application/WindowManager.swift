@@ -101,8 +101,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     init(logger: Logger = DefaultLogger.shared,
          tabDataStore: TabDataStore? = nil,
          userDefaults: UserDefaultsInterface = UserDefaults.standard) {
-        self.tabDataStore = tabDataStore ?? DefaultTabDataStore(logger: logger,
-                                                                fileManager: DefaultTabFileManager())
+        self.tabDataStore = tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
         self.logger = logger
         self.defaults = userDefaults
         tabSyncCoordinator.delegate = self
