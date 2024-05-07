@@ -36,8 +36,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
          windowManager: WindowManager = AppContainer.shared.resolve()) {
-        let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger,
-                                                             fileManager: DefaultTabFileManager())
+        let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
         self.tabDataStore = dataStore
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
