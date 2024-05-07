@@ -34,4 +34,5 @@ def add_worker(config, tasks):
     for task in tasks:
         worker = task.setdefault("worker", {})
         worker["bitrise"] = task.pop("bitrise")
+        task.setdefault("run-on-tasks-for", ["github-push"])
         yield task

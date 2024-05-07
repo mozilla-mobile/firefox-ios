@@ -14,7 +14,7 @@ task-defaults:
         artifact_prefix: public
 
 tasks:
-    build-firefox-debug:
+    firefox-debug:
         description: Build firefox_configure_build bitrise workflow
         run-on-tasks-for: 
             - github-pull-request
@@ -24,8 +24,20 @@ tasks:
                 - firefox_configure_build
         optimization:
             skip-unless-changed:
-                - taskcluster/kinds/build/kind.yml
-
+                - firefox-ios/**
+                - bitrise.yml
+    focus-debug:
+        description: Build firefox_configure_build bitrise workflow
+        run-on-tasks-for:
+            - github-pull-request
+            - github-push
+        bitrise:
+            workflows:
+                - focus_configure_build
+        optimization:
+            skip-unless-changed:
+                - focus-ios/**
+                - bitrise.yml
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
         attributes:
