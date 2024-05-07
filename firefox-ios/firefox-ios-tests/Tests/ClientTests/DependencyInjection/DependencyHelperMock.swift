@@ -17,9 +17,6 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
-        let tabDataStore: TabDataStore = MockTabDataStore()
-        AppContainer.shared.register(service: tabDataStore)
-
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,
             namespace: TabManagerConstants.tabScreenshotNamespace,
