@@ -178,25 +178,29 @@ class SiriFavoriteViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = addedToSiri ? doneButton : nextButton
     }
 
-    @objc func cancelTapped() {
+    @objc
+    func cancelTapped() {
         self.navigationController?.popViewController(animated: true)
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc func doneTapped() {
+    @objc
+    func doneTapped() {
         if saveFavorite() {
             self.navigationController?.popViewController(animated: true)
             self.dismiss(animated: true, completion: nil)
         }
     }
 
-    @objc func nextTapped() {
+    @objc
+    func nextTapped() {
         if saveFavorite() {
             SiriShortcuts().displayAddToSiri(for: .openURL, in: self)
         }
     }
 
-    @objc func editTapped() {
+    @objc
+    func editTapped() {
         SiriShortcuts().manageSiri(for: .openURL, in: self)
     }
 

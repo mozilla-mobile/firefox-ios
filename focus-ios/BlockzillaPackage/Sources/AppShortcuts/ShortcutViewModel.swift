@@ -26,10 +26,10 @@ public class ShortcutViewModel {
 
     public func send(action: ShortcutAction) {
         switch action {
-            case .tapped: onTap?()
-            case .showRenameAlert: onShowRenameAlert?(shortcut)
-            case .remove: onRemove?(self)
-            case .dismiss: onDismiss?()
+        case .tapped: onTap?()
+        case .showRenameAlert: onShowRenameAlert?(shortcut)
+        case .remove: onRemove?(self)
+        case .dismiss: onDismiss?()
         }
     }
 }

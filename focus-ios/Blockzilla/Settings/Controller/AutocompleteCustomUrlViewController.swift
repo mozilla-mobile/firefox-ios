@@ -69,7 +69,8 @@ class AutocompleteCustomUrlViewController: UIViewController {
         tableView.reloadData()
     }
 
-    @objc private func toggleEditing() {
+    @objc
+    private func toggleEditing() {
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
 
         tableView.setEditing(!tableView.isEditing, animated: true)
@@ -86,7 +87,8 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || !domains.isEmpty
     }
 
-    @objc private func updateEmptyStateView() {
+    @objc
+    private func updateEmptyStateView() {
         if tableView.isEditing && domains.isEmpty {
             tableView.backgroundView?.animateHidden(false, duration: UIConstants.layout.autocompleteAnimationDuration)
         } else {

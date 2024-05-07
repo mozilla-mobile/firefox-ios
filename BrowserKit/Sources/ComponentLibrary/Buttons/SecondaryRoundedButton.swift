@@ -70,6 +70,7 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.background.backgroundColorTransformer = nil
         updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
         updatedConfiguration.cornerStyle = .fixed
+        addCornerRadiusForVisualEffectView(radiusSize: UX.buttonCornerRadius)
 
         accessibilityIdentifier = viewModel.a11yIdentifier
 
@@ -95,6 +96,14 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         configuration = updatedConfiguration
 
         setNeedsUpdateConfiguration()
+    }
+
+    func addCornerRadiusForVisualEffectView(radiusSize: CGFloat) {
+        // Note: changing the corner radius for the subview, in this case UIVisualEffectView
+        // is required for certain cases where UIVisualEffectView doesn't update with super view radius change
+        for subview in self.subviews where subview is UIVisualEffectView {
+            subview.layer.cornerRadius = radiusSize
+        }
     }
 
     // MARK: ThemeApplicable

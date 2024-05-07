@@ -306,24 +306,9 @@ open class BrowserProfile: Profile {
             object: nil
         )
 
-        if AppInfo.isChinaEdition {
-            // Set the default homepage.
-            prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
-
-            if prefs.stringForKey(PrefsKeys.KeyNewTab) == nil {
-                prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.NewTabCustomUrlPrefKey)
-                prefs.setString(PrefsDefaults.ChineseNewTabDefault, forKey: PrefsKeys.KeyNewTab)
-            }
-
-            if prefs.stringForKey(PrefsKeys.HomePageTab) == nil {
-                prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.HomeButtonHomePageURL)
-                prefs.setString(PrefsDefaults.ChineseNewTabDefault, forKey: PrefsKeys.HomePageTab)
-            }
-        } else {
-            // Remove the default homepage. This does not change the user's preference,
-            // just the behaviour when there is no homepage.
-            prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
-        }
+        // Remove the default homepage. This does not change the user's preference,
+        // just the behaviour when there is no homepage.
+        prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
 
         // Create the "Downloads" folder in the documents directory.
         if let downloadsPath = try? FileManager.default.url(

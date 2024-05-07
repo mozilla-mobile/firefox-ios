@@ -18,7 +18,8 @@ extension WindowManagerImplementation {
             result.append("    \(idx + 1): \(short(uuid))\n")
             let tabMgr = tabManager(for: uuid)
             for (tabIdx, tab) in tabMgr.normalTabs.enumerated() {
-                result.append("        \(tabIdx): \(tab.url?.absoluteString ?? "<nil url>")\n")
+                let memAddr = Unmanaged.passUnretained(tab).toOpaque()
+                result.append("        \(tabIdx + 1) (\(memAddr)): \(tab.url?.absoluteString ?? "<nil url>")\n")
             }
         }
         result.append("\n")

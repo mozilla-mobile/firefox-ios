@@ -129,7 +129,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         self.preferredContentSize = self.tableView.contentSize
     }
 
-    @objc func dismiss(_ gestureRecognizer: UIGestureRecognizer? = nil) {
+    @objc
+    func dismiss(_ gestureRecognizer: UIGestureRecognizer? = nil) {
         delegate?.photonActionSheetDidDismiss()
         self.dismiss(animated: true, completion: nil)
     }
@@ -139,7 +140,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         self.dismiss(animated: true) { callback() }
     }
 
-    @objc func didToggle(enabled: Bool) {
+    @objc
+    func didToggle(enabled: Bool) {
         delegate?.photonActionSheetDidToggleProtection(enabled: enabled)
         dismiss()
         delegate?.photonActionSheetDidDismiss()

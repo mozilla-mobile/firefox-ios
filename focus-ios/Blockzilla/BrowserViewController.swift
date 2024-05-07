@@ -337,8 +337,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: self.urlBar.shieldIconAnchor,
                     sourceRect: CGRect(x: self.urlBar.shieldIconAnchor.bounds.midX, y: self.urlBar.shieldIconAnchor.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
-                    dismiss: {
-                        [unowned self] in self.onboardingEventsHandler.route = nil
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil
                         self.onboardingEventsHandler.send(.showTrash)
                     }
                 )
@@ -551,7 +550,8 @@ class BrowserViewController: UIViewController {
         addShortcuts()
     }
 
-    @objc func orientationChanged() {
+    @objc
+    func orientationChanged() {
         setupBackgroundImage()
     }
 
@@ -659,39 +659,39 @@ class BrowserViewController: UIViewController {
                 guard let self = self else { return }
 
                 switch action {
-                    case .contextMenuTap(let anchor):
-                        self.updateFindInPageVisibility(visible: false)
-                        self.presentContextMenu(from: anchor)
+                case .contextMenuTap(let anchor):
+                    self.updateFindInPageVisibility(visible: false)
+                    self.presentContextMenu(from: anchor)
 
-                    case .backButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.goBack()
+                case .backButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.goBack()
 
-                    case .forwardButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.goForward()
+                case .forwardButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.goForward()
 
-                    case .deleteButtonTap:
-                        self.updateFindInPageVisibility(visible: false)
-                        self.resetBrowser()
-                        self.urlBarViewModel.resetToDefaults()
+                case .deleteButtonTap:
+                    self.updateFindInPageVisibility(visible: false)
+                    self.resetBrowser()
+                    self.urlBarViewModel.resetToDefaults()
 
-                    case .shieldIconButtonTap:
-                        self.urlBarDidTapShield(self.urlBar)
+                case .shieldIconButtonTap:
+                    self.urlBarDidTapShield(self.urlBar)
 
-                    case .stopButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.stop()
+                case .stopButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.stop()
 
-                    case .reloadButtonTap:
-                        // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
-                        self.webViewController.reload()
+                case .reloadButtonTap:
+                    // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
+                    self.webViewController.reload()
 
-                    case .dragInteractionStarted:
-                        GleanMetrics.UrlInteraction.dragStarted.record()
+                case .dragInteractionStarted:
+                    GleanMetrics.UrlInteraction.dragStarted.record()
 
-                    case .pasteAndGo:
-                        GleanMetrics.UrlInteraction.pasteAndGo.record()
+                case .pasteAndGo:
+                    GleanMetrics.UrlInteraction.pasteAndGo.record()
                 }
             }.store(in: &cancellables)
     }
@@ -886,12 +886,12 @@ class BrowserViewController: UIViewController {
 
         // Increment the threshold by 50 so the user is not constantly pestered with review requests
         switch threshold {
-            case 14:
-                UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
-            case 64:
-                UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
-            default:
-                break
+        case 14:
+            UserDefaults.standard.set(64, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        case 64:
+            UserDefaults.standard.set(114, forKey: UIConstants.strings.userDefaultsLaunchThresholdKey)
+        default:
+            break
         }
 
         if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
@@ -1041,28 +1041,33 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc private func selectLocationBar() {
+    @objc
+    private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
         shortcutsPresenter.shortcutsState = .activeURLBar
     }
 
-    @objc private func reload() {
+    @objc
+    private func reload() {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.reload()
     }
 
-    @objc private func goBack() {
+    @objc
+    private func goBack() {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.goBack()
     }
 
-    @objc private func goForward() {
+    @objc
+    private func goForward() {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.goForward()
     }
 
-    @objc private func showFindInPage() {
+    @objc
+    private func showFindInPage() {
         self.updateFindInPageVisibility(visible: true)
     }
 
