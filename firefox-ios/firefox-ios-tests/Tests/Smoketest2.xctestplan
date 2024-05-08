@@ -47,6 +47,7 @@
         "FakespotTests\/testPriceTagNotDisplayedOnSitesNotIntegratedFakespot()",
         "FakespotTests\/testPrivacyPolicyLink()",
         "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
+        "FakespotTests\/testReviewQualityCheckBottomSheetUILandscape()",
         "FakespotTests\/testSettingsSectionUI()",
         "FakespotTests\/testTermsOfUseLink()",
         "FakespotTests\/testTurnOffAndOnTheReviewQualityCheck()",

@@ -25,25 +25,21 @@ class FakespotTests: BaseTestCase {
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
         app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        validateReviewQualityCheckSheet()
+    }
 
-        // Check the content of the Review quality check sheet
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
-        if app.staticTexts["How reliable are these reviews?"].exists {
-            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReliabilityCard.title].firstMatch.label,
-                           "How reliable are these reviews?")
-            XCTAssertTrue(app.staticTexts["Adjusted rating"].exists)
-            validateHighlightsSection()
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358866
+    func testReviewQualityCheckBottomSheetUILandscape() throws {
+        if iPad() {
+            throw XCTSkip("iPhone only test")
         } else {
-            XCTAssertTrue(app.staticTexts["No info about these reviews yet"].exists)
-            XCTAssertTrue(app.buttons["Check Review Quality"].exists)
+            // Change the device orientation to be landscape
+            XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+            reachReviewChecker()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+            app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+            validateReviewQualityCheckSheet()
         }
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
-                       "How we determine review quality")
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title].label, "Settings")
-        XCTAssertTrue(app.staticTexts["Review Checker is powered by Fakespot by Mozilla"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358902
@@ -250,6 +246,26 @@ class FakespotTests: BaseTestCase {
             waitUntilPageLoad()
         }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
+    }
+
+    private func validateReviewQualityCheckSheet() {
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
+        if app.staticTexts["How reliable are these reviews?"].exists {
+            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReliabilityCard.title].firstMatch.label,
+                           "How reliable are these reviews?")
+            XCTAssertTrue(app.staticTexts["Adjusted rating"].exists)
+            validateHighlightsSection()
+        } else {
+            XCTAssertTrue(app.staticTexts["No info about these reviews yet"].exists)
+            XCTAssertTrue(app.buttons["Check Review Quality"].exists)
+        }
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
+                       "How we determine review quality")
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title].label, "Settings")
+        XCTAssertTrue(app.staticTexts["Review Checker is powered by Fakespot by Mozilla"].exists)
     }
 
     private func validateMozillaSupportWebpage(_ webpageTitle: String, _ url: String) {

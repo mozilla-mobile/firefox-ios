@@ -30,8 +30,9 @@
         "PastenGoTest\/testPastenGo()",
         "RequestDesktopTest\/testActivityMenuRequestDesktopItem()",
         "SearchProviderTest\/testGoogleSearchProvider()",
-        "SettingAppearanceTest\/testCheckSetting()",
-        "SettingAppearanceTest\/testSafariIntegration()",
+        "SettingTest\/testCheckSetting()",
+        "SettingTest\/testSafariIntegration()",
+        "SettingTest\/testVisitWebsite()",
         "URLValidationTest",
         "WebsiteAccessTests\/testVisitWebsite()"
       ],

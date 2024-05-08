@@ -4,11 +4,12 @@
 
 import XCTest
 
-class SettingAppearanceTest: BaseTestCase {
+class SettingTest: BaseTestCase {
     let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 
     // Smoketest
     // Check for the basic appearance of the Settings Menu
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394976
     func testCheckSetting() {
         dismissURLBarFocused()
 
@@ -106,44 +107,49 @@ class SettingAppearanceTest: BaseTestCase {
         reviewCell.tap()
         waitForExistence(safariApp, timeout: 10)
         XCTAssert(safariApp.state == .runningForeground)
-        // Commenting this part due to error re-launching the app
-        /* safariApp.terminate()
+
+        safariApp.terminate()
         XCUIDevice.shared.press(.home)
+
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
         app.activate()
-        waitForExistence(app.navigationBars["Settings"], timeout: 10)*/
+        waitForExistence(app.navigationBars["Settings"], timeout: 10)
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574974
     func testOpenInSafari() {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)
 
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        let safariButton = app.collectionViews.cells.element(boundBy: 5)
+        let safariButton = app.collectionViews.buttons["Open in Default Browser"]
         waitForExistence(safariButton)
         safariButton.tap()
 
         // Now in Safari
-        let safariLabel = safariapp.otherElements["Address"]
-        if #unavailable(iOS 15.0) {
+        let safariLabel = safariapp.textFields["Address"]
+        // iPad Safari cannot access the URL bar. 
+        // Let's ensure that Safari exists at the very least.
+        waitForExistence(safariapp)
+        if !iPad() {
             waitForValueContains(safariLabel, value: "google")
         }
 
         // Go back to Focus
-        // Commenting this part out since this issue is common when coming back to the app
-        // Failed to launch org.mozilla.ios.Focus: The operation couldn’t be completed. Application cannot be launched because it has outstanding termination assertions.
-        // app.activate()
+        app.activate()
 
         // Now back to Focus
-        // waitForWebPageLoad()
-        // app.buttons["URLBar.deleteButton"].tap()
-        // waitForExistence(app.staticTexts["Your browsing history has been erased."])
+        waitForWebPageLoad()
+        waitForExistence(app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
+        waitForExistence(app.staticTexts["Browsing history cleared"])
     }
 
-    func testDisableAutocomplete() {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574975
+    func testEnableDisableAutocomplete() {
         dismissURLBarFocused()
 
         // Navigate to Settings
@@ -171,6 +177,7 @@ class SettingAppearanceTest: BaseTestCase {
         toggle.tap()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574976
     func testAddRemoveCustomDomain() {
         dismissURLBarFocused()
         // Navigate to Settings
@@ -225,6 +232,7 @@ class SettingAppearanceTest: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569297
     func testSafariIntegration() {
         dismissURLBarFocused()
 
@@ -266,5 +274,156 @@ class SettingAppearanceTest: BaseTestCase {
         app.activate()
         waitForExistence(app.navigationBars["Settings"], timeout: 15)
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
+    }
+
+    func setUrlAutoCompleteTo(desiredAutoCompleteState: String) {
+        let homeViewSettingsButton = app.homeViewSettingsButton
+        let settingsButton = app.settingsButton
+        let settingsViewControllerAutoCompleteCell = app.tables.cells["SettingsViewController.autocompleteCell"]
+        let autoCompleteSwitch = app.switches["toggleAutocompleteSwitch"]
+        let settingsBackButton = app.settingsBackButton
+        let settingsDoneButton = app.settingsDoneButton
+
+        // Navigate to autocomplete settings
+        mozTap(homeViewSettingsButton)
+        mozTap(settingsButton)
+        mozTap(settingsViewControllerAutoCompleteCell)
+
+        let topSitesState = autoCompleteSwitch.value as? String == "1" ? "On" : "Off"
+        // Toggle switch if desired state is already set
+        if desiredAutoCompleteState != topSitesState {
+            mozTap(autoCompleteSwitch)
+        }
+
+        // Navigate back to home page
+        mozTap(settingsBackButton)
+        mozTap(settingsDoneButton)
+    }
+
+    // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2584834
+    func testVisitWebsite() {
+        dismissURLBarFocused()
+
+        // Check initial page
+        checkForHomeScreen()
+
+        // Enter 'mozilla' on the search field
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+        XCTAssertTrue(searchOrEnterAddressTextField.exists)
+        XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)
+
+        // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
+        let label = app.textFields["URLBar.urlText"]
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("mozilla")
+        waitForValueContains(label, value: "mozilla.org/")
+
+        // Providing straight URL to avoid the error - and use internal website
+        app.buttons["icon clear"].tap()
+        loadWebPage("https://www.example.com")
+        waitForValueContains(label, value: "www.example.com")
+
+        // Erase the history
+        app.buttons["URLBar.deleteButton"].firstMatch.tap()
+
+        // Check it is on the initial page
+        dismissURLBarFocused()
+        checkForHomeScreen()
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    func testDisableAutocomplete() {
+        let urlTextField = app.urlTextField
+        let searchSuggestionsOverlay = app.searchSuggestionsOverlay
+
+        // Test Setup
+        dismissURLBarFocused()
+        setUrlAutoCompleteTo(desiredAutoCompleteState: "Off")
+
+        // Test Steps
+        mozTypeText(urlTextField, text: "mozilla")
+
+        // Test Assertion
+        waitForExistence(searchSuggestionsOverlay)
+        XCTAssertEqual(urlTextField.value as? String, "mozilla")
+    }
+ 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    func testReEnableAutoComplete() {
+        let urlTextField = app.urlTextField
+        let searchSuggestionsOverlay = app.searchSuggestionsOverlay
+
+        // Test Setup: to ensure autocomplete state is picked up, set to off, navigate out, then toggle back on
+        dismissURLBarFocused()
+        setUrlAutoCompleteTo(desiredAutoCompleteState: "Off")
+        setUrlAutoCompleteTo(desiredAutoCompleteState: "On")
+
+        // Test Steps
+        mozTypeText(urlTextField, text: "mozilla")
+
+        // Test Assertion
+        waitForExistence(searchSuggestionsOverlay)
+        XCTAssertEqual(urlTextField.value as? String, "mozilla.org/")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    func testAutocompleteCustomDomain() {
+        dismissURLBarFocused()
+        app.buttons["HomeView.settingsButton"].tap()
+        let settingsButton = app.settingsButton
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
+        // Add Custom Domain
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        app.tables.cells["customURLS"].tap()
+        app.tables.cells["addCustomDomainCell"].tap()
+
+        let urlInput = app.textFields["urlInput"]
+        urlInput.tap()
+        urlInput.typeText("getfirefox.com")
+        app.navigationBars.buttons["saveButton"].tap()
+        let manageSitesBackButton = app.navigationBars.buttons["URL Autocomplete"]
+        manageSitesBackButton.tap()
+        app.navigationBars.buttons["Settings"].tap()
+        app.buttons["SettingsViewController.doneButton"].tap()
+
+        // Test auto completing the domain
+        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("getfire")
+        waitForExistence(app.buttons["Search for getfire"])
+        waitForValueContains(searchOrEnterAddressTextField, value: "getfirefox.com/")
+
+        // Remove the custom domain
+        if !iPad() {
+            app.buttons["URLBar.cancelButton"].tap()
+        }
+        app.buttons["Settings"].tap()
+        waitForExistence(settingsButton, timeout: 10)
+        settingsButton.tap()
+        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
+        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
+        app.tables.cells["customURLS"].tap()
+        app.navigationBars.buttons["editButton"].tap()
+        if #available(iOS 17, *) {
+            app.tables.cells["getfirefox.com"].buttons["Remove getfirefox.com"].tap()
+        } else {
+            app.tables.cells["getfirefox.com"].buttons["Delete getfirefox.com"].tap()
+        }
+        app.tables.cells["getfirefox.com"].buttons["Delete"].tap()
+
+        // Finish Editing
+        app.navigationBars.buttons["editButton"].tap()
+        manageSitesBackButton.tap()
+        app.navigationBars.buttons["Settings"].tap()
+        app.buttons["SettingsViewController.doneButton"].tap()
+
+        // Verify the URL bar only display what you type
+        searchOrEnterAddressTextField.tap()
+        searchOrEnterAddressTextField.typeText("getfire")
+        waitForValueContains(searchOrEnterAddressTextField, value: "getfire")
+        XCTAssertTrue(searchOrEnterAddressTextField.value as? String == "getfire")
     }
 }

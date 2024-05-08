@@ -790,9 +790,9 @@ extension LegacyGridTabViewController: InactiveTabsCFRProtocol {
             withArrowDirection: .up,
             andDelegate: self,
             presentedUsing: { self.presentCFROnView() },
-            andActionForButton: {
-                self.dismissTabTray()
-                self.delegate?.tabTrayDidRequestTabsSettings()
+            andActionForButton: { [weak self] in
+                self?.dismissTabTray()
+                self?.delegate?.tabTrayDidRequestTabsSettings()
             }, andShouldStartTimerRightAway: false
         )
     }
