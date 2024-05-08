@@ -25,6 +25,7 @@
         "BasicBrowsing\/testAdBlocking()",
         "BasicBrowsing\/testLaunchExternalApp()",
         "BasicBrowsing\/testNavigationToolbar()",
+        "BrowsingTest\/testActivityMenuRequestDesktopItem()",
         "FindInPageTest\/testActivityMenuFindInPageAction()",
         "OnboardingTest",
         "PastenGoTest\/testPastenGo()",
