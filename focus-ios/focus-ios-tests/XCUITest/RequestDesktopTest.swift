@@ -7,8 +7,7 @@ import XCTest
 class RequestDesktopTest: BaseTestCase {
     // Smoketest
     // Disabled due to issue #2782
-    func testActivityMenuRequestDesktopItem() throws {
-        throw XCTSkip("Due to bug 2782")
+    func testActivityMenuRequestDesktopItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
 
         // Wait for existence rather than hittable because the textfield is technically disabled
@@ -19,11 +18,12 @@ class RequestDesktopTest: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         if iPad() {
-            waitForExistence(app.tables.cells["request_mobile_site_activity"])
-            app.tables.cells["request_mobile_site_activity"].tap()
+            waitForExistence(app.collectionViews.buttons["Request Mobile Site"])
+            app.collectionViews.buttons["Request Mobile Site"].tap()
         } else {
-            waitForExistence(app.tables.cells["request_desktop_site_activity"])
-            app.tables.cells["request_desktop_site_activity"].tap()
+            print(app.debugDescription)
+            waitForExistence(app.collectionViews.buttons["Request Desktop Site"])
+            app.collectionViews.buttons["Request Desktop Site"].tap()
         }
 
         waitForWebPageLoad()
