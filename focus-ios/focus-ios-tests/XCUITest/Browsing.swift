@@ -5,7 +5,7 @@
 import Foundation
 import XCTest
 
-class BasicBrowsing: BaseTestCase {
+class Browsing: BaseTestCase {
     // Smoke test
     // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
     func testLaunchExternalApp() {
