@@ -5,6 +5,8 @@
 import XCTest
 
 class FindInPageTest: BaseTestCase {
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587660
     func testFindInPageURLBarElement() {
         // Navigate to website
         loadWebPage("https://www.example.com")
@@ -31,6 +33,7 @@ class FindInPageTest: BaseTestCase {
         waitForNoExistence(app.buttons["FindInPage.close"])
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/395022
     func testActivityMenuFindInPageAction() {
         // Navigate to website
         loadWebPage("https://www.example.com")
