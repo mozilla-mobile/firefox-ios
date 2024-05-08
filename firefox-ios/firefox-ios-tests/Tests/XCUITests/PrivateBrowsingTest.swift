@@ -221,6 +221,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // Tap on "Close All Tabs"
         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
         // The private tabs are closed
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"])
         numTab = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(0, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
