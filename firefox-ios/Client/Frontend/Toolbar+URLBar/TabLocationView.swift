@@ -66,17 +66,10 @@ class TabLocationView: UIView, FeatureFlaggable {
         didSet {
             hideButtons()
             updateTextWithURL()
-            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol(url))
+            shareButton.isHidden = !isValidHttpUrlProtocol(url)
             setNeedsUpdateConstraints()
             showTrackingProtectionButton(for: url)
         }
-    }
-
-    var shouldEnableShareButtonFeature: Bool {
-        guard featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) else {
-            return false
-        }
-        return true
     }
 
     var readerModeState: ReaderModeState {
