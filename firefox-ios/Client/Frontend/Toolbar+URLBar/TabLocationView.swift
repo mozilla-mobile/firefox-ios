@@ -13,7 +13,6 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
-    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
     func tabLocationViewPresentCFR(at sourceView: UIView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions
@@ -66,7 +65,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         didSet {
             hideButtons()
             updateTextWithURL()
-            shareButton.isHidden = !isValidHttpUrlProtocol(url)
             setNeedsUpdateConstraints()
             showTrackingProtectionButton(for: url)
         }
@@ -120,17 +118,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         trackingProtectionButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.lock)
         trackingProtectionButton.largeContentTitle = .TabLocationLockButtonLargeContentTitle
         trackingProtectionButton.accessibilityLabel = .TabLocationLockButtonAccessibilityLabel
-    }
-
-    lazy var shareButton: ShareButton = .build { shareButton in
-        shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
-        shareButton.clipsToBounds = false
-        shareButton.contentHorizontalAlignment = .center
-        shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
-        shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
-        shareButton.showsLargeContentViewer = true
-        shareButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.shareApple)
-        shareButton.largeContentTitle = .TabLocationShareButtonLargeContentTitle
     }
 
     private lazy var shoppingButton: UIButton = .build { button in
@@ -212,7 +199,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             urlTextField,
             shoppingButton,
             readerModeButton,
-            shareButton,
             reloadButton
         ]
         contentView = UIStackView(arrangedSubviews: subviews)
@@ -229,8 +215,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             shoppingButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-            shareButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-            shareButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             reloadButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
         ])
@@ -255,7 +239,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         urlTextField,
         shoppingButton,
         readerModeButton,
-        shareButton,
         reloadButton
     ]
 
@@ -315,11 +298,6 @@ class TabLocationView: UIView, FeatureFlaggable {
     @objc
     func didPressTPShieldButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapShield(self)
-    }
-
-    @objc
-    func didPressShareButton(_ button: UIButton) {
-        delegate?.tabLocationViewDidTapShare(self, button: shareButton)
     }
 
     @objc
@@ -438,7 +416,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // Fixes: https://github.com/mozilla-mobile/firefox-ios/issues/17403
     private func hideButtons() {
-        [shoppingButton, shareButton].forEach { $0.isHidden = true }
+        [shoppingButton].forEach { $0.isHidden = true }
     }
 
     private func currentTheme() -> Theme {
@@ -548,7 +526,6 @@ extension TabLocationView: ThemeApplicable {
         urlTextField.textColor = theme.colors.textPrimary
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
-        shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
