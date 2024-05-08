@@ -92,6 +92,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     }
 
     func initGlean(_ profile: Profile, sendUsageData: Bool) {
+        // Record default search engine setting to avoid sending a `null` value.
+        // If there's no default search engine, (there's not, at this point), we will
+        // send "unavailable" in order not to send `null`, but still differentiate
+        // the event in the startup sequence.
+        let defaultEngine = profile.searchEngines.defaultEngine
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
+
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
@@ -317,6 +324,7 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        case defaultSearchEngine = "default-search-engine"
         // MARK: Fakespot
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
@@ -354,6 +362,7 @@ extension TelemetryWrapper {
         case tabNormalQuantity = "normal-tab-quantity"
         case tabPrivateQuantity = "private-tab-quantity"
         case tabInactiveQuantity = "inactive-tab-quantity"
+        case iPadWindowCount = "ipad-window-count"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -648,6 +657,7 @@ extension TelemetryWrapper {
         case isRestoreTabsStarted = "is-restore-tabs-started"
         case recordSearchLocation = "recordSearchLocation"
         case recordSearchEngineID = "recordSearchEngineID"
+        case windowCount = "windowCount"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -920,7 +930,12 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
-
+        case(.information, .background, .iPadWindowCount, _, let extras):
+            if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
+                GleanMetrics.Windows.ipadWindowCount.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
@@ -1096,6 +1111,18 @@ extension TelemetryWrapper {
                     extras: extras)
             }
 
+        // MARK: - Search Engine
+        case(.information, .change, .defaultSearchEngine, _, let extras):
+            if let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? ?? "custom" {
+                GleanMetrics.Search.defaultEngine.set(searchEngineID)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()

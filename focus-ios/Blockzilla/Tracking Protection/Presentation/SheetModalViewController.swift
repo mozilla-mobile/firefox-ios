@@ -133,7 +133,8 @@ class SheetModalViewController: UIViewController {
         }
     }
 
-    @objc func animateDismissView() {
+    @objc
+    func animateDismissView() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         dimmedView.alpha = maximumDimmingAlpha
 

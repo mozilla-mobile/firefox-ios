@@ -550,7 +550,8 @@ class BrowserViewController: UIViewController {
         addShortcuts()
     }
 
-    @objc func orientationChanged() {
+    @objc
+    func orientationChanged() {
         setupBackgroundImage()
     }
 
@@ -1040,28 +1041,33 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc private func selectLocationBar() {
+    @objc
+    private func selectLocationBar() {
         showToolbars()
         urlBar.activateTextField()
         shortcutsPresenter.shortcutsState = .activeURLBar
     }
 
-    @objc private func reload() {
+    @objc
+    private func reload() {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.reload()
     }
 
-    @objc private func goBack() {
+    @objc
+    private func goBack() {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.goBack()
     }
 
-    @objc private func goForward() {
+    @objc
+    private func goForward() {
         // FXIOS-8626 - #19148 - Integrate basics APIs of WebEngine in Focus iOS
         webViewController.goForward()
     }
 
-    @objc private func showFindInPage() {
+    @objc
+    private func showFindInPage() {
         self.updateFindInPageVisibility(visible: true)
     }
 

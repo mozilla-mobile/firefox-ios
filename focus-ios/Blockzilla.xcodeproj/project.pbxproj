@@ -11,9 +11,8 @@
 		0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0D6BC31F3CDDBB00497D08 /* CollapsedURLTest.swift */; };
 		0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */; };
 		0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */; };
-		0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */; };
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
-		0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */; };
+		0BBBED431DD3B78300F9C565 /* SettingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
 		1215EC0928D316B500AECC75 /* NavigationPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1215EC0828D316B500AECC75 /* NavigationPath.swift */; };
 		122D19F328D870E800B884E7 /* NavigationPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122D19F128D86B5100B884E7 /* NavigationPathTests.swift */; };
@@ -351,11 +350,10 @@
 		0B4868651F2250A3008C3C09 /* PastenGoTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastenGoTest.swift; sourceTree = "<group>"; };
 		0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteMemoryTest.swift; sourceTree = "<group>"; };
 		0BA39A831DD2B8E4005F970A /* XCUITest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XCUITest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsiteAccessTest.swift; sourceTree = "<group>"; };
 		0BA39A871DD2B8E4005F970A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUITests-Bridging-Header.h"; sourceTree = "<group>"; };
 		0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
-		0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAppearanceTest.swift; sourceTree = "<group>"; };
+		0BBBED421DD3B78300F9C565 /* SettingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingTest.swift; sourceTree = "<group>"; };
 		0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsianLocaleTest.swift; sourceTree = "<group>"; };
 		1215EC0828D316B500AECC75 /* NavigationPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPath.swift; sourceTree = "<group>"; };
 		122D19F128D86B5100B884E7 /* NavigationPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationPathTests.swift; sourceTree = "<group>"; };
@@ -1319,8 +1317,7 @@
 				E4BC84F31E2A862400833B45 /* InfoPlist.strings */,
 				0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */,
 				0BBBED3F1DD3821600F9C565 /* Utils */,
-				0BA39A851DD2B8E4005F970A /* WebsiteAccessTest.swift */,
-				0BBBED421DD3B78300F9C565 /* SettingAppearanceTest.swift */,
+				0BBBED421DD3B78300F9C565 /* SettingTest.swift */,
 				0BA39A871DD2B8E4005F970A /* Info.plist */,
 				0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */,
 				4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */,
@@ -2547,7 +2544,7 @@
 				D47940DA2664E4F700C286BB /* PastenGoTest.swift in Sources */,
 				1DE903CE20C751D7002E53ED /* FindInPageTest.swift in Sources */,
 				D440BC18276B3535003FD9B1 /* PageShortcutsTest.swift in Sources */,
-				0BBBED431DD3B78300F9C565 /* SettingAppearanceTest.swift in Sources */,
+				0BBBED431DD3B78300F9C565 /* SettingTest.swift in Sources */,
 				1D199EF220D813D300CDF976 /* DragAndDropTest.swift in Sources */,
 				0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */,
 				B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */,
@@ -2567,7 +2564,6 @@
 				F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */,
 				C82F45F328193628000D7D84 /* TestHelpers.swift in Sources */,
 				C8D0306E27E9B03D000664DA /* UIConstants.swift in Sources */,
-				0BA39A861DD2B8E4005F970A /* WebsiteAccessTest.swift in Sources */,
 				0B0D6BC41F3CDDBB00497D08 /* CollapsedURLTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7185,7 +7181,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 127.0.20240430050317;
+				version = 127.0.20240507050248;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {

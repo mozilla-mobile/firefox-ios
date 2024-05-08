@@ -708,10 +708,14 @@ class BrowserCoordinator: BaseCoordinator,
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
 
-            // TODO: Revisit for [FXIOS-8064]. Disabled temporarily to avoid potential KVO crash in WebKit. (FXIOS-8416)
             // Clean up views and ensure BVC for the window is freed
-            // browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            // browserViewController.removeFromParent()
+            browserViewController.view.endEditing(true)
+            browserViewController.dismissUrlBar()
+            homepageViewController?.view.removeFromSuperview()
+            homepageViewController?.removeFromParent()
+            homepageViewController = nil
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }

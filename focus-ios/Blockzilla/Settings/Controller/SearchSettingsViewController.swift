@@ -205,7 +205,8 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
 
-    @objc func toggleEditing() {
+    @objc
+    func toggleEditing() {
         isInEditMode = !isInEditMode
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.Edit : UIConstants.strings.Done
         tableView.setEditing(!tableView.isEditing, animated: true)

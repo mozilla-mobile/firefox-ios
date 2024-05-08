@@ -4,7 +4,7 @@
 
 import UIKit
 
-protocol AddSearchEngineDelegate {
+protocol AddSearchEngineDelegate: AnyObject {
     func addSearchEngineViewController(_ addSearchEngineViewController: AddSearchEngineViewController, name: String, searchTemplate: String)
 }
 
@@ -208,7 +208,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         ])
     }
 
-    @objc func learnMoreTapped() {
+    @objc
+    func learnMoreTapped() {
         let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: .addSearchEngine))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
@@ -224,12 +225,14 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.delegate = self
     }
 
-    @objc func cancelTapped() {
+    @objc
+    func cancelTapped() {
         dataTask?.cancel()
         self.navigationController?.popViewController(animated: true)
     }
 
-    @objc func saveTapped() {
+    @objc
+    func saveTapped() {
         guard let name = nameInput.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         guard let template = templateInput.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
 

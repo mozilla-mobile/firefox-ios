@@ -111,6 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let bundleID = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundleID)
             }
+            UIView.setAnimationsEnabled(false)
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
 
@@ -392,7 +393,7 @@ extension AppDelegate: ModalDelegate {
     }
 }
 
-protocol ModalDelegate {
+protocol ModalDelegate: AnyObject {
     func presentModal(viewController: UIViewController, animated: Bool)
     func presentSheet(viewController: UIViewController)
     func dismiss(animated: Bool)

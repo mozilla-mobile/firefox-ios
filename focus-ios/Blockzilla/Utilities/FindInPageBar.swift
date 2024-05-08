@@ -157,25 +157,30 @@ class FindInPageBar: UIView {
         }
     }
 
-    @discardableResult override func becomeFirstResponder() -> Bool {
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
         searchText.becomeFirstResponder()
         return super.becomeFirstResponder()
     }
 
-    @objc private func didFindPrevious(_ sender: UIButton) {
+    @objc
+    private func didFindPrevious(_ sender: UIButton) {
         delegate?.findInPage(self, didFindPreviousWithText: searchText.text ?? "")
     }
 
-    @objc private func didFindNext(_ sender: UIButton) {
+    @objc
+    private func didFindNext(_ sender: UIButton) {
         delegate?.findInPage(self, didFindNextWithText: searchText.text ?? "")
     }
 
-    @objc private func didTextChange(_ sender: UITextField) {
+    @objc
+    private func didTextChange(_ sender: UITextField) {
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
-    @objc private func didPressClose(_ sender: UIButton) {
+    @objc
+    private func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
     }
 }
