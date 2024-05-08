@@ -51,7 +51,7 @@
 		451B81C92BA4DBB700CF3C50 /* FocusAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 451B81C82BA4DBB700CF3C50 /* FocusAppServices */; };
 		4F1284861FC5E242001A775B /* TrackingProtectionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */; };
 		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
-		58408BA5265FC524003C4E4F /* Browsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58408BA4265FC524003C4E4F /* Browsing.swift */; };
+		58408BA5265FC524003C4E4F /* BrowsingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58408BA4265FC524003C4E4F /* BrowsingTest.swift */; };
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
 		60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */; };
 		741FDDFB294248AD00F4FF7B /* InternalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741FDDFA294248AD00F4FF7B /* InternalURL.swift */; };
@@ -504,7 +504,7 @@
 		451B81B92BA4DB9F00CF3C50 /* RustMozillaAppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustMozillaAppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTest.swift; sourceTree = "<group>"; };
 		4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInFocusTest.swift; sourceTree = "<group>"; };
-		58408BA4265FC524003C4E4F /* Browsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browsing.swift; sourceTree = "<group>"; };
+		58408BA4265FC524003C4E4F /* BrowsingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingTest.swift; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
 		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
 		741FDDFA294248AD00F4FF7B /* InternalURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalURL.swift; sourceTree = "<group>"; };
@@ -1324,7 +1324,7 @@
 				4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */,
 				166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */,
 				F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */,
-				58408BA4265FC524003C4E4F /* Browsing.swift */,
+				58408BA4265FC524003C4E4F /* BrowsingTest.swift */,
 				D440BC17276B3535003FD9B1 /* PageShortcutsTest.swift */,
 				C82F45F228193628000D7D84 /* TestHelpers.swift */,
 				B101243D2B4EE8C20099F3CA /* URLValidationTest.swift */,
@@ -2550,7 +2550,7 @@
 				B101243E2B4EE8C20099F3CA /* URLValidationTest.swift in Sources */,
 				1D47758820C1E66000C074AE /* CopyTest.swift in Sources */,
 				0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */,
-				58408BA5265FC524003C4E4F /* Browsing.swift in Sources */,
+				58408BA5265FC524003C4E4F /* BrowsingTest.swift in Sources */,
 				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
 				F8DEC61526C6A33200C5F26B /* AppConfig.swift in Sources */,
 				166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */,
