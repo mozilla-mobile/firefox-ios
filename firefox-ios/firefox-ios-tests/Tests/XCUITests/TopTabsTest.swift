@@ -294,6 +294,7 @@ class TopTabsTest: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
 
             waitForTabsButton()
+            print(app.debugDescription)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
             mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
             app.cells.staticTexts["Homepage"].firstMatch.tap()
@@ -482,11 +483,15 @@ class TopTabsTest: BaseTestCase {
 fileprivate extension BaseTestCase {
     func checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: Int) {
         navigator.goto(TabTray)
-        var numTabsOpen = userState.numTabs
-        if iPad() {
-            numTabsOpen = app.collectionViews.firstMatch.cells.count
+        if #available(iOS 16, *) {
+            var numTabsOpen = userState.numTabs
+            if iPad() {
+                numTabsOpen = app.collectionViews.firstMatch.cells.count
+            }
+            XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
+        } else {
+            XCTAssertEqual(app.buttons["TabToolbar.tabsButton"].value, Optional(expectedNumberOfTabsOpen))
         }
-        XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
     }
 
     func closeTabTrayView(goBackToBrowserTab: String) {
