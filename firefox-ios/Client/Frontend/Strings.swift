@@ -1065,7 +1065,7 @@ extension String {
                 value: "Continue",
                 comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127",
+                key: "Microsurvey.Prompt.Close.AccessibilityLabel.v127",
                 tableName: "Microsurvey",
                 value: "Close",
                 comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt.")
@@ -1078,7 +1078,7 @@ extension String {
                 value: "Complete this survey",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.Close.Button.Accessibility.Label.v127",
+                key: "Microsurvey.Survey.Close.AccessibilityLabel.v127",
                 tableName: "Microsurvey",
                 value: "Close",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
@@ -5997,19 +5997,6 @@ extension String {
                 tableName: "Shopping",
                 value: "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.",
                 comment: "Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly.")
-        }
-
-        struct v127 {
-            public static let ClosePromptButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Prompt.Close.AccessibilityLabel.v127",
-                tableName: "Microsurvey",
-                value: "Close Survey Prompt",
-                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt.")
-            public static let CloseSurveyButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.Close.AccessibilityLabel.v127",
-                tableName: "Microsurvey",
-                value: "Close Survey",
-                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
         }
     }
 }
