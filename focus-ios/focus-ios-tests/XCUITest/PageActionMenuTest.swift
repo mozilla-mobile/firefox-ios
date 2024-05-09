@@ -4,7 +4,7 @@
 
 import XCTest
 
-class FindInPageTest: BaseTestCase {
+class PageActionMenuTest: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2587660
     func testFindInPageURLBarElement() {
