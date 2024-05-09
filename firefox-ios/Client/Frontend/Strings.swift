@@ -1078,7 +1078,7 @@ extension String {
                 value: "Complete this survey",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.Close.Button.Accessibility.Label.v127",
+                key: "Microsurvey.Survey.Close.Button.AccessibilityLabel.v127",
                 tableName: "Microsurvey",
                 value: "Close",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
