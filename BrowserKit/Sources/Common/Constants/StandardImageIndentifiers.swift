@@ -90,6 +90,7 @@ public struct StandardImageIdentifiers {
         public static let shopping = "shoppingLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
+        public static let tabNumber = "tabNumberLarge"
         public static let tabTray = "tabTrayLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"

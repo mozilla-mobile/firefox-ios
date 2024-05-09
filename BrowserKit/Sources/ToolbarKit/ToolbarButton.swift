@@ -109,7 +109,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.iconPrimary
-        foregroundColorHighlighted = theme.colors.iconPrimary
+        foregroundColorHighlighted = theme.colors.actionPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
