@@ -9,7 +9,7 @@ final class TabNumberButton: ToolbarButton {
     // MARK: - UX Constants
     struct UX {
         static let cornerRadius: CGFloat = 2
-        static let titleFont: UIFont = UIFont.boldSystemFont(ofSize: 11)
+        static let titleFont = UIFont.boldSystemFont(ofSize: 11)
 
         // Tab count related constants
         static let defaultCountLabelText = "0"
@@ -66,4 +66,3 @@ final class TabNumberButton: ToolbarButton {
         countLabel.textColor = theme.colors.iconPrimary
     }
 }
-
