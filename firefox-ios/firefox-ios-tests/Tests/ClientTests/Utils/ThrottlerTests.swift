@@ -7,46 +7,68 @@ import XCTest
 @testable import Client
 
 class ThrottlerTests: XCTestCase {
-    func testThrottle_1000SecondsThrottle_doesntCall() {
-        let subject = Throttler(seconds: 100000, on: DispatchQueue.global())
-        var throttleCalled = 0
-        subject.throttle {
-            throttleCalled += 1
-        }
-
-        subject.throttle {
-            throttleCalled += 1
-        }
-
-        XCTAssertEqual(throttleCalled, 0, "Throttle isn't called since delay is high")
+    struct Timing {
+        static let veryLongDelay: Double = 100_000
+        static let defaultTestMaxWaitTime: Double = 2
     }
 
-    func testThrottle_zeroSecondThrottle_callsTwice() {
-        let subject = Throttler(seconds: 0, on: MockDispatchQueue())
-        var throttleCalled = 0
-        subject.throttle {
-            throttleCalled += 1
-        }
+    private let testQueue = DispatchQueue.global()
+    private var throttler: Throttler!
+    private var expectation: XCTestExpectation!
+    private var testValue = 0
 
-        subject.throttle {
-            throttleCalled += 1
-        }
+    func testMultipleFastConsecutiveCallsAreThrottledAndExecutedAtMostOneTime() {
+        prepareTest(timeout: Timing.veryLongDelay)
 
-        XCTAssertEqual(throttleCalled, 2, "Throttle twice is called since delay is zero")
+        throttler.throttle { self.testValue += 1 }
+        throttler.throttle { self.testValue += 1 }
+        throttler.throttle { self.testValue += 1 }
+
+        expect(value: 1)
     }
 
-    func testThrottle_oneSecondThrottle_callsOnce() {
-        let subject = Throttler(seconds: 0.2, on: DispatchQueue.global())
-        var throttleCalled = 0
-        subject.throttle {
-            throttleCalled += 1
+    func testThrottleZeroSecondThrottleExecutesAllClosures() {
+        prepareTest(timeout: 0)
+
+        throttler.throttle { self.testValue += 1 }
+        throttler.throttle { self.testValue += 1 }
+
+        expect(value: 2)
+    }
+
+    func testSecondCallAfterDelayThresholdCallsBothClosures() {
+        let threshold: Double = 0.5
+        let step: Double = (threshold / 2.0)
+        prepareTest(timeout: threshold)
+
+        // Send one call to throttler
+        throttler.throttle { self.testValue = 1 }
+        DispatchQueue.main.asyncAfter(deadline: .now() + step) {
+            XCTAssertEqual(self.testValue, 1)
         }
 
-        subject.throttle {
-            throttleCalled += 1
+        // Wait briefly after our threshold and send another call
+        DispatchQueue.main.asyncAfter(deadline: .now() + threshold + step) {
+            self.throttler.throttle { self.testValue = 2 }
         }
-        wait(0.5)
 
-        XCTAssertEqual(throttleCalled, 1, "Throttle is called once, one got canceled")
+        // Expect both calls to throttler have executed
+        self.expect(value: 2)
+    }
+
+    // MARK: - Utility
+
+    private func prepareTest(timeout: Double) {
+        testValue = 0
+        expectation = XCTestExpectation(description: "Throttle value expectation")
+        throttler = Throttler(seconds: timeout, on: testQueue)
+    }
+
+    private func expect(value expected: Int) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + Timing.defaultTestMaxWaitTime) {
+            guard self.testValue == expected else { XCTFail("Expected value \(expected) != \(self.testValue)."); return }
+            self.expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: Timing.defaultTestMaxWaitTime * 2.0)
     }
 }
