@@ -9,7 +9,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private struct UX {
         static let verticalInset: CGFloat = 8
         static let horizontalInset: CGFloat = 8
-        static let badgeImageViewBorderWidth: CGFloat = 1.5
+        static let badgeImageViewBorderWidth: CGFloat = 1
         static let badgeImageViewCornerRadius: CGFloat = 10
         static let badgeIconSize = CGSize(width: 20, height: 20)
     }
@@ -136,7 +136,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         foregroundColorNormal = theme.colors.iconPrimary
         foregroundColorHighlighted = theme.colors.iconPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
-        badgeImageView?.layer.borderColor = theme.colors.borderPrimary.cgColor
+        badgeImageView?.layer.borderColor = theme.colors.layer3.cgColor
         badgeImageView?.backgroundColor = theme.colors.layer1
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
