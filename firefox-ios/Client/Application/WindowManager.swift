@@ -210,7 +210,6 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
             windows.forEach {
                 guard let browserCoordinator = $0.value.sceneCoordinator?
                     .childCoordinators.first(where: { $0 is BrowserCoordinator }) as? BrowserCoordinator else { return }
-                print("DBG: closing all private tabs \(browserCoordinator)")
                 browserCoordinator.browserViewController.closeAllPrivateTabs()
             }
             break
