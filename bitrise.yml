@@ -500,7 +500,7 @@ workflows:
 
             echo "Swiftlint version before mirror swap"
             swiftlint version
-            # Workaround to find the homebre-core folder
+            # Workaround to find the homebrew-core folder
             brew tap homebrew/core --force
             cd "$(brew --repository)/Library/Taps/homebrew/homebrew-core"
             # Bypass Bitrise mirror that lags 1 week to 1 month behind homebrew-core versions
