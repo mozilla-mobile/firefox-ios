@@ -27,7 +27,7 @@ class DependencyHelperMock {
         AppContainer.shared.register(service: diskImageStore)
 
         let windowUUID = WindowUUID.XCTestDefaultUUID
-        let windowManager: WindowManager = WindowManagerImplementation()
+        let windowManager: WindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
         let tabManager: TabManager =
         injectedTabManager ?? TabManagerImplementation(profile: profile,
                                                        uuid: windowUUID,
