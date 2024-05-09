@@ -278,7 +278,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func handleClosePrivateTabsWidgetAction() {
         // Our widget actions will arrive as a URL passed into the client iOS app.
-        // If multiple iPad iwndows are open the resulting action + route will be
+        // If multiple iPad windows are open the resulting action + route will be
         // sent to one particular window, but for this action we want to close tabs
         // for all open windows, so we route this message to the WindowManager.
         windowManager.performMultiWindowAction(.closeAllPrivateTabs)
