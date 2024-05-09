@@ -99,7 +99,7 @@ class MockBrowserViewController: BrowserViewController {
         qrCodeCount += 1
     }
 
-    override func handleClosePrivateTabs() {
+    override func closeAllPrivateTabs() {
         closePrivateTabsCount += 1
     }
 

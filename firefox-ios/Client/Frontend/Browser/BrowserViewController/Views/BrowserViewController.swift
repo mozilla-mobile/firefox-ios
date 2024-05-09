@@ -1650,7 +1650,7 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showQRCode(delegate: self)
     }
 
-    func handleClosePrivateTabs() {
+    func closeAllPrivateTabs() {
         tabManager.removeTabs(tabManager.privateTabs)
         guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
             tabManager.selectTab(tabManager.addTab())
