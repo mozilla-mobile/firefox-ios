@@ -2441,6 +2441,7 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         )
 
         pasteConfiguration = UIPasteConfiguration(acceptableTypeIdentifiers: [UTType.url.identifier])
+
         let toast = PasteControlToast(
             viewModel: viewModel,
             theme: currentTheme(),
