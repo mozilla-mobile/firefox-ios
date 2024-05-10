@@ -212,7 +212,6 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
                     .childCoordinators.first(where: { $0 is BrowserCoordinator }) as? BrowserCoordinator else { return }
                 browserCoordinator.browserViewController.closeAllPrivateTabs()
             }
-            break
         case .storeTabs:
             storeTabs()
         }
