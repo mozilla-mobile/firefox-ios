@@ -13,6 +13,9 @@ enum MultiWindowAction {
     /// Signals that we should store tabs (for all windows) on the default Profile.
     case storeTabs
 
+    /// Signals that we should save Simple Tabs for all windows (used by our widgets).
+    case saveSimpleTabs
+
     /// Closes private tabs across all windows.
     case closeAllPrivateTabs
 }
@@ -92,6 +95,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     private let defaults: UserDefaultsInterface
     private var _activeWindowUUID: WindowUUID?
     private let tabSyncCoordinator = WindowTabsSyncCoordinator()
+    private let widgetSimpleTabsCoordinator = WindowSimpleTabsCoordinator()
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
     // UUIDs at the beginning of the list are prioritized over UUIDs at the end
@@ -214,6 +218,8 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
             }
         case .storeTabs:
             storeTabs()
+        case .saveSimpleTabs:
+            saveSimpleTabs()
         }
     }
 
@@ -228,6 +234,11 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     // MARK: - Internal Utilities
+
+    func saveSimpleTabs() {
+        let providers = allWindowTabManagers() as? [WindowSimpleTabsProvider] ?? []
+        widgetSimpleTabsCoordinator.saveSimpleTabs(for: providers)
+    }
 
     /// When provided a list of UUIDs of available window data files on disk,
     /// this function determines which of them should be the next to be
