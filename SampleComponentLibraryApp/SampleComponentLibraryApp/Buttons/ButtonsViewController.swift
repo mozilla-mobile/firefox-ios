@@ -13,6 +13,7 @@ class ButtonsViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { _ in }
+    private lazy var primaryButtonDisabled: PrimaryRoundedButton = .build { _ in }
     private lazy var secondaryButton: SecondaryRoundedButton = .build { _ in }
     private lazy var linkButton: LinkButton = .build { _ in }
     private lazy var closeButton: CloseButton = .build { _ in }
@@ -51,6 +52,13 @@ class ButtonsViewController: UIViewController, Themeable {
         let primaryViewModel = PrimaryRoundedButtonViewModel(title: "Primary",
                                                              a11yIdentifier: "a11yPrimary")
         primaryButton.configure(viewModel: primaryViewModel)
+
+        let primaryViewModelDisabled = PrimaryRoundedButtonViewModel(
+            title: "Primary Disabled",
+            a11yIdentifier: "a11yPrimaryDisabled"
+        )
+        primaryButtonDisabled.configure(viewModel: primaryViewModelDisabled)
+        primaryButtonDisabled.isEnabled = false
 
         let secondaryViewModel = SecondaryRoundedButtonViewModel(title: "Secondary",
                                                                  a11yIdentifier: "a11ySecondary")
@@ -94,6 +102,7 @@ class ButtonsViewController: UIViewController, Themeable {
         disabledOffSwitch.configure(with: paddedSwitchViewModelOffDisabled)
 
         primaryButton.applyTheme(theme: themeManager.currentTheme)
+        primaryButtonDisabled.applyTheme(theme: themeManager.currentTheme)
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
         linkButton.applyTheme(theme: themeManager.currentTheme)
     }
@@ -101,6 +110,7 @@ class ButtonsViewController: UIViewController, Themeable {
     private func setupView() {
         view.addSubview(buttonStackView)
         buttonStackView.addArrangedSubview(primaryButton)
+        buttonStackView.addArrangedSubview(primaryButtonDisabled)
         buttonStackView.addArrangedSubview(secondaryButton)
         buttonStackView.addArrangedSubview(linkButton)
         buttonStackView.addArrangedSubview(closeButton)
