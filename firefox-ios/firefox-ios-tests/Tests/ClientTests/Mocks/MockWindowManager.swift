@@ -31,7 +31,7 @@ final class MockWindowManager: WindowManager {
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
-        tabManager(for: windowUUID)
+        wrappedManager.tabManager(for: windowUUID)
     }
 
     func allWindowTabManagers() -> [TabManager] {
