@@ -39,6 +39,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
+            if element.isSelectedOnTap { self.isSelected.toggle() }
             element.onSelected?()
         })
 
@@ -66,9 +67,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
 
         switch state {
-        case [.highlighted]:
+        case .highlighted, .selected:
             updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
-        case [.disabled]:
+        case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
             updatedConfiguration.baseForegroundColor = foregroundColorNormal
@@ -109,7 +110,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.iconPrimary
-        foregroundColorHighlighted = theme.colors.iconPrimary
+        foregroundColorHighlighted = theme.colors.actionPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
