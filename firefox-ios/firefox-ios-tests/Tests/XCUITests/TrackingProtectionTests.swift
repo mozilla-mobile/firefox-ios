@@ -88,6 +88,8 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        XCTAssert(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].isHittable)
+        sleep(2)
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
         var switchValue = app.switches.firstMatch.value!
@@ -146,6 +148,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL("https://www.Mozilla.org")
         waitUntilPageLoad()
         // Tap "Secure connection"
+        sleep(2)
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
         XCTAssertTrue(app.staticTexts["mozilla.org"].exists)
@@ -162,13 +165,11 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
-        app.links["expired"].tap()
+        mozWaitForElementToExist(app.links.staticTexts["expired"])
+        app.links.staticTexts["expired"].tap()
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled
-        XCTAssertTrue(
-            app.staticTexts["This Connection is Untrusted"].exists,
-            "Missing This Connection is Untrusted info"
-        )
+        mozWaitForElementToExist(app.staticTexts["This Connection is Untrusted"], timeout: TIMEOUT_LONG)
         XCTAssertTrue(app.staticTexts.elementContainingText("Firefox has not connected to this website.").exists)
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }
