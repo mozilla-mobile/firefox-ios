@@ -2432,6 +2432,7 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
         show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
     }
 
+    @available(iOS 16.0, *)
     func shouldDisplay() {
         let viewModel = ButtonToastViewModel(
             labelText: .GoToCopiedLink,
@@ -2439,17 +2440,15 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
             buttonText: .GoButtonTittle
         )
 
-        if #available(iOS 16.0, *) {
-            pasteConfiguration = UIPasteConfiguration(acceptableTypeIdentifiers: [UTType.url.identifier])
-            let toast = PasteControlToast(
-                viewModel: viewModel,
-                theme: currentTheme(),
-                target: self
-            )
+        pasteConfiguration = UIPasteConfiguration(acceptableTypeIdentifiers: [UTType.url.identifier])
+        let toast = PasteControlToast(
+            viewModel: viewModel,
+            theme: currentTheme(),
+            target: self
+        )
 
-            clipboardBarDisplayHandler?.clipboardToast = toast
-            show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
-        }
+        clipboardBarDisplayHandler?.clipboardToast = toast
+        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
     }
 
     override func paste(itemProviders: [NSItemProvider]) {

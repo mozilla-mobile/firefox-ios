@@ -7,6 +7,8 @@ import Shared
 
 protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
     func shouldDisplay(clipBoardURL url: URL)
+
+    @available(iOS 16.0, *)
     func shouldDisplay()
 }
 
