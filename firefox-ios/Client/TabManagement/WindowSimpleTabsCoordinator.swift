@@ -10,7 +10,7 @@ protocol WindowSimpleTabsProvider {
 
 final class WindowSimpleTabsCoordinator {
     private struct Timing {
-        static let throttleDelay = 0.25
+        static let throttleDelay = 1.0
     }
     private let throttler = Throttler(seconds: Timing.throttleDelay)
 
