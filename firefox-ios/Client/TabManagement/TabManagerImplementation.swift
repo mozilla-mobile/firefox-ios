@@ -284,7 +284,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
         let windowManager: WindowManager = AppContainer.shared.resolve()
-        windowManager.storeTabs()
+        windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveCurrentTabSessionData()
     }
