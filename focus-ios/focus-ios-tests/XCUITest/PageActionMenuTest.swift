@@ -32,7 +32,8 @@ class PageActionMenuTest: BaseTestCase {
         // Ensure find in page bar is dismissed
         waitForNoExistence(app.buttons["FindInPage.close"])
     }
-
+    
+    // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/395022
     func testActivityMenuFindInPageAction() {
         // Navigate to website
