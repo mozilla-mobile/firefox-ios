@@ -9,11 +9,11 @@ final class TabNumberButton: ToolbarButton {
     // MARK: - UX Constants
     struct UX {
         static let cornerRadius: CGFloat = 2
-        static let titleFont = UIFont.boldSystemFont(ofSize: 11)
+        static let titleFont = FXFontStyles.Bold.caption2.systemFont()
 
         // Tab count related constants
         static let defaultCountLabelText = "0"
-        static let maxTabCountToShowInfinity = 100
+        static let maxTabCount = 99
         static let infinitySymbol = "\u{221E}"
     }
 
@@ -43,9 +43,9 @@ final class TabNumberButton: ToolbarButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateTabCount(_ count: Int, animated: Bool = true) {
+    func updateTabCount(_ count: Int) {
         let count = max(count, 1)
-        let countToBe = (count < UX.maxTabCountToShowInfinity) ? count.description : UX.infinitySymbol
+        let countToBe = (count <= UX.maxTabCount) ? count.description : UX.infinitySymbol
         countLabel.text = countToBe
     }
 
