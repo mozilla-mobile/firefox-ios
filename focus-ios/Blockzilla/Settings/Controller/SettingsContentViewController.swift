@@ -153,7 +153,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         startLoading()
     }
 
-    @objc func SELdidTimeOut() {
+    @objc
+    func SELdidTimeOut() {
         self.timer = nil
         self.isError = true
     }

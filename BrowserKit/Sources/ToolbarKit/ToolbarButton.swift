@@ -21,6 +21,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
     var foregroundColorDisabled: UIColor = .clear
     var backgroundColorNormal: UIColor = .clear
 
+    private var onLongPress: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -35,6 +37,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
         guard var config = configuration else {
             return
         }
+        removeAllGestureRecognizers()
+        configureLongPressGestureRecognizerIfNeeded(for: element)
 
         let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
         let action = UIAction(title: element.a11yLabel,
@@ -79,7 +83,35 @@ class ToolbarButton: UIButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
-    // MARK: ThemeApplicable
+    private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement) {
+        guard element.onLongPress != nil else { return }
+        onLongPress = element.onLongPress
+        let longPressRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(handleLongPress)
+        )
+        addGestureRecognizer(longPressRecognizer)
+    }
+
+    private func removeAllGestureRecognizers() {
+        if let gestureRecognizers = gestureRecognizers {
+            for recognizer in gestureRecognizers {
+                removeGestureRecognizer(recognizer)
+            }
+        }
+    }
+
+    // MARK: - Selectors
+    @objc
+    private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            onLongPress?()
+        }
+    }
+
+    // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.iconPrimary
         foregroundColorHighlighted = theme.colors.iconPrimary

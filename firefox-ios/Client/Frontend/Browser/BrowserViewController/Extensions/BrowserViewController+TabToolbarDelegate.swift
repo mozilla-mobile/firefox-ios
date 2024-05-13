@@ -24,7 +24,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             anchor: navigationToolbar.multiStateButton,
             withArrowDirection: topTabsVisible ? .up : .down,
             andDelegate: self,
-            presentedUsing: { self.presentDataClearanceContextualHint() },
+            presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
             overlayState: overlayManager)
     }

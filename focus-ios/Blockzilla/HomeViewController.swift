@@ -104,7 +104,8 @@ class HomeViewController: UIViewController {
                 )))
     }
 
-    @objc private func rotated() {
+    @objc
+    private func rotated() {
         if UIApplication.shared.orientation?.isLandscape == true {
             if UIDevice.current.userInterfaceIdiom == .pad {
                 // On iPad in landscape we only show the tips.

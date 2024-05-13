@@ -18,6 +18,7 @@ class MockCoordinator: Coordinator {
     var removedChildCalled = 0
     var canHandleRouteCalled = 0
     var findRouteCalled = 0
+    var removeAllChildrenCalled = 0
 
     init(router: MockRouter) {
         self.router = router
@@ -34,6 +35,10 @@ class MockCoordinator: Coordinator {
     func canHandle(route: Route) -> Bool {
         canHandleRouteCalled += 1
         return false
+    }
+
+    func removeAllChildren() {
+        removeAllChildrenCalled += 1
     }
 
     func handle(route: Route) { }

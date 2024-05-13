@@ -1,9 +1,9 @@
 only_rules: # Only enforce these rules, ignore all others
   # - line_length
+  - class_delegate_protocol
   - blanket_disable_command
-  # - class_delegate_protocol
   - closure_spacing
-  # - closure_parameter_position
+  - closure_parameter_position
   - colon
   - comma
   - comment_spacing
@@ -55,9 +55,9 @@ only_rules: # Only enforce these rules, ignore all others
   - vertical_whitespace
   - void_function_in_ternary
   - void_return
-  # - file_header
+  - file_header
   - redundant_type_annotation
-  # - attributes
+  - attributes
   - closing_brace
   - closure_end_indentation
   - contains_over_filter_count

@@ -44,6 +44,7 @@ protocol Coordinator: AnyObject {
 
     func add(child coordinator: Coordinator)
     func remove(child coordinator: Coordinator?)
+    func removeAllChildren()
 }
 
 extension Array where Element == Coordinator {

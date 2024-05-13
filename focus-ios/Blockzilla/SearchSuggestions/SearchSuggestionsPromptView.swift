@@ -152,12 +152,14 @@ class SearchSuggestionsPromptView: UIView {
         setNeedsUpdateConstraints()
     }
 
-    @objc private func didPressDisable() {
+    @objc
+    private func didPressDisable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: false)
         GleanMetrics.ShowSearchSuggestions.disabledFromPanel.record()
     }
 
-    @objc private func didPressEnable() {
+    @objc
+    private func didPressEnable() {
         delegate?.searchSuggestionsPromptView(self, didEnable: true)
         GleanMetrics.ShowSearchSuggestions.enabledFromPanel.record()
     }

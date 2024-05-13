@@ -34,6 +34,10 @@ open class BaseCoordinator: NSObject, Coordinator {
         childCoordinators.remove(at: index)
     }
 
+    func removeAllChildren() {
+        childCoordinators.removeAll()
+    }
+
     func canHandle(route: Route) -> Bool {
         return false
     }

@@ -42,7 +42,8 @@ class SwitchTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func toggle(sender: UISwitch) {
+    @objc
+    private func toggle(sender: UISwitch) {
         subject.send(sender.isOn)
     }
 }
