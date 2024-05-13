@@ -5,10 +5,15 @@
 import Common
 import UIKit
 
+public enum ToolbarButtonGesture {
+    case tap
+    case longPress
+}
+
 class ToolbarButton: UIButton, ThemeApplicable {
-    public struct UX {
-        public static let verticalInset: CGFloat = 8
-        public static let horizontalInset: CGFloat = 8
+    struct UX {
+        static let verticalInset: CGFloat = 8
+        static let horizontalInset: CGFloat = 8
     }
 
     var foregroundColorNormal: UIColor = .clear
