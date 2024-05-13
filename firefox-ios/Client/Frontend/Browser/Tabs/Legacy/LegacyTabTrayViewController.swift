@@ -528,9 +528,9 @@ extension LegacyTabTrayViewController: Notifiable {
                       notification.windowUUID == self?.windowUUID
                 else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
-                self?.segmentedControlIphone.setImage(
-                    UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label),
-                    forSegmentAt: 0)
+                if let image = UIImage(named: StandardImageIdentifiers.Large.tab) {
+                    self?.segmentedControlIphone.setImage(image.overlayWith(image: label), forSegmentAt: 0)
+                }
             default: break
             }
         }

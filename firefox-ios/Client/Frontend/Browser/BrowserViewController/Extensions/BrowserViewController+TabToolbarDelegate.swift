@@ -226,14 +226,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
 
         let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
-                                                        iconString: "nav-tabcounter",
+                                                        iconString: StandardImageIdentifiers.Large.tab,
                                                         iconType: .TabsButton,
                                                         tabCount: tabCount) { _ in
             action()
         }.items
 
         let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
-                                                       iconString: "nav-tabcounter",
+                                                       iconString: StandardImageIdentifiers.Large.tab,
                                                        iconType: .TabsButton,
                                                        tabCount: tabCount) { _ in
             action()
