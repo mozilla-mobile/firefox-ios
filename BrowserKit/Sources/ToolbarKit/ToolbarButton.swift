@@ -12,8 +12,8 @@ public enum ToolbarButtonGesture {
 
 class ToolbarButton: UIButton, ThemeApplicable {
     struct UX {
-        public static let verticalInset: CGFloat = 8
-        public static let horizontalInset: CGFloat = 8
+        static let verticalInset: CGFloat = 8
+        static let horizontalInset: CGFloat = 8
     }
 
     var foregroundColorNormal: UIColor = .clear
