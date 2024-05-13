@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0AAE4B562BB45FD50078BAB2 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAE4B552BB45FD50078BAB2 /* Glean */; };
 		0B37F9A61E2FCAD4002DF74B /* SearchProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */; };
-		0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */; };
 		0BBBED411DD3823C00F9C565 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED401DD3823C00F9C565 /* BaseTestCase.swift */; };
 		0BBBED431DD3B78300F9C565 /* SettingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBBED421DD3B78300F9C565 /* SettingTest.swift */; };
 		0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */; };
@@ -345,7 +344,6 @@
 /* Begin PBXFileReference section */
 		0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProviderTest.swift; sourceTree = "<group>"; };
 		0B4868651F2250A3008C3C09 /* PastenGoTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastenGoTest.swift; sourceTree = "<group>"; };
-		0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsiteMemoryTest.swift; sourceTree = "<group>"; };
 		0BA39A831DD2B8E4005F970A /* XCUITest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XCUITest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA39A871DD2B8E4005F970A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUITests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1309,7 +1307,6 @@
 				0BC928CD1E366A6E004AC581 /* AsianLocaleTest.swift */,
 				0B37F9A51E2FCAD4002DF74B /* SearchProviderTest.swift */,
 				E4BC84F31E2A862400833B45 /* InfoPlist.strings */,
-				0B70C1621DE6128900CEF7E0 /* WebsiteMemoryTest.swift */,
 				0BBBED3F1DD3821600F9C565 /* Utils */,
 				0BBBED421DD3B78300F9C565 /* SettingTest.swift */,
 				0BA39A871DD2B8E4005F970A /* Info.plist */,
@@ -2548,7 +2545,6 @@
 				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
 				F8DEC61526C6A33200C5F26B /* AppConfig.swift in Sources */,
 				166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */,
-				0B70C1631DE6128900CEF7E0 /* WebsiteMemoryTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
 				C847E956274BB7CC000F6D20 /* XCUIApplication+Buttons.swift in Sources */,
