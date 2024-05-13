@@ -111,6 +111,11 @@ export const XPCOMUtils = withNotImplementedError({
   defineLazyModuleGetters(obj, modules) {
     internalModuleResolvers.resolveModules(obj, modules);
   },
+  defineLazyServiceGetter() {
+    // Don't do anything
+    // We need this for OS Auth fixes for formautofill.
+    // TODO(issam, Bug 1894967): Move os auth to separate module and remove this.
+  },
 });
 
 // eslint-disable-next-line no-shadow

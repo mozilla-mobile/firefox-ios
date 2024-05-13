@@ -751,7 +751,9 @@ class BrowserViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if !displayedRestoreTabsAlert && crashedLastLaunch() {
+        // Skip the 'restore tabs' alert on iPad; this avoids some potential UX issues with multi-window. [FXIOS-9079]
+        let iPadDevice = UIDevice.current.userInterfaceIdiom == .pad
+        if !iPadDevice && !displayedRestoreTabsAlert && crashedLastLaunch() {
             logger.log("The application crashed on last session",
                        level: .info,
                        category: .lifecycle)
@@ -792,8 +794,8 @@ class BrowserViewController: UIViewController,
             anchor: urlBar,
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
-            presentedUsing: { self.presentContextualHint() },
-            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .toolbar) },
+            presentedUsing: { [weak self] in self?.presentContextualHint() },
+            andActionForButton: { [weak self] in self?.homePanelDidRequestToOpenSettings(at: .toolbar) },
             overlayState: overlayManager)
     }
 
@@ -827,6 +829,33 @@ class BrowserViewController: UIViewController,
         view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
+        adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    private func adjustURLBarHeightBasedOnLocationViewHeight() {
+        // Make sure that we have a height to actually base our calculations on
+        guard urlBar.locationContainer.bounds.height != 0 else { return }
+        let locationViewHeight = urlBar.locationView.bounds.height
+        let heightWithPadding = locationViewHeight + UIConstants.ToolbarPadding
+
+        // Adjustment for landscape on the urlbar
+        // need to account for inset and remove it when keyboard is showing
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let isKeyboardShowing = keyboardState != nil
+
+        if !showToolBar && isBottomSearchBar &&
+        !isKeyboardShowing && UIDevice.current.orientation.isLandscape {
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else {
+            overKeyboardContainer.removeBottomInsetSpacer()
+        }
+
+        // We have to deactivate the original constraint, and remake the constraint
+        // or else funky conflicts happen
+        urlBarHeightConstraint.deactivate()
+        urlBar.snp.makeConstraints { make in
+            self.urlBarHeightConstraint = make.height.equalTo(heightWithPadding).constraint
+        }
     }
 
     override func willTransition(
@@ -1648,7 +1677,7 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showQRCode(delegate: self)
     }
 
-    func handleClosePrivateTabs() {
+    func closeAllPrivateTabs() {
         tabManager.removeTabs(tabManager.privateTabs)
         guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
             tabManager.selectTab(tabManager.addTab())
@@ -2968,6 +2997,19 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        keyboardState = state
+        updateViewConstraints()
+
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomContentStackView.layoutIfNeeded()
+            })
     }
 
     private func finishEditionMode() {

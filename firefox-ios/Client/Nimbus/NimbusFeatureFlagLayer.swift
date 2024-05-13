@@ -68,9 +68,6 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
-        case .shareSheetChanges,
-                .shareToolbarChanges:
-            return checkNimbusForShareSheet(for: featureID, from: nimbus)
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
         case .tabTrayRefactor:
@@ -181,18 +178,6 @@ final class NimbusFeatureFlagLayer {
             default: return false
             }
         }
-
-    public func checkNimbusForShareSheet(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.shareSheet.value()
-
-            switch featureID {
-            case .shareSheetChanges: return config.moveActions
-            case .shareToolbarChanges: return config.toolbarChanges
-            default: return false
-            }
-    }
 
     private func checkSplashScreenFeature(
         for featureID: NimbusFeatureFlagID,

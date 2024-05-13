@@ -159,7 +159,8 @@ class PhotonActionSheetCell: UITableViewCell {
             break
         }
     }
-    @objc func valueChanged(sender: UISwitch) {
+    @objc
+    func valueChanged(sender: UISwitch) {
         actionSheet?.didToggle(enabled: sender.isOn)
     }
 }

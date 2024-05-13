@@ -13,6 +13,7 @@ import TabDataStore
 class WindowManagerTests: XCTestCase {
     let tabManager = MockTabManager(windowUUID: WindowUUID())
     let secondTabManager = MockTabManager(windowUUID: WindowUUID())
+    let mockTabDataStore = MockTabDataStore()
 
     override func setUp() {
         super.setUp()
@@ -104,8 +105,6 @@ class WindowManagerTests: XCTestCase {
 
     func testNextAvailableUUIDWhenNoTabDataIsSaved() {
         let subject = createSubject()
-        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
-        let mockTabDataStore = tabDataStore as! MockTabDataStore
         mockTabDataStore.resetMockTabWindowUUIDs()
 
         // Check that asking for two UUIDs results in two unique/random UUIDs
@@ -118,8 +117,6 @@ class WindowManagerTests: XCTestCase {
 
     func testNextAvailableUUIDWhenOnlyOneWindowSaved() {
         let subject = createSubject()
-        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
-        let mockTabDataStore = tabDataStore as! MockTabDataStore
         mockTabDataStore.resetMockTabWindowUUIDs()
 
         let savedUUID = UUID()
@@ -135,8 +132,6 @@ class WindowManagerTests: XCTestCase {
 
     func testNextAvailableUUIDWhenMultipleWindowsSaved() {
         let subject = createSubject()
-        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
-        let mockTabDataStore = tabDataStore as! MockTabDataStore
         mockTabDataStore.resetMockTabWindowUUIDs()
 
         let uuid1 = UUID()
@@ -191,8 +186,6 @@ class WindowManagerTests: XCTestCase {
 
     func testReservedUUIDsAreUnavailableInSuccessiveCalls() {
         let subject = createSubject()
-        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
-        let mockTabDataStore = tabDataStore as! MockTabDataStore
         mockTabDataStore.resetMockTabWindowUUIDs()
 
         let savedUUID = UUID()
@@ -210,8 +203,6 @@ class WindowManagerTests: XCTestCase {
 
     func testClosingTwoWindowsInDifferentOrdersResultsInSensibleExpectedOrderWhenOpening() {
         let subject = createSubject()
-        let tabDataStore: TabDataStore = AppContainer.shared.resolve()
-        let mockTabDataStore = tabDataStore as! MockTabDataStore
         mockTabDataStore.resetMockTabWindowUUIDs()
 
         let uuid1 = UUID()
@@ -255,6 +246,6 @@ class WindowManagerTests: XCTestCase {
         // For this test case, we create a new WindowManager that we can
         // modify and reset between each test case as needed, without
         // impacting other tests that may use the shared AppContainer.
-        return WindowManagerImplementation()
+        return WindowManagerImplementation(tabDataStore: mockTabDataStore)
     }
 }

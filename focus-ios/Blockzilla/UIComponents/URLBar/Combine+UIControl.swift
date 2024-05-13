@@ -52,7 +52,8 @@ where SubscriberType.Input == Control {
         subscriber = nil
     }
 
-    @objc private func eventHandler() {
+    @objc
+    private func eventHandler() {
         _ = subscriber?.receive(control)
     }
 }

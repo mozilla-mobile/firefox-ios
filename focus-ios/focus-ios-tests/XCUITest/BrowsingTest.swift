@@ -5,7 +5,7 @@
 import Foundation
 import XCTest
 
-class BasicBrowsing: BaseTestCase {
+class BrowsingTest: BaseTestCase {
     // Smoke test
     // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
     func testLaunchExternalApp() {
@@ -74,5 +74,68 @@ class BasicBrowsing: BaseTestCase {
         waitForValueContains(app.textFields["URLBar.urlText"], value: "mozilla")
         app.buttons["BrowserToolset.stopReloadButton"].tap()
         waitForValueContains(app.textFields["URLBar.urlText"], value: "mozilla")
+    }
+
+    // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587661
+    func testActivityMenuRequestDesktopItem() {
+        let urlBarTextField = app.textFields["URLBar.urlText"]
+
+        // Wait for existence rather than hittable because the textfield is technically disabled
+        loadWebPage("facebook.com")
+
+        waitForWebPageLoad()
+        waitForExistence(app.buttons["HomeView.settingsButton"])
+        app.buttons["HomeView.settingsButton"].tap()
+
+        if iPad() {
+            waitForExistence(app.collectionViews.buttons["Request Mobile Site"])
+            app.collectionViews.buttons["Request Mobile Site"].tap()
+        } else {
+            waitForExistence(app.collectionViews.buttons["Request Desktop Site"])
+            app.collectionViews.buttons["Request Desktop Site"].tap()
+        }
+
+        waitForWebPageLoad()
+
+        // https://github.com/mozilla-mobile/focus-ios/issues/2782
+        /*
+         guard let text = urlBarTextField.value as? String else {
+             XCTFail()
+             return
+         }
+
+         if text.contains("m.facebook") {
+             if !iPad() {
+                 XCTFail()
+             }
+         }
+        */
+    }
+
+    // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587662
+    func testCheckCollapsedURL() {
+        // Test do not apply to iPad
+        if !iPad() {
+            // Visit a page that scrolls
+            loadWebPage("https://news.ycombinator.com")
+
+            // Wait for the website to load
+            waitForExistence(app.webViews.otherElements["Hacker News"])
+            app.swipeUp()
+            app.swipeUp()
+            let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
+            waitForExistence(collapsedTruncatedurltextTextView)
+
+            XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
+            XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
+
+            // After swiping down, the collapsed URL should not be displayed
+            app.swipeDown()
+            app.swipeDown()
+            waitForNoExistence(collapsedTruncatedurltextTextView)
+            XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
+        }
     }
 }

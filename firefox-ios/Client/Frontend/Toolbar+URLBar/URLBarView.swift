@@ -247,6 +247,15 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func searchEnginesDidUpdate() {
+        let engineID = profile.searchEngines.defaultEngine?.engineID ?? "custom"
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .change,
+            object: .defaultSearchEngine,
+            value: nil,
+            extras: [TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engineID]
+        )
+
         self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
         self.searchIconImageView.largeContentTitle = profile.searchEngines.defaultEngine?.shortName
         self.searchIconImageView.largeContentImage = nil

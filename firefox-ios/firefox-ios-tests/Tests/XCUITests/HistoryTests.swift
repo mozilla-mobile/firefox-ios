@@ -325,9 +325,6 @@ class HistoryTests: BaseTestCase {
         app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.tap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
-        // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/19672
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
         closeKeyboard()

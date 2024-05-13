@@ -127,22 +127,26 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         }
     }
 
-    @objc private func defaultToggleSwitched(_ sender: UISwitch) {
+    @objc
+    private func defaultToggleSwitched(_ sender: UISwitch) {
         let enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableDomainAutocomplete)
     }
 
-    @objc private func customToggleSwitched(_ sender: UISwitch) {
+    @objc
+    private func customToggleSwitched(_ sender: UISwitch) {
         let enabled = sender.isOn
         Settings.set(enabled, forToggle: .enableCustomDomainAutocomplete)
     }
 
-    @objc private func learnMoreDefaultTapped() {
+    @objc
+    private func learnMoreDefaultTapped() {
         let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: .autofillDomain))
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
-    @objc private func learnMoreCustomapped() {
+    @objc
+    private func learnMoreCustomapped() {
         let contentViewController = SettingsContentViewController(url: URL(forSupportTopic: .autofillDomain))
         navigationController?.pushViewController(contentViewController, animated: true)
     }

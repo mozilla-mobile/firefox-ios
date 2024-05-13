@@ -246,7 +246,7 @@ class BrowserCoordinator: BaseCoordinator,
         case let .action(routeAction):
             switch routeAction {
             case .closePrivateTabs:
-                handleClosePrivateTabs()
+                handleClosePrivateTabsWidgetAction()
             case .showQRCode:
                 handleQRCode()
             case .showIntroOnboarding:
@@ -276,8 +276,12 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.handleQRCode()
     }
 
-    private func handleClosePrivateTabs() {
-        browserViewController.handleClosePrivateTabs()
+    private func handleClosePrivateTabsWidgetAction() {
+        // Our widget actions will arrive as a URL passed into the client iOS app.
+        // If multiple iPad windows are open the resulting action + route will be
+        // sent to one particular window, but for this action we want to close tabs
+        // for all open windows, so we route this message to the WindowManager.
+        windowManager.performMultiWindowAction(.closeAllPrivateTabs)
     }
 
     private func handle(homepanelSection section: Route.HomepanelSection) {
@@ -708,10 +712,14 @@ class BrowserCoordinator: BaseCoordinator,
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
 
-            // TODO: Revisit for [FXIOS-8064]. Disabled temporarily to avoid potential KVO crash in WebKit. (FXIOS-8416)
             // Clean up views and ensure BVC for the window is freed
-            // browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            // browserViewController.removeFromParent()
+            browserViewController.view.endEditing(true)
+            browserViewController.dismissUrlBar()
+            homepageViewController?.view.removeFromSuperview()
+            homepageViewController?.removeFromParent()
+            homepageViewController = nil
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }

@@ -29,9 +29,7 @@ final class WindowTabsSyncCoordinator {
     }
 
     func syncTabsToProfile() {
-        // throttler.throttle { [weak self] in self?.performSync() }
-        // TODO: [FXIOS-9050] Once 9050 issue is addressed, throttle calls to `performSync`
-        performSync()
+        throttler.throttle { [weak self] in self?.performSync() }
     }
 
     // MARK: - Utility

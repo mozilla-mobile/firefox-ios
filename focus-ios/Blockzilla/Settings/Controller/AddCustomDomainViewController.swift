@@ -91,7 +91,8 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         ])
     }
 
-    @objc func cancelTapped() {
+    @objc
+    func cancelTapped() {
         finish()
     }
 
@@ -100,7 +101,8 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 
-    @objc func doneTapped() {
+    @objc
+    func doneTapped() {
         self.resignFirstResponder()
         guard let domain = textInput.text, !domain.isEmpty else {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()

@@ -343,7 +343,8 @@ class TrackingProtectionViewController: UIViewController {
         calculatePreferredSize()
     }
 
-    @objc private func doneTapped() {
+    @objc
+    private func doneTapped() {
         onboardingEventsHandler.route = nil
         self.dismiss(animated: true, completion: nil)
     }
