@@ -84,6 +84,7 @@
         "HomePageSettingsUITests\/testRecentlySaved()",
         "HomePageSettingsUITests\/testSetCustomURLAsHome()",
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
+        "HomePageSettingsUITests\/testShortcutsRows()",
         "HomePageSettingsUITests\/testTopSitesCustomNumberOfRows()",
         "HomePageSettingsUITests\/testTyping()",
         "IntegrationTests",

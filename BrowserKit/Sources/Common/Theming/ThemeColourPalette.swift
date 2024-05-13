@@ -81,6 +81,7 @@ public protocol ThemeColourPalette {
     var iconAccentPink: UIColor { get }
     var iconAccentGreen: UIColor { get }
     var iconAccentYellow: UIColor { get }
+    var iconRatingNeutral: UIColor { get }
 
     // MARK: - Border
     var borderPrimary: UIColor { get }

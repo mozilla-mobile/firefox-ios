@@ -7,6 +7,16 @@ import Common
 import Shared
 import TabDataStore
 
+/// Defines various actions in the app which are performed for all open iPad
+/// windows. These can be routed through the WindowManager 
+enum MultiWindowAction {
+    /// Signals that we should store tabs (for all windows) on the default Profile.
+    case storeTabs
+
+    /// Closes private tabs across all windows.
+    case closeAllPrivateTabs
+}
+
 /// General window management class that provides some basic coordination and
 /// state management for multiple windows shared across a single running app.
 protocol WindowManager {
@@ -55,8 +65,9 @@ protocol WindowManager {
     /// - Parameter windowUUID: the UUID of the window triggering the event.
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID)
 
-    /// Signals the WindowManager to store tabs (across all windows) on the default Profile.
-    func storeTabs()
+    /// Performs a MultiWindowAction.
+    /// - Parameter action: the action to perform.
+    func performMultiWindowAction(_ action: MultiWindowAction)
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -99,10 +110,10 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     // MARK: - Initializer
 
     init(logger: Logger = DefaultLogger.shared,
-         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore? = nil,
          userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+        self.tabDataStore = tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
         self.logger = logger
-        self.tabDataStore = tabDataStore
         self.defaults = userDefaults
         tabSyncCoordinator.delegate = self
     }
@@ -193,11 +204,24 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         }
     }
 
-    func storeTabs() {
-        tabSyncCoordinator.syncTabsToProfile()
+    func performMultiWindowAction(_ action: MultiWindowAction) {
+        switch action {
+        case .closeAllPrivateTabs:
+            windows.forEach {
+                guard let browserCoordinator = $0.value.sceneCoordinator?
+                    .childCoordinators.first(where: { $0 is BrowserCoordinator }) as? BrowserCoordinator else { return }
+                browserCoordinator.browserViewController.closeAllPrivateTabs()
+            }
+        case .storeTabs:
+            storeTabs()
+        }
     }
 
     // MARK: - WindowTabSyncCoordinatorDelegate
+
+    private func storeTabs() {
+        tabSyncCoordinator.syncTabsToProfile()
+    }
 
     func tabManagers() -> [TabManager] {
         return allWindowTabManagers()

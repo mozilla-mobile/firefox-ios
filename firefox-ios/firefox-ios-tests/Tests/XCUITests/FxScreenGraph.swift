@@ -910,7 +910,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.otherElements["nav-tabcounter"],
+                app.otherElements[StandardImageIdentifiers.Large.tab],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in
