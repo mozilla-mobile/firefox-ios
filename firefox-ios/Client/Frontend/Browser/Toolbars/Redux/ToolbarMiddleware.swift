@@ -19,7 +19,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         self.logger = logger
     }
 
-    lazy var toolbarProvider: Middleware<AppState> = { [self] state, action in
+    lazy var toolbarProvider: Middleware<AppState> = { state, action in
         if let action = action as? GeneralBrowserMiddlewareAction {
             self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
         } else if let action = action as? ToolbarMiddlewareAction {
