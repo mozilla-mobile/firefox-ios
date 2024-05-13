@@ -8,6 +8,7 @@ import Account
 import MozillaAppServices
 import Shared
 import Common
+import PDFKit
 
 enum FxAPageType: Equatable {
     case emailLoginFlow
@@ -41,6 +42,28 @@ class FxAWebViewModel: FeatureFlaggable {
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
+
+    var blobToDataScript = """
+                async function createBlobFromUrl(url) {
+                  const response = await fetch(url);
+                  const blob = await response.blob();
+                  return blob;
+                }
+
+                function blobToDataURLAsync(blob) {
+                  return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      resolve(reader.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                  });
+                }
+
+                const url = await createBlobFromUrl(blobUrl)
+                return await blobToDataURLAsync(url)
+            """
 
     func setupUserScript(for controller: WKUserContentController) {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
@@ -148,6 +171,52 @@ class FxAWebViewModel: FeatureFlaggable {
         }
 
         return URLRequest(url: url)
+    }
+
+    private func createOutputURL(withFileName name: String, withFileExtension ext: String) -> URL? {
+        try? FileManager.default.url(for: .documentDirectory,
+                                     in: .userDomainMask,
+                                     appropriateFor: nil,
+                                     create: false)
+        .appendingPathComponent(name)
+        .appendingPathExtension(ext)
+    }
+
+    func isMozillaAccountPDF(blobURL: URL, webViewURL: URL?) -> Bool {
+        if blobURL.scheme == "blob", webViewURL?.host == "accounts.firefox.com" {
+            return true
+        }
+        return false
+    }
+
+    func getURLForPDF(webView: WKWebView, blobURL: URL, completion: @escaping (_ outputURL: URL?) -> Void) {
+        webView.callAsyncJavaScript(blobToDataScript,
+                                    arguments: ["blobUrl": blobURL.absoluteString],
+                                    in: nil,
+                                    in: WKContentWorld.defaultClient) { [weak self] result in
+            switch result {
+            case .success(let dataURL):
+                guard let data = dataURL as? String,
+                      let url = URL(string: data),
+                      let data = try? Data(contentsOf: url),
+                      let pdf = PDFDocument(data: data),
+                      let outputURL = self?.createOutputURL(withFileName: "RecoveryKey",
+                                                            withFileExtension: "pdf") else {
+                    completion(nil)
+                    return
+                }
+
+                pdf.write(to: outputURL)
+                if FileManager.default.fileExists(atPath: outputURL.path) {
+                    let url = URL(fileURLWithPath: outputURL.path)
+                    completion(url)
+                    return
+                }
+
+                completion(nil)
+            case .failure: completion(nil)
+            }
+        }
     }
 }
 
