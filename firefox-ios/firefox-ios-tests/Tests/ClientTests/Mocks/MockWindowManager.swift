@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+@testable import Client
 
 final class MockWindowManager: WindowManager {
     private let wrappedManager: WindowManagerImplementation
