@@ -73,7 +73,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ? foregroundColorHighlighted : foregroundColorNormal
+            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ? 
+                                                       foregroundColorHighlighted :
+                                                       foregroundColorNormal
         }
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
