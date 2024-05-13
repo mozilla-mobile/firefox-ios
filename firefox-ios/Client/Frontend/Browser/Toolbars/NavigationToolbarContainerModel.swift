@@ -28,7 +28,8 @@ struct NavigationToolbarContainerModel {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-            })
+                }
+            )
         }
         self.windowUUID = windowUUID
     }
