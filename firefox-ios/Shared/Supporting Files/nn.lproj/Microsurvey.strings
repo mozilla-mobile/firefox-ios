@@ -1,0 +1,36 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
+"Microsurvey.Prompt.Button.v127" = "Hald fram";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
+"Microsurvey.Prompt.Close.AccessibilityLabel.v127" = "Lat att spørjeundersøking";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name. */
+"Microsurvey.Prompt.TitleLabel.v127" = "Hjelp oss å gjere %@ betre. Det tek berre eitt minutt.";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
+"Microsurvey.Survey.Button.v127" = "Send inn";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
+"Microsurvey.Survey.Close.AccessibilityLabel.v127" = "Lat att undersøking";
+
+/* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
+"Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "Takk for tilbakemeldinga di!";
+
+/* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey. */
+"Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "Undersøkinga er fullført";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
+"Microsurvey.Survey.HeaderLabel.v127" = "Ver med i denne undersøkinga";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.LikertScaleOption2.v127" = "Fornøgd";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.LikertScaleOption3.v127" = "Nøytral";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.LikertScaleOption4.v127" = "Misfornøgd";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
+"Microsurvey.Survey.PrivacyPolicyLink.v127" = "Peronvernerklæring";
+

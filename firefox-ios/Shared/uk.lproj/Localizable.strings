@@ -392,7 +392,7 @@
 "fxa.signin.qr-link-instruction" = "На своєму комп'ютері відкрийте Firefox і перейдіть до firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Готові сканувати";
+"fxa.signin.ready-to-scan" = "Сканувати";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Використати е-пошту";
@@ -1316,7 +1316,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Спробуйте нову колекцію.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
-"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Нова колекція Незалежні Голоси.";
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Нова збірка \"Незалежні голоси\".";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Обмежений випуск";
@@ -1601,7 +1601,7 @@
 "Show Tour" = "Показати знайомство";
 
 /* Accessibility Label for the tab toolbar Stop button */
-"Stop" = "Стоп";
+"Stop" = "Зупинити";
 
 /* Support section title */
 "Support" = "Підтримка";
