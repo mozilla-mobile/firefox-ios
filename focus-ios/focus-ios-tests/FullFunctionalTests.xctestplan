@@ -29,7 +29,6 @@
         "FindInPageTest\/testActivityMenuFindInPageAction()",
         "OnboardingTest",
         "PastenGoTest\/testPastenGo()",
-        "RequestDesktopTest\/testActivityMenuRequestDesktopItem()",
         "SearchProviderTest\/testGoogleSearchProvider()",
         "SettingTest\/testCheckSetting()",
         "SettingTest\/testSafariIntegration()",
