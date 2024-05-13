@@ -40,6 +40,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Բացել %@-ում";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "Լավ";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Հավելել հարմարեցված URL";
 
@@ -67,14 +70,32 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Անջատել";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL-ն արդեն գոյություն ունի";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Չկան հարմարեցված URL-ներ՝ ցուցադրելու համար";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Միացնել";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Կառավարել կայքերը";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Իմ կայքերը";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "Նոր աշխատաշրջան";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Նախորդը";
+
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL-ն պատճենվեց սեղմատախտակում";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "Պատճենել";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Փոխանցել";
@@ -124,6 +145,21 @@
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Դիտարկեք այնպես, որ ոչ ոք Ձեզ չի հետևում:";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Փակել";
+
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Սկսել";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Սկսել դիտարկումը";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Բաց թողնել";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Բարի գալու՜ստ Firefox %@";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Հպեք Safari, ընտրեք բովանդակության արգելափակիչներ";
 
@@ -136,8 +172,20 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Բացել կարգավորումները";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Բացել սարքի կարգավորումները";
+
 /* Save button label */
 "Save" = "Պահպանել";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Ոչ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Այո";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Ցուցադրե՞լ որոնման առաջարկները";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ինքնալրացում";
@@ -145,17 +193,26 @@
 /* Alert message shown when toggling the Content blocker */
 "Settings.blockOtherMessage" = "Բովանդակության այլ հետագծումների արգելափակումը կարող է ընդհատել որոշ տեսանյութեր և վեբ էջեր:";
 
+/* Button label for declining Content blocker alert */
+"Settings.blockOtherNo2" = "Չեղարկել";
+
+/* Dark theme option in settings menu */
+"Settings.darkTheme" = "Մուգ";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla-ն ձգտում է հավաքել միայն այն, ինչ պետք է՝ %@-ը լավարկելու համար";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Իմանալ ավելին";
 
+/* Light theme option in settings menu */
+"Settings.lightTheme" = "Լուսավոր";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Կարգավորումներ";
 
 /* Text for button to add another search engine in settings */
-"Settings.Search.AddSearchEngineButton" = "Ավելացնել որոնողական հանգույց";
+"Settings.Search.AddSearchEngineButton" = "Ավելացնել մեկ այլ որոնիչ";
 
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "Ավելացնել որոնիչ";
@@ -179,7 +236,7 @@
 "Settings.Search.SearchTemplate" = "Որոնել տողը՝ օգտագործելու համար";
 
 /* Placeholder text for input of new search engine template */
-"Settings.Search.SearchTemplatePlaceholder" = "Տեղադրեք կամ մուտքագրեք որոնիչի տողը: Եթե անհրաժեշտ է՝ փոխարինեք որոնվող բառը հետևյալով՝ %s:";
+"Settings.Search.SearchTemplatePlaceholder" = "Փակցրեք կամ մուտքագրեք որոնման տող: Եթե անհրաժեշտ է՝ փոխարինեք որոնման եզրույթը՝ %s-ով:";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Որոնիչներ";
@@ -193,8 +250,23 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ԳԱՂՏՆԻՈՒԹՅՈՒՆ";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Սահմանել որպես սկզբնադիր դիտարկիչ";
+
+/* System value for theme section in settings menu */
+"Settings.systemTheme" = "Համակարգի ոճ";
+
+/* Theme section in settings menu */
+"Settings.theme" = "Ոճ";
+
+/* Header for manual theme section in settings menu */
+"Settings.themePicker" = "Ոճի ընտրիչ";
+
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Արգելափակել վեբ տառատեսակները";
+
+/* Label for the checkbox to toggle Other trackers */
+"Settings.toggleBlockOther2" = "Բովանդակություն";
 
 /* Safari toggle label on settings screen */
 "Settings.toggleSafari" = "Safari­-ից";
@@ -202,14 +274,80 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Ուղարկել օգտագործման տվյալները";
 
+/* Status off for tracking protection in settings screen */
+"Settings.trackingProtectionOff" = "Անջ.";
+
+/* Status on for tracking protection in settings screen */
+"Settings.trackingProtectionOn" = "Միաց.";
+
+/* Text for a share button */
+"share" = "Տարածել";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Պատճենել հասցեն";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "Գտնել էջում";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "Պահանջել աշխատասեղանային կայք";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Պահանջել շարժական կայք";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Բացել Chrome-ում";
+
+/* Text for the share menu option when a user wants to open the current website in the default browser. */
+"ShareMenu.ShareOpenDefaultBrowser" = "Բացել սկզբնադիր դիտակիչում";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Բացել Firefox-֊ում";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Բացել հղումը";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Տարածել էջը հետևյալով…";
+
+/* Text for the rename shortcut alert primary action. */
+"ShortcutView.RenameShortcutAlertPrimaryAction" = "Պահպանել";
+
+/* Text for the rename shortcut alert secondary action. */
+"ShortcutView.RenameShortcutAlertSecondaryAction" = "Չեղարկել";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Ավելացնել";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Ավելացնել Siri-ին";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Բացեք սիրելի կայքը";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Բացեք սիրելի կայքը";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Բացելու URL";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Որոնել %@-ում";
+
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Տեղադրել և Առաջ";
+"URL.contextMenu" = "Փակցնել և գնալ";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "ՋՆՋԵԼ";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "Գտնել էջում՝ %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Փակցնել";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Մուտքագրեք կայքի հասցե կամ որոնում";
+"URL.placeholderText" = "Որոնեք կամ մուտքագրեք հասցեն";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Որոնել %@-ը";
