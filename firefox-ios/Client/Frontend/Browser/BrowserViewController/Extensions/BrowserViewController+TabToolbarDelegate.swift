@@ -35,7 +35,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTabOnHome()
+        didTapOnHome()
     }
 
     // Presents alert to clear users private session data

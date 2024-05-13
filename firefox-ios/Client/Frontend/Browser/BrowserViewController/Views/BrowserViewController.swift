@@ -1634,10 +1634,10 @@ class BrowserViewController: UIViewController,
 
     private func updateToolbarActions() {
         guard isToolbarRefactorEnabled else { return }
-        didTabOnHome()
+        didTapOnHome()
     }
 
-    func didTabOnHome() {
+    func didTapOnHome() {
         let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateToHome == true
         guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
 
