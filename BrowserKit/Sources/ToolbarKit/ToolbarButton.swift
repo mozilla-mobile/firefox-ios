@@ -15,6 +15,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     var foregroundColorHighlighted: UIColor = .clear
     var foregroundColorDisabled: UIColor = .clear
     var backgroundColorNormal: UIColor = .clear
+    private var shouldDisplayAsHighlighted = false
 
     private var onLongPress: (() -> Void)?
 
@@ -34,12 +35,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
+        shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
 
         let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
-            if element.isSelectedOnTap { self.isSelected.toggle() }
             element.onSelected?()
         })
 
@@ -67,12 +68,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
 
         switch state {
-        case .highlighted, .selected:
+        case .highlighted:
             updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = foregroundColorNormal
+            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ? foregroundColorHighlighted : foregroundColorNormal
         }
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal

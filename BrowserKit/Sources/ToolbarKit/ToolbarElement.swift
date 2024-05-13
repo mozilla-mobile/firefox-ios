@@ -11,8 +11,8 @@ public struct ToolbarElement {
     /// Whether the toolbar element can be interacted with
     let isEnabled: Bool
 
-    /// Indicates if element is selected on tap
-    let isSelectedOnTap: Bool
+    /// Indicates if the element should be displayed as highlighted
+    let shouldDisplayAsHighlighted: Bool
 
     /// Accessibility label of the toolbar element
     let a11yLabel: String
@@ -30,14 +30,14 @@ public struct ToolbarElement {
     // can therefor not be used outside of the ToolbarKit
     public init(iconName: String,
                 isEnabled: Bool,
-                isSelectedOnTap: Bool = false,
+                shouldDisplayAsHighlighted: Bool = false,
                 a11yLabel: String,
                 a11yId: String,
                 onSelected: (() -> Void)?,
                 onLongPress: (() -> Void)? = nil) {
         self.iconName = iconName
         self.isEnabled = isEnabled
-        self.isSelectedOnTap = isSelectedOnTap
+        self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
