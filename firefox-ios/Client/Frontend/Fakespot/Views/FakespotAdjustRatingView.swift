@@ -140,5 +140,6 @@ class FakespotAdjustRatingView: UIView, Notifiable, ThemeApplicable {
         cardContainer.applyTheme(theme: theme)
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
+        starRatingView.applyTheme(theme: theme)
     }
 }

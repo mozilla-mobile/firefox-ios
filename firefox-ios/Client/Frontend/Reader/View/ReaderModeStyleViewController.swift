@@ -14,6 +14,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     private var fontSizeLabel: ReaderModeFontSizeLabel!
     private var fontSizeButtons: [ReaderModeFontSizeButton]!
     private var themeButtons: [ReaderModeThemeButton]!
+    private var brightnessImageViews = [UIImageView]()
     private var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
 
     private var fontTypeRow: UIView!
@@ -163,9 +164,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         )
 
         let brightnessMinImageView: UIImageView = .build { imageView in
-            imageView.image = UIImage(named: "brightnessMin")
+            imageView.image = UIImage(named: StandardImageIdentifiers.Medium.sun)?.withRenderingMode(.alwaysTemplate)
         }
-
+        brightnessImageViews.append(brightnessMinImageView)
         brightnessRow.addSubview(brightnessMinImageView)
 
         NSLayoutConstraint.activate(
@@ -179,9 +180,10 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         )
 
         let brightnessMaxImageView: UIImageView = .build { imageView in
-            imageView.image = UIImage(named: "brightnessMax")
+            let image = UIImage(named: StandardImageIdentifiers.Medium.sunFill)
+            imageView.image = image?.withRenderingMode(.alwaysTemplate)
         }
-
+        brightnessImageViews.append(brightnessMaxImageView)
         brightnessRow.addSubview(brightnessMaxImageView)
 
         NSLayoutConstraint.activate(
@@ -229,6 +231,10 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         separatorLines.forEach { line in
             line.backgroundColor = theme.colors.borderPrimary
+        }
+
+        brightnessImageViews.forEach { view in
+            view.tintColor = theme.colors.iconSecondary
         }
     }
 
