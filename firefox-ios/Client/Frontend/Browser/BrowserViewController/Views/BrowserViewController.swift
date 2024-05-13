@@ -588,6 +588,18 @@ class BrowserViewController: UIViewController,
             }
 
             updateToolbarActions()
+
+            // Microsurveys
+            if !state.microsurveyState.showPrompt {
+                guard microsurvey != nil else { return }
+                removeMicrosurveyPrompt()
+            } else if state.microsurveyState.showSurvey {
+                // TODO: FXIOS-8895: Create Microsurvey Modal View
+                print("CYN - FXIOS-8895: Create Microsurvey Modal View")
+            } else if state.microsurveyState.showPrompt {
+                guard microsurvey == nil else { return }
+                createMicrosurveyPrompt(with: state.microsurveyState)
+            }
         }
     }
 
@@ -1205,7 +1217,9 @@ class BrowserViewController: UIViewController,
             removeMicrosurveyPrompt()
         }
 
-        createMicrosurveyPrompt()
+        store.dispatch(
+            MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
+        )
     }
 
     private func updateMicrosurveyConstraints() {
@@ -1229,14 +1243,8 @@ class BrowserViewController: UIViewController,
         updateViewConstraints()
     }
 
-    private func createMicrosurveyPrompt() {
-        let viewModel = MicrosurveyViewModel(openAction: {
-            // TODO: FXIOS-8895: Create Micro Survey Modal View
-        }) {
-            // TODO: FXIOS-8898: Setup Redux to handle open and dismissing modal
-        }
-
-        self.microsurvey = MicrosurveyPromptView(viewModel: viewModel)
+    private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
+        self.microsurvey = MicrosurveyPromptView(state: state, windowUUID: windowUUID)
 
         updateMicrosurveyConstraints()
     }
