@@ -29,10 +29,12 @@ window.init = init;
  * @param {Boolean} isEditable - Set to true if the form should be editable. Default is false.
  */
 const toggleEditMode = (isEditable = false) => {
-  const elements = document.querySelectorAll("input,select,textarea");
-  elements.forEach((element) => {
-    element.disabled = !isEditable;
-  });
-  elements[0].focus();
+  const textFields = document.querySelectorAll("input,textarea");
+  const selectElements = document.querySelectorAll("select");
+
+  textFields.forEach((element) => (element.readOnly = !isEditable));
+  selectElements.forEach((element) => (element.disabled = !isEditable));
+
+  textFields[0].focus();
 };
 window.toggleEditMode = toggleEditMode;
