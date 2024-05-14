@@ -63,4 +63,8 @@ final class MockWindowManager: WindowManager {
         }
         wrappedManager.performMultiWindowAction(action)
     }
+
+    func window(for tab: TabUUID) -> WindowUUID? {
+        wrappedManager.window(for: tab)
+    }
 }

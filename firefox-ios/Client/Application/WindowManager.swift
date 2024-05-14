@@ -71,6 +71,11 @@ protocol WindowManager {
     /// Performs a MultiWindowAction.
     /// - Parameter action: the action to perform.
     func performMultiWindowAction(_ action: MultiWindowAction)
+
+    /// Returns the current window (if available) which hosts a specific tab.
+    /// - Parameter tab: the UUID of the tab.
+    /// - Returns: the UUID of the window hosting it (if available and open).
+    func window(for tab: TabUUID) -> WindowUUID?
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -221,6 +226,10 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         case .saveSimpleTabs:
             saveSimpleTabs()
         }
+    }
+
+    func window(for tab: TabUUID) -> WindowUUID? {
+        return allWindowTabManagers().first(where: { $0.tabs.contains(where: { $0.tabUUID == tab }) })?.windowUUID
     }
 
     // MARK: - WindowTabSyncCoordinatorDelegate
