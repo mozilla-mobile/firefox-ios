@@ -5,7 +5,7 @@
 import Foundation
 
 protocol WindowSimpleTabsProvider {
-    func windowSimpleTabs() -> [TabUUID: SimpleTab]
+    func windowSimpleTabs() -> [String: SimpleTab]
 }
 
 final class WindowSimpleTabsCoordinator {
