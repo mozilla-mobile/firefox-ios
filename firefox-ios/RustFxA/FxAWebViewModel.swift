@@ -190,32 +190,31 @@ class FxAWebViewModel: FeatureFlaggable {
     }
 
     func getURLForPDF(webView: WKWebView, blobURL: URL, completion: @escaping (_ outputURL: URL?) -> Void) {
-        webView.callAsyncJavaScript(blobToDataScript,
-                                    arguments: ["blobUrl": blobURL.absoluteString],
-                                    in: nil,
-                                    in: WKContentWorld.defaultClient) { [weak self] result in
-            switch result {
-            case .success(let dataURL):
-                guard let data = dataURL as? String,
-                      let url = URL(string: data),
-                      let data = try? Data(contentsOf: url),
-                      let pdf = PDFDocument(data: data),
-                      let outputURL = self?.createOutputURL(withFileName: "RecoveryKey",
-                                                            withFileExtension: "pdf") else {
+        webView.callAsyncJavaScriptInDefaultContentWorld(
+            blobToDataScript,
+            arguments: ["blobUrl": blobURL.absoluteString]) { [weak self] result in
+                switch result {
+                case .success(let dataURL):
+                    guard let data = dataURL as? String,
+                          let url = URL(string: data),
+                          let data = try? Data(contentsOf: url),
+                          let pdf = PDFDocument(data: data),
+                          let outputURL = self?.createOutputURL(withFileName: "RecoveryKey",
+                                                                withFileExtension: "pdf") else {
+                        completion(nil)
+                        return
+                    }
+
+                    pdf.write(to: outputURL)
+                    if FileManager.default.fileExists(atPath: outputURL.path) {
+                        let url = URL(fileURLWithPath: outputURL.path)
+                        completion(url)
+                        return
+                    }
+
                     completion(nil)
-                    return
+                case .failure: completion(nil)
                 }
-
-                pdf.write(to: outputURL)
-                if FileManager.default.fileExists(atPath: outputURL.path) {
-                    let url = URL(fileURLWithPath: outputURL.path)
-                    completion(url)
-                    return
-                }
-
-                completion(nil)
-            case .failure: completion(nil)
-            }
         }
     }
 }
