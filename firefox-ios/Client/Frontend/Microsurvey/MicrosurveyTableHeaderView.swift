@@ -49,7 +49,10 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
 
         NSLayoutConstraint.activate(
             [
-                horizontalStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.padding.top),
+                horizontalStackView.topAnchor.constraint(
+                    equalTo: contentView.topAnchor,
+                    constant: UX.padding.top
+                ),
                 horizontalStackView.leadingAnchor.constraint(
                     equalTo: contentView.leadingAnchor,
                     constant: UX.padding.leading
@@ -58,7 +61,10 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
                     equalTo: contentView.trailingAnchor,
                     constant: UX.padding.trailing
                 ),
-                horizontalStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: UX.padding.bottom),
+                horizontalStackView.bottomAnchor.constraint(
+                    equalTo: contentView.bottomAnchor,
+                    constant: UX.padding.bottom
+                ),
 
                 iconView.heightAnchor.constraint(equalToConstant: UX.radioButtonSize.height),
                 iconView.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width)
