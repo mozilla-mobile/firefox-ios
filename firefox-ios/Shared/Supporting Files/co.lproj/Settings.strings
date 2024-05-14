@@ -155,8 +155,8 @@
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Suggestioni da u Web";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Sustene %@ cù suggestioni finanziare occasiunale";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Sustene %@ cù suggestioni occasiunale spunsurizate";
 
 /* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
-"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Suggestioni da i finanziati";
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Suggestioni da i spunsurizatori";
 

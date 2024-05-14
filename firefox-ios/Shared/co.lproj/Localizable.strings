@@ -356,7 +356,7 @@
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Preferenze";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
-"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "I nostri finanzieri è a vostra vita privata";
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "I nostri spunsurizatori è a vostra vita privata";
 
 /* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Apre l’unghjetta sincrunizata";
@@ -368,10 +368,10 @@
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Riguarera d’unghjetta";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
-"FirefoxHomepage.Pocket.Sponsored.v103" = "Finanziatu";
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Spunsurizatu";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
-"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Finanziatu";
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Spunsurizatu";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pagina seguente";
@@ -407,19 +407,19 @@
 "FxAPush_DeviceConnected_title" = "Sync cunnessu";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
-"FxAPush_DeviceDisconnected_body" = "%@ hè statu disghjuntu bè.";
+"FxAPush_DeviceDisconnected_body" = "%@ hè statu discunnessu bè.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "St’apparechju hè statu disghjuntu bè da Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "St’apparechju hè statu discunnessu bè da Firefox Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync disghjuntu";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync discunnessu";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync disghjuntu";
+"FxAPush_DeviceDisconnected_title" = "Sync discunnessu";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu disghjuntu da Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu discunnessu da Firefox Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, cambià u sfondu di screnu.";
@@ -1172,16 +1172,16 @@
 "Settings.Disconnect.Body" = "Firefox ùn si sincruniserà più cù u vostru contu, ma ùn squasserà alcunu datu di navigazione nant’à st’apparechju.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
-"Settings.Disconnect.Button" = "Disghjunghje Sync";
+"Settings.Disconnect.Button" = "Discunnette Sync";
 
 /* Cancel action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.CancelButton" = "Abbandunà";
 
 /* Destructive action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.DestructiveButton" = "Disghjunghje";
+"Settings.Disconnect.DestructiveButton" = "Discunnette";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Disghjunghjessi di Sync ?";
+"Settings.Disconnect.Title" = "Discunnettesi di Sync ?";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Sogliu";
@@ -1349,7 +1349,7 @@
 "Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Accurtatoghji";
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
-"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji finanziati";
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji spunsurizati";
 
 /* Toggled OFF to hide the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "Disattivatu";
