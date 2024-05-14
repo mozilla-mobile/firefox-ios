@@ -101,7 +101,6 @@ public struct StandardImageIdentifiers {
         public static let subtract = "subtractLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
-        public static let tabNumber = "tabNumberLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
         public static let warning = "warningLarge"
