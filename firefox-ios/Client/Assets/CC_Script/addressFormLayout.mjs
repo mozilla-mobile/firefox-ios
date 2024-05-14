@@ -2,12 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-ChromeUtils.defineESModuleGetters(this, {
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
   FormAutofill: "resource://autofill/FormAutofill.sys.mjs",
   FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
 });
-
-/* exported canSubmitForm, getCurrentFormData */
 
 // Defines template descriptors for generating elements in convertLayoutToUI.
 const fieldTemplates = {
@@ -117,7 +116,7 @@ function* convertLayoutToUI(fields, l10nStrings) {
  *
  * @returns {object} An object containing key-value pairs of form data.
  */
-const getCurrentFormData = () => {
+export const getCurrentFormData = () => {
   const formElement = document.querySelector("form");
   const formData = new FormData(formElement);
   return Object.fromEntries(formData.entries());
@@ -129,7 +128,7 @@ const getCurrentFormData = () => {
  *
  * @returns {boolean} True if the form can be submitted
  */
-const canSubmitForm = () => {
+export const canSubmitForm = () => {
   const formData = getCurrentFormData();
   const validValues = Object.values(formData).filter(Boolean);
   return validValues.length >= 2;
@@ -142,9 +141,9 @@ const canSubmitForm = () => {
  * @param {object} record - Address record, includes at least country code defaulted to FormAutofill.DEFAULT_REGION.
  * @param {object} l10nStrings - Localization strings map.
  */
-const createFormLayoutFromRecord = (
+export const createFormLayoutFromRecord = (
   formElement,
-  record = { country: FormAutofill.DEFAULT_REGION },
+  record = { country: lazy.FormAutofill.DEFAULT_REGION },
   l10nStrings = {}
 ) => {
   // Always clear select values because they are not persisted between countries.
@@ -163,7 +162,7 @@ const createFormLayoutFromRecord = (
   };
 
   formElement.innerHTML = "";
-  const fields = FormAutofillUtils.getFormLayout(record);
+  const fields = lazy.FormAutofillUtils.getFormLayout(record);
 
   const layoutGenerator = convertLayoutToUI(fields, l10nStrings);
 
