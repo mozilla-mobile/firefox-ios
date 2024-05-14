@@ -41,7 +41,7 @@
 "Menu.SharePageAction.Title" = "Chia sẻ trang với…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Yêu cầu trang web trên máy tính";
+"Menu.ViewDekstopSiteAction.Title" = "Yêu cầu trang web cho máy tính";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "Yêu cầu trang web di động";

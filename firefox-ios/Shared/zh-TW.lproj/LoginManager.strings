@@ -23,7 +23,7 @@
 "DeleteLoginAlert.DeleteButton.Title.v122" = "移除";
 
 /* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
-"DeleteLoginAlert.Message.Local.v122" = "無法復原此動作。";
+"DeleteLoginAlert.Message.Local.v122" = "無法還原此動作。";
 
 /* Prompt message warning the user that deleted logins will remove logins from all connected devices */
 "DeleteLoginAlert.Message.Synced.v122" = "將從您所有進行同步的裝置中，刪除密碼。";

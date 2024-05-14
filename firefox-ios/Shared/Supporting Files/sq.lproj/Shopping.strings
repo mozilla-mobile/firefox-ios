@@ -187,6 +187,9 @@
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Gjërat në pah* janë nga shqyrtime %1@ brenda 80 ditëve të fundit, të cilave besojmë se mund t’u zihet besë.";
 
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "*Gjërat në pah* janë nga shqyrtime %@ brenda 80 ditëve të fundit, të cilave besojmë se mund t’u zihet besë.";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Si e përcaktojmë cilësinë e shqyrtimeve";
 
