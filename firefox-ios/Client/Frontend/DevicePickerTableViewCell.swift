@@ -31,7 +31,7 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
 
     var clientType = ClientType.Mobile {
         didSet {
-            self.imageView?.image = UIImage.templateImageNamed(clientType.rawValue)
+            self.imageView?.image = UIImage.templateImageNamed(clientType.imageName)
         }
     }
 

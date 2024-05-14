@@ -14,6 +14,7 @@ import MobileCoreServices
 import Common
 import ComponentLibrary
 import Redux
+import ToolbarKit
 
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
@@ -109,6 +110,7 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
+    lazy var isToolbarRefactorEnabled: Bool = ToolbarFlagManager.isRefactorEnabled
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -167,6 +169,10 @@ class BrowserViewController: UIViewController,
     // TODO: weak references?
     var ignoredNavigation = Set<WKNavigation>()
     var typedNavigation = [WKNavigation: VisitType]()
+
+    private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
+        view.windowUUID = self.windowUUID
+    }
     var toolbar = TabToolbar()
     var navigationToolbar: TabToolbarProtocol {
         return toolbar.isHidden ? urlBar : toolbar
@@ -349,7 +355,9 @@ class BrowserViewController: UIViewController,
         let showWarningBadge = actionNeeded
 
         urlBar.warningMenuBadge(setVisible: showWarningBadge)
-        toolbar.warningMenuBadge(setVisible: showWarningBadge)
+        if !isToolbarRefactorEnabled {
+            toolbar.warningMenuBadge(setVisible: showWarningBadge)
+        }
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
@@ -358,21 +366,26 @@ class BrowserViewController: UIViewController,
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
-        toolbar.addNewTabButton.isHidden = showToolbar
 
-        if showToolbar {
-            toolbar.isHidden = false
-            toolbar.tabToolbarDelegate = self
-            toolbar.applyUIMode(
-                isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                theme: currentTheme()
-            )
-            toolbar.applyTheme(theme: currentTheme())
-            handleMiddleButtonState(currentMiddleButtonState ?? .search)
-            updateTabCountUsingTabManager(self.tabManager)
+        if isToolbarRefactorEnabled {
+            navigationToolbarContainer.applyTheme(theme: currentTheme())
         } else {
-            toolbar.tabToolbarDelegate = nil
-            toolbar.isHidden = true
+            toolbar.addNewTabButton.isHidden = showToolbar
+
+            if showToolbar {
+                toolbar.isHidden = false
+                toolbar.tabToolbarDelegate = self
+                toolbar.applyUIMode(
+                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                    theme: currentTheme()
+                )
+                toolbar.applyTheme(theme: currentTheme())
+                handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                updateTabCountUsingTabManager(self.tabManager)
+            } else {
+                toolbar.tabToolbarDelegate = nil
+                toolbar.isHidden = true
+            }
         }
 
         appMenuBadgeUpdate()
@@ -524,6 +537,12 @@ class BrowserViewController: UIViewController,
                                   actionType: ScreenActionType.showScreen,
                                   screen: .browserViewController)
         store.dispatch(action)
+
+        let browserAction = GeneralBrowserMiddlewareAction(
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
+        store.dispatch(browserAction)
+
         let uuid = self.windowUUID
         store.subscribe(self, transform: {
             $0.select({ appState in
@@ -567,6 +586,8 @@ class BrowserViewController: UIViewController,
             if state.showOverlay == true {
                 overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
             }
+
+            updateToolbarActions()
         }
     }
 
@@ -743,8 +764,13 @@ class BrowserViewController: UIViewController,
         view.addSubview(bottomContentStackView)
         view.addSubview(overKeyboardContainer)
 
-        toolbar = TabToolbar()
-        bottomContainer.addArrangedSubview(toolbar)
+        if isToolbarRefactorEnabled {
+            toolbar = TabToolbar()
+        }
+
+        let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
+
+        bottomContainer.addArrangedSubview(toolbarToShow)
         view.addSubview(bottomContainer)
     }
 
@@ -829,6 +855,33 @@ class BrowserViewController: UIViewController,
         view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
+        adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    private func adjustURLBarHeightBasedOnLocationViewHeight() {
+        // Make sure that we have a height to actually base our calculations on
+        guard urlBar.locationContainer.bounds.height != 0 else { return }
+        let locationViewHeight = urlBar.locationView.bounds.height
+        let heightWithPadding = locationViewHeight + UIConstants.ToolbarPadding
+
+        // Adjustment for landscape on the urlbar
+        // need to account for inset and remove it when keyboard is showing
+        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let isKeyboardShowing = keyboardState != nil
+
+        if !showToolBar && isBottomSearchBar &&
+        !isKeyboardShowing && UIDevice.current.orientation.isLandscape {
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else {
+            overKeyboardContainer.removeBottomInsetSpacer()
+        }
+
+        // We have to deactivate the original constraint, and remake the constraint
+        // or else funky conflicts happen
+        urlBarHeightConstraint.deactivate()
+        urlBar.snp.makeConstraints { make in
+            self.urlBarHeightConstraint = make.height.equalTo(heightWithPadding).constraint
+        }
     }
 
     override func willTransition(
@@ -946,8 +999,10 @@ class BrowserViewController: UIViewController,
         }
 
         // Setup the bottom toolbar
-        toolbar.snp.remakeConstraints { make in
-            make.height.equalTo(UIConstants.BottomToolbarHeight)
+        if !isToolbarRefactorEnabled {
+            toolbar.snp.remakeConstraints { make in
+                make.height.equalTo(UIConstants.BottomToolbarHeight)
+            }
         }
 
         overKeyboardContainer.snp.remakeConstraints { make in
@@ -1065,7 +1120,9 @@ class BrowserViewController: UIViewController,
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
-        toolbar.isHidden = false
+        if !isToolbarRefactorEnabled {
+            toolbar.isHidden = false
+        }
 
         [header, overKeyboardContainer].forEach { view in
             view?.transform = .identity
@@ -1575,6 +1632,31 @@ class BrowserViewController: UIViewController,
         navigationToolbar.updatePageStatus(isPage)
     }
 
+    private func updateToolbarActions() {
+        guard isToolbarRefactorEnabled else { return }
+        didTapOnHome()
+    }
+
+    func didTapOnHome() {
+        let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateToHome == true
+        guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
+
+        updateZoomPageBarVisibility(visible: false)
+        let page = NewTabAccessors.getHomePage(self.profile.prefs)
+        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+        } else if let homePanelURL = page.url {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
+        }
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+
+        guard isToolbarRefactorEnabled else { return }
+        let action = GeneralBrowserAction(navigateToHome: false,
+                                          windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.goToHomepage)
+        store.dispatch(action)
+    }
+
     // MARK: Opening New Tabs
 
     /// ⚠️ !! WARNING !! ⚠️
@@ -1650,7 +1732,7 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showQRCode(delegate: self)
     }
 
-    func handleClosePrivateTabs() {
+    func closeAllPrivateTabs() {
         tabManager.removeTabs(tabManager.privateTabs)
         guard let tab = mostRecentTab(inTabs: tabManager.normalTabs) else {
             tabManager.selectTab(tabManager.addTab())
@@ -2730,8 +2812,10 @@ extension BrowserViewController: TabManagerDelegate {
             if previous == nil || tab.isPrivate != previous?.isPrivate {
                 applyTheme()
 
-                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
+                if !isToolbarRefactorEnabled {
+                    let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
+                    ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
+                }
             } else {
                 // Theme is applied to the tab and webView in the else case
                 // because in the if block is applied already to all the tabs and web views
@@ -2874,8 +2958,10 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            toolbar.updateTabCount(count, animated: animated)
             urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
+            if !isToolbarRefactorEnabled {
+                toolbar.updateTabCount(count, animated: animated)
+            }
             topTabsViewController?.updateTabCount(count, animated: animated)
         }
     }
@@ -2970,6 +3056,19 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        keyboardState = state
+        updateViewConstraints()
+
+        UIView.animate(
+            withDuration: state.animationDuration,
+            delay: 0,
+            options: [UIView.AnimationOptions(rawValue: UInt(state.animationCurve.rawValue << 16))],
+            animations: {
+                self.bottomContentStackView.layoutIfNeeded()
+            })
     }
 
     private func finishEditionMode() {

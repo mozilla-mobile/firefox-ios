@@ -68,5 +68,6 @@ let store = Store(state: AppState(),
                     FeltPrivacyMiddleware().privacyManagerProvider,
                     ThemeManagerMiddleware().themeManagerProvider,
                     TabManagerMiddleware().tabsPanelProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+                    ToolbarMiddleware().toolbarProvider
                   ])

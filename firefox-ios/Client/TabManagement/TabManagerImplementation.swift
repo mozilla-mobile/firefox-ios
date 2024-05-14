@@ -30,16 +30,17 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          uuid: WindowUUID,
-         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore? = nil,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
-         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
+         tabMigration: TabMigrationUtility? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
          windowManager: WindowManager = AppContainer.shared.resolve()) {
-        self.tabDataStore = tabDataStore
+        let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
+        self.tabDataStore = dataStore
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
-        self.tabMigration = tabMigration
+        self.tabMigration = tabMigration ?? DefaultTabMigrationUtility(tabDataStore: dataStore)
         self.notificationCenter = notificationCenter
         self.inactiveTabsManager = inactiveTabsManager
         self.windowManager = windowManager
@@ -284,7 +285,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
         let windowManager: WindowManager = AppContainer.shared.resolve()
-        windowManager.storeTabs()
+        windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveCurrentTabSessionData()
     }

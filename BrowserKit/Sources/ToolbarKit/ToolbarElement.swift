@@ -12,6 +12,9 @@ public struct ToolbarElement {
     /// Whether the toolbar element can be interacted with
     let isEnabled: Bool
 
+    /// Indicates if the element should be displayed as highlighted
+    let shouldDisplayAsHighlighted: Bool
+
     /// Accessibility label of the toolbar element
     let a11yLabel: String
 
@@ -29,6 +32,7 @@ public struct ToolbarElement {
     public init(iconName: String,
                 badgeImageName: String? = nil,
                 isEnabled: Bool,
+                shouldDisplayAsHighlighted: Bool = false,
                 a11yLabel: String,
                 a11yId: String,
                 onSelected: (() -> Void)?,
@@ -36,6 +40,7 @@ public struct ToolbarElement {
         self.iconName = iconName
         self.badgeImageName = badgeImageName
         self.isEnabled = isEnabled
+        self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel

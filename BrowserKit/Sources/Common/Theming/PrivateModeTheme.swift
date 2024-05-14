@@ -95,6 +95,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var iconAccentPink: UIColor = FXColors.Pink20
     var iconAccentGreen: UIColor = FXColors.Green20
     var iconAccentYellow: UIColor = FXColors.Yellow20
+    var iconRatingNeutral: UIColor = FXColors.LightGrey05.withAlphaComponent(0.3)
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.DarkGrey05
