@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Shared
 import TabDataStore
+import WidgetKit
 
 /// Defines various actions in the app which are performed for all open iPad
 /// windows. These can be routed through the WindowManager 
