@@ -96,6 +96,7 @@ class RootViewControllerModel {
                 urlTextFieldPlaceholder: "Search or enter address",
                 urlTextFieldA11yLabel: "Address Bar",
                 searchEngineImageName: "bingSearchEngine",
+                lockIconImageName: StandardImageIdentifiers.Medium.lock,
                 url: url
         )
 
