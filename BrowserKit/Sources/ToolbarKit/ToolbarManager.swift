@@ -14,7 +14,7 @@ public protocol ToolbarManager {
     func shouldDisplayAddressBorder(borderPosition: AddressToolbarBorderPosition,
                                     toolbarPosition: AddressToolbarPosition,
                                     isPrivate: Bool,
-                                    scrollY: Int) -> Bool
+                                    scrollY: CGFloat) -> Bool
 
     /// Determines whether a border on top of the navigation toolbar should be displayed
     func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool
@@ -26,7 +26,7 @@ public class DefaultToolbarManager: ToolbarManager {
     public func shouldDisplayAddressBorder(borderPosition: AddressToolbarBorderPosition,
                                            toolbarPosition: AddressToolbarPosition,
                                            isPrivate: Bool,
-                                           scrollY: Int) -> Bool {
+                                           scrollY: CGFloat) -> Bool {
         // display the top border if
         // - the toolbar is displayed at the bottom
         // display the bottom border if
