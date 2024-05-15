@@ -15,8 +15,8 @@ open class Action {
     }
 
     func displayString() -> String {
-        let className = String(describing: actionType.self)
-        return "\(className).\(actionType)"
+        let className = String(describing: Self.self)
+        return "\(className) \(actionType)"
     }
 }
 
