@@ -249,6 +249,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         locationDividerView.backgroundColor = theme.colors.layer2
         toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
+        locationView.applyTheme(theme: theme)
         self.theme = theme
     }
 }
