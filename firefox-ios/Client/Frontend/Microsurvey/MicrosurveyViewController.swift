@@ -220,6 +220,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     @objc
     private func didTapSubmit() {
+        // TODO: FXIOS-9059: Redux for sending telemetry
         showConfirmationPage()
     }
 
