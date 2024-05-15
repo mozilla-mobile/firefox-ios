@@ -183,8 +183,10 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     var title: String? {
-        if let title = webView?.title, !title.isEmpty {
+        if let title = webView?.title, !title.isEmpty, !self.isFxHomeTab {
             return webView?.title
+        } else if self.isFxHomeTab {
+            return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
         return nil
@@ -193,6 +195,9 @@ class Tab: NSObject, ThemeApplicable {
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal
     /// or not, it will resort to other displayable titles.
     var displayTitle: String {
+        if self.isFxHomeTab {
+            return .AppMenu.AppMenuOpenHomePageTitleString
+        }
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
             return lastTitle
         }
