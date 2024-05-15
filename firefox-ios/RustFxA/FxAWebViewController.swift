@@ -139,7 +139,7 @@ class FxAWebViewController: UIViewController {
         backgroundTaskID = UIBackgroundTaskIdentifier.invalid
     }
 
-    private func presentSavePDFController(outputURL: URL) {
+    func presentSavePDFController(outputURL: URL) {
         let controller = UIActivityViewController(activityItems: [outputURL], applicationActivities: nil)
         controller.popoverPresentationController?.sourceView = view
         present(controller, animated: true, completion: nil)

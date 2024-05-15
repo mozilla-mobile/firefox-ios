@@ -173,7 +173,7 @@ class FxAWebViewModel: FeatureFlaggable {
         return URLRequest(url: url)
     }
 
-    private func createOutputURL(withFileName name: String, withFileExtension ext: String) -> URL? {
+    func createOutputURL(withFileName name: String, withFileExtension ext: String) -> URL? {
         try? FileManager.default.url(for: .documentDirectory,
                                      in: .userDomainMask,
                                      appropriateFor: nil,
@@ -193,28 +193,30 @@ class FxAWebViewModel: FeatureFlaggable {
         webView.callAsyncJavaScriptInDefaultContentWorld(
             blobToDataScript,
             arguments: ["blobUrl": blobURL.absoluteString]) { [weak self] result in
-                switch result {
-                case .success(let dataURL):
-                    guard let data = dataURL as? String,
-                          let url = URL(string: data),
-                          let data = try? Data(contentsOf: url),
-                          let pdf = PDFDocument(data: data),
-                          let outputURL = self?.createOutputURL(withFileName: "RecoveryKey",
-                                                                withFileExtension: "pdf") else {
-                        completion(nil)
-                        return
-                    }
+                completion(self?.createURLForPDF(result: result))
+        }
+    }
 
-                    pdf.write(to: outputURL)
-                    if FileManager.default.fileExists(atPath: outputURL.path) {
-                        let url = URL(fileURLWithPath: outputURL.path)
-                        completion(url)
-                        return
-                    }
+    func createURLForPDF(result: Result<Any?, Error>) -> URL? {
+        switch result {
+        case .success(let dataURL):
+            guard let data = dataURL as? String,
+                  let url = URL(string: data),
+                  let data = try? Data(contentsOf: url),
+                  let pdf = PDFDocument(data: data),
+                  let outputURL = createOutputURL(withFileName: "RecoveryKey",
+                                                  withFileExtension: "pdf") else {
+                return nil
+            }
 
-                    completion(nil)
-                case .failure: completion(nil)
-                }
+            pdf.write(to: outputURL)
+            if FileManager.default.fileExists(atPath: outputURL.path) {
+                let url = URL(fileURLWithPath: outputURL.path)
+                return url
+            }
+
+            return nil
+        case .failure: return nil
         }
     }
 }
