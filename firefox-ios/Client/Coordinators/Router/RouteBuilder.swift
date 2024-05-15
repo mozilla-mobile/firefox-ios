@@ -16,10 +16,15 @@ final class RouteBuilder {
         self.prefs = prefs
     }
 
+    func parseURLHost(_ url: URL) -> DeeplinkInput.Host? {
+        guard let urlScanner = URLScanner(url: url), urlScanner.isOurScheme else { return nil }
+        return DeeplinkInput.Host(rawValue: urlScanner.host.lowercased())
+    }
+
     func makeRoute(url: URL) -> Route? {
         guard let urlScanner = URLScanner(url: url) else { return nil }
 
-        if urlScanner.isOurScheme, let host = DeeplinkInput.Host(rawValue: urlScanner.host.lowercased()) {
+        if let host = parseURLHost(url) {
             let urlQuery = urlScanner.fullURLQueryItem()?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.

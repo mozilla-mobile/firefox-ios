@@ -9,6 +9,9 @@ public struct ToolbarElement {
     /// Badge name of the toolbar element
     let badgeImageName: String?
 
+    /// Number of open tabs
+    let numberOfTabs: Int?
+
     /// Whether the toolbar element can be interacted with
     let isEnabled: Bool
 
@@ -31,6 +34,7 @@ public struct ToolbarElement {
     // can therefor not be used outside of the ToolbarKit
     public init(iconName: String,
                 badgeImageName: String? = nil,
+                numberOfTabs: Int? = nil,
                 isEnabled: Bool,
                 shouldDisplayAsHighlighted: Bool = false,
                 a11yLabel: String,
@@ -39,6 +43,7 @@ public struct ToolbarElement {
                 onLongPress: (() -> Void)? = nil) {
         self.iconName = iconName
         self.badgeImageName = badgeImageName
+        self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
         self.onSelected = onSelected

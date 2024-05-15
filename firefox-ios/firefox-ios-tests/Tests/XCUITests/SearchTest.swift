@@ -358,7 +358,7 @@ class SearchTests: BaseTestCase {
         typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons["appendUpLarge"].firstMatch.tap()
+        app.tables.buttons["appendUpLeftLarge"].firstMatch.tap()
 
         // The search suggestion fills the URL bar but does not conduct the search
         let urlBarAddress = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
@@ -418,11 +418,11 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
         if isSwitchOn {
-            mozWaitForElementToExist(app.staticTexts["Google Search"])
+            mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
+            XCTAssertTrue(app.staticTexts.elementContainingText("google").exists)
             mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
         } else {
-            mozWaitForElementToNotExist(app.staticTexts["Google Search"])
-            mozWaitForElementToNotExist(app.tables.cells.staticTexts["g"])
+            mozWaitForElementToNotExist(app.tables.buttons["appendUpLeftLarge"])
         }
         XCTAssertEqual(app.tables.cells.count, totalSuggestedSearches)
     }

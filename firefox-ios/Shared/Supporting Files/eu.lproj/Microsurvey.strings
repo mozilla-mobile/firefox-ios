@@ -1,0 +1,3 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
+"Microsurvey.Prompt.Button.v127" = "Jarraitu";
+

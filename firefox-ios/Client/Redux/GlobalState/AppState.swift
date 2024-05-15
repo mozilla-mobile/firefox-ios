@@ -69,5 +69,6 @@ let store = Store(state: AppState(),
                     ThemeManagerMiddleware().themeManagerProvider,
                     TabManagerMiddleware().tabsPanelProvider,
                     RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
-                    ToolbarMiddleware().toolbarProvider
+                    ToolbarMiddleware().toolbarProvider,
+                    MicrosurveyPromptMiddleware().microsurveyProvider
                   ])
