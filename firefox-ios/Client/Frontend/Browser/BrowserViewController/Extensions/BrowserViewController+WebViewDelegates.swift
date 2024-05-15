@@ -194,20 +194,7 @@ extension BrowserViewController: WKUIDelegate {
                             tab.adsTelemetryRedirectUrlList = currentTab.adsTelemetryRedirectUrlList
                         }
 
-                        // Record Observation for Search Term Groups
-                        let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
-                        let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
-                        if !searchTerm.isEmpty,
-                           !searchUrl.isEmpty {
-                            let searchData = LegacyTabGroupData(searchTerm: searchTerm,
-                                                                searchUrl: searchUrl,
-                                                                nextReferralUrl: tab.url?.absoluteString ?? "")
-                            tab.metadataManager?.updateTimerAndObserving(
-                                state: .openInNewTab,
-                                searchData: searchData,
-                                isPrivate: tab.isPrivate
-                            )
-                        }
+                        self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
 
                         guard !self.topTabsVisible else { return }
                         var toastLabelText: String
@@ -404,6 +391,22 @@ extension BrowserViewController: WKUIDelegate {
                !tab.adsTelemetryUrlList.isEmpty &&
                tab.adsTelemetryUrlList.contains(adUrl) &&
                !tab.adsProviderName.isEmpty
+    }
+
+    func recordObservationForSearchTermGroups(currentTab: Tab, addedTab: Tab) {
+        let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
+        let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
+        if !searchTerm.isEmpty,
+           !searchUrl.isEmpty {
+            let searchData = LegacyTabGroupData(searchTerm: searchTerm,
+                                                searchUrl: searchUrl,
+                                                nextReferralUrl: addedTab.url?.absoluteString ?? "")
+            addedTab.metadataManager?.updateTimerAndObserving(
+                state: .openInNewTab,
+                searchData: searchData,
+                isPrivate: addedTab.isPrivate
+            )
+        }
     }
 
     func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
