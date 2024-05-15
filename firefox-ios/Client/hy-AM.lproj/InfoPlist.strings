@@ -14,7 +14,7 @@
 "NSLocationWhenInUseUsageDescription" = "Ձեր այցելած կայքերը կարող են հարցնել ձեր տեղադրությունը։";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Firefox-ն օգտագործում է ձեր բարձրախոսը ձայնագրելու և վերբեռնելու ձայնանյութ:";
+"NSMicrophoneUsageDescription" = "Firefox-ն օգտագործում է Ձեր խոսափողը՝ ձայնագրման և ձայնանյութի վերբեռնման համար:";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Սա ձեզ թույլ է տալիս պահպանել լուսանկարներ։";
