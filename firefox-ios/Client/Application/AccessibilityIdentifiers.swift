@@ -136,6 +136,14 @@ public struct AccessibilityIdentifiers {
             static let closeButton = "Microsurvey.Prompt.CloseButton"
             static let takeSurveyButton = "Microsurvey.Prompt.TakeSurveyButton"
         }
+
+        struct Survey {
+            static let firefoxLogo = "Microsurvey.Survey.FirefoxLogo"
+            static let closeButton = "Microsurvey.Survey.CloseButton"
+            static let privacyPolicyLink = "Microsurvey.Prompt.PrivacyPolicyLink"
+            static let submitButton = "Microsurvey.Survey.SubmitButton"
+            static let radioButton = "Microsurvey.Survey.RadioButton"
+        }
     }
 
     struct PrivateMode {

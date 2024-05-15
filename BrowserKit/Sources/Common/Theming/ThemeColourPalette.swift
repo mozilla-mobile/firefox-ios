@@ -45,6 +45,7 @@ public protocol ThemeColourPalette {
     // MARK: - Actions
     var actionPrimary: UIColor { get }
     var actionPrimaryHover: UIColor { get }
+    var actionPrimaryDisabled: UIColor { get }
     var actionSecondary: UIColor { get }
     var actionSecondaryHover: UIColor { get }
     var formSurfaceOff: UIColor { get }
@@ -67,6 +68,7 @@ public protocol ThemeColourPalette {
     var textOnDark: UIColor { get }
     var textOnLight: UIColor { get }
     var textInverted: UIColor { get }
+    var textInvertedDisabled: UIColor { get }
 
     // MARK: - Icons
     var iconPrimary: UIColor { get }
