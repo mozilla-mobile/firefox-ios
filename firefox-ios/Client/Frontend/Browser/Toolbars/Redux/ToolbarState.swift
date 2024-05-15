@@ -33,7 +33,7 @@ struct ToolbarState: ScreenState, Equatable {
             case reload
             case readerMode
             case shopping
-            case clearPrivateData
+            case dataClearance
         }
 
         var actionType: ActionType
