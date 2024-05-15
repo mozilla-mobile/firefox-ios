@@ -170,10 +170,7 @@ extension BrowserViewController: WKUIDelegate {
                     var setAddTabAdSearchParam = false
                     let addTab = { (rURL: URL, isPrivate: Bool) in
                         let adUrl = rURL.absoluteString
-                        if currentTab == self.tabManager.selectedTab,
-                           !currentTab.adsTelemetryUrlList.isEmpty,
-                           currentTab.adsTelemetryUrlList.contains(adUrl),
-                           !currentTab.adsProviderName.isEmpty {
+                        if self.canTrackAds(tab: currentTab, adUrl: adUrl) {
                             AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
                             currentTab.adsTelemetryUrlList.removeAll()
                             currentTab.adsTelemetryRedirectUrlList.removeAll()
@@ -412,6 +409,13 @@ extension BrowserViewController: WKUIDelegate {
                     return UIMenu(title: url.absoluteString, children: actions)
                 })
         )
+    }
+
+    func canTrackAds(tab: Tab, adUrl: String) -> Bool {
+        return tab == self.tabManager.selectedTab &&
+               !tab.adsTelemetryUrlList.isEmpty &&
+               tab.adsTelemetryUrlList.contains(adUrl) &&
+               !tab.adsProviderName.isEmpty
     }
 
     @available(iOS 15, *)
