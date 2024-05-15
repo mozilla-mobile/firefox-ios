@@ -231,18 +231,6 @@ extension BrowserViewController: WKUIDelegate {
                         self.show(toast: toast)
                     }
 
-                    let getImageData = { (_ url: URL, success: @escaping (Data) -> Void) in
-                        makeURLSession(
-                            userAgent: UserAgent.fxaUserAgent,
-                            configuration: URLSessionConfiguration.default)
-                        .dataTask(with: url) { (data, response, error) in
-                            if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
-                               let data = data {
-                                success(data)
-                            }
-                        }.resume()
-                    }
-
                     var actions = [UIAction]()
 
                     if !isPrivate {
@@ -348,7 +336,7 @@ extension BrowserViewController: WKUIDelegate {
                             title: .ContextMenuSaveImage,
                             identifier: UIAction.Identifier("linkContextMenu.saveImage")
                         ) { _ in
-                            getImageData(url) { data in
+                            self.getImageData(url) { data in
                                 if url.pathExtension.lowercased() == "gif" {
                                     PHPhotoLibrary.shared().performChanges {
                                         let creationRequest = PHAssetCreationRequest.forAsset()
@@ -416,6 +404,18 @@ extension BrowserViewController: WKUIDelegate {
                !tab.adsTelemetryUrlList.isEmpty &&
                tab.adsTelemetryUrlList.contains(adUrl) &&
                !tab.adsProviderName.isEmpty
+    }
+
+    func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
+        makeURLSession(
+            userAgent: UserAgent.fxaUserAgent,
+            configuration: URLSessionConfiguration.default)
+        .dataTask(with: url) { (data, response, error) in
+            if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
+               let data = data {
+                success(data)
+            }
+        }.resume()
     }
 
     @available(iOS 15, *)
