@@ -16,7 +16,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureDataClearanceContextualHint() {
-        guard !isToolbarRefactorEnabled, contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+        guard !isToolbarRefactorEnabled,
+                contentContainer.hasWebView,
+                tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
+        else {
             resetDataClearanceCFRTimer()
             return
         }
