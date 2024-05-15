@@ -90,6 +90,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     private lazy var submitButton: PrimaryRoundedButton = .build { button in
         button.addTarget(self, action: #selector(self.didTapSubmit), for: .touchUpInside)
+        button.isEnabled = false
     }
 
     private lazy var privacyPolicyButton: LinkButton = .build { button in
@@ -97,6 +98,8 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         button.setContentCompressionResistancePriority(.required, for: .vertical)
         button.accessibilityTraits.insert(.link)
     }
+
+    private lazy var confirmationView: MicrosurveyConfirmationView = .build()
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -217,7 +220,23 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     @objc
     private func didTapSubmit() {
-        // TODO: FXIOS-9072: Add confirmation page
+        showConfirmationPage()
+    }
+
+    private func showConfirmationPage() {
+        headerLabel.text = .Microsurvey.Survey.ConfirmationPage.HeaderLabel
+        tableView.removeFromSuperview()
+        submitButton.removeFromSuperview()
+        containerView.addSubview(confirmationView)
+        NSLayoutConstraint.activate(
+            [
+                confirmationView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                confirmationView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                confirmationView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                confirmationView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            ]
+        )
+        confirmationView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
     }
 
     @objc
@@ -261,7 +280,10 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         submitButton.isEnabled = true
-        (tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell)?.checked.toggle()
+        let selectedCell = tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell
+        if selectedCell?.checked == false {
+            (tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell)?.checked.toggle()
+        }
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
