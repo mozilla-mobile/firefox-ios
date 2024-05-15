@@ -11,6 +11,8 @@ struct ToolbarState: ScreenState, Equatable {
         var navigationActions: [ActionState]
         var pageActions: [ActionState]
         var browserActions: [ActionState]
+        var displayTopBorder: Bool
+        var displayBottomBorder: Bool
     }
 
     struct NavigationState: Equatable {
@@ -26,6 +28,12 @@ struct ToolbarState: ScreenState, Equatable {
             case search
             case tabs
             case menu
+            case qrCode
+            case share
+            case reload
+            case readerMode
+            case shopping
+            case clearPrivateData
         }
 
         var actionType: ActionType
@@ -50,10 +58,15 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     init(windowUUID: WindowUUID) {
+        let addressToolbar = AddressState(navigationActions: [],
+                                          pageActions: [],
+                                          browserActions: [],
+                                          displayTopBorder: false,
+                                          displayBottomBorder: false)
         self.init(
             windowUUID: windowUUID,
             toolbarPosition: .top,
-            addressToolbar: AddressState(navigationActions: [], pageActions: [], browserActions: []),
+            addressToolbar: addressToolbar,
             navigationToolbar: NavigationState(actions: [], displayBorder: false)
         )
     }
@@ -78,10 +91,19 @@ struct ToolbarState: ScreenState, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let actions = action.actions, let displayBorder = action.displayBorder else { return state }
+            guard let navToolbarModel = action.navigationToolbarModel,
+                    let addressToolbarModel = action.addressToolbarModel
+            else { return state }
+
             var state = state
-            state.navigationToolbar.actions = actions
-            state.navigationToolbar.displayBorder = displayBorder
+            state.addressToolbar.navigationActions = addressToolbarModel.navigationActions
+            state.addressToolbar.pageActions = addressToolbarModel.pageActions
+            state.addressToolbar.browserActions = addressToolbarModel.browserActions
+            state.addressToolbar.displayTopBorder = addressToolbarModel.displayTopBorder
+            state.addressToolbar.displayBottomBorder = addressToolbarModel.displayBottomBorder
+
+            state.navigationToolbar.actions = navToolbarModel.actions
+            state.navigationToolbar.displayBorder = navToolbarModel.displayBorder
             return state
 
         default:
