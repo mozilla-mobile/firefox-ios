@@ -23,9 +23,6 @@
 "Microsurvey.Survey.HeaderLabel.v127" = "このアンケートにご回答ください";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption1.v127" = "とても満足";
-
-/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.LikertScaleOption2.v127" = "満足";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
@@ -33,9 +30,6 @@
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.LikertScaleOption4.v127" = "不満";
-
-/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption5.v127" = "非常に不満";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
 "Microsurvey.Survey.PrivacyPolicyLink.v127" = "プライバシー通知";

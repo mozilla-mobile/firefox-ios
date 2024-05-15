@@ -187,6 +187,9 @@
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Istaknuto* je iz %1@ recenzija u posljednjih 80 dana za koje vjerujemo da su pouzdane.";
 
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "*Istaknuto* je iz %@ recenzija u posljednjih 80 dana za koje vjerujemo da su pouzdane.";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Kako utvrđujemo kvalitet recenzija";
 
