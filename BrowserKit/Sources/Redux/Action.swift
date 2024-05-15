@@ -15,9 +15,8 @@ open class Action {
     }
 
     func displayString() -> String {
-        let className = String(describing: Self.self)
-        let actionName = String(describing: self).prefix(20)
-        return "\(className).\(actionName)"
+        let className = String(describing: actionType.self)
+        return "\(className).\(actionType)"
     }
 }
 
