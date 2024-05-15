@@ -68,11 +68,13 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
-        logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
         guard Thread.isMainThread && !actionRunning else {
             DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
             return
         }
+
+        logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
+
         actionRunning = true; defer { actionRunning = false }
 
         // Each active screen state is given an opportunity to be reduced using the dispatched action
