@@ -467,7 +467,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // are going to a about:reader page. Then we keep it on screen: it will change status
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
-            if !url.isReaderModeURL {
+            if !url.isReaderModeURL, !isToolbarRefactorEnabled {
                 urlBar.updateReaderModeState(ReaderModeState.unavailable)
                 hideReaderModeBar(animated: false)
             }
@@ -745,7 +745,8 @@ extension BrowserViewController: WKNavigationDelegate {
             // Open our helper and cancel this response from the webview.
             if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
                                                                         okAction: downloadAction) {
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBar)
+                let displayFrom = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar!
+                presentSheetWith(viewModel: downloadViewModel, on: self, from: displayFrom)
             }
             decisionHandler(.cancel)
             return
@@ -818,7 +819,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
-            if let tab = tabManager[webView], tab === tabManager.selectedTab {
+            if !isToolbarRefactorEnabled, let tab = tabManager[webView], tab === tabManager.selectedTab {
                 urlBar.currentURL = tab.url?.displayURL
             }
             return

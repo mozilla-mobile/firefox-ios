@@ -133,7 +133,10 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "select-location-bar"])
         scrollController.showToolbars(animated: true)
-        urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+
+        if !isToolbarRefactorEnabled {
+            urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+        }
     }
 
     @objc
@@ -397,7 +400,7 @@ extension BrowserViewController {
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false
 
-        if urlBar.inOverlayMode {
+        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
             return commands + searchLocationCommands
         } else if !isEditingText {
             return commands + overridesTextEditing

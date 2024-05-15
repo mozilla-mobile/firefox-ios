@@ -16,7 +16,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureDataClearanceContextualHint() {
-        guard contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+        guard !isToolbarRefactorEnabled, contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
             resetDataClearanceCFRTimer()
             return
         }
@@ -113,7 +113,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func dismissUrlBar() {
-        if urlBar.inOverlayMode {
+        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
             urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
