@@ -130,6 +130,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
+        hideClearButton()
 
         urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
         notifyTextChanged = { [self] in
@@ -167,6 +168,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         configureA11y(state)
         formatAndTruncateURLTextField()
         locationViewDelegate = delegate
+        showSearchEngineButton()
     }
 
     // MARK: - Layout
@@ -284,6 +286,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private func showSearchEngineButton() {
+        guard searchEngineImageView.image != nil else { return }
         searchEngineImageView.isHidden = false
         updateWidthConstraint(
             &searchEngineContentViewWidthConstraint,
