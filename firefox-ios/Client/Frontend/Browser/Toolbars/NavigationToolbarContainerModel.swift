@@ -8,13 +8,13 @@ import ToolbarKit
 struct NavigationToolbarContainerModel {
     let actions: [ToolbarElement]
     let displayBorder: Bool
-    let windowUUID: UUID
+    let windowUUID: WindowUUID
 
     var navigationToolbarState: NavigationToolbarState {
         return NavigationToolbarState(actions: actions, shouldDisplayBorder: displayBorder)
     }
 
-    init(state: ToolbarState, windowUUID: UUID) {
+    init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(

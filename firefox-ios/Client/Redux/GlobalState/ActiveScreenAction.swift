@@ -4,11 +4,12 @@
 
 import Foundation
 import Redux
+import Common
 
 class ScreenAction: Action {
     let screen: AppScreen
 
-    init(windowUUID: UUID,
+    init(windowUUID: WindowUUID,
          actionType: ActionType,
          screen: AppScreen) {
         self.screen = screen

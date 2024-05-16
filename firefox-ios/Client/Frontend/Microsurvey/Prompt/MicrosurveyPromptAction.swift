@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 class MicrosurveyPromptAction: Action { }
 
@@ -11,7 +12,7 @@ class MicrosurveyPromptMiddlewareAction: Action {
     let microsurveyState: MicrosurveyPromptState?
 
     init(microsurveyState: MicrosurveyPromptState? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.microsurveyState = microsurveyState
         super.init(windowUUID: windowUUID, actionType: actionType)
