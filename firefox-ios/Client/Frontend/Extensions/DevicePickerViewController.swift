@@ -67,11 +67,6 @@ class DevicePickerViewController: UITableViewController {
         static let tabTitleTextFont = UIFont.boldSystemFont(ofSize: 16)
     }
 
-    private lazy var tabTitleLabel: UILabel = .build { label in
-        label.font = UX.tabTitleTextFont
-        label.textColor = self.currentTheme().colors.textPrimary
-    }
-
     private var devices = [RemoteDevice]()
     var profile: Profile
     weak var pickerDelegate: DevicePickerViewControllerDelegate?
@@ -99,9 +94,8 @@ class DevicePickerViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tabTitle = tabTitleLabel
-        tabTitle.text = .SendToTitle
-        navigationItem.titleView = tabTitle
+        setNavBarTitle()
+        setNavBarApperanace()
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -145,7 +139,25 @@ class DevicePickerViewController: UITableViewController {
         }
     }
 
-    private func currentTheme() -> Theme {
+    fileprivate func setNavBarTitle() {
+        let tabTitle: UILabel = .build { label in
+            label.font = UX.tabTitleTextFont
+            label.textColor = self.currentTheme().colors.textPrimary
+        }
+        tabTitle.text = .SendToTitle
+        navigationItem.titleView = tabTitle
+    }
+
+    fileprivate func setNavBarApperanace() {
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = currentTheme().colors.layer2
+        appearance.shadowColor = currentTheme().colors.borderPrimary
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+
+    fileprivate func currentTheme() -> Theme {
         return themeManager.windowNonspecificTheme()
     }
 
@@ -324,5 +336,21 @@ class DevicePickerViewController: UITableViewController {
         loadingIndicator.startAnimating()
         let customBarButton = UIBarButtonItem(customView: loadingIndicator)
         self.navigationItem.rightBarButtonItem = customBarButton
+    }
+}
+
+class SendToDevicePickerViewController: DevicePickerViewController {
+    override fileprivate func currentTheme() -> Theme {
+        return traitCollection.userInterfaceStyle == .dark ? DarkTheme() : LightTheme()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
+            self.tableView.backgroundColor = currentTheme().colors.layer2
+            self.tableView.reloadData()
+
+            setNavBarApperanace()
+            setNavBarTitle()
+        }
     }
 }

@@ -37,15 +37,20 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
             return UIViewController()
         }
 
-        let colors = SendToDeviceHelper.Colors(
+        let colors = SendToExtensionHelper.Colors(
             defaultBackground: theme.colors.layer2,
             textColor: theme.colors.textPrimary,
             iconColor: theme.colors.iconDisabled
         )
-        let helper = SendToDeviceHelper(shareItem: shareItem,
-                                        profile: profile,
-                                        colors: colors,
-                                        delegate: self)
+
+        let helper = SendToExtensionHelper(
+            shareItem: shareItem,
+            profile: profile,
+            colors: colors,
+            delegate: self,
+            useSystemLightDarkMode: true
+        )
+
         return helper.initialViewController()
     }
 

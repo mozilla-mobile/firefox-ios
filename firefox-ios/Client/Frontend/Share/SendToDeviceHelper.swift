@@ -21,10 +21,10 @@ class SendToDeviceHelper {
         case picker
     }
 
-    private var shareItem: ShareItem
-    private var profile: Profile
-    private var colors: Colors
-    private weak var delegate: Delegate?
+    fileprivate var shareItem: ShareItem
+    fileprivate var profile: Profile
+    fileprivate var colors: Colors
+    fileprivate weak var delegate: Delegate?
 
     init(shareItem: ShareItem, profile: Profile, colors: Colors, delegate: Delegate) {
         self.shareItem = shareItem
@@ -36,12 +36,7 @@ class SendToDeviceHelper {
     func initialViewController() -> UIViewController {
         if !hasAccount() {
             // Display instructions to log in if user has no account
-            let instructionsView = InstructionsView(backgroundColor: colors.defaultBackground,
-                                                    textColor: colors.textColor,
-                                                    imageColor: colors.iconColor,
-                                                    dismissAction: {
-                self.delegate?.dismissInstructionsView()
-            })
+            let instructionsView = getInstructionsView()
             let hostingViewController = UIHostingController(rootView: instructionsView)
             #if MOZ_TARGET_SHARETO
                 return hostingViewController
@@ -53,7 +48,7 @@ class SendToDeviceHelper {
         }
 
         // Display device picker if the user has an account
-        let devicePickerViewController = DevicePickerViewController(profile: profile)
+        let devicePickerViewController = getDevicePickerViewController()
         devicePickerViewController.pickerDelegate = delegate
         devicePickerViewController.shareItem = shareItem
         #if MOZ_TARGET_SHARETO
@@ -68,5 +63,51 @@ class SendToDeviceHelper {
     // MARK: - Private
     private func hasAccount() -> Bool {
         return profile.hasAccount()
+    }
+
+    fileprivate func getInstructionsView() -> InstructionsView {
+        return InstructionsView(
+            backgroundColor: colors.defaultBackground,
+            textColor: colors.textColor,
+            imageColor: colors.iconColor,
+            dismissAction: {
+                self.delegate?.dismissInstructionsView()
+            }
+        )
+    }
+
+    fileprivate func getDevicePickerViewController() -> DevicePickerViewController {
+        return DevicePickerViewController(profile: profile)
+    }
+}
+
+class SendToExtensionHelper: SendToDeviceHelper {
+    private var useSystemLightDarkMode: Bool
+
+    init(
+        shareItem: ShareItem,
+        profile: Profile,
+        colors: Colors,
+        delegate: Delegate,
+        useSystemLightDarkMode: Bool
+    ) {
+        self.useSystemLightDarkMode = useSystemLightDarkMode
+        super.init(shareItem: shareItem, profile: profile, colors: colors, delegate: delegate)
+    }
+
+    override fileprivate func getDevicePickerViewController() -> DevicePickerViewController {
+        return SendToDevicePickerViewController(profile: profile)
+    }
+
+    override fileprivate func getInstructionsView() -> InstructionsView {
+        return InstructionsView(
+            backgroundColor: colors.defaultBackground,
+            textColor: colors.textColor,
+            imageColor: colors.iconColor,
+            dismissAction: {
+                self.delegate?.dismissInstructionsView()
+            },
+            useSystemLightDarkMode: useSystemLightDarkMode
+        )
     }
 }

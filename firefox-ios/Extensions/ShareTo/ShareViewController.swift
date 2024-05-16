@@ -89,7 +89,7 @@ class ShareViewController: UIViewController {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.windowNonspecificTheme()
+        return traitCollection.userInterfaceStyle == .dark ? DarkTheme() : LightTheme()
     }
 
     func setupUI() {
@@ -555,5 +555,11 @@ extension ShareViewController {
         }
 
         finish(afterDelay: 0)
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle {
+            self.setupUI()
+        }
     }
 }

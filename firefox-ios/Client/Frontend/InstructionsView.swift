@@ -5,12 +5,16 @@
 import Shared
 import SwiftUI
 import UIKit
+import Common
 
 protocol InstructionsViewDelegate: AnyObject {
     func dismissInstructionsView()
 }
 
 struct InstructionsView: View {
+    @Environment(\.colorScheme)
+    var colorScheme
+
     private struct UX {
         static let padding: CGFloat = 20
         static let textFont = Font.body
@@ -20,22 +24,33 @@ struct InstructionsView: View {
     var textColor: UIColor
     var imageColor: UIColor
     var dismissAction: (() -> Void)?
+    var useSystemLightDarkMode = false
 
     var body: some View {
+        if #available(iOS 16.0, *) {
+            mainView
+            .toolbarBackground(getBackgroundColor().color, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+        } else {
+            mainView
+        }
+    }
+
+    var mainView: some View {
         ZStack {
-            backgroundColor.color.edgesIgnoringSafeArea(.all)
+            getBackgroundColor().color.edgesIgnoringSafeArea(.all)
             ScrollView {
-                HelpView(textColor: textColor,
-                         imageColor: imageColor,
-                         topMessage: String.SendToNotSignedInText,
-                         bottomMessage: String.SendToNotSignedInMessage)
+                HelpView(
+                    textColor: getTextColor(),
+                    imageColor: getImageColor(),
+                    topMessage: String.SendToNotSignedInText,
+                    bottomMessage: String.SendToNotSignedInMessage
+                )
             }
         }
-        .foregroundColor(Color(textColor))
-        .navigationBarItems(leading:
-            Button(action: {
-                dismissAction?()
-            }) {
+        .foregroundColor(Color(getTextColor()))
+        .navigationBarItems(
+            leading: Button(action: { dismissAction?() }) {
                 Text(String.CloseButtonTitle)
             }
             .accessibility(identifier: AccessibilityIdentifiers.ShareTo.HelpView.doneButton)
@@ -44,6 +59,36 @@ struct InstructionsView: View {
         .onDisappear {
             dismissAction?()
         }
+    }
+}
+
+extension InstructionsView {
+    func currentTheme() -> Theme {
+        return colorScheme == .dark ? DarkTheme() : LightTheme()
+    }
+
+    func getBackgroundColor() -> UIColor {
+        if useSystemLightDarkMode {
+            return currentTheme().colors.layer2
+        }
+
+        return backgroundColor
+    }
+
+    func getTextColor() -> UIColor {
+        if useSystemLightDarkMode {
+            return currentTheme().colors.textPrimary
+        }
+
+        return textColor
+    }
+
+    func getImageColor() -> UIColor {
+        if useSystemLightDarkMode {
+            return currentTheme().colors.iconDisabled
+        }
+
+        return imageColor
     }
 }
 
