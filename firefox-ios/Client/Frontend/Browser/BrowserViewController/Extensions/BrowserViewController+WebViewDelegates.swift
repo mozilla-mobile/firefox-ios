@@ -407,18 +407,6 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
-        makeURLSession(
-            userAgent: UserAgent.fxaUserAgent,
-            configuration: URLSessionConfiguration.default)
-        .dataTask(with: url) { (data, response, error) in
-            if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
-               let data = data {
-                success(data)
-            }
-        }.resume()
-    }
-
     @available(iOS 15, *)
     func webView(_ webView: WKWebView,
                  requestMediaCapturePermissionFor origin: WKSecurityOrigin,
