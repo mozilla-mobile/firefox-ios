@@ -32,7 +32,6 @@ struct ToolbarState: ScreenState, Equatable {
             case share
             case reload
             case readerMode
-            case shopping
             case dataClearance
         }
 
