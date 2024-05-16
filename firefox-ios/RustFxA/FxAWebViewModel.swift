@@ -216,7 +216,11 @@ class FxAWebViewModel: FeatureFlaggable {
             }
 
             return nil
-        case .failure: return nil
+        case .failure(let error):
+            logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                       level: .debug,
+                       category: .webview)
+            return nil
         }
     }
 }

@@ -6,7 +6,6 @@
 import XCTest
 import PDFKit
 
-// swiftlint:disable force_try
 class FxAWebViewModelTests: XCTestCase {
     var viewModel: FxAWebViewModel!
     var deeplinkParams: FxALaunchParams!
@@ -48,45 +47,51 @@ class FxAWebViewModelTests: XCTestCase {
     }
 
     func testIsMozillaAccountPDFWithValidBlobURLAndCorrectHost() {
-        let blobURL = URL(string: "blob://some/blob/url")!
-        let webViewURL = URL(string: "https://accounts.firefox.com")!
-        let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-        XCTAssertTrue(result, "Should return true for a valid blob URL and a webView URL with the host accounts.firefox.com.")
+        if let blobURL = URL(string: "blob://some/blob/url"),
+           let webViewURL = URL(string: "https://accounts.firefox.com") {
+            let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
+            XCTAssertTrue(result, "Should return true for a valid blob URL and a webView URL with the host accounts.firefox.com.")
+        }
     }
 
     func testIsMozillaAccountPDFWithValidBlobURLAndIncorrectHost() {
-        let blobURL = URL(string: "blob://some/blob/url")!
-        let webViewURL = URL(string: "https://example.com")!
-        let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-        XCTAssertFalse(result, "Should return false for a valid blob URL and a webView URL with a different host then accounts.firefox.com")
+        if let blobURL = URL(string: "blob://some/blob/url"),
+           let webViewURL = URL(string: "https://example.com") {
+            let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
+            XCTAssertFalse(result, "Should return false for a valid blob URL and a webView URL with a different host then accounts.firefox.com")
+        }
     }
 
     func testIsMozillaAccountPDFWithInvalidBlobURLAndCorrectHost() {
-        let blobURL = URL(string: "https://example.com/blob")!
-        let webViewURL = URL(string: "https://accounts.firefox.com")!
-        let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-        XCTAssertFalse(result, "Should return false for a wrong blob URL and a webView URL with the host accounts.firefox.com.")
+        if let blobURL = URL(string: "https://example.com/blob"),
+           let webViewURL = URL(string: "https://accounts.firefox.com") {
+            let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
+            XCTAssertFalse(result, "Should return false for a wrong blob URL and a webView URL with the host accounts.firefox.com.")
+        }
     }
 
     func testIsMozillaAccountPDFWithValidBlobURLAndNilWebViewURL() {
-        let blobURL = URL(string: "blob://some/blob/url")!
-        let webViewURL: URL? = nil
-        let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-        XCTAssertFalse(result, "Should return false for a valid blob URL and a nil webView URL.")
+        if let blobURL = URL(string: "blob://some/blob/url") {
+            let webViewURL: URL? = nil
+            let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
+            XCTAssertFalse(result, "Should return false for a valid blob URL and a nil webView URL.")
+        }
     }
 
     func testIsMozillaAccountPDFWithInvalidBlobURLAndNilWebViewURL() {
-        let blobURL = URL(string: "https://example.com/blob")!
-        let webViewURL: URL? = nil
-        let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
-        XCTAssertFalse(result, "Should return false for a wrong blob URL and a nil webView URL.")
+        if let blobURL = URL(string: "https://example.com/blob") {
+            let webViewURL: URL? = nil
+            let result = viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webViewURL)
+            XCTAssertFalse(result, "Should return false for a wrong blob URL and a nil webView URL.")
+        }
     }
 
     func testCreateURLForPDFWithValidSuccessResult() {
         let result: Result<Any?, Error> = .success(MockFxAWebViewModel().validPDFDataURL)
-        let outputURL = viewModel.createURLForPDF(result: result)
-        XCTAssertNotNil(outputURL, "Should return a valid URL.")
-        XCTAssertTrue(FileManager.default.fileExists(atPath: outputURL!.path), "PDF File should exist.")
+        if let outputURL = viewModel.createURLForPDF(result: result) {
+            XCTAssertNotNil(outputURL, "Should return a valid URL.")
+            XCTAssertTrue(FileManager.default.fileExists(atPath: outputURL.path), "PDF File should exist.")
+        }
     }
 
     func testCreateURLForPDFWithInvalidSuccessResult() {
@@ -112,7 +117,7 @@ class FxAWebViewModelTests: XCTestCase {
 
 extension FxAWebViewModelTests {
     private func createExpectedURL(with fileName: String, and fileExtension: String) -> URL? {
-        try! FileManager.default.url(for: .documentDirectory,
+        try? FileManager.default.url(for: .documentDirectory,
                                      in: .userDomainMask,
                                      appropriateFor: nil,
                                      create: false)
