@@ -86,7 +86,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         pageActions.append(ToolbarState.ActionState(actionType: .qrCode,
                                                     iconName: StandardImageIdentifiers.Large.qrCode,
                                                     isEnabled: true,
-                                                    a11yLabel: .ScanQRCodeViewTitle,
+                                                    a11yLabel: .QRCode.ToolbarButtonA11yLabel,
                                                     a11yId: AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton))
         return pageActions
     }

@@ -3384,6 +3384,14 @@ extension String {
         tableName: nil,
         value: "OK",
         comment: "OK button to dismiss the error prompt.")
+
+    public struct QRCode {
+        public static let ToolbarButtonA11yLabel = MZLocalizedString(
+            key: "QRCode.Toolbar.Button.A11y.Title.v128",
+            tableName: "QRCode",
+            value: "Scan QR code",
+            comment: "Accessibility label of the QR code button in the toolbar")
+    }
 }
 
 // MARK: - App menu
