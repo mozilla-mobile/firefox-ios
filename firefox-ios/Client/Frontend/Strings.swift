@@ -2987,6 +2987,20 @@ extension String {
         comment: "Description displayed under the ”Show Link Previews” option")
 }
 
+// MARK: - Open Links in Apps
+extension String {
+    public static let SettingsOpenLinksInAppsTitle = MZLocalizedString(
+        key: "Settings.OpenLinksInApps.Title",
+        tableName: nil,
+        value: "Open Links In Apps",
+        comment: "Title of setting to enable open links in apps when pressing links.")
+    public static let SettingsOpenLinksInAppsStatus = MZLocalizedString(
+        key: "Settings.OpenLinksInApps.Status",
+        tableName: nil,
+        value: "When pressing Links",
+        comment: "Description displayed under the ”Open Links In Apps” option")
+}
+
 // MARK: - Errors
 extension String {
     public static let UnableToAddPassErrorTitle = MZLocalizedString(

@@ -256,9 +256,19 @@ class AppSettingsTableViewController: SettingsTableViewController,
             statusText: .SettingsShowLinkPreviewsStatus
         )
 
+        let openLinksInAppsSettings = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme(for: windowUUID),
+            prefKey: PrefsKeys.OpenLinksInApps,
+            defaultValue: true,
+            titleText: .SettingsOpenLinksInAppsTitle,
+            statusText: .SettingsOpenLinksInAppsStatus
+        )
+
         generalSettings += [
             offerToOpenCopiedLinksSettings,
-            showLinksPreviewSettings
+            showLinksPreviewSettings,
+            openLinksInAppsSettings
         ]
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
