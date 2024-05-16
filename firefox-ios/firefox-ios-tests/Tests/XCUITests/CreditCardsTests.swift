@@ -483,6 +483,7 @@ class CreditCardsTests: BaseTestCase {
         cardNumber.tapOnApp()
         cardNumber.typeText(cardNr)
         mozWaitForElementToExist(expiration)
+        dismissSavedCardsPrompt()
         expiration.tapOnApp()
         expiration.typeText(expirationDate)
         cvc.tapOnApp()
