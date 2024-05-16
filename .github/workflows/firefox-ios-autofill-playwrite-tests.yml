@@ -55,9 +55,11 @@ jobs:
             npm test
         - name: Set job log URL
           if: always()
-          run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+          run: |
+            echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+            echo "${{ !github.event.pull_request.head.repo.fork }}"
         - name: Send Slack notification if tests fail
-          if: '!cancelled() && ${{ !github.event.pull_request.head.repo.fork }}'
+          if: '!cancelled() || ${{ !github.event.pull_request.head.repo.fork }}'
           id: slack
           uses: slackapi/slack-github-action@v1.26.0
           with:
