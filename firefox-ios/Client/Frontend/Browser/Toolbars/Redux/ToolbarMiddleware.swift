@@ -83,11 +83,12 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func loadAddressToolbarPageElements() -> [ToolbarState.ActionState] {
         var pageActions = [ToolbarState.ActionState]()
-        pageActions.append(ToolbarState.ActionState(actionType: .qrCode,
-                                                    iconName: StandardImageIdentifiers.Large.qrCode,
-                                                    isEnabled: true,
-                                                    a11yLabel: .QRCode.ToolbarButtonA11yLabel,
-                                                    a11yId: AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton))
+        pageActions.append(ToolbarState.ActionState(
+            actionType: .qrCode,
+            iconName: StandardImageIdentifiers.Large.qrCode,
+            isEnabled: true,
+            a11yLabel: .QRCode.ToolbarButtonA11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode))
         return pageActions
     }
 
