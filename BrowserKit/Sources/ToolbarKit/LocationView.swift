@@ -189,7 +189,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateGradientLayerFrame()
-        updateURLTextFieldLeadingConstraint()
+        updateURLTextFieldLeadingConstraintBasedOnState()
     }
 
     private func setupLayout() {
@@ -257,7 +257,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         }
     }
 
-    private func updateURLTextFieldLeadingConstraint() {
+    private func updateURLTextFieldLeadingConstraintBasedOnState() {
         let isTextFieldFocused = urlTextField.isFirstResponder
         let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isTextFieldFocused
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isTextFieldFocused
