@@ -205,17 +205,7 @@ extension BrowserViewController: WKUIDelegate {
                             toastLabelText = .ContextMenuButtonToastNewTabOpenedLabelText
                         }
                         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                        let viewModel = ButtonToastViewModel(labelText: toastLabelText,
-                                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-                        let toast = ButtonToast(viewModel: viewModel,
-                                                theme: self.currentTheme(),
-                                                completion: { buttonPressed in
-                            if buttonPressed {
-                                self.tabManager.selectTab(tab)
-                                self.overlayManager.switchTab(shouldCancelLoading: true)
-                            }
-                        })
-                        self.show(toast: toast)
+                        self.showToastBy(text: toastLabelText, tab: tab)
                     }
 
                     var actions = [UIAction]()
@@ -405,6 +395,20 @@ extension BrowserViewController: WKUIDelegate {
                 isPrivate: addedTab.isPrivate
             )
         }
+    }
+
+    func showToastBy(text: String, tab: Tab) {
+        let viewModel = ButtonToastViewModel(labelText: text,
+                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: self.currentTheme(),
+                                completion: { buttonPressed in
+            if buttonPressed {
+                self.tabManager.selectTab(tab)
+                self.overlayManager.switchTab(shouldCancelLoading: true)
+            }
+        })
+        show(toast: toast)
     }
 
     @available(iOS 15, *)
