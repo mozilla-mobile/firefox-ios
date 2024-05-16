@@ -6,6 +6,10 @@ on:
           SLACK_WEBHOOK_URL:
             required: true
     workflow_dispatch: {}
+    pull_request_target:
+      types: [opened, synchronize]
+      paths:
+      - 'firefox-ios/Client/Assets/CC_Script/**'
     pull_request:
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
