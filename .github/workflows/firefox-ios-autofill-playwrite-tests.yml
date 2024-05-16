@@ -9,9 +9,12 @@ on:
     pull_request_target:
       types: 
         - reopened
-      branches: ['main']
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
+    #pull_request:
+    #  branches: ['main']
+    #  paths:
+    #    - 'firefox-ios/Client/Assets/CC_Script/**'
     push:
       branches: ['main']
       paths:
