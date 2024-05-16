@@ -48,3 +48,4 @@ public extension Notification {
         return uuid
     }
 }
+

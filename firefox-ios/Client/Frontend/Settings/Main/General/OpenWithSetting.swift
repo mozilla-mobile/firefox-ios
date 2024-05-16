@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 class OpenWithSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?

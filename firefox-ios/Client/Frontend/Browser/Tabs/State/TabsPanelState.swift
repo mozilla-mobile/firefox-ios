@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 struct TabsPanelState: ScreenState, Equatable {
     var isPrivateMode: Bool

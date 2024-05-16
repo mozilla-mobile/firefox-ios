@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Shared
+import Common
 
 protocol DownloadDelegate: AnyObject {
     func download(_ download: Download, didCompleteWithError error: Error?)
