@@ -4,10 +4,11 @@
 
 import Foundation
 import Storage
+import Common
 @testable import Client
 
 class MockLibraryCoordinatorDelegate: LibraryCoordinatorDelegate, LibraryPanelDelegate {
-    var libraryPanelWindowUUID: Client.WindowUUID { return Client.WindowUUID.XCTestDefaultUUID }
+    var libraryPanelWindowUUID: WindowUUID { return WindowUUID.XCTestDefaultUUID }
     var didFinishSettingsCalled = 0
     var didRequestToOpenInNewTabCalled = false
     var didSelectURLCalled = false

@@ -6,6 +6,7 @@ import XCTest
 import Shared
 import Storage
 import WebKit
+import Common
 
 @testable import Client
 

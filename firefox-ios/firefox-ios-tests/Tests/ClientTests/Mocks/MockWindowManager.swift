@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import Common
 @testable import Client
 
 final class MockWindowManager: WindowManager {

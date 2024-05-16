@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import Common
 
 @testable import Client
 
