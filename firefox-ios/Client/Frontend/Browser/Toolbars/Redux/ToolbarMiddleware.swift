@@ -157,6 +157,11 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
+        case .qrCode:
+            let action = GeneralBrowserAction(showQRcodeReader: true,
+                                              windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showQRcodeReader)
+            store.dispatch(action)
 
         default:
             break

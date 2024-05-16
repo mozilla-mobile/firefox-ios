@@ -1718,6 +1718,8 @@ class BrowserViewController: UIViewController,
 
         if state.navigateToHome {
             didTapOnHome()
+        } else if state.showQRcodeReader {
+            navigationHandler?.showQRCode(delegate: self)
         }
     }
 

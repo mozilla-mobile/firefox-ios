@@ -77,12 +77,14 @@ class RemoteTabsCoordinator: BaseCoordinator,
             if rootNavigationController != nil {
                 coordinator = QRCodeCoordinator(
                     parentCoordinator: self,
-                    router: DefaultRouter(navigationController: rootNavigationController!)
+                    router: DefaultRouter(navigationController: rootNavigationController!),
+                    windowUUID: windowUUID
                 )
             } else {
                 coordinator = QRCodeCoordinator(
                     parentCoordinator: self,
-                    router: router
+                    router: router,
+                    windowUUID: windowUUID
                 )
             }
             add(child: coordinator)
