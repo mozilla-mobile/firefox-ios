@@ -7,7 +7,8 @@ on:
             required: true
     workflow_dispatch: {}
     pull_request_target:
-      types: [opened, synchronize, reopened, edited]
+      types: 
+        - reopened
       branches: ['main']
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
