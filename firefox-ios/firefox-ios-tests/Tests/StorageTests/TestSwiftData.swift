@@ -66,7 +66,7 @@ class TestSwiftData: XCTestCase {
     ) -> MaybeErrorType? {
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db -> Void in
+        let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
@@ -96,7 +96,7 @@ class TestSwiftData: XCTestCase {
     }
 
     fileprivate func addSite(_ table: BrowserSchema, url: String, title: String) -> MaybeErrorType? {
-        let result = swiftData!.withConnection(SwiftData.Flags.readWrite) { connection -> Void in
+        let result = swiftData!.withConnection(SwiftData.Flags.readWrite) { connection in
             let args: Args = [Bytes.generateGUID(), url, title]
             try connection.executeChange(
                 "INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)",

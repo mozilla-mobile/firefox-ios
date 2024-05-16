@@ -193,7 +193,7 @@ class Authenticator {
         let action = UIAlertAction(
             title: .AuthenticatorLogin,
             style: .default
-        ) { (action) -> Void in
+        ) { (action) in
             guard let user = alert.textFields?[0].text,
                   let pass = alert.textFields?[1].text
             else {
@@ -212,25 +212,25 @@ class Authenticator {
         alert.addAction(action, accessibilityIdentifier: "authenticationAlert.loginRequired")
 
         // Add a cancel button.
-        let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) -> Void in
+        let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) in
             completionHandler(.failure(LoginRecordError(description: "Save password cancelled")))
         }
         alert.addAction(cancel, accessibilityIdentifier: "authenticationAlert.cancel")
 
         // Add a username textfield.
-        alert.addTextField { (textfield) -> Void in
+        alert.addTextField { (textfield) in
             textfield.placeholder = .AuthenticatorUsernamePlaceholder
             textfield.text = credentials?.user
         }
 
         // Add a password textfield.
-        alert.addTextField { (textfield) -> Void in
+        alert.addTextField { (textfield) in
             textfield.placeholder = .AuthenticatorPasswordPlaceholder
             textfield.isSecureTextEntry = true
             textfield.text = credentials?.password
         }
 
-        viewController.present(alert, animated: true) { () -> Void in }
+        viewController.present(alert, animated: true) { () in }
     }
 
     // MARK: Telemetry

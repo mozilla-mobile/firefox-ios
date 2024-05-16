@@ -75,7 +75,7 @@ class CreditCardBottomSheetViewModel {
 
     var didUpdateCreditCard: (() -> Void)?
     var decryptedCreditCard: UnencryptedCreditCardFields?
-    var storedCreditCards: [CreditCard] = [CreditCard]()
+    var storedCreditCards = [CreditCard]()
     var state: CreditCardBottomSheetState
 
     init(profile: Profile,
