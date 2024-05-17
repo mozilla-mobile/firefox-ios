@@ -122,7 +122,7 @@ class SearchTermGroupsUtility {
         and searchTermMetadata: [String: [HistoryMetadata]]
     ) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
         var itemGroupData: [String: [T]] = [:]
-        var itemsInGroups: [T] = [T]()
+        var itemsInGroups = [T]()
 
         outeritemLoop: for item in items {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where historyMetaList
