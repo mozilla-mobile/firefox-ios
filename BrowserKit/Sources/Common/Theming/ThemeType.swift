@@ -12,30 +12,30 @@ public enum ThemeType: String {
 
     public func getInterfaceStyle() -> UIUserInterfaceStyle {
         return switch self {
-        case .dark, .privateMode: .dark
-        case .light: .light
+            case .dark, .privateMode: .dark
+            case .light: .light
         }
     }
 
     public func getBarStyle() -> UIBarStyle {
         return switch self {
-        case .dark, .privateMode: .black
-        case .light: .default
+            case .dark, .privateMode: .black
+            case .light: .default
         }
     }
 
     public func keyboardAppearence(isPrivate: Bool) -> UIKeyboardAppearance {
         if isPrivate { return .dark }
         return switch self {
-        case .dark, .privateMode: .dark
-        case .light: .light
+            case .dark, .privateMode: .dark
+            case .light: .light
         }
     }
 
     public func tabTitleBlurStyle() -> UIBlurEffect.Style {
         return switch self {
-        case .dark, .privateMode: UIBlurEffect.Style.dark
-        case .light: UIBlurEffect.Style.extraLight
+            case .dark, .privateMode: UIBlurEffect.Style.dark
+            case .light: UIBlurEffect.Style.extraLight
         }
     }
 }

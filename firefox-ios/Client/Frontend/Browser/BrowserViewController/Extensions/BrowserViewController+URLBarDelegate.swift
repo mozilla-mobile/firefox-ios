@@ -425,8 +425,8 @@ extension BrowserViewController: URLBarDelegate {
             // currently searching, but we only want to update the search
             // session state if they are.
             searchSessionState = switch reason {
-            case .finished: .engaged
-            case .cancelled: .abandoned
+                case .finished: .engaged
+                case .cancelled: .abandoned
             }
         }
         destroySearchController()
