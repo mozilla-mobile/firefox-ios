@@ -8,7 +8,7 @@ set -x
 cd focus-ios
 
 # Version 107.0 hash
-SHAVAR_COMMIT_HASH="1d71be25893b05ba85850078b1ccedc0824ca958"
+SHAVAR_COMMIT_HASH="91cf7dd142fc69aabe334a1a6e0091a1db228203"
 
 # Download the nimbus-fml.sh script from application-services.
 NIMBUS_FML_FILE=./nimbus.fml.yaml
