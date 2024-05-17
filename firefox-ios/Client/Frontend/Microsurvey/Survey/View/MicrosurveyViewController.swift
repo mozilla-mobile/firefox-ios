@@ -5,24 +5,26 @@
 import Foundation
 import Common
 import ComponentLibrary
+import Redux
 
-class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
+class MicrosurveyViewController: UIViewController,
+                                 UITableViewDataSource,
+                                 UITableViewDelegate,
+                                 Themeable,
+                                 StoreSubscriber {
+    typealias SubscriberStateType = MicrosurveyState
+
     // MARK: Themable Variables
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: Common.NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
 
-    private let windowUUID: WindowUUID
+    weak var coordinator: MicroSurveyCoordinatorDelegate?
 
-    // TODO: FXIOS-9059 / FXIOS-8990 - Replace after Redux implementation + microsurvey surface manager is implemented
-    private let surveyOptions: [String] = [
-        .Microsurvey.Survey.Options.LikertScaleOption1,
-        .Microsurvey.Survey.Options.LikertScaleOption2,
-        .Microsurvey.Survey.Options.LikertScaleOption3,
-        .Microsurvey.Survey.Options.LikertScaleOption4,
-        .Microsurvey.Survey.Options.LikertScaleOption5
-    ]
+    private let windowUUID: WindowUUID
+    private let model: MicrosurveyModel
+    private var microsurveyState: MicrosurveyState
 
     // MARK: UI Elements
     private struct UX {
@@ -105,18 +107,52 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(windowUUID: WindowUUID,
+    init(model: MicrosurveyModel, windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        microsurveyState = MicrosurveyState(windowUUID: windowUUID)
+        self.model = model
         super.init(nibName: nil, bundle: nil)
-
         self.sheetPresentationController?.prefersGrabberVisible = true
+        subscribeToRedux()
         configureUI()
         setupLayout()
+    }
+
+    // MARK: Redux
+    func newState(state: MicrosurveyState) {
+        // CYN: Need to check if this needs to be on main thread
+        microsurveyState = state
+        if microsurveyState.shouldDismiss {
+            coordinator?.dismissFlow()
+        } else if microsurveyState.showPrivacy {
+            coordinator?.showPrivacy()
+        }
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .microsurvey)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                // CYN: What does this appstate do?
+                return MicrosurveyState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .microsurvey)
+        store.dispatch(action)
     }
 
     override func viewDidLoad() {
@@ -124,6 +160,11 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
+        tableView.removeFromSuperview()
     }
 
     private func configureUI() {
@@ -220,8 +261,14 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     @objc
     private func didTapSubmit() {
-        // TODO: FXIOS-9059: Redux for sending telemetry
+        sendTelemetry()
         showConfirmationPage()
+    }
+
+    private func sendTelemetry() {
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.submitSurvey)
+        )
     }
 
     private func showConfirmationPage() {
@@ -242,17 +289,21 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     @objc
     private func didTapClose() {
-        // TODO: FXIOS-9059: Redux for Survey close action
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.closeSurvey)
+        )
     }
 
     @objc
     private func didTapPrivacyPolicy() {
-        // TODO: FXIOS-8976: Privacy policy should open a new tab
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.tapPrivacyNotice)
+        )
     }
 
     // MARK: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return surveyOptions.count
+        return model.surveyOptions.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -262,7 +313,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         ) as? MicrosurveyTableViewCell else {
             return UITableViewCell()
         }
-        cell.configureCell(surveyOptions[indexPath.row])
+        cell.configure(model.surveyOptions[indexPath.row])
         cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return cell
     }
@@ -274,7 +325,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         ) as? MicrosurveyTableHeaderView else {
             return nil
         }
-
+        headerView.configure(model.surveyQuestion)
         headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return headerView
     }

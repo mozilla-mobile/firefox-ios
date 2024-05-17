@@ -609,8 +609,9 @@ class BrowserViewController: UIViewController,
                 guard microsurvey != nil else { return }
                 removeMicrosurveyPrompt()
             } else if state.microsurveyState.showSurvey {
-                // TODO: FXIOS-8895: Create Microsurvey Modal View
-                print("CYN - FXIOS-8895: Create Microsurvey Modal View")
+                // CYN: Torn between passing model and initializing the mobile messaging in the middleware
+                guard let model = state.microsurveyState.model else { return }
+                navigationHandler?.showMicrosurvey(model: model)
             } else if state.microsurveyState.showPrompt {
                 guard microsurvey == nil else { return }
                 createMicrosurveyPrompt(with: state.microsurveyState)
