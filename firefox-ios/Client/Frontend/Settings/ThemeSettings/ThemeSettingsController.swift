@@ -13,7 +13,6 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     struct UX {
         static var rowHeight: CGFloat = 70
         static var moonSunIconSize: CGFloat = 18
-        static var footerFontSize: CGFloat = 12
         static var sliderLeftRightInset: CGFloat = 16
         static var spaceBetweenTableSections: CGFloat = 20
     }
@@ -202,8 +201,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let label: UILabel = .build { label in
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .footnote,
-                                                                size: UX.footerFontSize)
+            label.font = FXFontStyles.Regular.footnote.scaledFont()
             label.textColor = self.themeManager.currentTheme(for: self.windowUUID).colors.textSecondary
         }
         footer.addSubview(label)
