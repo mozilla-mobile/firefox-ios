@@ -79,7 +79,7 @@ class TestHistory: ProfileTest {
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testHistory() {
-        withTestProfile { profile -> Void in
+        withTestProfile { profile in
             let places = profile.places
             self.addSite(places, url: "http://url1/", title: "title")
             self.addSite(places, url: "http://url1/", title: "title")
@@ -241,7 +241,7 @@ class TestHistory: ProfileTest {
 //    }
 
     func testAboutUrls() {
-        withTestProfile { (profile) -> Void in
+        withTestProfile { (profile) in
             let places = profile.places
             self.addSite(
                 places,
@@ -256,12 +256,12 @@ class TestHistory: ProfileTest {
     let numCmds = 10
 
     func testInsertPerformance() {
-        withTestProfile { profile -> Void in
+        withTestProfile { profile in
             let places = profile.places
             var index = 0
 
             self.measure({
-                () -> Void in
+                () in
                 for _ in 0...self.numCmds {
                     self.addSite(
                         places,
@@ -276,7 +276,7 @@ class TestHistory: ProfileTest {
     }
 
     func testGetPerformance() {
-        withTestProfile { profile -> Void in
+        withTestProfile { profile in
             let places = profile.places
             var index = 0
             var urls = [String: String]()
@@ -292,7 +292,7 @@ class TestHistory: ProfileTest {
                 index += 1
             }
 
-            self.measure({ () -> Void in
+            self.measure({ () in
                 self.checkSites(places, urls: urls)
                 return
             })
@@ -304,7 +304,7 @@ class TestHistory: ProfileTest {
     // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads.
     // The don't check the results. Just look for crashes.
     func testRandomThreading() {
-        withTestProfile { profile -> Void in
+        withTestProfile { profile in
             let queue = DispatchQueue(
                 label: "My Queue",
                 qos: DispatchQoS.default,
@@ -317,7 +317,7 @@ class TestHistory: ProfileTest {
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
                 var places = profile.places
-                self.runRandom(&places, queue: queue, completion: { () -> Void in
+                self.runRandom(&places, queue: queue, completion: { () in
                     counter += 1
                     if counter == self.numThreads {
                         self.clear(places)
@@ -331,7 +331,7 @@ class TestHistory: ProfileTest {
 
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
-        withTestProfile { profile -> Void in
+        withTestProfile { profile in
             let queue = DispatchQueue(
                 label: "My Queue",
                 qos: DispatchQoS.default,
@@ -344,7 +344,7 @@ class TestHistory: ProfileTest {
 
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
-                self.runRandom(&places, queue: queue, completion: { () -> Void in
+                self.runRandom(&places, queue: queue, completion: { () in
                     counter += 1
                     if counter == self.numThreads {
                         self.clear(places)

@@ -482,7 +482,7 @@ private extension TabLocationView {
                 }
             }
         }
-        UIView.animate(withDuration: 0.1, animations: { () -> Void in
+        UIView.animate(withDuration: 0.1, animations: { () in
             self.readerModeButton.alpha = newReaderModeState == .unavailable ? 0 : 1
         })
     }

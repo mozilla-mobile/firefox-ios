@@ -161,7 +161,7 @@ class Authenticator {
         let action = UIAlertAction(
             title: .AuthenticatorLogin,
             style: .default
-        ) { (action) -> Void in
+        ) { (action) in
             guard let user = alert.textFields?[0].text,
                   let pass = alert.textFields?[1].text
             else {
@@ -180,26 +180,35 @@ class Authenticator {
         alert.addAction(action, accessibilityIdentifier: "authenticationAlert.loginRequired")
 
         // Add a cancel button.
+<<<<<<< HEAD
         let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) -> Void in
             deferred.fill(Maybe(failure: LoginRecordError(description: "Save password cancelled")))
+=======
+        let cancel = UIAlertAction(title: .AuthenticatorCancel, style: .cancel) { (action) in
+            completionHandler(.failure(LoginRecordError(description: "Save password cancelled")))
+>>>>>>> 3ff655a01 (Swiftlint fix (#20294))
         }
         alert.addAction(cancel, accessibilityIdentifier: "authenticationAlert.cancel")
 
         // Add a username textfield.
-        alert.addTextField { (textfield) -> Void in
+        alert.addTextField { (textfield) in
             textfield.placeholder = .AuthenticatorUsernamePlaceholder
             textfield.text = credentials?.user
         }
 
         // Add a password textfield.
-        alert.addTextField { (textfield) -> Void in
+        alert.addTextField { (textfield) in
             textfield.placeholder = .AuthenticatorPasswordPlaceholder
             textfield.isSecureTextEntry = true
             textfield.text = credentials?.password
         }
 
+<<<<<<< HEAD
         viewController.present(alert, animated: true) { () -> Void in }
         return deferred
+=======
+        viewController.present(alert, animated: true) { () in }
+>>>>>>> 3ff655a01 (Swiftlint fix (#20294))
     }
 
     // MARK: Telemetry
