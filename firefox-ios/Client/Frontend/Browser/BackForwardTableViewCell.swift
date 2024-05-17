@@ -118,11 +118,9 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
         label.text = viewModel.cellTittle
         if viewModel.isCurrentTab {
-            label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .body,
-                                                                    size: UX.fontSize)
+            label.font = FXFontStyles.Bold.caption1.scaledFont()
         } else {
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                size: UX.fontSize)
+            label.font = FXFontStyles.Regular.caption1.scaledFont()
         }
         setNeedsLayout()
         applyTheme(theme: theme)
