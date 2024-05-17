@@ -81,11 +81,11 @@ extension BackForwardListAnimator {
                 usingSpringWithDamping: 0.8,
                 initialSpringVelocity: 0.3,
                 options: [],
-                animations: { () -> Void in
+                animations: { () in
                     backForward.view.alpha = 1
                     backForward.tableViewHeightAnchor.constant = backForward.tableHeight
                     backForward.view.layoutIfNeeded()
-                }, completion: { (completed) -> Void in
+                }, completion: { (completed) in
                     transitionContext.completeTransition(completed)
                 })
         } else {
@@ -95,11 +95,11 @@ extension BackForwardListAnimator {
                 usingSpringWithDamping: 1.2,
                 initialSpringVelocity: 0.0,
                 options: [],
-                animations: { () -> Void in
+                animations: { () in
                     backForward.view.alpha = 0
                     backForward.tableViewHeightAnchor.constant = 0
                     backForward.view.layoutIfNeeded()
-                }, completion: { (completed) -> Void in
+                }, completion: { (completed) in
                     backForward.view.removeFromSuperview()
                     transitionContext.completeTransition(completed)
                 })
