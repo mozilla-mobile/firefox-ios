@@ -18,7 +18,11 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
 
-class AutocompleteTextField: UITextField, UITextFieldDelegate {
+class AutocompleteTextField: UITextField,
+                             UITextFieldDelegate,
+                             ThemeApplicable,
+                             PrivateModeUI,
+                             MenuHelperURLBarInterface {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
     // AutocompleteTextLabel represents the actual autocomplete text.
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
@@ -381,23 +385,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         applyCompletion()
         super.touchesBegan(touches, with: event)
     }
-}
 
-extension AutocompleteTextField: MenuHelperURLBarInterface {
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == MenuHelperURLBarModel.selectorPasteAndGo {
-            return UIPasteboard.general.hasStrings
-        }
-
-        return super.canPerformAction(action, withSender: sender)
-    }
-
-    func menuHelperPasteAndGo() {
-        autocompleteDelegate?.autocompletePasteAndGo(self)
-    }
-}
-
-extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
+    // MARK: - PrivateModeUI
     func applyUIMode(isPrivate: Bool, theme: Theme) {
         isPrivateMode = isPrivate
 
@@ -415,6 +404,7 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
         applyTheme(theme: theme)
     }
 
+    // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         self.theme = theme
         let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
@@ -430,5 +420,18 @@ extension AutocompleteTextField: ThemeApplicable, PrivateModeUI {
             autocompleteTextLabel?.backgroundColor = theme.colors.layer3
             autocompleteTextLabel?.textColor = theme.colors.textPrimary
         }
+    }
+
+    // MARK: - MenuHelperURLBarInterface
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelperURLBarModel.selectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    func menuHelperPasteAndGo() {
+        autocompleteDelegate?.autocompletePasteAndGo(self)
     }
 }

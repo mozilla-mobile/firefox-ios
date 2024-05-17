@@ -19,7 +19,6 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
     private let suggestTemplate: String?
     private let searchTermComponent = "{searchTerms}"
-    private let localeTermComponent = "{moz:locale}"
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
     private let googleEngineID = "google-b-1-m"
 
@@ -161,10 +160,8 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
             if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(
                 withAllowedCharacters: templateAllowedSet as CharacterSet
             ) {
-                let localeString = Locale.current.identifier
                 let urlString = encodedSearchTemplate
                     .replacingOccurrences(of: searchTermComponent, with: escapedQuery, options: .literal, range: nil)
-                    .replacingOccurrences(of: localeTermComponent, with: localeString, options: .literal, range: nil)
                 return URL(string: urlString, invalidCharacters: false)
             }
         }

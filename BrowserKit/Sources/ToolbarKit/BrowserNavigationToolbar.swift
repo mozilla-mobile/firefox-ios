@@ -59,7 +59,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
         actionStack.removeAllArrangedViews()
         toolbarElements.forEach { toolbarElement in
-            let button = ToolbarButton()
+            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
             button.configure(element: toolbarElement)
             actionStack.addArrangedSubview(button)
 

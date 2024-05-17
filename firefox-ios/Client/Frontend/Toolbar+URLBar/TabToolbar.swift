@@ -20,8 +20,9 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     let multiStateButton = ToolbarButton()
     let actionButtons: [ThemeApplicable & UIButton]
 
-    private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
-                                                     isPrivateBadge: true)
+    private let privateModeBadge = BadgeWithBackdrop(
+        imageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
+        isPrivateBadge: true)
     private let warningMenuBadge = BadgeWithBackdrop(imageName: StandardImageIdentifiers.Large.warningFill,
                                                      imageMask: ImageIdentifiers.menuWarningMask)
 

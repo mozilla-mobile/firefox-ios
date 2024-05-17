@@ -6,12 +6,16 @@ import Foundation
 import Common
 import Shared
 import TabDataStore
+import WidgetKit
 
 /// Defines various actions in the app which are performed for all open iPad
 /// windows. These can be routed through the WindowManager 
 enum MultiWindowAction {
     /// Signals that we should store tabs (for all windows) on the default Profile.
     case storeTabs
+
+    /// Signals that we should save Simple Tabs for all windows (used by our widgets).
+    case saveSimpleTabs
 
     /// Closes private tabs across all windows.
     case closeAllPrivateTabs
@@ -68,6 +72,11 @@ protocol WindowManager {
     /// Performs a MultiWindowAction.
     /// - Parameter action: the action to perform.
     func performMultiWindowAction(_ action: MultiWindowAction)
+
+    /// Returns the current window (if available) which hosts a specific tab.
+    /// - Parameter tab: the UUID of the tab.
+    /// - Returns: the UUID of the window hosting it (if available and open).
+    func window(for tab: TabUUID) -> WindowUUID?
 }
 
 /// Captures state and coordinator references specific to one particular app window.
@@ -92,6 +101,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     private let defaults: UserDefaultsInterface
     private var _activeWindowUUID: WindowUUID?
     private let tabSyncCoordinator = WindowTabsSyncCoordinator()
+    private let widgetSimpleTabsCoordinator = WindowSimpleTabsCoordinator()
 
     // Ordered set of UUIDs which determines the order that windows are re-opened on iPad
     // UUIDs at the beginning of the list are prioritized over UUIDs at the end
@@ -110,10 +120,10 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     // MARK: - Initializer
 
     init(logger: Logger = DefaultLogger.shared,
-         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore? = nil,
          userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+        self.tabDataStore = tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
         self.logger = logger
-        self.tabDataStore = tabDataStore
         self.defaults = userDefaults
         tabSyncCoordinator.delegate = self
     }
@@ -214,7 +224,13 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
             }
         case .storeTabs:
             storeTabs()
+        case .saveSimpleTabs:
+            saveSimpleTabs()
         }
+    }
+
+    func window(for tab: TabUUID) -> WindowUUID? {
+        return allWindowTabManagers().first(where: { $0.tabs.contains(where: { $0.tabUUID == tab }) })?.windowUUID
     }
 
     // MARK: - WindowTabSyncCoordinatorDelegate
@@ -228,6 +244,11 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     // MARK: - Internal Utilities
+
+    func saveSimpleTabs() {
+        let providers = allWindowTabManagers() as? [WindowSimpleTabsProvider] ?? []
+        widgetSimpleTabsCoordinator.saveSimpleTabs(for: providers)
+    }
 
     /// When provided a list of UUIDs of available window data files on disk,
     /// this function determines which of them should be the next to be

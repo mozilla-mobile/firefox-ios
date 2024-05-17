@@ -5,16 +5,22 @@
 import Common
 import UIKit
 
+public enum ToolbarButtonGesture {
+    case tap
+    case longPress
+}
+
 class ToolbarButton: UIButton, ThemeApplicable {
-    public struct UX {
-        public static let verticalInset: CGFloat = 8
-        public static let horizontalInset: CGFloat = 8
+    struct UX {
+        static let verticalInset: CGFloat = 8
+        static let horizontalInset: CGFloat = 8
     }
 
     var foregroundColorNormal: UIColor = .clear
     var foregroundColorHighlighted: UIColor = .clear
     var foregroundColorDisabled: UIColor = .clear
     var backgroundColorNormal: UIColor = .clear
+    private var shouldDisplayAsHighlighted = false
 
     private var onLongPress: (() -> Void)?
 
@@ -34,6 +40,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
+        shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
 
         let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
         let action = UIAction(title: element.a11yLabel,
@@ -66,12 +73,14 @@ class ToolbarButton: UIButton, ThemeApplicable {
         }
 
         switch state {
-        case [.highlighted]:
+        case .highlighted:
             updatedConfiguration.baseForegroundColor = foregroundColorHighlighted
-        case [.disabled]:
+        case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = foregroundColorNormal
+            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ?
+                                                       foregroundColorHighlighted :
+                                                       foregroundColorNormal
         }
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
@@ -109,7 +118,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         foregroundColorNormal = theme.colors.iconPrimary
-        foregroundColorHighlighted = theme.colors.iconPrimary
+        foregroundColorHighlighted = theme.colors.actionPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()

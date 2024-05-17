@@ -117,12 +117,12 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
-    var adsTelemetryUrlList: [String] = [String]() {
+    var adsTelemetryUrlList = [String]() {
         didSet {
             startingSearchUrlWithAds = url
         }
     }
-    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var adsTelemetryRedirectUrlList = [URL]()
     var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
     var hasHomeScreenshot = false
@@ -727,7 +727,7 @@ class Tab: NSObject, ThemeApplicable {
     func hideContent(_ animated: Bool = false) {
         webView?.isUserInteractionEnabled = false
         if animated {
-            UIView.animate(withDuration: 0.25, animations: { () -> Void in
+            UIView.animate(withDuration: 0.25, animations: { () in
                 self.webView?.alpha = 0.0
             })
         } else {
@@ -738,7 +738,7 @@ class Tab: NSObject, ThemeApplicable {
     func showContent(_ animated: Bool = false) {
         webView?.isUserInteractionEnabled = true
         if animated {
-            UIView.animate(withDuration: 0.25, animations: { () -> Void in
+            UIView.animate(withDuration: 0.25, animations: { () in
                 self.webView?.alpha = 1.0
             })
         } else {

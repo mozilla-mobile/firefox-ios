@@ -3,11 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Common
 
 struct HelpView: View {
     private struct UX {
         static let padding: CGFloat = 20
         static let textFont = Font.body
+        static let imageSize = CGSize(width: 96, height: 96)
     }
 
     var textColor: UIColor
@@ -18,9 +20,11 @@ struct HelpView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: UX.padding) {
-            Image(ImageIdentifiers.emptySyncImageName)
+            Image(StandardImageIdentifiers.Large.cloud)
                 .renderingMode(.template)
+                .resizable()
                 .foregroundColor(Color(imageColor))
+                .frame(width: UX.imageSize.width, height: UX.imageSize.height)
                 .padding(.top, UX.padding)
                 .accessibility(hidden: true)
             Text(topMessage)

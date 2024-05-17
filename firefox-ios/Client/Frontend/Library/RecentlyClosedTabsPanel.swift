@@ -27,7 +27,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     var state: LibraryPanelMainState = .history(state: .inFolder)
     weak var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
-    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var bottomToolbarItems = [UIBarButtonItem]()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
