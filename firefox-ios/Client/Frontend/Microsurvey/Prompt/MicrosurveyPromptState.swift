@@ -32,7 +32,8 @@ struct MicrosurveyPromptState: StateType, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // TODO: FXIOS-9068 Need to test this experience with multiwindow
-        // CYN: Instead of blocking the actions, I want to reset the state by returning the default; avoid triggering showSurvey action multiple times
+        // CYN: Instead of blocking the actions, I want to reset the state by returning the default
+        // avoid triggering showSurvey action multiple times
         switch action.actionType {
         case MicrosurveyPromptMiddlewareActionType.initialize(let model):
             return MicrosurveyPromptState(

@@ -7,7 +7,7 @@ import Shared
 
 struct MicrosurveyState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    var model: MicrosurveyModel?
+    var model: MicrosurveyModel? // CYN: Debating on keeping or removing
     var shouldDismiss: Bool
     var showPrivacy: Bool
 
