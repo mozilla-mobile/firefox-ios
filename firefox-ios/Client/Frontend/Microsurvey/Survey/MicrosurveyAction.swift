@@ -27,5 +27,4 @@ enum MicrosurveyActionType: ActionType {
 enum MicrosurveyMiddlewareActionType: ActionType {
     case dismissSurvey
     case navigateToPrivacyNotice
-    case sendTelemetry
 }
