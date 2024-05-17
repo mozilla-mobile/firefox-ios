@@ -83,7 +83,7 @@ open class BrowserDB {
             return succeed()
         }
 
-        return transaction { connection -> Void in
+        return transaction { connection in
             for (sql, args) in commands {
                 try connection.executeChange(sql, withArgs: args)
             }
