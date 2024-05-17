@@ -1,0 +1,6 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
+"Microsurvey.Prompt.Button.v127" = "ඉදිරියට";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
+"Microsurvey.Survey.Button.v127" = "යොමන්න";
+

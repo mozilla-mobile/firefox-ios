@@ -10,17 +10,20 @@ class GeneralBrowserAction: Action {
     let isPrivateBrowsing: Bool?
     let toastType: ToastType?
     let showOverlay: Bool?
+    let navigateToHome: Bool?
 
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
+         navigateToHome: Bool? = nil,
          windowUUID: UUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
         self.toastType = toastType
         self.showOverlay = showOverlay
+        self.navigateToHome = navigateToHome
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -30,4 +33,12 @@ enum GeneralBrowserActionType: ActionType {
     case showToast
     case showOverlay
     case updateSelectedTab
+    case goToHomepage
+}
+
+class GeneralBrowserMiddlewareAction: Action {
+}
+
+enum GeneralBrowserMiddlewareActionType: ActionType {
+    case browserDidLoad
 }

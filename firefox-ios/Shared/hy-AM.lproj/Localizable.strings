@@ -62,7 +62,7 @@
 "AddPass.Error.Title" = "Չհաջողվեց գաղտնաբառեր ավելացնել";
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
-"Address and Search" = "Հասցեն և Որոնում";
+"Address and Search" = "Հասցե և որոնում";
 
 /* Accessibility label for action adding current page to reading list. */
 "Address.Bar.ReadingList.v106" = "Ավելացնել ընթերցման ցուցակում";
@@ -107,7 +107,7 @@
 "Bookmarks.Folder.Label" = "Պանակ";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Սեղանի էջանիշեր";
+"Bookmarks.Menu.DesktopBookmarks" = "Աշխատասեղանի էջանիշեր";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Նոր էջանիշ";
@@ -122,7 +122,7 @@
 "Bookmarks.Title.Label" = "Անվանում";
 
 /* Describes the date on which the breach occurred */
-"BreachAlerts.BreachDate" = "Այս խախտումը տեղի է ունեցել ս.թ.";
+"BreachAlerts.BreachDate" = "Այս խախտումը տեղի է ունեցել՝";
 
 /* Description of what a breach is */
 "BreachAlerts.Description" = "Գաղտնաբառերը արտահոսել կամ գողացել են ձեր գաղտնաբառը վերջին անգամ փոխելուց հետո: Այս հաշիվը պաշտպանելու համար մուտք գործեք կայք և փոխեք ձեր գաղտնաբառը:";
@@ -239,7 +239,7 @@
 "Decrease text size" = "Փոքրացնել գրվածքի չափը";
 
 /* Title for default search engine picker. */
-"Default Search Engine" = "Հիմնական որոնիչը";
+"Default Search Engine" = "Սկզբնադիր որոնիչը";
 
 /* Accessibility label for action denoting closing default browser home tab banner. */
 "DefaultBrowserCloseButtonAccessibility.v102" = "Փակել";
@@ -392,7 +392,7 @@
 "fxa.signin.qr-link-instruction" = "Ձեր համակարգչի վրա բացեք Firefox-ը և անցեք firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Պատրաստ է սկանավորել";
+"fxa.signin.ready-to-scan" = "Պատրաստել սկանավորման";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Փոխարենը օգտագործեք էլ. փոստ";
@@ -488,7 +488,7 @@
 "HomePanel.ContextMenu.Share" = "Համօգտագործել";
 
 /* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.Back.DiscoveryTitle" = "Վերադառնալ";
+"Hotkeys.Back.DiscoveryTitle" = "Ետ";
 
 /* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.CloseTab.DiscoveryTitle" = "Փակել ներդիրը";
@@ -617,7 +617,7 @@
 "LibraryPanel.History.RecentlyClosedTabs.v99" = "Վերջին փակված ներդիրները";
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
-"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Մուտքագրեք որոնվող բառը";
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Մուտքագրեք որոնման եզրույթներ";
 
 /* Within the History Panel, users can see the option of viewing their history from synced tabs. */
 "LibraryPanel.History.SyncedHistory.v100" = "Համաժամեցված պատմություն";
@@ -737,10 +737,10 @@
 "Menu.Copy.Title" = "Պատճենել հասցեն";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "URL-ն պատճենվել է";
+"Menu.CopyURL.Confirm" = "URL-ը պատճենվեց սեղմատախտակին";
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
-"Menu.CustomizeHomePage.v99" = "Հարմարեցնել տնայինը";
+"Menu.CustomizeHomePage.v99" = "Հարմարեցնել տնէջը";
 
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Ներբեռնումներ";
@@ -791,7 +791,7 @@
 "Menu.RemoveBookmark.Label.v99" = "Հեռացնել";
 
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
-"Menu.RemovedFromShortcuts.v99" = "Հեռացնել դյուրանցումներից";
+"Menu.RemovedFromShortcuts.v99" = "Հանել դյուրանցումներից";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
 "Menu.RemovePin.Confirm2.v99" = "Հեռացվել է դյուրանցումներից";
@@ -887,7 +887,7 @@
 "Okay" = "Լավ";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
-"Onboarding.WhatsNew.Button.Title" = "Սկսել զննումը";
+"Onboarding.WhatsNew.Button.Title" = "Սկսել դիտարկումը";
 
 /* Title for prompt displayed to user after the app crashes */
 "Oops! Firefox crashed" = "Վա՜յ, Firefox-ը վթարվեց:";
@@ -932,7 +932,7 @@
 "ProtectionStatus.Secure" = "Կապակցումն ապահով է";
 
 /* Title for quick-search engines settings section. */
-"Quick-Search Engines" = "Որոգ որոնման որոնիչներ";
+"Quick-Search Engines" = "Արագ-որոնիչներ";
 
 /* A label indicating the action that a user can rate the Firefox app in the App store. */
 "Ratings.Settings.RateOnAppStore" = "Գնահատեք App Store-ում";
@@ -1010,7 +1010,7 @@
 "Search" = "Որոնում";
 
 /* The text shown in the URL bar on about:home */
-"Search or enter address" = "Որոնել կամ մուտքագրել հասցե";
+"Search or enter address" = "Որոնեք կամ մուտքագրեք հասցե";
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "Անցնել ներդիրին";
@@ -1535,10 +1535,10 @@
 "Settings.TrackingProtection.SectionName" = "Հետագծման պաշտպանություն";
 
 /* Tracking protection settings option for using the basic blocklist. */
-"Settings.TrackingProtectionOption.BasicBlockList" = "Ստանդարտ (լռելյայն)";
+"Settings.TrackingProtectionOption.BasicBlockList" = "Սովորական (սկզբնադիր)";
 
 /* Tracking protection settings status showing the current option selected. */
-"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Ստանդարտ";
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Սովորական";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Խիստ";
@@ -1577,7 +1577,7 @@
 "ShareExtension.LoadInBackgroundAction.Title" = "Բեռնվում է հետնաշերտում";
 
 /* Share extension label shown after user has performed 'Load in Background' action. */
-"ShareExtension.LoadInBackgroundActionDone.Title" = "Բեռնվում է Firefox-֊ում";
+"ShareExtension.LoadInBackgroundActionDone.Title" = "Բեռնում Firefox-ում";
 
 /* Action label on share extension to immediately open page in Firefox. */
 "ShareExtension.OpenInFirefoxAction.Title" = "Բացել Firefox-֊ում";
@@ -1739,7 +1739,7 @@
 "Use stage servers" = "Օգտագործել փուլային սերվերներ";
 
 /* Username textbox in Authentication prompt */
-"Username" = "Օգտվողի անուն";
+"Username" = "Օգտանուն";
 
 /* The message of the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Change.Error.Body.v106" = "Սխալ առաջացավ այս պաստառի հետ:";

@@ -1242,7 +1242,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var searchAppendImage: UIImage? {
-        var searchAppendImage = UIImage(named: StandardImageIdentifiers.Large.appendUp)
+        var searchAppendImage = UIImage(named: StandardImageIdentifiers.Large.appendUpLeft)
 
         if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
             searchAppendImage = UIImage(

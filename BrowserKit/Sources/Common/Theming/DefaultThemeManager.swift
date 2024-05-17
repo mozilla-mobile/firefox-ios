@@ -225,8 +225,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         self.windows[window]?.overrideUserInterfaceStyle = style
 
         mainQueue.ensureMainThread { [weak self] in
-            // TODO: [FXIOS-8939] Send UUID in userInfo payload rather than object for consistency with Client.
-            self?.notificationCenter.post(name: .ThemeDidChange, withObject: window)
+            // Eventually WindowUUID and its extensions will be moved into BrowserKit. [FXIOS-9145]
+            // Once that happens we should replace this string literal with `WindowUUID.userInfoKey`
+            self?.notificationCenter.post(name: .ThemeDidChange, withUserInfo: ["windowUUID": window])
         }
     }
 
