@@ -138,6 +138,12 @@ class FxAWebViewController: UIViewController {
         UIApplication.shared.endBackgroundTask(backgroundTaskID)
         backgroundTaskID = UIBackgroundTaskIdentifier.invalid
     }
+
+    func presentSavePDFController(outputURL: URL) {
+        let controller = UIActivityViewController(activityItems: [outputURL], applicationActivities: nil)
+        controller.popoverPresentationController?.sourceView = view
+        present(controller, animated: true, completion: nil)
+    }
 }
 
 // MARK: - WKNavigationDelegate
@@ -147,8 +153,22 @@ extension FxAWebViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
-        decisionHandler(decision)
+        if let blobURL = navigationAction.request.url,
+           viewModel.isMozillaAccountPDF(blobURL: blobURL, webViewURL: webView.url) {
+            viewModel.getURLForPDF(webView: webView, blobURL: blobURL) { [weak self] outputURL in
+                guard let self else { return }
+                if let outputURL {
+                    self.presentSavePDFController(outputURL: outputURL)
+                    decisionHandler(.cancel)
+                } else {
+                    let decision = self.viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
+                    decisionHandler(decision)
+                }
+            }
+        } else {
+            let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
+            decisionHandler(decision)
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
