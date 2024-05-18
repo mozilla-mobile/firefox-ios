@@ -316,23 +316,7 @@ extension BrowserViewController: WKUIDelegate {
                     }
 
                     if url.scheme != "javascript" {
-                        actions.append(UIAction(
-                            title: .ContextMenuDownloadLink,
-                            image: UIImage.templateImageNamed(
-                                StandardImageIdentifiers.Large.download
-                            ),
-                            identifier: UIAction.Identifier("linkContextMenu.download")
-                        ) { _ in
-                            // This checks if download is a blob, if yes, begin blob download process
-                            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                                // if not a blob, set pendingDownloadWebView and load the request in
-                                // the webview, which will trigger the WKWebView navigationResponse
-                                // delegate function and eventually downloadHelper.open()
-                                self.pendingDownloadWebView = currentTab.webView
-                                let request = URLRequest(url: url)
-                                currentTab.webView?.load(request)
-                            }
-                        })
+                        actionsBuilder.AddDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
                     }
 
                     actions.append(UIAction(
@@ -466,6 +450,10 @@ extension BrowserViewController: WKUIDelegate {
             }
         })
         show(toast: toast)
+    }
+
+    func assignWebView(_ webView: WKWebView?) {
+        pendingDownloadWebView = webView
     }
 
     @available(iOS 15, *)
