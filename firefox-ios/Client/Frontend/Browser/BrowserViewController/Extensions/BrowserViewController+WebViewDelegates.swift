@@ -451,12 +451,7 @@ extension BrowserViewController: WKUIDelegate {
 
                         actionsBuilder.AddCopyImage(url: url)
 
-                        actions.append(UIAction(
-                            title: .ContextMenuCopyImageLink,
-                            identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
-                        ) { _ in
-                            UIPasteboard.general.url = url as URL
-                        })
+                        actionsBuilder.AddCopyImageLink(url: url)
                     }
 
                     return UIMenu(title: url.absoluteString, children: actions)
