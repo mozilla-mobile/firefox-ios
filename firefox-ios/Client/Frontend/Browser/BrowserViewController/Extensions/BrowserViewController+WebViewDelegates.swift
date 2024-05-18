@@ -15,6 +15,7 @@ protocol ActionProviderProtocol {
     func AddBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
     func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
     func AddDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
+    func AddCopyLink(url: URL)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -91,6 +92,16 @@ class ActionProviderBuilder: ActionProviderProtocol {
                 let request = URLRequest(url: url)
                 currentTab.webView?.load(request)
             }
+        })
+    }
+
+    func AddCopyLink(url: URL) {
+        actions.append(UIAction(
+            title: .ContextMenuCopyLink,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
+            identifier: UIAction.Identifier("linkContextMenu.copyLink")
+        ) { _ in
+            UIPasteboard.general.url = url
         })
     }
 }
