@@ -427,8 +427,8 @@ extension BrowserViewController: WKUIDelegate {
                         .successValue ?? false
                     if isBookmarkedSite {
                         actionBuilder.addRemoveBookmarkLink(url: url,
-                                                             title: elements.title,
-                                                             removeBookmark: self.removeBookmark)
+                                                            title: elements.title,
+                                                            removeBookmark: self.removeBookmark)
                     } else {
                         actionBuilder.addBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
                     }
@@ -438,16 +438,16 @@ extension BrowserViewController: WKUIDelegate {
                     actionBuilder.addCopyLink(url: url)
 
                     actionBuilder.addShare(url: url,
-                                            tabManager: tabManager,
-                                            webView: webView,
-                                            view: view,
-                                            navigationHandler: navigationHandler,
-                                            contentContainer: contentContainer)
+                                           tabManager: tabManager,
+                                           webView: webView,
+                                           view: view,
+                                           navigationHandler: navigationHandler,
+                                           contentContainer: contentContainer)
 
                     if let url = elements.image {
                         actionBuilder.addSaveImage(url: url,
-                                                    getImageData: getImageData,
-                                                    writeToPhotoAlbum: writeToPhotoAlbum)
+                                                   getImageData: getImageData,
+                                                   writeToPhotoAlbum: writeToPhotoAlbum)
 
                         actionBuilder.addCopyImage(url: url)
 
