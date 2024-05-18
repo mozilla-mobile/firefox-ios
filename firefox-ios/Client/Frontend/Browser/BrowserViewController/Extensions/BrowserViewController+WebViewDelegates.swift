@@ -503,6 +503,57 @@ extension BrowserViewController: WKUIDelegate {
         show(toast: toast)
     }
 
+    func createActions(isPrivate: Bool,
+                       url: URL,
+                       addTab: @escaping (URL, Bool) -> Void,
+                       title: String?,
+                       image: URL?,
+                       currentTab: Tab,
+                       webView: WKWebView) -> [UIAction] {
+        let actionBuilder = ActionProviderBuilder()
+
+        if !isPrivate {
+            actionBuilder.addOpenInNewTab(url: url, addTab: addTab)
+        }
+
+        actionBuilder.addOpenInNewPrivateTab(url: url, addTab: addTab)
+
+        let isBookmarkedSite = profile.places
+            .isBookmarked(url: url.absoluteString)
+            .value
+            .successValue ?? false
+        if isBookmarkedSite {
+            actionBuilder.addRemoveBookmarkLink(url: url,
+                                                title: title,
+                                                removeBookmark: self.removeBookmark)
+        } else {
+            actionBuilder.addBookmarkLink(url: url, title: title, addBookmark: self.addBookmark)
+        }
+
+        actionBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
+
+        actionBuilder.addCopyLink(url: url)
+
+        actionBuilder.addShare(url: url,
+                               tabManager: tabManager,
+                               webView: webView,
+                               view: view,
+                               navigationHandler: navigationHandler,
+                               contentContainer: contentContainer)
+
+        if let url = image {
+            actionBuilder.addSaveImage(url: url,
+                                       getImageData: getImageData,
+                                       writeToPhotoAlbum: writeToPhotoAlbum)
+
+            actionBuilder.addCopyImage(url: url)
+
+            actionBuilder.addCopyImageLink(url: url)
+        }
+
+        return actionBuilder.build()
+    }
+
     func assignWebView(_ webView: WKWebView?) {
         pendingDownloadWebView = webView
     }
