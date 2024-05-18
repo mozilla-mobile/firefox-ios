@@ -412,32 +412,32 @@ extension BrowserViewController: WKUIDelegate {
                         self.showToastBy(text: toastLabelText, tab: tab)
                     }
 
-                    let actionsBuilder = ActionProviderBuilder()
+                    let actionBuilder = ActionProviderBuilder()
                     var actions = [UIAction]()
 
                     if !isPrivate {
-                        actionsBuilder.addOpenInNewTab(url: url, addTab: addTab)
+                        actionBuilder.addOpenInNewTab(url: url, addTab: addTab)
                     }
 
-                    actionsBuilder.addOpenInNewPrivateTab(url: url, addTab: addTab)
+                    actionBuilder.addOpenInNewPrivateTab(url: url, addTab: addTab)
 
                     let isBookmarkedSite = profile.places
                         .isBookmarked(url: url.absoluteString)
                         .value
                         .successValue ?? false
                     if isBookmarkedSite {
-                        actionsBuilder.addRemoveBookmarkLink(url: url,
+                        actionBuilder.addRemoveBookmarkLink(url: url,
                                                              title: elements.title,
                                                              removeBookmark: self.removeBookmark)
                     } else {
-                        actionsBuilder.addBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
+                        actionBuilder.addBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
                     }
 
-                    actionsBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
+                    actionBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
 
-                    actionsBuilder.addCopyLink(url: url)
+                    actionBuilder.addCopyLink(url: url)
 
-                    actionsBuilder.addShare(url: url,
+                    actionBuilder.addShare(url: url,
                                             tabManager: tabManager,
                                             webView: webView,
                                             view: view,
@@ -445,13 +445,13 @@ extension BrowserViewController: WKUIDelegate {
                                             contentContainer: contentContainer)
 
                     if let url = elements.image {
-                        actionsBuilder.addSaveImage(url: url,
+                        actionBuilder.addSaveImage(url: url,
                                                     getImageData: getImageData,
                                                     writeToPhotoAlbum: writeToPhotoAlbum)
 
-                        actionsBuilder.addCopyImage(url: url)
+                        actionBuilder.addCopyImage(url: url)
 
-                        actionsBuilder.addCopyImageLink(url: url)
+                        actionBuilder.addCopyImageLink(url: url)
                     }
 
                     return UIMenu(title: url.absoluteString, children: actions)
