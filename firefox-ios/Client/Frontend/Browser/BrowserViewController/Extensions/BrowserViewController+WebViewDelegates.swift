@@ -418,7 +418,6 @@ extension BrowserViewController: WKUIDelegate {
                     }
 
                     let actionBuilder = ActionProviderBuilder()
-                    var actions = [UIAction]()
 
                     if !isPrivate {
                         actionBuilder.addOpenInNewTab(url: url, addTab: addTab)
@@ -461,6 +460,7 @@ extension BrowserViewController: WKUIDelegate {
                         actionBuilder.addCopyImageLink(url: url)
                     }
 
+                    let actions = actionBuilder.build()
                     return UIMenu(title: url.absoluteString, children: actions)
                 })
         )
