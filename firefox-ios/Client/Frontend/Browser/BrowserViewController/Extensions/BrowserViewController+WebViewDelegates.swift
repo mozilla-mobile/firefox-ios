@@ -13,6 +13,10 @@ protocol ActionProviderProtocol {
 
 }
 
+class ActionProviderBuilder: ActionProviderProtocol {
+
+}
+
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
     func webView(
