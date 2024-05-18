@@ -25,6 +25,7 @@ protocol ActionProviderProtocol {
     func AddSaveImage(url: URL,
                       getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
                       writeToPhotoAlbum: @escaping (UIImage) -> Void)
+    func AddCopyImage(url: URL)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -159,6 +160,45 @@ class ActionProviderBuilder: ActionProviderProtocol {
                     writeToPhotoAlbum(image)
                 }
             }
+        })
+    }
+
+    func AddCopyImage(url: URL) {
+        actions.append(UIAction(
+            title: .ContextMenuCopyImage,
+            identifier: UIAction.Identifier("linkContextMenu.copyImage")
+        ) { _ in
+            // put the actual image on the clipboard
+            // do this asynchronously just in case we're in a low bandwidth situation
+            let pasteboard = UIPasteboard.general
+            pasteboard.url = url as URL
+            let changeCount = pasteboard.changeCount
+            let application = UIApplication.shared
+            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+            taskId = application.beginBackgroundTask(expirationHandler: {
+                application.endBackgroundTask(taskId)
+            })
+
+            makeURLSession(
+                userAgent: UserAgent.fxaUserAgent,
+                configuration: URLSessionConfiguration.default
+            ).dataTask(with: url) { (data, response, error) in
+                guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
+                    application.endBackgroundTask(taskId)
+                    return
+                }
+
+                // Only set the image onto the pasteboard if the pasteboard hasn't changed since
+                // fetching the image; otherwise, in low-bandwidth situations,
+                // we might be overwriting something that the user has subsequently added.
+                if changeCount == pasteboard.changeCount,
+                   let imageData = data,
+                   error == nil {
+                    pasteboard.addImageWithData(imageData, forURL: url)
+                }
+
+                application.endBackgroundTask(taskId)
+            }.resume()
         })
     }
 }
