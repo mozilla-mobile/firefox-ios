@@ -14,6 +14,7 @@ protocol ActionProviderProtocol {
     func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func AddBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
     func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
+    func AddDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -71,6 +72,26 @@ class ActionProviderBuilder: ActionProviderProtocol {
                                              value: .contextMenu)
             }
         )
+    }
+
+    func AddDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void) {
+        actions.append(UIAction(
+            title: .ContextMenuDownloadLink,
+            image: UIImage.templateImageNamed(
+                StandardImageIdentifiers.Large.download
+            ),
+            identifier: UIAction.Identifier("linkContextMenu.download")
+        ) { _ in
+            // This checks if download is a blob, if yes, begin blob download process
+            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                // if not a blob, set pendingDownloadWebView and load the request in
+                // the webview, which will trigger the WKWebView navigationResponse
+                // delegate function and eventually downloadHelper.open()
+                assignWebView(currentTab.webView)
+                let request = URLRequest(url: url)
+                currentTab.webView?.load(request)
+            }
+        })
     }
 }
 
