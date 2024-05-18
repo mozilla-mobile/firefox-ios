@@ -417,48 +417,13 @@ extension BrowserViewController: WKUIDelegate {
                         self.showToastBy(text: toastLabelText, tab: tab)
                     }
 
-                    let actionBuilder = ActionProviderBuilder()
-
-                    if !isPrivate {
-                        actionBuilder.addOpenInNewTab(url: url, addTab: addTab)
-                    }
-
-                    actionBuilder.addOpenInNewPrivateTab(url: url, addTab: addTab)
-
-                    let isBookmarkedSite = profile.places
-                        .isBookmarked(url: url.absoluteString)
-                        .value
-                        .successValue ?? false
-                    if isBookmarkedSite {
-                        actionBuilder.addRemoveBookmarkLink(url: url,
-                                                            title: elements.title,
-                                                            removeBookmark: self.removeBookmark)
-                    } else {
-                        actionBuilder.addBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
-                    }
-
-                    actionBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
-
-                    actionBuilder.addCopyLink(url: url)
-
-                    actionBuilder.addShare(url: url,
-                                           tabManager: tabManager,
-                                           webView: webView,
-                                           view: view,
-                                           navigationHandler: navigationHandler,
-                                           contentContainer: contentContainer)
-
-                    if let url = elements.image {
-                        actionBuilder.addSaveImage(url: url,
-                                                   getImageData: getImageData,
-                                                   writeToPhotoAlbum: writeToPhotoAlbum)
-
-                        actionBuilder.addCopyImage(url: url)
-
-                        actionBuilder.addCopyImageLink(url: url)
-                    }
-
-                    let actions = actionBuilder.build()
+                    let actions = createActions(isPrivate: isPrivate,
+                                                url: url,
+                                                addTab: addTab,
+                                                title: elements.title,
+                                                image: elements.image,
+                                                currentTab: currentTab,
+                                                webView: webView)
                     return UIMenu(title: url.absoluteString, children: actions)
                 })
         )
