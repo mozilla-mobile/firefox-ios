@@ -149,8 +149,15 @@ class ActionProviderBuilder: ActionProviderProtocol {
             identifier: UIAction.Identifier("linkContextMenu.saveImage")
         ) { _ in
             getImageData(url) { data in
-                guard let image = UIImage(data: data) else { return }
-                writeToPhotoAlbum(image)
+                if url.pathExtension.lowercased() == "gif" {
+                    PHPhotoLibrary.shared().performChanges {
+                        let creationRequest = PHAssetCreationRequest.forAsset()
+                        creationRequest.addResource(with: .photo, data: data, options: nil)
+                    }
+                } else {
+                    guard let image = UIImage(data: data) else { return }
+                    writeToPhotoAlbum(image)
+                }
             }
         })
     }
@@ -388,22 +395,9 @@ extension BrowserViewController: WKUIDelegate {
                                             contentContainer: contentContainer)
 
                     if let url = elements.image {
-                        actions.append(UIAction(
-                            title: .ContextMenuSaveImage,
-                            identifier: UIAction.Identifier("linkContextMenu.saveImage")
-                        ) { _ in
-                            self.getImageData(url) { data in
-                                if url.pathExtension.lowercased() == "gif" {
-                                    PHPhotoLibrary.shared().performChanges {
-                                        let creationRequest = PHAssetCreationRequest.forAsset()
-                                        creationRequest.addResource(with: .photo, data: data, options: nil)
-                                    }
-                                } else {
-                                    guard let image = UIImage(data: data) else { return }
-                                    self.writeToPhotoAlbum(image: image)
-                                }
-                            }
-                        })
+                        actionsBuilder.AddSaveImage(url: url,
+                                                    getImageData: getImageData,
+                                                    writeToPhotoAlbum: writeToPhotoAlbum)
 
                         actions.append(UIAction(
                             title: .ContextMenuCopyImage,
