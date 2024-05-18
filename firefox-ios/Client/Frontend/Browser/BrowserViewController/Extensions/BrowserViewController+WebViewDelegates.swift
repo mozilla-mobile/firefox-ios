@@ -10,29 +10,29 @@ import UIKit
 import Photos
 
 protocol ActionProviderProtocol {
-    func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
-    func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
-    func AddBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
-    func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
-    func AddDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
-    func AddCopyLink(url: URL)
-    func AddShare(url: URL,
+    func addOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
+    func addOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
+    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
+    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
+    func addDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
+    func addCopyLink(url: URL)
+    func addShare(url: URL,
                   tabManager: TabManager,
                   webView: WKWebView,
                   view: UIView,
                   navigationHandler: BrowserNavigationHandler?,
                   contentContainer: ContentContainer)
-    func AddSaveImage(url: URL,
+    func addSaveImage(url: URL,
                       getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
                       writeToPhotoAlbum: @escaping (UIImage) -> Void)
-    func AddCopyImage(url: URL)
-    func AddCopyImageLink(url: URL)
+    func addCopyImage(url: URL)
+    func addCopyImageLink(url: URL)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
     private var actions = [UIAction]()
 
-    func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
+    func addOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewTab,
@@ -43,7 +43,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
             })
     }
 
-    func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
+    func addOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewPrivateTab,
@@ -54,7 +54,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
             })
     }
 
-    func AddBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void) {
+    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuBookmarkLink,
@@ -70,7 +70,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         )
     }
 
-    func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void) {
+    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
@@ -86,7 +86,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         )
     }
 
-    func AddDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void) {
+    func addDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void) {
         actions.append(UIAction(
             title: .ContextMenuDownloadLink,
             image: UIImage.templateImageNamed(
@@ -106,7 +106,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         })
     }
 
-    func AddCopyLink(url: URL) {
+    func addCopyLink(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyLink,
             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
@@ -116,7 +116,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         })
     }
 
-    func AddShare(url: URL,
+    func addShare(url: URL,
                   tabManager: TabManager,
                   webView: WKWebView,
                   view: UIView,
@@ -143,7 +143,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         })
     }
 
-    func AddSaveImage(url: URL,
+    func addSaveImage(url: URL,
                       getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
                       writeToPhotoAlbum: @escaping (UIImage) -> Void) {
         actions.append(UIAction(
@@ -164,7 +164,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         })
     }
 
-    func AddCopyImage(url: URL) {
+    func addCopyImage(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyImage,
             identifier: UIAction.Identifier("linkContextMenu.copyImage")
@@ -203,7 +203,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         })
     }
 
-    func AddCopyImageLink(url: URL) {
+    func addCopyImageLink(url: URL) {
         actions.append(UIAction(
             title: .ContextMenuCopyImageLink,
             identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
@@ -416,28 +416,28 @@ extension BrowserViewController: WKUIDelegate {
                     var actions = [UIAction]()
 
                     if !isPrivate {
-                        actionsBuilder.AddOpenInNewTab(url: url, addTab: addTab)
+                        actionsBuilder.addOpenInNewTab(url: url, addTab: addTab)
                     }
 
-                    actionsBuilder.AddOpenInNewPrivateTab(url: url, addTab: addTab)
+                    actionsBuilder.addOpenInNewPrivateTab(url: url, addTab: addTab)
 
                     let isBookmarkedSite = profile.places
                         .isBookmarked(url: url.absoluteString)
                         .value
                         .successValue ?? false
                     if isBookmarkedSite {
-                        actionsBuilder.AddRemoveBookmarkLink(url: url,
+                        actionsBuilder.addRemoveBookmarkLink(url: url,
                                                              title: elements.title,
                                                              removeBookmark: self.removeBookmark)
                     } else {
-                        actionsBuilder.AddBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
+                        actionsBuilder.addBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
                     }
 
-                    actionsBuilder.AddDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
+                    actionsBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
 
-                    actionsBuilder.AddCopyLink(url: url)
+                    actionsBuilder.addCopyLink(url: url)
 
-                    actionsBuilder.AddShare(url: url,
+                    actionsBuilder.addShare(url: url,
                                             tabManager: tabManager,
                                             webView: webView,
                                             view: view,
@@ -445,13 +445,13 @@ extension BrowserViewController: WKUIDelegate {
                                             contentContainer: contentContainer)
 
                     if let url = elements.image {
-                        actionsBuilder.AddSaveImage(url: url,
+                        actionsBuilder.addSaveImage(url: url,
                                                     getImageData: getImageData,
                                                     writeToPhotoAlbum: writeToPhotoAlbum)
 
-                        actionsBuilder.AddCopyImage(url: url)
+                        actionsBuilder.addCopyImage(url: url)
 
-                        actionsBuilder.AddCopyImageLink(url: url)
+                        actionsBuilder.addCopyImageLink(url: url)
                     }
 
                     return UIMenu(title: url.absoluteString, children: actions)
