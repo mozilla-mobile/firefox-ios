@@ -10,11 +10,22 @@ import UIKit
 import Photos
 
 protocol ActionProviderProtocol {
-
+    func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
+    private var actions = [UIAction]()
 
+    func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)  {
+        actions.append(
+            UIAction(
+                title: .ContextMenuOpenInNewTab,
+                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
+                identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
+            ) { _ in
+                addTab(url, false)
+            })
+    }
 }
 
 // MARK: - WKUIDelegate
