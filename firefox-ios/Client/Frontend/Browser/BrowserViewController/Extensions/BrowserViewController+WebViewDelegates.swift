@@ -22,6 +22,9 @@ protocol ActionProviderProtocol {
                   view: UIView,
                   navigationHandler: BrowserNavigationHandler?,
                   contentContainer: ContentContainer)
+    func AddSaveImage(url: URL,
+                      getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
+                      writeToPhotoAlbum: @escaping (UIImage) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -135,6 +138,20 @@ class ActionProviderBuilder: ActionProviderProtocol {
                 toastContainer: contentContainer,
                 popoverArrowDirection: .unknown
             )
+        })
+    }
+
+    func AddSaveImage(url: URL,
+                      getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
+                      writeToPhotoAlbum: @escaping (UIImage) -> Void) {
+        actions.append(UIAction(
+            title: .ContextMenuSaveImage,
+            identifier: UIAction.Identifier("linkContextMenu.saveImage")
+        ) { _ in
+            getImageData(url) { data in
+                guard let image = UIImage(data: data) else { return }
+                writeToPhotoAlbum(image)
+            }
         })
     }
 }
