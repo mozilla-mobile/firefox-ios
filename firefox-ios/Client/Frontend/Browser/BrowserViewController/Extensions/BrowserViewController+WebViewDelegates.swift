@@ -308,7 +308,7 @@ extension BrowserViewController: WKUIDelegate {
                         .value
                         .successValue ?? false
                     if isBookmarkedSite {
-                        actionsBuilder.AddRemoveBookmarkLink(url: url, 
+                        actionsBuilder.AddRemoveBookmarkLink(url: url,
                                                              title: elements.title,
                                                              removeBookmark: self.removeBookmark)
                     } else {
