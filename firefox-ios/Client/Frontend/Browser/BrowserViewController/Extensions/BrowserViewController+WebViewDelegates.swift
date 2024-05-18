@@ -9,6 +9,10 @@ import Shared
 import UIKit
 import Photos
 
+protocol ActionProviderProtocol {
+
+}
+
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
     func webView(
