@@ -429,19 +429,6 @@ extension BrowserViewController: WKUIDelegate {
         )
     }
 
-    func canHandleActions(elementInfo: WKContextMenuElementInfo) -> Bool {
-        if let url = elementInfo.linkURL,
-           let currentTab = self.tabManager.selectedTab,
-           let contextHelper = currentTab.getContentScript(
-               name: ContextMenuHelper.name()
-           ) as? ContextMenuHelper,
-           let elements = contextHelper.elements {
-            return true
-        }
-
-        return false
-    }
-
     func canTrackAds(tab: Tab, adUrl: String) -> Bool {
         return tab == self.tabManager.selectedTab &&
                !tab.adsTelemetryUrlList.isEmpty &&
