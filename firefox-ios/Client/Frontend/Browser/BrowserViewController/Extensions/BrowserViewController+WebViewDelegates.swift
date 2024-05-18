@@ -246,14 +246,7 @@ extension BrowserViewController: WKUIDelegate {
                         actionsBuilder.AddOpenInNewTab(url: url, addTab: addTab)
                     }
 
-                    actions.append(
-                        UIAction(
-                            title: .ContextMenuOpenInNewPrivateTab,
-                            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
-                            identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
-                        ) { _ in
-                            addTab(url, true)
-                        })
+                    actionsBuilder.AddOpenInNewPrivateTab(url: url, addTab: addTab)
 
                     let addBookmarkAction = UIAction(
                         title: .ContextMenuBookmarkLink,
