@@ -12,8 +12,8 @@ import Photos
 protocol ActionProviderProtocol {
     func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
-    func AddBookmarkLink(url: URL, title: String, addBookmark: @escaping (String, String?) -> Void)
-    func AddRemoveBookmarkLink(url: URL, title: String, removeBookmark: @escaping (URL, String?) -> Void)
+    func AddBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
+    func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -41,7 +41,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
             })
     }
 
-    func AddBookmarkLink(url: URL, title: String, addBookmark: @escaping (String, String?) -> Void) {
+    func AddBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuBookmarkLink,
@@ -57,7 +57,7 @@ class ActionProviderBuilder: ActionProviderProtocol {
         )
     }
 
-    func AddRemoveBookmarkLink(url: URL, title: String, removeBookmark: @escaping (URL, String?) -> Void) {
+    func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void) {
         actions.append(
             UIAction(
                 title: .RemoveBookmarkContextMenuTitle,
