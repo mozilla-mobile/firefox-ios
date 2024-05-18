@@ -12,6 +12,7 @@ import Photos
 protocol ActionProviderProtocol {
     func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
+    func AddBookmarkLink(url: URL, title: String, addBookmark: @escaping (String, String?) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -37,6 +38,22 @@ class ActionProviderBuilder: ActionProviderProtocol {
             ) { _ in
                 addTab(url, true)
             })
+    }
+
+    func AddBookmarkLink(url: URL, title: String, addBookmark: @escaping (String, String?) -> Void) {
+        actions.append(
+            UIAction(
+                title: .ContextMenuBookmarkLink,
+                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
+                identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
+            ) { _ in
+                addBookmark(url.absoluteString, title)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .add,
+                                             object: .bookmark,
+                                             value: .contextMenu)
+            }
+        )
     }
 }
 
