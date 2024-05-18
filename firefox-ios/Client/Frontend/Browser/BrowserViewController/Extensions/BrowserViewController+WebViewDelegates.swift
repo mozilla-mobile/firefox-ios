@@ -13,6 +13,7 @@ protocol ActionProviderProtocol {
     func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func AddBookmarkLink(url: URL, title: String, addBookmark: @escaping (String, String?) -> Void)
+    func AddRemoveBookmarkLink(url: URL, title: String, removeBookmark: @escaping (URL, String?) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -50,6 +51,22 @@ class ActionProviderBuilder: ActionProviderProtocol {
                 addBookmark(url.absoluteString, title)
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .add,
+                                             object: .bookmark,
+                                             value: .contextMenu)
+            }
+        )
+    }
+
+    func AddRemoveBookmarkLink(url: URL, title: String, removeBookmark: @escaping (URL, String?) -> Void) {
+        actions.append(
+            UIAction(
+                title: .RemoveBookmarkContextMenuTitle,
+                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+                identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
+            ) { _ in
+                removeBookmark(url, title)
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .delete,
                                              object: .bookmark,
                                              value: .contextMenu)
             }
