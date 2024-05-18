@@ -16,6 +16,12 @@ protocol ActionProviderProtocol {
     func AddRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
     func AddDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
     func AddCopyLink(url: URL)
+    func AddShare(url: URL,
+                  tabManager: TabManager,
+                  webView: WKWebView,
+                  view: UIView,
+                  navigationHandler: BrowserNavigationHandler?,
+                  contentContainer: ContentContainer)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -102,6 +108,33 @@ class ActionProviderBuilder: ActionProviderProtocol {
             identifier: UIAction.Identifier("linkContextMenu.copyLink")
         ) { _ in
             UIPasteboard.general.url = url
+        })
+    }
+
+    func AddShare(url: URL,
+                  tabManager: TabManager,
+                  webView: WKWebView,
+                  view: UIView,
+                  navigationHandler: BrowserNavigationHandler?,
+                  contentContainer: ContentContainer) {
+        actions.append(UIAction(
+            title: .ContextMenuShareLink,
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
+            identifier: UIAction.Identifier("linkContextMenu.share")
+        ) { _ in
+            guard let tab = tabManager[webView],
+                  let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
+            else { return }
+
+            // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
+            let point = webView.convert(helper.touchPoint, to: view)
+            navigationHandler?.showShareExtension(
+                url: url,
+                sourceView: view,
+                sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),
+                toastContainer: contentContainer,
+                popoverArrowDirection: .unknown
+            )
         })
     }
 }
