@@ -10,6 +10,7 @@ import UIKit
 import Photos
 
 protocol ActionProviderProtocol {
+    func build() -> [UIAction]
     func addOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func addOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
     func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
@@ -31,6 +32,10 @@ protocol ActionProviderProtocol {
 
 class ActionProviderBuilder: ActionProviderProtocol {
     private var actions = [UIAction]()
+
+    func build() -> [UIAction] {
+        return actions
+    }
 
     func addOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
         actions.append(
