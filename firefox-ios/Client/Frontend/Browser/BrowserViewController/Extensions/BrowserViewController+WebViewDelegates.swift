@@ -26,6 +26,7 @@ protocol ActionProviderProtocol {
                       getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
                       writeToPhotoAlbum: @escaping (UIImage) -> Void)
     func AddCopyImage(url: URL)
+    func AddCopyImageLink(url: URL)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -199,6 +200,15 @@ class ActionProviderBuilder: ActionProviderProtocol {
 
                 application.endBackgroundTask(taskId)
             }.resume()
+        })
+    }
+
+    func AddCopyImageLink(url: URL) {
+        actions.append(UIAction(
+            title: .ContextMenuCopyImageLink,
+            identifier: UIAction.Identifier("linkContextMenu.copyImageLink")
+        ) { _ in
+            UIPasteboard.general.url = url as URL
         })
     }
 }
