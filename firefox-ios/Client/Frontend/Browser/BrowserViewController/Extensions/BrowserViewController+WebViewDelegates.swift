@@ -11,6 +11,7 @@ import Photos
 
 protocol ActionProviderProtocol {
     func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
+    func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
 }
 
 class ActionProviderBuilder: ActionProviderProtocol {
@@ -24,6 +25,17 @@ class ActionProviderBuilder: ActionProviderProtocol {
                 identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
             ) { _ in
                 addTab(url, false)
+            })
+    }
+
+    func AddOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
+        actions.append(
+            UIAction(
+                title: .ContextMenuOpenInNewPrivateTab,
+                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
+                identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
+            ) { _ in
+                addTab(url, true)
             })
     }
 }
