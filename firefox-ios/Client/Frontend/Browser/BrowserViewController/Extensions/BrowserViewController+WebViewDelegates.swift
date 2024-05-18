@@ -16,7 +16,7 @@ protocol ActionProviderProtocol {
 class ActionProviderBuilder: ActionProviderProtocol {
     private var actions = [UIAction]()
 
-    func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)  {
+    func AddOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewTab,
@@ -227,17 +227,11 @@ extension BrowserViewController: WKUIDelegate {
                         self.showToastBy(text: toastLabelText, tab: tab)
                     }
 
+                    let actionsBuilder = ActionProviderBuilder()
                     var actions = [UIAction]()
 
                     if !isPrivate {
-                        actions.append(
-                            UIAction(
-                                title: .ContextMenuOpenInNewTab,
-                                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
-                                identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
-                            ) { _ in
-                                addTab(url, false)
-                            })
+                        actionsBuilder.AddOpenInNewTab(url: url, addTab: addTab)
                     }
 
                     actions.append(
