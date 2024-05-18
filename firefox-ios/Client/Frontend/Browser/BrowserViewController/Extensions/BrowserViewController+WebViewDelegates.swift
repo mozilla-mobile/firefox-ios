@@ -282,35 +282,17 @@ extension BrowserViewController: WKUIDelegate {
 
                     actionsBuilder.AddOpenInNewPrivateTab(url: url, addTab: addTab)
 
-                    let addBookmarkAction = UIAction(
-                        title: .ContextMenuBookmarkLink,
-                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.bookmark),
-                        identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")
-                    ) { _ in
-                        self.addBookmark(url: url.absoluteString, title: elements.title)
-                        TelemetryWrapper.recordEvent(category: .action,
-                                                     method: .add,
-                                                     object: .bookmark,
-                                                     value: .contextMenu)
-                    }
-
-                    let removeAction = UIAction(
-                        title: .RemoveBookmarkContextMenuTitle,
-                        image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
-                        identifier: UIAction.Identifier("linkContextMenu.removeBookmarkLink")
-                    ) { _ in
-                        self.removeBookmark(url: url, title: elements.title)
-                        TelemetryWrapper.recordEvent(category: .action,
-                                                     method: .delete,
-                                                     object: .bookmark,
-                                                     value: .contextMenu)
-                    }
-
                     let isBookmarkedSite = profile.places
                         .isBookmarked(url: url.absoluteString)
                         .value
                         .successValue ?? false
-                    actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
+                    if isBookmarkedSite {
+                        actionsBuilder.AddRemoveBookmarkLink(url: url, 
+                                                             title: elements.title,
+                                                             removeBookmark: self.removeBookmark)
+                    } else {
+                        actionsBuilder.AddBookmarkLink(url: url, title: elements.title, addBookmark: self.addBookmark)
+                    }
 
                     if url.scheme != "javascript" {
                         actions.append(UIAction(
