@@ -198,6 +198,14 @@ enum Experiments {
             .build(appInfo: appSettings)
     }()
 
+    private static func isReviewCheckerEnabled() -> Bool {
+        var isReviewCheckerEnabled = false
+        if let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) {
+            isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
+        }
+        return isReviewCheckerEnabled
+    }
+
     /// A convenience method to initialize the `NimbusApi` object at startup.
     ///
     /// This includes opening the database, connecting to the Remote Settings server, and downloading
