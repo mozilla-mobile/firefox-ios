@@ -35,16 +35,7 @@ extension SiteImageDownloader {
             }
 
             group.addTask {
-                try await Task.sleep(nanoseconds: self.timeoutDelay * NSEC_PER_SEC)
-                try Task.checkCancellation()
-                let error = SiteImageError.unableToDownloadImage("Timeout reached")
-                self.continuation?.resume(throwing: error)
-                self.continuation = nil
-
-                self.logger.log("Timeout when downloading image reached",
-                                level: .warning,
-                                category: .images)
-                throw error
+                try await self.handleTimeout()
             }
 
             // wait for the first task and cancel the other one
@@ -73,6 +64,19 @@ extension SiteImageDownloader {
                 self.continuation = nil
             }
         }
+    }
+
+    fileprivate func handleTimeout() async throws -> any SiteImageLoadingResult {
+        try await Task.sleep(nanoseconds: self.timeoutDelay * NSEC_PER_SEC)
+        try Task.checkCancellation()
+        let error = SiteImageError.unableToDownloadImage("Timeout reached")
+        self.continuation?.resume(throwing: error)
+        self.continuation = nil
+
+        self.logger.log("Timeout when downloading image reached",
+                        level: .warning,
+                        category: .images)
+        throw error
     }
 }
 
