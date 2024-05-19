@@ -193,6 +193,26 @@ enum Experiments {
             .build(appInfo: appSettings)
     }()
 
+    fileprivate static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
+        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+
+        let customTargetingAttributes: [String: Any] =  [
+            "isFirstRun": "\(isFirstRun)",
+            "is_first_run": isFirstRun,
+            "is_phone": isPhone,
+            "is_review_checker_enabled": isReviewCheckerEnabled()
+        ]
+
+        // App settings, to allow experiments to target the app name and the
+        // channel. The values given here should match what `Experimenter`
+        // thinks it is.
+        return NimbusAppSettings(
+            appName: nimbusAppName,
+            channel: AppConstants.buildChannel.nimbusString,
+            customTargetingAttributes: customTargetingAttributes
+        )
+    }
+
     private static func isReviewCheckerEnabled() -> Bool {
         var isReviewCheckerEnabled = false
         if let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) {
