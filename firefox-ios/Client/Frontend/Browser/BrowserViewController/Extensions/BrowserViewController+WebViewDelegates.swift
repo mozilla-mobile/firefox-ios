@@ -9,28 +9,7 @@ import Shared
 import UIKit
 import Photos
 
-protocol ActionProviderProtocol {
-    func build() -> [UIAction]
-    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void)
-    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void)
-    func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
-    func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
-    func addDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
-    func addCopyLink(url: URL)
-    func addShare(url: URL,
-                  tabManager: TabManager,
-                  webView: WKWebView,
-                  view: UIView,
-                  navigationHandler: BrowserNavigationHandler?,
-                  contentContainer: ContentContainer)
-    func addSaveImage(url: URL,
-                      getImageData: @escaping (URL, @escaping (Data) -> Void) -> Void,
-                      writeToPhotoAlbum: @escaping (UIImage) -> Void)
-    func addCopyImage(url: URL)
-    func addCopyImageLink(url: URL)
-}
-
-class ActionProviderBuilder: ActionProviderProtocol {
+class ActionProviderBuilder {
     private var actions = [UIAction]()
 
     func build() -> [UIAction] {
