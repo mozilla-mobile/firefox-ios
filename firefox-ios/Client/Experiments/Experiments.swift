@@ -203,6 +203,28 @@ enum Experiments {
         return isReviewCheckerEnabled
     }
 
+    fileprivate static func buildNimbus(dbPath: String,
+                                        errorReporter: @escaping NimbusErrorReporter,
+                                        initialExperiments: URL?,
+                                        isFirstRun: Bool) -> NimbusInterface {
+        let bundles = [
+            Bundle.main,
+            Strings.bundle,
+            Strings.bundle.fallbackTranslationBundle(language: "en-US")
+        ].compactMap { $0 }
+
+        return NimbusBuilder(dbPath: dbPath)
+            .with(url: remoteSettingsURL)
+            .using(previewCollection: usePreviewCollection())
+            .with(errorReporter: errorReporter)
+            .with(initialExperiments: initialExperiments)
+            .isFirstRun(isFirstRun)
+            .with(bundles: bundles)
+            .with(featureManifest: FxNimbus.shared)
+            .with(commandLineArgs: CommandLine.arguments)
+            .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
+    }
+
     /// A convenience method to initialize the `NimbusApi` object at startup.
     ///
     /// This includes opening the database, connecting to the Remote Settings server, and downloading
