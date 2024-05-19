@@ -157,22 +157,10 @@ enum Experiments {
             return NimbusDisabled.shared
         }
 
-        let bundles = [
-            Bundle.main,
-            Strings.bundle,
-            Strings.bundle.fallbackTranslationBundle(language: "en-US")
-        ].compactMap { $0 }
-
-        return NimbusBuilder(dbPath: dbPath)
-            .with(url: remoteSettingsURL)
-            .using(previewCollection: usePreviewCollection())
-            .with(errorReporter: errorReporter)
-            .with(initialExperiments: initialExperiments)
-            .isFirstRun(isFirstRun)
-            .with(bundles: bundles)
-            .with(featureManifest: FxNimbus.shared)
-            .with(commandLineArgs: CommandLine.arguments)
-            .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
+        return buildNimbus(dbPath: dbPath,
+                           errorReporter: errorReporter,
+                           initialExperiments: initialExperiments,
+                           isFirstRun: isFirstRun)
     }()
 
     fileprivate static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
