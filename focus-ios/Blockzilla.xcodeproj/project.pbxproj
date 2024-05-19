@@ -18,7 +18,6 @@
 		16074B6D2114364C003B671F /* PhotonActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16074B6C2114364C003B671F /* PhotonActionSheet.swift */; };
 		161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161D90302108085F00C2A74A /* HomeViewToolbar.swift */; };
 		163BFFE62125EE260007CEBC /* SiriShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163BFFE52125EE260007CEBC /* SiriShortcuts.swift */; };
-		166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */; };
 		166E4C0321347D150029E2A5 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166E4C0221347D150029E2A5 /* IntentHandler.swift */; };
 		166E4C0721347D150029E2A5 /* FocusIntentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 166E4C0021347D150029E2A5 /* FocusIntentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		166E4C86213480F60029E2A5 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
@@ -358,7 +357,6 @@
 		163BFFE12124EBAF0007CEBC /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		163BFFE32124F8E10007CEBC /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
 		163BFFE52125EE260007CEBC /* SiriShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriShortcuts.swift; sourceTree = "<group>"; };
-		166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTest.swift; sourceTree = "<group>"; };
 		166E4C0021347D150029E2A5 /* FocusIntentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FocusIntentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		166E4C0221347D150029E2A5 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		166E4C0421347D150029E2A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1313,7 +1311,6 @@
 				0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */,
 				4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */,
 				4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */,
-				166E4BFA212F7DEC0029E2A5 /* UserAgentTest.swift */,
 				F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */,
 				58408BA4265FC524003C4E4F /* BrowsingTest.swift */,
 				D440BC17276B3535003FD9B1 /* PageShortcutsTest.swift */,
@@ -2544,7 +2541,6 @@
 				58408BA5265FC524003C4E4F /* BrowsingTest.swift in Sources */,
 				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
 				F8DEC61526C6A33200C5F26B /* AppConfig.swift in Sources */,
-				166E4BFB212F7DEC0029E2A5 /* UserAgentTest.swift in Sources */,
 				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
 				C847E956274BB7CC000F6D20 /* XCUIApplication+Buttons.swift in Sources */,
