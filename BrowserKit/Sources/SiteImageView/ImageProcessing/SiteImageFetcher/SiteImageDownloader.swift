@@ -31,21 +31,7 @@ extension SiteImageDownloader {
             // Use task groups to have a timeout when downloading an image from Kingfisher
             // due to https://sentry.io/share/issue/951b878416374dd98eccb6fd88fd8427
             group.addTask {
-                return try await withCheckedThrowingContinuation { continuation in
-                    // Store a copy of the continuation to act on in the case the sleep finishes first
-                    self.continuation = continuation
-
-                    _ = self.downloadImage(with: url) { result in
-                        guard let continuation = self.continuation else { return }
-                        switch result {
-                        case .success(let imageResult):
-                            continuation.resume(returning: imageResult)
-                        case .failure(let error):
-                            continuation.resume(throwing: error)
-                        }
-                        self.continuation = nil
-                    }
-                }
+                return try await self.handleImageDownload(url: url)
             }
 
             group.addTask {
@@ -68,6 +54,24 @@ extension SiteImageDownloader {
                 throw SiteImageError.unableToDownloadImage("Result not present")
             }
             return result
+        }
+    }
+
+    fileprivate func handleImageDownload(url: URL) async throws -> any SiteImageLoadingResult {
+        return try await withCheckedThrowingContinuation { continuation in
+            // Store a copy of the continuation to act on in the case the sleep finishes first
+            self.continuation = continuation
+
+            _ = self.downloadImage(with: url) { result in
+                guard let continuation = self.continuation else { return }
+                switch result {
+                case .success(let imageResult):
+                    continuation.resume(returning: imageResult)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+                self.continuation = nil
+            }
         }
     }
 }
