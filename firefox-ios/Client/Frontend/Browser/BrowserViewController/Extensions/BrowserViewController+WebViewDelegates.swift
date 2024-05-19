@@ -376,40 +376,6 @@ extension BrowserViewController: WKUIDelegate {
                     else { return nil }
 
                     let isPrivate = currentTab.isPrivate
-                    var setAddTabAdSearchParam = false
-                    let addTab = { (rURL: URL, isPrivate: Bool) in
-                        let adUrl = rURL.absoluteString
-                        if self.canTrackAds(tab: currentTab, adUrl: adUrl) {
-                            AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
-                            currentTab.adsTelemetryUrlList.removeAll()
-                            currentTab.adsTelemetryRedirectUrlList.removeAll()
-                            currentTab.adsProviderName = ""
-
-                            // Set the tab search param from current tab considering we need
-                            // the values in order to cope with ad redirects
-                        } else if !currentTab.adsProviderName.isEmpty {
-                            setAddTabAdSearchParam = true
-                        }
-
-                        let tab = self.tabManager.addTab(
-                            URLRequest(url: rURL as URL),
-                            afterTab: currentTab,
-                            isPrivate: isPrivate
-                        )
-
-                        if setAddTabAdSearchParam {
-                            tab.adsProviderName = currentTab.adsProviderName
-                            tab.adsTelemetryUrlList = currentTab.adsTelemetryUrlList
-                            tab.adsTelemetryRedirectUrlList = currentTab.adsTelemetryRedirectUrlList
-                        }
-
-                        self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
-
-                        guard !self.topTabsVisible else { return }
-
-                        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                        self.showToastBy(isPrivate: isPrivate, tab: tab)
-                    }
 
                     let actions = createActions(isPrivate: isPrivate,
                                                 url: url,
