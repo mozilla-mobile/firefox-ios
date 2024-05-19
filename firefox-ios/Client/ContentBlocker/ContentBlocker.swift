@@ -369,4 +369,30 @@ extension ContentBlocker {
             completion()
         }
     }
+
+    fileprivate func compileContentRuleListCompletion(dispatchGroup: DispatchGroup,
+                                                      rule: WKContentRuleList?,
+                                                      error: (any Error)?) {
+        defer {
+            dispatchGroup.leave()
+        }
+        guard error == nil else {
+            self.logger.log(
+                "Content blocker errored with: \(String(describing: error))",
+                level: .warning,
+                category: .webview
+            )
+            assert(error == nil)
+            return
+        }
+        guard rule != nil else {
+            self.logger.log(
+                "We came across a nil rule set for BlockList.",
+                level: .warning,
+                category: .webview
+            )
+            assert(rule != nil)
+            return
+        }
+    }
 }
