@@ -406,15 +406,9 @@ extension BrowserViewController: WKUIDelegate {
                         self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
 
                         guard !self.topTabsVisible else { return }
-                        var toastLabelText: String
 
-                        if isPrivate {
-                            toastLabelText = .ContextMenuButtonToastNewPrivateTabOpenedLabelText
-                        } else {
-                            toastLabelText = .ContextMenuButtonToastNewTabOpenedLabelText
-                        }
                         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                        self.showToastBy(text: toastLabelText, tab: tab)
+                        self.showToastBy(isPrivate: isPrivate, tab: tab)
                     }
 
                     let actions = createActions(isPrivate: isPrivate,
@@ -452,8 +446,16 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func showToastBy(text: String, tab: Tab) {
-        let viewModel = ButtonToastViewModel(labelText: text,
+    func showToastBy(isPrivate: Bool, tab: Tab) {
+        var toastLabelText: String
+
+        if isPrivate {
+            toastLabelText = .ContextMenuButtonToastNewPrivateTabOpenedLabelText
+        } else {
+            toastLabelText = .ContextMenuButtonToastNewTabOpenedLabelText
+        }
+
+        let viewModel = ButtonToastViewModel(labelText: toastLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: self.currentTheme(),
