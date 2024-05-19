@@ -11,8 +11,8 @@ import Photos
 
 protocol ActionProviderProtocol {
     func build() -> [UIAction]
-    func addOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
-    func addOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void)
+    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void)
+    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void)
     func addBookmarkLink(url: URL, title: String?, addBookmark: @escaping (String, String?) -> Void)
     func addRemoveBookmarkLink(url: URL, title: String?, removeBookmark: @escaping (URL, String?) -> Void)
     func addDownload(url: URL, currentTab: Tab, assignWebView: @escaping (WKWebView?) -> Void)
@@ -37,25 +37,25 @@ class ActionProviderBuilder: ActionProviderProtocol {
         return actions
     }
 
-    func addOpenInNewTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
+    func addOpenInNewTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewTab,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
                 identifier: UIAction.Identifier(rawValue: "linkContextMenu.openInNewTab")
             ) { _ in
-                addTab(url, false)
+                addTab(url, false, currentTab)
             })
     }
 
-    func addOpenInNewPrivateTab(url: URL, addTab: @escaping (URL, Bool) -> Void) {
+    func addOpenInNewPrivateTab(url: URL, currentTab: Tab, addTab: @escaping (URL, Bool, Tab) -> Void) {
         actions.append(
             UIAction(
                 title: .ContextMenuOpenInNewPrivateTab,
                 image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.privateMode),
                 identifier: UIAction.Identifier("linkContextMenu.openInNewPrivateTab")
             ) { _ in
-                addTab(url, true)
+                addTab(url, true, currentTab)
             })
     }
 
@@ -413,7 +413,7 @@ extension BrowserViewController: WKUIDelegate {
 
                     let actions = createActions(isPrivate: isPrivate,
                                                 url: url,
-                                                addTab: addTab,
+                                                addTab: self.addTab,
                                                 title: elements.title,
                                                 image: elements.image,
                                                 currentTab: currentTab,
@@ -505,7 +505,7 @@ extension BrowserViewController: WKUIDelegate {
 
     func createActions(isPrivate: Bool,
                        url: URL,
-                       addTab: @escaping (URL, Bool) -> Void,
+                       addTab: @escaping (URL, Bool, Tab) -> Void,
                        title: String?,
                        image: URL?,
                        currentTab: Tab,
@@ -513,10 +513,10 @@ extension BrowserViewController: WKUIDelegate {
         let actionBuilder = ActionProviderBuilder()
 
         if !isPrivate {
-            actionBuilder.addOpenInNewTab(url: url, addTab: addTab)
+            actionBuilder.addOpenInNewTab(url: url, currentTab: currentTab, addTab: addTab)
         }
 
-        actionBuilder.addOpenInNewPrivateTab(url: url, addTab: addTab)
+        actionBuilder.addOpenInNewPrivateTab(url: url, currentTab: currentTab, addTab: addTab)
 
         let isBookmarkedSite = profile.places
             .isBookmarked(url: url.absoluteString)
