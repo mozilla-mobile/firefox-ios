@@ -201,7 +201,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let label: UILabel = .build { label in
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
-            label.font = FXFontStyles.Regular.footnote.scaledFont()
+            label.font = FXFontStyles.Regular.caption1.scaledFont()
             label.textColor = self.themeManager.currentTheme(for: self.windowUUID).colors.textSecondary
         }
         footer.addSubview(label)

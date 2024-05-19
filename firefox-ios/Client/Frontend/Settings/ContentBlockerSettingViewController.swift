@@ -149,7 +149,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             let title: String = .TrackerProtectionLearnMore
 
             let theme = themeManager.currentTheme(for: windowUUID)
-            let font = FXFontStyles.Regular.subheadline.scaledFont()
+            let font = FXFontStyles.Regular.caption1.scaledFont()
             var attributes = [NSAttributedString.Key: AnyObject]()
             attributes[NSAttributedString.Key.foregroundColor] = theme.colors.actionPrimary
             attributes[NSAttributedString.Key.font] = font
