@@ -423,6 +423,41 @@ extension BrowserViewController: WKUIDelegate {
         )
     }
 
+    func addTab(rURL: URL, isPrivate: Bool, currentTab: Tab) {
+        var setAddTabAdSearchParam = false
+        let adUrl = rURL.absoluteString
+        if canTrackAds(tab: currentTab, adUrl: adUrl) {
+            AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
+            currentTab.adsTelemetryUrlList.removeAll()
+            currentTab.adsTelemetryRedirectUrlList.removeAll()
+            currentTab.adsProviderName = ""
+
+            // Set the tab search param from current tab considering we need
+            // the values in order to cope with ad redirects
+        } else if !currentTab.adsProviderName.isEmpty {
+            setAddTabAdSearchParam = true
+        }
+
+        let tab = tabManager.addTab(
+            URLRequest(url: rURL as URL),
+            afterTab: currentTab,
+            isPrivate: isPrivate
+        )
+
+        if setAddTabAdSearchParam {
+            tab.adsProviderName = currentTab.adsProviderName
+            tab.adsTelemetryUrlList = currentTab.adsTelemetryUrlList
+            tab.adsTelemetryRedirectUrlList = currentTab.adsTelemetryRedirectUrlList
+        }
+
+        self.recordObservationForSearchTermGroups(currentTab: currentTab, addedTab: tab)
+
+        guard !topTabsVisible else { return }
+
+        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
+        showToastBy(isPrivate: isPrivate, tab: tab)
+    }
+
     func canTrackAds(tab: Tab, adUrl: String) -> Bool {
         return tab == self.tabManager.selectedTab &&
                !tab.adsTelemetryUrlList.isEmpty &&
