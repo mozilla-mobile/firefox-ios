@@ -6,24 +6,21 @@ import Common
 import Foundation
 import Shared
 
-protocol MicroSurveyCoordinatorDelegate: AnyObject {
+protocol MicrosurveyCoordinatorDelegate: AnyObject {
     func dismissFlow()
     func showPrivacy()
 }
 
-class MicroSurveyCoordinator: BaseCoordinator, FeatureFlaggable, MicroSurveyCoordinatorDelegate {
+final class MicrosurveyCoordinator: BaseCoordinator, FeatureFlaggable, MicrosurveyCoordinatorDelegate {
     weak var parentCoordinator: ParentCoordinatorDelegate?
-    private var profile: Profile
     private let tabManager: TabManager
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let model: MicrosurveyModel
 
     init(model: MicrosurveyModel,
          router: Router,
-         profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager) {
         self.tabManager = tabManager
-        self.profile = profile
         self.model = model
         super.init(router: router)
     }

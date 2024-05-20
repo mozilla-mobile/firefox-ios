@@ -673,12 +673,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: Microsurvey
     func showMicrosurvey(model: MicrosurveyModel) {
-        guard !childCoordinators.contains(where: { $0 is MicroSurveyCoordinator }) else {
+        guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
             return
         }
 
         let navigationController = DismissableNavigationViewController()
-        let coordinator = MicroSurveyCoordinator(
+        let coordinator = MicrosurveyCoordinator(
             model: model,
             router: DefaultRouter(
                 navigationController: navigationController

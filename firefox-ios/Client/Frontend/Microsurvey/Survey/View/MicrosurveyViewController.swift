@@ -7,7 +7,7 @@ import Common
 import ComponentLibrary
 import Redux
 
-class MicrosurveyViewController: UIViewController,
+final class MicrosurveyViewController: UIViewController,
                                  UITableViewDataSource,
                                  UITableViewDelegate,
                                  Themeable,
@@ -20,7 +20,7 @@ class MicrosurveyViewController: UIViewController,
     var notificationCenter: Common.NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
 
-    weak var coordinator: MicroSurveyCoordinatorDelegate?
+    weak var coordinator: MicrosurveyCoordinatorDelegate?
 
     private let windowUUID: WindowUUID
     private let model: MicrosurveyModel
