@@ -37,6 +37,33 @@ class ZoomingTests: BaseTestCase {
         validateZoomActions()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307127
+    func testZoomForceCloseFirefox() {
+        openWebsiteAndReachZoomSetting()
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        // Tap on + and - buttons
+        zoomIn()
+        forceRestartApp()
+        openWebsiteAndReachZoomSetting()
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
+        zoomOut()
+        zoomOutButton.tap()
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+    }
+
+    private func openWebsiteAndReachZoomSetting() {
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        waitUntilPageLoad()
+        // Tap on the hamburger menu -> Tap on Zoom
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(PageZoom)
+        // The zoom bar is displayed
+        mozWaitForElementToExist(zoomInButton)
+    }
+
     func validateZoomActions() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
