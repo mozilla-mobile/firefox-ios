@@ -170,9 +170,14 @@ class TabManagerTests: XCTestCase {
         subject.tabs.forEach { $0.firstCreatedTime = Timestamp(0) }
 
         // Override lastExecutedTime of 1st tab to indicate tab active
+        // and lastExecutedTime of other 2 to be distant past
         let tab1 = subject.tabs[0]
+        let tab2 = subject.tabs[1]
+        let tab3 = subject.tabs[2]
         let lastExecutedDate = Calendar.current.add(numberOfDays: 1, to: Date())
         tab1.lastExecutedTime = lastExecutedDate?.toTimestamp()
+        tab2.lastExecutedTime = 0
+        tab3.lastExecutedTime = 0
 
         let inactiveTabs = subject.getInactiveTabs()
         let expectedInactiveTabs = 2
