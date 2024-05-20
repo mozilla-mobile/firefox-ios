@@ -30,7 +30,9 @@ struct AddressListView: View {
                             windowUUID: windowUUID,
                             address: address,
                             onTap: {
-                                // TODO: PHASE - 2: FXIOS-7653 Handle action when address cell is tapped.
+                                if viewModel.isEditingFeatureEnabled {
+                                    viewModel.onAddressTap(address)
+                                }
                             }
                         )
                     }
@@ -41,6 +43,21 @@ struct AddressListView: View {
         }
         .listStyle(.plain)
         .listRowInsets(EdgeInsets())
+        .sheet(item: $viewModel.selectedAddress) { address in
+            NavigationView {
+                EditAddressViewControllerRepresentable(model: viewModel)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .cancellationAction) {
+                            Button {
+                                viewModel.onCancelButtonTap()
+                            } label: {
+                                // Change the correct string after UX finalize copyright
+                                Text(String.CreditCard.EditCard.CancelNavBarButtonLabel)
+                            }
+                        }
+                    }
+            }
+        }
         .onAppear {
             viewModel.fetchAddresses()
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))

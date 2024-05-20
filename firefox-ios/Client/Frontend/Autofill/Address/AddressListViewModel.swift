@@ -21,13 +21,18 @@ extension Address {
 }
 
 // AddressListViewModel: A view model for managing addresses.
-class AddressListViewModel: ObservableObject {
+class AddressListViewModel: ObservableObject, FeatureFlaggable {
     // MARK: - Properties
 
     @Published var addresses: [Address] = []
     @Published var showSection = false
+    @Published var selectedAddress: Address?
+
     private let profile: Profile?
     private let logger: Logger
+
+    var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
+
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
 
     // MARK: - Initializer
@@ -78,9 +83,17 @@ class AddressListViewModel: ObservableObject {
 
     // MARK: - Handle Address Selection
 
-        /// Handles the selection of an address.
-        /// - Parameter address: The selected address.
-        func handleAddressSelection(_ address: Address) {
-            addressSelectionCallback?(fromAddress(address))
-        }
+    /// Handles the selection of an address.
+    /// - Parameter address: The selected address.
+    func handleAddressSelection(_ address: Address) {
+        addressSelectionCallback?(fromAddress(address))
+    }
+
+    func onAddressTap(_ address: Address) {
+        selectedAddress = address
+    }
+
+    func onCancelButtonTap() {
+        selectedAddress = nil
+    }
 }
