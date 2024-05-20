@@ -94,6 +94,36 @@ struct AddressAutofillToggle: View {
         }
     }
 
+    fileprivate func mainContent() -> some View {
+        // Horizontal stack containing title, description, and toggle
+        return HStack {
+            // Left-aligned stack for title and description
+            VStack(alignment: .leading) {
+                // Title for the Toggle
+                Text(String.Addresses.Settings.SwitchTitle)
+                    .font(.body)
+                    .foregroundColor(textColor)
+
+                // Description for the Toggle
+                Text(String.Addresses.Settings.SwitchDescription)
+                    .font(.footnote)
+                    .foregroundColor(descriptionTextColor)
+            }
+            .padding(.leading, 16)
+
+            Spacer()
+
+            // Toggle switch
+            Toggle(isOn: $model.isEnabled) {
+                EmptyView()
+            }
+            .padding(.trailing, 16)
+            .labelsHidden()
+            .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
+            .frame(alignment: .trailing)
+        }
+    }
+
     var traits: AccessibilityTraits {
         if #available(iOS 17.0, *) {
             return [.isButton, .isToggle]
