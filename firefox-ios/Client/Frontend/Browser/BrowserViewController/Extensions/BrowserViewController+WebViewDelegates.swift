@@ -629,7 +629,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             if navigationAction.navigationType == .linkActivated {
-                if tab.isPrivate || !(self.profile.prefs.boolForKey(PrefsKeys.OpenLinksInApps) ?? true) {
+                if tab.isPrivate || (profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false) {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)
                     return

@@ -2987,18 +2987,13 @@ extension String {
         comment: "Description displayed under the ”Show Link Previews” option")
 }
 
-// MARK: - Open Links in Apps
+// MARK: - Block opening external apps
 extension String {
-    public static let SettingsOpenLinksInAppsTitle = MZLocalizedString(
-        key: "Settings.OpenLinksInApps.Title",
+    public static let SettingsBlockOpeningExternalAppsTitle = MZLocalizedString(
+        key: "Settings.BlockOpeningExternalApps.Title",
         tableName: nil,
-        value: "Open Links In Apps",
-        comment: "Title of setting to enable open links in apps when pressing links.")
-    public static let SettingsOpenLinksInAppsStatus = MZLocalizedString(
-        key: "Settings.OpenLinksInApps.Status",
-        tableName: nil,
-        value: "When pressing Links",
-        comment: "Description displayed under the ”Open Links In Apps” option")
+        value: "Block opening external apps",
+        comment: "Title of setting to block opening external apps when pressing links.")
 }
 
 // MARK: - Errors
