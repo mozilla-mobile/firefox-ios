@@ -399,8 +399,7 @@ class CreditCardsTests: BaseTestCase {
         app.buttons["Close"].tap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
-        swipeDown(nrOfSwipes: 2)
-        swipeUp(nrOfSwipes: 1)
+        swipeDown(nrOfSwipes: 3)
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Credit cards details did not change
@@ -517,7 +516,8 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func dismissSavedCardsPrompt() {
-        if app.staticTexts["Tap"].isVisible() {
+        if app.buttons.elementContainingText("Decline").isVisible() &&
+            app.buttons.elementContainingText("Decline").isHittable {
             app.staticTexts["TEST CARDS"].tap()
         }
     }
