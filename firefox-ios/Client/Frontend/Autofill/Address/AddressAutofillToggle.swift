@@ -44,13 +44,13 @@ struct AddressAutofillToggle: View {
                 .hidden()
 
             mainContent()
-            .accessibilityElement()
-            .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
-            .accessibilityValue("\(model.isEnabled ? 1 : 0)")
-            .accessibilityAddTraits(traits)
-            .accessibilityAction {
-                model.isEnabled = !model.isEnabled
-            }
+                .accessibilityElement()
+                .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
+                .accessibilityValue("\(model.isEnabled ? 1 : 0)")
+                .accessibilityAddTraits(traits)
+                .accessibilityAction {
+                    model.isEnabled = !model.isEnabled
+                }
 
             // Divider line to separate content
             Divider()
