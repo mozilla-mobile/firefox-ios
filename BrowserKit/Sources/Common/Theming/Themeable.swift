@@ -17,19 +17,23 @@ public protocol ThemeUUIDIdentifiable: AnyObject {
     var currentWindowUUID: WindowUUID? { get }
 }
 
+public protocol InjectedThemeUUIDIdentifiable: AnyObject {
+    var windowUUID: WindowUUID { get }
+}
+
 extension Themeable {
     public func listenForThemeChange(_ subview: UIView) {
         let mainQueue = OperationQueue.main
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
             self?.applyTheme()
-            guard let uuidIdentifiable = subview as? ThemeUUIDIdentifiable else { return }
-            self?.updateThemeApplicableSubviews(subview, for: uuidIdentifiable.currentWindowUUID)
+            self?.updateThemeApplicableSubviews(subview)
         }
     }
 
-    public func updateThemeApplicableSubviews(_ view: UIView, for window: WindowUUID?) {
-        guard let window else { return }
+    public func updateThemeApplicableSubviews(_ view: UIView) {
+        guard let window = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
+        if window == .unavailable { assertionFailure("Theme applicable view has `unavailable` window UUID. Unexpected.") }
         let theme = themeManager.currentTheme(for: window)
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: theme) }
