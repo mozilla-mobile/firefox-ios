@@ -103,10 +103,7 @@ class Authenticator {
                     return
                 }
 
-                let logins = logins.compactMap {
-                    // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
-                    return $0.formSubmitUrl == nil && $0.httpRealm != nil ? $0 : nil
-                }
+                let logins = filterHttpAuthLogins(logins: logins)
                 var credentials: URLCredential?
 
                 // It is possible that we might have duplicate entries since we match against host and scheme://host.
