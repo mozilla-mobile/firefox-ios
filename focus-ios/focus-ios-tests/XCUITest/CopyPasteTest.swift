@@ -5,6 +5,7 @@
 import XCTest
 
 class CopyPasteTest: BaseTestCase {
+    // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/395745
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
@@ -42,6 +43,7 @@ class CopyPasteTest: BaseTestCase {
         XCTAssert(text == "www.example.com")
     }
 
+    // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2609148
     // Test the clipboard contents are displayed/updated properly
     func testClipboard() throws {
