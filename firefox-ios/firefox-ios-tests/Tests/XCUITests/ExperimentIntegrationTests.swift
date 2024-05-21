@@ -51,7 +51,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             return false
         }
     }
-    
+
     func testVerifyExperimentEnrolled() throws {
         navigator.goto(SettingsScreen)
 
