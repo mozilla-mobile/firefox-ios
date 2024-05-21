@@ -90,6 +90,34 @@ struct CreditCardInputView: View {
         }
     }
 
+    fileprivate func mainContent() -> some View {
+        return VStack(spacing: 0) {
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+
+            nameContent()
+                .background(textFieldBackgroundColor)
+
+            numberContent()
+                .background(textFieldBackgroundColor)
+
+            expirationContent()
+                .background(textFieldBackgroundColor)
+
+            Spacer()
+                .frame(height: 4)
+
+            if viewModel.state == .edit {
+                RemoveCardButton(windowUUID: windowUUID,
+                                 alertDetails: viewModel.removeButtonDetails)
+                .padding(.top, 28)
+            }
+
+            Spacer()
+        }
+    }
+
     fileprivate func nameContent() -> some View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
