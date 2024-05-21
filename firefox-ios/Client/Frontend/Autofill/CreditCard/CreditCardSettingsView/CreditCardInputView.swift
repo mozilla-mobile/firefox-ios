@@ -66,6 +66,28 @@ struct CreditCardInputView: View {
         }
     }
 
+    fileprivate func mainContent() -> some View {
+        return ZStack {
+            backgroundColor.ignoresSafeArea()
+            formContent()
+                .navigationBarTitle(viewModel.state.title,
+                                    displayMode: .inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        rightBarButton()
+                            .disabled(!viewModel.isRightBarButtonEnabled)
+                            .foregroundColor(barButtonColor)
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        leftBarButton()
+                            .foregroundColor(barButtonColor)
+                    }
+                }
+                .padding(.top, 0)
+                .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
+        }
+    }
+
     fileprivate func formContent() -> some View {
         return VStack(spacing: 0) {
             Divider()
