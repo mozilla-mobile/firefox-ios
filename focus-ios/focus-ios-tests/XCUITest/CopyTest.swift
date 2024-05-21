@@ -8,19 +8,29 @@ import XCTest
 
 class CopyTest: BaseTestCase {
     func testCopyMenuItem() throws {
-        throw XCTSkip("This test needs to be updated or removed")
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("https://www.example.com")
+        waitForWebPageLoad()
 
         // Must offset textfield press to support 5S.
-        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 0.5)
+        urlBarTextField.press(forDuration: 2)
         waitForExistence(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         waitForNoExistence(app.menuItems["Copy"])
 
         loadWebPage("bing.com")
+        waitForWebPageLoad()
         urlBarTextField.tap()
-        urlBarTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
+        urlBarTextField.press(forDuration: 2)
+        waitForExistence(app.collectionViews.menuItems.firstMatch)
+        waitForHittable(app.buttons["Forward"].firstMatch)
+        app.buttons["Forward"].firstMatch.tap()
+        if !iPad() {
+            waitForExistence(app.collectionViews.menuItems.firstMatch)
+            waitForHittable(app.buttons["Forward"].firstMatch)
+            app.buttons["Forward"].firstMatch.tap()
+        }
+        waitForExistence(app.collectionViews.menuItems.firstMatch)
         waitForHittable(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
 
@@ -30,6 +40,6 @@ class CopyTest: BaseTestCase {
             return
         }
 
-        XCTAssert(text == "http://localhost:6573/licenses.html")
+        XCTAssert(text == "www.example.com")
     }
 }
