@@ -21,6 +21,7 @@ task-defaults:
     description: Generate localized screenshots by delegating the work to bitrise.io
     worker-type: bitrise
     bitrise:
+        artifact_prefix: public
         workflows:
             - L10nScreenshotsTests
     build-derived-data-path: {artifact-reference: '<build/public/L10nBuild/l10n-screenshots-dd.zip>'}

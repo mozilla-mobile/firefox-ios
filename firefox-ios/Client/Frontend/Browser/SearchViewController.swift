@@ -1049,11 +1049,7 @@ class SearchViewController: SiteTableViewController,
 
         let attributedString = searchPhrase.attributedText(
             boldIn: upperBound..<searchPhrase.endIndex,
-            font: DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .body,
-                size: 17,
-                weight: .regular
-            )
+            font: FXFontStyles.Regular.body.scaledFont()
         )
         return attributedString
     }

@@ -1,5 +1,5 @@
 /* When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs */
-"CloseTabsToast.Button.v113" = "復原";
+"CloseTabsToast.Button.v113" = "還原";
 
 /* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
 "CloseTabsToast.SingleTabTitle.v113" = "已關閉分頁";
