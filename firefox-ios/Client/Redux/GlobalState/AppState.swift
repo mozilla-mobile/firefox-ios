@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 struct AppState: StateType {
     let activeScreens: ActiveScreensState

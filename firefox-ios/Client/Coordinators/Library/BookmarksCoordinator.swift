@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func start(from folder: FxBookmarkNode)

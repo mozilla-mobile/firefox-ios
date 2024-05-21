@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Storage
+import Common
 
 protocol LibraryPanelDelegate: AnyObject {
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)

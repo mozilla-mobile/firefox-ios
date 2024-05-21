@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Shared
+import Common
 
 struct BrowserViewControllerState: ScreenState, Equatable {
     let windowUUID: WindowUUID
