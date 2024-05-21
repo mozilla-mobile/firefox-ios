@@ -33,19 +33,8 @@ struct CreditCardInputView: View {
                         .frame(height: 0.7)
                         .foregroundColor(borderColor)
 
-                    Group {
-                        CreditCardInputField(windowUUID: windowUUID,
-                                             inputType: .name,
-                                             showError: !viewModel.nameIsValid,
-                                             inputViewModel: viewModel)
-                        .padding(.top, 11)
-
-                        Divider()
-                            .frame(height: 0.7)
-                            .foregroundColor(borderColor)
-                            .padding(.top, 1)
-                    }
-                    .background(textFieldBackgroundColor)
+                    nameContent()
+                        .background(textFieldBackgroundColor)
 
                     Group {
                         CreditCardInputField(windowUUID: windowUUID,
