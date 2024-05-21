@@ -122,6 +122,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         allWindowUUIDs.forEach {
             updateCurrentTheme(to: fetchSavedThemeType(for: $0), for: $0, notify: false)
         }
+        // After updating all windows, notify (once). We send the UUID of the window for
+        // which the change originated though more than 1 window may ultimately update its UI.
         notifyCurrentThemeDidChange(for: window)
     }
 
