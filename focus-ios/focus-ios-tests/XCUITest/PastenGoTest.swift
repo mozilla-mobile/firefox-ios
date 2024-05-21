@@ -5,6 +5,43 @@
 import XCTest
 
 class PastenGoTest: BaseTestCase {
+    
+    func testCopyMenuItem() throws {
+        let urlBarTextField = app.textFields["URLBar.urlText"]
+        loadWebPage("https://www.example.com")
+        waitForWebPageLoad()
+
+        // Must offset textfield press to support 5S.
+        urlBarTextField.press(forDuration: 2)
+        waitForExistence(app.menuItems["Copy"])
+        app.menuItems["Copy"].tap()
+        waitForNoExistence(app.menuItems["Copy"])
+
+        loadWebPage("bing.com")
+        waitForWebPageLoad()
+        urlBarTextField.tap()
+        urlBarTextField.press(forDuration: 2)
+        waitForExistence(app.collectionViews.menuItems.firstMatch)
+        waitForHittable(app.buttons["Forward"].firstMatch)
+        app.buttons["Forward"].firstMatch.tap()
+        if !iPad() {
+            waitForExistence(app.collectionViews.menuItems.firstMatch)
+            waitForHittable(app.buttons["Forward"].firstMatch)
+            app.buttons["Forward"].firstMatch.tap()
+        }
+        waitForExistence(app.collectionViews.menuItems.firstMatch)
+        waitForHittable(app.menuItems["Paste & Go"])
+        app.menuItems["Paste & Go"].tap()
+
+        waitForWebPageLoad()
+        guard let text = urlBarTextField.value as? String else {
+            XCTFail()
+            return
+        }
+
+        XCTAssert(text == "www.example.com")
+    }
+
     // Test the clipboard contents are displayed/updated properly
     func testClipboard() throws {
         let app = XCUIApplication()
