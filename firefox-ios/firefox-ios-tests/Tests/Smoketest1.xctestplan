@@ -220,7 +220,8 @@
         "TrackingProtectionTests\/testMenuWhenThereAreBlockedElements()",
         "URLValidationTests",
         "UrlBarTests",
-        "WhatsNewTest"
+        "WhatsNewTest",
+        "ZoomingTests\/testZoomForceCloseFirefox()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",
