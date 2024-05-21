@@ -153,6 +153,21 @@ struct CreditCardInputView: View {
         }
     }
 
+    fileprivate func expirationContent() -> some View {
+        return Group {
+            CreditCardInputField(windowUUID: windowUUID,
+                                 inputType: .expiration,
+                                 showError: !viewModel.expirationIsValid,
+                                 inputViewModel: viewModel)
+            .padding(.top, 11)
+
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+                .padding(.top, 1)
+        }
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         backgroundColor = Color(color.layer1)
