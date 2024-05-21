@@ -39,19 +39,8 @@ struct CreditCardInputView: View {
                     numberContent()
                         .background(textFieldBackgroundColor)
 
-                    Group {
-                        CreditCardInputField(windowUUID: windowUUID,
-                                             inputType: .expiration,
-                                             showError: viewModel.showExpirationError,
-                                             inputViewModel: viewModel)
-                        .padding(.top, 11)
-
-                        Divider()
-                            .frame(height: 0.7)
-                            .foregroundColor(borderColor)
-                            .padding(.top, 1)
-                    }
-                    .background(textFieldBackgroundColor)
+                    expirationContent()
+                        .background(textFieldBackgroundColor)
 
                     Spacer()
                         .frame(height: 4)
@@ -135,7 +124,7 @@ struct CreditCardInputView: View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .expiration,
-                                 showError: !viewModel.expirationIsValid,
+                                 showError: viewModel.showExpirationError,
                                  inputViewModel: viewModel)
             .padding(.top, 11)
 
