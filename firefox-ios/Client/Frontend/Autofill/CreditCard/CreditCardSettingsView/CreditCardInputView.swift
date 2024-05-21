@@ -28,46 +28,22 @@ struct CreditCardInputView: View {
         NavigationView {
             ZStack {
                 backgroundColor.ignoresSafeArea()
-                VStack(spacing: 0) {
-                    Divider()
-                        .frame(height: 0.7)
-                        .foregroundColor(borderColor)
-
-                    nameContent()
-                        .background(textFieldBackgroundColor)
-
-                    numberContent()
-                        .background(textFieldBackgroundColor)
-
-                    expirationContent()
-                        .background(textFieldBackgroundColor)
-
-                    Spacer()
-                        .frame(height: 4)
-
-                    if viewModel.state == .edit {
-                        RemoveCardButton(windowUUID: windowUUID,
-                                         alertDetails: viewModel.removeButtonDetails)
-                        .padding(.top, 28)
+                mainContent()
+                    .navigationBarTitle(viewModel.state.title,
+                                        displayMode: .inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            rightBarButton()
+                                .disabled(!viewModel.isRightBarButtonEnabled)
+                                .foregroundColor(barButtonColor)
+                        }
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            leftBarButton()
+                                .foregroundColor(barButtonColor)
+                        }
                     }
-
-                    Spacer()
-                }
-                .navigationBarTitle(viewModel.state.title,
-                                    displayMode: .inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        rightBarButton()
-                            .disabled(!viewModel.isRightBarButtonEnabled)
-                            .foregroundColor(barButtonColor)
-                    }
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        leftBarButton()
-                            .foregroundColor(barButtonColor)
-                    }
-                }
-                .padding(.top, 0)
-                .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
+                    .padding(.top, 0)
+                    .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
             }
             .blur(radius: isBlurred ? 10 : 0)
             .onAppear {
