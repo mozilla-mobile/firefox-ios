@@ -171,6 +171,23 @@ class Authenticator {
         return credentials
     }
 
+    fileprivate static func handleUnmatchedSchemes(logins: [EncryptedLogin],
+                                                   challenge: URLAuthenticationChallenge,
+                                                   loginsProvider: RustLogins,
+                                                   completionHandler: @escaping (Result<URLCredential?, Error>) -> Void) {
+        let login = logins[0]
+        let credentials = login.credentials
+        let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
+        loginsProvider.updateLogin(id: login.id, login: new) { result in
+            switch result {
+            case .success:
+                completionHandler(.success(credentials))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
+
     fileprivate static func promptForUsernamePassword(
         _ viewController: UIViewController,
         credentials: URLCredential?,
