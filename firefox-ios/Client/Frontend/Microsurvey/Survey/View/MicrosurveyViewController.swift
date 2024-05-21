@@ -153,6 +153,7 @@ final class MicrosurveyViewController: UIViewController,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .microsurvey)
         store.dispatch(action)
+        // CYN: It seems actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
     override func viewDidLoad() {

@@ -68,6 +68,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
+        print(subscriptions.compactMap({ $0.subscriber.debugDescription }))
         guard Thread.isMainThread && !actionRunning else {
             DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
             return
