@@ -33,7 +33,7 @@ extension Themeable {
 
     public func updateThemeApplicableSubviews(_ view: UIView) {
         guard let window = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
-        if window == .unavailable { assertionFailure("Theme applicable view has `unavailable` window UUID. Unexpected.") }
+        assert(window != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
         let theme = themeManager.currentTheme(for: window)
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: theme) }
