@@ -44,7 +44,14 @@ public class DefaultCrashManager: CrashManager {
     private var enabled = false
 
     private var shouldSetup: Bool {
-        return !enabled && !isSimulator
+        return !enabled
+                && !isSimulator
+                && isValidReleaseName
+    }
+
+    private var isValidReleaseName: Bool {
+        return AppInfo.bundleIdentifier == "org.mozilla.ios.Firefox"
+                || AppInfo.bundleIdentifier == "org.mozilla.ios.FirefoxBeta"
     }
 
     private var environment: Environment {
@@ -56,7 +63,7 @@ public class DefaultCrashManager: CrashManager {
     }
 
     private var releaseName: String {
-        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)+(\(AppInfo.buildNumber))"
+        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
     }
 
     // MARK: - Init
