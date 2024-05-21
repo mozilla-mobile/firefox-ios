@@ -619,14 +619,12 @@ class BrowserCoordinator: BaseCoordinator,
             if rootNavigationController != nil {
                 coordinator = QRCodeCoordinator(
                     parentCoordinator: self,
-                    router: DefaultRouter(navigationController: rootNavigationController!),
-                    windowUUID: windowUUID
+                    router: DefaultRouter(navigationController: rootNavigationController!)
                 )
             } else {
                 coordinator = QRCodeCoordinator(
                     parentCoordinator: self,
-                    router: router,
-                    windowUUID: windowUUID
+                    router: router
                 )
             }
 

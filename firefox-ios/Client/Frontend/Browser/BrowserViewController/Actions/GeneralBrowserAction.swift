@@ -11,14 +11,12 @@ class GeneralBrowserAction: Action {
     let toastType: ToastType?
     let showOverlay: Bool?
     let navigateToHome: Bool?
-    let showQRcodeReader: Bool?
 
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          navigateToHome: Bool? = nil,
-         showQRcodeReader: Bool? = nil,
          windowUUID: UUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
@@ -26,7 +24,6 @@ class GeneralBrowserAction: Action {
         self.toastType = toastType
         self.showOverlay = showOverlay
         self.navigateToHome = navigateToHome
-        self.showQRcodeReader = showQRcodeReader
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }

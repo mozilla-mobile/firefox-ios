@@ -11,15 +11,12 @@ protocol QRCodeDismissHandler: AnyObject {
 
 class QRCodeCoordinator: BaseCoordinator, QRCodeDismissHandler {
     private weak var parentCoordinator: ParentCoordinatorDelegate?
-    let windowUUID: WindowUUID
 
     init(
         parentCoordinator: ParentCoordinatorDelegate?,
-        router: Router,
-        windowUUID: WindowUUID
+        router: Router
     ) {
         self.parentCoordinator = parentCoordinator
-        self.windowUUID = windowUUID
         super.init(router: router)
     }
 
@@ -42,11 +39,6 @@ class QRCodeCoordinator: BaseCoordinator, QRCodeDismissHandler {
 
     // MARK: - Private
     private func dismiss() {
-        let action = GeneralBrowserAction(showQRcodeReader: false,
-                                          windowUUID: windowUUID,
-                                          actionType: GeneralBrowserActionType.showQRcodeReader)
-        store.dispatch(action)
-
         parentCoordinator?.didFinish(from: self)
     }
 }

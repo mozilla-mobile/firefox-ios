@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 final class QRCodeCoordinatorTests: XCTestCase {
-    let windowUUID: WindowUUID = .XCTestDefaultUUID
     private var router: MockRouter!
     private var parentCoordinator: MockParentCoordinatorDelegate!
 
@@ -95,8 +94,7 @@ final class QRCodeCoordinatorTests: XCTestCase {
 
     private func createSubject() -> QRCodeCoordinator {
         let coordinator = QRCodeCoordinator(parentCoordinator: parentCoordinator,
-                                            router: router,
-                                            windowUUID: windowUUID)
+                                            router: router)
         trackForMemoryLeaks(coordinator)
         return coordinator
     }

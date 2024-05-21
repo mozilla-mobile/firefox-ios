@@ -112,7 +112,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 reloadWebView: false,
                 browserViewType: state.browserViewType,
                 navigateToHome: state.navigateToHome,
-                showQRcodeReader: state.showQRcodeReader,
+                showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         }
     }
@@ -127,7 +127,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             navigateToHome: state.navigateToHome,
-            showQRcodeReader: state.showQRcodeReader,
+            showQRcodeReader: false,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
@@ -141,7 +141,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
             navigateToHome: state.navigateToHome,
-            showQRcodeReader: state.showQRcodeReader,
+            showQRcodeReader: false,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
@@ -163,7 +163,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 reloadWebView: true,
                 browserViewType: browserViewType,
                 navigateToHome: state.navigateToHome,
-                showQRcodeReader: state.showQRcodeReader,
+                showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state
@@ -184,7 +184,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateToHome: state.navigateToHome,
-                showQRcodeReader: state.showQRcodeReader,
+                showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showOverlay:
             let showOverlay = action.showOverlay ?? false
@@ -197,7 +197,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateToHome: state.navigateToHome,
-                showQRcodeReader: state.showQRcodeReader,
+                showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.updateSelectedTab:
             return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action: action, state: state)
@@ -212,10 +212,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateToHome: showHomepage,
-                showQRcodeReader: state.showQRcodeReader,
+                showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showQRcodeReader:
-            let showQRcodeReader = action.showQRcodeReader ?? false
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
@@ -225,7 +224,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateToHome: state.navigateToHome,
-                showQRcodeReader: showQRcodeReader,
+                showQRcodeReader: true,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         default:
@@ -246,7 +245,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateToHome: state.navigateToHome,
-                showQRcodeReader: state.showQRcodeReader,
+                showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state
@@ -275,7 +274,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             reloadWebView: true,
             browserViewType: browserViewType,
             navigateToHome: state.navigateToHome,
-            showQRcodeReader: state.showQRcodeReader,
+            showQRcodeReader: false,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 }
