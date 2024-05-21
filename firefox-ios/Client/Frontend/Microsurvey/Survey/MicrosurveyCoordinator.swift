@@ -39,8 +39,6 @@ final class MicrosurveyCoordinator: BaseCoordinator, FeatureFlaggable, Microsurv
     func showPrivacy() {
         // TODO: FXIOS-8976 - Add to Support Utils
         guard let url = URL(string: "https://www.mozilla.org/privacy/firefox") else { return }
-        // CYN: Need to investigate what zombie is used for - seems to be used for tab restoration and avoids creating
-        // a webview if it is a zombie
         tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
         router.dismiss(animated: true, completion: nil)
         parentCoordinator?.didFinish(from: self)

@@ -125,7 +125,6 @@ final class MicrosurveyViewController: UIViewController,
 
     // MARK: Redux
     func newState(state: MicrosurveyState) {
-        // CYN: Need to check if this needs to be on main thread
         microsurveyState = state
         if microsurveyState.shouldDismiss {
             coordinator?.dismissFlow()
@@ -142,7 +141,6 @@ final class MicrosurveyViewController: UIViewController,
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
-                // CYN: What does this appstate do?
                 return MicrosurveyState(appState: appState, uuid: uuid)
             })
         })
@@ -153,7 +151,6 @@ final class MicrosurveyViewController: UIViewController,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .microsurvey)
         store.dispatch(action)
-        // CYN: It seems actual `store.unsubscribe()` is not strictly needed; Redux uses weak subscribers
     }
 
     override func viewDidLoad() {

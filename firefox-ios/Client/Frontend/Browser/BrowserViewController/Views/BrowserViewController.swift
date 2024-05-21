@@ -609,8 +609,10 @@ class BrowserViewController: UIViewController,
                 guard microsurvey != nil else { return }
                 removeMicrosurveyPrompt()
             } else if state.microsurveyState.showSurvey {
-                // CYN: Torn between passing model and initializing the mobile messaging in the middleware
-                guard let model = state.microsurveyState.model else { return }
+                guard let model = state.microsurveyState.model else {
+                    logger.log("Microsurvey model should not be nil", level: .warning, category: .redux)
+                    return
+                }
                 navigationHandler?.showMicrosurvey(model: model)
             } else if state.microsurveyState.showPrompt {
                 guard microsurvey == nil else { return }
