@@ -33,4 +33,5 @@ include:
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/tabTrayRefactorFeature.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
+  - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/zoomFeature.yaml
