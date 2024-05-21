@@ -129,9 +129,7 @@ class Authenticator {
                 else if logins.count == 1 {
                     credentials = logins[0].credentials
                 } else {
-                    logger.log("No logins found for Authenticator",
-                               level: .info,
-                               category: .webview)
+                    logger.log("No logins found for Authenticator", level: .info, category: .webview)
                 }
 
                 completionHandler(.success(credentials))
