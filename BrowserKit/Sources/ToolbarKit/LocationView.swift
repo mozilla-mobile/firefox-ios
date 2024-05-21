@@ -108,10 +108,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         button.addTarget(self, action: #selector(self.clearURLText), for: .touchUpInside)
     }
 
-    private lazy var iconContainerStackView: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-    }
+    private lazy var iconContainerStackView: UIStackView = .build()
 
     private lazy var searchEngineContentView: UIView = .build()
 
@@ -121,7 +118,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         imageView.isAccessibilityElement = true
     }
 
-    private lazy var lockIconImageView: UIImageView = .build()
+    private lazy var lockIconImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+    }
 
     private lazy var urlTextField: UITextField = .build { [self] urlTextField in
         urlTextField.accessibilityIdentifier = "url"
@@ -194,7 +193,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private func setupLayout() {
         addSubviews(urlTextField, iconContainerStackView, gradientView, clearButton)
-        iconContainerStackView.addArrangedSubview(searchEngineImageView)
+        searchEngineContentView.addSubview(searchEngineImageView)
+        iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldTrailingConstraint = urlTextField.trailingAnchor.constraint(
             equalTo: trailingAnchor,
@@ -204,14 +204,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
         NSLayoutConstraint.activate(
             [
-                gradientView.topAnchor.constraint(
-                    equalTo: urlTextField.topAnchor,
-                    constant: UX.gradientViewVerticalPadding
-                ),
-                gradientView.bottomAnchor.constraint(
-                    equalTo: urlTextField.bottomAnchor,
-                    constant: -UX.gradientViewVerticalPadding
-                ),
+                gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
+                gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
                 gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
                 gradientView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
 
@@ -222,9 +216,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
                 searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
                 searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
+                searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
+                searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
 
+                iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
+                iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
                 iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
-                iconContainerStackView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
             ]
         )
     }
@@ -263,7 +260,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isTextFieldFocused
 
         if shouldAdjustForOverflow {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor, constant: iconContainerStackView.frame.width * 0.5)
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor)
         }
@@ -286,7 +283,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private func addSearchEngineButton() {
-        iconContainerStackView.addArrangedSubview(searchEngineImageView)
+        iconContainerStackView.addArrangedSubview(searchEngineContentView)
     }
 
     private func showClearButton() {
