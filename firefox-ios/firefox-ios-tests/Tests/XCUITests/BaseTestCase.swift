@@ -68,7 +68,7 @@ class BaseTestCase: XCTestCase {
 
     func setUpApp() {
         setUpLaunchArguments()
-        if let value = ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] {
+        if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
             app.activate()
         }
         app.launch()
