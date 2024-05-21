@@ -112,18 +112,9 @@ class Authenticator {
                 // It is possible that we might have duplicate entries since we match against host and scheme://host.
                 // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
                 if logins.count > 1 {
-                    credentials = (logins.first(where: { login in
-                        (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`)
-                        && !login.hasMalformedHostname
-                    }))?.credentials
-
-                    let malformedGUIDs: [GUID] = logins.compactMap { login in
-                        if login.hasMalformedHostname {
-                            return login.id
-                        }
-                        return nil
-                    }
-                    loginsProvider.deleteLogins(ids: malformedGUIDs) { _ in }
+                    credentials = handleDuplicatedEntries(logins: logins,
+                                                          challenge: challenge,
+                                                          loginsProvider: loginsProvider)
                 }
 
                 // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
