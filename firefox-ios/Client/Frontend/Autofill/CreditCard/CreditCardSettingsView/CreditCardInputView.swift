@@ -138,6 +138,21 @@ struct CreditCardInputView: View {
         }
     }
 
+    fileprivate func numberContent() -> some View {
+        return Group {
+            CreditCardInputField(windowUUID: windowUUID,
+                                 inputType: .number,
+                                 showError: !viewModel.numberIsValid,
+                                 inputViewModel: viewModel)
+            .padding(.top, 11)
+
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+                .padding(.top, 1)
+        }
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         backgroundColor = Color(color.layer1)
