@@ -4,6 +4,7 @@
 
 import Redux
 import Shared
+import Common
 
 struct MicrosurveyState: ScreenState, Equatable {
     var windowUUID: WindowUUID
