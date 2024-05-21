@@ -4,9 +4,9 @@
 
 import XCTest
 
-class PastenGoTest: BaseTestCase {
-    
-    func testCopyMenuItem() throws {
+class CopyPasteTest: BaseTestCase {
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/395745
+    func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("https://www.example.com")
         waitForWebPageLoad()
@@ -42,6 +42,7 @@ class PastenGoTest: BaseTestCase {
         XCTAssert(text == "www.example.com")
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609148
     // Test the clipboard contents are displayed/updated properly
     func testClipboard() throws {
         let app = XCUIApplication()
@@ -87,10 +88,11 @@ class PastenGoTest: BaseTestCase {
     }
 
     // Smoketest
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609149
     // Test Paste & Go feature
     func testPastenGo() {
         // Inject a string into clipboard
-        var clipboard = "https://www.mozilla.org/en-US/"
+        let clipboard = "https://www.mozilla.org/en-US/"
         UIPasteboard.general.string = clipboard
 
         // Tap url bar to show context menu
