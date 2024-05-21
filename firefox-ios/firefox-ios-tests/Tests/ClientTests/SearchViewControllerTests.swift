@@ -180,7 +180,7 @@ class SearchViewControllerTest: XCTestCase {
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
         searchViewController.searchRemoteTabs(for: "Mozilla")
-        XCTAssertEqual(searchViewController.filteredRemoteClientTabs.count, 1)
+        XCTAssertEqual(searchViewController.filteredRemoteClientTabs.count, 2)
     }
 
     func testSyncedTabsAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
@@ -217,7 +217,7 @@ class SearchViewControllerTest: XCTestCase {
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab2),
                                                  ClientTabsSearchWrapper(client: remoteClient, tab: remoteTab3)]
         searchViewController.searchRemoteTabs(for: "Mozilla")
-        XCTAssertEqual(searchViewController.filteredRemoteClientTabs.count, 1)
+        XCTAssertEqual(searchViewController.filteredRemoteClientTabs.count, 3)
     }
 
     func testSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
