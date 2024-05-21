@@ -26,43 +26,25 @@ struct CreditCardInputView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                backgroundColor.ignoresSafeArea()
-                formContent()
-                    .navigationBarTitle(viewModel.state.title,
-                                        displayMode: .inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            rightBarButton()
-                                .disabled(!viewModel.isRightBarButtonEnabled)
-                                .foregroundColor(barButtonColor)
-                        }
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            leftBarButton()
-                                .foregroundColor(barButtonColor)
-                        }
-                    }
-                    .padding(.top, 0)
-                    .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
-            }
-            .blur(radius: isBlurred ? 10 : 0)
-            .onAppear {
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(
-                for: UIApplication.willResignActiveNotification)
-            ) { _ in
-                isBlurred = true
-            }
-            .onReceive(NotificationCenter.default.publisher(
-                for: UIApplication.didBecomeActiveNotification)
-            ) { _ in
-                isBlurred = false
-            }
+            mainContent()
+                .blur(radius: isBlurred ? 10 : 0)
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                    guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(
+                    for: UIApplication.willResignActiveNotification)
+                ) { _ in
+                    isBlurred = true
+                }
+                .onReceive(NotificationCenter.default.publisher(
+                    for: UIApplication.didBecomeActiveNotification)
+                ) { _ in
+                    isBlurred = false
+                }
         }
     }
 
