@@ -51,8 +51,13 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
+<<<<<<< HEAD
           "revision": "5bfe57dda6658646dea009e375965e87c67e452c",
           "version": "127.0.0"
+=======
+          "revision": "8d6304f12d43dae17fd76854a01ba9c5df13ca85",
+          "version": "128.0.20240520192211"
+>>>>>>> 5021deed3 (Auto update SPM with latest rust-component release 128.0.20240520192211 (#20359))
         }
       },
       {
