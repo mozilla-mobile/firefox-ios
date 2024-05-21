@@ -1,0 +1,61 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+body {
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+
+  font-family: -apple-system, "SF Pro", sans-serif;
+  background-color: #26252c;
+  margin: 0;
+  padding: 0;
+}
+
+form {
+  display: grid;
+  input,
+  textarea,
+  select {
+    order: 2;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    background-color: transparent;
+    color: #f8f8fb;
+
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+
+  input,
+  select {
+    height: 22px;
+  }
+
+  label {
+    background-color: #3a3943;
+    border-bottom: 0.5px solid #e0e0e6;
+    display: flex;
+    flex-direction: column;
+    padding: 11px 16px;
+
+    span {
+      font-size: 15px;
+      color: #c1c1ca;
+      margin-bottom: 4px;
+      margin-top: 12px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+}

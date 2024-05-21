@@ -41,10 +41,10 @@
 "Menu.SharePageAction.Title" = "Համօգտագործել էջը՝";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Դեսքթոփ կայքի հարցում";
+"Menu.ViewDekstopSiteAction.Title" = "Հայցել ամբողջական կայք";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Բջջային կայքի հարցում";
+"Menu.ViewMobileSiteAction.Title" = "Հայցել բջջային կայք";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Տնային էջ";

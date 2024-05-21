@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import ComponentLibrary
+import Redux
 
 /*
  |----------------|
@@ -15,7 +16,6 @@ import ComponentLibrary
  */
 
 class MicrosurveyPromptView: UIView, ThemeApplicable {
-    private var viewModel: MicrosurveyViewModel
     struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
@@ -28,6 +28,8 @@ class MicrosurveyPromptView: UIView, ThemeApplicable {
             trailing: -16
         )
     }
+
+    private let windowUUID: WindowUUID
 
     private lazy var logoImage: UIImageView = .build { imageView in
             imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
@@ -66,19 +68,32 @@ class MicrosurveyPromptView: UIView, ThemeApplicable {
 
     @objc
     func closeMicroSurvey() {
-        viewModel.closeAction()
+        store.dispatch(
+            MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.closePrompt)
+        )
     }
 
     @objc
     func openMicroSurvey() {
-        viewModel.openAction()
+        store.dispatch(
+            MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.continueToSurvey)
+        )
     }
 
-    init(viewModel: MicrosurveyViewModel) {
-        self.viewModel = viewModel
+    init(state: MicrosurveyPromptState, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         super.init(frame: .zero)
+        configure(with: state)
         setupView()
-        configure()
+    }
+
+    private func configure(with state: MicrosurveyPromptState) {
+        titleLabel.text = state.model.title
+        let roundedButtonViewModel = SecondaryRoundedButtonViewModel(
+            title: state.model.button,
+            a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton
+        )
+        surveyButton.configure(viewModel: roundedButtonViewModel)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -107,15 +122,6 @@ class MicrosurveyPromptView: UIView, ThemeApplicable {
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
         ])
-    }
-
-    private func configure() {
-        titleLabel.text = viewModel.title
-        let roundedButtonViewModel = SecondaryRoundedButtonViewModel(
-            title: viewModel.buttonText,
-            a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton
-        )
-        surveyButton.configure(viewModel: roundedButtonViewModel)
     }
 
     func applyTheme(theme: Theme) {

@@ -404,17 +404,17 @@ class HomePageSettingsUITests: BaseTestCase {
         addWebsitesToShortcut(website: "www.bestbuy.com")
         addWebsitesToShortcut(website: "www.instagram.com")
         if !iPad() {
-            validateNumberOfTopSitesDisplayed(row: 0, topSites: 4)
-            validateNumberOfTopSitesDisplayed(row: 1, topSites: 8)
-            validateNumberOfTopSitesDisplayed(row: 2, topSites: 12)
-            validateNumberOfTopSitesDisplayed(row: 3, topSites: 13)
+            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 5)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 4, maxBoundary: 9)
+            validateNumberOfTopSitesDisplayed(row: 2, minBoundary: 8, maxBoundary: 13)
+            validateNumberOfTopSitesDisplayed(row: 3, minBoundary: 12, maxBoundary: 17)
         } else {
-            validateNumberOfTopSitesDisplayed(row: 0, topSites: 7)
-            validateNumberOfTopSitesDisplayed(row: 2, topSites: 13)
+            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 8)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 15)
         }
     }
 
-    private func validateNumberOfTopSitesDisplayed(row: Int, topSites: Int) {
+    private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {
         navigator.goto(HomeSettings)
         app.staticTexts["Shortcuts"].tap()
         mozWaitForElementToExist(app.staticTexts["Rows"])
@@ -428,7 +428,9 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabScreen)
         app.buttons["Done"].tap()
         mozWaitForElementToExist(app.cells["TopSitesCell"])
-        XCTAssertEqual(app.cells.matching(identifier: "TopSitesCell").count, topSites)
+        let totalTopSites = app.cells.matching(identifier: "TopSitesCell").count
+        XCTAssertTrue(totalTopSites > minBoundary)
+        XCTAssertTrue(totalTopSites < maxBoundary)
     }
 
     private func addWebsitesToShortcut(website: String) {

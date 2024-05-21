@@ -182,7 +182,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         stackView.removeAllArrangedViews()
         toolbarElements.forEach { toolbarElement in
-            let button = ToolbarButton()
+            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
             button.configure(element: toolbarElement)
             stackView.addArrangedSubview(button)
 

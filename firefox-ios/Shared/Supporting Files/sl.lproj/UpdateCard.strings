@@ -1,6 +1,9 @@
 /* This value is used as the toast message for the saving success alert in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v116" = "Podatki o kartici posodobljeni";
 
+/* This value is used as the title for the update card page */
+"CreditCard.UpdateCard.MainTitle.v122" = "Posodobim kartico?";
+
 /* This value is used as the title for the Manage Cards button from the update credit card page */
 "CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "Upravljanje kartic";
 

@@ -17,6 +17,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var reloadWebView: Bool
     var browserViewType: BrowserViewType
     var navigateToHome: Bool
+    var microsurveyState: MicrosurveyPromptState
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -37,7 +38,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   windowUUID: bvcState.windowUUID,
                   reloadWebView: bvcState.reloadWebView,
                   browserViewType: bvcState.browserViewType,
-                  navigateToHome: bvcState.navigateToHome)
+                  navigateToHome: bvcState.navigateToHome,
+                  microsurveyState: bvcState.microsurveyState)
     }
 
     init(windowUUID: WindowUUID) {
@@ -50,7 +52,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             showOverlay: false,
             windowUUID: windowUUID,
             browserViewType: .normalHomepage,
-            navigateToHome: false)
+            navigateToHome: false,
+            microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID))
     }
 
     init(
@@ -63,7 +66,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         reloadWebView: Bool = false,
         browserViewType: BrowserViewType,
-        navigateToHome: Bool = false
+        navigateToHome: Bool = false,
+        microsurveyState: MicrosurveyPromptState
     ) {
         self.searchScreenState = searchScreenState
         self.showDataClearanceFlow = showDataClearanceFlow
@@ -75,6 +79,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.reloadWebView = reloadWebView
         self.browserViewType = browserViewType
         self.navigateToHome = navigateToHome
+        self.microsurveyState = microsurveyState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -83,6 +88,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
         if let action = action as? FakespotAction {
             return BrowserViewControllerState.reduceStateForFakeSpotAction(action: action, state: state)
+        } else if let action = action as? MicrosurveyPromptAction {
+            return BrowserViewControllerState.reduceStateForMicrosurveyAction(action: action, state: state)
         } else if let action = action as? PrivateModeAction {
             return BrowserViewControllerState.reduceStateForPrivateModeAction(action: action, state: state)
         } else if let action = action as? GeneralBrowserAction {
@@ -99,7 +106,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 reloadWebView: false,
                 browserViewType: state.browserViewType,
-                navigateToHome: state.navigateToHome)
+                navigateToHome: state.navigateToHome,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         }
     }
 
@@ -112,7 +120,21 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             fakespotState: FakespotState.reducer(state.fakespotState, action),
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
-            navigateToHome: state.navigateToHome)
+            navigateToHome: state.navigateToHome,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+    }
+
+    static func reduceStateForMicrosurveyAction(action: MicrosurveyPromptAction,
+                                                state: BrowserViewControllerState) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            showDataClearanceFlow: state.showDataClearanceFlow,
+            toolbarState: state.toolbarState,
+            fakespotState: state.fakespotState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            navigateToHome: state.navigateToHome,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 
     static func reduceStateForPrivateModeAction(action: PrivateModeAction,
@@ -132,7 +154,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 reloadWebView: true,
                 browserViewType: browserViewType,
-                navigateToHome: state.navigateToHome)
+                navigateToHome: state.navigateToHome,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state
         }
@@ -151,7 +174,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: toastType,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                navigateToHome: state.navigateToHome)
+                navigateToHome: state.navigateToHome,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showOverlay:
             let showOverlay = action.showOverlay ?? false
             return BrowserViewControllerState(
@@ -162,7 +186,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                navigateToHome: state.navigateToHome)
+                navigateToHome: state.navigateToHome,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.updateSelectedTab:
             return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action: action, state: state)
         case GeneralBrowserActionType.goToHomepage:
@@ -175,7 +200,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: state.toast,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                navigateToHome: showHomepage)
+                navigateToHome: showHomepage,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         default:
             return state
@@ -194,7 +220,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showOverlay: state.showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                navigateToHome: state.navigateToHome)
+                navigateToHome: state.navigateToHome,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state
         }
@@ -221,6 +248,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             reloadWebView: true,
             browserViewType: browserViewType,
-            navigateToHome: state.navigateToHome)
+            navigateToHome: state.navigateToHome,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
 }
