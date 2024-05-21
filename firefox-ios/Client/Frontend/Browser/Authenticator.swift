@@ -121,17 +121,10 @@ class Authenticator {
                 // saved in a previous iteration of the app so we need to migrate it. We only care about the
                 // the username/password so we can rewrite the scheme to be correct.
                 else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
-                    let login = logins[0]
-                    credentials = login.credentials
-                    let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
-                    loginsProvider.updateLogin(id: login.id, login: new) { result in
-                        switch result {
-                        case .success:
-                            completionHandler(.success(credentials))
-                        case .failure(let error):
-                            completionHandler(.failure(error))
-                        }
-                    }
+                    handleUnmatchedSchemes(logins: logins,
+                                           challenge: challenge,
+                                           loginsProvider: loginsProvider,
+                                           completionHandler: completionHandler)
                     return
                 }
 
