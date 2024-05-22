@@ -4,6 +4,7 @@
 
 import Redux
 import Storage
+import Common
 
 struct MoveTabData {
     let originIndex: Int
@@ -27,7 +28,7 @@ class TabPanelViewAction: Action {
          moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.panelType = panelType
         self.isPrivateModeActive = isPrivateModeActive
@@ -70,7 +71,7 @@ class TabPanelMiddlewareAction: Action {
     init(tabDisplayModel: TabDisplayModel? = nil,
          inactiveTabModels: [InactiveTabsModel]? = nil,
          toastType: ToastType? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.tabDisplayModel = tabDisplayModel
         self.inactiveTabModels = inactiveTabModels

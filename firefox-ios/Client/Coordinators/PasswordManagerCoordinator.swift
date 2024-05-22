@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 protocol PasswordManagerCoordinatorDelegate: AnyObject, ParentCoordinatorDelegate {
     func settingsOpenURLInNewTab(_ url: URL)

@@ -4,12 +4,13 @@
 
 import Foundation
 import Redux
+import Common
 
 class PrivateModeAction: Action {
     let isPrivate: Bool?
 
     init(isPrivate: Bool? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.isPrivate = isPrivate
         super.init(windowUUID: windowUUID,

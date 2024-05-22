@@ -3,13 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 /// Used to describe an action that can be dispatched by the redux store
 open class Action {
-    public var windowUUID: UUID
+    public var windowUUID: WindowUUID
     public var actionType: ActionType
 
-    public init(windowUUID: UUID, actionType: ActionType) {
+    public init(windowUUID: WindowUUID, actionType: ActionType) {
         self.windowUUID = windowUUID
         self.actionType = actionType
     }

@@ -7,15 +7,15 @@ import Redux
 import ToolbarKit
 
 class ToolbarAction: Action {
-    let actions: [ToolbarState.ActionState]?
-    let displayBorder: Bool?
+    let addressToolbarModel: AddressToolbarModel?
+    let navigationToolbarModel: NavigationToolbarModel?
 
-    init(actions: [ToolbarState.ActionState]? = nil,
-         displayBorder: Bool? = nil,
+    init(addressToolbarModel: AddressToolbarModel? = nil,
+         navigationToolbarModel: NavigationToolbarModel? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
-        self.actions = actions
-        self.displayBorder = displayBorder
+        self.addressToolbarModel = addressToolbarModel
+        self.navigationToolbarModel = navigationToolbarModel
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

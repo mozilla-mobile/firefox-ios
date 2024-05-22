@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Intents
 import IntentsUI
+import Common
 
 class SiriSettingsViewController: SettingsTableViewController {
     let prefs: Prefs

@@ -32,11 +32,11 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         switch action.actionType {
         case GeneralBrowserMiddlewareActionType.browserDidLoad:
-            let actions = self.loadNavigationToolbarElements()
-            let displayBorder = self.shouldDisplayNavigationToolbarBorder(state: state, windowUUID: action.windowUUID)
+            let addressToolbarModel = loadInitialAddressToolbarState(state: state, windowUUID: action.windowUUID)
+            let navigationToolbarModel = loadInitialNavigationToolbarState(state: state, windowUUID: action.windowUUID)
 
-            let action = ToolbarAction(actions: actions,
-                                       displayBorder: displayBorder,
+            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                       navigationToolbarModel: navigationToolbarModel,
                                        windowUUID: uuid,
                                        actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
@@ -64,6 +64,38 @@ class ToolbarMiddleware: FeatureFlaggable {
         case .tap: handleToolbarButtonTapActions(actionType: buttonType, windowUUID: uuid)
         case .longPress: handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
         }
+    }
+
+    private func loadInitialAddressToolbarState(state: AppState, windowUUID: UUID) -> AddressToolbarModel {
+        let displayTopBorder = shouldDisplayAddressToolbarBorder(borderPosition: .top,
+                                                                 state: state,
+                                                                 windowUUID: windowUUID)
+        let displayBottomBorder = shouldDisplayAddressToolbarBorder(borderPosition: .bottom,
+                                                                    state: state,
+                                                                    windowUUID: windowUUID)
+
+        return AddressToolbarModel(navigationActions: [ToolbarState.ActionState](),
+                                   pageActions: loadAddressToolbarPageElements(),
+                                   browserActions: [ToolbarState.ActionState](),
+                                   displayTopBorder: displayTopBorder,
+                                   displayBottomBorder: displayBottomBorder)
+    }
+
+    private func loadAddressToolbarPageElements() -> [ToolbarState.ActionState] {
+        var pageActions = [ToolbarState.ActionState]()
+        pageActions.append(ToolbarState.ActionState(
+            actionType: .qrCode,
+            iconName: StandardImageIdentifiers.Large.qrCode,
+            isEnabled: true,
+            a11yLabel: .QRCode.ToolbarButtonA11yLabel,
+            a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode))
+        return pageActions
+    }
+
+    private func loadInitialNavigationToolbarState(state: AppState, windowUUID: UUID) -> NavigationToolbarModel {
+        let actions = loadNavigationToolbarElements()
+        let displayBorder = shouldDisplayNavigationToolbarBorder(state: state, windowUUID: windowUUID)
+        return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
     }
 
     private func loadNavigationToolbarElements() -> [ToolbarState.ActionState] {
@@ -96,7 +128,22 @@ class ToolbarMiddleware: FeatureFlaggable {
         return elements
     }
 
-    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: UUID) -> Bool {
+    private func shouldDisplayAddressToolbarBorder(borderPosition: AddressToolbarBorderPosition,
+                                                   isPrivate: Bool = false,
+                                                   scrollY: CGFloat = 0,
+                                                   state: AppState,
+                                                   windowUUID: WindowUUID) -> Bool {
+        guard let browserState = state.screenState(BrowserViewControllerState.self,
+                                                   for: .browserViewController,
+                                                   window: windowUUID) else { return false }
+        let toolbarState = browserState.toolbarState
+        return manager.shouldDisplayAddressBorder(borderPosition: borderPosition,
+                                                  toolbarPosition: toolbarState.toolbarPosition,
+                                                  isPrivate: isPrivate,
+                                                  scrollY: scrollY)
+    }
+
+    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: WindowUUID) -> Bool {
         guard let browserState = state.screenState(BrowserViewControllerState.self,
                                                    for: .browserViewController,
                                                    window: windowUUID) else { return false }
@@ -104,12 +151,16 @@ class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
     }
 
-    private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: UUID) {
+    private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: WindowUUID) {
         switch actionType {
         case .home:
             let action = GeneralBrowserAction(navigateToHome: true,
                                               windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
+            store.dispatch(action)
+        case .qrCode:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
 
         default:
@@ -118,7 +169,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func handleToolbarButtonLongPressActions(actionType: ToolbarState.ActionState.ActionType,
-                                                     windowUUID: UUID) {
+                                                     windowUUID: WindowUUID) {
         switch actionType {
         default:
             break

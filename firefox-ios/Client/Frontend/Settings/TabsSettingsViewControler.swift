@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     init(windowUUID: WindowUUID) {

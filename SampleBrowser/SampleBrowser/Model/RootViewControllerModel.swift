@@ -88,16 +88,16 @@ class RootViewControllerModel {
             })]
 
         let locationViewState = LocationViewState(
-                clearButtonA11yId: "clearButton",
-                clearButtonA11yHint: "Double tap to clear text",
-                clearButtonA11yLabel: "Clean",
-                searchEngineImageViewA11yId: "searchEngine",
-                searchEngineImageViewA11yLabel: "Search engine icon",
-                urlTextFieldPlaceholder: "Search or enter address",
-                urlTextFieldA11yLabel: "Address Bar",
-                searchEngineImageName: "bingSearchEngine",
-                lockIconImageName: StandardImageIdentifiers.Medium.lock,
-                url: url
+            clearButtonA11yId: "clearButton",
+            clearButtonA11yLabel: "Clean",
+            searchEngineImageViewA11yId: "searchEngine",
+            searchEngineImageViewA11yLabel: "Search engine icon",
+            urlTextFieldPlaceholder: "Search or enter address",
+            urlTextFieldA11yId: "urlTextField",
+            urlTextFieldA11yLabel: "Address Bar",
+            searchEngineImageName: "bingSearchEngine",
+            lockIconImageName: StandardImageIdentifiers.Medium.lock,
+            url: url
         )
 
         // FXIOS-8947: Use scroll position
