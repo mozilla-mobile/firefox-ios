@@ -247,7 +247,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !urlTextField.isFirstResponder
         let width = showGradientForLongURL ? UX.gradientViewWidth : 0
         let frame = showGradientForLongURL ? gradientView.bounds : CGRect()
-    
+
         DispatchQueue.main.async { [self] in
             updateWidthConstraint(&gradientViewWidthConstraint, for: gradientView, to: width)
             gradientLayer.frame = frame
@@ -369,8 +369,15 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         removeContainerIcons()
 
-        updateWidthConstraint(&iconContainerStackViewWidthConstraint, for: iconContainerStackView, to: UX.searchEngineImageViewSize.width)
-        updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor, constant: UX.horizontalSpace)
+        updateWidthConstraint(
+            &iconContainerStackViewWidthConstraint,
+            for: iconContainerStackView,
+            to: UX.searchEngineImageViewSize.width
+        )
+        updateURLTextFieldLeadingConstraint(
+            equalTo: iconContainerStackView.trailingAnchor,
+            constant: UX.horizontalSpace
+        )
         urlTextFieldTrailingConstraint?.constant = 0
 
         if !isURLTextFieldEmpty {
