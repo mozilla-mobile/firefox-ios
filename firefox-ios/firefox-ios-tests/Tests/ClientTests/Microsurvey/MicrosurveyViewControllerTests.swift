@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+
 @testable import Client
 
 final class MicrosurveyViewControllerTests: XCTestCase {
