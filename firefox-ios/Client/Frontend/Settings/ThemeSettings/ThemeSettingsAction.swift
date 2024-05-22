@@ -17,7 +17,7 @@ class ThemeSettingsViewAction: Action {
          manualThemeType: ThemeType? = nil,
          userBrightness: Float? = nil,
          systemBrightness: Float? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.useSystemAppearance = useSystemAppearance
         self.automaticBrightnessEnabled = automaticBrightnessEnabled
@@ -33,7 +33,7 @@ class ThemeSettingsMiddlewareAction: Action {
     let themeSettingsState: ThemeSettingsState?
 
     init(themeSettingsState: ThemeSettingsState? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.themeSettingsState = themeSettingsState
         super.init(windowUUID: windowUUID, actionType: actionType)

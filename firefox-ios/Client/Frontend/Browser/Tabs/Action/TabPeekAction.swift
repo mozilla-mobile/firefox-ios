@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Common
 
 class TabPeekAction: Action {
     let tabUUID: TabUUID?
@@ -10,7 +11,7 @@ class TabPeekAction: Action {
 
     init(tabUUID: TabUUID? = nil,
          tabPeekModel: TabPeekModel? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.tabUUID = tabUUID
         self.tabPeekModel = tabPeekModel

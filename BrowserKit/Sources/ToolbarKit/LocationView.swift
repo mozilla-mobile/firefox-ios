@@ -31,13 +31,13 @@ protocol LocationViewDelegate: AnyObject {
 
 public struct LocationViewState {
     public let clearButtonA11yId: String
-    public let clearButtonA11yHint: String
     public let clearButtonA11yLabel: String
 
     public let searchEngineImageViewA11yId: String
     public let searchEngineImageViewA11yLabel: String
 
     public let urlTextFieldPlaceholder: String
+    public let urlTextFieldA11yId: String
     public let urlTextFieldA11yLabel: String
 
     public let searchEngineImageName: String
@@ -45,21 +45,21 @@ public struct LocationViewState {
 
     public init(
         clearButtonA11yId: String,
-        clearButtonA11yHint: String,
         clearButtonA11yLabel: String,
         searchEngineImageViewA11yId: String,
         searchEngineImageViewA11yLabel: String,
         urlTextFieldPlaceholder: String,
+        urlTextFieldA11yId: String,
         urlTextFieldA11yLabel: String,
         searchEngineImageName: String,
         url: String?
     ) {
         self.clearButtonA11yId = clearButtonA11yId
-        self.clearButtonA11yHint = clearButtonA11yHint
         self.clearButtonA11yLabel = clearButtonA11yLabel
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
         self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
         self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
+        self.urlTextFieldA11yId = urlTextFieldA11yId
         self.urlTextFieldA11yLabel = urlTextFieldA11yLabel
         self.searchEngineImageName = searchEngineImageName
         self.url = url
@@ -130,6 +130,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
+        hideClearButton()
 
         urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
         notifyTextChanged = { [self] in
@@ -167,6 +168,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         configureA11y(state)
         formatAndTruncateURLTextField()
         locationViewDelegate = delegate
+        showSearchEngineButton()
     }
 
     // MARK: - Layout
@@ -284,6 +286,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private func showSearchEngineButton() {
+        guard searchEngineImageView.image != nil else { return }
         searchEngineImageView.isHidden = false
         updateWidthConstraint(
             &searchEngineContentViewWidthConstraint,
@@ -427,12 +430,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     // MARK: - Accessibility
     private func configureA11y(_ state: LocationViewState) {
         clearButton.accessibilityIdentifier = state.clearButtonA11yId
-        clearButton.accessibilityHint = state.clearButtonA11yHint
         clearButton.accessibilityLabel = state.clearButtonA11yLabel
 
         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
 
+        urlTextField.accessibilityIdentifier = state.urlTextFieldA11yId
         urlTextField.accessibilityLabel = state.urlTextFieldA11yLabel
     }
 

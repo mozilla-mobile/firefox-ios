@@ -8,6 +8,7 @@ import WebKit
 import GCDWebServers
 import XCTest
 import Shared
+import Common
 
 class TabEventHandlerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID

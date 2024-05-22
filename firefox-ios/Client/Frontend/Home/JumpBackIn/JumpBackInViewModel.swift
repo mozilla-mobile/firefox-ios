@@ -31,7 +31,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     // Raw data to calculate what we can show to the user
-    var recentTabs: [Tab] = [Tab]()
+    var recentTabs = [Tab]()
     var recentSyncedTab: JumpBackInSyncedTab?
 
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor

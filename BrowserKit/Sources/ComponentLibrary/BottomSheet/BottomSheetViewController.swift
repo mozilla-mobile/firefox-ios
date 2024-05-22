@@ -146,7 +146,7 @@ public class BottomSheetViewController: UIViewController,
         }
     }
 
-    public var currentWindowUUID: UUID? {
+    public var currentWindowUUID: WindowUUID? {
         return (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID
     }
 

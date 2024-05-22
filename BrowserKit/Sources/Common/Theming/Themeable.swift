@@ -14,7 +14,7 @@ public protocol Themeable: ThemeUUIDIdentifiable, AnyObject {
 }
 
 public protocol ThemeUUIDIdentifiable: AnyObject {
-    var currentWindowUUID: UUID? { get }
+    var currentWindowUUID: WindowUUID? { get }
 }
 
 extension Themeable {
@@ -28,7 +28,7 @@ extension Themeable {
         }
     }
 
-    public func updateThemeApplicableSubviews(_ view: UIView, for window: UUID?) {
+    public func updateThemeApplicableSubviews(_ view: UIView, for window: WindowUUID?) {
         guard let window else { return }
         let theme = themeManager.currentTheme(for: window)
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)

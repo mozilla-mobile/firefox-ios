@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import ComponentLibrary
+import Common
 
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(

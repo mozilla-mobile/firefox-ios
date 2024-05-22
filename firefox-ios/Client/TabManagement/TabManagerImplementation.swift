@@ -274,9 +274,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                            tabGroupData: groupData)
         }
 
-        logger.log("We are preserving \(tabData.count) tabs",
-                   level: .debug,
-                   category: .tabs)
+        let logInfo: String
+        let windowCount = windowManager.windows.count
+        let totalTabCount =
+        (windowCount > 1 ? windowManager.allWindowTabManagers().map({ $0.normalTabs.count }).reduce(0, +) : 0)
+        logInfo = (windowCount == 1) ? "(1 window)" : "(of \(totalTabCount) total tabs across \(windowCount) windows)"
+        logger.log("Tab manager is preserving \(tabData.count) tabs \(logInfo)", level: .debug, category: .tabs)
 
         return tabData
     }

@@ -58,13 +58,16 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState,
-                          toolbarDelegate: AddressToolbarDelegate) {
+    public func configure(state: AddressToolbarState, toolbarDelegate: any AddressToolbarDelegate) {
+        configure(state: state)
+        self.toolbarDelegate = toolbarDelegate
+    }
+
+    public func configure(state: AddressToolbarState) {
         updateActions(state: state)
         updateBorder(shouldDisplayTopBorder: state.shouldDisplayTopBorder,
                      shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
 
-        self.toolbarDelegate = toolbarDelegate
         locationView.configure(state.locationViewState, delegate: self)
 
         setNeedsLayout()
@@ -246,6 +249,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         locationDividerView.backgroundColor = theme.colors.layer2
         toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
+        locationView.applyTheme(theme: theme)
         self.theme = theme
     }
 }

@@ -147,8 +147,8 @@
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
         "TrackingProtectionTests\/testTrackingProtection()",
         "URLValidationTests",
-        "ZoomingTests",
-        "ZoomingTests\/testZommingActions()"
+        "ZoomingTests\/testZommingActions()",
+        "ZoomingTests\/testZoomingActions()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

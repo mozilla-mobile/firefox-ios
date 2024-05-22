@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 /// A handler can be a plain old swift object. It does not need to extend any
 /// other object, but can.

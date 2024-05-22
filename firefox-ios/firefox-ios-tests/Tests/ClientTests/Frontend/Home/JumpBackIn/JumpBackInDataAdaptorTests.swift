@@ -6,6 +6,7 @@
 import Storage
 import XCTest
 import WebKit
+import Common
 
 // NOTE:
 // Tab groups not tested at the moment since it depends on RustPlaces concrete object.

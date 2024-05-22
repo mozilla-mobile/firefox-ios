@@ -256,9 +256,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
             statusText: .SettingsShowLinkPreviewsStatus
         )
 
+        let blockOpeningExternalAppsSettings = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme(for: windowUUID),
+            prefKey: PrefsKeys.BlockOpeningExternalApps,
+            defaultValue: false,
+            titleText: .SettingsBlockOpeningExternalAppsTitle
+        )
+
         generalSettings += [
             offerToOpenCopiedLinksSettings,
-            showLinksPreviewSettings
+            showLinksPreviewSettings,
+            blockOpeningExternalAppsSettings
         ]
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),

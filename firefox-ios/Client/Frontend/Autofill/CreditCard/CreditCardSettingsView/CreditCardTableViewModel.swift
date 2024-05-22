@@ -11,7 +11,7 @@ import Shared
 class CreditCardTableViewModel {
     var toggleModel: ToggleModel?
 
-    var creditCards: [CreditCard] = [CreditCard]() {
+    var creditCards = [CreditCard]() {
         didSet {
             didUpdateCreditCards?()
         }
