@@ -13,10 +13,15 @@ public protocol Themeable: ThemeUUIDIdentifiable, AnyObject {
     func applyTheme()
 }
 
+/// Protocol for views to identify which iPad window (UUID) the view is associated with.
+/// By default, all UIViews conform to this automatically. See: UIView+ThemeUUIDIdentifiable.swift.
 public protocol ThemeUUIDIdentifiable: AnyObject {
     var currentWindowUUID: WindowUUID? { get }
 }
 
+/// Protocol that views or controllers may optionally adopt when they provide an explicit (typically, injected)
+/// window UUID. This is used by our convenience extensions to allow UIViews to automatically detect their
+/// associated iPad window UUID, even if the view is not immediately installed in a window or view hierarchy.
 public protocol InjectedThemeUUIDIdentifiable: AnyObject {
     var windowUUID: WindowUUID { get }
 }

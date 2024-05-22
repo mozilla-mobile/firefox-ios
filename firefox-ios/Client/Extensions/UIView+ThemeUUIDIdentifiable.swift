@@ -11,9 +11,13 @@ extension UIView: ThemeUUIDIdentifiable {
     /// If the view is installed in a view hierarchy that is part of a window, or is a type
     /// that has its UUID injected, this returns the window UUID. If not, returns nil.
     public var currentWindowUUID: WindowUUID? {
-        if let injectedUUID = (self as? InjectedThemeUUIDIdentifiable)?.windowUUID { return injectedUUID }
-        if let tableView = (self as? UITableView),
-           let uuidProvider = (tableView.delegate as? InjectedThemeUUIDIdentifiable) { return uuidProvider.windowUUID }
+        if let injectedUUID = (self as? InjectedThemeUUIDIdentifiable)?.windowUUID {
+            return injectedUUID
+        }
+        if let tableView = self as? UITableView,
+           let uuidProvider = tableView.delegate as? InjectedThemeUUIDIdentifiable {
+            return uuidProvider.windowUUID
+        }
         return (self.window as? BrowserWindow)?.uuid
     }
 }
