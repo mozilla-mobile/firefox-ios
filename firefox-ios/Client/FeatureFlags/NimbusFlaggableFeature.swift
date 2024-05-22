@@ -35,6 +35,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case splashScreen
     case tabTrayRefactor
     case toolbarRefactor
+    case trackingProtectionRefactor
     case zoomFeature
 }
 
@@ -85,6 +86,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .splashScreen,
                 .tabTrayRefactor,
                 .toolbarRefactor,
+                .trackingProtectionRefactor,
                 .zoomFeature:
             return nil
         }

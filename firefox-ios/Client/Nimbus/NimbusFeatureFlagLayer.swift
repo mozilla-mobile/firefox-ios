@@ -77,6 +77,9 @@ final class NimbusFeatureFlagLayer {
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
+        case .trackingProtectionRefactor:
+            return checkTrackingProtectionRefactor(from: nimbus)
+
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
         }
@@ -151,6 +154,11 @@ final class NimbusFeatureFlagLayer {
 
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.trackingProtectionRefactor.value()
         return config.enabled
     }
 

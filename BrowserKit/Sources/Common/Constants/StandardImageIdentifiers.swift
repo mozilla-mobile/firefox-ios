@@ -21,6 +21,7 @@ public struct StandardImageIdentifiers {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let crossCircleFill = "crossCircleFillMedium"
         public static let cross = "crossMedium"
+        public static let lock = "lockMedium"
         public static let nightMode = "nightModeMedium"
         public static let privateModeCircleFillPurple = "privateModeCircleFillMediumPurple"
         public static let starFill = "starFillMedium"
