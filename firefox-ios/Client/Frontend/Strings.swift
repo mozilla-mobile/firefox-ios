@@ -2967,9 +2967,9 @@ extension String {
         value: "Offer to Open Copied Links",
         comment: "Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
     public static let SettingsOfferClipboardBarStatus = MZLocalizedString(
-        key: "Settings.OfferClipboardBar.Status",
+        key: "Settings.OfferClipboardBar.StatusV2",
         tableName: nil,
-        value: "When Opening Firefox",
+        value: "When opening Firefox",
         comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
 }
 
@@ -2981,10 +2981,19 @@ extension String {
         value: "Show Link Previews",
         comment: "Title of setting to enable link previews when long-pressing links.")
     public static let SettingsShowLinkPreviewsStatus = MZLocalizedString(
-        key: "Settings.ShowLinkPreviews.Status",
+        key: "Settings.ShowLinkPreviews.StatusV2",
         tableName: nil,
-        value: "When Long-pressing Links",
+        value: "When long-pressing links",
         comment: "Description displayed under the ”Show Link Previews” option")
+}
+
+// MARK: - Block Opening External Apps
+extension String {
+    public static let SettingsBlockOpeningExternalAppsTitle = MZLocalizedString(
+        key: "Settings.BlockOpeningExternalApps.Title",
+        tableName: nil,
+        value: "Block Opening External Apps",
+        comment: "Title of setting to block opening external apps when pressing links.")
 }
 
 // MARK: - Errors
