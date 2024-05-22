@@ -37,7 +37,7 @@ tasks:
         optimization:
             skip-unless-changed:
                 - focus-ios/**
-                - bitrise.yml
+                #- bitrise.yml
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
         attributes:
