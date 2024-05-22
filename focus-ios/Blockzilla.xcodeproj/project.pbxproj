@@ -45,7 +45,6 @@
 		451B81C02BA4DB9F00CF3C50 /* RustMozillaAppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 451B81B92BA4DB9F00CF3C50 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		451B81C92BA4DBB700CF3C50 /* FocusAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 451B81C82BA4DBB700CF3C50 /* FocusAppServices */; };
 		4F1284861FC5E242001A775B /* TrackingProtectionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */; };
-		4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */; };
 		58408BA5265FC524003C4E4F /* BrowsingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58408BA4265FC524003C4E4F /* BrowsingTest.swift */; };
 		6028814027B2C6BB00CAF588 /* OnboardingConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */; };
 		60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */; };
@@ -493,7 +492,6 @@
 		43FEAB7B28FCB9B500D6465F /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		451B81B92BA4DB9F00CF3C50 /* RustMozillaAppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RustMozillaAppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTest.swift; sourceTree = "<group>"; };
-		4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenInFocusTest.swift; sourceTree = "<group>"; };
 		58408BA4265FC524003C4E4F /* BrowsingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowsingTest.swift; sourceTree = "<group>"; };
 		6028813F27B2C6BB00CAF588 /* OnboardingConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConstants.swift; sourceTree = "<group>"; };
 		60CF785827C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalOnboardingSettingsView.swift; sourceTree = "<group>"; };
@@ -1306,7 +1304,6 @@
 				0BBBED421DD3B78300F9C565 /* SettingTest.swift */,
 				0BA39A871DD2B8E4005F970A /* Info.plist */,
 				0BA7B7BF1E9D6C1B0058EA5B /* XCUITests-Bridging-Header.h */,
-				4F582F7A1F44A10F006C744B /* OpenInFocusTest.swift */,
 				4F1284851FC5E242001A775B /* TrackingProtectionTest.swift */,
 				F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */,
 				58408BA4265FC524003C4E4F /* BrowsingTest.swift */,
@@ -2537,7 +2534,6 @@
 				58408BA5265FC524003C4E4F /* BrowsingTest.swift in Sources */,
 				1DD317E120BF1B3000DFA44E /* OnboardingTest.swift in Sources */,
 				F8DEC61526C6A33200C5F26B /* AppConfig.swift in Sources */,
-				4F582F7B1F44A10F006C744B /* OpenInFocusTest.swift in Sources */,
 				0BC928CE1E366A6E004AC581 /* AsianLocaleTest.swift in Sources */,
 				C847E956274BB7CC000F6D20 /* XCUIApplication+Buttons.swift in Sources */,
 				4F1284861FC5E242001A775B /* TrackingProtectionTest.swift in Sources */,
