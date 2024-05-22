@@ -11,15 +11,20 @@ public enum ToolbarButtonGesture {
 }
 
 class ToolbarButton: UIButton, ThemeApplicable {
-    struct UX {
+    private struct UX {
         static let verticalInset: CGFloat = 8
         static let horizontalInset: CGFloat = 8
+        static let badgeImageViewBorderWidth: CGFloat = 1
+        static let badgeImageViewCornerRadius: CGFloat = 10
+        static let badgeIconSize = CGSize(width: 20, height: 20)
     }
 
-    var foregroundColorNormal: UIColor = .clear
-    var foregroundColorHighlighted: UIColor = .clear
-    var foregroundColorDisabled: UIColor = .clear
-    var backgroundColorNormal: UIColor = .clear
+    private(set) var foregroundColorNormal: UIColor = .clear
+    private(set) var foregroundColorHighlighted: UIColor = .clear
+    private(set) var foregroundColorDisabled: UIColor = .clear
+    private(set) var backgroundColorNormal: UIColor = .clear
+
+    private var badgeImageView: UIImageView?
     private var shouldDisplayAsHighlighted = false
 
     private var onLongPress: (() -> Void)?
@@ -60,6 +65,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
         largeContentImage = image
 
         configuration = config
+        if let badgeName = element.badgeImageName {
+            addBadgeIcon(imageName: badgeName)
+        }
         layoutIfNeeded()
     }
 
@@ -87,6 +95,24 @@ class ToolbarButton: UIButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
+    private func addBadgeIcon(imageName: String) {
+        badgeImageView = UIImageView(image: UIImage(named: imageName))
+        guard let badgeImageView, configuration?.image != nil else { return }
+
+        badgeImageView.layer.borderWidth = UX.badgeImageViewBorderWidth
+        badgeImageView.layer.cornerRadius = UX.badgeImageViewCornerRadius
+        badgeImageView.clipsToBounds = true
+        badgeImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        imageView?.addSubview(badgeImageView)
+        NSLayoutConstraint.activate([
+            badgeImageView.widthAnchor.constraint(equalToConstant: UX.badgeIconSize.width),
+            badgeImageView.heightAnchor.constraint(equalToConstant: UX.badgeIconSize.height),
+            badgeImageView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            badgeImageView.bottomAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+
     private func configureLongPressGestureRecognizerIfNeeded(for element: ToolbarElement) {
         guard element.onLongPress != nil else { return }
         onLongPress = element.onLongPress
@@ -98,11 +124,10 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     private func removeAllGestureRecognizers() {
-        if let gestureRecognizers = gestureRecognizers {
+        guard let gestureRecognizers else { return }
             for recognizer in gestureRecognizers {
                 removeGestureRecognizer(recognizer)
             }
-        }
     }
 
     // MARK: - Selectors
@@ -120,6 +145,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
         foregroundColorNormal = theme.colors.iconPrimary
         foregroundColorHighlighted = theme.colors.actionPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
+        badgeImageView?.layer.borderColor = theme.colors.layer1.cgColor
+        badgeImageView?.backgroundColor = theme.colors.layer1
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
     }
