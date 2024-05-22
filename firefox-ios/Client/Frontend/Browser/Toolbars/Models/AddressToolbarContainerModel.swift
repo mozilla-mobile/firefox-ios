@@ -22,8 +22,9 @@ class AddressToolbarContainerModel {
             searchEngineImageViewA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
-            urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
+            urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel, 
             searchEngineImageName: "",
+            lockIconImageName: "",
             url: nil)
         return AddressToolbarState(
             locationViewState: locationViewState,
