@@ -387,8 +387,8 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.links["link-created-by-parent"], timeout: TIMEOUT)
     }
 
-    // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307020
+    // Smoketest
     func testVerifyBrowserTabMenu() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)

@@ -21,10 +21,11 @@ class XCodeBuild(object):
         self.testPlan = kwargs.get("test_plan", self.testPlan)
         self.log = log
 
-    def install(self):
+    def install(self, boot=True):
         command = "find ~/Library/Developer/Xcode/DerivedData/Client-*/Build/Products/Fennec-* -type d -iname 'Client.app'"
         path = subprocess.check_output(command, shell=True, universal_newlines=True)
-        self.xcrun.boot()
+        if boot:
+            self.xcrun.boot()
         try:
             out = subprocess.check_output(
                 f"xcrun simctl install booted {path}",
@@ -40,12 +41,15 @@ class XCodeBuild(object):
             with open(self.log, 'w') as f:
                 f.write(out)
 
-    def test(self, identifier, erase=True):
+    def test(self, identifier, build=True, erase=True):
+        run_args = "test"
         if erase:
             self.xcrun.erase()
+        if not build:
+            run_args = "test-without-building"
         args = [
             self.binary,
-            'test',
+            f'{run_args}',
             '-scheme', self.scheme,
             '-destination', self.destination,
             '-only-testing:{}'.format(identifier),

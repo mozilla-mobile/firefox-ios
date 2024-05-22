@@ -6,3 +6,11 @@ urls:
   stage_server: "https://stage.experimenter.nonprod.dataops.mozgcp.net"
   prod_server: "https://experimenter.services.mozilla.com"
   telemetry_server: "http://10.10.1.198:5000" # must be changed
+smoke_tests:
+  - BookmarksTests
+  - HomePageSettingsUITest
+  - NavigationTest
+  - NewTabSettings
+  - SearchTest
+  - ToolbarTest
+  - TopTabsTest
