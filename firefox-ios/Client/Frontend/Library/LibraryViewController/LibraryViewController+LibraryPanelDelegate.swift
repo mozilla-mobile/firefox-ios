@@ -4,6 +4,7 @@
 
 import Storage
 import Shared
+import Common
 
 extension LibraryViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

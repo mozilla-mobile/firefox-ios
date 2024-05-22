@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import UIKit
+import Common
 
 enum CreditCardSettingsState: String, Equatable, CaseIterable {
     // Default state

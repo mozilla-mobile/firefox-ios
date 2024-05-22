@@ -180,7 +180,7 @@ class ReadingListPanel: UITableViewController,
     weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
     var state: LibraryPanelMainState
-    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

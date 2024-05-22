@@ -26,10 +26,19 @@ ChromeUtils.defineLazyGetter(
     )
 );
 
+XPCOMUtils.defineLazyServiceGetter(
+  lazy,
+  "Crypto",
+  "@mozilla.org/login-manager/crypto/SDR;1",
+  "nsILoginManagerCrypto"
+);
+
 export let FormAutofillUtils;
 
 const ADDRESSES_COLLECTION_NAME = "addresses";
 const CREDITCARDS_COLLECTION_NAME = "creditCards";
+const AUTOFILL_CREDITCARDS_REAUTH_PREF =
+  FormAutofill.AUTOFILL_CREDITCARDS_REAUTH_PREF;
 const MANAGE_ADDRESSES_L10N_IDS = [
   "autofill-add-address-title",
   "autofill-manage-addresses-title",
@@ -107,6 +116,7 @@ FormAutofillUtils = {
 
   ADDRESSES_COLLECTION_NAME,
   CREDITCARDS_COLLECTION_NAME,
+  AUTOFILL_CREDITCARDS_REAUTH_PREF,
   MANAGE_ADDRESSES_L10N_IDS,
   EDIT_ADDRESS_L10N_IDS,
   MANAGE_CREDITCARDS_L10N_IDS,
@@ -168,10 +178,88 @@ FormAutofillUtils = {
     return ccNumber && lazy.CreditCard.isValidNumber(ccNumber);
   },
 
-  ensureLoggedIn(promptMessage) {
-    return lazy.OSKeyStore.ensureLoggedIn(
-      this._reauthEnabledByUser && promptMessage ? promptMessage : false
+  /**
+   * Get the decrypted value for a string pref.
+   *
+   * @param {string} prefName -> The pref whose value is needed.
+   * @param {string} safeDefaultValue -> Value to be returned incase the pref is not yet set.
+   * @returns {string}
+   */
+  getSecurePref(prefName, safeDefaultValue) {
+    try {
+      const encryptedValue = Services.prefs.getStringPref(prefName, "");
+      return encryptedValue === ""
+        ? safeDefaultValue
+        : lazy.Crypto.decrypt(encryptedValue);
+    } catch {
+      return safeDefaultValue;
+    }
+  },
+
+  /**
+   * Set the pref to the encrypted form of the value.
+   *
+   * @param {string} prefName -> The pref whose value is to be set.
+   * @param {string} value -> The value to be set in its encrypted form.
+   */
+  setSecurePref(prefName, value) {
+    if (value) {
+      const encryptedValue = lazy.Crypto.encrypt(value);
+      Services.prefs.setStringPref(prefName, encryptedValue);
+    } else {
+      Services.prefs.clearUserPref(prefName);
+    }
+  },
+
+  /**
+   * Get whether the OSAuth is enabled or not.
+   *
+   * @param {string} prefName -> The name of the pref (creditcards or addresses)
+   * @returns {boolean}
+   */
+  getOSAuthEnabled(prefName) {
+    return (
+      lazy.OSKeyStore.canReauth() &&
+      this.getSecurePref(prefName, "") !== "opt out"
     );
+  },
+
+  /**
+   * Set whether the OSAuth is enabled or not.
+   *
+   * @param {string} prefName -> The pref to encrypt.
+   * @param {boolean} enable -> Whether the pref is to be enabled.
+   */
+  setOSAuthEnabled(prefName, enable) {
+    this.setSecurePref(prefName, enable ? null : "opt out");
+  },
+
+  async verifyUserOSAuth(
+    prefName,
+    promptMessage,
+    captionDialog = "",
+    parentWindow = null,
+    generateKeyIfNotAvailable = true
+  ) {
+    if (!this.getOSAuthEnabled(prefName)) {
+      promptMessage = false;
+    }
+    try {
+      return (
+        await lazy.OSKeyStore.ensureLoggedIn(
+          promptMessage,
+          captionDialog,
+          parentWindow,
+          generateKeyIfNotAvailable
+        )
+      ).authenticated;
+    } catch (ex) {
+      // Since Win throws an exception whereas Mac resolves to false upon cancelling.
+      if (ex.result !== Cr.NS_ERROR_FAILURE) {
+        throw ex;
+      }
+    }
+    return false;
   },
 
   /**

@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import Common
 
 class ToolbarTextField: AutocompleteTextField {
     // MARK: - Variables
@@ -38,7 +39,7 @@ class ToolbarTextField: AutocompleteTextField {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let image = UIImage.templateImageNamed("topTabs-closeTabs") else { return }
+        guard let image = UIImage(named: StandardImageIdentifiers.Medium.crossCircleFill) else { return }
         if tintedClearImage == nil {
             if let clearButtonTintColor = clearButtonTintColor {
                 tintedClearImage = image.tinted(withColor: clearButtonTintColor)

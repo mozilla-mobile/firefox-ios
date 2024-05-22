@@ -125,4 +125,48 @@ class ToolbarTests: BaseTestCase {
             XCTAssertTrue(topElement.isHittable)
         }
    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306870
+    func testOpenNewTabButtonOnToolbar() throws {
+        if iPad() {
+            throw XCTSkip("iPhone only test")
+        } else {
+            // Launch Firefox iOS
+            // A magnifying glass icon is displayed. A "+" icon is displayed
+            validateAddNewTabButtonOnToolbar(isPrivate: false)
+            // Repeat steps on private mode
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            validateAddNewTabButtonOnToolbar(isPrivate: true)
+        }
+    }
+
+    private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
+        if isPrivate {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        restartInBackground()
+        if isPrivate {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        closeFromAppSwitcherAndRelaunch()
+        if isPrivate {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tapOnApp()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as! String, "2")
+    }
 }

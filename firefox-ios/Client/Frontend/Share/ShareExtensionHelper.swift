@@ -17,19 +17,8 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
     private let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
 
-    var areShareSheetChangesEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFileURL
-    }
-
-    /// Exclude 'Add to Reading List' which currently uses Safari. If share sheet changes are enabled exclude
-    /// Copy from system to provide custom activity
     private var excludingActivities: [UIActivity.ActivityType] {
-        guard areShareSheetChangesEnabled else {
-            return [UIActivity.ActivityType.addToReadingList]
-        }
-
-        return [UIActivity.ActivityType.addToReadingList,
-                UIActivity.ActivityType.copyToPasteboard]
+        return [UIActivity.ActivityType.addToReadingList]
     }
 
     // Can be a file:// or http(s):// url
@@ -50,9 +39,8 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
         if #available(iOS 16.4, *), let webView = webView {
             activityItems.append(webView)
         }
-        let appActivities = getApplicationActivities()
         let activityViewController = UIActivityViewController(activityItems: activityItems,
-                                                              applicationActivities: appActivities)
+                                                              applicationActivities: nil)
 
         activityViewController.excludedActivityTypes = excludingActivities
 
@@ -108,21 +96,6 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
         activityItems.append(self)
 
         return activityItems
-    }
-
-    private func getApplicationActivities() -> [UIActivity]? {
-        guard areShareSheetChangesEnabled else {
-            return nil
-        }
-
-        var appActivities = [UIActivity]()
-        let copyLinkActivity = CopyLinkActivity(activityType: .copyLink, url: url)
-        appActivities.append(copyLinkActivity)
-
-        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
-        appActivities.append(sendToDeviceActivity)
-
-        return appActivities
     }
 }
 

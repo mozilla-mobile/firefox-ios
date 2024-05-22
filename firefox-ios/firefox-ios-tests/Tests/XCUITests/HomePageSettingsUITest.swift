@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
@@ -391,5 +392,57 @@ class HomePageSettingsUITests: BaseTestCase {
             app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String,
             "1"
         )
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307032
+    func testShortcutsRows() {
+        addWebsitesToShortcut(website: path(forTestPage: url_1))
+        addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))
+        addWebsitesToShortcut(website: path(forTestPage: url_3))
+        addWebsitesToShortcut(website: "www.euronews.com")
+        addWebsitesToShortcut(website: "www.walmart.com")
+        addWebsitesToShortcut(website: "www.bestbuy.com")
+        addWebsitesToShortcut(website: "www.instagram.com")
+        if !iPad() {
+            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 5)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 4, maxBoundary: 9)
+            validateNumberOfTopSitesDisplayed(row: 2, minBoundary: 8, maxBoundary: 13)
+            validateNumberOfTopSitesDisplayed(row: 3, minBoundary: 12, maxBoundary: 17)
+        } else {
+            validateNumberOfTopSitesDisplayed(row: 0, minBoundary: 1, maxBoundary: 8)
+            validateNumberOfTopSitesDisplayed(row: 1, minBoundary: 7, maxBoundary: 15)
+        }
+    }
+
+    private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {
+        navigator.goto(HomeSettings)
+        app.staticTexts["Shortcuts"].tap()
+        mozWaitForElementToExist(app.staticTexts["Rows"])
+        app.staticTexts["Rows"].tap()
+        let expectedRowValues = ["1", "2", "3", "4"]
+        for i in 0...3 {
+            XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
+        }
+        app.tables.cells.element(boundBy: row).tap()
+        app.buttons["Shortcuts"].tap()
+        navigator.goto(NewTabScreen)
+        app.buttons["Done"].tap()
+        mozWaitForElementToExist(app.cells["TopSitesCell"])
+        let totalTopSites = app.cells.matching(identifier: "TopSitesCell").count
+        XCTAssertTrue(totalTopSites > minBoundary)
+        XCTAssertTrue(totalTopSites < maxBoundary)
+    }
+
+    private func addWebsitesToShortcut(website: String) {
+        navigator.goto(NewTabScreen)
+        navigator.openURL(website)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.pin])
+        app.tables.otherElements[StandardImageIdentifiers.Large.pin].tap()
+        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
     }
 }

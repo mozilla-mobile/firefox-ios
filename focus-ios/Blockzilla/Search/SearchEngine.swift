@@ -12,7 +12,6 @@ class SearchEngine: NSObject, NSCoding {
     private let searchTemplate: String
     private let suggestionsTemplate: String?
     private let SearchTermComponent = "{searchTerms}"
-    private let LocaleTermComponent = "{moz:locale}"
     fileprivate var suggestTemplate: String?
 
     fileprivate lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
@@ -52,10 +51,8 @@ class SearchEngine: NSObject, NSCoding {
                 return nil
         }
 
-        let localeString = Locale.current.identifier
         let urlString = encodedSearchTemplate
             .replacingOccurrences(of: SearchTermComponent, with: escaped, options: .literal, range: nil)
-            .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
         return URL(string: urlString, invalidCharacters: false)
     }
 
@@ -66,9 +63,7 @@ class SearchEngine: NSObject, NSCoding {
             return nil
         }
 
-        let localeString = NSLocale.current.identifier
         guard let urlString = searchTemplate.replacingOccurrences(of: SearchTermComponent, with: escaped)
-            .replacingOccurrences(of: LocaleTermComponent, with: localeString)
             .addingPercentEncoding(withAllowedCharacters: .urlAllowed) else {
             assertionFailure("Invalid search URL")
             return nil
@@ -152,10 +147,8 @@ class SearchEngine: NSObject, NSCoding {
             templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
 
             if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
-                let localeString = Locale.current.identifier
                 let urlString = encodedSearchTemplate
                     .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
-                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
                 return URL(string: urlString)
             }
         }

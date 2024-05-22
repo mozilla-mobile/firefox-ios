@@ -40,7 +40,7 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
         let colors = SendToDeviceHelper.Colors(
             defaultBackground: theme.colors.layer2,
             textColor: theme.colors.textPrimary,
-            iconColor: theme.colors.iconPrimary
+            iconColor: theme.colors.iconDisabled
         )
         let helper = SendToDeviceHelper(shareItem: shareItem,
                                         profile: profile,

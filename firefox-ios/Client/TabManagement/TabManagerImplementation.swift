@@ -10,7 +10,7 @@ import Shared
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
-class TabManagerImplementation: LegacyTabManager, Notifiable {
+class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsProvider {
     private let tabDataStore: TabDataStore
     private let tabSessionStore: TabSessionStore
     private let imageStore: DiskImageStore?
@@ -30,16 +30,17 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
          uuid: WindowUUID,
-         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore? = nil,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
-         tabMigration: TabMigrationUtility = DefaultTabMigrationUtility(),
+         tabMigration: TabMigrationUtility? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          inactiveTabsManager: InactiveTabsManagerProtocol = InactiveTabsManager(),
          windowManager: WindowManager = AppContainer.shared.resolve()) {
-        self.tabDataStore = tabDataStore
+        let dataStore =  tabDataStore ?? DefaultTabDataStore(logger: logger, fileManager: DefaultTabFileManager())
+        self.tabDataStore = dataStore
         self.tabSessionStore = tabSessionStore
         self.imageStore = imageStore
-        self.tabMigration = tabMigration
+        self.tabMigration = tabMigration ?? DefaultTabMigrationUtility(tabDataStore: dataStore)
         self.notificationCenter = notificationCenter
         self.inactiveTabsManager = inactiveTabsManager
         self.windowManager = windowManager
@@ -240,8 +241,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
 
             // Save simple tabs, used by widget extension
-            let simpleTabs = SimpleTab.convertToSimpleTabs(windowData.tabData)
-            SimpleTab.saveSimpleTab(tabs: simpleTabs)
+            windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
         }
@@ -274,9 +274,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
                            tabGroupData: groupData)
         }
 
-        logger.log("We are preserving \(tabData.count) tabs",
-                   level: .debug,
-                   category: .tabs)
+        let logInfo: String
+        let windowCount = windowManager.windows.count
+        let totalTabCount =
+        (windowCount > 1 ? windowManager.allWindowTabManagers().map({ $0.normalTabs.count }).reduce(0, +) : 0)
+        logInfo = (windowCount == 1) ? "(1 window)" : "(of \(totalTabCount) total tabs across \(windowCount) windows)"
+        logger.log("Tab manager is preserving \(tabData.count) tabs \(logInfo)", level: .debug, category: .tabs)
 
         return tabData
     }
@@ -284,7 +287,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
     /// storeChanges is called when a web view has finished loading a page
     override func storeChanges() {
         let windowManager: WindowManager = AppContainer.shared.resolve()
-        windowManager.storeTabs()
+        windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
         saveCurrentTabSessionData()
     }
@@ -542,5 +545,15 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
         default:
             break
         }
+    }
+
+    // MARK: - WindowSimpleTabsProvider
+
+    func windowSimpleTabs() -> [TabUUID: SimpleTab] {
+        let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
+        let windowData = WindowData(id: windowUUID,
+                                    activeTabId: activeTabID,
+                                    tabData: self.generateTabDataForSaving())
+        return SimpleTab.convertToSimpleTabs(windowData.tabData)
     }
 }

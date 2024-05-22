@@ -4,6 +4,7 @@
 
 import XCTest
 import Storage
+import Common
 @testable import Client
 
 final class PasswordManagerCoordinatorTests: XCTestCase {

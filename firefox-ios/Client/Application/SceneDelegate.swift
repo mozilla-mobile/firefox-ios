@@ -104,7 +104,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
-        // Configure the route with the latest browsing state.
         guard let url = URLContexts.first?.url else { return }
         handleOpenURL(url)
     }
@@ -142,11 +141,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ),
             prefs: profile.prefs
         )
-        guard let route = routeBuilder.makeRoute(url: url) else { return }
-        handle(route: route)
+
+        // Before processing the incoming URL, check if it is a widget that is opening a tab via UUID.
+        // If so, we want to be sure that we select the tab in the correct iPad window.
+        if shouldRerouteIncomingURLToSpecificWindow(url),
+           let tabUUID = URLScanner(url: url)?.value(query: "uuid"),
+           let targetWindow = (AppContainer.shared.resolve() as WindowManager).window(for: tabUUID),
+           targetWindow != sceneCoordinator?.windowUUID {
+            DefaultApplicationHelper().open(url, inWindow: targetWindow)
+        } else {
+            guard let route = routeBuilder.makeRoute(url: url) else { return }
+            handle(route: route)
+        }
     }
 
     // MARK: - Misc. Helpers
+
+    private func shouldRerouteIncomingURLToSpecificWindow(_ url: URL) -> Bool {
+        return routeBuilder.parseURLHost(url)?.shouldRouteDeeplinkToSpecificIPadWindow ?? false
+    }
 
     private func handle(connectionOptions: UIScene.ConnectionOptions) {
         if let context = connectionOptions.urlContexts.first,

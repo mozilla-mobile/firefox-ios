@@ -21,22 +21,30 @@ extension Address {
 }
 
 // AddressListViewModel: A view model for managing addresses.
-class AddressListViewModel: ObservableObject {
+class AddressListViewModel: ObservableObject, FeatureFlaggable {
     // MARK: - Properties
 
     @Published var addresses: [Address] = []
     @Published var showSection = false
-    private let profile: Profile?
+    @Published var selectedAddress: Address?
+
     private let logger: Logger
+
+    var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
+
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
+
+    let addressProvider: AddressProvider
 
     // MARK: - Initializer
 
     /// Initializes the AddressListViewModel.
-    /// - Parameter profile: The profile associated with the address list.
-    init(profile: Profile? = nil, logger: Logger = DefaultLogger.shared) {
-        self.profile = profile
+    init(
+        logger: Logger = DefaultLogger.shared,
+        addressProvider: AddressProvider
+    ) {
         self.logger = logger
+        self.addressProvider = addressProvider
     }
 
     // MARK: - Fetch Addresses
@@ -44,7 +52,7 @@ class AddressListViewModel: ObservableObject {
     /// Fetches addresses from the associated profile's autofill.
     func fetchAddresses() {
         // Assuming profile is a class-level variable
-        profile?.autofill.listAllAddresses { [weak self] storedAddresses, error in
+        addressProvider.listAllAddresses { [weak self] storedAddresses, error in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 if let addresses = storedAddresses {
@@ -78,9 +86,54 @@ class AddressListViewModel: ObservableObject {
 
     // MARK: - Handle Address Selection
 
-        /// Handles the selection of an address.
-        /// - Parameter address: The selected address.
-        func handleAddressSelection(_ address: Address) {
-            addressSelectionCallback?(fromAddress(address))
+    /// Handles the selection of an address.
+    /// - Parameter address: The selected address.
+    func handleAddressSelection(_ address: Address) {
+        addressSelectionCallback?(fromAddress(address))
+    }
+
+    func onAddressTap(_ address: Address) {
+        selectedAddress = address
+    }
+
+    func onCancelButtonTap() {
+        selectedAddress = nil
+    }
+
+    // MARK: - Inject JSON Data
+
+    struct JSONDataError: Error {}
+
+    func getInjectJSONDataInit() throws -> String {
+        guard let address = selectedAddress else {
+            throw JSONDataError()
         }
+
+        do {
+            let addressString = try jsonString(from: address)
+            let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
+
+            let javascript = "init(\(addressString), \(l10sString));"
+            return javascript
+        } catch {
+            logger.log("Failed to encode data",
+                       level: .warning,
+                       category: .autofill,
+                       description: "Failed to encode data with error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+
+    private func jsonString<T: Encodable>(from object: T) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
+        let data = try encoder.encode(object)
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            throw EncodingError.invalidValue(
+                object,
+                EncodingError.Context(codingPath: [], debugDescription: "Unable to convert data to String")
+            )
+        }
+        return jsonString.replacingOccurrences(of: "\\", with: "\\\\")
+    }
 }

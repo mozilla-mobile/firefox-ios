@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 struct AppState: StateType {
     let activeScreens: ActiveScreensState
@@ -68,5 +69,7 @@ let store = Store(state: AppState(),
                     FeltPrivacyMiddleware().privacyManagerProvider,
                     ThemeManagerMiddleware().themeManagerProvider,
                     TabManagerMiddleware().tabsPanelProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+                    ToolbarMiddleware().toolbarProvider,
+                    MicrosurveyPromptMiddleware().microsurveyProvider
                   ])

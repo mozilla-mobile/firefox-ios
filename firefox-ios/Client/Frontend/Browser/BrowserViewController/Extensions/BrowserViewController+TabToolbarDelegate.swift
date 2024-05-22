@@ -16,7 +16,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureDataClearanceContextualHint() {
-        guard contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+        guard !isToolbarRefactorEnabled,
+                contentContainer.hasWebView,
+                tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
+        else {
             resetDataClearanceCFRTimer()
             return
         }
@@ -35,14 +38,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        updateZoomPageBarVisibility(visible: false)
-        let page = NewTabAccessors.getHomePage(self.profile.prefs)
-        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
-            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
-        } else if let homePanelURL = page.url {
-            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+        didTapOnHome()
     }
 
     // Presents alert to clear users private session data
@@ -120,7 +116,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func dismissUrlBar() {
-        if urlBar.inOverlayMode {
+        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
             urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
@@ -233,14 +229,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
 
         let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
-                                                        iconString: "nav-tabcounter",
+                                                        iconString: StandardImageIdentifiers.Large.tab,
                                                         iconType: .TabsButton,
                                                         tabCount: tabCount) { _ in
             action()
         }.items
 
         let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
-                                                       iconString: "nav-tabcounter",
+                                                       iconString: StandardImageIdentifiers.Large.tab,
                                                        iconType: .TabsButton,
                                                        tabCount: tabCount) { _ in
             action()

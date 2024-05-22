@@ -17,6 +17,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
+        case .addressAutofillEdit:
+            return checkAddressAutofillEditing(from: nimbus)
+
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
@@ -68,13 +71,17 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
-        case .shareSheetChanges,
-                .shareToolbarChanges:
-            return checkNimbusForShareSheet(for: featureID, from: nimbus)
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
+
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
+
+        case .toolbarRefactor:
+            return checkToolbarRefactorFeature(from: nimbus)
+
+        case .trackingProtectionRefactor:
+            return checkTrackingProtectionRefactor(from: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -148,6 +155,16 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.trackingProtectionRefactor.value()
+        return config.enabled
+    }
+
     private func checkFeltPrivacyFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -181,18 +198,6 @@ final class NimbusFeatureFlagLayer {
             default: return false
             }
         }
-
-    public func checkNimbusForShareSheet(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.shareSheet.value()
-
-            switch featureID {
-            case .shareSheetChanges: return config.moveActions
-            case .shareToolbarChanges: return config.toolbarChanges
-            default: return false
-            }
-    }
 
     private func checkSplashScreenFeature(
         for featureID: NimbusFeatureFlagID,
@@ -241,6 +246,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillFeature.value()
+
+        return config.status
+    }
+
+    private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
     }

@@ -64,7 +64,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     private lazy var zoomOutButton: UIButton = .build { button in
         self.configureButton(button,
-                             image: UIImage.templateImageNamed(ImageIdentifiers.subtract),
+                             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.subtract),
                              accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)

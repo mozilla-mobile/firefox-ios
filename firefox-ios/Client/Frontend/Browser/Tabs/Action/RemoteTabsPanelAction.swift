@@ -15,7 +15,7 @@ class RemoteTabsPanelAction: Action {
     init(clientAndTabs: [ClientAndTabs]? = nil,
          reason: RemoteTabsPanelEmptyStateReason? = nil,
          url: URL? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.clientAndTabs = clientAndTabs
         self.reason = reason
