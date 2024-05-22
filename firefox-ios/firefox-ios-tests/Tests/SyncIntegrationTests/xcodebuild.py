@@ -61,7 +61,7 @@ class XCodeBuild(object):
                 cwd=os.chdir("../../.."),
                 stderr=subprocess.STDOUT,
                 universal_newlines=True)
-        except Exception as e:
+        except subprocess.CalledProcessError as e:
             out = e.output
             raise
         finally:
