@@ -17,6 +17,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
+        case .addressAutofillEdit:
+            return checkAddressAutofillEditing(from: nimbus)
+
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
@@ -243,6 +246,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillFeature.value()
+
+        return config.status
+    }
+
+    private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
     }
