@@ -464,7 +464,6 @@ extension String {
                 value: "Save",
                 comment: "Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly."
             )
-
         }
         public struct BottomSheet {
             public static let UseASavedAddress = MZLocalizedString(
