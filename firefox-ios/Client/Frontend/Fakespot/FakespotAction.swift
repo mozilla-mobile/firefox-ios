@@ -15,7 +15,7 @@ class FakespotAction: Action {
          isExpanded: Bool? = nil,
          tabUUID: TabUUID? = nil,
          productId: String? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.isOpen = isOpen
         self.isExpanded = isExpanded

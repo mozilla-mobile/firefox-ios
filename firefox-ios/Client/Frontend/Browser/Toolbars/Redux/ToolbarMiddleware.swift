@@ -132,7 +132,7 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    isPrivate: Bool = false,
                                                    scrollY: CGFloat = 0,
                                                    state: AppState,
-                                                   windowUUID: UUID) -> Bool {
+                                                   windowUUID: WindowUUID) -> Bool {
         guard let browserState = state.screenState(BrowserViewControllerState.self,
                                                    for: .browserViewController,
                                                    window: windowUUID) else { return false }
@@ -143,7 +143,7 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                   scrollY: scrollY)
     }
 
-    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: UUID) -> Bool {
+    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: WindowUUID) -> Bool {
         guard let browserState = state.screenState(BrowserViewControllerState.self,
                                                    for: .browserViewController,
                                                    window: windowUUID) else { return false }
@@ -151,7 +151,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
     }
 
-    private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: UUID) {
+    private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: WindowUUID) {
         switch actionType {
         case .home:
             let action = GeneralBrowserAction(navigateToHome: true,
@@ -169,7 +169,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func handleToolbarButtonLongPressActions(actionType: ToolbarState.ActionState.ActionType,
-                                                     windowUUID: UUID) {
+                                                     windowUUID: WindowUUID) {
         switch actionType {
         default:
             break

@@ -106,6 +106,11 @@ class BaseTestCase: XCTestCase {
         app.activate()
     }
 
+    func forceRestartApp() {
+        tearDown()
+        setUp()
+    }
+
     // If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().scrollViews["IntroViewController.scrollView"]

@@ -4,6 +4,7 @@
 
 import XCTest
 
+import Common
 @testable import Client
 
 class HistoryPanelTests: XCTestCase {

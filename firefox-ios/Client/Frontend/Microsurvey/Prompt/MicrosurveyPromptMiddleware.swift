@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Shared
+import Common
 
 class MicrosurveyPromptMiddleware {
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in

@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 class SearchBarSettingsViewController: SettingsTableViewController {
     private let viewModel: SearchBarSettingsViewModel

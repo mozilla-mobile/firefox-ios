@@ -7,6 +7,7 @@
 import Foundation
 import XCTest
 import SwiftUI
+import Common
 @testable import Client
 
 class CreditCardInputFieldTests: XCTestCase {

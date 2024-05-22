@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 class GeneralBrowserAction: Action {
     let selectedTabURL: URL?
@@ -17,7 +18,7 @@ class GeneralBrowserAction: Action {
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          navigateToHome: Bool? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
