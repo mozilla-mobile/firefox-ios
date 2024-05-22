@@ -145,7 +145,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         foregroundColorNormal = theme.colors.iconPrimary
         foregroundColorHighlighted = theme.colors.actionPrimary
         foregroundColorDisabled = theme.colors.iconDisabled
-        badgeImageView?.layer.borderColor = theme.colors.layer3.cgColor
+        badgeImageView?.layer.borderColor = theme.colors.layer1.cgColor
         badgeImageView?.backgroundColor = theme.colors.layer1
         backgroundColorNormal = .clear
         setNeedsUpdateConfiguration()
