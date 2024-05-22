@@ -45,47 +45,14 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        guard let address = model.selectedAddress else { return }
-        injectJSONDataInit(address: address, editAddressL10n: .editAddressLocalizationIDs)
-    }
-
-    private func jsonString<T: Encodable>(from object: T) throws -> String {
-        let encoder = JSONEncoder()
-        encoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
-        let data = try encoder.encode(object)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            throw EncodingError.invalidValue(
-                object,
-                EncodingError.Context(codingPath: [], debugDescription: "Unable to convert data to String")
-            )
-        }
-        return jsonString.replacingOccurrences(of: "\\", with: "\\\\")
-    }
-
-    private func injectJSONDataInit(address: Address, editAddressL10n: EditAddressLocalization) {
         do {
-            let addressString = try jsonString(from: address)
-            let l10sString = try jsonString(from: editAddressL10n)
-
-            let javascript = "init(\(addressString), \(l10sString));"
-            webView.evaluateJavaScript(javascript) { (result, error) in
-                if let error = error {
-                    self.logger.log("Error evaluating JavaScript",
-                                    level: .warning,
-                                    category: .autofill,
-                                    description: "Error evaluating JavaScript: \(error.localizedDescription)")
-                } else {
-                    self.logger.log("JavaScript evaluated successfully",
-                                    level: .info,
-                                    category: .autofill,
-                                    description: "JavaScript evaluated successfully")
-                }
-            }
+            let javascript = try model.getInjectJSONDataInit()
+            self.evaluateJavaScript(javascript)
         } catch {
-            self.logger.log("Failed to encode data",
+            self.logger.log("Error injecting JavaScript",
                             level: .warning,
                             category: .autofill,
-                            description: "Failed to encode data with error: \(error.localizedDescription)")
+                            description: "Error injecting JavaScript: \(error.localizedDescription)")
         }
     }
 
