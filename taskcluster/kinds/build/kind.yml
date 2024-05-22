@@ -26,18 +26,19 @@ tasks:
             skip-unless-changed:
                 - firefox-ios/**
                 - bitrise.yml
-    focus-debug:
-        description: Build firefox_configure_build bitrise workflow
-        run-on-tasks-for:
-            - github-pull-request
-            - github-push
-        bitrise:
-            workflows:
-                - focus_configure_build
-        optimization:
-            skip-unless-changed:
-                - focus-ios/**
-                #- bitrise.yml
+    # Commenting for now until the focus workflow is added
+    #focus-debug:
+    #    description: Build firefox_configure_build bitrise workflow
+    #    run-on-tasks-for:
+    #        - github-pull-request
+    #        - github-push
+    #    bitrise:
+    #        workflows:
+    #            - focus_configure_build
+    #    optimization:
+    #        skip-unless-changed:
+    #            - focus-ios/**
+    #            - bitrise.yml
     screenshots:
         description: Generate build instrumented for screenshots, including en-US pictures
         attributes:

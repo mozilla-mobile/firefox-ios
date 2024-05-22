@@ -4,7 +4,7 @@ project_type: ios
 pipelines:
   pipeline_build_and_test:
     stages:
-    #- pre_configuration: {}
+    - pre_configuration: {}
     - build_applications: {}
     - run_tests: {}
 stages:
@@ -13,7 +13,7 @@ stages:
     - determine_apps_affected: {}
   build_applications:
     workflows:
-    - firefox_configure_build:
+    - firefox_configure_build_bitrise:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
     - focus_configure_build:
         run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
@@ -34,7 +34,7 @@ stages:
     - klar_unit_test:
         run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
 workflows:
-  firefox_configure_build:
+  firefox_configure_build_bitrise:
     before_run:
     - 0_detect_standalone_build
     - 1_git_clone_and_post_clone
@@ -360,7 +360,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: build_applications.firefox_configure_build
+        - artifact_sources: build_applications.firefox_configure_build_bitrise
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -641,9 +641,9 @@ workflows:
             else
                 echo "Not Running UI Tests"
             fi
-    - share-pipeline-variable@1:
-        inputs:
-        - variables: RUN_UI_TESTS
+    #- share-pipeline-variable@1:
+    #    inputs:
+    #    - variables: RUN_UI_TESTS
   NewXcodeVersions:
     steps:
     - script@1:
@@ -2113,6 +2113,128 @@ workflows:
             set -x
             focus-ios/focus-ios-tests/tools/sentry-cli --auth-token "$SENTRY_AUTH_TOKEN" upload-dif \
               --org mozilla --project klar-ios "$BITRISE_DSYM_DIR_PATH"
+#
+# *****%*****%***** TEMP WORKFLOWS FOR TASKCLUSTER *****%*****%*****
+#
+  firefox_configure_build:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - restore-spm-cache@1:
+        is_always_run: true
+    - script@1.1:
+        title: Build for Testing
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+
+            ls /Users/vagrant/git/DerivedData/Build/Products
+            ls /Users/vagrant/git/DerivedData
+    - xcode-test-without-building@0:
+        timeout: 600
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.4
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.4-arm64.xctestrun"
+        - maximum_test_repetitions: 2
+    - save-spm-cache@1:
+        is_always_run: true
+    - script@1.1:
+        title: Compress Derived Data
+        is_always_run: true
+        inputs:
+        - content: |
+            set -euxo pipefail
+            ls /Users/vagrant/git/DerivedData
+            ls /Users/vagrant/git/DerivedData/Build/Products
+
+            echo "-- compress --"
+            # Add Fennec-iphonesimulator folder
+            # Add All .xctestrun files
+            # Add firefox-ios-test files and test plans
+
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client.xcodeproj" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/" \
+            "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
+            "$BITRISE_SOURCE_DIR/xcodebuild.log"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+    # Commenting for now until the token is stored in TC
+    #- script@1.1:
+    #    title: Run Danger 2
+    #    timeout: 180
+    #    inputs:
+    #    - content: |
+    #        #!/usr/bin/env bash
+    #        # Fail if any command fails
+    #        set -e
+    #        echo "Run danger"
+    #        swift run danger-swift ci
+    - cache-push@2.7.1:
+        is_always_run: true
+    - script@1.1:
+        title: Detect number of warnings
+        is_always_run: true
+        inputs:
+        - content: |
+            set -e
+            set -x
+
+            echo "bitrise_xcode"
+            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_fennec.log all)
+
+            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
+
+            STR=$COUNT_XCUI
+            SUB='greater'
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
+    - slack@3.1:
+        is_always_run: true
+        inputs:
+        - title: 'Running via Taskcluster'
+        - author_name: ''
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
+        - footer: Created by Mobile Test Engineering
+        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
+        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
+        - timestamp: 'no'
+        - fields: |
+            Task | ${BITRISE_BUILD_URL}
+            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
+            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
+            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
+            Branch | ${BITRISE_GIT_BRANCH}
+            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
+        - buttons: |
+            App|${BITRISE_APP_URL}
+            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
+            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
+    - slack@3.1:
+        is_always_run: true
+        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version" | and .IsBuildFailed}}'
+        inputs:
+        - channel: "#firefox-ios"
+        - text: Build status using latest Rust-Component
+        - webhook_url: $WEBHOOK_SLACK_TOKEN_2
 
 app:
   envs:
