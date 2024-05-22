@@ -107,8 +107,7 @@ struct EditAddressViewControllerRepresentable: UIViewControllerRepresentable {
     var model: AddressListViewModel
 
     func makeUIViewController(context: Context) -> EditAddressViewController {
-        let webViewController = EditAddressViewController(model: model)
-        return webViewController
+        return EditAddressViewController(model: model)
     }
 
     func updateUIViewController(_ uiViewController: EditAddressViewController, context: Context) {

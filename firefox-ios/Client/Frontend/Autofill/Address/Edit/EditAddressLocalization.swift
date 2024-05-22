@@ -79,7 +79,7 @@ struct EditAddressLocalization: Encodable {
         case autofillSaveButton = "autofill-save-button"
     }
 
-    // Change the correct strings after UX finalize copyright
+    // TODO: FXIOS-9100 Change the correct strings after UX finalize copyright
     static let editAddressLocalizationIDs = EditAddressLocalization(
         autofillAddressGivenName: "Given Name",
         autofillAddressAdditionalName: "Additional Name",

@@ -51,7 +51,7 @@ struct AddressListView: View {
                             Button {
                                 viewModel.onCancelButtonTap()
                             } label: {
-                                // Change the correct string after UX finalize copyright
+                                // TODO: FXIOS-9100 Change the correct string after UX finalize copyright
                                 Text(String.CreditCard.EditCard.CancelNavBarButtonLabel)
                             }
                         }
