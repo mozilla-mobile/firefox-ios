@@ -35,6 +35,7 @@ enum GeneralBrowserActionType: ActionType {
     case showOverlay
     case updateSelectedTab
     case goToHomepage
+    case showQRcodeReader
 }
 
 class GeneralBrowserMiddlewareAction: Action {

@@ -54,6 +54,16 @@ public struct AccessibilityIdentifiers {
             static let creditCardAutofillButton = "KeyboardAccessory.creditCardAutofillButton"
             static let loginAutofillButton = "KeyboardAccessory.loginAutofillButton"
         }
+
+        struct AddressToolbar {
+            static let clear = "AddressToolbar.clear"
+            static let searchTextField = "AddressToolbar.address"
+            static let searchEngine = "AddressToolbar.searchEngine"
+        }
+
+        struct ToolbarButtons {
+            static let qrCode = "Toolbar.QRCode.button"
+        }
     }
 
     struct ContextualHints {

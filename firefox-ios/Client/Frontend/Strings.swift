@@ -3384,6 +3384,14 @@ extension String {
         tableName: nil,
         value: "OK",
         comment: "OK button to dismiss the error prompt.")
+
+    public struct QRCode {
+        public static let ToolbarButtonA11yLabel = MZLocalizedString(
+            key: "QRCode.Toolbar.Button.A11y.Title.v128",
+            tableName: "QRCode",
+            value: "Scan QR code",
+            comment: "Accessibility label of the QR code button in the toolbar")
+    }
 }
 
 // MARK: - App menu
@@ -5215,6 +5223,31 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+}
+
+extension String {
+    public struct AddressToolbar {
+        public static let LocationPlaceholder = MZLocalizedString(
+            key: "AddressToolbar.Location.Placeholder.v128",
+            tableName: "AddressToolbar",
+            value: "Search or enter address",
+            comment: "Placeholder for the address field in the address toolbar.")
+        public static let LocationA11yLabel = MZLocalizedString(
+            key: "AddressToolbar.Location.A11y.Label.v128",
+            tableName: "AddressToolbar",
+            value: "Search or enter address",
+            comment: "Accessibility label for the address field in the address toolbar.")
+        public static let LocationClearButtonA11yLabel = MZLocalizedString(
+            key: "AddressToolbar.Location.Clear.Button.v128",
+            tableName: "AddressToolbar",
+            value: "Clear text",
+            comment: "Accessibility label for the clear button in the address field of the address toolbar.")
+        public static let SearchEngineA11yLabel = MZLocalizedString(
+            key: "AddressToolbar.SearchEngine.A11y.Label.v128",
+            tableName: "AddressToolbar",
+            value: "Search Engine: %@",
+            comment: "Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google).")
+    }
 }
 
 // MARK: - Error Pages
