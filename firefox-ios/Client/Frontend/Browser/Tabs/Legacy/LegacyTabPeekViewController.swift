@@ -35,6 +35,14 @@ class PreviewActionBuilder {
             handler: handler
         ))
     }
+
+    func addCopyUrl(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
+        actions.append(UIPreviewAction(
+            title: .TabPeekCopyUrl,
+            style: .default,
+            handler: handler
+        ))
+    }
 }
 
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
