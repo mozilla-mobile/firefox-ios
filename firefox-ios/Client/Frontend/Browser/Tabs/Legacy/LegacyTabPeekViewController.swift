@@ -82,13 +82,10 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
         let isHomeTab = self.tab?.isFxHomeTab ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
             if !self.isBookmarked && !isHomeTab {
-                actions.append(UIPreviewAction(
-                    title: .TabPeekAddToBookmarks,
-                    style: .default
-                ) { [weak self] previewAction, viewController in
+                actionsBuilder.addBookmark { [weak self] previewAction, viewController in
                     guard let wself = self, let tab = wself.tab else { return }
                     wself.delegate?.tabPeekDidAddBookmark(tab)
-                })
+                }
             }
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(
