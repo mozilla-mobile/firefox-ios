@@ -35,7 +35,7 @@ final class CrashManagerTests: XCTestCase {
 
     func testSetup_sendNoUsageData_notSetup() {
         sentryWrapper.dsn = "12345"
-        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper, 
+        let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
         subject.setup(sendUsageData: false)
