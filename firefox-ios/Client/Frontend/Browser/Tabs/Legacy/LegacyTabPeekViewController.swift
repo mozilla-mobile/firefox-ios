@@ -19,6 +19,14 @@ protocol LegacyTabPeekDelegate: AnyObject {
 
 class PreviewActionBuilder {
     private var actions = [UIPreviewActionItem]()
+
+    func addBookmark(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
+        actions.append(UIPreviewAction(
+            title: .TabPeekAddToBookmarks,
+            style: .default,
+            handler: handler
+        ))
+    }
 }
 
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
