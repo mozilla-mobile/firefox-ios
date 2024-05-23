@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Common
 
-class ThemedTableViewController: UITableViewController, Themeable {
+class ThemedTableViewController: UITableViewController, Themeable, InjectedThemeUUIDIdentifiable {
     var themeManager: ThemeManager
     @objc var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?

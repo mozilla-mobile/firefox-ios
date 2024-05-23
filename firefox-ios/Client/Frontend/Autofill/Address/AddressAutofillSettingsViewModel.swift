@@ -15,7 +15,7 @@ class AddressAutofillSettingsViewModel {
     lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
 
     /// ViewModel for managing the list of addresses.
-    lazy var addressListViewModel = AddressListViewModel(profile: profile)
+    lazy var addressListViewModel = AddressListViewModel(addressProvider: profile.autofill)
 
     /// RustAutofill instance for handling autofill functionality.
     var autofill: RustAutofill?

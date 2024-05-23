@@ -10,7 +10,7 @@ enum AccessoryType {
     case standard, creditCard, address, login
 }
 
-class AccessoryViewProvider: UIView, Themeable {
+class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     // MARK: - Constants
     private struct UX {
         static let toolbarHeight: CGFloat = 50

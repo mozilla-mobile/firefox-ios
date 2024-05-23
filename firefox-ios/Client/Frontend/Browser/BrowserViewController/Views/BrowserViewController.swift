@@ -2364,6 +2364,8 @@ class BrowserViewController: UIViewController,
             urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
+        toolbar.applyTheme(theme: currentTheme)
+
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
