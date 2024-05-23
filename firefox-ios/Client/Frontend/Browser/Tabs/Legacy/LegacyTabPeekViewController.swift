@@ -104,13 +104,10 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
                 }
             }
         }
-        actions.append(UIPreviewAction(
-            title: .TabPeekCloseTab,
-            style: .destructive
-        ) { [weak self] previewAction, viewController in
+        actionsBuilder.addCloseTab { [weak self] previewAction, viewController in
             guard let wself = self, let tab = wself.tab else { return }
             wself.delegate?.tabPeekDidCloseTab(tab)
-        })
+        }
 
         return actions
     }()
