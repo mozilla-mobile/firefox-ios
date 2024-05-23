@@ -40,7 +40,7 @@ public struct LocationViewState {
     public let urlTextFieldA11yId: String
     public let urlTextFieldA11yLabel: String
 
-    public let searchEngineImageName: String
+    public let searchEngineImage: UIImage?
     public let lockIconImageName: String
     public let url: String?
 
@@ -52,7 +52,7 @@ public struct LocationViewState {
         urlTextFieldPlaceholder: String,
         urlTextFieldA11yId: String,
         urlTextFieldA11yLabel: String,
-        searchEngineImageName: String,
+        searchEngineImage: UIImage?,
         lockIconImageName: String,
         url: String?
     ) {
@@ -63,7 +63,7 @@ public struct LocationViewState {
         self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
         self.urlTextFieldA11yId = urlTextFieldA11yId
         self.urlTextFieldA11yLabel = urlTextFieldA11yLabel
-        self.searchEngineImageName = searchEngineImageName
+        self.searchEngineImage = searchEngineImage
         self.lockIconImageName = lockIconImageName
         self.url = url
     }
@@ -170,7 +170,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
-        searchEngineImageView.image = UIImage(named: state.searchEngineImageName)
+        searchEngineImageView.image = state.searchEngineImage
         lockIconImageView.image = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
         configureURLTextField(state)
         configureA11y(state)
@@ -426,6 +426,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
+        searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel
+        searchEngineImageView.largeContentImage = nil
 
         urlTextField.accessibilityIdentifier = state.urlTextFieldA11yId
         urlTextField.accessibilityLabel = state.urlTextFieldA11yLabel

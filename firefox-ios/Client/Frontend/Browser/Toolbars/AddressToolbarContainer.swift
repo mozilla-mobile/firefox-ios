@@ -10,11 +10,8 @@ import UIKit
 class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable, StoreSubscriber {
     typealias SubscriberStateType = BrowserViewControllerState
 
-    var windowUUID: WindowUUID? {
-        didSet {
-            subscribeToRedux()
-        }
-    }
+    private var windowUUID: WindowUUID?
+    private var profile: Profile?
     private var toolbarState: ToolbarState?
     private var model: AddressToolbarContainerModel?
 
@@ -31,10 +28,10 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ model: AddressToolbarContainerModel,
-                   toolbarDelegate: AddressToolbarDelegate) {
-        compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: toolbarDelegate)
-        regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: toolbarDelegate)
+    func configure(windowUUID: WindowUUID, profile: Profile) {
+        self.windowUUID = windowUUID
+        self.profile = profile
+        subscribeToRedux()
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -60,11 +57,11 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard let uuid = windowUUID else { return }
+        guard let windowUUID else { return }
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
+                return BrowserViewControllerState(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -79,8 +76,10 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
     }
 
     private func updateModel(toolbarState: ToolbarState) {
-        guard let windowUUID else { return }
-        let model = AddressToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
+        guard let windowUUID, let profile else { return }
+        let model = AddressToolbarContainerModel(state: toolbarState,
+                                                 profile: profile,
+                                                 windowUUID: windowUUID)
         self.model = model
 
         compactToolbar.configure(state: model.addressToolbarState)
