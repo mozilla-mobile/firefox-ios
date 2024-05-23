@@ -18,6 +18,7 @@ protocol LegacyTabPeekDelegate: AnyObject {
 }
 
 class PreviewActionBuilder {
+    private var actions = [UIPreviewActionItem]()
 }
 
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
