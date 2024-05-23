@@ -27,6 +27,14 @@ class PreviewActionBuilder {
             handler: handler
         ))
     }
+
+    func addSendToDeviceTitle(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
+        actions.append(UIPreviewAction(
+            title: .AppMenu.TouchActions.SendToDeviceTitle,
+            style: .default,
+            handler: handler
+        ))
+    }
 }
 
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
