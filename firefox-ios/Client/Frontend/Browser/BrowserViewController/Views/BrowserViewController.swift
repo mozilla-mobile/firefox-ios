@@ -2739,6 +2739,34 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    fileprivate func handleAddressField(type: FormAutofillPayloadType?,
+                                        tabWebView: TabWebView,
+                                        webView: WKWebView,
+                                        frame: WKFrameInfo?) {
+        guard addressAutofillSettingsUserDefaultsIsEnabled(),
+              addressAutofillNimbusFeatureFlag(),
+              // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
+              let type = type else { return }
+
+        // Handle address form filling or capturing
+        switch type {
+        case .fillAddressForm:
+            displayAddressAutofillAccessoryView(tabWebView: tabWebView)
+        case .captureAddressForm:
+            // FXMO-376: No action needed for capturing address form as this is for Phase 2
+            break
+        default:
+            break
+        }
+
+        tabWebView.accessoryView.savedAddressesClosure = {
+            DispatchQueue.main.async { [weak self] in
+                webView.resignFirstResponder()
+                self?.navigationHandler?.showAddressAutofill(frame: frame)
+            }
+        }
+    }
+
     private func displayAutofillCreditCardAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listCreditCards(completion: { cards, error in
             guard let cards = cards, !cards.isEmpty, error == nil else { return }
