@@ -17,6 +17,9 @@ protocol LegacyTabPeekDelegate: AnyObject {
     func tabPeekDidCopyUrl()
 }
 
+class PreviewActionBuilder {
+}
+
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
     weak var tab: Tab?
 
