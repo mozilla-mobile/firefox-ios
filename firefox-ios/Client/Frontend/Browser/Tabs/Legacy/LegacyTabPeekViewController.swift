@@ -75,6 +75,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
     override var previewActionItems: [UIPreviewActionItem] { return previewActions }
 
     lazy var previewActions: [UIPreviewActionItem] = {
+        let actionsBuilder = PreviewActionBuilder()
         var actions = [UIPreviewActionItem]()
 
         let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
