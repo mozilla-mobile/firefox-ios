@@ -13,8 +13,17 @@ public protocol Themeable: ThemeUUIDIdentifiable, AnyObject {
     func applyTheme()
 }
 
+/// Protocol for views to identify which iPad window (UUID) the view is associated with.
+/// By default, all UIViews conform to this automatically. See: UIView+ThemeUUIDIdentifiable.swift.
 public protocol ThemeUUIDIdentifiable: AnyObject {
-    var currentWindowUUID: UUID? { get }
+    var currentWindowUUID: WindowUUID? { get }
+}
+
+/// Protocol that views or controllers may optionally adopt when they provide an explicit (typically, injected)
+/// window UUID. This is used by our convenience extensions to allow UIViews to automatically detect their
+/// associated iPad window UUID, even if the view is not immediately installed in a window or view hierarchy.
+public protocol InjectedThemeUUIDIdentifiable: AnyObject {
+    var windowUUID: WindowUUID { get }
 }
 
 extension Themeable {
@@ -23,13 +32,13 @@ extension Themeable {
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
             self?.applyTheme()
-            guard let uuidIdentifiable = subview as? ThemeUUIDIdentifiable else { return }
-            self?.updateThemeApplicableSubviews(subview, for: uuidIdentifiable.currentWindowUUID)
+            self?.updateThemeApplicableSubviews(subview)
         }
     }
 
-    public func updateThemeApplicableSubviews(_ view: UIView, for window: UUID?) {
-        guard let window else { return }
+    public func updateThemeApplicableSubviews(_ view: UIView) {
+        guard let window = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
+        assert(window != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
         let theme = themeManager.currentTheme(for: window)
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: theme) }

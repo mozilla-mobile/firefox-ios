@@ -20,7 +20,7 @@
 "DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox는 매달 사용자당 평균 3,000개 이상의 트래커를 차단합니다. 안심할 수 있는 개인 정보 보호를 위해 기본 브라우저로 설정하세요.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
-"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox에는 개인 정보가 포함되어 있습니다.";
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox는 개인 정보 보호를 보장합니다.";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "기본 브라우저 전환";

@@ -6,6 +6,7 @@ import Foundation
 @testable import Client
 import XCTest
 import Shared
+import Common
 
 class UpdateViewModelTests: XCTestCase {
     private var profile: MockProfile!

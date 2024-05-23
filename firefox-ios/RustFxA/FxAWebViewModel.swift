@@ -8,6 +8,7 @@ import Account
 import MozillaAppServices
 import Shared
 import Common
+import PDFKit
 
 enum FxAPageType: Equatable {
     case emailLoginFlow
@@ -41,6 +42,28 @@ class FxAWebViewModel: FeatureFlaggable {
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
+
+    var blobToDataScript = """
+                async function createBlobFromUrl(url) {
+                  const response = await fetch(url);
+                  const blob = await response.blob();
+                  return blob;
+                }
+
+                function blobToDataURLAsync(blob) {
+                  return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      resolve(reader.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                  });
+                }
+
+                const url = await createBlobFromUrl(blobUrl)
+                return await blobToDataURLAsync(url)
+            """
 
     func setupUserScript(for controller: WKUserContentController) {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
@@ -148,6 +171,57 @@ class FxAWebViewModel: FeatureFlaggable {
         }
 
         return URLRequest(url: url)
+    }
+
+    func createOutputURL(withFileName name: String, withFileExtension ext: String) -> URL? {
+        try? FileManager.default.url(for: .documentDirectory,
+                                     in: .userDomainMask,
+                                     appropriateFor: nil,
+                                     create: false)
+        .appendingPathComponent(name)
+        .appendingPathExtension(ext)
+    }
+
+    func isMozillaAccountPDF(blobURL: URL, webViewURL: URL?) -> Bool {
+        if blobURL.scheme == "blob", webViewURL?.host == "accounts.firefox.com" {
+            return true
+        }
+        return false
+    }
+
+    func getURLForPDF(webView: WKWebView, blobURL: URL, completion: @escaping (_ outputURL: URL?) -> Void) {
+        webView.callAsyncJavaScriptInDefaultContentWorld(
+            blobToDataScript,
+            arguments: ["blobUrl": blobURL.absoluteString]) { [weak self] result in
+                completion(self?.createURLForPDF(result: result))
+        }
+    }
+
+    func createURLForPDF(result: Result<Any?, Error>) -> URL? {
+        switch result {
+        case .success(let dataURL):
+            guard let data = dataURL as? String,
+                  let url = URL(string: data),
+                  let data = try? Data(contentsOf: url),
+                  let pdf = PDFDocument(data: data),
+                  let outputURL = createOutputURL(withFileName: "RecoveryKey",
+                                                  withFileExtension: "pdf") else {
+                return nil
+            }
+
+            pdf.write(to: outputURL)
+            if FileManager.default.fileExists(atPath: outputURL.path) {
+                let url = URL(fileURLWithPath: outputURL.path)
+                return url
+            }
+
+            return nil
+        case .failure(let error):
+            logger.log("Failed to get a valid data URL result, with error: \(error.localizedDescription)",
+                       level: .debug,
+                       category: .webview)
+            return nil
+        }
     }
 }
 

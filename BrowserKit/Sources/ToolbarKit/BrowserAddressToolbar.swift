@@ -6,10 +6,10 @@ import UIKit
 import Common
 
 /// Simple address toolbar implementation.
-/// +-------------+------------+-----------------------+----------+------+
-/// | navigation  | indicators | url       [ page    ] | browser  | menu |
-/// |   actions   |            |           [ actions ] | actions  |      |
-/// +-------------+------------+-----------------------+----------+------+
+/// +-------------+------------+-----------------------+----------+
+/// | navigation  | indicators | url       [ page    ] | browser  |
+/// |   actions   |            |           [ actions ] | actions  |
+/// +-------------+------------+-----------------------+----------+
 public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
@@ -20,6 +20,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 40, height: 40)
+        static let locationHeight: CGFloat = 44
     }
 
     private weak var toolbarDelegate: AddressToolbarDelegate?
@@ -57,13 +58,16 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState,
-                          toolbarDelegate: AddressToolbarDelegate) {
+    public func configure(state: AddressToolbarState, toolbarDelegate: any AddressToolbarDelegate) {
+        configure(state: state)
+        self.toolbarDelegate = toolbarDelegate
+    }
+
+    public func configure(state: AddressToolbarState) {
         updateActions(state: state)
         updateBorder(shouldDisplayTopBorder: state.shouldDisplayTopBorder,
                      shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
 
-        self.toolbarDelegate = toolbarDelegate
         locationView.configure(state.locationViewState, delegate: self)
 
         setNeedsLayout()
@@ -135,6 +139,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
+            locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -180,7 +185,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         stackView.removeAllArrangedViews()
         toolbarElements.forEach { toolbarElement in
-            let button = ToolbarButton()
+            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
             button.configure(element: toolbarElement)
             stackView.addArrangedSubview(button)
 
@@ -239,11 +244,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer1
         locationContainer.backgroundColor = theme.colors.layerSearch
         locationDividerView.backgroundColor = theme.colors.layer2
         toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
+        locationView.applyTheme(theme: theme)
         self.theme = theme
     }
 }

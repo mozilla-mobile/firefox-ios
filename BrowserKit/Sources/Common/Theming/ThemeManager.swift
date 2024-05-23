@@ -6,7 +6,7 @@ import UIKit
 
 public protocol ThemeManager {
     // Current theme
-    func currentTheme(for window: UUID?) -> Theme
+    func currentTheme(for window: WindowUUID?) -> Theme
 
     // System theme and brightness settings
     var systemThemeIsOn: Bool { get }
@@ -20,12 +20,12 @@ public protocol ThemeManager {
     func getNormalSavedTheme() -> ThemeType
 
     // Window management and window-specific themeing
-    func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID)
-    func setPrivateTheme(isOn: Bool, for window: UUID)
-    func getPrivateThemeIsOn(for window: UUID) -> Bool
-    func reloadTheme(for window: UUID)
-    func setWindow(_ window: UIWindow, for uuid: UUID)
-    func windowDidClose(uuid: UUID)
+    func changeCurrentTheme(_ newTheme: ThemeType, for window: WindowUUID)
+    func setPrivateTheme(isOn: Bool, for window: WindowUUID)
+    func getPrivateThemeIsOn(for window: WindowUUID) -> Bool
+    func reloadTheme(for window: WindowUUID)
+    func setWindow(_ window: UIWindow, for uuid: WindowUUID)
+    func windowDidClose(uuid: WindowUUID)
 
     // Theme functions for app extensions
 

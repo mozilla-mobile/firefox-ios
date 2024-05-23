@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 /// Base event type protocol. Conforming types must be hashable.
 public protocol AppEventType: Hashable { }

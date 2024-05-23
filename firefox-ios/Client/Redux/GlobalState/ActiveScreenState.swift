@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 enum AppScreenState: Equatable {
     case onboardingViewController(OnboardingViewControllerState)

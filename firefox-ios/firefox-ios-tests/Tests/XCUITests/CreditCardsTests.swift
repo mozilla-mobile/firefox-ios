@@ -399,8 +399,7 @@ class CreditCardsTests: BaseTestCase {
         app.buttons["Close"].tap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
-        swipeDown(nrOfSwipes: 2)
-        swipeUp(nrOfSwipes: 1)
+        swipeDown(nrOfSwipes: 3)
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Credit cards details did not change
@@ -474,17 +473,16 @@ class CreditCardsTests: BaseTestCase {
         email.tapOnApp()
         var nrOfRetries = 3
         while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+            swipeUp(nrOfSwipes: 1)
             email.tapOnApp()
             nrOfRetries -= 1
         }
         email.typeText("foo@mozilla.org")
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
-        dismissSavedCardsPrompt()
-        mozWaitForElementToExist(cardNumber)
-        cardNumber.tapOnApp()
         cardNumber.typeText(cardNr)
         mozWaitForElementToExist(expiration)
+        dismissSavedCardsPrompt()
         expiration.tapOnApp()
         expiration.typeText(expirationDate)
         cvc.tapOnApp()
@@ -518,7 +516,8 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func dismissSavedCardsPrompt() {
-        if app.staticTexts["Tap"].isVisible() {
+        if app.buttons.elementContainingText("Decline").isVisible() &&
+            app.buttons.elementContainingText("Decline").isHittable {
             app.staticTexts["TEST CARDS"].tap()
         }
     }

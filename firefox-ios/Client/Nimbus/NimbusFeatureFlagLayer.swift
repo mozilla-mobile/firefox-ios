@@ -17,6 +17,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofill:
             return checkAddressAutofill(from: nimbus)
 
+        case .addressAutofillEdit:
+            return checkAddressAutofillEditing(from: nimbus)
+
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
@@ -70,8 +73,15 @@ final class NimbusFeatureFlagLayer {
 
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
+
         case .tabTrayRefactor:
             return checkTabTrayRefactorFeature(from: nimbus)
+
+        case .toolbarRefactor:
+            return checkToolbarRefactorFeature(from: nimbus)
+
+        case .trackingProtectionRefactor:
+            return checkTrackingProtectionRefactor(from: nimbus)
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
@@ -142,6 +152,16 @@ final class NimbusFeatureFlagLayer {
 
     private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.tabTrayRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.enabled
+    }
+
+    private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.trackingProtectionRefactor.value()
         return config.enabled
     }
 
@@ -226,6 +246,12 @@ final class NimbusFeatureFlagLayer {
 
     private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillFeature.value()
+
+        return config.status
+    }
+
+    private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
     }

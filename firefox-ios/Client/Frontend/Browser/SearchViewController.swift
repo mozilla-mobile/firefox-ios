@@ -10,10 +10,10 @@ import SiteImageView
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
-    case history
-    case bookmarks
     case firefoxSuggestions
+    case bookmarks
     case remoteTabs
+    case history
     case openedTabs
     case searchHighlights
 }
@@ -100,7 +100,6 @@ class SearchViewController: SiteTableViewController,
     private var searchHighlights = [HighlightItem]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
-    private var totalRowCount = 0
 
     var searchTelemetry: SearchTelemetry?
 
@@ -136,13 +135,13 @@ class SearchViewController: SiteTableViewController,
     static var userAgent: String?
 
     private var bookmarkSites: [Site] {
-        Array(data.compactMap { $0 }
-            .filter { $0.bookmarked == true }.prefix(1))
+        data.compactMap { $0 }
+            .filter { $0.bookmarked == true }
     }
 
     private var historySites: [Site] {
-        Array(data.compactMap { $0 }
-            .filter { $0.bookmarked == false }.prefix(1))
+        data.compactMap { $0 }
+            .filter { $0.bookmarked == false }
     }
 
     private var hasBookmarksSuggestions: Bool {
@@ -622,7 +621,6 @@ class SearchViewController: SiteTableViewController,
         super.viewWillTransition(to: size, with: coordinator)
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animate(alongsideTransition: { [self] _ in
-            totalRowCount = 0
             tableView.reloadData()
             layoutSearchEngineScrollViewContent()
         }, completion: nil)
@@ -679,7 +677,7 @@ class SearchViewController: SiteTableViewController,
         let searchInContent = config.usePageContent
         && searchTerms.contains(where: { $0.count >= config.minSearchTerm })
 
-        filteredOpenedTabs = Array(currentTabs.filter { tab in
+        filteredOpenedTabs = currentTabs.filter { tab in
             guard let url = tab.url,
                   !InternalURL.isValid(url: url) else {
                 return false
@@ -693,7 +691,7 @@ class SearchViewController: SiteTableViewController,
 
             let text = lines.joined(separator: "\n")
             return find(in: text)
-        }.prefix(1))
+        }
     }
 
     func searchRemoteTabs(for searchString: String) {
@@ -703,7 +701,7 @@ class SearchViewController: SiteTableViewController,
         }
 
         let currentTabs = self.remoteClientTabs
-        self.filteredRemoteClientTabs = Array(currentTabs.filter { value in
+        self.filteredRemoteClientTabs = currentTabs.filter { value in
             let tab = value.tab
 
             if InternalURL.isValid(url: tab.URL) {
@@ -724,7 +722,7 @@ class SearchViewController: SiteTableViewController,
             }
 
             return false
-        }.prefix(1))
+        }
     }
 
     private func querySuggestClient() {
@@ -764,8 +762,6 @@ class SearchViewController: SiteTableViewController,
 
             self.searchTabs(for: self.searchQuery)
             self.searchRemoteTabs(for: self.searchQuery)
-            // Reload the tableView to show the new list of search suggestions.
-            self.totalRowCount = 0
             self.savedQuery = tempSearchQuery
             self.searchTelemetry?.savedQuery = tempSearchQuery
             self.tableView.reloadData()
@@ -874,7 +870,7 @@ class SearchViewController: SiteTableViewController,
 
         var title: String
         switch section {
-        case SearchListSection.history.rawValue:
+        case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
             title = searchEngines?.defaultEngine?.headerSearchTitle ?? ""
@@ -972,41 +968,30 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let rowCount: Int
         switch SearchListSection(rawValue: section)! {
         case .searchSuggestions:
             guard let count = suggestions?.count else { return 0 }
             return count < 4 ? count : 4
         case .openedTabs:
-            rowCount = filteredOpenedTabs.count
+            return filteredOpenedTabs.count
         case .remoteTabs:
             if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                rowCount = shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
+               return shouldShowSyncedTabsSuggestions ? filteredRemoteClientTabs.count : 0
             } else {
-                rowCount = filteredRemoteClientTabs.count
+                return filteredRemoteClientTabs.count
             }
         case .history:
-            guard featureFlags.isFeatureEnabled(
-                .firefoxSuggestFeature,
-                checking: .buildAndUser
-            ) else { return historySites.count }
-            rowCount = shouldShowBrowsingHistorySuggestions ? historySites.count : 0
+            guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
+                                                checking: .buildAndUser) else { return historySites.count }
+            return shouldShowBrowsingHistorySuggestions ? historySites.count : 0
         case .bookmarks:
-            guard featureFlags.isFeatureEnabled(
-                .firefoxSuggestFeature,
-                checking: .buildAndUser
-            ) else { return bookmarkSites.count }
-            rowCount = shouldShowBookmarksSuggestions ? bookmarkSites.count : 0
+            guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
+                                                checking: .buildAndUser) else { return bookmarkSites.count }
+            return shouldShowBookmarksSuggestions ? bookmarkSites.count : 0
         case .searchHighlights:
-            rowCount = searchHighlights.count
+            return searchHighlights.count
         case .firefoxSuggestions:
-            rowCount = firefoxSuggestions.count
-        }
-        if totalRowCount + rowCount > 3 {
-            return 0
-        } else {
-            totalRowCount += rowCount
-            return rowCount
+            return firefoxSuggestions.count
         }
     }
 
@@ -1049,11 +1034,7 @@ class SearchViewController: SiteTableViewController,
 
         let attributedString = searchPhrase.attributedText(
             boldIn: upperBound..<searchPhrase.endIndex,
-            font: DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .body,
-                size: 17,
-                weight: .regular
-            )
+            font: FXFontStyles.Regular.body.scaledFont()
         )
         return attributedString
     }
@@ -1223,7 +1204,7 @@ class SearchViewController: SiteTableViewController,
 
     private func shouldShowHeader(for section: Int) -> Bool {
         switch section {
-        case SearchListSection.history.rawValue:
+        case SearchListSection.firefoxSuggestions.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
             return shouldShowSearchEngineSuggestions
@@ -1242,7 +1223,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var searchAppendImage: UIImage? {
-        var searchAppendImage = UIImage(named: StandardImageIdentifiers.Large.appendUp)
+        var searchAppendImage = UIImage(named: StandardImageIdentifiers.Large.appendUpLeft)
 
         if viewModel.isBottomSearchBar, let image = searchAppendImage, let cgImage = image.cgImage {
             searchAppendImage = UIImage(
@@ -1274,7 +1255,7 @@ class SearchViewController: SiteTableViewController,
 // MARK: - Keyboard shortcuts
 extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
-        let initialSection = SearchListSection.history.rawValue
+        let initialSection = SearchListSection.firefoxSuggestions.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
             let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
             if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {

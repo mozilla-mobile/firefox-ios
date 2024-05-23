@@ -21,7 +21,9 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
 
     private var backgroundColorNormal: UIColor = .clear
     private var backgroundColorHighlighted: UIColor = .clear
+    private var backgroundColorDisabled: UIColor = .clear
     private var foregroundColor: UIColor = .black
+    private var foregroundColorDisabled: UIColor = .clear
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,6 +42,8 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         }
 
         switch state {
+        case [.disabled]:
+            updatedConfiguration.background.backgroundColor = backgroundColorDisabled
         case [.highlighted]:
             updatedConfiguration.background.backgroundColor = backgroundColorHighlighted
         default:
@@ -50,13 +54,21 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { [weak self] incoming in
         // swiftlint:enable line_length
             var container = incoming
-            container.foregroundColor = self?.foregroundColor
+            if self?.state == .disabled {
+                container.foregroundColor = self?.foregroundColorDisabled
+            } else {
+                container.foregroundColor = self?.foregroundColor
+            }
             container.font = FXFontStyles.Bold.callout.scaledFont()
             return container
         }
 
         updatedConfiguration.imageColorTransformer = UIConfigurationColorTransformer { [weak self] color in
-            return self?.foregroundColor ?? .white
+            if self?.state == .disabled {
+                return self?.foregroundColorDisabled ?? .white
+            } else {
+                return self?.foregroundColor ?? .white
+            }
         }
 
         configuration = updatedConfiguration
@@ -92,7 +104,9 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         backgroundColorNormal = theme.colors.actionPrimary
         backgroundColorHighlighted = theme.colors.actionPrimaryHover
+        backgroundColorDisabled = theme.colors.actionPrimaryDisabled
         foregroundColor = theme.colors.textInverted
+        foregroundColorDisabled = theme.colors.textInvertedDisabled
         setNeedsUpdateConfiguration()
     }
 }

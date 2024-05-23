@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Redux
+import Common
 
 class TabTrayAction: Action {
     let panelType: TabTrayPanelType?
@@ -12,7 +13,7 @@ class TabTrayAction: Action {
     init(panelType: TabTrayPanelType? = nil,
          tabTrayModel: TabTrayModel? = nil,
          hasSyncableAccount: Bool? = nil,
-         windowUUID: UUID,
+         windowUUID: WindowUUID,
          actionType: ActionType) {
         self.panelType = panelType
         self.tabTrayModel = tabTrayModel

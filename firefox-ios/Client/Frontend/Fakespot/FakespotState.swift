@@ -33,17 +33,6 @@ struct FakespotState: ScreenState, Equatable {
     var isSettingsExpanded: Bool { expandState[currentTabUUID]?.isSettingsExpanded ?? false }
     var isHighlightsSectionExpanded: Bool { expandState[currentTabUUID]?.isHighlightsSectionExpanded ?? false }
 
-    init(_ appState: BrowserViewControllerState) {
-        self.init(
-            windowUUID: appState.windowUUID,
-            isOpen: appState.fakespotState.isOpen,
-            sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
-            currentTabUUID: appState.fakespotState.currentTabUUID,
-            expandState: appState.fakespotState.expandState,
-            telemetryState: appState.fakespotState.telemetryState
-        )
-    }
-
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,

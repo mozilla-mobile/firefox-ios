@@ -22,6 +22,17 @@ enum DeeplinkInput {
         case widgetMediumQuickLinkClosePrivateTabs = "widget-medium-quicklink-close-private-tabs"
         case widgetTabsMediumOpenUrl = "widget-tabs-medium-open-url"
         case widgetTabsLargeOpenUrl = "widget-tabs-large-open-url"
+
+        var shouldRouteDeeplinkToSpecificIPadWindow: Bool {
+            switch self {
+            case .widgetTabsMediumOpenUrl, .widgetTabsLargeOpenUrl:
+                // Some of our widget URLs contain tab UUIDs which will be contained within a specific iPad
+                // window. Make sure that when opening these we route them to the correct UIScene.
+                return true
+            default:
+                return false
+            }
+        }
     }
 
     /// An enumeration of possible paths for deep links.

@@ -3,11 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Foundation
 import ToolbarKit
 
 struct AddressToolbarContainerModel {
     let toolbarPosition: AddressToolbarPosition
-    let scrollY: Int
+    let scrollY: CGFloat
     let isPrivate: Bool
     let locationViewState: LocationViewState
     let navigationActions: [ToolbarElement]

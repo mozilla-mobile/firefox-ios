@@ -27,7 +27,7 @@ class SiteTableViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
-    var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
+    var data = Cursor<Site>(status: .success, msg: "No data set")
     lazy var tableView: UITableView = .build { [weak self] table in
         guard let self = self else { return }
         table.delegate = self

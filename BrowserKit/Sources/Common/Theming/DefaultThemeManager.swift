@@ -31,9 +31,9 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Variables
 
-    private var windowThemeState: [UUID: Theme] = [:]
-    private var windows: [UUID: UIWindow] = [:]
-    private var allWindowUUIDs: [UUID] { return Array(windows.keys) }
+    private var windowThemeState: [WindowUUID: Theme] = [:]
+    private var windows: [WindowUUID: UIWindow] = [:]
+    private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
 
     private var userDefaults: UserDefaultsInterface
@@ -44,7 +44,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
 
-    private func privateModeIsOn(for window: UUID) -> Bool {
+    private func privateModeIsOn(for window: WindowUUID) -> Bool {
         return getPrivateThemeIsOn(for: window)
     }
 
@@ -92,18 +92,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    public func windowDidClose(uuid: UUID) {
+    public func windowDidClose(uuid: WindowUUID) {
         windows.removeValue(forKey: uuid)
         windowThemeState.removeValue(forKey: uuid)
     }
 
-    public func setWindow(_ window: UIWindow, for uuid: UUID) {
+    public func setWindow(_ window: UIWindow, for uuid: WindowUUID) {
         windows[uuid] = window
         updateSavedTheme(to: getNormalSavedTheme())
         updateCurrentTheme(to: fetchSavedThemeType(for: uuid), for: uuid)
     }
 
-    public func currentTheme(for window: UUID?) -> Theme {
+    public func currentTheme(for window: WindowUUID?) -> Theme {
         guard let window else {
             assertionFailure("Attempt to get the theme for a nil window UUID.")
             return DarkTheme()
@@ -112,14 +112,22 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return windowThemeState[window] ?? DarkTheme()
     }
 
-    public func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID) {
+    public func changeCurrentTheme(_ newTheme: ThemeType, for window: WindowUUID) {
         guard currentTheme(for: window).type != newTheme else { return }
 
         updateSavedTheme(to: newTheme)
-        updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
+
+        // Although we may have only explicitly changed the state on one specific window,
+        // we want to be sure we update all windows in case the Light/Dark theme changed.
+        allWindowUUIDs.forEach {
+            updateCurrentTheme(to: fetchSavedThemeType(for: $0), for: $0, notify: false)
+        }
+        // After updating all windows, notify (once). We send the UUID of the window for
+        // which the change originated though more than 1 window may ultimately update its UI.
+        notifyCurrentThemeDidChange(for: window)
     }
 
-    public func reloadTheme(for window: UUID) {
+    public func reloadTheme(for window: WindowUUID) {
         updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
     }
 
@@ -148,7 +156,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    public func setPrivateTheme(isOn: Bool, for window: UUID) {
+    public func setPrivateTheme(isOn: Bool, for window: WindowUUID) {
         let currentSetting = getPrivateThemeIsOn(for: window)
         guard currentSetting != isOn else { return }
 
@@ -161,7 +169,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
     }
 
-    public func getPrivateThemeIsOn(for window: UUID) -> Bool {
+    public func getPrivateThemeIsOn(for window: WindowUUID) -> Bool {
         let settings = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags
         if settings == nil {
             migrateSingleWindowPrivateDefaultsToMultiWindow(for: window)
@@ -200,7 +208,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Private methods
 
-    private func migrateSingleWindowPrivateDefaultsToMultiWindow(for window: UUID) {
+    private func migrateSingleWindowPrivateDefaultsToMultiWindow(for window: WindowUUID) {
         // Migrate old private setting to our window-based settings
         let oldPrivateSetting = userDefaults.bool(forKey: ThemeKeys.PrivateMode.legacy_isOn)
         let newSettings: KeyedPrivateModeFlags = [window.uuidString: NSNumber(value: oldPrivateSetting)]
@@ -215,7 +223,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
-    private func updateCurrentTheme(to newTheme: ThemeType, for window: UUID) {
+    private func updateCurrentTheme(to newTheme: ThemeType, for window: WindowUUID, notify: Bool = true) {
         windowThemeState[window] = newThemeForType(newTheme)
 
         // Overwrite the user interface style on the window attached to our scene
@@ -223,14 +231,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         let style = self.currentTheme(for: window).type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
-
-        mainQueue.ensureMainThread { [weak self] in
-            // TODO: [FXIOS-8939] Send UUID in userInfo payload rather than object for consistency with Client.
-            self?.notificationCenter.post(name: .ThemeDidChange, withObject: window)
+        if notify {
+            notifyCurrentThemeDidChange(for: window)
         }
     }
 
-    private func fetchSavedThemeType(for window: UUID) -> ThemeType {
+    private func notifyCurrentThemeDidChange(for window: WindowUUID) {
+        mainQueue.ensureMainThread { [weak self] in
+            self?.notificationCenter.post(name: .ThemeDidChange, withUserInfo: window.userInfo)
+        }
+    }
+
+    private func fetchSavedThemeType(for window: WindowUUID) -> ThemeType {
         if privateModeIsOn(for: window) { return .privateMode }
         if nightModeIsOn { return .dark }
 

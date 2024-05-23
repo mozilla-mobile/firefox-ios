@@ -18,7 +18,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let generalCornerRadius: CGFloat = 12
         static let horizontalMargin: CGFloat = 16
         static let heroImageSize =  CGSize(width: 108, height: 80)
-        static let sponsoredIconSize = CGSize(width: 12, height: 12)
+        static let sponsoredIconSize = CGSize(width: 16, height: 16)
         static let sponsoredStackSpacing: CGFloat = 4
     }
 
@@ -52,7 +52,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     private lazy var sponsoredIcon: UIImageView = .build { image in
-        image.image = UIImage(named: ImageIdentifiers.sponsoredStar)
+        image.image = UIImage(named: StandardImageIdentifiers.Small.sponsoredStar)?.withRenderingMode(.alwaysTemplate)
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
@@ -99,8 +99,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         descriptionLabel.font = viewModel.shouldHideSponsor
         ? FXFontStyles.Regular.caption1.scaledFont()
         : FXFontStyles.Bold.caption1.scaledFont()
-
-        sponsoredStack.isHidden  = viewModel.shouldHideSponsor
 
         adjustLayout()
         applyTheme(theme: theme)
@@ -188,6 +186,7 @@ extension PocketStandardCell: ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textSecondary
         sponsoredLabel.textColor = theme.colors.textSecondary
+        sponsoredIcon.tintColor = theme.colors.iconSecondary
 
         adjustBlur(theme: theme)
     }

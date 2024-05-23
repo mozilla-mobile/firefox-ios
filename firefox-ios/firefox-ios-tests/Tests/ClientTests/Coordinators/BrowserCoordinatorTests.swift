@@ -728,7 +728,8 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         // Then
         XCTAssertTrue(result)
-        XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
+        let windowManager = (AppContainer.shared.resolve() as WindowManager) as! MockWindowManager
+        XCTAssertEqual(windowManager.closePrivateTabsMultiActionCalled, 1)
     }
 
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
