@@ -669,6 +669,22 @@ class BrowserViewController: UIViewController,
         show(toast: toast)
     }
 
+    fileprivate func handleMicrosurvey(state: BrowserViewControllerState) {
+        if !state.microsurveyState.showPrompt {
+            guard microsurvey != nil else { return }
+            removeMicrosurveyPrompt()
+        } else if state.microsurveyState.showSurvey {
+            guard let model = state.microsurveyState.model else {
+                logger.log("Microsurvey model should not be nil", level: .warning, category: .redux)
+                return
+            }
+            navigationHandler?.showMicrosurvey(model: model)
+        } else if state.microsurveyState.showPrompt {
+            guard microsurvey == nil else { return }
+            createMicrosurveyPrompt(with: state.microsurveyState)
+        }
+    }
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
