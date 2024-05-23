@@ -43,7 +43,14 @@ final class TabNumberButton: ToolbarButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateTabCount(_ count: Int) {
+    public override func configure(element: ToolbarElement) {
+        super.configure(element: element)
+
+        guard let numberOfTabs = element.numberOfTabs else { return }
+        updateTabCount(numberOfTabs)
+    }
+
+    private func updateTabCount(_ count: Int) {
         let count = max(count, 1)
         let countToBe = (count <= UX.maxTabCount) ? count.description : UX.infinitySymbol
         countLabel.text = countToBe

@@ -372,6 +372,7 @@ class BrowserViewController: UIViewController,
 
         if isToolbarRefactorEnabled {
             navigationToolbarContainer.applyTheme(theme: currentTheme())
+            updateTabCountUsingTabManager(self.tabManager)
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showToolbar)
@@ -3064,7 +3065,12 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            if !isToolbarRefactorEnabled {
+            if isToolbarRefactorEnabled {
+                let action = ToolbarAction(numberOfTabs: count,
+                                           windowUUID: windowUUID,
+                                           actionType: ToolbarActionType.numberOfTabsChanged)
+                store.dispatch(action)
+            } else {
                 toolbar.updateTabCount(count, animated: animated)
                 urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
             }
