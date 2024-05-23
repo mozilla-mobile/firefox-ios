@@ -109,7 +109,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
             wself.delegate?.tabPeekDidCloseTab(tab)
         }
 
-        return actions
+        return actionsBuilder.build()
     }()
 
     func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
