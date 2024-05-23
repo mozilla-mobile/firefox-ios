@@ -17,7 +17,7 @@ protocol LegacyTabPeekDelegate: AnyObject {
     func tabPeekDidCopyUrl()
 }
 
-class PreviewActionBuilder {
+class LegacyTabPeekPreviewActionBuilder {
     private var actions = [UIPreviewActionItem]()
 
     var count: Int {
@@ -79,7 +79,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
     override var previewActionItems: [UIPreviewActionItem] { return previewActions }
 
     lazy var previewActions: [UIPreviewActionItem] = {
-        let actionsBuilder = PreviewActionBuilder()
+        let actionsBuilder = LegacyTabPeekPreviewActionBuilder()
 
         let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
         let isHomeTab = self.tab?.isFxHomeTab ?? false
