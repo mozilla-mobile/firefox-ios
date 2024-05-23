@@ -17,50 +17,6 @@ protocol LegacyTabPeekDelegate: AnyObject {
     func tabPeekDidCopyUrl()
 }
 
-class LegacyTabPeekPreviewActionBuilder {
-    private var actions = [UIPreviewActionItem]()
-
-    var count: Int {
-        return actions.count
-    }
-
-    func addBookmark(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
-        actions.append(UIPreviewAction(
-            title: .TabPeekAddToBookmarks,
-            style: .default,
-            handler: handler
-        ))
-    }
-
-    func addSendToDeviceTitle(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
-        actions.append(UIPreviewAction(
-            title: .AppMenu.TouchActions.SendToDeviceTitle,
-            style: .default,
-            handler: handler
-        ))
-    }
-
-    func addCopyUrl(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
-        actions.append(UIPreviewAction(
-            title: .TabPeekCopyUrl,
-            style: .default,
-            handler: handler
-        ))
-    }
-
-    func addCloseTab(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
-        actions.append(UIPreviewAction(
-            title: .TabPeekCloseTab,
-            style: .destructive,
-            handler: handler
-        ))
-    }
-
-    func build() -> [UIPreviewActionItem] {
-        return actions
-    }
-}
-
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
     weak var tab: Tab?
 
