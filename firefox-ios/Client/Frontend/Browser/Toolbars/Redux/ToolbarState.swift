@@ -37,6 +37,7 @@ struct ToolbarState: ScreenState, Equatable {
 
         var actionType: ActionType
         var iconName: String
+        var numberOfTabs: Int?
         var isEnabled: Bool
         var a11yLabel: String
         var a11yId: String
@@ -103,6 +104,20 @@ struct ToolbarState: ScreenState, Equatable {
 
             state.navigationToolbar.actions = navToolbarModel.actions
             state.navigationToolbar.displayBorder = navToolbarModel.displayBorder
+            return state
+
+        case ToolbarActionType.numberOfTabsChanged:
+            guard let numberOfTabs = action.numberOfTabs else { return state }
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .tabs }) {
+                state.navigationToolbar.actions[index].numberOfTabs = numberOfTabs
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .tabs }) {
+                state.addressToolbar.browserActions[index].numberOfTabs = numberOfTabs
+            }
+
             return state
 
         default:
