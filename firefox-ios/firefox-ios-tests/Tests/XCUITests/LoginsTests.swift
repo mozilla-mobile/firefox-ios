@@ -271,8 +271,11 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Edit"])
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
         XCTAssertTrue(app.buttons["Add"].isEnabled)
-        createLoginManually()
-        XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
+        // iOS 15 does not expand the keyboard for entering the credentials
+        if #available(iOS 16, *) {
+            createLoginManually()
+            XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306954
