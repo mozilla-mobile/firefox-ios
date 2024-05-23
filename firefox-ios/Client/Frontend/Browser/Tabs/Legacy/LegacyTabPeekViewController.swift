@@ -43,6 +43,14 @@ class PreviewActionBuilder {
             handler: handler
         ))
     }
+
+    func addCloseTab(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
+        actions.append(UIPreviewAction(
+            title: .TabPeekCloseTab,
+            style: .destructive,
+            handler: handler
+        ))
+    }
 }
 
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
