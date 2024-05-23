@@ -13,6 +13,7 @@ class AddressToolbarContainerModel {
     let displayTopBorder: Bool
     let displayBottomBorder: Bool
     let windowUUID: UUID
+    var profile: Profile
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(
@@ -23,8 +24,8 @@ class AddressToolbarContainerModel {
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
-            searchEngineImageName: "",
-            lockIconImageName: "",
+            searchEngineImage: profile.searchEngines.defaultEngine?.image,
+            lockIconImageName: StandardImageIdentifiers.Medium.lock,
             url: nil)
         return AddressToolbarState(
             locationViewState: locationViewState,
@@ -35,7 +36,7 @@ class AddressToolbarContainerModel {
             shouldDisplayBottomBorder: displayBottomBorder)
     }
 
-    init(state: ToolbarState, windowUUID: UUID) {
+    init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
         self.displayTopBorder = state.addressToolbar.displayTopBorder
         self.displayBottomBorder = state.addressToolbar.displayBottomBorder
 
@@ -46,6 +47,7 @@ class AddressToolbarContainerModel {
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
                                                                       windowUUID: windowUUID)
         self.windowUUID = windowUUID
+        self.profile = profile
     }
 
     private static func mapActions(_ actions: [ToolbarState.ActionState], windowUUID: UUID) -> [ToolbarElement] {
