@@ -6,17 +6,7 @@ import Foundation
 import Redux
 
 class MicrosurveyAction: Action { }
-
-class MicrosurveyMiddlewareAction: Action {
-    let microsurveyState: MicrosurveyPromptState?
-
-    init(microsurveyState: MicrosurveyPromptState? = nil,
-         windowUUID: UUID,
-         actionType: ActionType) {
-        self.microsurveyState = microsurveyState
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
+class MicrosurveyMiddlewareAction: Action { }
 
 enum MicrosurveyActionType: ActionType {
     case closeSurvey
