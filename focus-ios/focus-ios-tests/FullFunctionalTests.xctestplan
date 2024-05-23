@@ -26,6 +26,8 @@
         "BasicBrowsing\/testLaunchExternalApp()",
         "BasicBrowsing\/testNavigationToolbar()",
         "BrowsingTest\/testActivityMenuRequestDesktopItem()",
+        "CopyPasteTest\/testClipboard()",
+        "CopyPasteTest\/testPastenGo()",
         "FindInPageTest\/testActivityMenuFindInPageAction()",
         "OnboardingTest",
         "PastenGoTest\/testPastenGo()",

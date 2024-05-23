@@ -16,6 +16,7 @@
       "skippedTests" : [
         "AsianLocaleTest",
         "CollapsedURLTest",
+        "CopyPasteTest\/testCopyMenuItem()",
         "CopyTest",
         "DragAndDropTest",
         "FindInPageTest\/testFindInPageURLBarElement()",

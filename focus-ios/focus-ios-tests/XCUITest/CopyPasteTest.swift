@@ -5,7 +5,6 @@
 import XCTest
 
 class CopyPasteTest: BaseTestCase {
-    // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/395745
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
