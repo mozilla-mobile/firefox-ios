@@ -49,11 +49,17 @@ class MicrosurveyPromptMiddleware {
 
 struct MicrosurveyModel: Equatable {
     // TODO: FXIOS-8990 - Mobile Messaging Structure
-    // Title + button text can come from mobile messaging; but has a hardcoded string as fallback
-    let title = String(
+    let promptTitle = String(
         format: .Microsurvey.Prompt.TitleLabel,
         AppName.shortName.rawValue
     )
-    let button: String = .Microsurvey.Prompt.TakeSurveyButton
-    let a11yLabel: String = .Microsurvey.Prompt.CloseButtonAccessibilityLabel
+    let promptButtonLabel: String = .Microsurvey.Prompt.TakeSurveyButton
+    let surveyQuestion = "How satisfied are you with printing in Firefox?"
+    let surveyOptions: [String] = [
+        .Microsurvey.Survey.Options.LikertScaleOption1,
+        .Microsurvey.Survey.Options.LikertScaleOption2,
+        .Microsurvey.Survey.Options.LikertScaleOption3,
+        .Microsurvey.Survey.Options.LikertScaleOption4,
+        .Microsurvey.Survey.Options.LikertScaleOption5
+    ]
 }

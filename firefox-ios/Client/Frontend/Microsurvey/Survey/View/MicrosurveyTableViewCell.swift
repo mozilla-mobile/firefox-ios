@@ -91,7 +91,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         )
     }
 
-    func configureCell(_ text: String) {
+    func configure(_ text: String) {
         optionLabel.text = text
     }
 
