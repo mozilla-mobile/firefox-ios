@@ -355,7 +355,7 @@ class SearchTests: BaseTestCase {
     func testSearchSuggestions() {
         // Tap on URL Bar and type "g"
         navigator.nowAt(NewTabScreen)
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
         app.tables.buttons["appendUpLeftLarge"].firstMatch.tap()
@@ -368,7 +368,7 @@ class SearchTests: BaseTestCase {
         // Delete the text and type "g"
         mozWaitForElementToExist(app.buttons["Clear text"])
         app.buttons["Clear text"].tap()
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the text letter "g"
         app.tables.cells.firstMatch.tap()
@@ -382,8 +382,8 @@ class SearchTests: BaseTestCase {
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
 
         // No search suggestions are displayed
-        // Firefox suggest adds 2 more cells
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 2, isSwitchOn: false)
+        // Firefox suggest adds 2, 3 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: false)
 
         // Enable "Show search suggestions" from Settings and type text in a new tab
         app.tables.cells.firstMatch.tap()
@@ -391,8 +391,8 @@ class SearchTests: BaseTestCase {
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: true)
 
         // Search suggestions are displayed
-        // Firefox suggest adds 2 more cells
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 6, isSwitchOn: true)
+        // Firefox suggest adds 2, 3 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
@@ -414,17 +414,19 @@ class SearchTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
     }
 
-    private func typeTextAndValidateSearchSuggestions(text: String, totalSuggestedSearches: Int, isSwitchOn: Bool) {
+    private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
         if isSwitchOn {
             mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
             XCTAssertTrue(app.staticTexts.elementContainingText("google").exists)
             mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
+            XCTAssertTrue(app.tables.cells.count >= 4)
         } else {
             mozWaitForElementToNotExist(app.tables.buttons["appendUpLeftLarge"])
+            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
+            XCTAssertTrue(app.tables.cells.count <= 3)
         }
-        XCTAssertEqual(app.tables.cells.count, totalSuggestedSearches)
     }
 
     private func validateUrlHasFocusAndKeyboardIsDisplayed() {
