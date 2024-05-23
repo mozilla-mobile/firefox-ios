@@ -54,6 +54,7 @@ final class TabNumberButton: ToolbarButton {
         let count = max(count, 1)
         let countToBe = (count <= UX.maxTabCount) ? count.description : UX.infinitySymbol
         countLabel.text = countToBe
+        accessibilityValue = countToBe
     }
 
     // MARK: - Layout
