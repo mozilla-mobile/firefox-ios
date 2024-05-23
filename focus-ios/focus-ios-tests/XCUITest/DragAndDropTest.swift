@@ -7,6 +7,7 @@ import XCTest
 class DragAndDropTest: BaseTestCase {
     let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/", "urlSearchField": "Search MDN"]
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609718
     func testDragElement() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage(websiteWithSearchField["url"]!)
