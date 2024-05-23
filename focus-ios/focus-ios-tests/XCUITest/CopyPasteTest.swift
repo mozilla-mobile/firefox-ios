@@ -17,18 +17,9 @@ class CopyPasteTest: BaseTestCase {
         app.menuItems["Copy"].tap()
         waitForNoExistence(app.menuItems["Copy"])
 
-        loadWebPage("bing.com")
+        loadWebPage("mozilla.org")
         waitForWebPageLoad()
-        urlBarTextField.tap()
         urlBarTextField.press(forDuration: 2)
-        waitForExistence(app.collectionViews.menuItems.firstMatch)
-        waitForHittable(app.buttons["Forward"].firstMatch)
-        app.buttons["Forward"].firstMatch.tap()
-        if !iPad() {
-            waitForExistence(app.collectionViews.menuItems.firstMatch)
-            waitForHittable(app.buttons["Forward"].firstMatch)
-            app.buttons["Forward"].firstMatch.tap()
-        }
         waitForExistence(app.collectionViews.menuItems.firstMatch)
         waitForHittable(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
