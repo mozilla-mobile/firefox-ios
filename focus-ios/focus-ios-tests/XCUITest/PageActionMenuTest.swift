@@ -5,7 +5,6 @@
 import XCTest
 
 class PageActionMenuTest: BaseTestCase {
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2587660
     func testFindInPageURLBarElement() {
         // Navigate to website
@@ -32,7 +31,7 @@ class PageActionMenuTest: BaseTestCase {
         // Ensure find in page bar is dismissed
         waitForNoExistence(app.buttons["FindInPage.close"])
     }
-    
+
     // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/395022
     func testActivityMenuFindInPageAction() {
