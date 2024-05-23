@@ -51,6 +51,10 @@ class PreviewActionBuilder {
             handler: handler
         ))
     }
+
+    func build() -> [UIPreviewActionItem] {
+        return actions
+    }
 }
 
 class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
