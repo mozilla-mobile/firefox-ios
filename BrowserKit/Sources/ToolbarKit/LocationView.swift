@@ -217,6 +217,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
                 searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
                 searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
+                searchEngineImageView.leadingAnchor.constraint(equalTo: searchEngineContentView.leadingAnchor),
+                searchEngineImageView.trailingAnchor.constraint(equalTo: searchEngineContentView.trailingAnchor,
+                                                                constant: -UX.horizontalSpace),
+                searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: searchEngineContentView.topAnchor),
+                searchEngineImageView.bottomAnchor.constraint(lessThanOrEqualTo: searchEngineContentView.bottomAnchor),
                 searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
                 searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
 
