@@ -88,13 +88,10 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
                 }
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(
-                    title: .AppMenu.TouchActions.SendToDeviceTitle,
-                    style: .default
-                ) { [weak self] previewAction, viewController in
+                actionsBuilder.addSendToDeviceTitle { [weak self] previewAction, viewController in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
                     wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
-                })
+                }
             }
             // only add the copy URL action if we don't already have 3 items in our list
             // as we are only allowed 4 in total and we always want to display close tab
