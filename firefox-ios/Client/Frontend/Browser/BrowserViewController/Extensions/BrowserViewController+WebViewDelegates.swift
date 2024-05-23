@@ -7,6 +7,7 @@ import Common
 import WebKit
 import Shared
 import UIKit
+import Photos
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -350,8 +351,15 @@ extension BrowserViewController: WKUIDelegate {
                             identifier: UIAction.Identifier("linkContextMenu.saveImage")
                         ) { _ in
                             getImageData(url) { data in
-                                guard let image = UIImage(data: data) else { return }
-                                self.writeToPhotoAlbum(image: image)
+                                if url.pathExtension.lowercased() == "gif" {
+                                    PHPhotoLibrary.shared().performChanges {
+                                        let creationRequest = PHAssetCreationRequest.forAsset()
+                                        creationRequest.addResource(with: .photo, data: data, options: nil)
+                                    }
+                                } else {
+                                    guard let image = UIImage(data: data) else { return }
+                                    self.writeToPhotoAlbum(image: image)
+                                }
                             }
                         })
 
