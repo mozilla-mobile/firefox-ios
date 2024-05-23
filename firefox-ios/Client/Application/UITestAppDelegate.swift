@@ -34,12 +34,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
-                let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
-                if let port = Int(portString) {
-                    AppInfo.webserverPort = port
-                } else {
-                    fatalError("Failed to set web server port override.")
-                }
+                configureWebserverPort(arg)
             }
 
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
