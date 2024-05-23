@@ -50,14 +50,14 @@ class SettingsTests: BaseTestCase {
         navigator.goto(SettingsScreen)
 
         // Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value as? String, "0")
 
         // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].tap()
+        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].tap()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
         app.navigationBars["Settings"].buttons["Done"].tap()
@@ -67,7 +67,7 @@ class SettingsTests: BaseTestCase {
         settingsmenuitemCell.tap()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value3 as? String, "1")
     }
 
