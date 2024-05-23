@@ -5,9 +5,15 @@
 import Common
 import Foundation
 import Shared
+import ComponentLibrary
 
 class ContentBlockerSettingViewController: SettingsTableViewController {
-    private let button = UIButton()
+    private struct UX {
+        static let portraitTopConstant: CGFloat = 42
+        static let landscapeTopConstant: CGFloat = 22
+    }
+
+    private let linkButton: LinkButton = .build()
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
@@ -71,7 +77,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     )
 
                     if option == .strict {
-                        self.button.isHidden = true
+                        self.linkButton.isHidden = true
                         TelemetryWrapper.recordEvent(
                             category: .action,
                             method: .tap,
@@ -145,20 +151,29 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         guard let defaultFooter = _defaultFooter else { return nil }
 
         if section == 0 {
-            // TODO: Get a dedicated string for this.
             let title: String = .TrackerProtectionLearnMore
 
             let theme = themeManager.currentTheme(for: windowUUID)
-            let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+            let font = FXFontStyles.Regular.caption1.scaledFont()
             var attributes = [NSAttributedString.Key: AnyObject]()
             attributes[NSAttributedString.Key.foregroundColor] = theme.colors.actionPrimary
             attributes[NSAttributedString.Key.font] = font
 
-            button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
-            button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-            button.isHidden = false
+            linkButton.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
+            linkButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+            linkButton.isHidden = false
 
-            defaultFooter.stackView.addArrangedSubview(button)
+            defaultFooter.contentView.addSubview(linkButton)
+
+            NSLayoutConstraint.activate(
+                [
+                    linkButton.leadingAnchor.constraint(equalTo: defaultFooter.contentView.leadingAnchor, constant: 4),
+                    linkButton.topAnchor.constraint(
+                        equalTo: defaultFooter.contentView.topAnchor,
+                        constant: UIDevice.current.orientation.isPortrait ? UX.portraitTopConstant : UX.landscapeTopConstant
+                    )
+                ]
+            )
 
             return defaultFooter
         }
