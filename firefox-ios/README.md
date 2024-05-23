@@ -23,11 +23,11 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
     brew install node
     pip3 install virtualenv
     ```
-1. Clone the repository:
+1. Clone the repository into your current directory:
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Install Node.js dependencies, build user scripts and update content blocker:
+1. Change directories to firefox-ios and install Node.js dependencies, build user scripts and update content blocker:
     ```shell
     cd firefox-ios
     sh ./bootstrap.sh
