@@ -20,6 +20,10 @@ protocol LegacyTabPeekDelegate: AnyObject {
 class PreviewActionBuilder {
     private var actions = [UIPreviewActionItem]()
 
+    var count: Int {
+        return actions.count
+    }
+
     func addBookmark(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
         actions.append(UIPreviewAction(
             title: .TabPeekAddToBookmarks,
