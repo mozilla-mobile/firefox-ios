@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Common
+import Foundation
 import ToolbarKit
+import UIKit
 
 class RootViewControllerModel {
     // By default the state is set to reload. We save the state to avoid setting the toolbar
@@ -95,7 +96,7 @@ class RootViewControllerModel {
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTextField",
             urlTextFieldA11yLabel: "Address Bar",
-            searchEngineImageName: "bingSearchEngine",
+            searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
             url: url
         )
