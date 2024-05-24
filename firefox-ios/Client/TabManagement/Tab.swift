@@ -193,6 +193,10 @@ class Tab: NSObject, ThemeApplicable {
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal
     /// or not, it will resort to other displayable titles.
     var displayTitle: String {
+        if self.isFxHomeTab {
+            return .AppMenu.AppMenuOpenHomePageTitleString
+        }
+
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
             return lastTitle
         }
@@ -200,14 +204,6 @@ class Tab: NSObject, ThemeApplicable {
         // First, check if the webView can give us a title.
         if let title = webView?.title, !title.isEmpty {
             return title
-        }
-
-        // If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData
-        // on this tab. When picking a display title. Tabs with sessionData are pending a restore so show their
-        // old title. To prevent flickering of the display title. If a tab is restoring make sure to use
-        // its lastTitle.
-        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false {
-            return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
         // Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
