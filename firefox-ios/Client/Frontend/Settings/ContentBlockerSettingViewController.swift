@@ -7,10 +7,10 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class ContentBlockerSettingViewController: SettingsTableViewController {
+class ContentBlockerSettingViewController: SettingsTableViewController, ThemeApplicable {
     private struct UX {
-        static let portraitTopConstant: CGFloat = 42
-        static let landscapeTopConstant: CGFloat = 22
+        static let portraitTopConstant: CGFloat = 44
+        static let landscapeTopConstant: CGFloat = 24
     }
 
     private let linkButton: LinkButton = .build()
@@ -151,15 +151,16 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         guard let defaultFooter = _defaultFooter else { return nil }
 
         if section == 0 {
-            let title: String = .TrackerProtectionLearnMore
+            let linkButtonViewModel = LinkButtonViewModel(
+                title: .TrackerProtectionLearnMore,
+                a11yIdentifier: AccessibilityIdentifiers.Settings.ContentBlocker.title,
+                font: FXFontStyles.Regular.caption1.scaledFont()
+            )
+            linkButton.configure(viewModel: linkButtonViewModel)
 
             let theme = themeManager.currentTheme(for: windowUUID)
-            let font = FXFontStyles.Regular.caption1.scaledFont()
-            var attributes = [NSAttributedString.Key: AnyObject]()
-            attributes[NSAttributedString.Key.foregroundColor] = theme.colors.actionPrimary
-            attributes[NSAttributedString.Key.font] = font
+            linkButton.applyTheme(theme: theme)
 
-            linkButton.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
             linkButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
             linkButton.isHidden = false
 
@@ -167,11 +168,12 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
             NSLayoutConstraint.activate(
                 [
-                    linkButton.leadingAnchor.constraint(equalTo: defaultFooter.contentView.leadingAnchor, constant: 4),
+                    linkButton.leadingAnchor.constraint(equalTo: defaultFooter.contentView.leadingAnchor),
                     linkButton.topAnchor.constraint(
                         equalTo: defaultFooter.contentView.topAnchor,
                         constant: UIDevice.current.orientation.isPortrait ? UX.portraitTopConstant : UX.landscapeTopConstant
-                    )
+                    ),
+                    linkButton.bottomAnchor.constraint(equalTo: defaultFooter.bottomAnchor)
                 ]
             )
 
@@ -199,5 +201,11 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     @objc
     func done() {
         settingsDelegate?.didFinish()
+    }
+
+    // MARK: - ThemeApplicable
+    func applyTheme(theme: Theme) {
+        let colors = theme.colors
+        linkButton.setTitleColor(colors.actionPrimary, for: .normal)
     }
 }
