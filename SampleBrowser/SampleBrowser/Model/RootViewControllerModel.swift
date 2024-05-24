@@ -89,8 +89,6 @@ class RootViewControllerModel {
             })]
 
         let locationViewState = LocationViewState(
-            clearButtonA11yId: "clearButton",
-            clearButtonA11yLabel: "Clean",
             searchEngineImageViewA11yId: "searchEngine",
             searchEngineImageViewA11yLabel: "Search engine icon",
             urlTextFieldPlaceholder: "Search or enter address",
@@ -98,6 +96,8 @@ class RootViewControllerModel {
             urlTextFieldA11yLabel: "Address Bar",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
+            showSearchEngineIcon: false,
+            showTrackingProtectionButton: false,
             url: url
         )
 
