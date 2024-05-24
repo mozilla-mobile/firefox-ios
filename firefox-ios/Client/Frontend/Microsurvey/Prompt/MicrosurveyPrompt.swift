@@ -88,9 +88,9 @@ class MicrosurveyPromptView: UIView, ThemeApplicable {
     }
 
     private func configure(with state: MicrosurveyPromptState) {
-        titleLabel.text = state.model.title
+        titleLabel.text = state.model?.promptTitle
         let roundedButtonViewModel = SecondaryRoundedButtonViewModel(
-            title: state.model.button,
+            title: state.model?.promptButtonLabel,
             a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton
         )
         surveyButton.configure(viewModel: roundedButtonViewModel)

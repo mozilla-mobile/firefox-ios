@@ -31,9 +31,6 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
 
     private lazy var questionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
-        // TODO: FXIOS-9108: This string should come from the experiment when target feature is defined
-        // i.e. "How satisfied are you with printing in Firefox?"
-        label.text = ""
         label.numberOfLines = 0
         label.setContentCompressionResistancePriority(.required, for: .vertical)
     }
@@ -74,6 +71,10 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(_ text: String) {
+        questionLabel.text = text
     }
 
     // MARK: - ThemeApplicable

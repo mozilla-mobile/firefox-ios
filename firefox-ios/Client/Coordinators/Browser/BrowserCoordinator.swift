@@ -671,6 +671,32 @@ class BrowserCoordinator: BaseCoordinator,
         present(backForwardListVC)
     }
 
+    // MARK: Microsurvey
+    func showMicrosurvey(model: MicrosurveyModel) {
+        guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
+            return
+        }
+
+        let navigationController = DismissableNavigationViewController()
+        let coordinator = MicrosurveyCoordinator(
+            model: model,
+            router: DefaultRouter(
+                navigationController: navigationController
+            ),
+            tabManager: tabManager
+        )
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start()
+
+        navigationController.onViewDismissed = { [weak self] in
+            // Remove coordinator when user drags down to dismiss modal
+            self?.didFinish(from: coordinator)
+        }
+
+        present(navigationController)
+    }
+
     private func present(_ viewController: UIViewController,
                          animated: Bool = true,
                          completion: (() -> Void)? = nil) {

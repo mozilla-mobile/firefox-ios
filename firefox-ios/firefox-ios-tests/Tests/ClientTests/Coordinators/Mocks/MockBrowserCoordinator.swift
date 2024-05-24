@@ -26,6 +26,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var dismissFakespotModalCalled = 0
     var dismissFakespotSidebarCalled = 0
     var updateFakespotSidebarCalled = 0
+    var showMicrosurveyCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -115,5 +116,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
                                sidebarContainer: SidebarEnabledViewProtocol,
                                parentViewController: UIViewController) {
         updateFakespotSidebarCalled += 1
+    }
+
+    func showMicrosurvey(model: MicrosurveyModel) {
+        showMicrosurveyCalled += 1
     }
 }

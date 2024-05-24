@@ -11,19 +11,19 @@ struct MicrosurveyPromptState: StateType, Equatable {
     var windowUUID: WindowUUID
     var showPrompt: Bool
     var showSurvey: Bool
-    var model: MicrosurveyModel
+    var model: MicrosurveyModel?
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   showPrompt: false,
                   showSurvey: false,
-                  model: MicrosurveyModel())
+                  model: nil)
     }
 
     init(windowUUID: WindowUUID,
          showPrompt: Bool,
          showSurvey: Bool,
-         model: MicrosurveyModel) {
+         model: MicrosurveyModel?) {
         self.windowUUID = windowUUID
         self.showPrompt = showPrompt
         self.showSurvey = showSurvey
@@ -32,35 +32,34 @@ struct MicrosurveyPromptState: StateType, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // TODO: FXIOS-9068 Need to test this experience with multiwindow
-        guard let action = action as? MicrosurveyPromptMiddlewareAction else { return state }
         switch action.actionType {
         case MicrosurveyPromptMiddlewareActionType.initialize(let model):
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
                 showPrompt: true,
-                showSurvey: state.showSurvey,
+                showSurvey: false,
                 model: model
             )
         case MicrosurveyPromptMiddlewareActionType.dismissPrompt:
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
                 showPrompt: false,
-                showSurvey: state.showSurvey,
+                showSurvey: false,
                 model: state.model
             )
         case MicrosurveyPromptMiddlewareActionType.openSurvey:
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
-                showPrompt: state.showPrompt,
+                showPrompt: true,
                 showSurvey: true,
                 model: state.model
             )
         default:
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
-                showPrompt: false,
+                showPrompt: state.showPrompt,
                 showSurvey: false,
-                model: MicrosurveyModel()
+                model: state.model
             )
         }
     }

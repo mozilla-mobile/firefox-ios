@@ -96,7 +96,7 @@ class CreditCardsTests: BaseTestCase {
         addCardAndReachViewCardPage()
 
         // Go back to saved cards section
-        app.buttons[creditCardsStaticTexts.ViewCreditCard.close].tap()
+        app.navigationBars.buttons[creditCardsStaticTexts.ViewCreditCard.close].tap()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
         mozWaitForElementToExist(app.switches[creditCardsStaticTexts.AutoFillCreditCard.saveAutofillCards])
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
