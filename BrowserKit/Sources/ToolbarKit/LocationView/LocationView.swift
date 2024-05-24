@@ -5,80 +5,14 @@
 import UIKit
 import Common
 
-/// `LocationViewDelegate` protocol defines the delegate methods that respond
-/// to user interactions with a location view.
-protocol LocationViewDelegate: AnyObject {
-    /// Called when the user enters text into the location view.
-    ///
-    /// - Parameter text: The text that was entered.
-    func locationViewDidEnterText(_ text: String)
-    /// Called when the user begins editing text in the location view.
-    ///
-    /// - Parameter text: The initial text in the location view when the user began editing.
-    func locationViewDidBeginEditing(_ text: String)
-    /// Called when the location view should perform a search based on the entered text.
-    ///
-    /// - Parameter text: The text for which the location view should search.
-    func locationViewShouldSearchFor(_ text: String)
-
-    /// Called to determine the display text for a given URL in the location view.
-    ///
-    /// - Parameter url: The URL for which to determine the display text.
-    /// - Returns: The display text as an optional String. If the URL is nil
-    ///  or cannot be converted to a display text, returns nil.
-    func locationViewDisplayTextForURL(_ url: URL?) -> String?
-}
-
-public struct LocationViewState {
-    public let clearButtonA11yId: String
-    public let clearButtonA11yLabel: String
-
-    public let searchEngineImageViewA11yId: String
-    public let searchEngineImageViewA11yLabel: String
-
-    public let urlTextFieldPlaceholder: String
-    public let urlTextFieldA11yId: String
-    public let urlTextFieldA11yLabel: String
-
-    public let searchEngineImage: UIImage?
-    public let lockIconImageName: String
-    public let url: String?
-
-    public init(
-        clearButtonA11yId: String,
-        clearButtonA11yLabel: String,
-        searchEngineImageViewA11yId: String,
-        searchEngineImageViewA11yLabel: String,
-        urlTextFieldPlaceholder: String,
-        urlTextFieldA11yId: String,
-        urlTextFieldA11yLabel: String,
-        searchEngineImage: UIImage?,
-        lockIconImageName: String,
-        url: String?
-    ) {
-        self.clearButtonA11yId = clearButtonA11yId
-        self.clearButtonA11yLabel = clearButtonA11yLabel
-        self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
-        self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
-        self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
-        self.urlTextFieldA11yId = urlTextFieldA11yId
-        self.urlTextFieldA11yLabel = urlTextFieldA11yLabel
-        self.searchEngineImage = searchEngineImage
-        self.lockIconImageName = lockIconImageName
-        self.url = url
-    }
-}
-
 class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
-        static let gradientViewVerticalPadding: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let searchEngineImageViewCornerRadius: CGFloat = 4
         static let lockIconWidth: CGFloat = 20
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
-        static let clearButtonSize = CGSize(width: 40, height: 40)
         static let transitionDuration: TimeInterval = 0.3
     }
 
@@ -95,20 +29,14 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     private lazy var gradientView: UIView = .build()
 
     private var clearButtonWidthConstraint: NSLayoutConstraint?
-    private var gradientViewWidthConstraint: NSLayoutConstraint?
     private var iconContainerStackViewWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
-    private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
 
-    private lazy var clearButton: UIButton = .build { button in
-        button.setImage(
-            UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)?.withRenderingMode(.alwaysTemplate),
-            for: .normal
-        )
-        button.addTarget(self, action: #selector(self.clearURLText), for: .touchUpInside)
+    private lazy var iconContainerStackView: UIStackView = .build { view in
+        view.axis = .horizontal
+        view.alignment = .center
+        view.distribution = .fill
     }
-
-    private lazy var iconContainerStackView: UIStackView = .build()
 
     private lazy var searchEngineContentView: UIView = .build()
 
@@ -122,13 +50,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
     }
 
-    private lazy var urlTextField: UITextField = .build { [self] urlTextField in
-        urlTextField.accessibilityIdentifier = "url"
+    private lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
         urlTextField.backgroundColor = .clear
-        urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
+        urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true
-        urlTextField.rightView = clearButton
-        urlTextField.rightViewMode = .whileEditing
         urlTextField.delegate = self
     }
 
@@ -137,17 +62,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
-        hideClearButton()
 
         urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
-
-            if isURLTextFieldEmpty {
-                hideClearButton()
-            } else {
-                showClearButton()
-            }
 
             urlTextField.text = urlTextField.text?.lowercased()
             urlAbsolutePath = urlTextField.text
@@ -188,38 +106,30 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        updateGradientLayerFrame()
+        updateGradient()
         updateURLTextFieldLeadingConstraintBasedOnState()
     }
 
     private func setupLayout() {
-        addSubviews(urlTextField, iconContainerStackView, gradientView, clearButton)
+        addSubviews(urlTextField, iconContainerStackView, gradientView)
         searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
-
-        urlTextFieldTrailingConstraint = urlTextField.trailingAnchor.constraint(
-            equalTo: trailingAnchor,
-            constant: UX.horizontalSpace
-        )
-        urlTextFieldTrailingConstraint?.isActive = true
 
         NSLayoutConstraint.activate(
             [
                 gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
                 gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
                 gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
-                gradientView.centerYAnchor.constraint(equalTo: urlTextField.centerYAnchor),
+                gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
 
                 urlTextField.topAnchor.constraint(equalTo: topAnchor),
                 urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-                clearButton.heightAnchor.constraint(equalToConstant: UX.clearButtonSize.height),
+                urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
 
                 searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
                 searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
                 searchEngineImageView.leadingAnchor.constraint(equalTo: searchEngineContentView.leadingAnchor),
-                searchEngineImageView.trailingAnchor.constraint(equalTo: searchEngineContentView.trailingAnchor,
-                                                                constant: -UX.horizontalSpace),
+                searchEngineImageView.trailingAnchor.constraint(equalTo: searchEngineContentView.trailingAnchor),
                 searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: searchEngineContentView.topAnchor),
                 searchEngineImageView.bottomAnchor.constraint(lessThanOrEqualTo: searchEngineContentView.bottomAnchor),
                 searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
@@ -249,15 +159,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         return urlTextFieldWidth >= locationViewWidth
     }
 
-    private func updateGradientLayerFrame() {
+    private func updateGradient() {
         let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !urlTextField.isFirstResponder
-        let width = showGradientForLongURL ? UX.gradientViewWidth : 0
-        let frame = showGradientForLongURL ? gradientView.bounds : CGRect()
-
-        DispatchQueue.main.async { [self] in
-            updateWidthConstraint(&gradientViewWidthConstraint, for: gradientView, to: width)
-            gradientLayer.frame = frame
-        }
+        gradientView.isHidden = !showGradientForLongURL
+        gradientLayer.frame = gradientView.bounds
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
@@ -268,7 +173,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor)
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor, constant: UX.horizontalSpace)
         }
     }
 
@@ -290,18 +195,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private func addSearchEngineButton() {
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
-    }
-
-    private func showClearButton() {
-        clearButton.isHidden = false
-        updateWidthConstraint(&clearButtonWidthConstraint, for: clearButton, to: UX.clearButtonSize.width)
-        updateWidthConstraint(&gradientViewWidthConstraint, for: gradientView, to: 0)
-    }
-
-    private func hideClearButton() {
-        clearButton.isHidden = true
-        updateWidthConstraint(&clearButtonWidthConstraint, for: clearButton, to: 0)
-        updateWidthConstraint(&gradientViewWidthConstraint, for: gradientView, to: UX.gradientViewWidth)
     }
 
     private func addLockIconImageView() {
@@ -361,12 +254,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - Selectors
     @objc
-    private func clearURLText() {
-        urlTextField.text = ""
-        notifyTextChanged?()
-    }
-
-    @objc
     func textDidChange(_ textField: UITextField) {
         notifyTextChanged?()
     }
@@ -384,16 +271,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             equalTo: iconContainerStackView.trailingAnchor,
             constant: UX.horizontalSpace
         )
-        urlTextFieldTrailingConstraint?.constant = 0
 
         if !isURLTextFieldEmpty {
-            showClearButton()
             animateURLText(textField, options: .transitionFlipFromBottom, textAlignment: .natural)
-        } else {
-            hideClearButton()
         }
         addSearchEngineButton()
-        updateGradientLayerFrame()
+        updateGradient()
 
         let url = URL(string: textField.text ?? "")
         let queryText = locationViewDelegate?.locationViewDisplayTextForURL(url)
@@ -408,12 +291,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        hideClearButton()
         if !isURLTextFieldEmpty {
             updateWidthConstraint(&iconContainerStackViewWidthConstraint, for: iconContainerStackView, to: UX.lockIconWidth)
             removeContainerIcons()
             addLockIconImageView()
         }
+        updateGradient()
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -426,9 +309,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - Accessibility
     private func configureA11y(_ state: LocationViewState) {
-        clearButton.accessibilityIdentifier = state.clearButtonA11yId
-        clearButton.accessibilityLabel = state.clearButtonA11yLabel
-
         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
         searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel
@@ -439,14 +319,13 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: any Common.Theme) {
+    func applyTheme(theme: Theme) {
         let colors = theme.colors
-        urlTextField.textColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
-        clearButton.tintColor = colors.iconPrimary
         searchEngineImageView.backgroundColor = colors.iconPrimary
         lockIconImageView.tintColor = colors.iconPrimary
         lockIconImageView.backgroundColor = colors.layerSearch
+        urlTextField.applyTheme(theme: theme)
     }
 }

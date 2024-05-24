@@ -17,8 +17,6 @@ class AddressToolbarContainerModel {
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(
-            clearButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.clear,
-            clearButtonA11yLabel: .AddressToolbar.LocationClearButtonA11yLabel,
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
@@ -26,6 +24,8 @@ class AddressToolbarContainerModel {
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: profile.searchEngines.defaultEngine?.image,
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
+            showSearchEngineIcon: false,
+            showTrackingProtectionButton: false,
             url: nil)
         return AddressToolbarState(
             locationViewState: locationViewState,
