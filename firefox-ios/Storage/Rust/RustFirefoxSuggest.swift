@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-public protocol RustFirefoxSuggestActor: Actor {
+public protocol RustFirefoxSuggestProtocol {
     /// Downloads and stores new Firefox Suggest suggestions.
     func ingest() async throws
 
@@ -17,15 +17,15 @@ public protocol RustFirefoxSuggestActor: Actor {
     ) async throws -> [RustFirefoxSuggestion]
 
     /// Interrupts any ongoing queries for suggestions.
-    nonisolated func interruptReader()
+    func interruptReader()
 
     /// Interrupts all ongoing operations.
-    nonisolated func interruptEverything()
+    func interruptEverything()
 }
 
-/// An actor that wraps the synchronous Rust `SuggestStore` binding to execute
+/// Wraps the synchronous Rust `SuggestStore` binding to execute
 /// blocking operations on a dispatch queue.
-public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
+public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
     private let store: SuggestStore
 
     // Using a pair of serial queues lets read and write operations run
@@ -83,11 +83,11 @@ public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
         }
     }
 
-    public nonisolated func interruptReader() {
+    public func interruptReader() {
         store.interrupt()
     }
 
-    public nonisolated func interruptEverything() {
+    public func interruptEverything() {
         store.interrupt(kind: .readWrite)
     }
 }

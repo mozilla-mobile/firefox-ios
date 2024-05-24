@@ -13,11 +13,11 @@ import Storage
 class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureFlaggable {
     static let taskIdentifier = "org.mozilla.ios.firefox.suggest.ingest"
 
-    let firefoxSuggest: RustFirefoxSuggestActor
+    let firefoxSuggest: RustFirefoxSuggestProtocol
     let logger: Logger
     private var didRegisterTaskHandler = false
 
-    init(firefoxSuggest: RustFirefoxSuggestActor, logger: Logger = DefaultLogger.shared) {
+    init(firefoxSuggest: RustFirefoxSuggestProtocol, logger: Logger = DefaultLogger.shared) {
         self.firefoxSuggest = firefoxSuggest
         self.logger = logger
 
