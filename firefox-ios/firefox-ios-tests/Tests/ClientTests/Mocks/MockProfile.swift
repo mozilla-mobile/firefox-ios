@@ -108,14 +108,14 @@ open class MockProfile: Client.Profile {
 
     public var files: FileAccessor
     public var syncManager: ClientSyncManager!
-    public var firefoxSuggest: RustFirefoxSuggestActor?
+    public var firefoxSuggest: RustFirefoxSuggestProtocol?
 
     fileprivate let name: String = "mockaccount"
 
     private let directory: String
     private let databasePrefix: String
 
-    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestActor? = nil) {
+    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestProtocol? = nil) {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
         self.databasePrefix = databasePrefix
