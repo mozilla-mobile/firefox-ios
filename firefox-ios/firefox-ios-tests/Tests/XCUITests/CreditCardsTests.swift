@@ -632,7 +632,6 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard])
         XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252").exists)
         let cardDetails = ["Test", "05 / 40"]
-        print(app.debugDescription)
         for i in cardDetails {
             if #available(iOS 16, *) {
                 XCTAssertTrue(app.textFields[i].exists, "\(i) does not exists")
