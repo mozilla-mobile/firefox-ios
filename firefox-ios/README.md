@@ -23,13 +23,16 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
     brew install node
     pip3 install virtualenv
     ```
-1. Clone the repository into your current directory:
+1. Clone the repository:
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Change directories to firefox-ios and install Node.js dependencies, build user scripts and update content blocker:
+1. Change directories to the project root:
     ```shell
     cd firefox-ios
+    ```
+1. From the project root, install Node.js dependencies, build user scripts and update content blocker:
+    ```shell
     sh ./bootstrap.sh
     ```
 1. Open the `Client.xcodeproj` under the `firefox-ios` folder in Xcode.
