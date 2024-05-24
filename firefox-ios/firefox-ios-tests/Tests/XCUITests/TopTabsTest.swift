@@ -493,7 +493,7 @@ fileprivate extension BaseTestCase {
             }
             XCTAssertEqual(numTabsOpen, expectedNumberOfTabsOpen, "The number of tabs open is not correct")
         } else {
-            // TODO!
+            // iOS 15 does not update userState.numTabs propertly
         }
     }
 
