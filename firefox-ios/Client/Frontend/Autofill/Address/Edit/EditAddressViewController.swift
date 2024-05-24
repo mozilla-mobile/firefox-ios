@@ -35,34 +35,46 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func setupWebView() {
+        model.saveAction = { [weak self] in
+            self?.evaluateJavaScript("getCurrentFormData();")
+        }
+
         if let url = Bundle.main.url(forResource: "AddressFormManager", withExtension: "html") {
             let request = URLRequest(url: url)
             webView.loadFileURL(url, allowingReadAccessTo: url)
             webView.load(request)
         }
+
+        webView.configuration.userContentController.add(self, name: "addressFormMessageHandler")
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        
+    }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         do {
             let javascript = try model.getInjectJSONDataInit()
             self.evaluateJavaScript(javascript)
         } catch {
-            self.logger.log("Error injecting JavaScript",
-                            level: .warning,
-                            category: .autofill,
-                            description: "Error injecting JavaScript: \(error.localizedDescription)")
+            self.logger.log(
+                "Error injecting JavaScript",
+                level: .warning,
+                category: .autofill,
+                description: "Error injecting JavaScript: \(error.localizedDescription)"
+            )
         }
     }
 
     private func evaluateJavaScript(_ jsCode: String) {
         webView.evaluateJavaScript(jsCode) { result, error in
             if let error = error {
-                self.logger.log("JavaScript execution error",
-                                level: .warning,
-                                category: .autofill,
-                                description: "JavaScript execution error: \(error.localizedDescription)")
+                self.logger.log(
+                    "JavaScript execution error",
+                    level: .warning,
+                    category: .autofill,
+                    description: "JavaScript execution error: \(error.localizedDescription)"
+                )
             }
         }
     }

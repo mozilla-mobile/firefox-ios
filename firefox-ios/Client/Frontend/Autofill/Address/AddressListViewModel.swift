@@ -26,7 +26,23 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     @Published var addresses: [Address] = []
     @Published var showSection = false
-    @Published var selectedAddress: Address?
+    @Published var destination: Destination?
+
+    var saveAction: (() -> Void)?
+
+    enum Destination: Swift.Identifiable {
+        case add(Address)
+        case edit(Address)
+
+        var id: String {
+            switch self {
+            case .add(let value):
+                return value.guid
+            case .edit(let value):
+                return value.guid
+            }
+        }
+    }
 
     private let logger: Logger
 
@@ -92,12 +108,40 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         addressSelectionCallback?(fromAddress(address))
     }
 
-    func onAddressTap(_ address: Address) {
-        selectedAddress = address
+    func addressTapped(_ address: Address) {
+        destination = .edit(address)
     }
 
-    func onCancelButtonTap() {
-        selectedAddress = nil
+    func cancelEditButtonTap() {
+        destination = nil
+    }
+
+    func cancelAddButtonTap() {
+        destination = nil
+    }
+
+    func saveAddress(completion: (Address) -> Void) {
+        saveAction?()
+    }
+
+    func addButtonTap() {
+        destination = .add(Address(
+            guid: "",
+            name: "",
+            organization: "",
+            streetAddress: "",
+            addressLevel3: "",
+            addressLevel2: "",
+            addressLevel1: "",
+            postalCode: "",
+            country: "",
+            tel: "",
+            email: "",
+            timeCreated: 0,
+            timeLastUsed: nil,
+            timeLastModified: 0,
+            timesUsed: 0
+        ))
     }
 
     // MARK: - Inject JSON Data
@@ -105,11 +149,19 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     struct JSONDataError: Error {}
 
     func getInjectJSONDataInit() throws -> String {
-        guard let address = selectedAddress else {
+        guard let destination = self.destination else {
             throw JSONDataError()
         }
 
         do {
+            let address: Address =
+            switch destination {
+            case .add(let address):
+                address
+            case .edit(let address):
+                address
+            }
+
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
 
