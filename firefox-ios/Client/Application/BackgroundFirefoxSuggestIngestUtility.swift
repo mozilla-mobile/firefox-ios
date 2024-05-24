@@ -72,6 +72,12 @@ class BackgroundFirefoxSuggestIngestUtility: BackgroundUtilityProtocol, FeatureF
     private func setUp() {
         guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) else { return }
         BGTaskScheduler.shared.register(forTaskWithIdentifier: Self.taskIdentifier, using: nil) { task in
+            task.expirationHandler = {
+                // Interrupt all ongoing storage operations if our
+                // background time is about to expire.
+                self.firefoxSuggest.interruptEverything()
+                task.setTaskCompleted(success: false)
+            }
             Task {
                 let success = await self.ingest()
                 if !success {

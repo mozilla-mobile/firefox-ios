@@ -38,6 +38,8 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
     }
     nonisolated func interruptReader() {
     }
+    nonisolated func interruptEverything() {
+    }
 }
 
 @MainActor
