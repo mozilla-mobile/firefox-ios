@@ -518,6 +518,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if viewModel.shouldReloadView { reloadView() }
         return viewModel.shownSections.count
     }
 
