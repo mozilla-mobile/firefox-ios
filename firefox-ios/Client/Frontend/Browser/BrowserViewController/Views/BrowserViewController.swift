@@ -2770,6 +2770,40 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    fileprivate func handleCreditCard(fieldValues: AutofillFieldValuePayload,
+                                      type: FormAutofillPayloadType?,
+                                      tabWebView: TabWebView,
+                                      webView: WKWebView,
+                                      frame: WKFrameInfo?) {
+        guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
+              let type = type,
+              autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
+
+        // Record telemetry for credit card form detection
+        if type == .formInput {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .creditCardFormDetected)
+        }
+
+        guard autofillCreditCardNimbusFeatureFlag() else { return }
+
+        // Handle different types of credit card interactions
+        switch type {
+        case .formInput:
+            displayAutofillCreditCardAccessoryView(tabWebView: tabWebView)
+        case .formSubmit:
+            showCreditCardAutofillSheet(fieldValues: creditCardPayload)
+        default:
+            break
+        }
+
+        // Handle action when saved cards button is tapped
+        handleSavedCardsButtonTap(tabWebView: tabWebView,
+                                  webView: webView,
+                                  frame: frame)
+    }
+
     private func displayAutofillCreditCardAccessoryView(tabWebView: TabWebView) {
         profile.autofill.listCreditCards(completion: { cards, error in
             guard let cards = cards, !cards.isEmpty, error == nil else { return }
