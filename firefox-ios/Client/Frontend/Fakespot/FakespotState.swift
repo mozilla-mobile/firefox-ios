@@ -184,4 +184,11 @@ struct FakespotState: ScreenState, Equatable {
         }
         return state
     }
+
+    fileprivate static func handleShow(state: FakespotState) -> FakespotState {
+        var state = state
+        state.isOpen = true
+        state.sidebarOpenForiPadLandscape = true
+        return state
+    }
 }
