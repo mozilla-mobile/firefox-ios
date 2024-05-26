@@ -71,12 +71,7 @@ class SearchSuggestClient {
             // That is, an array of at least two elements: the search term and an array of suggestions.
 
             if array?.count ?? 0 < 2 {
-                let error = NSError(
-                    domain: SearchSuggestClientErrorDomain,
-                    code: SearchSuggestClientErrorInvalidResponse,
-                    userInfo: nil
-                )
-                callback(nil, error)
+                self.handleInvalidResponseError(callback: callback)
                 return
             }
 
