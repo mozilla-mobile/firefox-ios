@@ -163,6 +163,55 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
         }
     }
 
+    fileprivate func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
+                                                         timerid: TimerId,
+                                                         historyHighlightsEnabled: Bool,
+                                                         oldValue: String) {
+        let results = queries
+        defer {
+            GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
+        }
+
+        let bookmarksSites = results[safe: 0] ?? []
+        var combinedSites = bookmarksSites
+        if !historyHighlightsEnabled {
+            let historySites = results[safe: 1] ?? []
+            combinedSites += historySites
+        }
+
+        // Load the data in the table view.
+        load(ArrayCursor(data: combinedSites))
+
+        // If the new search string is not longer than the previous
+        // we don't need to find an autocomplete suggestion.
+        guard oldValue.count < query.count else { return }
+
+        // If we should skip the next autocomplete, reset
+        // the flag and bail out here.
+        guard !skipNextAutocomplete else {
+            skipNextAutocomplete = false
+            return
+        }
+
+        // First, see if the query matches any URLs from the user's search history.
+        for site in combinedSites {
+            if let completion = completionForURL(site.url) {
+                urlBar.setAutocompleteSuggestion(completion)
+                return
+            }
+        }
+
+        // If there are no search history matches, try matching one of the Alexa top domains.
+        if let topDomains = topDomains {
+            for domain in topDomains {
+                if let completion = completionForDomain(domain) {
+                    urlBar.setAutocompleteSuggestion(completion)
+                    return
+                }
+            }
+        }
+    }
+
     func setQueryWithoutAutocomplete(_ query: String) {
         skipNextAutocomplete = true
         self.query = query
