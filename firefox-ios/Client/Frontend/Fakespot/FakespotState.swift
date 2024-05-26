@@ -94,9 +94,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleAppearance(action: action, state: state)
 
         case FakespotActionType.surfaceDisplayedEventSend:
-            var state = state
-            state.sendSurfaceDisplayedTelemetryEvent = false
-            return state
+            return handleSurfaceDisplayed(state: state)
 
         case FakespotActionType.adsImpressionEventSendFor:
             guard let productId = action.productId else { return state }
