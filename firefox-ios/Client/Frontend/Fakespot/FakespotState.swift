@@ -192,4 +192,12 @@ struct FakespotState: ScreenState, Equatable {
         state.sendSurfaceDisplayedTelemetryEvent = true
         return state
     }
+
+    fileprivate static func handleAppearance(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isEnabled = action.isOpen ?? state.isOpen
+        var state = state
+        state.isOpen = isEnabled
+        state.sendSurfaceDisplayedTelemetryEvent = !isEnabled
+        return state
+    }
 }
