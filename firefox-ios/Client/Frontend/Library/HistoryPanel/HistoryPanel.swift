@@ -441,6 +441,21 @@ class HistoryPanel: UIViewController,
         return cell
     }
 
+    private func getSiteCell(site: Site, indexPath: IndexPath) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier,
+            for: indexPath
+        ) as? TwoLineImageOverlayCell else {
+            logger.log("History Panel - cannot create TwoLineImageOverlayCell for site",
+                       level: .debug,
+                       category: .library)
+            return nil
+        }
+
+        let siteCell = configureSiteCell(site, cell)
+        return siteCell
+    }
+
     private func configureSiteCell(
         _ site: Site,
         _ cell: TwoLineImageOverlayCell
