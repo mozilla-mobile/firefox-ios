@@ -180,4 +180,14 @@ struct FakespotState: ScreenState, Equatable {
         state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
         return state
     }
+
+    fileprivate static func handlePressedShopping(action: FakespotAction, state: FakespotState) -> FakespotState {
+        var state = state
+        state.isOpen = !state.isOpen
+        state.sidebarOpenForiPadLandscape = state.isOpen
+        if !state.isOpen {
+            state.sendSurfaceDisplayedTelemetryEvent = true
+        }
+        return state
+    }
 }
