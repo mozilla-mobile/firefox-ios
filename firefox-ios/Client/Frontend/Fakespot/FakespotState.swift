@@ -168,4 +168,11 @@ struct FakespotState: ScreenState, Equatable {
         state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded = isExpanded
         return state
     }
+
+    fileprivate static func handleHighlights(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isExpanded = action.isExpanded ?? state.isHighlightsSectionExpanded
+        var state = state
+        state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
+        return state
+    }
 }
