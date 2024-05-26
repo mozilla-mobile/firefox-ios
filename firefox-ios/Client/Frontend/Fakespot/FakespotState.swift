@@ -172,4 +172,15 @@ struct FakespotState: ScreenState, Equatable {
         state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
         return state
     }
+
+    fileprivate static func handleTabDidChange(action: FakespotAction, state: FakespotState) -> FakespotState {
+        guard let tabUUID = action.tabUUID else { return state }
+        var state = state
+        if state.telemetryState[tabUUID] == nil {
+            state.telemetryState[tabUUID] = TelemetryState()
+        }
+        state.currentTabUUID = tabUUID
+
+        return state
+    }
 }
