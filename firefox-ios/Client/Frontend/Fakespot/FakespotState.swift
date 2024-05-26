@@ -67,10 +67,7 @@ struct FakespotState: ScreenState, Equatable {
 
         switch action.actionType {
         case FakespotActionType.settingsStateDidChange:
-            let isExpanded = action.isExpanded ?? state.isSettingsExpanded
-            var state = state
-            state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded = isExpanded
-            return state
+            return handleSettingsStateDidChange(action: action, state: state)
 
         case FakespotActionType.reviewQualityDidChange:
             let isExpanded = action.isExpanded ?? state.isReviewQualityExpanded
