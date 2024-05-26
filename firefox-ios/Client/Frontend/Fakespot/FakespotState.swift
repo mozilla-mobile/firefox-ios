@@ -85,10 +85,7 @@ struct FakespotState: ScreenState, Equatable {
             return handlePressedShopping(state: state)
 
         case FakespotActionType.show:
-            var state = state
-            state.isOpen = true
-            state.sidebarOpenForiPadLandscape = true
-            return state
+            return handleShow(state: state)
 
         case FakespotActionType.dismiss:
             var state = state
