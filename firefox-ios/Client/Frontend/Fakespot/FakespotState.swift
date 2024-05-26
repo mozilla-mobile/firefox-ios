@@ -188,4 +188,12 @@ struct FakespotState: ScreenState, Equatable {
         state.sidebarOpenForiPadLandscape = true
         return state
     }
+
+    fileprivate static func handleDismiss(state: FakespotState) -> FakespotState {
+        var state = state
+        state.isOpen = false
+        state.sidebarOpenForiPadLandscape = false
+        state.sendSurfaceDisplayedTelemetryEvent = true
+        return state
+    }
 }
