@@ -368,19 +368,7 @@ class HistoryPanel: UIViewController,
 
             if var historyActionable = item as? HistoryActionablesModel {
                 historyActionable.configureImage(for: windowUUID)
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: OneLineTableViewCell.cellIdentifier,
-                    for: indexPath
-                ) as? OneLineTableViewCell
-                else {
-                    self.logger.log("History Panel - cannot create OneLineTableViewCell for historyActionable",
-                                    level: .debug,
-                                    category: .library)
-                    return nil
-                }
-
-                let actionableCell = self.configureHistoryActionableCell(historyActionable, cell)
-                return actionableCell
+                return self.getHistoryActionableCell(historyActionable: historyActionable, indexPath: indexPath)
             }
 
             if let site = item as? Site {
