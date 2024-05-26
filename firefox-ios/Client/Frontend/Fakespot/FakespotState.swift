@@ -76,14 +76,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleHighlights(action: action, state: state)
 
         case FakespotActionType.tabDidChange:
-            guard let tabUUID = action.tabUUID else { return state }
-            var state = state
-            if state.telemetryState[tabUUID] == nil {
-                state.telemetryState[tabUUID] = TelemetryState()
-            }
-            state.currentTabUUID = tabUUID
-
-            return state
+            return handleTabDidChange(action: action, state: state)
 
         case FakespotActionType.tabDidReload:
             guard let tabUUID = action.tabUUID,
