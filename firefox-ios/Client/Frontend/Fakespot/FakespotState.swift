@@ -160,4 +160,11 @@ struct FakespotState: ScreenState, Equatable {
             return state
         }
     }
+
+    fileprivate static func handleSettingsStateDidChange(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isExpanded = action.isExpanded ?? state.isSettingsExpanded
+        var state = state
+        state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded = isExpanded
+        return state
+    }
 }
