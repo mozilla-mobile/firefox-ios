@@ -95,6 +95,15 @@ class SearchSuggestClient {
         task?.resume()
     }
 
+    fileprivate func handleInvalidResponseError(callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
+        let error = NSError(
+            domain: SearchSuggestClientErrorDomain,
+            code: SearchSuggestClientErrorInvalidResponse,
+            userInfo: nil
+        )
+        callback(nil, error)
+    }
+
     func cancelPendingRequest() {
         task?.cancel()
     }
