@@ -88,11 +88,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleShow(state: state)
 
         case FakespotActionType.dismiss:
-            var state = state
-            state.isOpen = false
-            state.sidebarOpenForiPadLandscape = false
-            state.sendSurfaceDisplayedTelemetryEvent = true
-            return state
+            return handleDismiss(state: state)
 
         case FakespotActionType.setAppearanceTo:
             let isEnabled = action.isOpen ?? state.isOpen
