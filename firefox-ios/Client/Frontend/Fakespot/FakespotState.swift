@@ -79,14 +79,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleTabDidChange(action: action, state: state)
 
         case FakespotActionType.tabDidReload:
-            guard let tabUUID = action.tabUUID,
-                    state.currentTabUUID == tabUUID,
-                    let productId = action.productId
-            else { return state }
-
-            var state = state
-            state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
-            return state
+            return handleTabDidReload(action: action, state: state)
 
         case FakespotActionType.pressedShoppingButton:
             var state = state
