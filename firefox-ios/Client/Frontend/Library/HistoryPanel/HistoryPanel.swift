@@ -461,6 +461,21 @@ class HistoryPanel: UIViewController,
         return cell
     }
 
+    private func getGroupCell(searchTermGroup: ASGroup<Site>, indexPath: IndexPath) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+            for: indexPath
+        ) as? TwoLineImageOverlayCell else {
+            logger.log("History Panel - cannot create TwoLineImageOverlayCell for STG",
+                       level: .debug,
+                       category: .library)
+            return nil
+        }
+
+        let asGroupCell = configureASGroupCell(searchTermGroup, cell)
+        return asGroupCell
+    }
+
     private func configureASGroupCell(
         _ asGroup: ASGroup<Site>,
         _ cell: TwoLineImageOverlayCell
