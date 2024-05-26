@@ -372,18 +372,7 @@ class HistoryPanel: UIViewController,
             }
 
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier,
-                    for: indexPath
-                ) as? TwoLineImageOverlayCell else {
-                    self.logger.log("History Panel - cannot create TwoLineImageOverlayCell for site",
-                                    level: .debug,
-                                    category: .library)
-                    return nil
-                }
-
-                let siteCell = self.configureSiteCell(site, cell)
-                return siteCell
+                return self.getSiteCell(site: site, indexPath: indexPath)
             }
 
             if let searchTermGroup = item as? ASGroup<Site> {
