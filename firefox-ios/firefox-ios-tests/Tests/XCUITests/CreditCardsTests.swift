@@ -26,7 +26,10 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306967
     // SmokeTest
-    func testAccessingTheCreditCardsSection() {
+    func testAccessingTheCreditCardsSection() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
