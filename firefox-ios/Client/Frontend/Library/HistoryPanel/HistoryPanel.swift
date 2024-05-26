@@ -376,18 +376,7 @@ class HistoryPanel: UIViewController,
             }
 
             if let searchTermGroup = item as? ASGroup<Site> {
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
-                    for: indexPath
-                ) as? TwoLineImageOverlayCell else {
-                    self.logger.log("History Panel - cannot create TwoLineImageOverlayCell for STG",
-                                    level: .debug,
-                                    category: .library)
-                    return nil
-                }
-
-                let asGroupCell = self.configureASGroupCell(searchTermGroup, cell)
-                return asGroupCell
+                return self.getGroupCell(searchTermGroup: searchTermGroup, indexPath: indexPath)
             }
 
             // This should never happen! You will have an empty row!
