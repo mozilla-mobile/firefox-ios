@@ -122,7 +122,10 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306969
     // Smoketest
-    func testAutofillCreditCardsToggleOnOoff() {
+    func testAutofillCreditCardsToggleOnOoff() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
         // Disable the "Save and Fill Payment Methods" toggle
         navigator.nowAt(NewTabScreen)
         navigator.goto(CreditCardsSettings)
