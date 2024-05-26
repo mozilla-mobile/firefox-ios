@@ -82,13 +82,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleTabDidReload(action: action, state: state)
 
         case FakespotActionType.pressedShoppingButton:
-            var state = state
-            state.isOpen = !state.isOpen
-            state.sidebarOpenForiPadLandscape = state.isOpen
-            if !state.isOpen {
-                state.sendSurfaceDisplayedTelemetryEvent = true
-            }
-            return state
+            return handlePressedShopping(action: action, state: state)
 
         case FakespotActionType.show:
             var state = state
