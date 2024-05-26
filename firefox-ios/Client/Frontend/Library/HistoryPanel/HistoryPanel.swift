@@ -418,6 +418,23 @@ class HistoryPanel: UIViewController,
         }
     }
 
+    private func getHistoryActionableCell(historyActionable: HistoryActionablesModel,
+                                          indexPath: IndexPath) -> UITableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: OneLineTableViewCell.cellIdentifier,
+            for: indexPath
+        ) as? OneLineTableViewCell
+        else {
+            logger.log("History Panel - cannot create OneLineTableViewCell for historyActionable",
+                       level: .debug,
+                       category: .library)
+            return nil
+        }
+
+        let actionableCell = configureHistoryActionableCell(historyActionable, cell)
+        return actionableCell
+    }
+
     private func configureHistoryActionableCell(
         _ historyActionable: HistoryActionablesModel,
         _ cell: OneLineTableViewCell
