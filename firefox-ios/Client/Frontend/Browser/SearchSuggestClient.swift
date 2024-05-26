@@ -81,12 +81,7 @@ class SearchSuggestClient {
             }
 
             guard let suggestions = array?[1] as? [String] else {
-                let error = NSError(
-                    domain: SearchSuggestClientErrorDomain,
-                    code: SearchSuggestClientErrorInvalidResponse,
-                    userInfo: nil
-                )
-                callback(nil, error)
+                self.handleInvalidResponseError(callback: callback)
                 return
             }
 
