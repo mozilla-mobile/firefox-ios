@@ -271,11 +271,8 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Edit"])
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
         XCTAssertTrue(app.buttons["Add"].isEnabled)
-        // iOS 15 does not expand the keyboard for entering the credentials
-        if #available(iOS 16, *) {
-            createLoginManually()
-            XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
-        }
+        createLoginManually()
+        mozWaitForElementToExist(app.tables["Login List"].staticTexts["https://testweb"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306954
@@ -314,6 +311,15 @@ class LoginTest: BaseTestCase {
     }
 
     func enterTextInField(typedText: String) {
+        // iOS 15 does not expand the keyboard for entering the credentials sometimes.
+        if #unavailable(iOS 16) {
+            if app.keyboards.buttons["Continue"].exists {
+                app.keyboards.buttons["Continue"].tap()
+                mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
+            }
+            // The keyboard may need extra time to respond.
+            sleep(1)
+        }
         for letter in typedText {
             print("\(letter)")
             app.keyboards.keys["\(letter)"].tap()
