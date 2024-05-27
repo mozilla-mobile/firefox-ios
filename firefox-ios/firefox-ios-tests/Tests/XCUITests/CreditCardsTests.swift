@@ -46,7 +46,7 @@ class CreditCardsTests: BaseTestCase {
         // Add, and save a valid credit card
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
-        XCTAssertTrue(app.staticTexts["New Card Saved"].exists)
+        XCTAssertTrue(app.staticTexts.containingText("New").element.exists)
         XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252").exists)
         let cardDetails = ["Test", "Expires", "5/40"]
         for i in cardDetails {
@@ -337,9 +337,9 @@ class CreditCardsTests: BaseTestCase {
         // Securely save this card prompt is displayed
         mozWaitForElementToExist(app.staticTexts["Securely save this card?"])
         mozWaitForElementToExist(app.buttons["Save"])
-        mozWaitForElementToExist(app.buttons["Close"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton])
         // Tapping 'x' will dismiss the prompt
-        app.buttons["Close"].tap()
+        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].tap()
         mozWaitForElementToNotExist(app.staticTexts["Securely save this card?"])
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 2)
@@ -394,9 +394,9 @@ class CreditCardsTests: BaseTestCase {
         // The prompt contains two buttons: "Save" and "x".
         mozWaitForElementToExist(app.staticTexts["Update card?"])
         mozWaitForElementToExist(app.buttons["Save"])
-        mozWaitForElementToExist(app.buttons["Close"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton])
         // Tapping 'x' will dismiss the prompt
-        app.buttons["Close"].tap()
+        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].tap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 3)
@@ -443,6 +443,7 @@ class CreditCardsTests: BaseTestCase {
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 2)
         swipeUp(nrOfSwipes: 1)
+        dismissSurveyPrompt()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Credit cards details changed
