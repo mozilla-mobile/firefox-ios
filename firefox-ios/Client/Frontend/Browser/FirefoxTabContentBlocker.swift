@@ -101,14 +101,22 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         setupForTab()
     }
 
-    func setupForTab() {
+    func setupForTab(completion: (() -> Void)? = nil) {
         guard let tab = tab else { return }
         let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
-        ContentBlocker.shared.setupTrackingProtection(forTab: tab, isEnabled: isEnabled, rules: rules)
+        ContentBlocker.shared.setupTrackingProtection(
+            forTab: tab,
+            isEnabled: isEnabled,
+            rules: rules,
+            completion: completion
+        )
     }
 
     override func notifiedTabSetupRequired() {
-        setupForTab()
+        setupForTab(completion: { [weak self] in
+            guard let tab = self?.tab as? Tab else { return }
+            tab.reloadPage()
+        })
         if let tab = tab as? Tab {
             TabEvent.post(.didChangeContentBlocking, for: tab)
         }
