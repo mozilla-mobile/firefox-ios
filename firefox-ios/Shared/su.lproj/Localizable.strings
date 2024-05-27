@@ -221,13 +221,13 @@
 "Could not load page." = "Teu bisa muat kaca.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Enhanced Tracking Protection bawaan mantuan ngeureunan iklan nunutur anjeun. Hurungkeun Strict pikeun meungpeuk leuwih loba palacak, iklan, jeung popap.";
+"CoverSheet.v24.ETP.Description" = "Kilung Palacakan anu Ditingkatkeun bawaan mantuan ngeureunan iklan nunutur anjeun. Hurungkeun Strict pikeun meungpeuk leuwih loba palacak, iklan, jeung popap. ";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Buka Setélan";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "Perlindungan Ngalawan Palacakan Iklan";
+"CoverSheet.v24.ETP.Title" = "Kilung Ngalawan Palacakan Iklan";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Jieun akun";
@@ -860,7 +860,7 @@
 "Menu.ZoomPage.Title.v113" = "Jum (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
-"mobile device" = "parangkat ider";
+"mobile device" = "parabot ider";
 
 /* Relative date for dates older than a month and less than two months. */
 "more than a month ago" = "leuwih ti sabulan kalarung";
