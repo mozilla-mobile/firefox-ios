@@ -88,6 +88,8 @@ class HomepageViewModel: FeatureFlaggable {
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     var viewAppeared = false
 
+    var newSize: CGSize?
+
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
     private var wallpaperManager: WallpaperManager

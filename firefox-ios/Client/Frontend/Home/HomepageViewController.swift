@@ -184,6 +184,9 @@ class HomepageViewController:
 
         wallpaperView.updateImageForOrientationChange()
 
+        // Note: Saving the newSize for using it, later, in traitCollectionDidChange
+        // because view.frame.size will provide the current size, not the newest one.
+        viewModel.newSize = size
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation(newSize: size)
         }
@@ -196,7 +199,7 @@ class HomepageViewController:
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            reloadOnRotation(newSize: view.frame.size)
+            reloadOnRotation(newSize: viewModel.newSize ?? view.frame.size)
         }
     }
 
