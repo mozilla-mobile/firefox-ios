@@ -420,7 +420,10 @@ class BrowserViewController: UIViewController,
            let webView = tab.webView {
             updateURLBarDisplayURL(tab)
 
-            if !isToolbarRefactorEnabled {
+            if isToolbarRefactorEnabled {
+                dispatchBackForwardToolbarAction(webView.canGoBack, windowUUID, .backButtonStatus)
+                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStatus)
+            } else {
                 navigationToolbar.updateBackStatus(webView.canGoBack)
                 navigationToolbar.updateForwardStatus(webView.canGoForward)
             }
@@ -1660,17 +1663,23 @@ class BrowserViewController: UIViewController,
             }
             TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
-            guard !isToolbarRefactorEnabled,
-                  tab === tabManager.selectedTab,
+            guard tab === tabManager.selectedTab,
                   let canGoBack = change?[.newKey] as? Bool
             else { break }
-            navigationToolbar.updateBackStatus(canGoBack)
+            if isToolbarRefactorEnabled {
+                dispatchBackForwardToolbarAction(webView.canGoBack, windowUUID, .backButtonStatus)
+            } else {
+                navigationToolbar.updateBackStatus(canGoBack)
+            }
         case .canGoForward:
-            guard !isToolbarRefactorEnabled,
-                  tab === tabManager.selectedTab,
+            guard tab === tabManager.selectedTab,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
-            navigationToolbar.updateForwardStatus(canGoForward)
+            if isToolbarRefactorEnabled {
+                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStatus)
+            } else {
+                navigationToolbar.updateForwardStatus(canGoForward)
+            }
         case .hasOnlySecureContent:
             if !isToolbarRefactorEnabled {
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
@@ -1724,6 +1733,60 @@ class BrowserViewController: UIViewController,
             didTapOnHome()
         } else if state.showQRcodeReader {
             navigationHandler?.showQRCode(delegate: self)
+        }
+
+        handleNavigationActions(for: state)
+    }
+
+    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
+        let action = ToolbarAction(isEnabled: isEnabled, windowUUID: windowUUID, actionType: actionType)
+
+        switch actionType {
+        case .backButtonStatus,
+             .forwardButtonStatus:
+            store.dispatch(action)
+        default: break
+        }
+    }
+
+    private func getNavigationAction(for state: BrowserViewControllerState, actionType: ToolbarState.ActionState.ActionType) -> Bool {
+        let navigationToolbarAction = actionType == .back ?
+            state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateBack :
+            state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateForward
+
+        let addressToolbarAction = actionType == .back ?
+            state.toolbarState.addressToolbar.navigationActions.first(where: { $0.actionType == actionType })?.navigateBack :
+            state.toolbarState.addressToolbar.navigationActions.first(where: { $0.actionType == actionType })?.navigateForward
+
+        return navigationToolbarAction ?? addressToolbarAction ?? false
+    }
+
+    private func handleNavigationActions(for state: BrowserViewControllerState) {
+        let navigateBack = getNavigationAction(for: state, actionType: .back)
+        if navigateBack {
+            dismissUrlBar()
+            updateZoomPageBarVisibility(visible: false)
+            tabManager.selectedTab?.goBack()
+
+            let action = ToolbarAction(navigateBack: false,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didTapBack)
+            store.dispatch(action)
+
+            return
+        }
+
+        let navigateForward = getNavigationAction(for: state, actionType: .forward)
+
+        if navigateForward {
+            dismissUrlBar()
+            updateZoomPageBarVisibility(visible: false)
+            tabManager.selectedTab?.goForward()
+
+            let action = ToolbarAction(navigateForward: false,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didTapForward)
+            store.dispatch(action)
         }
     }
 
@@ -2962,7 +3025,10 @@ extension BrowserViewController: TabManagerDelegate {
         updateFindInPageVisibility(visible: false, tab: previous)
         setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
 
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            dispatchBackForwardToolbarAction(selected?.canGoBack, windowUUID, .backButtonStatus)
+            dispatchBackForwardToolbarAction(selected?.canGoForward, windowUUID, .forwardButtonStatus)
+        } else {
             navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
             navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         }

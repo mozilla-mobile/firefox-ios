@@ -38,6 +38,8 @@ struct ToolbarState: ScreenState, Equatable {
         var actionType: ActionType
         var iconName: String
         var numberOfTabs: Int?
+        var navigateBack: Bool?
+        var navigateForward: Bool?
         var isEnabled: Bool
         var a11yLabel: String
         var a11yId: String
@@ -120,6 +122,53 @@ struct ToolbarState: ScreenState, Equatable {
 
             return state
 
+        case ToolbarActionType.backButtonStatus:
+            guard let isEnabled = action.isEnabled else { return state }
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .back }) {
+                state.navigationToolbar.actions[index].isEnabled = isEnabled
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .back }) {
+                state.addressToolbar.navigationActions[index].isEnabled = isEnabled
+            }
+
+            return state
+
+        case ToolbarActionType.forwardButtonStatus:
+            guard let isEnabled = action.isEnabled else { return state }
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .forward }) {
+                state.navigationToolbar.actions[index].isEnabled = isEnabled
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .forward }) {
+                state.addressToolbar.navigationActions[index].isEnabled = isEnabled
+            }
+
+            return state
+
+        case ToolbarActionType.didTapBack:
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .back }) {
+                let navigateBack = action.navigateBack ?? false
+                state.navigationToolbar.actions[index].navigateBack = navigateBack
+            }
+    
+            return state
+            
+        case ToolbarActionType.didTapForward:
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .forward }) {
+                let navigateForward = action.navigateForward ?? false
+                state.navigationToolbar.actions[index].navigateForward = navigateForward
+            }
+
+            return state
         default:
             return state
         }

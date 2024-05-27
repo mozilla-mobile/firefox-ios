@@ -164,6 +164,18 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
 
+        case .back:
+            let action = ToolbarAction(navigateBack: true,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didTapBack)
+            store.dispatch(action)
+
+        case .forward:
+            let action = ToolbarAction(navigateForward: true,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didTapForward)
+            store.dispatch(action)
+
         default:
             break
         }
