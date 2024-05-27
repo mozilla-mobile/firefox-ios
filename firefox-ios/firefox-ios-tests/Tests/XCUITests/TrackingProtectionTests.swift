@@ -88,8 +88,10 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        XCTAssert(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].isHittable)
-        sleep(2)
+        if #unavailable(iOS 16) {
+            XCTAssert(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].isHittable)
+            sleep(2)
+        }
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
         var switchValue = app.switches.firstMatch.value!
@@ -147,8 +149,12 @@ class TrackingProtectionTests: BaseTestCase {
     func testLockIconSecureConnection() {
         navigator.openURL("https://www.Mozilla.org")
         waitUntilPageLoad()
+        // iOS 15 displays a toast for the paste. The toast may cover areas to be 
+        // tapped in the next step.
+        if #unavailable(iOS 16) {
+            sleep(2)
+        }
         // Tap "Secure connection"
-        sleep(2)
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
         XCTAssertTrue(app.staticTexts["mozilla.org"].exists)
