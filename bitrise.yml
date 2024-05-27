@@ -15,7 +15,7 @@ stages:
     workflows:
     - firefox_configure_build_bitrise:
         run_if: '{{getenv "BUILD_FIREFOX_IOS" | eq "true"}}'
-    - focus_configure_build:
+    - focus_configure_build_bitrise:
         run_if: '{{getenv "BUILD_FOCUS_IOS" | eq "true"}}'
   run_tests:
     workflows:
@@ -1585,7 +1585,7 @@ workflows:
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
   # 
-  focus_configure_build:
+  focus_configure_build_bitrise:
     before_run:
     - focus-clone-and-build-dependencies
     steps:
@@ -1776,7 +1776,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: build_applications.focus_configure_build
+        - artifact_sources: build_applications.focus_configure_build_bitrise
     - script@1.1:
         title: Unzip
         inputs:
@@ -2235,6 +2235,67 @@ workflows:
         - channel: "#firefox-ios"
         - text: Build status using latest Rust-Component
         - webhook_url: $WEBHOOK_SLACK_TOKEN_2
+
+  focus_configure_build:
+    before_run:
+    - focus-clone-and-build-dependencies
+    steps:
+    - cache-pull@2: {}
+    #- swiftlint-extended@1:
+    #    inputs:
+    #    - linting_path: "$BITRISE_SOURCE_DIR"
+    - script@1:
+        title: Set Default Web Browser Entitlement
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -x
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Focus.entitlements
+            /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Klar.entitlements
+    - script@1.1:
+        title: Build for Testing Focus
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            mkdir DerivedData
+            #xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
+            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+    - script@1.1:
+        title: Build for Testing Klar
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- build-for-testing --"
+            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+    - script@1.1:
+        title: Compress Derived Data
+        is_always_run: true
+        inputs:
+        - content: |
+            set -euxo pipefail
+            echo "-- compress --"
+            # Add FocusDebug-iphonesimulator folder
+            # Add All .xctestrun files
+            # Add focuos-ios-test files and test plans
+            # Add KlarDebug-iphonesimulator folder
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
+            "${BITRISE_SOURCE_DIR}/focus-ios/Blockzilla.xcodeproj" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/FocusDebug-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/KlarDebug-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/" \
+            "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/" \
+            "$BITRISE_SOURCE_DIR/focus-ios/xcodebuild.log" \
+            "$BITRISE_SOURCE_DIR/focus-ios/Blockzilla/"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+    - slack@3:
+        run_if: ".IsBuildFailed"
+        inputs:
+        - channel: "#mobile-alerts-ios"
+        - message: "The build failed to build"
+        - webhook_url: "$SLACK_WEBHOOK"
 
 app:
   envs:
