@@ -298,9 +298,9 @@ class LoginTest: BaseTestCase {
     private func createLoginManually() {
         app.buttons["Add"].tap()
         mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Website"].exists)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Username"].exists)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Password"].exists)
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Website"])
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Username"])
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Password"])
 
         app.tables["Add Credential"].cells["Website, "].tap()
         enterTextInField(typedText: "testweb")
@@ -318,6 +318,7 @@ class LoginTest: BaseTestCase {
     func enterTextInField(typedText: String) {
         // iOS 15 does not expand the keyboard for entering the credentials sometimes.
         if #unavailable(iOS 16) {
+            mozWaitForElementToExist(app.keyboards.firstMatch)
             if app.keyboards.buttons["Continue"].exists {
                 app.keyboards.buttons["Continue"].tap()
                 mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
