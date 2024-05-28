@@ -39,7 +39,6 @@ const init = (record, l10nStrings, isDarkTheme = false) => {
   setTheme(isDarkTheme);
 
   // Replace all "\\n" with new line character.
-  // TODO: We should probably do this Swift code instead.
   for (const [key, value] of Object.entries(record)) {
     if (typeof value === "string") {
       record[key] = value.replaceAll("\\n", "\n");
