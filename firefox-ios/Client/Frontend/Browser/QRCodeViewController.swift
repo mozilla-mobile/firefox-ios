@@ -330,16 +330,9 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                 accessibilityIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrScanFailedAlertOkButton)
             present(alert, animated: true, completion: nil)
         } else {
-            captureSession.stopRunning()
-            stopScanLineAnimation()
-            dismissController {
-                guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
-                      let qrCodeDelegate = self.qrCodeDelegate,
-                      let text = metaData.stringValue
-                else {
-                    return
-                }
-
+            if let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
+               let qrCodeDelegate = self.qrCodeDelegate,
+               let text = metaData.stringValue {
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
                 if let url = URIFixup.getURL(text), url.isWebPage() {
                     qrCodeDelegate.didScanQRCodeWithURL(url)
@@ -347,6 +340,9 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                     qrCodeDelegate.didScanQRCodeWithText(text)
                 }
             }
+            captureSession.stopRunning()
+            stopScanLineAnimation()
+            dismissController()
         }
     }
 }

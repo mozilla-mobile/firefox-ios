@@ -507,7 +507,6 @@ class StringSetting: Setting, UITextFieldDelegate {
     private struct UX {
         static let padding: CGFloat = 15
         static let textFieldHeight: CGFloat = 44
-        static let fontSize: CGFloat = 17
         static let textFieldIdentifierSuffix = "TextField"
     }
 
@@ -575,11 +574,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
 
-        textField.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.fontSize,
-            weight: .regular
-        )
+        textField.font = FXFontStyles.Regular.body.scaledFont()
 
         NSLayoutConstraint.activate(
             [

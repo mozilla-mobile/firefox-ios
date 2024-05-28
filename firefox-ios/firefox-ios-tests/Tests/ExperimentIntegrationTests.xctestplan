@@ -9,6 +9,39 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : false,
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "FIREFOX_SKIP_INTRO"
+      },
+      {
+        "argument" : "FIREFOX_TEST"
+      },
+      {
+        "argument" : "FIREFOX_CLEAR_PROFILE"
+      },
+      {
+        "argument" : "\"GCDWEBSERVER_PORT:7777\""
+      },
+      {
+        "argument" : "DISABLE_ANIMATIONS"
+      }
+    ],
+    "environmentVariableEntries" : [
+      {
+        "key" : "WEBSERVER_PORT",
+        "value" : "7777"
+      },
+      {
+        "key" : "EXPERIMENT_NAME",
+        "value" : "${EXPERIMENT_NAME}"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Client.xcodeproj",
+      "identifier" : "F84B21BD1A090F8100AAB793",
+      "name" : "Client"
+    },
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [
@@ -17,7 +50,6 @@
         "ActivityStreamTest",
         "AuthenticationTest",
         "BaseTestCase",
-        "BookmarksTests",
         "BrowsingPDFTests",
         "ClipBoardTests",
         "CreditCardsTests",
@@ -45,8 +77,6 @@
         "JumpBackInTests",
         "LibraryTestsIpad",
         "LoginTest",
-        "NavigationTest",
-        "NewTabSettingsTest",
         "NightModeTests",
         "OnboardingTests",
         "OpeningScreenTests",
@@ -60,20 +90,16 @@
         "ReportSiteTests",
         "ScreenGraphTest",
         "SearchSettingsUITests",
-        "SearchTests",
         "SettingsTests",
         "SiteLoadTest",
         "SyncUITests",
         "TabCounterTests",
         "ThirdPartySearchTest",
         "ToolbarMenuTests",
-        "ToolbarTests",
-        "TopTabsTest",
         "TopTabsTestIpad",
         "TopTabsTestIphone",
         "TrackingProtectionTests",
         "URLValidationTests",
-        "UrlBarTests",
         "WhatsNewTest"
       ],
       "target" : {

@@ -25,6 +25,7 @@ struct AppState: StateType {
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
                 case (.browserViewController(let state), .browserViewController): return state as? S
+                case (.microsurvey(let state), .microsurvey): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -71,5 +72,6 @@ let store = Store(state: AppState(),
                     TabManagerMiddleware().tabsPanelProvider,
                     RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
                     ToolbarMiddleware().toolbarProvider,
-                    MicrosurveyPromptMiddleware().microsurveyProvider
+                    MicrosurveyPromptMiddleware().microsurveyProvider,
+                    MicrosurveyMiddleware().microsurveyProvider
                   ])

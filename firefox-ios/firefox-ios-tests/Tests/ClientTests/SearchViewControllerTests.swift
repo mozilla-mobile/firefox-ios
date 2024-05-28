@@ -9,7 +9,7 @@ import Shared
 
 @testable import Client
 
-actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
+class MockRustFirefoxSuggest: RustFirefoxSuggestProtocol {
     func ingest() async throws {
     }
     func query(
@@ -36,7 +36,9 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
         }
         return suggestions
     }
-    nonisolated func interruptReader() {
+    func interruptReader() {
+    }
+    func interruptEverything() {
     }
 }
 

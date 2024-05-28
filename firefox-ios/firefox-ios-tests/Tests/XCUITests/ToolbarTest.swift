@@ -162,8 +162,12 @@ class ToolbarTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
         }
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tapOnApp()
+        let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+        mozWaitForElementToExist(addNewTabButton)
+        addNewTabButton.tapOnApp()
+        if !app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].exists {
+            addNewTabButton.tap()
+        }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])

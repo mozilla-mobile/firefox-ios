@@ -141,6 +141,12 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct SaveCardPrompt {
+        struct Prompt {
+            static let closeButton = "a11yCloseButton"
+        }
+    }
+
     struct Microsurvey {
         struct Prompt {
             static let closeButton = "Microsurvey.Prompt.CloseButton"

@@ -2,10 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Redux
-import Storage
-import Shared
 import XCTest
 
 @testable import Client
@@ -21,57 +18,42 @@ final class MicrosurveyStateTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testShowPromptAction() {
+    func testDismissSurveyAction() {
         let initialState = createSubject()
         let reducer = microsurveyReducer()
 
-        XCTAssertEqual(initialState.showPrompt, false)
+        XCTAssertEqual(initialState.shouldDismiss, false)
 
-        let action = getAction(for: .initialize(MicrosurveyModel()))
+        let action = getAction(for: .dismissSurvey)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.showPrompt, true)
+        XCTAssertEqual(newState.shouldDismiss, true)
+        XCTAssertEqual(newState.showPrivacy, false)
     }
 
-    func testDismissPromptAction() {
-        let initialState = MicrosurveyPromptState(
-            windowUUID: .XCTestDefaultUUID,
-            showPrompt: true,
-            showSurvey: false,
-            model: MicrosurveyModel()
-        )
-        let reducer = microsurveyReducer()
-
-        XCTAssertEqual(initialState.showPrompt, true)
-
-        let action = getAction(for: .dismissPrompt)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.showPrompt, false)
-    }
-
-    func testShowSurveyAction() {
+    func testSubmitSurveyAction() {
         let initialState = createSubject()
         let reducer = microsurveyReducer()
 
-        XCTAssertEqual(initialState.showSurvey, false)
+        XCTAssertEqual(initialState.showPrivacy, false)
 
-        let action = getAction(for: .openSurvey)
+        let action = getAction(for: .navigateToPrivacyNotice)
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.showSurvey, true)
+        XCTAssertEqual(newState.showPrivacy, true)
+        XCTAssertEqual(newState.shouldDismiss, false)
     }
 
     // MARK: - Private
-    private func createSubject() -> MicrosurveyPromptState {
-        return MicrosurveyPromptState(windowUUID: .XCTestDefaultUUID)
+    private func createSubject() -> MicrosurveyState {
+        return MicrosurveyState(windowUUID: .XCTestDefaultUUID)
     }
 
-    private func microsurveyReducer() -> Reducer<MicrosurveyPromptState> {
-        return MicrosurveyPromptState.reducer
+    private func microsurveyReducer() -> Reducer<MicrosurveyState> {
+        return MicrosurveyState.reducer
     }
 
-    private func getAction(for actionType: MicrosurveyPromptMiddlewareActionType) -> MicrosurveyPromptMiddlewareAction {
-        return  MicrosurveyPromptMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    private func getAction(for actionType: MicrosurveyMiddlewareActionType) -> MicrosurveyMiddlewareAction {
+        return  MicrosurveyMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 }

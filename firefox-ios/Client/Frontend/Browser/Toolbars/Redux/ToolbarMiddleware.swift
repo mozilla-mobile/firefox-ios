@@ -116,7 +116,8 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                  a11yLabel: .TabToolbarHomeAccessibilityLabel,
                                                  a11yId: AccessibilityIdentifiers.Toolbar.homeButton))
         elements.append(ToolbarState.ActionState(actionType: .tabs,
-                                                 iconName: StandardImageIdentifiers.Large.tabTray, // correct image
+                                                 iconName: StandardImageIdentifiers.Large.tab,
+                                                 numberOfTabs: 1,
                                                  isEnabled: true,
                                                  a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
                                                  a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))

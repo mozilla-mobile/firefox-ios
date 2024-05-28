@@ -16,7 +16,7 @@ let urlLogin = path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
 // The following seem to be labels that change a lot and make the tests
 // break; aka volatile. Let's keep them in one place.
-let loginsListURLLabel = "Website, \(domain)"
+let loginsListURLLabel = "Web Site, \(domain)"
 let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListUsernameLabelEdited = "Username, foo"
 let loginsListPasswordLabel = "Password"
@@ -31,6 +31,7 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["submit"], timeout: 10)
         app.buttons["submit"].tap()
         mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
+        dismissSurveyPrompt()
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
 
@@ -122,6 +123,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.buttons["submit"].tap()
+        dismissSurveyPrompt()
         app.buttons["SaveLoginPrompt.dontSaveButton"].tap()
         // There should not be any login saved
         openLoginsSettings()
@@ -240,6 +242,7 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
+        dismissSurveyPrompt()
         mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 5)
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
@@ -293,7 +296,7 @@ class LoginTest: BaseTestCase {
     private func createLoginManually() {
         app.buttons["Add"].tap()
         mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Website"].exists)
+        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts.containingText("Web").element.exists)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Username"].exists)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Password"].exists)
 
