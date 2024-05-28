@@ -1676,7 +1676,7 @@ class BrowserViewController: UIViewController,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStatus)
+                dispatchBackForwardToolbarAction(canGoForward, windowUUID, .forwardButtonStatus)
             } else {
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
