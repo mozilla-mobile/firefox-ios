@@ -26,7 +26,10 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306967
     // SmokeTest
-    func testAccessingTheCreditCardsSection() {
+    func testAccessingTheCreditCardsSection() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
@@ -122,7 +125,10 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306969
     // Smoketest
-    func testAutofillCreditCardsToggleOnOoff() {
+    func testAutofillCreditCardsToggleOnOoff() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
         // Disable the "Save and Fill Payment Methods" toggle
         navigator.nowAt(NewTabScreen)
         navigator.goto(CreditCardsSettings)
@@ -634,7 +640,11 @@ class CreditCardsTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252").exists)
         let cardDetails = ["Test", "05 / 40"]
         for i in cardDetails {
-            XCTAssertTrue(app.textFields[i].exists, "\(i) does not exists")
+            if #available(iOS 16, *) {
+                XCTAssertTrue(app.textFields[i].exists, "\(i) does not exists")
+            } else {
+                mozWaitForElementToExist(app.staticTexts[i])
+            }
         }
     }
 

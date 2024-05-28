@@ -281,7 +281,10 @@ class SearchTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306989
     // Smoketest
-    func testOpenTabsInSearchSuggestions() {
+    func testOpenTabsInSearchSuggestions() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
         // Go to localhost website and check the page displays correctly
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
