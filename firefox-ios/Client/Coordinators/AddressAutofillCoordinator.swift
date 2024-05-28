@@ -44,7 +44,7 @@ class AddressAutofillCoordinator: BaseCoordinator {
     /// Shows the address autofill functionality within a bottom sheet.
     /// - Parameter frame: The WKFrameInfo object representing the web view frame.
     func showAddressAutofill(frame: WKFrameInfo?) {
-        let bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        let bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle, closeButtonA11yIdentifer: AccessibilityIdentifiers.Autofill.addressCloseButton)
 
         let viewModel = AddressListViewModel(addressProvider: profile.autofill)
 
