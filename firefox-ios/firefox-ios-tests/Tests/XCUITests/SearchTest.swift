@@ -120,7 +120,9 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"])
         if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite4].exists) {
             if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite5].exists) {
-                mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[SuggestedSite6])
+                if #available(iOS 16, *) {
+                    mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[SuggestedSite6])
+                }
             }
         }
     }
@@ -211,10 +213,19 @@ class SearchTests: BaseTestCase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         // Click on the > button to get to that option only on iPhone
-        while !app.collectionViews.menuItems["Search with Firefox"].exists {
-            app.buttons["Forward"].firstMatch.tap()
-            mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
-            mozWaitForElementToExist(app.buttons["Forward"])
+        if #available(iOS 16, *) {
+            while !app.collectionViews.menuItems["Search with Firefox"].exists {
+                app.buttons["Forward"].firstMatch.tap()
+                mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
+                mozWaitForElementToExist(app.buttons["Forward"])
+            }
+        } else {
+            while !app.menuItems["Search with Firefox"].exists {
+                app.menuItems["Show more items"].firstMatch.tap()
+                mozWaitForElementToExist(app.menuItems.firstMatch)
+                print(app.debugDescription)
+                mozWaitForElementToExist(app.menuItems["Show more items"])
+            }
         }
 
         mozWaitForElementToExist(app.menuItems["Search with Firefox"])
