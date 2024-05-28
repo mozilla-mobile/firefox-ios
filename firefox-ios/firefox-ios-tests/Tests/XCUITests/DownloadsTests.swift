@@ -120,7 +120,7 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
         mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         if !iPad() {
-            app.buttons["Close"].tap()
+            app.otherElements.element(boundBy: 1).buttons["Close"].tap()
         } else {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
@@ -141,7 +141,7 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
         mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         if !iPad() {
-            app.buttons["Close"].tap()
+            app.otherElements.element(boundBy: 1).buttons["Close"].tap()
         } else {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.

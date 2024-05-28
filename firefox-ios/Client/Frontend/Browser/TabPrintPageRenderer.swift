@@ -7,7 +7,7 @@ import Common
 
 private struct PrintedPageUX {
     static let PageInsets = CGFloat(36.0)
-    static let PageTextFont = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .regular)
+    static let PageTextFont = FXFontStyles.Regular.caption1.scaledFont()
     static let PageMarginScale = CGFloat(0.5)
 }
 

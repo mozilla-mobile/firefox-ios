@@ -375,6 +375,12 @@ class BaseTestCase: XCTestCase {
         startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
         endCoordinate.press(forDuration: 0, thenDragTo: startCoordinate)
     }
+
+    func dismissSurveyPrompt() {
+        if app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists {
+            app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
+        }
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {

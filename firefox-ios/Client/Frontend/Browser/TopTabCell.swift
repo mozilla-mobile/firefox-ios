@@ -14,7 +14,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         static let faviconCornerRadius: CGFloat = 2
         static let tabTitlePadding: CGFloat = 10
         static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
-        static let fontSize: CGFloat = 12
 
         // MARK: - Tab Appearance Constants
         static let tabCornerRadius: CGFloat = 8
@@ -50,7 +49,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         label.textAlignment = .natural
         label.isUserInteractionEnabled = false
         label.lineBreakMode = .byCharWrapping
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .regular)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.semanticContentAttribute = .forceLeftToRight
         label.isAccessibilityElement = false
     }
