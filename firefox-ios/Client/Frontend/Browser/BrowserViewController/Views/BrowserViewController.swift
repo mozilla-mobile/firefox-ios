@@ -1749,7 +1749,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func getNavigationAction(for state: BrowserViewControllerState, 
+    private func getNavigationAction(for state: BrowserViewControllerState,
                                      actionType: ToolbarState.ActionState.ActionType) -> Bool {
         let navigationToolbarAction = actionType == .back ?
             state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateBack :
