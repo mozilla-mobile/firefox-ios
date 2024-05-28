@@ -13,7 +13,6 @@ class ToolbarAction: Action {
     let isEnabled: Bool?
     let navigateBack: Bool?
     let navigateForward: Bool?
-    
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,

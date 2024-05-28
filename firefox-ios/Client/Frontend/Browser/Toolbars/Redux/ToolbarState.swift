@@ -157,9 +157,9 @@ struct ToolbarState: ScreenState, Equatable {
                 let navigateBack = action.navigateBack ?? false
                 state.navigationToolbar.actions[index].navigateBack = navigateBack
             }
-    
+
             return state
-            
+
         case ToolbarActionType.didTapForward:
             var state = state
 

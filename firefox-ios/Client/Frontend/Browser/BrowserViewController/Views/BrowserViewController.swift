@@ -1749,14 +1749,22 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func getNavigationAction(for state: BrowserViewControllerState, actionType: ToolbarState.ActionState.ActionType) -> Bool {
+    private func getNavigationAction(for state: BrowserViewControllerState, 
+                                     actionType: ToolbarState.ActionState.ActionType) -> Bool {
         let navigationToolbarAction = actionType == .back ?
             state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateBack :
             state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateForward
 
         let addressToolbarAction = actionType == .back ?
-            state.toolbarState.addressToolbar.navigationActions.first(where: { $0.actionType == actionType })?.navigateBack :
-            state.toolbarState.addressToolbar.navigationActions.first(where: { $0.actionType == actionType })?.navigateForward
+            state.toolbarState
+                 .addressToolbar
+                 .navigationActions
+                 .first(where: { $0.actionType == actionType })?.navigateBack :
+
+            state.toolbarState
+                 .addressToolbar
+                 .navigationActions
+                 .first(where: { $0.actionType == actionType })?.navigateForward
 
         return navigationToolbarAction ?? addressToolbarAction ?? false
     }
