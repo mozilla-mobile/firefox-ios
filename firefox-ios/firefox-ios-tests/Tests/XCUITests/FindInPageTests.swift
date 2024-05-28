@@ -57,6 +57,7 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
 
+        dismissSurveyPrompt()
         nextInPageResultButton.tap()
         mozWaitForElementToExist(app.staticTexts["3/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["3/6"].exists)
