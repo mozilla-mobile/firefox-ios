@@ -73,6 +73,12 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    // Note: Should reload the view when have inconsistency between childViewModels count
+    // and shownSections count in order to avoid a crash
+    var shouldReloadView: Bool {
+        return childViewModels.filter({ $0.shouldShow }).count != shownSections.count
+    }
+
     var theme: Theme {
         didSet {
             childViewModels.forEach { $0.setTheme(theme: theme) }
@@ -81,6 +87,8 @@ class HomepageViewModel: FeatureFlaggable {
 
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     var viewAppeared = false
+
+    var newSize: CGSize?
 
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?

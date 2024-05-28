@@ -32,14 +32,14 @@ extension Themeable {
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
             self?.applyTheme()
-            self?.updateThemeApplicableSubviews(subview)
+            self?.updateThemeApplicableSubviews(subview, for: self?.currentWindowUUID)
         }
     }
 
-    public func updateThemeApplicableSubviews(_ view: UIView) {
-        guard let window = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
-        assert(window != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
-        let theme = themeManager.currentTheme(for: window)
+    public func updateThemeApplicableSubviews(_ view: UIView, for window: WindowUUID?) {
+        guard let uuid = (view as? ThemeUUIDIdentifiable)?.currentWindowUUID ?? window else { return }
+        assert(uuid != .unavailable, "Theme applicable view has `unavailable` window UUID. Unexpected.")
+        let theme = themeManager.currentTheme(for: uuid)
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: theme) }
     }
