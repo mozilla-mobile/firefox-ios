@@ -3702,126 +3702,152 @@ extension String {
 
 // MARK: Enhanced Tracking Protection/Unified Trust Panel
 extension String {
-    public static let EnhancedTrackingProtectionOnTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.On.Title",
-        tableName: nil,
-        value: "Firefox is on guard",
-        comment: "Title for the enhanced tracking protection screen when the user has selected to be protected.")
-    public static let EnhancedTrackingProtectionOnHeader = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.On.Header",
-        tableName: nil,
-        value: "You’re protected. If we spot something, we’ll let you know.",
-        comment: "Header for the enhanced tracking protection screen when the user has selected to be protected.")
-    public static let EnhancedTrackingProtectionOffTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Off.Title",
-        tableName: nil,
-        value: "You turned off protections",
-        comment: "Title for the enhanced tracking protection screen when the user has opted out of the feature.")
-    public static let EnhancedTrackingProtectionOffHeader = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Off.Header",
-        tableName: nil,
-        value: "Firefox is off-duty. We suggest turning protections back on.",
-        comment: "Header for the enhanced tracking protection screen when the user has opted out of the feature.")
-    public static let EnhancedTrackingProtectionOnNotSecureTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.On.NotSecure.Title",
-        tableName: nil,
-        value: "Be careful on this site",
-        comment: "Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
-    public static let EnhancedTrackingProtectionOnNotSecureHeader = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.On.Header",
-        tableName: nil,
-        value: "Your connection is not secure.",
-        comment: "Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
-    public static let EnhancedTrackingProtectionConnectionVerifiedByLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.Verifier",
-        tableName: nil,
-        value: "Verified by %@",
-        comment: "String to let users know the site verifier, where the placeholder represents the SSL certificate signer.")
-    public static let EnhancedTrackingProtectionTrackersBlockedLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.Trackers",
-        tableName: nil,
-        value: "%i Trackers blocked",
-        comment: "String to let users know how many trackers were blocked on the current website.")
-    public static let EnhancedTrackingProtectionTrackersNoTrackckersLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.Trackers",
-        tableName: nil,
-        value: "No trackers found",
-        comment: "String to let users know that no trackers were found on the current website.")
-    public static let EnhancedTrackingProtectionTrackersBlockedCrossSiteLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite",
-        tableName: nil,
-        value: "%@ Cross-site tracking cookies",
-        comment: "String to let users know how many cross-site tracking cookies were blocked on the current website.")
-    public static let EnhancedTrackingProtectionTrackersBlockedSocialMediaLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia",
-        tableName: nil,
-        value: "%@ Social media tracker",
-        comment: "String to let users know how many social media trackers were blocked on the current website.")
-    public static let EnhancedTrackingProtectionTrackersBlockedFingerprinterLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter",
-        tableName: nil,
-        value: "%@ Fingerprinter",
-        comment: "String to let users know how many fingerprinters were blocked on the current website.")
-    public static let EnhancedTrackingProtectionConnectionSecureLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure",
-        tableName: nil,
-        value: "Secure Connection",
-        comment: "String to let users know that the current website is secure.")
-    public static let EnhancedTrackingProtectionConnectionUnsecureLabel = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure",
-        tableName: nil,
-        value: "Connection is not secure",
-        comment: "String to let users know that the current website is not secure.")
-    public static let EnhancedTrackingProtectionSwitchTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.Switch.Title",
-        tableName: nil,
-        value: "Enhanced Tracking Protection",
-        comment: "Title for the switch to enable/disable enhanced tracking protection inside the menu.")
-    public static let EnhancedTrackingProtectionSwitchOnText = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.SwitchOn.Text",
-        tableName: nil,
-        value: "If something looks broken on this site, try turning it off.",
-        comment: "A switch to disable enhanced tracking protection inside the menu.")
-    public static let EnhancedTrackingProtectionSwitchOffText = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.SwitchOff.Text",
-        tableName: nil,
-        value: "Protections are OFF. We suggest turning it back on.",
-        comment: "A switch to disable enhanced tracking protection inside the menu.")
-    public static let EnhancedTrackingProtectionClearDataButtonTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.ClearData.ButtonTitle",
-        tableName: nil,
-        value: "Clear cookies and site data",
-        comment: "The title for the clear cookies and site data button inside the enhanced tracking protection screen.")
-    public static let EnhancedTrackingProtectionClearDataAlertTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.ClearData.AlertTitle",
-        tableName: nil,
-        value: "Clear cookies and site data",
-        comment: "The title for the clear cookies and site data alert inside the enhanced tracking protection screen.")
-    public static let EnhancedTrackingProtectionClearDataAlertText = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.ClearData.AlertText",
-        tableName: nil,
-        value: "Removing cookies and site data for %@ might log you out of websites and clear shopping carts.",
-        comment: "The text for the clear cookies and site data alert inside the enhanced tracking protection screen.")
-    public static let EnhancedTrackingProtectionClearDataAlertButton = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton",
-        tableName: nil,
-        value: "Clear",
-        comment: "The text for the clear cookies and site data alert button inside the enhanced tracking protection screen.")
-    public static let EnhancedTrackingProtectionClearDataAlertCancelButton = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton",
-        tableName: nil,
-        value: "Cancel",
-        comment: "The text for the clear cookies and site data alert button inside the enhanced tracking protection screen.")
-    public static let EnhancedTrackingProtectionClearDataToastMessage = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.ClearData.ToastMessage",
-        tableName: nil,
-        value: "Cookies and site data removed",
-        comment: "The text for the clear cookies and site data toast that appears when the user selects to clear the cookies")
-    public static let EnhancedTrackingProtectionPrivacySettingsTitle = MZLocalizedString(
-        key: "Menu.EnhancedTrackingProtection.PrivacySettings.Title",
-        tableName: nil,
-        value: "Privacy settings",
-        comment: "The title for the privacy settings button inside the enhanced tracking protection screen.")
+    public struct EnhancedTrackingProtectionStrings {
+        public static let onTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.On.Title",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Firefox is on guard",
+            comment: "Title for the enhanced tracking protection screen when the user has selected to be protected.")
+
+        public static let onHeader = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.On.Header",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "You’re protected. If we spot something, we’ll let you know.",
+            comment: "Header for the enhanced tracking protection screen when the user has selected to be protected.")
+
+        public static let offTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Off.Title",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "You turned off protections",
+            comment: "Title for the enhanced tracking protection screen when the user has opted out of the feature.")
+
+        public static let offHeader = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Off.Header",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Firefox is off-duty. We suggest turning protections back on.",
+            comment: "Header for the enhanced tracking protection screen when the user has opted out of the feature.")
+
+        public static let onNotSecureTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.On.NotSecure.Title",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Be careful on this site",
+            comment: "Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
+
+        public static let onNotSecureHeader = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.On.Header",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Your connection is not secure.",
+            comment: "Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
+
+        public static let connectionVerifiedByLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.Verifier",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Verified by %@",
+            comment: "String to let users know the site verifier, where the placeholder represents the SSL certificate signer.")
+
+        public static let trackersBlockedLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.Trackers",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "%i Trackers blocked",
+            comment: "String to let users know how many trackers were blocked on the current website.")
+
+        public static let noTrackersLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.Trackers",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "No trackers found",
+            comment: "String to let users know that no trackers were found on the current website.")
+
+        public static let crossSiteTrackersBlockedLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "%@ Cross-site tracking cookies",
+            comment: "String to let users know how many cross-site tracking cookies were blocked on the current website.")
+
+        public static let socialMediaTrackersBlockedLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "%@ Social media tracker",
+            comment: "String to let users know how many social media trackers were blocked on the current website.")
+
+        public static let fingerprinterBlockedLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "%@ Fingerprinter",
+            comment: "String to let users know how many fingerprinters were blocked on the current website.")
+
+        public static let connectionSecureLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Secure Connection",
+            comment: "String to let users know that the current website is secure.")
+
+        public static let connectionUnsecureLabel = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Connection is not secure",
+            comment: "String to let users know that the current website is not secure.")
+
+        public static let switchTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.Switch.Title",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Enhanced Tracking Protection",
+            comment: "Title for the switch to enable/disable enhanced tracking protection inside the menu.")
+
+        public static let switchOnText = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.SwitchOn.Text",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "If something looks broken on this site, try turning it off.",
+            comment: "A switch to disable enhanced tracking protection inside the menu.")
+
+        public static let switchOffText = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.SwitchOff.Text",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Protections are OFF. We suggest turning it back on.",
+            comment: "A switch to disable enhanced tracking protection inside the menu.")
+
+        public static let clearDataButtonTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.ClearData.ButtonTitle",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Clear cookies and site data",
+            comment: "The title for the clear cookies and site data button inside the enhanced tracking protection screen.")
+
+        public static let clearDataAlertTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.ClearData.AlertTitle",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Clear cookies and site data",
+            comment: "The title for the clear cookies and site data alert inside the enhanced tracking protection screen.")
+
+        public static let clearDataAlertText = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.ClearData.AlertText",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Removing cookies and site data for %@ might log you out of websites and clear shopping carts.",
+            comment: "The text for the clear cookies and site data alert inside the enhanced tracking protection screen.")
+
+        public static let clearDataAlertButton = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Clear",
+            comment: "The text for the clear cookies and site data alert button inside the enhanced tracking protection screen.")
+
+        public static let clearDataAlertCancelButton = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Cancel",
+            comment: "The text for the clear cookies and site data alert button inside the enhanced tracking protection screen.")
+
+        public static let clearDataToastMessage = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.ClearData.ToastMessage",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Cookies and site data removed",
+            comment: "The text for the clear cookies and site data toast that appears when the user selects to clear the cookies")
+
+        public static let privacySettingsTitle = MZLocalizedString(
+            key: "Menu.EnhancedTrackingProtection.PrivacySettings.Title",
+            tableName: "EnhancedTrackingProtectionFlow",
+            value: "Privacy settings",
+            comment: "The title for the privacy settings button inside the enhanced tracking protection screen.")
+    }
+
 }
 
 // MARK: - ContentBlocker/TrackingProtection string
