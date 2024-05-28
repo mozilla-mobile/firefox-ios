@@ -16,7 +16,7 @@ import Redux
  */
 
 class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
-    struct UX {
+    private struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
         static let closeButtonSize = CGSize(width: 30, height: 30)
