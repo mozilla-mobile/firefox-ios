@@ -21,14 +21,14 @@ public struct BottomSheetViewModel {
     public var closeButtonA11yLabel: String
     public var closeButtonA11yIdentifier: String
 
-    public init(closeButtonA11yLabel: String, closeButtonA11yIdentifer: String) {
+    public init(closeButtonA11yLabel: String, closeButtonA11yIdentifier: String) {
         cornerRadius = BottomSheetViewModel.UX.cornerRadius
         animationTransitionDuration = BottomSheetViewModel.UX.animationTransitionDuration
         backgroundColor = .clear
         shouldDismissForTapOutside = true
         shadowOpacity = BottomSheetViewModel.UX.shadowOpacity
         self.closeButtonA11yLabel = closeButtonA11yLabel
-        self.closeButtonA11yIdentifier = closeButtonA11yIdentifer
+        self.closeButtonA11yIdentifier = closeButtonA11yIdentifier
     }
 
     public init(cornerRadius: CGFloat,
