@@ -11,7 +11,8 @@ final class MicrosurveyViewController: UIViewController,
                                  UITableViewDataSource,
                                  UITableViewDelegate,
                                  Themeable,
-                                 StoreSubscriber {
+                                 StoreSubscriber,
+                                 Notifiable {
     typealias SubscriberStateType = MicrosurveyState
 
     // MARK: Themable Variables
@@ -31,6 +32,7 @@ final class MicrosurveyViewController: UIViewController,
         static let headerStackSpacing: CGFloat = 8
         static let scrollStackSpacing: CGFloat = 22
         static let logoSize = CGSize(width: 24, height: 24)
+        static let logoLargeSize = CGSize(width: 48, height: 48)
         static let borderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 8
         static let estimatedRowHeight: CGFloat = 44
@@ -45,7 +47,7 @@ final class MicrosurveyViewController: UIViewController,
     private lazy var headerView: UIStackView = .build { stack in
         stack.distribution = .fillProportionally
         stack.axis = .horizontal
-        stack.alignment = self.headerLabel.numberOfLines > 1 ? .top : .center
+        stack.alignment = .top
         stack.spacing = UX.headerStackSpacing
     }
 
@@ -99,9 +101,13 @@ final class MicrosurveyViewController: UIViewController,
         button.addTarget(self, action: #selector(self.didTapPrivacyPolicy), for: .touchUpInside)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
         button.accessibilityTraits.insert(.link)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var confirmationView: MicrosurveyConfirmationView = .build()
+
+    private var logoWidthConstraint: NSLayoutConstraint?
+    private var logoHeightConstraint: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -117,6 +123,9 @@ final class MicrosurveyViewController: UIViewController,
         microsurveyState = MicrosurveyState(windowUUID: windowUUID)
         self.model = model
         super.init(nibName: nil, bundle: nil)
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+
         self.sheetPresentationController?.prefersGrabberVisible = true
         subscribeToRedux()
         configureUI()
@@ -197,10 +206,14 @@ final class MicrosurveyViewController: UIViewController,
 
         view.addSubviews(headerView, scrollView)
 
+        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: UX.logoSize.width)
+        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: UX.logoSize.height)
+        logoWidthConstraint?.isActive = true
+        logoHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate(
             [
-                logoImage.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
-                logoImage.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
+                headerLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
 
                 headerView.topAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -241,6 +254,14 @@ final class MicrosurveyViewController: UIViewController,
         )
     }
 
+    private func adjustIconSize() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        let logoSize = contentSizeCategory.isAccessibilityCategory ? UX.logoLargeSize : UX.logoSize
+        logoWidthConstraint?.constant = logoSize.width
+        logoHeightConstraint?.constant = logoSize.height
+    }
+
+    // MARK: ThemeApplicable
     func applyTheme() {
         let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
@@ -255,6 +276,15 @@ final class MicrosurveyViewController: UIViewController,
 
         submitButton.applyTheme(theme: theme)
         privacyPolicyButton.applyTheme(theme: theme)
+    }
+
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustIconSize()
+        default: break
+        }
     }
 
     @objc
