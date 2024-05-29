@@ -223,7 +223,6 @@ class SearchTests: BaseTestCase {
             while !app.menuItems["Search with Firefox"].exists {
                 app.menuItems["Show more items"].firstMatch.tap()
                 mozWaitForElementToExist(app.menuItems.firstMatch)
-                print(app.debugDescription)
                 mozWaitForElementToExist(app.menuItems["Show more items"])
             }
         }
