@@ -4,6 +4,9 @@
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
 "Microsurvey.Prompt.Close.AccessibilityLabel.v127" = "Mbylle Hapin e Pyetësorit";
 
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
+"Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "Mbylle";
+
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name. */
 "Microsurvey.Prompt.TitleLabel.v127" = "Ndihmonani ta bëjmë më të mirë %@. Do vetëm një minutë.";
 
@@ -12,6 +15,9 @@
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
 "Microsurvey.Survey.Close.AccessibilityLabel.v127" = "Mbylle Pyetësorin";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
+"Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "Mbylle";
 
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
 "Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "Faleminderit për përshtypjet tuaja!";
@@ -23,6 +29,9 @@
 "Microsurvey.Survey.HeaderLabel.v127" = "Plotësoni këtë pyetësor";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.LikertScaleOption1.v127" = "Shumë i kënaqur";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.LikertScaleOption2.v127" = "I kënaqur";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
@@ -30,6 +39,9 @@
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.LikertScaleOption4.v127" = "Jo i kënaqur";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.LikertScaleOption5.v127" = "Shumë i pakënaqur";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
 "Microsurvey.Survey.PrivacyPolicyLink.v127" = "Shënim mbi privatësinë";
