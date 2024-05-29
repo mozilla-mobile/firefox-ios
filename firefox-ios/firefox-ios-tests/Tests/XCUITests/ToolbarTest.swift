@@ -135,10 +135,13 @@ class ToolbarTests: BaseTestCase {
             // A magnifying glass icon is displayed. A "+" icon is displayed
             validateAddNewTabButtonOnToolbar(isPrivate: false)
             // Repeat steps on private mode
-            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
-            validateAddNewTabButtonOnToolbar(isPrivate: true)
+            // validateAddNewTabButtonOnToolbar() does not work on iOS 15
+            if #available(iOS 16, *) {
+                navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+                navigator.performAction(Action.OpenNewTabFromTabTray)
+                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+                validateAddNewTabButtonOnToolbar(isPrivate: true)
+            }
         }
     }
 

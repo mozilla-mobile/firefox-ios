@@ -48,7 +48,12 @@ class SettingsTests: BaseTestCase {
     func testCopiedLinks() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-
+        
+        // For iOS 15, we must scroll until the switch is visible.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+            mozWaitForElementToExist(app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"])
+        }
         // Check Offer to open copied links, when opening firefox is off
         let value = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value as? String, "0")
