@@ -57,6 +57,7 @@ public struct AccessibilityIdentifiers {
 
         struct AddressToolbar {
             static let clear = "AddressToolbar.clear"
+            static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
         }

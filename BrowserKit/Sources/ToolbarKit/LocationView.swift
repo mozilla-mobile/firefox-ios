@@ -33,6 +33,9 @@ public struct LocationViewState {
     public let clearButtonA11yId: String
     public let clearButtonA11yLabel: String
 
+    public let lockIconButtonA11yId: String
+    public let lockIconButtonA11yLabel: String
+
     public let searchEngineImageViewA11yId: String
     public let searchEngineImageViewA11yLabel: String
 
@@ -43,10 +46,13 @@ public struct LocationViewState {
     public let searchEngineImageName: String
     public let lockIconImageName: String
     public let url: String?
+    public var onTapLockIcon: (() -> Void)?
 
     public init(
         clearButtonA11yId: String,
         clearButtonA11yLabel: String,
+        lockIconButtonA11yId: String,
+        lockIconButtonA11yLabel: String,
         searchEngineImageViewA11yId: String,
         searchEngineImageViewA11yLabel: String,
         urlTextFieldPlaceholder: String,
@@ -54,10 +60,13 @@ public struct LocationViewState {
         urlTextFieldA11yLabel: String,
         searchEngineImageName: String,
         lockIconImageName: String,
-        url: String?
+        url: String?,
+        onTapLockIcon: (() -> Void)? = nil
     ) {
         self.clearButtonA11yId = clearButtonA11yId
         self.clearButtonA11yLabel = clearButtonA11yLabel
+        self.lockIconButtonA11yId = lockIconButtonA11yId
+        self.lockIconButtonA11yLabel = lockIconButtonA11yLabel
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
         self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
         self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
@@ -66,6 +75,7 @@ public struct LocationViewState {
         self.searchEngineImageName = searchEngineImageName
         self.lockIconImageName = lockIconImageName
         self.url = url
+        self.onTapLockIcon = onTapLockIcon
     }
 }
 
@@ -84,6 +94,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private var urlAbsolutePath: String?
     private var notifyTextChanged: (() -> Void)?
+    private var onTapLockIcon: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
 
     private var isURLTextFieldEmpty: Bool {
@@ -118,8 +129,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         imageView.isAccessibilityElement = true
     }
 
-    private lazy var lockIconImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+    private lazy var lockIconButton: UIButton = .build { button in
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
     }
 
     private lazy var urlTextField: UITextField = .build { [self] urlTextField in
@@ -171,7 +183,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
         searchEngineImageView.image = UIImage(named: state.searchEngineImageName)
-        lockIconImageView.image = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+        configureLockIconButton(state)
         configureURLTextField(state)
         configureA11y(state)
         formatAndTruncateURLTextField()
@@ -219,6 +231,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
                 searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
                 searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
                 searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
+                searchEngineImageView.leadingAnchor.constraint(equalTo: searchEngineContentView.leadingAnchor),
 
                 iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
                 iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -264,6 +277,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor)
+        } else {
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
+                                                constant: UX.horizontalSpace)
         }
     }
 
@@ -300,7 +316,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private func addLockIconImageView() {
-        iconContainerStackView.addArrangedSubview(lockIconImageView)
+        iconContainerStackView.addArrangedSubview(lockIconButton)
     }
 
     private func removeContainerIcons() {
@@ -354,6 +370,13 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         }
     }
 
+    // MARK: - `lockIconButton` Configuration
+    private func configureLockIconButton(_ state: LocationViewState) {
+        let lockImage = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+        lockIconButton.setImage(lockImage, for: .normal)
+        onTapLockIcon = state.onTapLockIcon
+    }
+
     // MARK: - Selectors
     @objc
     private func clearURLText() {
@@ -364,6 +387,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     @objc
     func textDidChange(_ textField: UITextField) {
         notifyTextChanged?()
+    }
+
+    @objc
+    private func didTapLockIcon() {
+        onTapLockIcon?()
     }
 
     // MARK: - UITextFieldDelegate
@@ -424,6 +452,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         clearButton.accessibilityIdentifier = state.clearButtonA11yId
         clearButton.accessibilityLabel = state.clearButtonA11yLabel
 
+        lockIconButton.accessibilityIdentifier = state.lockIconButtonA11yId
+        lockIconButton.accessibilityLabel = state.lockIconButtonA11yLabel
+
         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
 
@@ -439,7 +470,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         clearButton.tintColor = colors.iconPrimary
         searchEngineImageView.backgroundColor = colors.iconPrimary
-        lockIconImageView.tintColor = colors.iconPrimary
-        lockIconImageView.backgroundColor = colors.layerSearch
+        lockIconButton.tintColor = colors.iconPrimary
+        lockIconButton.backgroundColor = colors.layerSearch
     }
 }

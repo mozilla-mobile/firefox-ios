@@ -18,13 +18,15 @@ class AddressToolbarContainerModel {
         let locationViewState = LocationViewState(
             clearButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.clear,
             clearButtonA11yLabel: .AddressToolbar.LocationClearButtonA11yLabel,
+            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
+            lockIconButtonA11yLabel: "",
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImageName: "",
-            lockIconImageName: "",
+            lockIconImageName: StandardImageIdentifiers.Medium.lock,
             url: nil)
         return AddressToolbarState(
             locationViewState: locationViewState,
