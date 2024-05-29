@@ -44,9 +44,6 @@ const MANAGE_ADDRESSES_L10N_IDS = [
   "autofill-manage-addresses-title",
 ];
 const EDIT_ADDRESS_L10N_IDS = [
-  "autofill-address-given-name",
-  "autofill-address-additional-name",
-  "autofill-address-family-name",
   "autofill-address-name",
   "autofill-address-organization",
   "autofill-address-street",
