@@ -7,6 +7,8 @@ import Foundation
 import Shared
 import Storage
 
+import enum MozillaAppServices.VisitType
+
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
     func didFinishLibrary(from coordinator: LibraryCoordinator)
 }
@@ -160,7 +162,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         parentCoordinator?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
-    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         parentCoordinator?.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 

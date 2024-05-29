@@ -6,7 +6,8 @@ import UIKit
 import Common
 import Shared
 import ComponentLibrary
-import MozillaAppServices
+
+import class MozillaAppServices.OhttpManager
 
 // MARK: View Model
 struct FakespotAdViewModel: FeatureFlaggable {

@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
 import UIKit
 
 /// An enum describing the featureID of all features found in Nimbus.

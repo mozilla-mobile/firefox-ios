@@ -8,6 +8,8 @@ import TabDataStore
 import Shared
 import Storage
 
+import enum MozillaAppServices.BookmarkRoots
+
 class TabManagerMiddleware {
     private let profile: Profile
     private let logger: Logger

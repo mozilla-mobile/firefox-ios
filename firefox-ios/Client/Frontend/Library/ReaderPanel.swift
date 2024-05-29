@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import enum MozillaAppServices.VisitType
+
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 

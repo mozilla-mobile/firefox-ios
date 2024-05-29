@@ -8,6 +8,8 @@ import Foundation
 import UIKit
 import Common
 
+import enum MozillaAppServices.VisitType
+
 enum TabTrayViewAction {
     case addTab
     case deleteTab

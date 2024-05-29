@@ -4,7 +4,10 @@
 
 import UIKit
 import Storage
+
 @testable import Client
+
+import enum MozillaAppServices.VisitType
 
 class MockBrowserViewController: BrowserViewController {
     var switchToPrivacyModeCalled = false

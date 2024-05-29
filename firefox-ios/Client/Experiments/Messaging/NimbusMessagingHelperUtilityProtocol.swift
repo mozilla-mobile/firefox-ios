@@ -5,7 +5,8 @@
 import Foundation
 import Common
 import Shared
-import MozillaAppServices
+
+import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
 protocol NimbusMessagingHelperUtilityProtocol {
     func createNimbusMessagingHelper() -> NimbusMessagingHelperProtocol?

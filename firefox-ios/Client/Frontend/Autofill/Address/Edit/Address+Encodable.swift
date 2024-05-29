@@ -4,6 +4,8 @@
 
 import Storage
 
+import struct MozillaAppServices.Address
+
 extension CodingUserInfoKey {
     static let formatStyleKey = CodingUserInfoKey(rawValue: "FormatStyleKey")!
 }

@@ -8,6 +8,8 @@ import Common
 import Shared
 import Redux
 
+import enum MozillaAppServices.VisitType
+
 protocol RemoteTabsPanelDelegate: AnyObject {
     func presentFirefoxAccountSignIn()
     func presentFxAccountSettings()

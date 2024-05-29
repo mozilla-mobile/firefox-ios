@@ -8,6 +8,8 @@ import Shared
 import Storage
 import WebKit
 
+import struct MozillaAppServices.LoginEntry
+
 enum FocusFieldType: String, Codable {
     case username
     case password

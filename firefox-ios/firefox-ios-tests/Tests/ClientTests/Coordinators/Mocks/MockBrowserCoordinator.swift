@@ -3,9 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import WebKit
 import Storage
+import WebKit
+
 @testable import Client
+
+import struct MozillaAppServices.CreditCard
 
 class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegate {
     var showSettingsCalled = 0

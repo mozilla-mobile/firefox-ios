@@ -10,6 +10,8 @@ import Common
 import Glean
 import TabDataStore
 
+import class MozillaAppServices.Viaduct
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default

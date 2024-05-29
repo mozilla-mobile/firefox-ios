@@ -7,6 +7,8 @@ import SwiftUI
 import Common
 import Storage
 
+import struct MozillaAppServices.CreditCard
+
 enum CreditCardLeftBarButton: String, Equatable, CaseIterable {
     case close
     case cancel

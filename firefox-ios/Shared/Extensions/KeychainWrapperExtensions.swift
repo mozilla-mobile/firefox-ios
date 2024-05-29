@@ -4,7 +4,9 @@
 
 import Common
 import Foundation
-import MozillaAppServices
+
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.MZKeychainItemAccessibility
 
 public extension MZKeychainWrapper {
     static var sharedClientAppContainerKeychain: MZKeychainWrapper {

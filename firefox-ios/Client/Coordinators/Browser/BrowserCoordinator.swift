@@ -10,6 +10,9 @@ import Storage
 import Redux
 import TabDataStore
 
+import enum MozillaAppServices.VisitType
+import struct MozillaAppServices.CreditCard
+
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
                           BrowserDelegate,
@@ -409,7 +412,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.dismiss()
     }
 
-    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
         router.dismiss()
     }

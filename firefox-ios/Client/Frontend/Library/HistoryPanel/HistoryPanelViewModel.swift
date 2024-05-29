@@ -8,6 +8,8 @@ import Shared
 import Storage
 import SwiftUI
 
+import struct MozillaAppServices.VisitTransitionSet
+
 private class FetchInProgressError: MaybeErrorType {
     internal var description: String {
         return "Fetch is already in-progress"

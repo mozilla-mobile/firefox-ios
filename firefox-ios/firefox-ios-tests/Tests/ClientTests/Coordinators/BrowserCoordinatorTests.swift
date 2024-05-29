@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import XCTest
-import WebKit
 import ComponentLibrary
+import MozillaAppServices
+import WebKit
+import XCTest
+
 @testable import Client
 
 final class BrowserCoordinatorTests: XCTestCase {
