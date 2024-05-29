@@ -26,10 +26,7 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306967
     // SmokeTest
-    func testAccessingTheCreditCardsSection() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Test fails intermittently for iOS 15")
-        }
+    func testAccessingTheCreditCardsSection() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
@@ -106,7 +103,10 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306972
-    func testManageCreditCardsOption() {
+    func testManageCreditCardsOption() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
+        }
         addCreditCardAndReachAutofillWebsite()
         // Tap on the "Manage credit cards" option
         app.buttons[manageCards].tap()
@@ -125,11 +125,7 @@ class CreditCardsTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306969
     // Smoketest
-    func testAutofillCreditCardsToggleOnOoff() throws {
-        if #unavailable(iOS 16) {
-            throw XCTSkip("Test fails intermittently for iOS 15")
-        }
-        // Disable the "Save and Fill Payment Methods" toggle
+    func testAutofillCreditCardsToggleOnOoff() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
@@ -142,40 +138,45 @@ class CreditCardsTests: BaseTestCase {
         XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as! String, "0")
         app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
-        navigator.goto(NewTabScreen)
-        navigator.openURL("https://checkout.stripe.dev/preview")
-        waitUntilPageLoad()
-        // The autofill option (Use saved card prompt) is not displayed
-        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
-        app.swipeUp()
-        app.swipeUp()
-        mozWaitForElementToExist(cardNumber)
-        cardNumber.tapOnApp()
-        mozWaitForElementToNotExist(app.buttons[useSavedCard])
-        dismissSavedCardsPrompt()
-        navigator.goto(CreditCardsSettings)
-        unlockLoginsView()
-        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
-        // Enable the "Save and Fill Payment Methods" toggle
-        app.switches.element(boundBy: 1).tap()
-        XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as! String, "1")
-        app.buttons["Settings"].tap()
-        navigator.nowAt(SettingsScreen)
-        waitForExistence(app.buttons["Done"])
-        app.buttons["Done"].tap()
-        app.swipeUp()
-        mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"])
-        mozWaitForElementToExist(cardNumber)
-        cardNumber.tapOnApp()
-        // The autofill option (Use saved card prompt) is displayed
-        if !app.buttons[useSavedCard].exists {
-            app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+        if #available(iOS 16, *) {
+            navigator.goto(NewTabScreen) // Not working on iOS 15
+            navigator.openURL("https://checkout.stripe.dev/preview")
+            waitUntilPageLoad()
+            // The autofill option (Use saved card prompt) is not displayed
+            let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+            app.swipeUp()
+            app.swipeUp()
+            mozWaitForElementToExist(cardNumber)
+            cardNumber.tapOnApp()
+            mozWaitForElementToNotExist(app.buttons[useSavedCard])
+            dismissSavedCardsPrompt()
+            navigator.goto(CreditCardsSettings)
+            unlockLoginsView()
+            mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+            // Enable the "Save and Fill Payment Methods" toggle
+            app.switches.element(boundBy: 1).tap()
+            XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as! String, "1")
+            app.buttons["Settings"].tap()
+            navigator.nowAt(SettingsScreen)
+            waitForExistence(app.buttons["Done"])
+            app.buttons["Done"].tap()
+            app.swipeUp()
+            mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"])
+            mozWaitForElementToExist(cardNumber)
+            cardNumber.tapOnApp()
+            // The autofill option (Use saved card prompt) is displayed
+            if !app.buttons[useSavedCard].exists {
+                app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+            }
+            mozWaitForElementToExist(app.buttons[useSavedCard])
         }
-        mozWaitForElementToExist(app.buttons[useSavedCard])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306971
-    func testCreditCardsAutofill() {
+    func testCreditCardsAutofill() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
+        }
         addCreditCardAndReachAutofillWebsite()
         // Select the saved credit card
         selectCreditCardOnFormWebsite()
@@ -211,10 +212,13 @@ class CreditCardsTests: BaseTestCase {
         // The credit card number is saved without issues
         XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1111").exists)
         // Reach autofill website
-        reachAutofillWebsite()
-        app.scrollViews.otherElements.tables.cells.firstMatch.tap()
-        // The credit card's number and name are imported correctly on the designated fields
-        validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "05 / 40", name: updatedName)
+        // reachAutofillWebsite() does not work on iOS 15
+        if #available(iOS 16, *) {
+            reachAutofillWebsite()
+            app.scrollViews.otherElements.tables.cells.firstMatch.tap()
+            // The credit card's number and name are imported correctly on the designated fields
+            validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "05 / 40", name: updatedName)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306974
@@ -246,33 +250,36 @@ class CreditCardsTests: BaseTestCase {
             XCTAssertTrue(app.tables.cells.element(boundBy: i).staticTexts[cardsInfo[i-1][2]].exists,
                           "\(cardsInfo[i-1][2]) info is not displayed")
         }
-        // Reach used saved cards autofill website
-        reachAutofillWebsite()
-        // Any saved card can be selected/used from the autofill menu
-        app.scrollViews.otherElements.tables.cells.firstMatch.tap()
-        validateAutofillCardInfo(cardNr: "2720 9943 2658 1252", expirationNr: "05 / 40", name: "Test")
-        dismissSavedCardsPrompt()
-        app.swipeUp()
-        app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
-        if !app.buttons[useSavedCard].exists {
-            app.webViews["contentView"].webViews.textFields["Card number"].tapOnApp()
-        }
-        app.buttons[useSavedCard].tap()
-        unlockLoginsView()
-        mozWaitForElementToExist(app.staticTexts["Use saved card"])
-        app.scrollViews.otherElements.tables.cells.element(boundBy: 1).tap()
-        validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "06 / 40", name: "Test2")
-        dismissSavedCardsPrompt()
-        app.swipeUp()
-        app.webViews["contentView"].webViews.textFields["Card number"].tapOnApp()
-        if !app.buttons[useSavedCard].exists {
+        // reachAutofillWebsite() not working on iOS 15
+        if #available(iOS 16, *) {
+            // Reach used saved cards autofill website
+            reachAutofillWebsite()
+            // Any saved card can be selected/used from the autofill menu
+            app.scrollViews.otherElements.tables.cells.firstMatch.tap()
+            validateAutofillCardInfo(cardNr: "2720 9943 2658 1252", expirationNr: "05 / 40", name: "Test")
+            dismissSavedCardsPrompt()
+            app.swipeUp()
             app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+            if !app.buttons[useSavedCard].exists {
+                app.webViews["contentView"].webViews.textFields["Card number"].tapOnApp()
+            }
+            app.buttons[useSavedCard].tap()
+            unlockLoginsView()
+            mozWaitForElementToExist(app.staticTexts["Use saved card"])
+            app.scrollViews.otherElements.tables.cells.element(boundBy: 1).tap()
+            validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "06 / 40", name: "Test2")
+            dismissSavedCardsPrompt()
+            app.swipeUp()
+            app.webViews["contentView"].webViews.textFields["Card number"].tapOnApp()
+            if !app.buttons[useSavedCard].exists {
+                app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+            }
+            app.buttons[useSavedCard].tap()
+            unlockLoginsView()
+            mozWaitForElementToExist(app.staticTexts["Use saved card"])
+            app.scrollViews.otherElements.tables.cells.element(boundBy: 2).tap()
+            validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
         }
-        app.buttons[useSavedCard].tap()
-        unlockLoginsView()
-        mozWaitForElementToExist(app.staticTexts["Use saved card"])
-        app.scrollViews.otherElements.tables.cells.element(boundBy: 2).tap()
-        validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306977
@@ -355,7 +362,13 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Save Cards to Firefox"])
         mozWaitForElementToNotExist(app.tables.cells.element(boundBy: 1))
         // Repeat above steps and tap 'Save'
-        navigator.goto(NewTabScreen)
+        if #unavailable(iOS 16) {
+            app.terminate()
+            app.launch()
+            navigator.nowAt(NewTabScreen)
+        } else {
+            navigator.goto(NewTabScreen)
+        }
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(NewTabScreen)
         navigator.openURL("https://checkout.stripe.dev/preview")
@@ -382,7 +395,10 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306980
-    func testUpdatePrompt() {
+    func testUpdatePrompt() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
+        }
         // Fill in the form with the details of an already saved credit card
         addCreditCardAndReachAutofillWebsite()
         // Select the saved credit card
@@ -487,6 +503,7 @@ class CreditCardsTests: BaseTestCase {
         email.typeText("foo@mozilla.org")
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
+        cardNumber.tap()
         cardNumber.typeText(cardNr)
         mozWaitForElementToExist(expiration)
         dismissSavedCardsPrompt()

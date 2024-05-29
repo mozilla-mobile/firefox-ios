@@ -118,9 +118,13 @@ class DownloadsTests: BaseTestCase {
         shareButton.tap(force: true)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
-        mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+        } else {
+            mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
+        }
         if !iPad() {
-            app.otherElements.element(boundBy: 1).buttons["Close"].tap()
+            app.navigationBars["UIActivityContentView"].buttons["Close"].tap()
         } else {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
@@ -139,9 +143,13 @@ class DownloadsTests: BaseTestCase {
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements["ActivityListView"], timeout: TIMEOUT)
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
-        mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+        } else {
+            mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
+        }
         if !iPad() {
-            app.otherElements.element(boundBy: 1).buttons["Close"].tap()
+            app.navigationBars["UIActivityContentView"].buttons["Close"].tap()
         } else {
             // Workaround to close the context menu.
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.

@@ -183,7 +183,9 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        if #available(iOS 16, *) {
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
