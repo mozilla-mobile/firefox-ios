@@ -48,7 +48,7 @@ class SettingsTests: BaseTestCase {
     func testCopiedLinks() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        
+
         // For iOS 15, we must scroll until the switch is visible.
         if #unavailable(iOS 16) {
             app.swipeUp()
