@@ -118,7 +118,7 @@ class CreditCardInputViewModel: ObservableObject {
     @Published var cardType: CreditCardType?
     @Published var nameIsValid = true
     @Published var numberIsValid = true
-    @Published var expirationIsValid = true
+    @Published var showExpirationError = false
     @Published var nameOnCard: String = ""
 
     @Published var expirationDate: String = "" {
@@ -274,7 +274,7 @@ class CreditCardInputViewModel: ObservableObject {
         cardNumber = ""
         expirationDate = ""
         nameIsValid = true
-        expirationIsValid = true
+        showExpirationError = false
         numberIsValid = true
         creditCard = nil
     }
