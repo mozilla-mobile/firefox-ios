@@ -615,6 +615,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        windowManager.postWindowEvent(event: .qrScannerOpened, windowUUID: windowUUID)
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
@@ -769,6 +770,14 @@ class BrowserCoordinator: BaseCoordinator,
                    $0 is FirefoxAccountSignInViewController || $0 is SyncContentSettingsViewController
                }) {
                 router.dismiss(animated: true, completion: nil)
+            }
+        case .qrScannerOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+            if rootVC is QRCodeViewController {
+                router.dismiss(animated: true, completion: nil)
+                remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
             }
         }
     }

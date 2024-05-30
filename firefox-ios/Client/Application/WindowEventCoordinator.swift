@@ -23,6 +23,9 @@ enum WindowEvent {
 
     /// Sync & sign-in, or sync settings, presented.
     case syncMenuOpened
+
+    /// QR code scanner is opened
+    case qrScannerOpened
 }
 
 /// Abstract protocol that any Coordinator can conform to in order to respond
