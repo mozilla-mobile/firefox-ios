@@ -170,10 +170,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isTextFieldFocused
         let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isTextFieldFocused
 
+        // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor, constant: UX.horizontalSpace)
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor, 
+                                                constant: UX.horizontalSpace)
         }
     }
 
@@ -183,16 +185,28 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextFieldLeadingConstraint?.isActive = true
     }
 
-    private func addSearchEngineButton() {
-        iconContainerStackView.addArrangedSubview(searchEngineContentView)
-    }
-
-    private func addLockIconImageView() {
-        iconContainerStackView.addArrangedSubview(lockIconImageView)
-    }
-
     private func removeContainerIcons() {
         iconContainerStackView.removeAllArrangedViews()
+    }
+
+    private func updateUIForSearchEngineDisplay() {
+        removeContainerIcons()
+        iconContainerStackView.addArrangedSubview(searchEngineContentView)
+        urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
+
+        updateURLTextFieldLeadingConstraint(
+            equalTo: iconContainerStackView.trailingAnchor,
+            constant: UX.horizontalSpace
+        )
+
+        updateGradient()
+    }
+
+    private func updateUIForLockIconDisplay() {
+        removeContainerIcons()
+        iconContainerStackView.addArrangedSubview(lockIconImageView)
+        urlTextFieldLeadingConstraint?.constant = 0
+        updateGradient()
     }
 
     // MARK: - `urlTextField` Configuration
@@ -250,18 +264,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        removeContainerIcons()
-
-        updateURLTextFieldLeadingConstraint(
-            equalTo: iconContainerStackView.trailingAnchor,
-            constant: UX.horizontalSpace
-        )
+        updateUIForSearchEngineDisplay()
 
         if !isURLTextFieldEmpty {
             animateURLText(textField, options: .transitionFlipFromBottom, textAlignment: .natural)
         }
-        addSearchEngineButton()
-        updateGradient()
 
         let url = URL(string: textField.text ?? "")
         let queryText = locationViewDelegate?.locationViewDisplayTextForURL(url)
@@ -276,11 +283,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        if !isURLTextFieldEmpty {
-            removeContainerIcons()
-            addLockIconImageView()
+        if isURLTextFieldEmpty {
+            updateGradient()
+        } else {
+            updateUIForLockIconDisplay()
         }
-        updateGradient()
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
