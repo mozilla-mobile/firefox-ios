@@ -5626,6 +5626,11 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search Engine: %@",
             comment: "Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google).")
+        public static let PrivacyAndSecuritySettingsA11yLabel = MZLocalizedString(
+            key: "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128",
+            tableName: "AddressToolbar",
+            value: "Privacy & Security Settings",
+            comment: "Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings.")
     }
 }
 
