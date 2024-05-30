@@ -761,6 +761,13 @@ class BrowserCoordinator: BaseCoordinator,
             performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
                 didFinishSettings(from: $0)
             }
+        case .syncMenuOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            if let navVCs = (browserPresentedVC as? UINavigationController)?.viewControllers,
+               navVCs.contains(where: { $0 is FirefoxAccountSignInViewController }) {
+                router.dismiss(animated: true, completion: nil)
+            }
         }
     }
 

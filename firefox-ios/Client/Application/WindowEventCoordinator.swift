@@ -20,6 +20,9 @@ enum WindowEvent {
 
     /// A window opened the settings menu.
     case settingsOpened
+
+    /// Sync & sign-in, or sync settings, presented.
+    case syncMenuOpened
 }
 
 /// Abstract protocol that any Coordinator can conform to in order to respond
