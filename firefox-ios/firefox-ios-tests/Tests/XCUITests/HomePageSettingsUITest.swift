@@ -104,6 +104,9 @@ class HomePageSettingsUITests: BaseTestCase {
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
         app.textFields["HomeAsCustomURLTextField"].tap()
+        if #unavailable(iOS 16) {
+            sleep(2)
+        }
         app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
         mozWaitForElementToExist(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()

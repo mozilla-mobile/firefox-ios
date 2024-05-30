@@ -56,6 +56,8 @@ public struct AccessibilityIdentifiers {
         }
 
         struct AddressToolbar {
+            static let clear = "AddressToolbar.clear"
+            static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
         }
@@ -138,6 +140,12 @@ public struct AccessibilityIdentifiers {
 
     struct GeneralizedIdentifiers {
         public static let back = "Back"
+    }
+
+    struct SaveCardPrompt {
+        struct Prompt {
+            static let closeButton = "a11yCloseButton"
+        }
     }
 
     struct Microsurvey {
@@ -627,6 +635,7 @@ public struct AccessibilityIdentifiers {
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
             static let onboardingContinue = "onboardingContinue"
+            static let onboardingLearnMore = "Passwords.onboardingLearnMore"
             static let addCredentialButton = "addCredentialButton"
             static let editButton = "editButton"
         }

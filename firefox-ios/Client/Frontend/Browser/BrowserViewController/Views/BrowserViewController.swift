@@ -977,6 +977,7 @@ class BrowserViewController: UIViewController,
         }, completion: { _ in
             self.scrollController.setMinimumZoom()
         })
+        microsurvey?.setNeedsUpdateConstraints()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

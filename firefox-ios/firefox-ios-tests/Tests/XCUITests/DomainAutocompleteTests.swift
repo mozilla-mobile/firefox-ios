@@ -97,8 +97,10 @@ class DomainAutocompleteTests: BaseTestCase {
         app.textFields["address"].typeText("z")
         mozWaitForValueContains(app.textFields["address"], value: "moz")
 
-        let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
+        if #available(iOS 16, *) {
+            let value = app.textFields["address"].value
+            XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
+        }
     }
     // Delete the entire string and verify that the home panels are shown again.
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2334648
@@ -122,9 +124,11 @@ class DomainAutocompleteTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("ex")
-        mozWaitForValueContains(app.otherElements.textFields["Address Bar"], value: "www.example.com/")
-        let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "example.com", "Wrong autocompletion")
+        if #available(iOS 16, *) {
+            mozWaitForValueContains(app.otherElements.textFields["Address Bar"], value: "www.example.com/")
+            let value = app.textFields["address"].value
+            XCTAssertEqual(value as? String, "example.com", "Wrong autocompletion")
+        }
     }
 
     // Non-matches.

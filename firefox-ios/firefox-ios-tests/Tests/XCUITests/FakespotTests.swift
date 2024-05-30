@@ -255,11 +255,11 @@ class FakespotTests: BaseTestCase {
         if app.staticTexts["How reliable are these reviews?"].exists {
             XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReliabilityCard.title].firstMatch.label,
                            "How reliable are these reviews?")
-            XCTAssertTrue(app.staticTexts["Adjusted rating"].exists)
+            mozWaitForElementToExist(app.staticTexts["Adjusted rating"])
             validateHighlightsSection()
         } else {
-            XCTAssertTrue(app.staticTexts["No info about these reviews yet"].exists)
-            XCTAssertTrue(app.buttons["Check Review Quality"].exists)
+            mozWaitForElementToExist(app.staticTexts["No info about these reviews yet"])
+            mozWaitForElementToExist(app.buttons["Check Review Quality"])
         }
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,

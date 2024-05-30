@@ -18,6 +18,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private var urlAbsolutePath: String?
     private var notifyTextChanged: (() -> Void)?
+    private var onTapLockIcon: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
 
     private var isURLTextFieldEmpty: Bool {
@@ -55,8 +56,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         imageView.isAccessibilityElement = true
     }
 
-    private lazy var lockIconImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
+    private lazy var lockIconButton: UIButton = .build { button in
+        button.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
     }
 
     private lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
@@ -98,7 +100,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
         searchEngineImageView.image = state.searchEngineImage
-        lockIconImageView.image = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+        configureLockIconButton(state)
         configureURLTextField(state)
         configureA11y(state)
         formatAndTruncateURLTextField()
@@ -174,7 +176,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor, 
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor),
+        										urlTextField.applyTheme(theme: theme)
+        } else {
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
                                                 constant: UX.horizontalSpace)
         }
     }
@@ -256,10 +261,22 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         }
     }
 
+    // MARK: - `lockIconButton` Configuration
+    private func configureLockIconButton(_ state: LocationViewState) {
+        let lockImage = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+        lockIconButton.setImage(lockImage, for: .normal)
+        onTapLockIcon = state.onTapLockIcon
+    }
+
     // MARK: - Selectors
     @objc
     func textDidChange(_ textField: UITextField) {
         notifyTextChanged?()
+    }
+
+    @objc
+    private func didTapLockIcon() {
+        onTapLockIcon?()
     }
 
     // MARK: - UITextFieldDelegate
@@ -300,6 +317,12 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - Accessibility
     private func configureA11y(_ state: LocationViewState) {
+        clearButton.accessibilityIdentifier = state.clearButtonA11yId
+        clearButton.accessibilityLabel = state.clearButtonA11yLabel
+
+        lockIconButton.accessibilityIdentifier = state.lockIconButtonA11yId
+        lockIconButton.accessibilityLabel = state.lockIconButtonA11yLabel
+        
         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
         searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel
@@ -315,8 +338,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         searchEngineImageView.backgroundColor = colors.iconPrimary
-        lockIconImageView.tintColor = colors.iconPrimary
-        lockIconImageView.backgroundColor = colors.layerSearch
+        lockIconButton.tintColor = colors.iconPrimary
+        lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
     }
 }
