@@ -17,7 +17,6 @@ class DragAndDropTest: BaseTestCase {
         if #unavailable(iOS 17) {
             waitForExistence(app.webViews.otherElements[websiteWithSearchField["urlSearchField"]!])
             urlBarTextField.firstMatch.press(forDuration: 1, thenDragTo: app.webViews.otherElements["search"].firstMatch)
-            // TODO!!
         } else {
             waitForExistence(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!])
             // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
