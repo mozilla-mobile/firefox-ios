@@ -765,7 +765,9 @@ class BrowserCoordinator: BaseCoordinator,
             guard uuid != windowUUID else { return }
             let browserPresentedVC = router.navigationController.presentedViewController
             if let navVCs = (browserPresentedVC as? UINavigationController)?.viewControllers,
-               navVCs.contains(where: { $0 is FirefoxAccountSignInViewController }) {
+               navVCs.contains(where: {
+                   $0 is FirefoxAccountSignInViewController || $0 is SyncContentSettingsViewController
+               }) {
                 router.dismiss(animated: true, completion: nil)
             }
         }
