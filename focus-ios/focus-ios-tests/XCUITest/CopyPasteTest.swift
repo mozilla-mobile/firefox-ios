@@ -20,7 +20,7 @@ class CopyPasteTest: BaseTestCase {
         loadWebPage("mozilla.org")
         waitForWebPageLoad()
         urlBarTextField.press(forDuration: 2)
-        waitForExistence(app.collectionViews.menuItems.firstMatch)
+        waitForExistence(app.menuItems.firstMatch)
         waitForHittable(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
 
