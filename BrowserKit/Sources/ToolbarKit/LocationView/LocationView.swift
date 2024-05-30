@@ -24,6 +24,16 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextField.text?.isEmpty == true
     }
 
+    private var doesURLTextFieldExceedViewWidth: Bool {
+        guard let text = urlTextField.text, let font = urlTextField.font else {
+            return false
+        }
+        let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        let urlTextFieldWidth = text.size(withAttributes: fontAttributes).width
+        return urlTextFieldWidth >= locationViewWidth
+    }
+
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
@@ -147,16 +157,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         gradientView.layer.addSublayer(gradientLayer)
-    }
-
-    private var doesURLTextFieldExceedViewWidth: Bool {
-        guard let text = urlTextField.text, let font = urlTextField.font else {
-            return false
-        }
-        let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
-        let fontAttributes = [NSAttributedString.Key.font: font]
-        let urlTextFieldWidth = text.size(withAttributes: fontAttributes).width
-        return urlTextFieldWidth >= locationViewWidth
     }
 
     private func updateGradient() {
