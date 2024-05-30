@@ -11,7 +11,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let searchEngineImageViewCornerRadius: CGFloat = 4
-        static let lockIconWidth: CGFloat = 20
+        static let lockIconImageViewSize = CGSize(width: 20, height: 20)
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
         static let transitionDuration: TimeInterval = 0.3
     }
@@ -39,7 +39,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     private lazy var gradientView: UIView = .build()
 
     private var clearButtonWidthConstraint: NSLayoutConstraint?
-    private var iconContainerStackViewWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
 
     private lazy var iconContainerStackView: UIStackView = .build { view in
@@ -125,31 +124,32 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
-        NSLayoutConstraint.activate(
-            [
-                gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
-                gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
-                gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
-                gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
+        NSLayoutConstraint.activate([
+            gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
+            gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
+            gradientView.widthAnchor.constraint(equalToConstant: UX.gradientViewWidth),
 
-                urlTextField.topAnchor.constraint(equalTo: topAnchor),
-                urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-                urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
+            urlTextField.topAnchor.constraint(equalTo: topAnchor),
+            urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
+            urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
 
-                searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
-                searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
-                searchEngineImageView.leadingAnchor.constraint(equalTo: searchEngineContentView.leadingAnchor),
-                searchEngineImageView.trailingAnchor.constraint(equalTo: searchEngineContentView.trailingAnchor),
-                searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: searchEngineContentView.topAnchor),
-                searchEngineImageView.bottomAnchor.constraint(lessThanOrEqualTo: searchEngineContentView.bottomAnchor),
-                searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
-                searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
+            searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
+            searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
+            searchEngineImageView.leadingAnchor.constraint(equalTo: searchEngineContentView.leadingAnchor),
+            searchEngineImageView.trailingAnchor.constraint(equalTo: searchEngineContentView.trailingAnchor),
+            searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: searchEngineContentView.topAnchor),
+            searchEngineImageView.bottomAnchor.constraint(lessThanOrEqualTo: searchEngineContentView.bottomAnchor),
+            searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
+            searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
 
-                iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
-                iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-                iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
-            ]
-        )
+            lockIconImageView.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
+            lockIconImageView.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
+
+            iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
+            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
+        ])
     }
 
     private func setupGradientLayer() {
@@ -181,16 +181,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextFieldLeadingConstraint?.isActive = false
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: anchor, constant: constant)
         urlTextFieldLeadingConstraint?.isActive = true
-    }
-
-    private func updateWidthConstraint(
-        _ constraint: inout NSLayoutConstraint?,
-        for view: UIView,
-        to widthConstant: CGFloat
-    ) {
-        constraint?.isActive = false
-        constraint = view.widthAnchor.constraint(equalToConstant: widthConstant)
-        constraint?.isActive = true
     }
 
     private func addSearchEngineButton() {
@@ -262,11 +252,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         removeContainerIcons()
 
-        updateWidthConstraint(
-            &iconContainerStackViewWidthConstraint,
-            for: iconContainerStackView,
-            to: UX.searchEngineImageViewSize.width
-        )
         updateURLTextFieldLeadingConstraint(
             equalTo: iconContainerStackView.trailingAnchor,
             constant: UX.horizontalSpace
@@ -292,7 +277,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
         if !isURLTextFieldEmpty {
-            updateWidthConstraint(&iconContainerStackViewWidthConstraint, for: iconContainerStackView, to: UX.lockIconWidth)
             removeContainerIcons()
             addLockIconImageView()
         }
