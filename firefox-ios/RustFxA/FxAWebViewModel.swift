@@ -5,10 +5,13 @@
 import WebKit
 import Foundation
 import Account
-import MozillaAppServices
 import Shared
 import Common
 import PDFKit
+
+import enum MozillaAppServices.OAuthScope
+import struct MozillaAppServices.FxaAuthData
+import struct MozillaAppServices.UserData
 
 enum FxAPageType: Equatable {
     case emailLoginFlow

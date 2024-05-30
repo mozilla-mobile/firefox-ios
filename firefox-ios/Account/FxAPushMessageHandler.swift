@@ -4,7 +4,6 @@
 
 import Shared
 import Account
-import MozillaAppServices
 import Common
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"

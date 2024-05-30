@@ -9,6 +9,8 @@ import Shared
 import WebKit
 import ComponentLibrary
 
+import struct MozillaAppServices.CreditCard
+
 class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
 

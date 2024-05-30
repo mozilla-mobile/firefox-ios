@@ -9,6 +9,15 @@ import Sync
 import AuthenticationServices
 import Common
 
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.OAuthScope
+import enum MozillaAppServices.SyncEngineSelection
+import enum MozillaAppServices.SyncReason
+import struct MozillaAppServices.DeviceSettings
+import struct MozillaAppServices.SyncAuthInfo
+import struct MozillaAppServices.SyncParams
+import struct MozillaAppServices.SyncResult
+
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app

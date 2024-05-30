@@ -7,6 +7,9 @@ import Common
 import Storage
 import Shared
 
+import class MozillaAppServices.BookmarkFolderData
+import enum MozillaAppServices.BookmarkRoots
+
 class BookmarksPanelViewModel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks

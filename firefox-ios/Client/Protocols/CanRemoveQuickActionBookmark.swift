@@ -5,6 +5,8 @@
 import Foundation
 import Storage
 
+import class MozillaAppServices.BookmarkItemData
+
 protocol CanRemoveQuickActionBookmark {
     var bookmarksHandler: BookmarksHandler { get }
     func removeBookmarkShortcut(quickAction: QuickActions)

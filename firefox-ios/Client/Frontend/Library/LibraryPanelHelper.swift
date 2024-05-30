@@ -7,6 +7,8 @@ import Shared
 import Storage
 import Common
 
+import enum MozillaAppServices.VisitType
+
 protocol LibraryPanelDelegate: AnyObject {
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func libraryPanel(didSelectURL url: URL, visitType: VisitType)

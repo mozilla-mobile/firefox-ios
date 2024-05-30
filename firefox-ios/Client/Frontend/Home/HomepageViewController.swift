@@ -4,11 +4,12 @@
 
 import Common
 import ComponentLibrary
-import MozillaAppServices
 import Shared
 import Storage
 import Redux
 import UIKit
+
+import enum MozillaAppServices.VisitType
 
 class HomepageViewController:
     UIViewController,

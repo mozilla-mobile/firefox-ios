@@ -11,6 +11,8 @@ import Shared
 
 import XCTest
 
+import struct MozillaAppServices.VisitObservation
+
 let threeMonthsInMillis: UInt64 = 3 * 30 * 24 * 60 * 60 * 1000
 let threeMonthsInMicros = UInt64(threeMonthsInMillis) * UInt64(1000)
 

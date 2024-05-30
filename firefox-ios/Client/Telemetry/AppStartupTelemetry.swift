@@ -7,6 +7,9 @@ import Glean
 import Storage
 import Common
 
+import class MozillaAppServices.BookmarkFolderData
+import enum MozillaAppServices.BookmarkRoots
+
 final class AppStartupTelemetry {
     let profile: Profile
 

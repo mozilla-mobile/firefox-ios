@@ -6,6 +6,9 @@ import Foundation
 import Storage
 import Common
 
+import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
+
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel

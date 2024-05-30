@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 class PasswordDetailViewController: SensitiveViewController, Themeable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14

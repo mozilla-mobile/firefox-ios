@@ -6,6 +6,8 @@ import Foundation
 import Storage
 import Common
 
+import enum MozillaAppServices.BookmarkNodeType
+
 protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func start(from folder: FxBookmarkNode)
 

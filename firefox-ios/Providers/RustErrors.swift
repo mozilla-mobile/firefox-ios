@@ -4,7 +4,12 @@
 
 import Common
 import Foundation
-import MozillaAppServices
+
+import enum MozillaAppServices.Level
+import func MozillaAppServices.setApplicationErrorReporter
+import protocol MozillaAppServices.ApplicationErrorReporter
+import protocol MozillaAppServices.AppServicesLogger
+import struct MozillaAppServices.Record
 
 public func initializeRustErrors(logger: Logger) {
     setApplicationErrorReporter(errorReporter: FirefoxIOSErrorReporter(logger: logger))
