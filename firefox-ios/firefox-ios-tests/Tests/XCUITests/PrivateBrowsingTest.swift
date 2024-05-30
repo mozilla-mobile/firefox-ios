@@ -220,6 +220,11 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Tap on "Close All Tabs"
         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
+        if #unavailable(iOS 16) {
+            // Wait for the screen to refresh first.
+            mozWaitForElementToExist(
+                app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
+        }
         // The private tabs are closed
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"])

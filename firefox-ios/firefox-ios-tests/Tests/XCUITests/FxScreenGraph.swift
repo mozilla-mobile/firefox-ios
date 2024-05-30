@@ -1202,6 +1202,7 @@ extension MMNavigator where T == FxUserState {
             performAction(Action.LoadURLByTyping)
         } else {
             performAction(Action.LoadURL)
+            sleep(5) // Wait for toast to disappear
         }
     }
 

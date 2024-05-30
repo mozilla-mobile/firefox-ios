@@ -634,6 +634,7 @@ public struct AccessibilityIdentifiers {
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
             static let onboardingContinue = "onboardingContinue"
+            static let onboardingLearnMore = "Passwords.onboardingLearnMore"
             static let addCredentialButton = "addCredentialButton"
             static let editButton = "editButton"
         }

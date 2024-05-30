@@ -16,7 +16,7 @@ let urlLogin = path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
 // The following seem to be labels that change a lot and make the tests
 // break; aka volatile. Let's keep them in one place.
-let loginsListURLLabel = "Web Site, \(domain)"
+let loginsListURLLabel = isTablet ? "Web Site, \(domain)" : "Website, \(domain)"
 let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListUsernameLabelEdited = "Username, foo"
 let loginsListPasswordLabel = "Password"
@@ -98,23 +98,28 @@ class LoginTest: BaseTestCase {
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-        // Check to see how it works with multiple entries in the list- in this case, two for now
-        app.buttons["Settings"].tap()
-        navigator.nowAt(SettingsScreen)
-        waitForExistence(app.buttons["Done"])
-        app.buttons["Done"].tap()
 
-        navigator.nowAt(HomePanelsScreen)
-        saveLogin(givenUrl: testSecondLoginPage)
-        openLoginsSettings()
-        mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
-        if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
-            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
-        } else {
-            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
+        // iOS 15 may show "Toolbar" instead of "Settings" intermittently.
+        // I can't reproduce the issue manually. The issue occurs only during test automation.
+        if #available(iOS 16, *) {
+            // Check to see how it works with multiple entries in the list- in this case, two for now
+            app.buttons["Settings"].tap()
+            navigator.nowAt(SettingsScreen)
+            waitForExistence(app.buttons["Done"])
+            app.buttons["Done"].tap()
+
+            navigator.nowAt(HomePanelsScreen)
+            saveLogin(givenUrl: testSecondLoginPage)
+            openLoginsSettings()
+            mozWaitForElementToExist(app.tables["Login List"])
+            XCTAssertTrue(app.staticTexts[domain].exists)
+            // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
+            // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
+            if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+            } else {
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
+            }
         }
     }
 
@@ -275,7 +280,7 @@ class LoginTest: BaseTestCase {
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
         XCTAssertTrue(app.buttons["Add"].isEnabled)
         createLoginManually()
-        XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
+        mozWaitForElementToExist(app.tables["Login List"].staticTexts["https://testweb"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306954
@@ -297,8 +302,8 @@ class LoginTest: BaseTestCase {
         app.buttons["Add"].tap()
         mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
         XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts.containingText("Web").element.exists)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Username"].exists)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts["Password"].exists)
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Username"])
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Password"])
 
         app.tables["Add Credential"].cells["Website, "].tap()
         enterTextInField(typedText: "testweb")
@@ -314,6 +319,16 @@ class LoginTest: BaseTestCase {
     }
 
     func enterTextInField(typedText: String) {
+        // iOS 15 does not expand the keyboard for entering the credentials sometimes.
+        if #unavailable(iOS 16) {
+            mozWaitForElementToExist(app.keyboards.firstMatch)
+            if app.keyboards.buttons["Continue"].exists {
+                app.keyboards.buttons["Continue"].tap()
+                mozWaitForElementToNotExist(app.keyboards.buttons["Continue"])
+            }
+            // The keyboard may need extra time to respond.
+            sleep(1)
+        }
         for letter in typedText {
             print("\(letter)")
             app.keyboards.keys["\(letter)"].tap()
