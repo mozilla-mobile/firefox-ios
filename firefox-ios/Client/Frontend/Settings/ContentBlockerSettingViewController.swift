@@ -8,10 +8,13 @@ import Shared
 import ComponentLibrary
 
 class ContentBlockerSettingViewController: SettingsTableViewController {
+    private struct UX {
+        static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+    }
+
     private lazy var linkButton: LinkButton = .build()
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
-    private var currentTheme: Theme!
 
     init(windowUUID: WindowUUID,
          prefs: Prefs,
@@ -23,8 +26,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         }) ?? .basic
 
         super.init(style: .grouped, windowUUID: windowUUID)
-
-        currentTheme = themeManager.currentTheme(for: windowUUID)
 
         self.title = .SettingsTrackingProtectionSectionName
 
@@ -39,6 +40,12 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        applyTheme(theme: currentTheme)
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -152,11 +159,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             let linkButtonViewModel = LinkButtonViewModel(
                 title: .TrackerProtectionLearnMore,
                 a11yIdentifier: AccessibilityIdentifiers.Settings.ContentBlocker.title,
-                font: FXFontStyles.Regular.caption1.scaledFont()
+                font: FXFontStyles.Regular.caption1.scaledFont(),
+                contentInsets: UX.buttonContentInsets
             )
             linkButton.configure(viewModel: linkButtonViewModel)
-
-            linkButton.applyTheme(theme: currentTheme)
 
             linkButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
             linkButton.isHidden = false
@@ -193,6 +199,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         linkButton.setTitleColor(colors.actionPrimary, for: .normal)
-        linkButton.applyTheme(theme: currentTheme)
+        linkButton.applyTheme(theme: theme)
     }
 }

@@ -23,9 +23,9 @@ public struct LinkButtonViewModel {
                 a11yIdentifier: String,
                 font: UIFont = FXFontStyles.Regular.callout.scaledFont(),
                 contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
-                                                                                 leading: 0,
+                                                                                 leading: UX.horizontalInset,
                                                                                  bottom: UX.verticalInset,
-                                                                                 trailing: 0),
+                                                                                 trailing: UX.horizontalInset),
                 contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
         self.title = title
         self.a11yIdentifier = a11yIdentifier
