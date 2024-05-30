@@ -14,7 +14,6 @@ class DragAndDropTest: BaseTestCase {
         waitForWebPageLoad()
 
         // Check the text in the search field before dragging and dropping the url text field
-        print(app.debugDescription)
         if #unavailable(iOS 17) {
             waitForExistence(app.webViews.otherElements[websiteWithSearchField["urlSearchField"]!])
             urlBarTextField.firstMatch.press(forDuration: 1, thenDragTo: app.webViews.otherElements["search"].firstMatch)
