@@ -14,3 +14,15 @@ smoke_tests:
   - SearchTest
   - ToolbarTest
   - TopTabsTest
+  - ClipBoardTests
+  - CreditCardsTests
+  - DownloadsTests
+  - FindInPageTests
+  - HistoryTests
+  - OnboardingTests
+  - PrivateBrowsingTestIphone
+  - SettingsTests
+  - TabCounterTests
+  - ToolbarMenuTests
+  - UrlBarTests
+  - ZoomingTests

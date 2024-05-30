@@ -1,7 +1,15 @@
+import argparse
 import subprocess
 from pathlib import Path
 
 import yaml
+
+parser = argparse.ArgumentParser("Options for android apk downloader")
+
+parser.add_argument(
+    "--test-files", nargs="+", help="List of test files to generate tests from"
+)
+args = parser.parse_args()
 
 
 def search_for_smoke_tests(tests_name):
@@ -82,10 +90,15 @@ def test_smoke_{test_name}(xcodebuild, setup_experiment, start_app, experiment_b
 
 
 if __name__ == "__main__":
-    test_modules = None
+    test_modules = []
     create_test_file()
-    with open("variables.yaml", "r") as file:
-        test_modules = yaml.safe_load(file)
-    for item in test_modules.get("smoke_tests"):
+    args = parser.parse_args()
+    if args.test_files:
+        test_modules = args.test_files
+    else:
+        with open("variables.yaml", "r") as file:
+            tests = yaml.safe_load(file)
+            test_modules = [test for test in tests.get("smoke_tests")]
+    for item in test_modules:
         tests = search_for_smoke_tests(item)
         generate_smoke_tests(tests)
