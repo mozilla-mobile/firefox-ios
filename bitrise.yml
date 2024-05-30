@@ -355,9 +355,8 @@ workflows:
 
   firefox_pull_and_unzip_dependencies:
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+    - pull-intermediate-files@1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: build_applications.firefox_configure_build
@@ -1771,8 +1770,7 @@ workflows:
   focus-pull-and-unzip-dependencies:
     description: Pulls and unzip the dependencis from previous stage 
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        title: Pull artifacts
+    - pull-intermediate-files@1:
         inputs:
         - verbose: true
         - artifact_sources: build_applications.focus_configure_build
