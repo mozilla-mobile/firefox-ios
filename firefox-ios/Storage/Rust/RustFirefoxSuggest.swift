@@ -81,7 +81,7 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
                         keyword: keyword,
                         providers: providers,
                         limit: limit
-                    )).compactMap(RustFirefoxSuggestion.init) ?? []
+                    )).compactMap(RustFirefoxSuggestion.init)
                     continuation.resume(returning: suggestions)
                 } catch {
                     continuation.resume(throwing: error)
