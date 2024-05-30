@@ -176,8 +176,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
-                                                constant: UX.horizontalSpace)
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor)
         } else {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
                                                 constant: UX.horizontalSpace)
