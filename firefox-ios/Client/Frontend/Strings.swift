@@ -1775,7 +1775,7 @@ extension String {
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off")
                 public static let Bookmarks = MZLocalizedString(
                     key: "Settings.Home.Option.Bookmarks.v128",
-                    tableName: nil,
+                    tableName: "CustomizeFirefoxHome",
                     value: "Bookmarks",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Bookmarks section on the Firefox homepage on or off")
                 public static let Shortcuts = MZLocalizedString(
@@ -2409,14 +2409,14 @@ extension String {
         comment: "More button text for Recently Saved items at the home page.")
     public static let BookmarksSectionTitle = MZLocalizedString(
         key: "ActivityStream.Bookmarks.Title.v128",
-        tableName: nil,
+        tableName: "ActivityStream",
         value: "Bookmarks",
-        comment: "A string used to signify the start of the Bookmarks section on Home Screen.")
+        comment: "String used in the section title of the Bookmarks section on Home Screen.")
     public static let BookmarksSavedShowAllText = MZLocalizedString(
         key: "Bookmarks.Actions.More.v128",
-        tableName: nil,
+        tableName: "ActivityStream",
         value: "Show All",
-        comment: "More button text for Bookmarks items on the home page.")
+        comment: "Show all button text for Bookmarks items on the home page, which opens the Bookmarks panel when tapped.")
 }
 
 // MARK: - Home Panel Context Menu
