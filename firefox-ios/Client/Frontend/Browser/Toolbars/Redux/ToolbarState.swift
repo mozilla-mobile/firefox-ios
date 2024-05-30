@@ -152,20 +152,28 @@ struct ToolbarState: ScreenState, Equatable {
 
         case ToolbarActionType.didTapBack:
             var state = state
+            let navigateBack = action.navigateBack ?? false
 
             if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .back }) {
-                let navigateBack = action.navigateBack ?? false
                 state.navigationToolbar.actions[index].navigateBack = navigateBack
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .back }) {
+                state.addressToolbar.navigationActions[index].navigateBack = navigateBack
             }
 
             return state
 
         case ToolbarActionType.didTapForward:
             var state = state
+            let navigateForward = action.navigateForward ?? false
 
             if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .forward }) {
-                let navigateForward = action.navigateForward ?? false
                 state.navigationToolbar.actions[index].navigateForward = navigateForward
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .forward }) {
+                state.addressToolbar.navigationActions[index].navigateForward = navigateForward
             }
 
             return state
