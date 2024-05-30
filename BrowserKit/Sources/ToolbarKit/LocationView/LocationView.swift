@@ -145,8 +145,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
             searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
 
-            lockIconImageView.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
-            lockIconImageView.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
+            lockIconButton.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
+            lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
 
             iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
             iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -176,8 +176,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor),
-        										urlTextField.applyTheme(theme: theme)
+            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
+                                                constant: UX.horizontalSpace)
         } else {
             updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
                                                 constant: UX.horizontalSpace)
@@ -209,7 +209,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private func updateUIForLockIconDisplay() {
         removeContainerIcons()
-        iconContainerStackView.addArrangedSubview(lockIconImageView)
+        iconContainerStackView.addArrangedSubview(lockIconButton)
         urlTextFieldLeadingConstraint?.constant = 0
         updateGradient()
     }
@@ -317,12 +317,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - Accessibility
     private func configureA11y(_ state: LocationViewState) {
-        clearButton.accessibilityIdentifier = state.clearButtonA11yId
-        clearButton.accessibilityLabel = state.clearButtonA11yLabel
-
         lockIconButton.accessibilityIdentifier = state.lockIconButtonA11yId
         lockIconButton.accessibilityLabel = state.lockIconButtonA11yLabel
-        
+
         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
         searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel

@@ -17,19 +17,15 @@ class AddressToolbarContainerModel {
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(
-            clearButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.clear,
-            clearButtonA11yLabel: .AddressToolbar.LocationClearButtonA11yLabel,
-            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
-            lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
-            searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
-            searchEngineImageViewA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
+            searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
+            searchEngineImageViewA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
+            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
+            lockIconButtonA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: profile.searchEngines.defaultEngine?.image,
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            showSearchEngineIcon: false,
-            showTrackingProtectionButton: false,
             url: nil)
         return AddressToolbarState(
             locationViewState: locationViewState,
