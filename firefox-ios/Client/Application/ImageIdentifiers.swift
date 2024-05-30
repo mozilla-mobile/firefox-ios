@@ -51,8 +51,8 @@ public struct ImageIdentifiers {
             public static let themeLight = "onboardingThemeLight"
             public static let toolbarTop = "onboardingToolbarIconTop"
             public static let toolbarBottom = "onboardingToolbarIconBottom"
-            public static let checkmarkEmpty = "onboardingCheckmarkEmpty"
-            public static let checkmarkFilled = "onboardingCheckmarkFilled"
+            public static let checkmarkEmpty = "radioButtonUnchecked"
+            public static let checkmarkFilled = "radioButtonChecked"
         }
 
         public struct ChallengeTheDefault {
