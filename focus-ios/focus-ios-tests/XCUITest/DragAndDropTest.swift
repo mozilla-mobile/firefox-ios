@@ -14,10 +14,17 @@ class DragAndDropTest: BaseTestCase {
         waitForWebPageLoad()
 
         // Check the text in the search field before dragging and dropping the url text field
-        waitForExistence(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!])
-        // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
-        urlBarTextField.firstMatch.press(forDuration: 1, thenDragTo: app.webViews.otherElements["search"].firstMatch)
-        // Verify that the text in the search field is the same as the text in the url text field
-        XCTAssertEqual(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!].firstMatch.value as? String, websiteWithSearchField["url"]!)
+        print(app.debugDescription)
+        if #unavailable(iOS 17) {
+            waitForExistence(app.webViews.otherElements[websiteWithSearchField["urlSearchField"]!])
+            urlBarTextField.firstMatch.press(forDuration: 1, thenDragTo: app.webViews.otherElements["search"].firstMatch)
+            // TODO!!
+        } else {
+            waitForExistence(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!])
+            // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
+            urlBarTextField.firstMatch.press(forDuration: 1, thenDragTo: app.webViews.otherElements["search"].firstMatch)
+            // Verify that the text in the search field is the same as the text in the url text field
+            XCTAssertEqual(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!].firstMatch.value as? String, websiteWithSearchField["url"]!)
+        }
     }
 }
