@@ -20,8 +20,8 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         }
 
         struct Images {
-            static let selected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkFilled
-            static let notSelected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty
+            static let selected = ImageIdentifiers.radioButtonSelected
+            static let notSelected = ImageIdentifiers.radioButtonNotSelected
         }
     }
 

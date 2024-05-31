@@ -32,6 +32,8 @@ public struct ImageIdentifiers {
     public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"
     public static let syncOpenTab = "sync_open_tab"
+    public static let radioButtonNotSelected = "radioButtonNotSelected"
+    public static let radioButtonSelected = "radioButtonSelected"
 
     public struct Onboarding {
         public struct HeaderImages {
@@ -51,8 +53,6 @@ public struct ImageIdentifiers {
             public static let themeLight = "onboardingThemeLight"
             public static let toolbarTop = "onboardingToolbarIconTop"
             public static let toolbarBottom = "onboardingToolbarIconBottom"
-            public static let checkmarkEmpty = "radioButtonUnchecked"
-            public static let checkmarkFilled = "radioButtonChecked"
         }
 
         public struct ChallengeTheDefault {

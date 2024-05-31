@@ -18,8 +18,8 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
         struct Images {
             // TODO: FXIOS-9028 Fix radio button for accessibility
-            static let selected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkFilled
-            static let notSelected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty
+            static let selected = ImageIdentifiers.radioButtonSelected
+            static let notSelected = ImageIdentifiers.radioButtonNotSelected
         }
     }
 
