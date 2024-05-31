@@ -155,8 +155,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: WindowUUID) {
         switch actionType {
         case .home:
-            let action = GeneralBrowserAction(navigateToHome: true,
-                                              windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
         case .qrCode:
@@ -165,15 +164,13 @@ class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .back:
-            let action = ToolbarAction(navigateBack: true,
-                                       windowUUID: windowUUID,
-                                       actionType: ToolbarActionType.didTapBack)
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.navigateBack)
             store.dispatch(action)
 
         case .forward:
-            let action = ToolbarAction(navigateForward: true,
-                                       windowUUID: windowUUID,
-                                       actionType: ToolbarActionType.didTapForward)
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.navigateForward)
             store.dispatch(action)
 
         default:

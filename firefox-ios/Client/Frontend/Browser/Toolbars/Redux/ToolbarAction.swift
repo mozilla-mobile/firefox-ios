@@ -11,34 +11,27 @@ class ToolbarAction: Action {
     let navigationToolbarModel: NavigationToolbarModel?
     let numberOfTabs: Int?
     let isEnabled: Bool?
-    let navigateBack: Bool?
-    let navigateForward: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
          numberOfTabs: Int? = nil,
          isEnabled: Bool? = nil,
-         navigateBack: Bool? = nil,
-         navigateForward: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
         self.navigationToolbarModel = navigationToolbarModel
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
-        self.navigateBack = navigateBack
-        self.navigateForward = navigateForward
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
+    case didLoadWebview
     case numberOfTabsChanged
     case backButtonStatus
     case forwardButtonStatus
-    case didTapBack
-    case didTapForward
 }
 
 class ToolbarMiddlewareAction: Action {

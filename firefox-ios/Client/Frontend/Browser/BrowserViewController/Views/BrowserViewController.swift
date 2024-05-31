@@ -1730,13 +1730,11 @@ class BrowserViewController: UIViewController,
     private func executeToolbarActions() {
         guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
 
-        if state.navigateToHome {
-            didTapOnHome()
+        if state.navigateTo != nil {
+            handleNavigationActions(for: state)
         } else if state.showQRcodeReader {
             navigationHandler?.showQRCode(delegate: self)
         }
-
-        handleNavigationActions(for: state)
     }
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
@@ -1750,57 +1748,21 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func getNavigationAction(for state: BrowserViewControllerState,
-                                     actionType: ToolbarState.ActionState.ActionType) -> Bool {
-        let navigationToolbarAction = actionType == .back ?
-            state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateBack :
-            state.toolbarState.navigationToolbar.actions.first(where: { $0.actionType == actionType })?.navigateForward
-
-        let addressToolbarAction = actionType == .back ?
-            state.toolbarState
-                 .addressToolbar
-                 .navigationActions
-                 .first(where: { $0.actionType == actionType })?.navigateBack :
-
-            state.toolbarState
-                 .addressToolbar
-                 .navigationActions
-                 .first(where: { $0.actionType == actionType })?.navigateForward
-
-        return navigationToolbarAction ?? addressToolbarAction ?? false
-    }
-
     private func handleNavigationActions(for state: BrowserViewControllerState) {
-        let navigateBack = getNavigationAction(for: state, actionType: .back)
-        if navigateBack {
-            dismissUrlBar()
-            updateZoomPageBarVisibility(visible: false)
-            tabManager.selectedTab?.goBack()
-
-            let action = ToolbarAction(navigateBack: false,
-                                       windowUUID: windowUUID,
-                                       actionType: ToolbarActionType.didTapBack)
-            store.dispatch(action)
-
+        switch state.navigateTo {
+        case .home:
+            didTapOnHome()
+        case .back:
+            didTapOnBack()
+        case .forward:
+            didTapOnForward()
+        case .none:
             return
-        }
-
-        let navigateForward = getNavigationAction(for: state, actionType: .forward)
-
-        if navigateForward {
-            dismissUrlBar()
-            updateZoomPageBarVisibility(visible: false)
-            tabManager.selectedTab?.goForward()
-
-            let action = ToolbarAction(navigateForward: false,
-                                       windowUUID: windowUUID,
-                                       actionType: ToolbarActionType.didTapForward)
-            store.dispatch(action)
         }
     }
 
     func didTapOnHome() {
-        let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateToHome == true
+        let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateTo == .home
         guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
 
         updateZoomPageBarVisibility(visible: false)
@@ -1811,12 +1773,24 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+    }
 
-        guard isToolbarRefactorEnabled else { return }
-        let action = GeneralBrowserAction(navigateToHome: false,
-                                          windowUUID: windowUUID,
-                                          actionType: GeneralBrowserActionType.goToHomepage)
-        store.dispatch(action)
+    func didTapOnBack() {
+        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
+        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
+        // operating in an overlay mode (`urlBar.inOverlayMode`).
+        dismissUrlBar()
+        updateZoomPageBarVisibility(visible: false)
+        tabManager.selectedTab?.goBack()
+    }
+
+    func didTapOnForward() {
+        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
+        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
+        // operating in an overlay mode (`urlBar.inOverlayMode`).
+        dismissUrlBar()
+        updateZoomPageBarVisibility(visible: false)
+        tabManager.selectedTab?.goForward()
     }
 
     // MARK: Opening New Tabs

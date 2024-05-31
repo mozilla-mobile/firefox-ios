@@ -38,8 +38,6 @@ struct ToolbarState: ScreenState, Equatable {
         var actionType: ActionType
         var iconName: String
         var numberOfTabs: Int?
-        var navigateBack: Bool?
-        var navigateForward: Bool?
         var isEnabled: Bool
         var a11yLabel: String
         var a11yId: String
@@ -150,33 +148,6 @@ struct ToolbarState: ScreenState, Equatable {
 
             return state
 
-        case ToolbarActionType.didTapBack:
-            var state = state
-            let navigateBack = action.navigateBack ?? false
-
-            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .back }) {
-                state.navigationToolbar.actions[index].navigateBack = navigateBack
-            }
-
-            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .back }) {
-                state.addressToolbar.navigationActions[index].navigateBack = navigateBack
-            }
-
-            return state
-
-        case ToolbarActionType.didTapForward:
-            var state = state
-            let navigateForward = action.navigateForward ?? false
-
-            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .forward }) {
-                state.navigationToolbar.actions[index].navigateForward = navigateForward
-            }
-
-            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .forward }) {
-                state.addressToolbar.navigationActions[index].navigateForward = navigateForward
-            }
-
-            return state
         default:
             return state
         }
