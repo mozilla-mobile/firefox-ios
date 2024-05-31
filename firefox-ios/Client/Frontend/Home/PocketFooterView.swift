@@ -34,10 +34,10 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
         let buttonViewModel = LinkButtonViewModel(
             title: .FirefoxHomepage.Pocket.Footer.LearnMore,
             a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel,
-            font: FXFontStyles.Regular.caption1.scaledFont()
+            font: FXFontStyles.Regular.caption1.scaledFont(),
+            contentInsets: NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         )
         button.configure(viewModel: buttonViewModel)
-        button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     }
 
     private let labelsContainer: UIStackView = .build { stackView in
