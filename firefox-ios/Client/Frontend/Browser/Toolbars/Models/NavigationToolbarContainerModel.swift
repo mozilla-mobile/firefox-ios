@@ -14,6 +14,10 @@ struct NavigationToolbarContainerModel {
         return NavigationToolbarState(actions: actions, shouldDisplayBorder: displayBorder)
     }
 
+    private func shouldPerformLongPressAction(for actionType: ToolbarState.ActionState.ActionType) -> Bool {
+        return actionType == .back || actionType == .forward
+    }
+
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.actions = state.navigationToolbar.actions.map { action in
@@ -29,7 +33,13 @@ struct NavigationToolbarContainerModel {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }
+                }, onLongPress: action.shouldPerformLongPressAction ? {
+                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         gestureType: .longPress,
+                                                         windowUUID: windowUUID,
+                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
+                    store.dispatch(action)
+                } : nil
             )
         }
         self.windowUUID = windowUUID
