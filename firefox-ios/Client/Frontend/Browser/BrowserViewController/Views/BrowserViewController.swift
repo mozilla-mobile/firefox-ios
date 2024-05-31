@@ -1783,6 +1783,8 @@ class BrowserViewController: UIViewController,
     func presentSignInViewController(_ fxaOptions: FxALaunchParams,
                                      flowType: FxAPageType = .emailLoginFlow,
                                      referringPage: ReferringPage = .none) {
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.postWindowEvent(event: .syncMenuOpened, windowUUID: windowUUID)
         let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
