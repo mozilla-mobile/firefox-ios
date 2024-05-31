@@ -54,7 +54,7 @@ class UserActivityRouteTests: XCTestCase {
 
     func createSubject() -> RouteBuilder {
         let subject = RouteBuilder()
-        subject.configure(isPrivate: false, prefs: MockProfile().prefs)
+        subject.configure(prefs: MockProfile().prefs)
         trackForMemoryLeaks(subject)
         return subject
     }
