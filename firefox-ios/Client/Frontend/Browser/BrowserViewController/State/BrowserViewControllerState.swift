@@ -267,8 +267,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars,
             ToolbarActionType.numberOfTabsChanged,
-            ToolbarActionType.backButtonStatus,
-            ToolbarActionType.forwardButtonStatus:
+            ToolbarActionType.backButtonStateChanged,
+            ToolbarActionType.forwardButtonStateChanged:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,

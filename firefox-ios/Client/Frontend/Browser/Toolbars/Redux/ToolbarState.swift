@@ -120,8 +120,8 @@ struct ToolbarState: ScreenState, Equatable {
 
             return state
 
-        case ToolbarActionType.backButtonStatus:
-            guard let isEnabled = action.isEnabled else { return state }
+        case ToolbarActionType.backButtonStateChanged:
+            guard let isEnabled = action.isButtonEnabled else { return state }
             var state = state
 
             if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .back }) {
@@ -134,8 +134,8 @@ struct ToolbarState: ScreenState, Equatable {
 
             return state
 
-        case ToolbarActionType.forwardButtonStatus:
-            guard let isEnabled = action.isEnabled else { return state }
+        case ToolbarActionType.forwardButtonStateChanged:
+            guard let isEnabled = action.isButtonEnabled else { return state }
             var state = state
 
             if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .forward }) {
