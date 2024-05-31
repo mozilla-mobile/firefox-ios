@@ -8,6 +8,8 @@ import SwiftUI
 import Storage
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 struct CreditCardItemRow: View {
     let item: CreditCard
     let isAccessibilityCategory: Bool

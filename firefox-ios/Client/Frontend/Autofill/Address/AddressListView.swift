@@ -7,6 +7,8 @@ import Common
 import Shared
 import Storage
 
+import struct MozillaAppServices.Address
+
 // MARK: - AddressListView
 
 /// A view displaying a list of addresses.

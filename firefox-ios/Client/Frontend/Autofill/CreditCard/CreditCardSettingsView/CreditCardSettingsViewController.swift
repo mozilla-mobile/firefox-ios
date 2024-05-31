@@ -8,6 +8,8 @@ import Shared
 import Storage
 import SwiftUI
 
+import struct MozillaAppServices.CreditCard
+
 class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     var viewModel: CreditCardSettingsViewModel
     var themeObserver: NSObjectProtocol?

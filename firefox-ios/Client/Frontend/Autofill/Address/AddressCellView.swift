@@ -7,6 +7,8 @@ import Common
 import Shared
 import Storage
 
+import struct MozillaAppServices.Address
+
 // MARK: - AddressCellView
 
 /// A view representing a cell displaying address information.

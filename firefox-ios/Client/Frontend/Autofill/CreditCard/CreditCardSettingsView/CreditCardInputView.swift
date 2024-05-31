@@ -8,6 +8,8 @@ import Storage
 import SwiftUI
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
     @State private var isBlurred = false

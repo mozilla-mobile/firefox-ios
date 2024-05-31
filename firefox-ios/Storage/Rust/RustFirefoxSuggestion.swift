@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
 import UIKit
+
+import enum MozillaAppServices.Suggestion
 
 /// Additional information about a Firefox Suggestion to record
 /// in telemetry when the user interacts with the suggestion

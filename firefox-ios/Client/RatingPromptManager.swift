@@ -8,6 +8,9 @@ import Shared
 import Storage
 import Common
 
+import class MozillaAppServices.BookmarkFolderData
+import enum MozillaAppServices.BookmarkRoots
+
 /// The `RatingPromptManager` handles app store review requests and the internal logic of when
 /// they can be presented to a user.
 final class RatingPromptManager {

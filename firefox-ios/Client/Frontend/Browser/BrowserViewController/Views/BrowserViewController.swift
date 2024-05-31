@@ -16,6 +16,11 @@ import ComponentLibrary
 import Redux
 import ToolbarKit
 
+import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
+import enum MozillaAppServices.BookmarkRoots
+import enum MozillaAppServices.VisitType
+
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,

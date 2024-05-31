@@ -6,7 +6,8 @@ import Common
 import Foundation
 import Shared
 import Kingfisher
-import MozillaAppServices
+
+import class MozillaAppServices.HardcodedNimbusFeatures
 
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()

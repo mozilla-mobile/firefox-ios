@@ -14,7 +14,17 @@ import Shared
 import Storage
 import Sync
 import AuthenticationServices
-import MozillaAppServices
+
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.Level
+import enum MozillaAppServices.SyncReason
+import enum MozillaAppServices.VisitType
+import func MozillaAppServices.setLogger
+import func MozillaAppServices.setMaxLevel
+import struct MozillaAppServices.HistoryMigrationResult
+import struct MozillaAppServices.SyncParams
+import struct MozillaAppServices.SyncResult
+import struct MozillaAppServices.VisitObservation
 
 public protocol SyncManager {
     var isSyncing: Bool { get }

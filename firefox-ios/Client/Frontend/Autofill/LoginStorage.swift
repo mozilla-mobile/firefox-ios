@@ -4,6 +4,8 @@
 
 import Storage
 
+import struct MozillaAppServices.EncryptedLogin
+
 protocol LoginStorage {
     func listLogins() async throws -> [EncryptedLogin]
 }

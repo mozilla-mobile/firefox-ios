@@ -8,6 +8,9 @@ import Storage
 import Shared
 import AuthenticationServices
 
+import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.LoginEntry
+
 struct NewSearchInProgressError: MaybeErrorType {
     public let description: String
 }

@@ -5,6 +5,8 @@
 import Foundation
 import Storage
 
+import enum MozillaAppServices.VisitType
+
 extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         // Prevent tabs from being dragged and dropped into the address bar.

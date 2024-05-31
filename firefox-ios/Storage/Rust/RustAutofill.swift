@@ -4,8 +4,15 @@
 
 import Foundation
 import Shared
-@_exported import MozillaAppServices
 import Common
+
+import class MozillaAppServices.Store
+import enum MozillaAppServices.AutofillApiError
+import func MozillaAppServices.encryptString
+import struct MozillaAppServices.Address
+import struct MozillaAppServices.CreditCard
+import struct MozillaAppServices.UpdatableAddressFields
+import struct MozillaAppServices.UpdatableCreditCardFields
 
 /// Typealias for AutofillStore.
 typealias AutofillStore = Store

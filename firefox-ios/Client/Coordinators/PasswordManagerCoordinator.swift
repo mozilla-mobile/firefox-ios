@@ -6,6 +6,8 @@ import Foundation
 import Storage
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 protocol PasswordManagerCoordinatorDelegate: AnyObject, ParentCoordinatorDelegate {
     func settingsOpenURLInNewTab(_ url: URL)
     func didFinishPasswordManager(from: PasswordManagerCoordinator)

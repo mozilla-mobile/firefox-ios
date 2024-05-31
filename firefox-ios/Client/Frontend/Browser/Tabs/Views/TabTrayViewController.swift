@@ -8,6 +8,8 @@ import Storage
 import Redux
 import Shared
 
+import enum MozillaAppServices.VisitType
+
 protocol TabTrayController: UIViewController,
                             UIAdaptivePresentationControllerDelegate,
                             UIPopoverPresentationControllerDelegate,
@@ -44,7 +46,7 @@ class TabTrayViewController: UIViewController,
     weak var navigationHandler: TabTrayNavigationHandler?
 
     var openInNewTab: ((URL, Bool) -> Void)?
-    var didSelectUrl: ((URL, Storage.VisitType) -> Void)?
+    var didSelectUrl: ((URL, VisitType) -> Void)?
 
     // MARK: - Redux state
     var tabTrayState: TabTrayState

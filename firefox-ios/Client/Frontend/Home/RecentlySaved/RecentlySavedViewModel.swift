@@ -7,6 +7,8 @@ import Foundation
 import Storage
 import Shared
 
+import enum MozillaAppServices.VisitType
+
 struct RecentlySavedCellViewModel {
     let site: Site
     var accessibilityLabel: String {

@@ -4,8 +4,9 @@
 
 import Common
 import Foundation
-import MozillaAppServices
 import Shared
+
+import protocol MozillaAppServices.NimbusMessagingHelperProtocol
 
 /// A utility for evaluating a Nimbus feature based on a set of valid JEXLs.
 /// Adaptable to any Nimbus feature by implementing a variable of type

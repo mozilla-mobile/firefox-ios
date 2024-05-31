@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import MozillaAppServices
+
+import struct MozillaAppServices.AvailableExperiment
 
 class ExperimentsBranchesViewController: UIViewController {
     private let experiment: AvailableExperiment
