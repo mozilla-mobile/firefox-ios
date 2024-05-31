@@ -114,9 +114,7 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: .SyncingMessageWithEllipsis,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary,
-                             NSAttributedString.Key.font: UIFont.systemFont(
-                                ofSize: LegacyDynamicFontHelper.defaultHelper.DefaultStandardFontSize,
-                                weight: UIFont.Weight.regular)])
+                             NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()])
         default:
             return syncNowTitle
         }
