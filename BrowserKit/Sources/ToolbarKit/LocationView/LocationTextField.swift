@@ -25,7 +25,7 @@ class LocationTextField: UITextField, ThemeApplicable {
 
         guard let image = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill) else { return }
         if tintedClearImage == nil {
-            if let clearButtonTintColor = clearButtonTintColor {
+            if let clearButtonTintColor {
                 tintedClearImage = image.withTintColor(clearButtonTintColor)
             }
         }
