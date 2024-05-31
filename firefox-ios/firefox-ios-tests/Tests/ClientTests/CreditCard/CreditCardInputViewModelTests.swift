@@ -187,7 +187,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.expirationDate = "12 / 39"
         viewModel.cardNumber = "4717219604213696"
         viewModel.nameIsValid = false
-        viewModel.expirationIsValid = false
+        viewModel.showExpirationError = true
         viewModel.numberIsValid = false
         viewModel.creditCard = CreditCard(guid: "1",
                                           ccName: "Allen Burges",
@@ -207,7 +207,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssert(viewModel.cardNumber.isEmpty)
         XCTAssert(viewModel.expirationDate.isEmpty)
         XCTAssert(viewModel.nameIsValid)
-        XCTAssert(viewModel.expirationIsValid)
+        XCTAssertFalse(viewModel.showExpirationError)
         XCTAssert(viewModel.numberIsValid)
         XCTAssertNil(viewModel.creditCard)
     }
