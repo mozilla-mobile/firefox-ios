@@ -229,10 +229,4 @@ window.Glean = {
   formautofill: undefinedProxy(),
 };
 
-export const windowUtils = withNotImplementedError({
-  removeManuallyManagedState: () => {},
-  addManuallyManagedState: () => {},
-});
-window.windowUtils = windowUtils;
-
 export { IOSAppConstants as AppConstants } from "resource://gre/modules/shared/Constants.ios.mjs";
