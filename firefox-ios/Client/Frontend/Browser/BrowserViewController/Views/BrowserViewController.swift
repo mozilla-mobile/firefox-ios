@@ -2830,11 +2830,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
     @objc
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
-        if !self.isToolbarRefactorEnabled {
-            self.urlBar.searchEnginesDidUpdate()
+        if !isToolbarRefactorEnabled {
+            urlBar.searchEnginesDidUpdate()
         }
-        self.searchController?.reloadSearchEngines()
-        self.searchController?.reloadData()
+        searchController?.reloadSearchEngines()
+        searchController?.reloadData()
     }
 
     func searchViewController(
