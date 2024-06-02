@@ -775,10 +775,16 @@ class BrowserViewController: UIViewController,
             selector: #selector(didFinishAnnouncement),
             name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(didAddPendingBlobDownloadToQueue),
-                                       name: .PendingBlobDownloadAddedToQueue,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(didAddPendingBlobDownloadToQueue),
+            name: .PendingBlobDownloadAddedToQueue,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(updateForDefaultSearchEngineDidChange),
+            name: .SearchSettingsDidUpdateDefaultSearchEngine,
+            object: nil)
     }
 
     func addSubviews() {
@@ -2817,17 +2823,18 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     func presentSearchSettingsController() {
         let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
-
-        // Update search icon when the searchengine changes
-        searchSettingsTableViewController.updateSearchIcon = {
-            if !self.isToolbarRefactorEnabled {
-                self.urlBar.searchEnginesDidUpdate()
-            }
-            self.searchController?.reloadSearchEngines()
-            self.searchController?.reloadData()
-        }
         let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)
+    }
+
+    @objc
+    func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
+        // Update search icon when the search engine changes
+        if !self.isToolbarRefactorEnabled {
+            self.urlBar.searchEnginesDidUpdate()
+        }
+        self.searchController?.reloadSearchEngines()
+        self.searchController?.reloadData()
     }
 
     func searchViewController(

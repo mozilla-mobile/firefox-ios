@@ -7,6 +7,11 @@ import Shared
 import ComponentLibrary
 import Common
 
+extension Notification.Name {
+    /// General notification posted when the default search engine has changed
+    public static let SearchSettingsDidUpdateDefaultSearchEngine = Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
+}
+
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(
         _ searchEnginePicker: SearchEnginePicker?,
@@ -71,7 +76,6 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     private var showDeletion = false
     private var sectionsToDisplay: [SearchSettingsTableViewController.Section] = []
 
-    var updateSearchIcon: (() -> Void)?
     private var isEditable: Bool {
         guard let defaultEngine = model.defaultEngine else { return false }
 
@@ -694,7 +698,7 @@ extension SearchSettingsTableViewController: SearchEnginePickerDelegate {
     ) {
         if let engine = searchEngine {
             model.defaultEngine = engine
-            updateSearchIcon?()
+            NotificationCenter.default.post(name: .SearchSettingsDidUpdateDefaultSearchEngine)
             self.tableView.reloadData()
 
             let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: "defaultSearchEngine",
