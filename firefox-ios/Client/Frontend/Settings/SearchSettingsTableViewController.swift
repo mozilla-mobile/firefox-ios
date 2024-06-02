@@ -9,7 +9,8 @@ import Common
 
 extension Notification.Name {
     /// General notification posted when the default search engine has changed
-    public static let SearchSettingsDidUpdateDefaultSearchEngine = Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
+    public static let SearchSettingsDidUpdateDefaultSearchEngine =
+    Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
 }
 
 protocol SearchEnginePickerDelegate: AnyObject {
