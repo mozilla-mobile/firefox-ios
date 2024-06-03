@@ -7,12 +7,6 @@ import Shared
 import ComponentLibrary
 import Common
 
-extension Notification.Name {
-    /// General notification posted when the default search engine has changed
-    public static let SearchSettingsDidUpdateDefaultSearchEngine =
-    Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
-}
-
 protocol SearchEnginePickerDelegate: AnyObject {
     func searchEnginePicker(
         _ searchEnginePicker: SearchEnginePicker?,
