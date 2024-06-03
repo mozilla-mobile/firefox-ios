@@ -8,11 +8,12 @@ struct SlideOverUXConstants {
     static let ETPMenuCornerRadius: CGFloat = 8
 }
 
-class SlideOverPresentationController: UIPresentationController {
+class SlideOverPresentationController: UIPresentationController, FeatureFlaggable {
     let blurEffectView: UIVisualEffectView!
     var tapGestureRecognizer = UITapGestureRecognizer()
     var globalETPStatus: Bool
-    weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
+    weak var enhancedTrackingProtectionMenuDelegate: TrackingProtectionMenuDelegate?
+    weak var oldTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
 
     init(
         presentedViewController: UIViewController,
@@ -88,7 +89,13 @@ class SlideOverPresentationController: UIPresentationController {
 
     @objc
     func dismissController() {
-        enhancedTrackingProtectionMenuDelegate?.didFinish()
+        trackingProtectionRefactorStatus = featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+        if trackingProtectionRefactorStatus {
+            enhancedTrackingProtectionMenuDelegate?.didFinish()
+        }
+        else {
+            oldTrackingProtectionMenuDelegate?.didFinish()
+        }
     }
 
     override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {

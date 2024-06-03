@@ -61,4 +61,10 @@ public struct ImageIdentifiers {
             public static let sync = "onboardingSyncCTD"
         }
     }
+
+    public struct TrackingProtection {
+        public static let protectionAlert = "protectionAlert"
+        public static let protectionOn = "protectionOn"
+        public static let protectionOff = "protectionOff"
+    }
 }

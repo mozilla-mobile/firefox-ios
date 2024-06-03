@@ -71,6 +71,27 @@ public struct AccessibilityIdentifiers {
         static let actionButton = "ContextualHints.ActionButton"
     }
 
+    struct EnhancedTrackingProtection {
+        struct MainScreen {
+            static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
+            static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
+            static let foxImage = "TrackingProtection.FoxStatusImage"
+            static let shieldImage = "TrackingProtection.ShieldImage"
+            static let lockImage = "TrackingProtection.LockImage"
+            static let arrowImage = "TrackingProtection.ArrowImage"
+            static let domainLabel = "TrackingProtection.DomainTitleLabel"
+            static let domainHeaderLabel = "TrackingProtection.DomainHeaderLabel"
+            static let statusTitleLabel = "TrackingProtection.ConnectionStatusTitleLabel"
+            static let statusBodyLabel = "TrackingProtection.ConnectionStatusBodyLabel"
+            static let trackersBlockedLabel = "TrackingProtection.TrackersBlockedLabel"
+            static let securityStatusLabel = "TrackingProtection.ConnectionSecurityStatusLabel"
+            static let toggleViewTitleLabel = "TrackingProtection.ToggleViewTitleLabel"
+            static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
+            static let closeButton = "TrackingProtection.CloseButton"
+            static let faviconImage = "TrackingProtection.FaviconImage"
+        }
+    }
+
     struct FirefoxHomepage {
         static let collectionView = "FxCollectionView"
 

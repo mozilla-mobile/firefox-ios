@@ -13,11 +13,15 @@ protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
 }
 
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
-                                             EnhancedTrackingProtectionMenuDelegate {
+                                             TrackingProtectionMenuDelegate,
+                                             EnhancedTrackingProtectionMenuDelegate,
+                                             FeatureFlaggable {
     private let profile: Profile
     private let tabManager: TabManager
-    private let enhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC
+    private let oldEnhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC
+    private let enhancedTrackingProtectionMenuVC: TrackingProtectionVC
     weak var parentCoordinator: EnhancedTrackingProtectionCoordinatorDelegate?
+    var trackingProtectionRefactorStatus = false
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
@@ -28,32 +32,63 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         let displayTitle = tab?.displayTitle ?? ""
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let connectionSecure = tab?.webView?.hasOnlySecureContent ?? true
-        let etpViewModel = EnhancedTrackingProtectionMenuVM(
+
+        let etpViewModel = TrackingProtectionViewModel(
             url: url,
             displayTitle: displayTitle,
             connectionSecure: connectionSecure,
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-            contentBlockerStatus: contentBlockerStatus)
+            contentBlockerStatus: contentBlockerStatus
+        )
 
-        self.enhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: etpViewModel,
-                                                                                 windowUUID: tabManager.windowUUID)
+        self.enhancedTrackingProtectionMenuVC = TrackingProtectionVC(viewModel: etpViewModel,
+                                                                     windowUUID: tabManager.windowUUID)
+        let oldEtpViewModel = EnhancedTrackingProtectionMenuVM(
+            url: url,
+            displayTitle: displayTitle,
+            connectionSecure: connectionSecure,
+            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+            contentBlockerStatus: contentBlockerStatus
+        )
+
+        self.oldEnhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: oldEtpViewModel,
+                                                                                    windowUUID: tabManager.windowUUID)
+
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
         enhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
+        oldEnhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
     }
 
     func start(sourceView: UIView) {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
-            enhancedTrackingProtectionMenuVC.transitioningDelegate = self
+        trackingProtectionRefactorStatus = featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+        if trackingProtectionRefactorStatus {
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
+                enhancedTrackingProtectionMenuVC.transitioningDelegate = self
+            } else {
+                enhancedTrackingProtectionMenuVC.asPopover = true
+                if trackingProtectionRefactorStatus {
+                    enhancedTrackingProtectionMenuVC.preferredContentSize = CGSize(width: 480, height: 517)
+                }
+                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
+                enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
+                enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+            }
+            router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
         } else {
-            enhancedTrackingProtectionMenuVC.asPopover = true
-            enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
-            enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
-            enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                oldEnhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
+                oldEnhancedTrackingProtectionMenuVC.transitioningDelegate = self
+            } else {
+                oldEnhancedTrackingProtectionMenuVC.asPopover = true
+                oldEnhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
+                oldEnhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
+                oldEnhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+            }
+            router.present(oldEnhancedTrackingProtectionMenuVC, animated: true, completion: nil)
         }
-        router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
     }
 
     // MARK: - EnhancedTrackingProtectionMenuDelegate
