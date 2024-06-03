@@ -2364,7 +2364,7 @@ class BrowserViewController: UIViewController,
     func handlePageZoomLevelUpdated(_ notification: Notification) {
         guard let uuid = notification.windowUUID,
               let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
-        uuid != windowUUID else { return }
+              uuid != windowUUID else { return }
         updateForZoomChangedInOtherIPadWindow(zoom: zoomSetting)
     }
 
