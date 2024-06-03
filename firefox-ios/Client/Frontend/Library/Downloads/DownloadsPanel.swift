@@ -7,6 +7,11 @@ import Shared
 import Storage
 import Common
 
+extension Notification.Name {
+    // General notification posted when a file has been deleted from the downloads manager
+    public static let DownloadPanelFileWasDeleted = Notification.Name("DownloadPanelFileWasDeleted")
+}
+
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
                       UITableViewDataSource,
@@ -29,7 +34,8 @@ class DownloadsPanel: UIViewController,
     private let logger: Logger
     private let events: [Notification.Name] = [.FileDidDownload,
                                                .PrivateDataClearedDownloadedFiles,
-                                               .DynamicFontChanged]
+                                               .DynamicFontChanged,
+                                               .DownloadPanelFileWasDeleted]
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
 
@@ -108,18 +114,24 @@ class DownloadsPanel: UIViewController,
 
     @objc
     func notificationReceived(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
 
             switch notification.name {
             case .FileDidDownload, .PrivateDataClearedDownloadedFiles:
-                break
+                self.reloadData()
             case .DynamicFontChanged:
+                self.reloadData()
                 if self.emptyStateOverlayView.superview != nil {
                     self.emptyStateOverlayView.removeFromSuperview()
                 }
                 self.emptyStateOverlayView = self.createEmptyStateOverlayView()
                 break
+            case .DownloadPanelFileWasDeleted:
+                guard let uuid = notification.windowUUID,
+                      uuid != self.windowUUID else { return }
+                // If another window's download panel has deleted a file, ensure we refresh our table
+                self.reloadData()
             default:
                 break
             }
@@ -136,6 +148,8 @@ class DownloadsPanel: UIViewController,
     private func deleteDownloadedFile(_ downloadedFile: DownloadedFile) -> Bool {
         do {
             try FileManager.default.removeItem(at: downloadedFile.path)
+            // Notify any other download managers (on other iPad windows) of the deletion
+            NotificationCenter.default.post(name: .DownloadPanelFileWasDeleted, withUserInfo: windowUUID.userInfo)
             return true
         } catch let error {
             logger.log("Unable to delete downloaded file: \(error.localizedDescription)",
