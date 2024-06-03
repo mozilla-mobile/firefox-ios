@@ -1,14 +1,65 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "Buka Setélan";
 
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*Naha %@ téh standar anjeun?* Tutup pesen ieu tuluy toél Luncat.";
+
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Buka *Setélan*";
+
+/* The second label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.SecondLabel.v114" = "2. Toél *Aplikasi Panyungsi Baku*";
 
 /* The third label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. Placeholder is the app name. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.ThirdLabel.v114" = "3. Pilih *%@*";
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "Ganti Panyungsi Baku Anjeun";
+
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "Réka %@";
+
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "Setel téma jeung papan pakakas anjeun sangkan cocog jeung gaya panyungsian unik anjeun.";
+
+/* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
+"Onboarding.Customization.Intro.Skip.Action.v123" = "Mitembeyan Ngalanglang";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Title.v123" = "%@ nempatkeun anjeun nyepeng kadali";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Continue.Action.v123" = "Simpen jeung Tuluykeun";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
+"Onboarding.Customization.Theme.Dark.Action.v123" = "Poék";
+
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "Tempo wéb dina lampu panghadéna.";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
+"Onboarding.Customization.Theme.Light.Action.v123" = "Caang";
+
+/* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Skip.Action.v123" = "Liwat";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "Sistem Otomatis";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "Pilih téma";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Handap";
+
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Simpen jeung Mimitian Ngalanglang";
+
+/* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
+"Onboarding.Customization.Toolbar.Skip.Action.v123" = "Liwat";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "Pilih perenahna tulbar anjeun";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v114" = "Indi. Nirlaba. Salilana.";
