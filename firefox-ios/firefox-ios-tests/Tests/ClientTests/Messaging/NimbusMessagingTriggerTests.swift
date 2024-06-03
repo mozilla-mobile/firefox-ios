@@ -29,7 +29,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
 
     func testTriggers() throws {
         Experiments.events.clearEvents()
-        Experiments.events.recordEvent("app_cycle.foreground")
+        Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         let helper = Experiments.createJexlHelper()!
         let triggers = feature.triggers
 

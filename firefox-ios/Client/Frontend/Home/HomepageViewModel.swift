@@ -196,6 +196,7 @@ class HomepageViewModel: FeatureFlaggable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
