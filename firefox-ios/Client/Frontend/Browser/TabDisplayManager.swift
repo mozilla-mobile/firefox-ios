@@ -290,8 +290,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
         isPrivate = isOn
 
-        UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
-
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .tap,

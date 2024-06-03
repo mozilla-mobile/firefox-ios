@@ -57,6 +57,7 @@ public struct AccessibilityIdentifiers {
 
         struct AddressToolbar {
             static let clear = "AddressToolbar.clear"
+            static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
         }
@@ -87,6 +88,7 @@ public struct AccessibilityIdentifiers {
             static let logoID = "FxHomeLogoID"
             static let privateModeToggleButton = "FirefoxHomepage.OtherButtons.PrivateModeToggle"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
+            static let closeButton = "FirefoxHomepage.closeButton"
         }
 
         struct MoreButtons {
@@ -139,6 +141,12 @@ public struct AccessibilityIdentifiers {
 
     struct GeneralizedIdentifiers {
         public static let back = "Back"
+    }
+
+    struct SaveCardPrompt {
+        struct Prompt {
+            static let closeButton = "a11yCloseButton"
+        }
     }
 
     struct Microsurvey {
@@ -395,6 +403,7 @@ public struct AccessibilityIdentifiers {
         static let onboarding = "onboarding."
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
+        static let bottomSheetCloseButton = "Onboarding.bottomSheetCloseButton"
 
         struct Wallpaper {
             static let card = "wallpaperCard"
@@ -561,10 +570,6 @@ public struct AccessibilityIdentifiers {
             static let title = "showLinkPreviews"
         }
 
-        struct ClosePrivateTabs {
-            static let title = "settings.closePrivateTabs"
-        }
-
         struct SearchBar {
             static let searchBarSetting = "SearchBarSetting"
             static let topSetting = "TopSearchBar"
@@ -628,6 +633,7 @@ public struct AccessibilityIdentifiers {
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
             static let onboardingContinue = "onboardingContinue"
+            static let onboardingLearnMore = "Passwords.onboardingLearnMore"
             static let addCredentialButton = "addCredentialButton"
             static let editButton = "editButton"
         }
@@ -691,6 +697,9 @@ public struct AccessibilityIdentifiers {
 
     enum Autofill {
         static let footerPrimaryAction = "Autofill.footerPrimaryAction"
+        static let addressCloseButton = "Autofill.addressCloseButton"
+        static let creditCardCloseButton = "Autofill.creditCardCloseButton"
+        static let loginCloseButton = "Autofill.loginCloseButton"
     }
 }
 // swiftlint:enable line_length

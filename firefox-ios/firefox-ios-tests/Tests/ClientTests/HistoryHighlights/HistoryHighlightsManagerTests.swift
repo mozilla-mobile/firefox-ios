@@ -2,11 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import MozillaAppServices
 import Shared
+import XCTest
 
 @testable import Client
 @testable import Storage
+
 // FXIOS-8331: Disable History Highlight tests while FXIOS-8059 (Epic) is in progress
 // FXIOS-8367: Added a ticket to enable these tests when we re-enable history highlights
 class HistoryHighlightsTests: XCTestCase {

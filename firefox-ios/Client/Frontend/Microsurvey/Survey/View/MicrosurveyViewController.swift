@@ -5,30 +5,34 @@
 import Foundation
 import Common
 import ComponentLibrary
+import Redux
 
-class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
+final class MicrosurveyViewController: UIViewController,
+                                 UITableViewDataSource,
+                                 UITableViewDelegate,
+                                 Themeable,
+                                 StoreSubscriber,
+                                 Notifiable {
+    typealias SubscriberStateType = MicrosurveyState
+
     // MARK: Themable Variables
     var themeManager: Common.ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: Common.NotificationProtocol
     var currentWindowUUID: UUID? { windowUUID }
 
-    private let windowUUID: WindowUUID
+    weak var coordinator: MicrosurveyCoordinatorDelegate?
 
-    // TODO: FXIOS-9059 / FXIOS-8990 - Replace after Redux implementation + microsurvey surface manager is implemented
-    private let surveyOptions: [String] = [
-        .Microsurvey.Survey.Options.LikertScaleOption1,
-        .Microsurvey.Survey.Options.LikertScaleOption2,
-        .Microsurvey.Survey.Options.LikertScaleOption3,
-        .Microsurvey.Survey.Options.LikertScaleOption4,
-        .Microsurvey.Survey.Options.LikertScaleOption5
-    ]
+    private let windowUUID: WindowUUID
+    private let model: MicrosurveyModel
+    private var microsurveyState: MicrosurveyState
 
     // MARK: UI Elements
     private struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let scrollStackSpacing: CGFloat = 22
         static let logoSize = CGSize(width: 24, height: 24)
+        static let logoLargeSize = CGSize(width: 48, height: 48)
         static let borderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 8
         static let estimatedRowHeight: CGFloat = 44
@@ -43,7 +47,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
     private lazy var headerView: UIStackView = .build { stack in
         stack.distribution = .fillProportionally
         stack.axis = .horizontal
-        stack.alignment = self.headerLabel.numberOfLines > 1 ? .top : .center
+        stack.alignment = .top
         stack.spacing = UX.headerStackSpacing
     }
 
@@ -97,26 +101,65 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         button.addTarget(self, action: #selector(self.didTapPrivacyPolicy), for: .touchUpInside)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
         button.accessibilityTraits.insert(.link)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var confirmationView: MicrosurveyConfirmationView = .build()
+
+    private var logoWidthConstraint: NSLayoutConstraint?
+    private var logoHeightConstraint: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(windowUUID: WindowUUID,
+    init(model: MicrosurveyModel, windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        microsurveyState = MicrosurveyState(windowUUID: windowUUID)
+        self.model = model
         super.init(nibName: nil, bundle: nil)
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
 
         self.sheetPresentationController?.prefersGrabberVisible = true
+        subscribeToRedux()
         configureUI()
         setupLayout()
+    }
+
+    // MARK: Redux
+    func newState(state: MicrosurveyState) {
+        microsurveyState = state
+        if microsurveyState.shouldDismiss {
+            coordinator?.dismissFlow()
+        } else if microsurveyState.showPrivacy {
+            coordinator?.showPrivacy()
+        }
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .microsurvey)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return MicrosurveyState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .microsurvey)
+        store.dispatch(action)
     }
 
     override func viewDidLoad() {
@@ -124,6 +167,11 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
+        tableView.removeFromSuperview()
     }
 
     private func configureUI() {
@@ -158,10 +206,14 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
         view.addSubviews(headerView, scrollView)
 
+        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: UX.logoSize.width)
+        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: UX.logoSize.height)
+        logoWidthConstraint?.isActive = true
+        logoHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate(
             [
-                logoImage.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
-                logoImage.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
+                headerLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
 
                 headerView.topAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -202,6 +254,14 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         )
     }
 
+    private func adjustIconSize() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        let logoSize = contentSizeCategory.isAccessibilityCategory ? UX.logoLargeSize : UX.logoSize
+        logoWidthConstraint?.constant = logoSize.width
+        logoHeightConstraint?.constant = logoSize.height
+    }
+
+    // MARK: ThemeApplicable
     func applyTheme() {
         let theme = themeManager.currentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
@@ -218,10 +278,25 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         privacyPolicyButton.applyTheme(theme: theme)
     }
 
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustIconSize()
+        default: break
+        }
+    }
+
     @objc
     private func didTapSubmit() {
-        // TODO: FXIOS-9059: Redux for sending telemetry
+        sendTelemetry()
         showConfirmationPage()
+    }
+
+    private func sendTelemetry() {
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.submitSurvey)
+        )
     }
 
     private func showConfirmationPage() {
@@ -242,17 +317,21 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
 
     @objc
     private func didTapClose() {
-        // TODO: FXIOS-9059: Redux for Survey close action
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.closeSurvey)
+        )
     }
 
     @objc
     private func didTapPrivacyPolicy() {
-        // TODO: FXIOS-8976: Privacy policy should open a new tab
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.tapPrivacyNotice)
+        )
     }
 
     // MARK: UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return surveyOptions.count
+        return model.surveyOptions.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -262,7 +341,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         ) as? MicrosurveyTableViewCell else {
             return UITableViewCell()
         }
-        cell.configureCell(surveyOptions[indexPath.row])
+        cell.configure(model.surveyOptions[indexPath.row])
         cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return cell
     }
@@ -274,7 +353,7 @@ class MicrosurveyViewController: UIViewController, UITableViewDataSource, UITabl
         ) as? MicrosurveyTableHeaderView else {
             return nil
         }
-
+        headerView.configure(model.surveyQuestion)
         headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return headerView
     }

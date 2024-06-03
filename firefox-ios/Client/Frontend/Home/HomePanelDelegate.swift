@@ -5,6 +5,8 @@
 import Foundation
 import Storage
 
+import enum MozillaAppServices.VisitType
+
 protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)

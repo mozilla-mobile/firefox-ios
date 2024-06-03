@@ -8,6 +8,8 @@ import SwiftUI
 import Storage
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 class CreditCardTableViewModel {
     var toggleModel: ToggleModel?
 

@@ -10,6 +10,9 @@ import Storage
 import Redux
 import TabDataStore
 
+import enum MozillaAppServices.VisitType
+import struct MozillaAppServices.CreditCard
+
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
                           BrowserDelegate,
@@ -409,7 +412,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.dismiss()
     }
 
-    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
         router.dismiss()
     }
@@ -612,6 +615,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        windowManager.postWindowEvent(event: .qrScannerOpened, windowUUID: windowUUID)
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
@@ -669,6 +673,32 @@ class BrowserCoordinator: BaseCoordinator,
         backForwardListVC.tabManager = tabManager
         backForwardListVC.modalPresentationStyle = .overCurrentContext
         present(backForwardListVC)
+    }
+
+    // MARK: Microsurvey
+    func showMicrosurvey(model: MicrosurveyModel) {
+        guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
+            return
+        }
+
+        let navigationController = DismissableNavigationViewController()
+        let coordinator = MicrosurveyCoordinator(
+            model: model,
+            router: DefaultRouter(
+                navigationController: navigationController
+            ),
+            tabManager: tabManager
+        )
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start()
+
+        navigationController.onViewDismissed = { [weak self] in
+            // Remove coordinator when user drags down to dismiss modal
+            self?.didFinish(from: coordinator)
+        }
+
+        present(navigationController)
     }
 
     private func present(_ viewController: UIViewController,
@@ -731,6 +761,23 @@ class BrowserCoordinator: BaseCoordinator,
             guard uuid != windowUUID else { return }
             performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
                 didFinishSettings(from: $0)
+            }
+        case .syncMenuOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            if let navVCs = (browserPresentedVC as? UINavigationController)?.viewControllers,
+               navVCs.contains(where: {
+                   $0 is FirefoxAccountSignInViewController || $0 is SyncContentSettingsViewController
+               }) {
+                router.dismiss(animated: true, completion: nil)
+            }
+        case .qrScannerOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+            if rootVC is QRCodeViewController {
+                router.dismiss(animated: true, completion: nil)
+                remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
             }
         }
     }

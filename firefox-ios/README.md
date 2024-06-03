@@ -27,9 +27,12 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Install Node.js dependencies, build user scripts and update content blocker:
+1. Change directories to the project root:
     ```shell
     cd firefox-ios
+    ```
+1. From the project root, install Node.js dependencies, build user scripts and update content blocker:
+    ```shell
     sh ./bootstrap.sh
     ```
 1. Open the `Client.xcodeproj` under the `firefox-ios` folder in Xcode.

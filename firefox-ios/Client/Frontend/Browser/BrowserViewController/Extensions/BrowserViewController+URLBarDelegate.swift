@@ -8,6 +8,8 @@ import Glean
 import Common
 import ComponentLibrary
 
+import enum MozillaAppServices.VisitType
+
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
 }

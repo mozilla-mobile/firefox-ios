@@ -8,6 +8,8 @@ import Storage
 import SwiftUI
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
     @State private var isBlurred = false
@@ -62,7 +64,7 @@ struct CreditCardInputView: View {
                     Group {
                         CreditCardInputField(windowUUID: windowUUID,
                                              inputType: .expiration,
-                                             showError: !viewModel.expirationIsValid,
+                                             showError: viewModel.showExpirationError,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
 

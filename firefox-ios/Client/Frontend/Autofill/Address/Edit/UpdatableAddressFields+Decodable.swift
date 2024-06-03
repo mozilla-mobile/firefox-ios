@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Storage
+import struct MozillaAppServices.UpdatableAddressFields
 
 extension UpdatableAddressFields: Decodable {
     enum KebabCodingKeys: String, CodingKey {
@@ -16,7 +17,6 @@ extension UpdatableAddressFields: Decodable {
         case country
         case tel
         case email
-
     }
 
     public init(from decoder: Decoder) throws {

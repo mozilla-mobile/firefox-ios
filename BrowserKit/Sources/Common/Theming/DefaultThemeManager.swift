@@ -116,7 +116,15 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         guard currentTheme(for: window).type != newTheme else { return }
 
         updateSavedTheme(to: newTheme)
-        updateCurrentTheme(to: fetchSavedThemeType(for: window), for: window)
+
+        // Although we may have only explicitly changed the state on one specific window,
+        // we want to be sure we update all windows in case the Light/Dark theme changed.
+        allWindowUUIDs.forEach {
+            updateCurrentTheme(to: fetchSavedThemeType(for: $0), for: $0, notify: false)
+        }
+        // After updating all windows, notify (once). We send the UUID of the window for
+        // which the change originated though more than 1 window may ultimately update its UI.
+        notifyCurrentThemeDidChange(for: window)
     }
 
     public func reloadTheme(for window: WindowUUID) {
@@ -215,7 +223,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
-    private func updateCurrentTheme(to newTheme: ThemeType, for window: WindowUUID) {
+    private func updateCurrentTheme(to newTheme: ThemeType, for window: WindowUUID, notify: Bool = true) {
         windowThemeState[window] = newThemeForType(newTheme)
 
         // Overwrite the user interface style on the window attached to our scene
@@ -223,7 +231,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         let style = self.currentTheme(for: window).type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
+        if notify {
+            notifyCurrentThemeDidChange(for: window)
+        }
+    }
 
+    private func notifyCurrentThemeDidChange(for window: WindowUUID) {
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange, withUserInfo: window.userInfo)
         }

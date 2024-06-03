@@ -6,12 +6,8 @@ import SwiftUI
 import Common
 import Shared
 import Storage
-
-// TODO: PHASE-2 FXIOS-7653
-// AddressListViewModelDelegate: A protocol to notify delegates about address updates.
-// protocol AddressListViewModelDelegate: AnyObject {
-//     func didUpdateAddresses(_ addresses: [Address])
-// }
+import struct MozillaAppServices.UpdatableAddressFields
+import struct MozillaAppServices.Address
 
 // TODO: Refactor the Address extension for global usage (FXIOS-8337)
 extension Address {

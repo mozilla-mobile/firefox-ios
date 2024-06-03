@@ -236,7 +236,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     static func reduceStateForToolbarAction(action: ToolbarAction,
                                             state: BrowserViewControllerState) -> BrowserViewControllerState {
         switch action.actionType {
-        case ToolbarActionType.didLoadToolbars:
+        case ToolbarActionType.didLoadToolbars,
+            ToolbarActionType.numberOfTabsChanged:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,

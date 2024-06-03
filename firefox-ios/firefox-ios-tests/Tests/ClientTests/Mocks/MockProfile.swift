@@ -2,13 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-@testable import Client
-import Foundation
 import Account
+import Foundation
 import Shared
 import Storage
 import Sync
 import XCTest
+
+@testable import Client
+
+import enum MozillaAppServices.SyncReason
+import struct MozillaAppServices.SyncResult
 
 public typealias ClientSyncManager = Client.SyncManager
 
@@ -108,14 +112,14 @@ open class MockProfile: Client.Profile {
 
     public var files: FileAccessor
     public var syncManager: ClientSyncManager!
-    public var firefoxSuggest: RustFirefoxSuggestActor?
+    public var firefoxSuggest: RustFirefoxSuggestProtocol?
 
     fileprivate let name: String = "mockaccount"
 
     private let directory: String
     private let databasePrefix: String
 
-    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestActor? = nil) {
+    init(databasePrefix: String = "mock", firefoxSuggest: RustFirefoxSuggestProtocol? = nil) {
         files = MockFiles()
         syncManager = ClientSyncManagerSpy()
         self.databasePrefix = databasePrefix

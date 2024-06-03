@@ -26,7 +26,6 @@ class OneLineTableViewCell: UITableViewCell,
     struct UX {
         static let imageSize: CGFloat = 29
         static let borderViewMargin: CGFloat = 16
-        static let labelFontSize: CGFloat = 17
         static let verticalMargin: CGFloat = 8
         static let leftImageViewSize: CGFloat = 28
         static let separatorViewHeight: CGFloat = 0.7
@@ -45,8 +44,7 @@ class OneLineTableViewCell: UITableViewCell,
     lazy var leftImageView: FaviconImageView = .build { _ in }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.labelFontSize)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .natural
     }
 

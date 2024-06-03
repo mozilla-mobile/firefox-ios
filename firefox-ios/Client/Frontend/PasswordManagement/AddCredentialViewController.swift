@@ -7,6 +7,8 @@ import Shared
 import Storage
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 enum AddCredentialField: Int {
     case websiteItem
     case usernameItem

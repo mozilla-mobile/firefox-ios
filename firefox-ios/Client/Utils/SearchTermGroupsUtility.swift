@@ -5,7 +5,9 @@
 import Foundation
 import Shared
 import Storage
-import MozillaAppServices
+
+import struct MozillaAppServices.HistoryHighlight
+import struct MozillaAppServices.HistoryMetadata
 
 class SearchTermGroupsUtility {
     public static func getHighlightGroups(

@@ -221,6 +221,8 @@
         "URLValidationTests",
         "UrlBarTests",
         "WhatsNewTest",
+        "ZoomingTests\/testSwitchingZoomedTabs()",
+        "ZoomingTests\/testSwitchingZoomedTabsLandscape()",
         "ZoomingTests\/testZoomForceCloseFirefox()"
       ],
       "target" : {

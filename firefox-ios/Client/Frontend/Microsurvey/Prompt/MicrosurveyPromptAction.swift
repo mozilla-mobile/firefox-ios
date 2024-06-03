@@ -7,17 +7,7 @@ import Redux
 import Common
 
 class MicrosurveyPromptAction: Action { }
-
-class MicrosurveyPromptMiddlewareAction: Action {
-    let microsurveyState: MicrosurveyPromptState?
-
-    init(microsurveyState: MicrosurveyPromptState? = nil,
-         windowUUID: WindowUUID,
-         actionType: ActionType) {
-        self.microsurveyState = microsurveyState
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
+class MicrosurveyPromptMiddlewareAction: Action { }
 
 enum MicrosurveyPromptActionType: ActionType {
     case showPrompt

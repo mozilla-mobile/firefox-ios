@@ -4,9 +4,9 @@
 
 import UIKit
 import WebKit
-import Storage
 import SwiftUI
 import Common
+import struct MozillaAppServices.UpdatableAddressFields
 
 class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     private lazy var webView: WKWebView = {

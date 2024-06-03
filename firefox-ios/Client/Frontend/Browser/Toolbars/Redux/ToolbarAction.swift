@@ -9,19 +9,23 @@ import ToolbarKit
 class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
+    let numberOfTabs: Int?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
+         numberOfTabs: Int? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
         self.navigationToolbarModel = navigationToolbarModel
+        self.numberOfTabs = numberOfTabs
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
+    case numberOfTabsChanged
 }
 
 class ToolbarMiddlewareAction: Action {

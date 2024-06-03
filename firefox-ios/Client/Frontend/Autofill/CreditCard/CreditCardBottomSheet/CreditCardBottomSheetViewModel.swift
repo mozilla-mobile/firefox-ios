@@ -7,6 +7,9 @@ import Common
 import Storage
 import Shared
 
+import enum MozillaAppServices.AutofillApiError
+import struct MozillaAppServices.CreditCard
+
 enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
     case save
     case update

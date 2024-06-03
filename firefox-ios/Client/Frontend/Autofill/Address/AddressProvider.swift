@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Storage
+import struct MozillaAppServices.UpdatableAddressFields
+import struct MozillaAppServices.Address
 
 protocol AddressProvider {
     func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void)
