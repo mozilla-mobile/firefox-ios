@@ -6,6 +6,7 @@ import Storage
 
 protocol AddressProvider {
     func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void)
+    func addAddress(address: UpdatableAddressFields, completion: @escaping (Result<Address, Error>) -> Void)
 }
 
 extension RustAutofill: AddressProvider {}

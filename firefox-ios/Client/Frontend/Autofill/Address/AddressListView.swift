@@ -55,7 +55,7 @@ struct AddressListView: View {
                                     viewModel.cancelAddButtonTap()
                                 },
                                 trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                                    viewModel.saveAddress(completion: { _ in })
+                                    viewModel.saveAddressTap()
                                 }
                             )
                     }
@@ -66,12 +66,6 @@ struct AddressListView: View {
                             ToolbarItemGroup(placement: .cancellationAction) {
                                 Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
                                     viewModel.cancelEditButtonTap()
-                                }
-                            }
-
-                            ToolbarItemGroup(placement: .primaryAction) {
-                                Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                                    viewModel.saveAddress(completion: { _ in })
                                 }
                             }
                         }

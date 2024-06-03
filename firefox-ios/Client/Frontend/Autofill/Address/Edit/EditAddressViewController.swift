@@ -35,8 +35,43 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func setupWebView() {
-        model.saveAction = { [weak self] in
-            self?.evaluateJavaScript("getCurrentFormData();")
+        model.saveAction = { [weak self] completion in
+            self?.webView.evaluateJavaScript("getCurrentFormData();") { result, error in
+                if let error = error {
+                    self?.logger.log(
+                        "JavaScript execution error",
+                        level: .warning,
+                        category: .autofill,
+                        description: "JavaScript execution error: \(error.localizedDescription)"
+                    )
+                    return
+                }
+
+                guard let resultDict = result as? [String: Any] else {
+                    self?.logger.log(
+                        "Result is nil or not a dictionary",
+                        level: .warning,
+                        category: .autofill,
+                        description: "Result is nil or not a dictionary"
+                    )
+                    return
+                }
+
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: resultDict, options: [])
+                    let decoder = JSONDecoder()
+                    decoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
+                    let address = try decoder.decode(UpdatableAddressFields.self, from: jsonData)
+                    completion(address)
+                } catch {
+                    self?.logger.log(
+                        "Failed to decode dictionary",
+                        level: .warning,
+                        category: .autofill,
+                        description: "Failed to decode dictionary \(error.localizedDescription)"
+                    )
+                }
+            }
         }
 
         if let url = Bundle.main.url(forResource: "AddressFormManager", withExtension: "html") {
@@ -48,14 +83,15 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         webView.configuration.userContentController.add(self, name: "addressFormMessageHandler")
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        
-    }
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         do {
             let javascript = try model.getInjectJSONDataInit()
             self.evaluateJavaScript(javascript)
+            if case .add = model.destination {
+                self.evaluateJavaScript("toggleEditMode(true);")
+            }
         } catch {
             self.logger.log(
                 "Error injecting JavaScript",
@@ -81,8 +117,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 }
 
 struct EditAddressViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIViewControllerType = EditAddressViewController
-
     var model: AddressListViewModel
 
     func makeUIViewController(context: Context) -> EditAddressViewController {

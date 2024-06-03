@@ -28,7 +28,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     @Published var showSection = false
     @Published var destination: Destination?
 
-    var saveAction: (() -> Void)?
+    var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
 
     enum Destination: Swift.Identifiable {
         case add(Address)
@@ -120,8 +120,23 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         destination = nil
     }
 
-    func saveAddress(completion: (Address) -> Void) {
-        saveAction?()
+    func saveAddressTap() {
+        saveAction? { [weak self] address in
+            guard let self else { return }
+            self.addressProvider.addAddress(address: address) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
     }
 
     func addButtonTap() {
@@ -134,7 +149,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             addressLevel2: "",
             addressLevel1: "",
             postalCode: "",
-            country: "",
+            country: Locale.current.regionCode ?? "",
             tel: "",
             email: "",
             timeCreated: 0,
