@@ -26,9 +26,6 @@ export class FormAutofillHandler {
   // The window to which this form belongs
   window = null;
 
-  // A WindowUtils reference of which Window the form belongs
-  winUtils = null;
-
   // DOM Form element to which this object is attached
   form = null;
 
@@ -41,8 +38,10 @@ export class FormAutofillHandler {
   // Caches the element to section mapping
   #cachedSectionByElement = new WeakMap();
 
-  // Keeps track of filled state for all identified elements
+  // Keeps track of filled state for all identified elements,
+  // used only for telemetry.
   #filledStateByElement = new WeakMap();
+
   /**
    * Array of collected data about relevant form fields.  Each item is an object
    * storing the identifying details of the field and a reference to the
@@ -76,17 +75,6 @@ export class FormAutofillHandler {
     this._updateForm(form);
 
     this.window = this.form.rootElement.ownerGlobal;
-    this.winUtils = this.window.windowUtils;
-
-    // Enum for form autofill MANUALLY_MANAGED_STATES values
-    this.FIELD_STATE_ENUM = {
-      // not themed
-      [FIELD_STATES.NORMAL]: null,
-      // highlighted
-      [FIELD_STATES.AUTO_FILLED]: "autofill",
-      // highlighted && grey color text
-      [FIELD_STATES.PREVIEW]: "-moz-autofill-preview",
-    };
 
     /**
      * This function is used if the form handler (or one of its sections)
@@ -125,6 +113,9 @@ export class FormAutofillHandler {
           this.onAutofillCallback();
         }
 
+        // This uses the #filledStateByElement map instead of
+        // autofillState as the state has already been cleared by the time
+        // the input event fires.
         if (this.getFilledStateByElement(target) == FIELD_STATES.NORMAL) {
           return;
         }
@@ -287,10 +278,10 @@ export class FormAutofillHandler {
    *
    * @param {object} fieldDetail
    *        A fieldDetail of which its element is about to update the state.
-   * @param {string} nextState
-   *        Used to determine the next state
+   * @param {string} state
+   *        The state to apply.
    */
-  changeFieldState(fieldDetail, nextState) {
+  changeFieldState(fieldDetail, state) {
     const element = fieldDetail.element;
     if (!element) {
       this.log.warn(
@@ -299,7 +290,8 @@ export class FormAutofillHandler {
       );
       return;
     }
-    if (!(nextState in this.FIELD_STATE_ENUM)) {
+
+    if (!Object.values(FIELD_STATES).includes(state)) {
       this.log.warn(
         fieldDetail.fieldName,
         "is trying to change to an invalid state"
@@ -307,34 +299,12 @@ export class FormAutofillHandler {
       return;
     }
 
-    if (this.#filledStateByElement.get(element) == nextState) {
-      return;
-    }
+    element.autofillState = state;
+    this.#filledStateByElement.set(element, state);
 
-    let nextStateValue = null;
-    for (const [state, mmStateValue] of Object.entries(this.FIELD_STATE_ENUM)) {
-      // The NORMAL state is simply the absence of other manually
-      // managed states so we never need to add or remove it.
-      if (!mmStateValue) {
-        continue;
-      }
-
-      if (state == nextState) {
-        nextStateValue = mmStateValue;
-      } else {
-        this.winUtils.removeManuallyManagedState(element, mmStateValue);
-      }
-    }
-
-    if (nextStateValue) {
-      this.winUtils.addManuallyManagedState(element, nextStateValue);
-    }
-
-    if (nextState == FIELD_STATES.AUTO_FILLED) {
+    if (state == FIELD_STATES.AUTO_FILLED) {
       element.addEventListener("input", this, { mozSystemGroup: true });
     }
-
-    this.#filledStateByElement.set(element, nextState);
   }
 
   /**
