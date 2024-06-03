@@ -44,9 +44,6 @@ const MANAGE_ADDRESSES_L10N_IDS = [
   "autofill-manage-addresses-title",
 ];
 const EDIT_ADDRESS_L10N_IDS = [
-  "autofill-address-given-name",
-  "autofill-address-additional-name",
-  "autofill-address-family-name",
   "autofill-address-name",
   "autofill-address-organization",
   "autofill-address-street",
@@ -92,9 +89,9 @@ const EDIT_CREDITCARD_L10N_IDS = [
   "autofill-card-network",
 ];
 const FIELD_STATES = {
-  NORMAL: "NORMAL",
-  AUTO_FILLED: "AUTO_FILLED",
-  PREVIEW: "PREVIEW",
+  NORMAL: "",
+  AUTO_FILLED: "autofill",
+  PREVIEW: "preview",
 };
 const FORM_SUBMISSION_REASON = {
   FORM_SUBMIT_EVENT: "form-submit-event",
@@ -884,7 +881,8 @@ FormAutofillUtils = {
               keys,
               names,
               option.text,
-              collators
+              collators,
+              true
             );
             if (
               identifiedValue === optionValue ||
@@ -1035,21 +1033,26 @@ FormAutofillUtils = {
 
   /**
    * Try to match value with keys and names, but always return the key.
+   * If inexactMatch is true, then a substring match is performed, otherwise
+   * the string must match exactly.
    *
    * @param   {Array<string>} keys
    * @param   {Array<string>} names
    * @param   {string} value
    * @param   {Array} collators
+   * @param   {bool} inexactMatch
    * @returns {string}
    */
-  identifyValue(keys, names, value, collators) {
+  identifyValue(keys, names, value, collators, inexactMatch = false) {
     let resultKey = keys.find(key => this.strCompare(value, key, collators));
     if (resultKey) {
       return resultKey;
     }
 
     let index = names.findIndex(name =>
-      this.strCompare(value, name, collators)
+      inexactMatch
+        ? this.strInclude(value, name, collators)
+        : this.strCompare(value, name, collators)
     );
     if (index !== -1) {
       return keys[index];

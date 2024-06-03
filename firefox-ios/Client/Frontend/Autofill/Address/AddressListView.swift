@@ -7,6 +7,8 @@ import Common
 import Shared
 import Storage
 
+import struct MozillaAppServices.Address
+
 // MARK: - AddressListView
 
 /// A view displaying a list of addresses.
@@ -51,8 +53,7 @@ struct AddressListView: View {
                             Button {
                                 viewModel.onCancelButtonTap()
                             } label: {
-                                // TODO: FXIOS-9100 Change the correct string after UX finalize copyright
-                                Text(String.CreditCard.EditCard.CancelNavBarButtonLabel)
+                                Text(String.Addresses.Settings.Edit.AutofillCancelButton)
                             }
                         }
                     }

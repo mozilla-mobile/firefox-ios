@@ -4,7 +4,8 @@
 
 import Common
 import Foundation
-import MozillaAppServices
+
+import class MozillaAppServices.MZKeychainWrapper
 
 public protocol JSONLiteralConvertible {
     func asJSON() -> [String: Any]

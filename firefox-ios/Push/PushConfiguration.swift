@@ -3,7 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
+
+import enum MozillaAppServices.BridgeType
+import enum MozillaAppServices.PushHttpProtocol
+import struct MozillaAppServices.PushConfiguration
 
 public struct KnownPushHost {
     public static let prod = "updates.push.services.mozilla.com"

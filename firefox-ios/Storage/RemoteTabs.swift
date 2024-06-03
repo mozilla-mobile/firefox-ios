@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 
+import struct MozillaAppServices.RemoteTabRecord
+
 public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let client: RemoteClient
     public let tabs: [RemoteTab]

@@ -16,6 +16,11 @@ import ComponentLibrary
 import Redux
 import ToolbarKit
 
+import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
+import enum MozillaAppServices.BookmarkRoots
+import enum MozillaAppServices.VisitType
+
 class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
@@ -370,6 +375,7 @@ class BrowserViewController: UIViewController,
 
         if isToolbarRefactorEnabled {
             navigationToolbarContainer.applyTheme(theme: currentTheme())
+            updateTabCountUsingTabManager(self.tabManager)
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showToolbar)
@@ -607,8 +613,11 @@ class BrowserViewController: UIViewController,
                 guard microsurvey != nil else { return }
                 removeMicrosurveyPrompt()
             } else if state.microsurveyState.showSurvey {
-                // TODO: FXIOS-8895: Create Microsurvey Modal View
-                print("CYN - FXIOS-8895: Create Microsurvey Modal View")
+                guard let model = state.microsurveyState.model else {
+                    logger.log("Microsurvey model should not be nil", level: .warning, category: .redux)
+                    return
+                }
+                navigationHandler?.showMicrosurvey(model: model)
             } else if state.microsurveyState.showPrompt {
                 guard microsurvey == nil else { return }
                 createMicrosurveyPrompt(with: state.microsurveyState)
@@ -973,6 +982,7 @@ class BrowserViewController: UIViewController,
         }, completion: { _ in
             self.scrollController.setMinimumZoom()
         })
+        microsurvey?.setNeedsUpdateConstraints()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -1772,6 +1782,8 @@ class BrowserViewController: UIViewController,
     func presentSignInViewController(_ fxaOptions: FxALaunchParams,
                                      flowType: FxAPageType = .emailLoginFlow,
                                      referringPage: ReferringPage = .none) {
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.postWindowEvent(event: .syncMenuOpened, windowUUID: windowUUID)
         let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
@@ -3063,7 +3075,12 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            if !isToolbarRefactorEnabled {
+            if isToolbarRefactorEnabled {
+                let action = ToolbarAction(numberOfTabs: count,
+                                           windowUUID: windowUUID,
+                                           actionType: ToolbarActionType.numberOfTabsChanged)
+                store.dispatch(action)
+            } else {
                 toolbar.updateTabCount(count, animated: animated)
                 urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
             }

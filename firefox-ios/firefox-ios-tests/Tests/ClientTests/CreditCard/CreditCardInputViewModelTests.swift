@@ -2,10 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import XCTest
 import Common
+import Foundation
+import MozillaAppServices
 import Storage
+import XCTest
+
 @testable import Client
 
 class CreditCardInputViewModelTests: XCTestCase {
@@ -185,7 +187,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.expirationDate = "12 / 39"
         viewModel.cardNumber = "4717219604213696"
         viewModel.nameIsValid = false
-        viewModel.expirationIsValid = false
+        viewModel.showExpirationError = true
         viewModel.numberIsValid = false
         viewModel.creditCard = CreditCard(guid: "1",
                                           ccName: "Allen Burges",
@@ -205,7 +207,7 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssert(viewModel.cardNumber.isEmpty)
         XCTAssert(viewModel.expirationDate.isEmpty)
         XCTAssert(viewModel.nameIsValid)
-        XCTAssert(viewModel.expirationIsValid)
+        XCTAssertFalse(viewModel.showExpirationError)
         XCTAssert(viewModel.numberIsValid)
         XCTAssertNil(viewModel.creditCard)
     }

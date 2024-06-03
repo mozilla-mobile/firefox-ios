@@ -5,7 +5,13 @@
 import Common
 import UIKit
 import Shared
-import MozillaAppServices
+
+import class MozillaAppServices.FxAccountManager
+import class MozillaAppServices.FxAConfig
+import enum MozillaAppServices.DeviceType
+import enum MozillaAppServices.OAuthScope
+import struct MozillaAppServices.DeviceConfig
+import struct MozillaAppServices.Profile
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 

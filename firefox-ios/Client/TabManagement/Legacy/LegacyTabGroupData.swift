@@ -3,7 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
+
+import struct MozillaAppServices.HistoryMetadataKey
 
 enum LegacyTabGroupTimerState: String, Codable {
     case navSearchLoaded

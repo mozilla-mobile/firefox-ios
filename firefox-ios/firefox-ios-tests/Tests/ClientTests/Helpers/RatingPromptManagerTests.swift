@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import XCTest
-import StoreKit
+import MozillaAppServices
 import Shared
 import Storage
+import StoreKit
+import XCTest
 
 @testable import Client
 

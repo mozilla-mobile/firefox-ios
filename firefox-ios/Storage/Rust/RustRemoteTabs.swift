@@ -4,8 +4,12 @@
 
 import Foundation
 import Shared
-@_exported import MozillaAppServices
 import Common
+
+import class MozillaAppServices.TabsStorage
+import enum MozillaAppServices.TabsApiError
+import struct MozillaAppServices.ClientRemoteTabs
+import struct MozillaAppServices.RemoteTabRecord
 
 public class RustRemoteTabs {
     let databasePath: String

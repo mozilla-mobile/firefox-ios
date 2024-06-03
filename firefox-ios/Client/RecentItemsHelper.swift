@@ -6,6 +6,8 @@ import Foundation
 import Storage
 import Shared
 
+import class MozillaAppServices.BookmarkItemData
+
 protocol RecentlySavedItem {
     var title: String { get }
     var url: String { get }

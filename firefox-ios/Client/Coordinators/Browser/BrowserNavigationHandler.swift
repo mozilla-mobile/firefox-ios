@@ -6,6 +6,8 @@ import Foundation
 import Storage
 import WebKit
 
+import struct MozillaAppServices.CreditCard
+
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
@@ -87,6 +89,8 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Shows the Back Forward List View Controller.
     func showBackForwardList()
+
+    func showMicrosurvey(model: MicrosurveyModel)
 }
 
 extension BrowserNavigationHandler {

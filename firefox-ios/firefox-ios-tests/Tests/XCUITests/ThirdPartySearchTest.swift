@@ -17,6 +17,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
         app.navigationBars["Search"].buttons["Settings"].tap()
+        mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
 
         // Perform a search using a custom search engine
@@ -66,6 +67,7 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
 
         app.navigationBars["Search"].buttons["Settings"].tap()
+        mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
         app.textFields["url"].tap()
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
@@ -83,19 +85,22 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.staticTexts["Google"])
         app.tables.staticTexts["Google"].tap()
 
-        navigator.performAction(Action.RemoveCustomSearchEngine)
-        dismissSearchScreen()
+        // Action.RemoveCustomSearchEngine does not work on iOS 15
+        if #available(iOS 16, *) {
+            navigator.performAction(Action.RemoveCustomSearchEngine)
+            dismissSearchScreen()
 
-        // Perform a search to check
-        mozWaitForElementToExist(app.textFields["url"], timeout: 3)
-        app.textFields["url"].tap()
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
-        UIPasteboard.general.string = "window"
-        app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+            // Perform a search to check
+            mozWaitForElementToExist(app.textFields["url"], timeout: 3)
+            app.textFields["url"].tap()
+            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+            UIPasteboard.general.string = "window"
+            app.textFields.firstMatch.press(forDuration: 1)
+            app.staticTexts["Paste"].tap()
 
-        mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-        XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
+            mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
+            XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
+        }
     }
 
     private func addCustomSearchEngine() {
@@ -104,11 +109,16 @@ class ThirdPartySearchTest: BaseTestCase {
         navigator.performAction(Action.AddCustomSearchEngine)
         mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
+        if #unavailable(iOS 16) {
+            // Wait for "Fennec pasted from XCUITests-Runner" banner to disappear
+            sleep(2)
+        }
     }
 
     private func dismissSearchScreen() {
         mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"])
         app.navigationBars["Search"].buttons["Settings"].tap()
+        mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
     }
 
@@ -138,14 +148,17 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars["Add Search Engine"], timeout: 3)
         app.navigationBars["Add Search Engine"].buttons["Save"].tap()
 
-        mozWaitForElementToExist(app.alerts.element(boundBy: 0))
-        XCTAssertTrue(
-            app.alerts.staticTexts["Failed"].exists,
-            "Alert title is missing or is incorrect"
-        )
-        XCTAssertTrue(
-            app.alerts.staticTexts["Please fill all fields correctly."].exists,
-            "Alert message is missing or is incorrect"
-        )
+        // The alert appears on iOS 15 but it disappears by itself immediately.
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.alerts.element(boundBy: 0))
+            XCTAssertTrue(
+                app.alerts.staticTexts["Failed"].exists,
+                "Alert title is missing or is incorrect"
+            )
+            XCTAssertTrue(
+                app.alerts.staticTexts["Please fill all fields correctly."].exists,
+                "Alert message is missing or is incorrect"
+            )
+        }
     }
 }

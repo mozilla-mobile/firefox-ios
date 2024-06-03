@@ -4,11 +4,12 @@
 
 import Common
 import ComponentLibrary
-import MozillaAppServices
 import Shared
 import Storage
 import Redux
 import UIKit
+
+import enum MozillaAppServices.VisitType
 
 class HomepageViewController:
     UIViewController,
@@ -184,6 +185,9 @@ class HomepageViewController:
 
         wallpaperView.updateImageForOrientationChange()
 
+        // Note: Saving the newSize for using it, later, in traitCollectionDidChange
+        // because view.frame.size will provide the current size, not the newest one.
+        viewModel.newSize = size
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation(newSize: size)
         }
@@ -196,7 +200,7 @@ class HomepageViewController:
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            reloadOnRotation(newSize: view.frame.size)
+            reloadOnRotation(newSize: viewModel.newSize ?? view.frame.size)
         }
     }
 
@@ -390,7 +394,10 @@ class HomepageViewController:
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
         })
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier:
+                AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton)
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
@@ -518,6 +525,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if viewModel.shouldReloadView { reloadView() }
         return viewModel.shownSections.count
     }
 

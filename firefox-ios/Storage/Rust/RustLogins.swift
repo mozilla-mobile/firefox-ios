@@ -5,8 +5,23 @@
 import Foundation
 import Glean
 import Shared
-@_exported import MozillaAppServices
 import Common
+
+import class MozillaAppServices.LoginsStorage
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.LoginsApiError
+import enum MozillaAppServices.MZKeychainItemAccessibility
+import func MozillaAppServices.checkCanary
+import func MozillaAppServices.createCanary
+import func MozillaAppServices.createKey
+import func MozillaAppServices.decryptLogin
+import func MozillaAppServices.encryptLogin
+import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
+import struct MozillaAppServices.LoginEntry
+import struct MozillaAppServices.LoginFields
+import struct MozillaAppServices.RecordFields
+import struct MozillaAppServices.SecureLoginFields
 
 typealias LoginsStoreError = LoginsApiError
 public typealias LoginRecord = EncryptedLogin

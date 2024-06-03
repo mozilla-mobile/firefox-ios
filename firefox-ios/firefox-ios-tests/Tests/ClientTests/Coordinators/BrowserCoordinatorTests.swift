@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import XCTest
-import WebKit
 import ComponentLibrary
+import MozillaAppServices
+import WebKit
+import XCTest
+
 @testable import Client
 
 final class BrowserCoordinatorTests: XCTestCase {
@@ -984,6 +986,18 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.first is AddressAutofillCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
+    func testShowMicrosurvey_addsMicrosurveyCoordinator() {
+        let subject = createSubject()
+
+        subject.showMicrosurvey(model: MicrosurveyModel())
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is MicrosurveyCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is MicrosurveyViewController)
     }
 
     // MARK: - Helpers

@@ -8,6 +8,8 @@ import Storage
 import Common
 import SiteImageView
 
+import class MozillaAppServices.FeatureHolder
+
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
     case firefoxSuggestions

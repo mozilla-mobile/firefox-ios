@@ -5,7 +5,29 @@
 import Foundation
 import Common
 import Shared
-@_exported import MozillaAppServices
+
+import class MozillaAppServices.BookmarkItemData
+import class MozillaAppServices.BookmarkNodeData
+import class MozillaAppServices.PlacesAPI
+import class MozillaAppServices.PlacesReadConnection
+import class MozillaAppServices.PlacesWriteConnection
+import enum MozillaAppServices.FrecencyThresholdOption
+import enum MozillaAppServices.PlacesApiError
+import enum MozillaAppServices.PlacesConnectionError
+import enum MozillaAppServices.VisitType
+import struct MozillaAppServices.HistoryHighlight
+import struct MozillaAppServices.HistoryHighlightWeights
+import struct MozillaAppServices.HistoryMetadata
+import struct MozillaAppServices.HistoryMetadataKey
+import struct MozillaAppServices.HistoryMetadataObservation
+import struct MozillaAppServices.HistoryMigrationResult
+import struct MozillaAppServices.HistoryVisitInfosWithBound
+import struct MozillaAppServices.PlacesTimestamp
+import struct MozillaAppServices.SearchResult
+import struct MozillaAppServices.TopFrecentSiteInfo
+import struct MozillaAppServices.Url
+import struct MozillaAppServices.VisitObservation
+import struct MozillaAppServices.VisitTransitionSet
 
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)

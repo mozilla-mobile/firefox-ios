@@ -220,6 +220,11 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Tap on "Close All Tabs"
         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
+        if #unavailable(iOS 16) {
+            // Wait for the screen to refresh first.
+            mozWaitForElementToExist(
+                app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
+        }
         // The private tabs are closed
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"])
@@ -256,17 +261,6 @@ fileprivate extension BaseTestCase {
             1,
             "The number of tabs is not correct"
         )
-    }
-
-    func enableClosePrivateBrowsingOptionWhenLeaving() {
-        navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
-
-        while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
-            settingsTableView.swipeUp()
-        }
-        let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
-        closePrivateTabsSwitch.tap()
     }
 }
 

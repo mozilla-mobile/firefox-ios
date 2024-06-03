@@ -7,6 +7,8 @@ import Common
 import Shared
 import Storage
 
+import struct MozillaAppServices.Address
+
 // TODO: PHASE-2 FXIOS-7653
 // AddressListViewModelDelegate: A protocol to notify delegates about address updates.
 // protocol AddressListViewModelDelegate: AnyObject {

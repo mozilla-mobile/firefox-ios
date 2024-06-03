@@ -89,10 +89,10 @@ class RootViewControllerModel {
             })]
 
         let locationViewState = LocationViewState(
-            clearButtonA11yId: "clearButton",
-            clearButtonA11yLabel: "Clean",
             searchEngineImageViewA11yId: "searchEngine",
             searchEngineImageViewA11yLabel: "Search engine icon",
+            lockIconButtonA11yId: "lockButton",
+            lockIconButtonA11yLabel: "Tracking Protection",
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTextField",
             urlTextFieldA11yLabel: "Address Bar",

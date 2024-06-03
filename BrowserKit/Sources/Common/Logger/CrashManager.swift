@@ -44,7 +44,16 @@ public class DefaultCrashManager: CrashManager {
     private var enabled = false
 
     private var shouldSetup: Bool {
-        return !enabled && !isSimulator
+        return !enabled
+                && !isSimulator
+                && isValidReleaseName
+    }
+
+    private var isValidReleaseName: Bool {
+        if skipReleaseNameCheck { return true }
+
+        return AppInfo.bundleIdentifier == "org.mozilla.ios.Firefox"
+                || AppInfo.bundleIdentifier == "org.mozilla.ios.FirefoxBeta"
     }
 
     private var environment: Environment {
@@ -56,13 +65,14 @@ public class DefaultCrashManager: CrashManager {
     }
 
     private var releaseName: String {
-        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)+(\(AppInfo.buildNumber))"
+        return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)"
     }
 
     // MARK: - Init
     private var appInfo: BrowserKitInformation
     private var sentryWrapper: SentryWrapper
     private var isSimulator: Bool
+    private var skipReleaseNameCheck: Bool
 
     // Only enable app hang tracking in Beta for now
     private var shouldEnableAppHangTracking: Bool {
@@ -79,10 +89,12 @@ public class DefaultCrashManager: CrashManager {
 
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
-                isSimulator: Bool = DeviceInfo.isSimulator()) {
+                isSimulator: Bool = DeviceInfo.isSimulator(),
+                skipReleaseNameCheck: Bool = false) {
         self.appInfo = appInfo
         self.sentryWrapper = sentryWrapper
         self.isSimulator = isSimulator
+        self.skipReleaseNameCheck = skipReleaseNameCheck
     }
 
     // MARK: - CrashManager protocol

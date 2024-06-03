@@ -8,6 +8,8 @@ import TabDataStore
 import Shared
 import Storage
 
+import enum MozillaAppServices.BookmarkRoots
+
 class TabManagerMiddleware {
     private let profile: Profile
     private let logger: Logger
@@ -600,10 +602,6 @@ class TabManagerMiddleware {
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
-        let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
     }
 
     private func changePanel(_ panel: TabTrayPanelType, uuid: WindowUUID) {

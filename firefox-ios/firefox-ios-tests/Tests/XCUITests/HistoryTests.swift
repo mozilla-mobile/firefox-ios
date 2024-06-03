@@ -269,7 +269,10 @@ class HistoryTests: BaseTestCase {
             mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
         XCTAssertTrue(app.staticTexts[bookOfMozilla["title"]!].exists)
-        XCTAssertEqual(userState.numTabs, 2)
+        // userState.numTabs does not work on iOS 15
+        if #available(iOS 16, *) {
+            XCTAssertEqual(userState.numTabs, 2)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307485

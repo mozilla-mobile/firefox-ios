@@ -3,13 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import MozillaAppServices
+import Shared
 import Storage
 import XCTest
-import Shared
 
 @testable import Client
 
-actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
+class MockRustFirefoxSuggest: RustFirefoxSuggestProtocol {
     func ingest() async throws {
     }
     func query(
@@ -36,7 +37,9 @@ actor MockRustFirefoxSuggest: RustFirefoxSuggestActor {
         }
         return suggestions
     }
-    nonisolated func interruptReader() {
+    func interruptReader() {
+    }
+    func interruptEverything() {
     }
 }
 
