@@ -5631,11 +5631,6 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search or enter address",
             comment: "Accessibility label for the address field in the address toolbar.")
-        public static let LocationClearButtonA11yLabel = MZLocalizedString(
-            key: "AddressToolbar.Location.Clear.Button.v128",
-            tableName: "AddressToolbar",
-            value: "Clear text",
-            comment: "Accessibility label for the clear button in the address field of the address toolbar.")
         public static let SearchEngineA11yLabel = MZLocalizedString(
             key: "AddressToolbar.SearchEngine.A11y.Label.v128",
             tableName: "AddressToolbar",
