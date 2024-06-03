@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "Ieu bisa anjeun paké jang nyomot sarta ngunjalkeun poto.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox butuh Face ID pikeun ngaksés sandi kedap nu disimpen jeung cara mayar.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Raramatloka nu disorang ku anjeun sigana ménta lokasi anjeun.";
 
