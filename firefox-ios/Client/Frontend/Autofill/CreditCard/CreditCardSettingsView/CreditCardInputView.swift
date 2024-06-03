@@ -64,7 +64,7 @@ struct CreditCardInputView: View {
                     Group {
                         CreditCardInputField(windowUUID: windowUUID,
                                              inputType: .expiration,
-                                             showError: !viewModel.expirationIsValid,
+                                             showError: viewModel.showExpirationError,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
 

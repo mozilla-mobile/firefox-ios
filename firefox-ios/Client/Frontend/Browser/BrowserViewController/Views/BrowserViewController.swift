@@ -66,9 +66,7 @@ class BrowserViewController: UIViewController,
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
-    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build { view in
-        view.windowUUID = self.windowUUID
-    }
+    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     var urlBar: URLBarView!
 
     var urlBarHeightConstraint: Constraint!
@@ -793,6 +791,7 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
+            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile)
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
@@ -1783,6 +1782,8 @@ class BrowserViewController: UIViewController,
     func presentSignInViewController(_ fxaOptions: FxALaunchParams,
                                      flowType: FxAPageType = .emailLoginFlow,
                                      referringPage: ReferringPage = .none) {
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.postWindowEvent(event: .syncMenuOpened, windowUUID: windowUUID)
         let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
