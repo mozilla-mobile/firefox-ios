@@ -41,7 +41,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var stackView: UIStackView = .build { stackView in
-        stackView.spacing = 8
+        stackView.spacing = 4
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
     }
