@@ -286,13 +286,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             animateURLText(textField, options: .transitionFlipFromBottom, textAlignment: .natural)
         }
 
-        let url = URL(string: textField.text ?? "")
-        let queryText = locationViewDelegate?.locationViewDisplayTextForURL(url)
-
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = (queryText != nil) ? queryText : urlAbsolutePath
+            textField.text = urlAbsolutePath
             textField.selectAll(nil)
         }
         locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")
