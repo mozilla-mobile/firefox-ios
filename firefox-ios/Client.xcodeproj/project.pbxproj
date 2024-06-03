@@ -897,10 +897,11 @@
 		8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937682BF79EDF00146613 /* AddressFormManager.mjs */; };
 		8C2937702BF79F0300146613 /* EditAddressLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */; };
 		8C2937712BF79F0300146613 /* EditAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376E2BF79F0300146613 /* EditAddressViewController.swift */; };
-		8C2937722BF79F0300146613 /* Address+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376F2BF79F0300146613 /* Address+Codable.swift */; };
+		8C2937722BF79F0300146613 /* Address+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29376F2BF79F0300146613 /* Address+Encodable.swift */; };
 		8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C29627B2B1F473800571655 /* AdEventsResponse.swift */; };
 		8C44A9D22A6A99FE009A1AA7 /* ShoppingProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */; };
 		8C46E1B72B2209F000F56521 /* FakespotAdsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C46E1B62B2209F000F56521 /* FakespotAdsEvent.swift */; };
+		8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */; };
 		8C6F94652A972EB300415FF6 /* FakespotAdjustRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */; };
 		8C6F94662A972EB300415FF6 /* FakespotStarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6F94642A972EB300415FF6 /* FakespotStarRatingView.swift */; };
 		8C8D8C7A2AA067AD00490D32 /* FakespotCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D8C792AA067AD00490D32 /* FakespotCoordinatorTests.swift */; };
@@ -6174,10 +6175,11 @@
 		8C2937682BF79EDF00146613 /* AddressFormManager.mjs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AddressFormManager.mjs; sourceTree = "<group>"; };
 		8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAddressLocalization.swift; sourceTree = "<group>"; };
 		8C29376E2BF79F0300146613 /* EditAddressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAddressViewController.swift; sourceTree = "<group>"; };
-		8C29376F2BF79F0300146613 /* Address+Codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Address+Codable.swift"; sourceTree = "<group>"; };
+		8C29376F2BF79F0300146613 /* Address+Encodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Address+Encodable.swift"; sourceTree = "<group>"; };
 		8C29627B2B1F473800571655 /* AdEventsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdEventsResponse.swift; sourceTree = "<group>"; };
 		8C44A9D12A6A99FE009A1AA7 /* ShoppingProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProduct.swift; sourceTree = "<group>"; };
 		8C46E1B62B2209F000F56521 /* FakespotAdsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotAdsEvent.swift; sourceTree = "<group>"; };
+		8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UpdatableAddressFields+Decodable.swift"; sourceTree = "<group>"; };
 		8C514AFEABEF8DE46CE7B8D4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingProductTests.swift; sourceTree = "<group>"; };
 		8C6F94632A972EB300415FF6 /* FakespotAdjustRatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotAdjustRatingView.swift; sourceTree = "<group>"; };
@@ -10160,7 +10162,8 @@
 		8C2937732BF79F0C00146613 /* Edit */ = {
 			isa = PBXGroup;
 			children = (
-				8C29376F2BF79F0300146613 /* Address+Codable.swift */,
+				8C29376F2BF79F0300146613 /* Address+Encodable.swift */,
+				8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */,
 				8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */,
 				8C29376E2BF79F0300146613 /* EditAddressViewController.swift */,
 			);
@@ -14088,7 +14091,7 @@
 				B2999FF12B194A5800F0FEC1 /* CreditCardPayload.swift in Sources */,
 				E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */,
 				274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */,
-				8C2937722BF79F0300146613 /* Address+Codable.swift in Sources */,
+				8C2937722BF79F0300146613 /* Address+Encodable.swift in Sources */,
 				D314E7F71A37B98700426A76 /* TabToolbar.swift in Sources */,
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
@@ -14477,6 +14480,7 @@
 				1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */,
 				5A1947152B8FA9E0009C7A6C /* BrowserViewType.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
+				8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
 				C81AC6B626160091007800C5 /* LegacyTabTrayViewModel.swift in Sources */,
 				8ADAE4222A33A113007BF926 /* SendAnonymousUsageDataSetting.swift in Sources */,
