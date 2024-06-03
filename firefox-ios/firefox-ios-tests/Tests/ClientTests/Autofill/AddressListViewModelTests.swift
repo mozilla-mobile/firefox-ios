@@ -16,7 +16,6 @@ class AddressListViewModelTests: XCTestCase {
     var mockAutofill: MockAutofill!
 
     var cancellables: [AnyCancellable] = []
-
     let dummyAddresses = [
         Address(
             guid: "12345-ABCDE",
@@ -129,7 +128,7 @@ class AddressListViewModelTests: XCTestCase {
 
     func testInjectJSONDataInitSuccess() throws {
         let address = dummyAddresses[0]
-        viewModel.selectedAddress = address
+        viewModel.destination = .edit(address)
 
         let javascript = try viewModel.getInjectJSONDataInit()
 
@@ -137,7 +136,7 @@ class AddressListViewModelTests: XCTestCase {
     }
 
     func testInjectJSONDataInitFailure() throws {
-        viewModel.selectedAddress = nil
+        viewModel.destination = nil
         do {
             _ = try viewModel.getInjectJSONDataInit()
             XCTFail("Parsing invalid JSON should throw an error")
@@ -145,12 +144,109 @@ class AddressListViewModelTests: XCTestCase {
             XCTAssertNotNil(error)
         }
     }
+
+    func testTapAddShowsAddAddressScreenThenTapCancelDismissScreen() {
+        let showSectionAddExpectation = XCTestExpectation(description: "Show add section")
+        let dismissSectionAddExpectation = XCTestExpectation(description: "Dismiss add section")
+        viewModel.currentRegionCode = { "RO" }
+        viewModel.addAddressButtonTap()
+
+        let cancellable = viewModel
+            .$destination
+            .dropFirst()
+            .sink { value in
+                XCTAssertEqual(value, .add(Address(
+                    guid: "",
+                    name: "",
+                    organization: "",
+                    streetAddress: "",
+                    addressLevel3: "",
+                    addressLevel2: "",
+                    addressLevel1: "",
+                    postalCode: "",
+                    country: "RO",
+                    tel: "",
+                    email: "",
+                    timeCreated: 0,
+                    timeLastUsed: nil,
+                    timeLastModified: 0,
+                    timesUsed: 0
+                )))
+                showSectionAddExpectation.fulfill()
+            }
+        cancellable.cancel()
+
+        viewModel.cancelAddButtonTap()
+
+        viewModel
+            .$destination
+            .dropFirst()
+            .sink { value in
+                XCTAssertNil(value)
+                dismissSectionAddExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+    }
+
+    func testTapSaveAddressScreenDismissScreenAndCallesAddressFetching() {
+        let address = dummyAddresses[0]
+        mockAutofill.mockSaveAddressResult = .success(address)
+        viewModel.saveAction = { completion in
+            completion(UpdatableAddressFields(
+                name: "John Doe",
+                organization: "Acme Corp",
+                streetAddress: "123 Main St",
+                addressLevel3: "Suite 100",
+                addressLevel2: "San Francisco",
+                addressLevel1: "CA",
+                postalCode: "94101",
+                country: "USA",
+                tel: "+1-555-1234",
+                email: "john.doe@example.com"
+            ))
+        }
+        let dismissSectionAddExpectation = XCTestExpectation(description: "Dimiss add section")
+        let newAddressesSectionExpectation = XCTestExpectation(description: "New address loaded")
+
+        viewModel.addAddressButtonTap()
+        viewModel.saveAddressButtonTap()
+
+        viewModel
+            .$destination
+            .dropFirst()
+            .sink { value in
+                XCTAssertNil(value)
+                dismissSectionAddExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$addresses
+            .dropFirst()
+            .sink { _ in
+                XCTAssertEqual(self.mockAutofill.listAllAddressesCalled, true)
+                newAddressesSectionExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+    }
 }
 
 class MockAutofill: AddressProvider {
     var mockListAllAddressesResult: Result<[Address], Error>?
+    var mockSaveAddressResult: Result<Address, Error>?
+    var listAllAddressesCalled = false
+
+    func addAddress(
+        address: UpdatableAddressFields,
+        completion: @escaping (Result<Address, Error>) -> Void
+    ) {
+        if let result = mockSaveAddressResult {
+            completion(result)
+        }
+    }
 
     func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void) {
+        listAllAddressesCalled = true
         if let result = mockListAllAddressesResult {
             switch result {
             case .success(let addresses):

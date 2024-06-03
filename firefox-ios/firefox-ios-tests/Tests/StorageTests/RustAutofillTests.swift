@@ -46,7 +46,7 @@ class RustAutofillTests: XCTestCase {
         return autofill.addCreditCard(creditCard: creditCard, completion: completion)
     }
 
-    func addAddress(completion: @escaping (Address?, Error?) -> Void) {
+    func addAddress(completion: @escaping (Result<Address, Error>) -> Void) {
         let address = UpdatableAddressFields(
             name: "Jane Doe",
             organization: "",
@@ -65,29 +65,28 @@ class RustAutofillTests: XCTestCase {
         let expectationAddAddress = expectation(description: "Completes the add address operation")
         let expectationGetAddress = expectation(description: "Completes the get address operation")
 
-        addAddress { address, error in
-            guard let address = address, error == nil else {
-                XCTFail("Failed to add address. Address: \(String(describing: address)), Error: \(String(describing: error))")
+        addAddress { result in
+            switch result {
+            case .success(let address):
+                XCTAssertEqual(address.name, "Jane Doe")
+                XCTAssertEqual(address.streetAddress, "123 Second Avenue")
+                XCTAssertEqual(address.addressLevel2, "Chicago, IL")
+                XCTAssertEqual(address.country, "United States")
                 expectationAddAddress.fulfill()
-                return
-            }
-
-            XCTAssertEqual(address.name, "Jane Doe")
-            XCTAssertEqual(address.streetAddress, "123 Second Avenue")
-            XCTAssertEqual(address.addressLevel2, "Chicago, IL")
-            XCTAssertEqual(address.country, "United States")
-
-            expectationAddAddress.fulfill()
-
-            self.autofill.getAddress(id: address.guid) { retrievedAddress, getAddressError in
-                guard let retrievedAddress = retrievedAddress, getAddressError == nil else {
-                    XCTFail("Failed to get address. Retrieved Address: \(String(describing: retrievedAddress)), Error: \(String(describing: getAddressError))")
+                self.autofill.getAddress(id: address.guid) { retrievedAddress, getAddressError in
+                    guard let retrievedAddress = retrievedAddress, getAddressError == nil else {
+                        XCTFail("Failed to get address. Retrieved Address: \(String(describing: retrievedAddress)), Error: \(String(describing: getAddressError))")
+                        expectationGetAddress.fulfill()
+                        return
+                    }
+                    XCTAssertEqual(address.guid, retrievedAddress.guid)
                     expectationGetAddress.fulfill()
-                    return
                 }
 
-                XCTAssertEqual(address.guid, retrievedAddress.guid)
-                expectationGetAddress.fulfill()
+            case .failure(let error):
+                XCTFail("Failed to add address, Error: \(String(describing: error))")
+                expectationAddAddress.fulfill()
+                return
             }
         }
 

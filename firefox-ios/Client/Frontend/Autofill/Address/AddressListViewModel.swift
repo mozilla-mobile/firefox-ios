@@ -26,7 +26,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
 
-    enum Destination: Swift.Identifiable {
+    enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
         case edit(Address)
 
@@ -47,6 +47,8 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
 
     let addressProvider: AddressProvider
+
+    var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
 
     // MARK: - Initializer
 
@@ -116,7 +118,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         destination = nil
     }
 
-    func saveAddressTap() {
+    func saveAddressButtonTap() {
         saveAction? { [weak self] address in
             guard let self else { return }
             self.addressProvider.addAddress(address: address) { result in
@@ -135,7 +137,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         }
     }
 
-    func addButtonTap() {
+    func addAddressButtonTap() {
         destination = .add(Address(
             guid: "",
             name: "",
@@ -145,7 +147,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             addressLevel2: "",
             addressLevel1: "",
             postalCode: "",
-            country: Locale.current.regionCode ?? "",
+            country: currentRegionCode(),
             tel: "",
             email: "",
             timeCreated: 0,

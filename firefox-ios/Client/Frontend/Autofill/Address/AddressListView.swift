@@ -55,7 +55,7 @@ struct AddressListView: View {
                                     viewModel.cancelAddButtonTap()
                                 },
                                 trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                                    viewModel.saveAddressTap()
+                                    viewModel.saveAddressButtonTap()
                                 }
                             )
                     }

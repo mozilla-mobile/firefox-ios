@@ -119,6 +119,6 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     @objc
     func addAddress() {
-        self.viewModel.addressListViewModel.addButtonTap()
+        self.viewModel.addressListViewModel.addAddressButtonTap()
     }
 }
