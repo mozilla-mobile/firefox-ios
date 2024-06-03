@@ -14,6 +14,7 @@ class AddressToolbarContainerModel {
     let displayBottomBorder: Bool
     let windowUUID: UUID
     var profile: Profile
+    let url: String?
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(
@@ -26,7 +27,7 @@ class AddressToolbarContainerModel {
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: profile.searchEngines.defaultEngine?.image,
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            url: nil)
+            url: url)
         return AddressToolbarState(
             locationViewState: locationViewState,
             navigationActions: navigationActions,
@@ -48,6 +49,7 @@ class AddressToolbarContainerModel {
                                                                       windowUUID: windowUUID)
         self.windowUUID = windowUUID
         self.profile = profile
+        self.url = state.addressToolbar.url
     }
 
     private static func mapActions(_ actions: [ToolbarState.ActionState], windowUUID: UUID) -> [ToolbarElement] {

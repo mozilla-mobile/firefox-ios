@@ -10,15 +10,18 @@ class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
     let numberOfTabs: Int?
+    let url: String?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
          numberOfTabs: Int? = nil,
+         url: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
         self.navigationToolbarModel = navigationToolbarModel
         self.numberOfTabs = numberOfTabs
+        self.url = url
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -26,6 +29,7 @@ class ToolbarAction: Action {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
+    case urlDidChange
 }
 
 class ToolbarMiddlewareAction: Action {

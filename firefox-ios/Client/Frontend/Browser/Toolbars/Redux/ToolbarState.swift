@@ -13,6 +13,7 @@ struct ToolbarState: ScreenState, Equatable {
         var browserActions: [ActionState]
         var displayTopBorder: Bool
         var displayBottomBorder: Bool
+        var url: String?
     }
 
     struct NavigationState: Equatable {
@@ -62,7 +63,8 @@ struct ToolbarState: ScreenState, Equatable {
                                           pageActions: [],
                                           browserActions: [],
                                           displayTopBorder: false,
-                                          displayBottomBorder: false)
+                                          displayBottomBorder: false,
+                                          url: nil)
         self.init(
             windowUUID: windowUUID,
             toolbarPosition: .top,
@@ -101,6 +103,7 @@ struct ToolbarState: ScreenState, Equatable {
             state.addressToolbar.browserActions = addressToolbarModel.browserActions
             state.addressToolbar.displayTopBorder = addressToolbarModel.displayTopBorder
             state.addressToolbar.displayBottomBorder = addressToolbarModel.displayBottomBorder
+            state.addressToolbar.url = addressToolbarModel.url
 
             state.navigationToolbar.actions = navToolbarModel.actions
             state.navigationToolbar.displayBorder = navToolbarModel.displayBorder
@@ -118,6 +121,13 @@ struct ToolbarState: ScreenState, Equatable {
                 state.addressToolbar.browserActions[index].numberOfTabs = numberOfTabs
             }
 
+            return state
+
+        case ToolbarActionType.urlDidChange:
+            guard let url = action.url else { return state }
+
+            var state = state
+            state.addressToolbar.url = url
             return state
 
         default:
