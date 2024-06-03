@@ -42,10 +42,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let currentTheme = themeManager.currentTheme(for: windowUUID)
-        applyTheme(theme: currentTheme)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        applyTheme()
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -196,9 +195,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     }
 
     // MARK: - ThemeApplicable
-    func applyTheme(theme: Theme) {
-        let colors = theme.colors
-        linkButton.setTitleColor(colors.actionPrimary, for: .normal)
-        linkButton.applyTheme(theme: theme)
+    override func applyTheme() {
+        super.applyTheme()
+        let currentTheme = currentTheme()
+        linkButton.setTitleColor(currentTheme.colors.actionPrimary, for: .normal)
+        linkButton.applyTheme(theme: currentTheme)
     }
 }
