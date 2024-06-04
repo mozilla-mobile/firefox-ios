@@ -14,7 +14,6 @@ protocol HomepageDataModelDelegate: AnyObject {
 }
 
 class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
-
     struct UX {
         static let spacingBetweenSections: CGFloat = 62
         static let standardInset: CGFloat = 16
