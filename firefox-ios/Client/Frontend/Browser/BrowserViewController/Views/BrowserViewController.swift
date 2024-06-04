@@ -1265,11 +1265,6 @@ class BrowserViewController: UIViewController,
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly) else { return }
 
-        // TODO: FXIOS-8990: Create Microsurvey Surface Manager to handle showing survey prompt
-        if microsurvey != nil {
-            removeMicrosurveyPrompt()
-        }
-
         store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
         )

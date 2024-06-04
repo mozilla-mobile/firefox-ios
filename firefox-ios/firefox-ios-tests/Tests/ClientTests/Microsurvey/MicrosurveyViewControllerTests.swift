@@ -21,7 +21,7 @@ final class MicrosurveyViewControllerTests: XCTestCase {
     }
 
     func testMicrosurveyViewController_simpleCreation_hasNoLeaks() {
-        let microsurveyViewController = MicrosurveyViewController(model: MicrosurveyModel(), windowUUID: windowUUID)
+        let microsurveyViewController = MicrosurveyViewController(model: MicrosurveyMock.model, windowUUID: windowUUID)
         trackForMemoryLeaks(microsurveyViewController)
     }
 }

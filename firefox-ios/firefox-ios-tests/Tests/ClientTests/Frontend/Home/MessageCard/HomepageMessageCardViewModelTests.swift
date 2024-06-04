@@ -171,6 +171,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var buttonLabel: String?
     var experiment: String?
     var actionParams: [String: String] = [:]
+    var microsurveyConfig: MicrosurveyConfig?
 }
 
 // MARK: - MockStyleDataProtocol
