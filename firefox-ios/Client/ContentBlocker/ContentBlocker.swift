@@ -146,19 +146,34 @@ class ContentBlocker {
     }
 
     // Function to install or remove TP for a tab
-    func setupTrackingProtection(forTab tab: ContentBlockerTab, isEnabled: Bool, rules: [BlocklistFileName]) {
+    func setupTrackingProtection(
+        forTab tab: ContentBlockerTab,
+        isEnabled: Bool,
+        rules: [BlocklistFileName],
+        completion: (() -> Void)?
+    ) {
         removeTrackingProtection(forTab: tab)
 
-        if !isEnabled {
+        guard isEnabled else {
+            completion?()
             return
         }
 
+        let group = DispatchGroup()
+
         for list in rules {
             let name = list.filename
+            group.enter()
             ruleStore?.lookUpContentRuleList(forIdentifier: name) { rule, error in
-                guard let rule = rule else { return }
-                self.add(contentRuleList: rule, toTab: tab)
+                if let rule = rule {
+                    self.add(contentRuleList: rule, toTab: tab)
+                }
+                group.leave()
             }
+        }
+
+        group.notify(queue: .main) {
+            completion?()
         }
     }
 

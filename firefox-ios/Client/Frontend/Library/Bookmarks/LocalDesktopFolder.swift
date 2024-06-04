@@ -2,9 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import MozillaAppServices
 import Storage
 import Common
+
+import enum MozillaAppServices.BookmarkNodeType
+import struct MozillaAppServices.Guid
 
 /// A folder class that enables us to have local folder presented to the user
 /// We can use this folder class for:

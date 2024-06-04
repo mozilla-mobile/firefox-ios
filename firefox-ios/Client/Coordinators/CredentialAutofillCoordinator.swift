@@ -9,6 +9,8 @@ import Shared
 import WebKit
 import ComponentLibrary
 
+import struct MozillaAppServices.CreditCard
+
 class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
 
@@ -103,7 +105,9 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             }
         }
 
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(
@@ -175,7 +179,9 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             )
         }
 
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(

@@ -6,6 +6,8 @@ import Foundation
 import Storage
 import Shared
 
+import struct MozillaAppServices.HistoryHighlight
+
 // Utility to filter sponsored content out of certain data type
 struct SponsoredContentFilterUtility {
     /// Hide with search param is defined by adMarketplace, indicates this URL was registered through sponsored clicks

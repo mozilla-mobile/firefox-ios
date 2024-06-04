@@ -120,6 +120,7 @@ class BrowsingTest: BaseTestCase {
         if !iPad() {
             // Visit a page that scrolls
             loadWebPage("https://news.ycombinator.com")
+            waitForWebPageLoad()
 
             // Wait for the website to load
             waitForExistence(app.webViews.otherElements["Hacker News"])

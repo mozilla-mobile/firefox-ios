@@ -5,7 +5,11 @@
 import Common
 import Shared
 import Storage
-import MozillaAppServices
+
+import class MozillaAppServices.PushManager
+import protocol MozillaAppServices.PushManagerProtocol
+import struct MozillaAppServices.DecryptResponse
+import struct MozillaAppServices.SubscriptionResponse
 
 public protocol AutopushProtocol {
     /// Updates the APNS token `Autopush` is using to send notifications to the device

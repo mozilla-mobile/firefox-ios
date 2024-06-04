@@ -7,6 +7,8 @@ import Foundation
 import Shared
 import Storage
 
+import enum MozillaAppServices.BookmarkRoots
+
 // swiftlint:disable class_delegate_protocol
 protocol HomepageContextMenuHelperDelegate: UIViewController {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)

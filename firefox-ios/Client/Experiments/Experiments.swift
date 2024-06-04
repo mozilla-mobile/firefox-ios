@@ -4,8 +4,15 @@
 
 import Common
 import Foundation
-import MozillaAppServices
 import Shared
+
+import class MozillaAppServices.NimbusBuilder
+import class MozillaAppServices.NimbusDisabled
+import protocol MozillaAppServices.NimbusEventStore
+import protocol MozillaAppServices.NimbusInterface
+import protocol MozillaAppServices.NimbusMessagingHelperProtocol
+import struct MozillaAppServices.NimbusAppSettings
+import typealias MozillaAppServices.NimbusErrorReporter
 
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"

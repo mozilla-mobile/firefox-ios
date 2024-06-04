@@ -3,7 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
+
+import class MozillaAppServices.SuggestStore
+import class MozillaAppServices.SuggestStoreBuilder
+import class MozillaAppServices.Viaduct
+import enum MozillaAppServices.SuggestionProvider
+import struct MozillaAppServices.RemoteSettingsConfig
+import struct MozillaAppServices.SuggestIngestionConstraints
+import struct MozillaAppServices.SuggestionQuery
 
 public protocol RustFirefoxSuggestProtocol {
     /// Downloads and stores new Firefox Suggest suggestions.
@@ -74,7 +81,7 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
                         keyword: keyword,
                         providers: providers,
                         limit: limit
-                    )).compactMap(RustFirefoxSuggestion.init) ?? []
+                    )).compactMap(RustFirefoxSuggestion.init)
                     continuation.resume(returning: suggestions)
                 } catch {
                     continuation.resume(throwing: error)

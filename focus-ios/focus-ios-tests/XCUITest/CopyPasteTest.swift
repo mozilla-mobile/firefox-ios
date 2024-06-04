@@ -20,7 +20,7 @@ class CopyPasteTest: BaseTestCase {
         loadWebPage("mozilla.org")
         waitForWebPageLoad()
         urlBarTextField.press(forDuration: 2)
-        waitForExistence(app.collectionViews.menuItems.firstMatch)
+        waitForExistence(app.menuItems.firstMatch)
         waitForHittable(app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
 
@@ -62,10 +62,14 @@ class CopyPasteTest: BaseTestCase {
             sleep(1)
         }
         searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.press(forDuration: 1.5)
+        searchOrEnterAddressTextField.tap()
 
         // Copy URL into clipboard
-        waitForHittable(app.buttons["Forward"].firstMatch)
+        if #unavailable(iOS 16) {
+            waitForHittable(app.menuItems["show.next.items.menu.button"].firstMatch)
+        } else {
+            waitForHittable(app.buttons["Forward"].firstMatch)
+        }
         XCTAssertTrue(app.menuItems["Copy"].isEnabled)
         app.menuItems["Copy"].tap()
 

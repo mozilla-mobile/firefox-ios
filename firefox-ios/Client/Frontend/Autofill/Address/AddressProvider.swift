@@ -4,6 +4,8 @@
 
 import Storage
 
+import struct MozillaAppServices.Address
+
 protocol AddressProvider {
     func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void)
 }
