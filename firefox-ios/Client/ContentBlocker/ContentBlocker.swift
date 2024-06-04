@@ -122,7 +122,7 @@ class ContentBlocker {
         TPStatsBlocklistChecker.shared.startup()
 
         removeOldListsByDateFromStore { [weak self] in
-            self.removeOldListsByNameFromStore {
+            self?.removeOldListsByNameFromStore {
                 self?.compileListsNotInStore {
                     // Read the safelist at startup
                     if let list = self?.readSafelistFile() {
