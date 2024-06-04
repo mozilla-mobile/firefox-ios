@@ -834,6 +834,7 @@
 		8AD08D1527E9198E00B8E907 /* TabsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
+		8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */; };
 		8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */; };
 		8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */; };
 		8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD40FC627BADC3400672675 /* ToolbarTextField.swift */; };
@@ -6123,6 +6124,7 @@
 		8AD08D1427E9198E00B8E907 /* TabsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsTelemetry.swift; sourceTree = "<group>"; };
 		8AD08D1627E91AC800B8E907 /* TabsTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsTelemetryTests.swift; sourceTree = "<group>"; };
 		8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetViewModel.swift; sourceTree = "<group>"; };
+		8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BehavioralTargetingEvent.swift; sourceTree = "<group>"; };
 		8AD3271427E3B45D00EAF033 /* SponsoredTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponsoredTile.swift; sourceTree = "<group>"; };
 		8AD40FC427BADC1E00672675 /* TabToolbarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHelper.swift; sourceTree = "<group>"; };
 		8AD40FC627BADC3400672675 /* ToolbarTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTextField.swift; sourceTree = "<group>"; };
@@ -8945,6 +8947,7 @@
 			isa = PBXGroup;
 			children = (
 				39EF434D260A73950011E22E /* Experiments.swift */,
+				8AD248F02C0F735200500AB7 /* BehavioralTargetingEvent.swift */,
 				3964F5FB2656D2B500065278 /* initial_experiments.json */,
 				9636D92627F5D71A00771F5E /* Messaging */,
 				D51EA5B82640697100334331 /* Settings */,
@@ -14706,6 +14709,7 @@
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
+				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				E192C1412B57DC860003BC0B /* FakespotMessageCardButton.swift in Sources */,
 				437A9B682681256800FB41C1 /* LegacyInactiveTabCell.swift in Sources */,
 				1D69FF8D27B17286001F660E /* HomeLogoHeaderCell.swift in Sources */,
