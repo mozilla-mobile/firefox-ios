@@ -8,11 +8,14 @@ import Shared
 import Common
 
 class MicrosurveyPromptMiddleware {
+    let microsurveySurfaceManager = MicrosurveySurfaceManager()
+
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
+
         switch action.actionType {
         case MicrosurveyPromptActionType.showPrompt:
-            self.initializeMicrosurvey(windowUUID: windowUUID)
+            self.checkIfMicrosurveyShouldShow(windowUUID: windowUUID)
         case MicrosurveyPromptActionType.closePrompt:
             self.dismissPrompt(windowUUID: windowUUID)
         case MicrosurveyPromptActionType.continueToSurvey:
@@ -22,12 +25,21 @@ class MicrosurveyPromptMiddleware {
         }
     }
 
-    private func initializeMicrosurvey(windowUUID: WindowUUID) {
+    private func checkIfMicrosurveyShouldShow(windowUUID: WindowUUID) {
+        if let model = self.microsurveySurfaceManager.showMicrosurveyPrompt() {
+            initializeMicrosurvey(windowUUID: windowUUID, model: model)
+        } else {
+            return
+        }
+    }
+
+    private func initializeMicrosurvey(windowUUID: WindowUUID, model: MicrosurveyModel) {
         let newAction = MicrosurveyPromptMiddlewareAction(
             windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.initialize(MicrosurveyModel())
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize(model)
         )
         store.dispatch(newAction)
+        microsurveySurfaceManager.handleMessageDisplayed()
     }
 
     private func dismissPrompt(windowUUID: WindowUUID) {
@@ -36,6 +48,7 @@ class MicrosurveyPromptMiddleware {
             actionType: MicrosurveyPromptMiddlewareActionType.dismissPrompt
         )
         store.dispatch(newAction)
+        microsurveySurfaceManager.handleMessageDismiss()
     }
 
     private func openSurvey(windowUUID: WindowUUID) {
@@ -45,21 +58,4 @@ class MicrosurveyPromptMiddleware {
         )
         store.dispatch(newAction)
     }
-}
-
-struct MicrosurveyModel: Equatable {
-    // TODO: FXIOS-8990 - Mobile Messaging Structure
-    let promptTitle = String(
-        format: .Microsurvey.Prompt.TitleLabel,
-        AppName.shortName.rawValue
-    )
-    let promptButtonLabel: String = .Microsurvey.Prompt.TakeSurveyButton
-    let surveyQuestion = "How satisfied are you with printing in Firefox?"
-    let surveyOptions: [String] = [
-        .Microsurvey.Survey.Options.LikertScaleOption1,
-        .Microsurvey.Survey.Options.LikertScaleOption2,
-        .Microsurvey.Survey.Options.LikertScaleOption3,
-        .Microsurvey.Survey.Options.LikertScaleOption4,
-        .Microsurvey.Survey.Options.LikertScaleOption5
-    ]
 }

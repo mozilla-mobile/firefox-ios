@@ -61,10 +61,9 @@ import:
                 trigger-if-all:
                   - VIEWED_HOMEPAGE
                 title: Microsurvey/Microsurvey.Prompt.TitleLabel.v127
-                text: "How satisfied are you with printing in Firefox?" # Should not show this message if this is nil
-                button-label: Microsurvey/Microsurvey.Prompt.TakeSurveyButton.v127
+                text: "How satisfied are you with your Firefox homepage?" # Should not show this message if this is nil
+                button-label: Microsurvey/Microsurvey.Prompt.Button.v127
                 microsurveyConfig:
-                  target-feature: printing
                   options:
                     - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption1.v127
                     - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption2.v127

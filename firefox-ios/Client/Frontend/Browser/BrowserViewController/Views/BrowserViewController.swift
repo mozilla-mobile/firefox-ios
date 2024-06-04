@@ -783,6 +783,11 @@ class BrowserViewController: UIViewController,
             selector: #selector(updateForDefaultSearchEngineDidChange),
             name: .SearchSettingsDidUpdateDefaultSearchEngine,
             object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(handlePageZoomLevelUpdated),
+            name: .PageZoomLevelUpdated,
+            object: nil)
     }
 
     func addSubviews() {
@@ -1259,11 +1264,6 @@ class BrowserViewController: UIViewController,
     // MARK: - Microsurvey
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly) else { return }
-
-        // TODO: FXIOS-8990: Create Microsurvey Surface Manager to handle showing survey prompt
-        if microsurvey != nil {
-            removeMicrosurveyPrompt()
-        }
 
         store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
@@ -2351,6 +2351,16 @@ class BrowserViewController: UIViewController,
         } else {
             showSearchController()
         }
+    }
+
+    // MARK: Page Zoom
+
+    @objc
+    func handlePageZoomLevelUpdated(_ notification: Notification) {
+        guard let uuid = notification.windowUUID,
+              let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
+              uuid != windowUUID else { return }
+        updateForZoomChangedInOtherIPadWindow(zoom: zoomSetting)
     }
 
     // MARK: Themeable
