@@ -12,6 +12,7 @@ protocol MessageDataProtocol {
     var buttonLabel: String? { get }
     var experiment: String? { get }
     var actionParams: [String: String] { get }
+    var microsurveyConfig: MicrosurveyConfig? { get }
 }
 
 extension MessageData: MessageDataProtocol {}
@@ -81,6 +82,13 @@ struct GleanPlumbMessage {
     /// Embedding apps should not read from this directly.
     var surface: MessageSurfaceId {
         data.surface
+    }
+
+    /// The survey options for this message if it has a microsurvey configuration.
+    ///
+    /// Embedding apps should not read from this directly.
+    var options: [String] {
+        data.microsurveyConfig?.options ?? []
     }
 }
 
