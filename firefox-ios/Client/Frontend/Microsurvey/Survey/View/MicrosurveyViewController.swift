@@ -42,6 +42,7 @@ final class MicrosurveyViewController: UIViewController,
             bottom: -16,
             trailing: -16
         )
+        static let contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 
     private lazy var headerView: UIStackView = .build { stack in
@@ -126,7 +127,6 @@ final class MicrosurveyViewController: UIViewController,
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
 
-        self.sheetPresentationController?.prefersGrabberVisible = true
         subscribeToRedux()
         configureUI()
         setupLayout()
@@ -185,7 +185,7 @@ final class MicrosurveyViewController: UIViewController,
             title: .Microsurvey.Survey.PrivacyPolicyLinkButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Survey.privacyPolicyLink,
             font: FXFontStyles.Regular.caption2.scaledFont(),
-            contentInsets: NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
+            contentInsets: UX.contentInsets,
             contentHorizontalAlignment: .center
         )
         privacyPolicyButton.configure(viewModel: privacyPolicyButtonViewModel)
@@ -269,6 +269,8 @@ final class MicrosurveyViewController: UIViewController,
         headerLabel.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textSecondary
         tableView.backgroundColor = theme.colors.layer2
+        tableView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        tableView.separatorColor = theme.colors.borderPrimary
 
         containerView.backgroundColor = theme.colors.layer2
         containerView.layer.borderColor = theme.colors.borderPrimary.cgColor

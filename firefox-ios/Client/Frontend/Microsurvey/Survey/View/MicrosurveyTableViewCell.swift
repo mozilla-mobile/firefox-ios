@@ -15,6 +15,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
             bottom: -10,
             trailing: -16
         )
+        static let separatorWidth = 0.5
 
         struct Images {
             // TODO: FXIOS-9028 Fix radio button for accessibility
@@ -22,6 +23,8 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
             static let notSelected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty
         }
     }
+
+    private var topSeparatorView: UIView = .build()
 
     private lazy var horizontalStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -53,7 +56,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
-        self.selectionStyle = .none
+        selectionStyle = .none
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -64,15 +67,21 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         horizontalStackView.addArrangedSubview(radioButton)
         horizontalStackView.addArrangedSubview(optionLabel)
         horizontalStackView.accessibilityElements = [radioButton, optionLabel]
+        contentView.addSubview(topSeparatorView)
         contentView.addSubview(horizontalStackView)
 
         NSLayoutConstraint.activate(
             [
+                topSeparatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                topSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                topSeparatorView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                topSeparatorView.heightAnchor.constraint(equalToConstant: UX.separatorWidth),
+
                 radioButton.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width),
                 radioButton.heightAnchor.constraint(equalToConstant: UX.radioButtonSize.height),
 
                 horizontalStackView.topAnchor.constraint(
-                    equalTo: contentView.topAnchor,
+                    equalTo: topSeparatorView.bottomAnchor,
                     constant: UX.padding.top
                 ),
                 horizontalStackView.leadingAnchor.constraint(
@@ -99,6 +108,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         optionLabel.textColor = colors.textPrimary
-        backgroundColor = theme.colors.layer5
+        backgroundColor = theme.colors.layer2
+        topSeparatorView.backgroundColor = theme.colors.borderPrimary
     }
 }

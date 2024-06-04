@@ -15,6 +15,7 @@ class MicrosurveyTableView: UITableView {
         )
         register(cellType: MicrosurveyTableViewCell.self)
         rowHeight = UITableView.automaticDimension
+        separatorStyle = .none
     }
 
     required init?(coder: NSCoder) {

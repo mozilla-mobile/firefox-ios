@@ -54,7 +54,7 @@ struct MicrosurveyModel: Equatable {
         AppName.shortName.rawValue
     )
     let promptButtonLabel: String = .Microsurvey.Prompt.TakeSurveyButton
-    let surveyQuestion = "How satisfied are you with printing in Firefox?"
+    let surveyQuestion = "How satisfied are you with your Firefox homepage?"
     let surveyOptions: [String] = [
         .Microsurvey.Survey.Options.LikertScaleOption1,
         .Microsurvey.Survey.Options.LikertScaleOption2,
