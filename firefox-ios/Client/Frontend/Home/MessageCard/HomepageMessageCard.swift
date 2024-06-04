@@ -26,9 +26,6 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         static let standardSpacing: CGFloat = 16
         static let topCardSafeSpace: CGFloat = 16
         static let bottomCardSafeSpace: CGFloat = 32
-        // Max font size
-        static let bannerTitleFontSize: CGFloat = 16
-        static let descriptionTextFontSize: CGFloat = 15
     }
 
     // MARK: - Properties
