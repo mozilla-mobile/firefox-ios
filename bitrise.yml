@@ -75,7 +75,8 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"
+            "-parallel-testing-enabled" "YES" "-parallel-testing-worker-count" "2"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - save-spm-cache@1:
@@ -1683,7 +1684,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.5" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.5-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -parallel-testing-enabled YES -parallel-testing-worker-count 2 -destination "platform=iOS Simulator,name=iPhone 15,OS=17.5" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.5-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
