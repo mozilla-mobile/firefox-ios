@@ -71,7 +71,7 @@ class RootViewControllerModel {
     }
 
     // MARK: - Address toolbar
-    func addressToolbarContainerModel(url: String?) -> AddressToolbarContainerModel {
+    func addressToolbarContainerModel(url: URL?) -> AddressToolbarContainerModel {
         let pageActions = [ToolbarElement(
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
