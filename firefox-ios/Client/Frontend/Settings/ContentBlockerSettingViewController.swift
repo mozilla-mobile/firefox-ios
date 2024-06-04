@@ -198,7 +198,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     override func applyTheme() {
         super.applyTheme()
         let currentTheme = currentTheme()
-        linkButton.setTitleColor(currentTheme.colors.actionPrimary, for: .normal)
         linkButton.applyTheme(theme: currentTheme)
     }
 }
