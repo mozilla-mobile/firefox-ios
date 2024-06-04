@@ -93,6 +93,7 @@
         "LibraryTestsIpad",
         "LoginTest",
         "MicrosurveyTests",
+        "MultiWindowTests",
         "NavigationTest\/testBookmarkLink()",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",
