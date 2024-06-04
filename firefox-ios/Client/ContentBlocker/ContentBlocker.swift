@@ -126,13 +126,21 @@ class ContentBlocker {
 
         TPStatsBlocklistChecker.shared.startup()
 
-        removeOldListsByDateFromStore {
-            self.removeOldListsByNameFromStore { [weak self] in
-                self?.compileListsNotInStore {
-                    self?.setupCompleted = true
-                    NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
-                }
-            }
+//        removeOldListsByDateFromStore { [weak self] in
+//            self.removeOldListsByNameFromStore {
+//                self?.compileListsNotInStore {
+//                    // Read the safelist at startup
+//                    if let list = self?.readSafelistFile() {
+//                        self?.safelistedDomains.domainSet = Set(list)
+//                    }
+//                    self?.setupCompleted = true
+//                    NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
+//                }
+//            }
+//        }
+        clearSafelist { [weak self] in
+            self?.setupCompleted = true
+//            NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
         }
     }
 
