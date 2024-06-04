@@ -2,6 +2,9 @@
 "Microsurvey.Prompt.Button.v127" = "Kemmel";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
+"Microsurvey.Prompt.Close.AccessibilityLabel.v127" = "Mdel attekki deg uḥedqis";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
 "Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "Mdel";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
