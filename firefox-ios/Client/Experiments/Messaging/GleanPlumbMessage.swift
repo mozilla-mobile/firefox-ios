@@ -85,7 +85,6 @@ struct GleanPlumbMessage {
     }
 
     /// The survey options for this message if it has a microsurvey configuration.
-    ///
     /// Embedding apps should not read from this directly.
     var options: [String] {
         return data.microsurveyConfig?.options ?? []
