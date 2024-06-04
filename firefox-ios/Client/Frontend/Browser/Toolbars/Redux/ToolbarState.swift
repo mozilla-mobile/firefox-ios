@@ -13,7 +13,7 @@ struct ToolbarState: ScreenState, Equatable {
         var browserActions: [ActionState]
         var displayTopBorder: Bool
         var displayBottomBorder: Bool
-        var url: String?
+        var url: URL?
     }
 
     struct NavigationState: Equatable {
@@ -124,10 +124,8 @@ struct ToolbarState: ScreenState, Equatable {
             return state
 
         case ToolbarActionType.urlDidChange:
-            guard let url = action.url else { return state }
-
             var state = state
-            state.addressToolbar.url = url
+            state.addressToolbar.url = action.url
             return state
 
         default:

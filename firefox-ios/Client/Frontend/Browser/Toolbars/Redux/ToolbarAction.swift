@@ -10,12 +10,12 @@ class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
     let numberOfTabs: Int?
-    let url: String?
+    let url: URL?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
          numberOfTabs: Int? = nil,
-         url: String? = nil,
+         url: URL? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel

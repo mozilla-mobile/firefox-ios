@@ -14,7 +14,7 @@ class AddressToolbarContainerModel {
     let displayBottomBorder: Bool
     let windowUUID: UUID
     var profile: Profile
-    let url: String?
+    let url: URL?
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(

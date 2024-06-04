@@ -13,5 +13,5 @@ struct AddressToolbarModel {
     let displayTopBorder: Bool
     let displayBottomBorder: Bool
 
-    let url: String?
+    let url: URL?
 }

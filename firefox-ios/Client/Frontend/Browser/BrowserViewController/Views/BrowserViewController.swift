@@ -1706,7 +1706,7 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            let action = ToolbarAction(url: tab.url?.absoluteString,
+            let action = ToolbarAction(url: tab.url?.displayURL,
                                        windowUUID: windowUUID,
                                        actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
