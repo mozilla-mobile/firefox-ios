@@ -27,7 +27,7 @@ class MicrosurveyPromptMiddleware {
 
     private func checkIfMicrosurveyShouldShow(windowUUID: WindowUUID) {
         if let model = self.microsurveySurfaceManager.showMicrosurveyPrompt() {
-            self.initializeMicrosurvey(windowUUID: windowUUID, model: model)
+            initializeMicrosurvey(windowUUID: windowUUID, model: model)
         } else {
             return
         }

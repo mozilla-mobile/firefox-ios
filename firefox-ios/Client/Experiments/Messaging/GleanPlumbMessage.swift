@@ -88,7 +88,7 @@ struct GleanPlumbMessage {
     ///
     /// Embedding apps should not read from this directly.
     var options: [String] {
-        data.microsurveyConfig?.options ?? []
+        return data.microsurveyConfig?.options ?? []
     }
 }
 

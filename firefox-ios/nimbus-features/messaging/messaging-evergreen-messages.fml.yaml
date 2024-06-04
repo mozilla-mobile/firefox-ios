@@ -61,7 +61,7 @@ import:
                 trigger-if-all:
                   - ALWAYS
                 title: Microsurvey/Microsurvey.Prompt.TitleLabel.v127
-                text: "How satisfied are you with Firefox Homepage?" # Should not show this message if this is nil
+                text: "How satisfied are you with your Firefox homepage?" # Should not show this message if this is nil
                 button-label: Microsurvey/Microsurvey.Prompt.Button.v127
                 microsurveyConfig:
                   options:

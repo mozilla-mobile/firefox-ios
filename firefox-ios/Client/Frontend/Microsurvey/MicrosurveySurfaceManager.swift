@@ -28,12 +28,10 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
     /// build a `MicrosurveyPromptView` to be presented.
     func showMicrosurveyPrompt() -> MicrosurveyModel? {
         retrieveMessage()
-        guard let surveyQuestion = message?.text else {
-            return nil
-        }
+        guard let surveyQuestion = message?.text else { return nil }
 
-        let promptTitle = message?.title ?? String(
-            format: .Microsurvey.Prompt.TitleLabel,
+        let promptTitle = String(
+            format: message?.title ?? .Microsurvey.Prompt.TitleLabel,
             AppName.shortName.rawValue
         )
         let promptButtonLabel = message?.buttonLabel ?? .Microsurvey.Prompt.TakeSurveyButton
