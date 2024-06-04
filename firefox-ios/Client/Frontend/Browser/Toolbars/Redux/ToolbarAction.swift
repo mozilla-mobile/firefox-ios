@@ -28,7 +28,6 @@ class ToolbarAction: Action {
 
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
-    case didLoadWebview
     case numberOfTabsChanged
     case backButtonStateChanged
     case forwardButtonStateChanged
