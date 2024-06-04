@@ -111,6 +111,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         configureURLTextField(state)
         configureA11y(state)
         formatAndTruncateURLTextField()
+        updateIconContainer()
         locationViewDelegate = delegate
     }
 
@@ -199,6 +200,19 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     private func removeContainerIcons() {
         iconContainerStackView.removeAllArrangedViews()
+    }
+
+    private func updateIconContainer() {
+        guard !urlTextField.isEditing else {
+            updateUIForSearchEngineDisplay()
+            return
+        }
+        
+        if isURLTextFieldEmpty {
+            updateUIForSearchEngineDisplay()
+        } else {
+            updateUIForLockIconDisplay()
+        }
     }
 
     private func updateUIForSearchEngineDisplay() {
