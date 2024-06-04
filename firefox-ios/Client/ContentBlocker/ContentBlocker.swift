@@ -258,18 +258,6 @@ extension ContentBlocker {
         return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
 
-    private func storeHashesForBlockerFiles() {
-        let blocklists = BlocklistFileName.allCases
-        let defaults = UserDefaults.standard
-
-        for list in blocklists {
-            guard let path = Bundle.main.path(forResource: list.filename, ofType: "json"),
-                  let hash = calculateHash(forFileAtPath: path) else { continue }
-
-            defaults.set(hash, forKey: list.filename)
-        }
-    }
-
     private func hasBlockerFileChanged() -> Bool {
         let blocklists = BlocklistFileName.allCases
         let defaults = UserDefaults.standard
