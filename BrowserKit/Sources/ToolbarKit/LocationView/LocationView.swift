@@ -207,7 +207,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             updateUIForSearchEngineDisplay()
             return
         }
-        
+
         if isURLTextFieldEmpty {
             updateUIForSearchEngineDisplay()
         } else {

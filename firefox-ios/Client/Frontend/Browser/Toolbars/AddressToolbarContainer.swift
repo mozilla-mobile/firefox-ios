@@ -7,7 +7,7 @@ import Redux
 import ToolbarKit
 import UIKit
 
-protocol AddressToolbarContainerDelegate {
+protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
