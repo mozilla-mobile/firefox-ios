@@ -35,6 +35,13 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         return urlTextFieldWidth >= locationViewWidth
     }
 
+    private var dotWidth: CGFloat {
+        guard let font = urlTextField.font else { return 0 }
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        let width = "...".size(withAttributes: fontAttributes).width
+        return CGFloat(width)
+    }
+
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
@@ -126,6 +133,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
+        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(
+            equalTo: iconContainerStackView.trailingAnchor)
+        urlTextFieldLeadingConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
@@ -174,19 +185,16 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
         // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
+            updateURLTextFieldLeadingConstraint(constant: -dotWidth)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor)
+            updateURLTextFieldLeadingConstraint()
         } else {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
-                                                constant: UX.horizontalSpace)
+            updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         }
     }
 
-    private func updateURLTextFieldLeadingConstraint(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
-        urlTextFieldLeadingConstraint?.isActive = false
-        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: anchor, constant: constant)
-        urlTextFieldLeadingConstraint?.isActive = true
+    private func updateURLTextFieldLeadingConstraint(constant: CGFloat = 0) {
+        urlTextFieldLeadingConstraint?.constant = constant
     }
 
     private func removeContainerIcons() {
@@ -197,12 +205,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
         urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
-
-        updateURLTextFieldLeadingConstraint(
-            equalTo: iconContainerStackView.trailingAnchor,
-            constant: UX.horizontalSpace
-        )
-
+        updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         updateGradient()
     }
 
