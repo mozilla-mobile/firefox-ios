@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-
+import Common
 import Shared
 
 import class MozillaAppServices.FeatureHolder
@@ -25,8 +25,10 @@ protocol GleanPlumbMessageManagerProtocol {
     func onMessageDisplayed(_ message: GleanPlumbMessage)
 
     /// Using the helper, this should get the message action string ready for use.
+    /// An optional UUID for the originating window can be provided to ensure any
+    /// resulting UI is displayed in the correct window.
     /// Surface calls.
-    func onMessagePressed(_ message: GleanPlumbMessage)
+    func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?)
 
     /// Handles what to do with a message when a user has dismissed it.
     /// Surface calls.
@@ -189,7 +191,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
-    func onMessagePressed(_ message: GleanPlumbMessage) {
+    func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?) {
         messagingStore.onMessagePressed(message)
 
         guard let helper = createMessagingHelper.createNimbusMessagingHelper() else { return }
@@ -200,7 +202,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         }
 
         // With our well-formed URL, we can handle the action here.
-        applicationHelper.open(urlToOpen)
+        if let specificWindow = window {
+            applicationHelper.open(urlToOpen, inWindow: specificWindow)
+        } else {
+            applicationHelper.open(urlToOpen)
+        }
 
         var extras = baseTelemetryExtras(using: message)
         if let uuid = uuid {
