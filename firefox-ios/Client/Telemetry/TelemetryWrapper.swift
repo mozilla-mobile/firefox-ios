@@ -110,6 +110,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
 
+        // Set the metric configuration from Nimbus.
+        glean.applyServerKnobsConfig(FxNimbus.shared.features.gleanServerKnobs.value().toJSONString())
+
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
