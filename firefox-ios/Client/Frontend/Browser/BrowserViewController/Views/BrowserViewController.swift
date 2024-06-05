@@ -66,9 +66,7 @@ class BrowserViewController: UIViewController,
     weak var browserDelegate: BrowserDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
-    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build { view in
-        view.windowUUID = self.windowUUID
-    }
+    private(set) lazy var addressToolbarContainer: AddressToolbarContainer = .build()
     var urlBar: URLBarView!
 
     var urlBarHeightConstraint: Constraint!
@@ -426,8 +424,8 @@ class BrowserViewController: UIViewController,
             updateURLBarDisplayURL(tab)
 
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(webView.canGoBack, windowUUID, .backButtonStatus)
-                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStatus)
+                dispatchBackForwardToolbarAction(webView.canGoBack, windowUUID, .backButtonStateChanged)
+                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStateChanged)
             } else {
                 navigationToolbar.updateBackStatus(webView.canGoBack)
                 navigationToolbar.updateForwardStatus(webView.canGoForward)
@@ -778,10 +776,21 @@ class BrowserViewController: UIViewController,
             selector: #selector(didFinishAnnouncement),
             name: UIAccessibility.announcementDidFinishNotification,
             object: nil)
-        notificationCenter.addObserver(self,
-                                       selector: #selector(didAddPendingBlobDownloadToQueue),
-                                       name: .PendingBlobDownloadAddedToQueue,
-                                       object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(didAddPendingBlobDownloadToQueue),
+            name: .PendingBlobDownloadAddedToQueue,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(updateForDefaultSearchEngineDidChange),
+            name: .SearchSettingsDidUpdateDefaultSearchEngine,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(handlePageZoomLevelUpdated),
+            name: .PageZoomLevelUpdated,
+            object: nil)
     }
 
     func addSubviews() {
@@ -796,6 +805,7 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
+            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile)
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
@@ -1258,11 +1268,6 @@ class BrowserViewController: UIViewController,
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly) else { return }
 
-        // TODO: FXIOS-8990: Create Microsurvey Surface Manager to handle showing survey prompt
-        if microsurvey != nil {
-            removeMicrosurveyPrompt()
-        }
-
         store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
         )
@@ -1673,7 +1678,7 @@ class BrowserViewController: UIViewController,
                   let canGoBack = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoBack, windowUUID, .backButtonStatus)
+                dispatchBackForwardToolbarAction(canGoBack, windowUUID, .backButtonStateChanged)
             } else {
                 navigationToolbar.updateBackStatus(canGoBack)
             }
@@ -1682,7 +1687,7 @@ class BrowserViewController: UIViewController,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoForward, windowUUID, .forwardButtonStatus)
+                dispatchBackForwardToolbarAction(canGoForward, windowUUID, .forwardButtonStateChanged)
             } else {
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
@@ -1743,11 +1748,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
-        let action = ToolbarAction(isEnabled: isEnabled, windowUUID: windowUUID, actionType: actionType)
+        let action = ToolbarAction(isButtonEnabled: isEnabled, windowUUID: windowUUID, actionType: actionType)
 
         switch actionType {
-        case .backButtonStatus,
-             .forwardButtonStatus:
+        case .backButtonStateChanged,
+             .forwardButtonStateChanged:
             store.dispatch(action)
         default: break
         }
@@ -1829,6 +1834,8 @@ class BrowserViewController: UIViewController,
     func presentSignInViewController(_ fxaOptions: FxALaunchParams,
                                      flowType: FxAPageType = .emailLoginFlow,
                                      referringPage: ReferringPage = .none) {
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        windowManager.postWindowEvent(event: .syncMenuOpened, windowUUID: windowUUID)
         let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
@@ -2392,6 +2399,16 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    // MARK: Page Zoom
+
+    @objc
+    func handlePageZoomLevelUpdated(_ notification: Notification) {
+        guard let uuid = notification.windowUUID,
+              let zoomSetting = notification.userInfo?["zoom"] as? DomainZoomLevel,
+              uuid != windowUUID else { return }
+        updateForZoomChangedInOtherIPadWindow(zoom: zoomSetting)
+    }
+
     // MARK: Themeable
 
     func currentTheme() -> Theme {
@@ -2861,17 +2878,18 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     func presentSearchSettingsController() {
         let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile, windowUUID: windowUUID)
-
-        // Update search icon when the searchengine changes
-        searchSettingsTableViewController.updateSearchIcon = {
-            if !self.isToolbarRefactorEnabled {
-                self.urlBar.searchEnginesDidUpdate()
-            }
-            self.searchController?.reloadSearchEngines()
-            self.searchController?.reloadData()
-        }
         let navController = ModalSettingsNavigationController(rootViewController: searchSettingsTableViewController)
         self.present(navController, animated: true, completion: nil)
+    }
+
+    @objc
+    func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
+        // Update search icon when the search engine changes
+        if !isToolbarRefactorEnabled {
+            urlBar.searchEnginesDidUpdate()
+        }
+        searchController?.reloadSearchEngines()
+        searchController?.reloadData()
     }
 
     func searchViewController(
@@ -3015,8 +3033,8 @@ extension BrowserViewController: TabManagerDelegate {
         setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
 
         if isToolbarRefactorEnabled {
-            dispatchBackForwardToolbarAction(selected?.canGoBack, windowUUID, .backButtonStatus)
-            dispatchBackForwardToolbarAction(selected?.canGoForward, windowUUID, .forwardButtonStatus)
+            dispatchBackForwardToolbarAction(selected?.canGoBack, windowUUID, .backButtonStateChanged)
+            dispatchBackForwardToolbarAction(selected?.canGoForward, windowUUID, .forwardButtonStateChanged)
         } else {
             navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
             navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)

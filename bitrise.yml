@@ -106,7 +106,9 @@ workflows:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
+        - pipeline_intermediate_files: |-
+            $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
+            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
@@ -355,9 +357,8 @@ workflows:
 
   firefox_pull_and_unzip_dependencies:
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+    - pull-intermediate-files@1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: build_applications.firefox_configure_build
@@ -367,14 +368,13 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
-
-            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
-            echo "$derived_data"
+            echo "$DERIVED_DATA_DIR"
 
             echo "-- unzip -- "
-            exec unzip "$derived_data"
+            exec unzip "$DERIVED_DATA_DIR"
 
+            echo "show dir"
+            ls
   send_slack_notification:
     steps:
     - slack@3.1:
@@ -1638,6 +1638,8 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+        - pipeline_intermediate_files: |-
+            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -1771,8 +1773,7 @@ workflows:
   focus-pull-and-unzip-dependencies:
     description: Pulls and unzip the dependencis from previous stage 
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        title: Pull artifacts
+    - pull-intermediate-files@1:
         inputs:
         - verbose: true
         - artifact_sources: build_applications.focus_configure_build
@@ -1781,9 +1782,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
+            echo "$DERIVED_DATA_DIR"
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "${DERIVED_DATA_DIR}"
             echo "show dir"
             ls
 

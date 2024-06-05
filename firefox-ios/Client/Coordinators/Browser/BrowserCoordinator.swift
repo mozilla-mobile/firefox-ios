@@ -615,6 +615,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        windowManager.postWindowEvent(event: .qrScannerOpened, windowUUID: windowUUID)
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
@@ -681,6 +682,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         let navigationController = DismissableNavigationViewController()
+        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
         let coordinator = MicrosurveyCoordinator(
             model: model,
             router: DefaultRouter(
@@ -760,6 +763,23 @@ class BrowserCoordinator: BaseCoordinator,
             guard uuid != windowUUID else { return }
             performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
                 didFinishSettings(from: $0)
+            }
+        case .syncMenuOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            if let navVCs = (browserPresentedVC as? UINavigationController)?.viewControllers,
+               navVCs.contains(where: {
+                   $0 is FirefoxAccountSignInViewController || $0 is SyncContentSettingsViewController
+               }) {
+                router.dismiss(animated: true, completion: nil)
+            }
+        case .qrScannerOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+            if rootVC is QRCodeViewController {
+                router.dismiss(animated: true, completion: nil)
+                remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
             }
         }
     }

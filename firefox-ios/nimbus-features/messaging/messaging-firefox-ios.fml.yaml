@@ -36,6 +36,9 @@ import:
               INACTIVE_NEW_USER:        "is_inactive_new_user"
               ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
 
+              # Behavioral Targeting Events
+              VIEWED_HOMEPAGE:  "'homepage_viewed'|eventLastSeen('Hours') <= 24"
+
             actions:
               OPEN_SETTINGS:                      ://deep-link?url=settings/general
               OPEN_SETTINGS_NEW_TAB:              ://deep-link?url=settings/newtab

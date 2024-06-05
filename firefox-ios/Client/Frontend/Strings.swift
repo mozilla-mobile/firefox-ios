@@ -1773,6 +1773,11 @@ extension String {
                     tableName: nil,
                     value: "Recently Saved",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off")
+                public static let Bookmarks = MZLocalizedString(
+                    key: "Settings.Home.Option.Bookmarks.v128",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Bookmarks",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Bookmarks section on the Firefox homepage on or off")
                 public static let Shortcuts = MZLocalizedString(
                     key: "Settings.Home.Option.Shortcuts",
                     tableName: nil,
@@ -2402,6 +2407,16 @@ extension String {
         tableName: nil,
         value: "Show All",
         comment: "More button text for Recently Saved items at the home page.")
+    public static let BookmarksSectionTitle = MZLocalizedString(
+        key: "ActivityStream.Bookmarks.Title.v128",
+        tableName: "ActivityStream",
+        value: "Bookmarks",
+        comment: "String used in the section title of the Bookmarks section on Home Screen.")
+    public static let BookmarksSavedShowAllText = MZLocalizedString(
+        key: "Bookmarks.Actions.More.v128",
+        tableName: "ActivityStream",
+        value: "Show All",
+        comment: "Show all button text for Bookmarks items on the home page, which opens the Bookmarks panel when tapped.")
 }
 
 // MARK: - Home Panel Context Menu
@@ -5616,11 +5631,6 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search or enter address",
             comment: "Accessibility label for the address field in the address toolbar.")
-        public static let LocationClearButtonA11yLabel = MZLocalizedString(
-            key: "AddressToolbar.Location.Clear.Button.v128",
-            tableName: "AddressToolbar",
-            value: "Clear text",
-            comment: "Accessibility label for the clear button in the address field of the address toolbar.")
         public static let SearchEngineA11yLabel = MZLocalizedString(
             key: "AddressToolbar.SearchEngine.A11y.Label.v128",
             tableName: "AddressToolbar",

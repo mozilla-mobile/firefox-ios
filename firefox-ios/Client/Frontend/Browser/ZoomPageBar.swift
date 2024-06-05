@@ -215,7 +215,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         gradient.frame = gradientView.bounds
     }
 
-    private func updateZoomLabel() {
+    func updateZoomLabel() {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
