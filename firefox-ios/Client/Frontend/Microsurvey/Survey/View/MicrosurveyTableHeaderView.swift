@@ -24,9 +24,7 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
     }
 
     private lazy var iconView: UIImageView = .build { imageView in
-        // TODO: FXIOS-9108: This image should come from the data source, based on the target feature
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: StandardImageIdentifiers.Large.lightbulb)?.withRenderingMode(.alwaysTemplate)
     }
 
     private lazy var questionLabel: UILabel = .build { label in
@@ -38,9 +36,7 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        if iconView.image != nil {
-            horizontalStackView.addArrangedSubview(iconView)
-        }
+        horizontalStackView.addArrangedSubview(iconView)
         horizontalStackView.addArrangedSubview(questionLabel)
         contentView.addSubview(horizontalStackView)
 
@@ -73,8 +69,9 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ text: String) {
+    func configure(_ text: String, icon: UIImage?) {
         questionLabel.text = text
+        iconView.image = icon ?? UIImage(named: StandardImageIdentifiers.Large.lightbulb)?.withRenderingMode(.alwaysTemplate)
     }
 
     // MARK: - ThemeApplicable
