@@ -14,10 +14,6 @@ struct NavigationToolbarContainerModel {
         return NavigationToolbarState(actions: actions, shouldDisplayBorder: displayBorder)
     }
 
-    private func shouldPerformLongPressAction(for actionType: ToolbarState.ActionState.ActionType) -> Bool {
-        return actionType == .back || actionType == .forward
-    }
-
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.actions = state.navigationToolbar.actions.map { action in
