@@ -51,13 +51,13 @@ class AddressToolbarContainerModel {
     }
 
     private static func mapActions(_ actions: [ToolbarState.ActionState], windowUUID: UUID) -> [ToolbarElement] {
-            return actions.map { action in
-                ToolbarElement(
-                    iconName: action.iconName,
-                    isEnabled: action.isEnabled,
-                    a11yLabel: action.a11yLabel,
-                    a11yId: action.a11yId,
-                    onSelected: {
+        return actions.map { action in
+            ToolbarElement(
+                iconName: action.iconName,
+                isEnabled: action.isEnabled,
+                a11yLabel: action.a11yLabel,
+                a11yId: action.a11yId,
+                onSelected: {
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          gestureType: .tap,
                                                          windowUUID: windowUUID,
