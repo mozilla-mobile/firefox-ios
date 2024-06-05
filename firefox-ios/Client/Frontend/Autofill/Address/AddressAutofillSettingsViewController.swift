@@ -92,7 +92,9 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     /// Sets up the view hierarchy and initial configurations.
     func setupView() {
-        navigationItem.rightBarButtonItem = addAddressButton
+        if viewModel.addressListViewModel.isEditingFeatureEnabled {
+            navigationItem.rightBarButtonItem = addAddressButton
+        }
 
         guard let emptyAddressAutofillView = addressAutofillSettingsPageView.view else { return }
         emptyAddressAutofillView.translatesAutoresizingMaskIntoConstraints = false
