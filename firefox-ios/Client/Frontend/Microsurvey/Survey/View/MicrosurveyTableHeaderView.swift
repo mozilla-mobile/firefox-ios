@@ -24,9 +24,9 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
     }
 
     private lazy var iconView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
         // TODO: FXIOS-9108: This image should come from the data source, based on the target feature
-        // imageView.image = UIImage(systemName: "printer")
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.lightbulb)?.withRenderingMode(.alwaysTemplate)
     }
 
     private lazy var questionLabel: UILabel = .build { label in

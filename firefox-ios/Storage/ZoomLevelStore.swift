@@ -7,7 +7,7 @@ import Shared
 import Common
 
 public struct DomainZoomLevel: Codable, Equatable {
-    let host: String
+    public let host: String
     public let zoomLevel: CGFloat
 
     public init(host: String, zoomLevel: CGFloat) {

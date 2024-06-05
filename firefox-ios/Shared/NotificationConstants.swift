@@ -91,6 +91,11 @@ extension Notification.Name {
     // fired when user taps on undo button on Toast
     public static let DidTapUndoCloseAllTabToast = Notification.Name("DidTapUndoCloseAllTabToast")
 
+    // MARK: Downloads
+
+    // General notification posted when a file has been deleted from the downloads manager
+    public static let DownloadPanelFileWasDeleted = Notification.Name("DownloadPanelFileWasDeleted")
+
     // MARK: Settings
 
     public static let BlockPopup = Notification.Name("BlockPopup")
@@ -98,8 +103,11 @@ extension Notification.Name {
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
     public static let HistoryUpdated = Notification.Name("HistoryUpdated")
+    public static let PageZoomLevelUpdated = Notification.Name("PageZoomLevelUpdated")
 
     // Search
     public static let DefaultSearchEngineUpdated = Notification.Name("DefaultSearchEngineUpdated")
     public static let DisablePrivateModeSearchSuggests = Notification.Name("DisablePrivateModeSearchSuggests")
+    public static let SearchSettingsDidUpdateDefaultSearchEngine =
+    Notification.Name("SearchSettingsDidUpdateDefaultSearchEngine")
 }
