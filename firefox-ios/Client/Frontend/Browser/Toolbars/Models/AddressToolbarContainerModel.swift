@@ -4,6 +4,7 @@
 
 import Common
 import ToolbarKit
+import Shared
 
 class AddressToolbarContainerModel {
     let navigationActions: [ToolbarElement]
@@ -27,7 +28,8 @@ class AddressToolbarContainerModel {
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: profile.searchEngines.defaultEngine?.image,
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            url: url)
+            url: url,
+            searchTerm: searchTermFromURL(url, searchEngines: profile.searchEngines))
         return AddressToolbarState(
             locationViewState: locationViewState,
             navigationActions: navigationActions,
@@ -50,6 +52,17 @@ class AddressToolbarContainerModel {
         self.windowUUID = windowUUID
         self.profile = profile
         self.url = state.addressToolbar.url
+    }
+
+    func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
+        var searchURL: URL? = url
+
+        if let url = searchURL, InternalURL.isValid(url: url) {
+            searchURL = url
+        }
+
+        guard let query = searchEngines.queryForSearchURL(searchURL) else { return nil }
+        return query
     }
 
     private static func mapActions(_ actions: [ToolbarState.ActionState], windowUUID: UUID) -> [ToolbarElement] {

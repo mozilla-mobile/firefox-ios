@@ -17,6 +17,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private var urlAbsolutePath: String?
+    private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
@@ -113,6 +114,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         formatAndTruncateURLTextField()
         updateIconContainer()
         locationViewDelegate = delegate
+        searchTerm = state.searchTerm
     }
 
     // MARK: - Layout
@@ -307,7 +309,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = urlAbsolutePath
+            textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
             textField.selectAll(nil)
         }
         locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")
