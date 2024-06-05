@@ -14,7 +14,8 @@ class MicrosurveyMock {
             surveyOptions: [
                 "yes",
                 "no"
-            ]
+            ],
+            icon: nil
         )
     }
 }
