@@ -10,15 +10,18 @@ class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
     let numberOfTabs: Int?
+    let isButtonEnabled: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
          numberOfTabs: Int? = nil,
+         isButtonEnabled: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
         self.navigationToolbarModel = navigationToolbarModel
         self.numberOfTabs = numberOfTabs
+        self.isButtonEnabled = isButtonEnabled
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -26,6 +29,8 @@ class ToolbarAction: Action {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
+    case backButtonStateChanged
+    case forwardButtonStateChanged
 }
 
 class ToolbarMiddlewareAction: Action {

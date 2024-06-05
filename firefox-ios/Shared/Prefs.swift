@@ -47,6 +47,7 @@ public struct PrefsKeys {
         public static let firstWeekAppOpenTimestamps = "firstWeekAppOpenTimestamps"
         public static let firstWeekSearchesTimestamps = "firstWeekSearchesTimestamps"
         public static let didUpdateConversionValue = "didUpdateConversionValue"
+        public static let InternalURLUUID = "InternalURLUUID"
     }
 
     public struct AppVersion {

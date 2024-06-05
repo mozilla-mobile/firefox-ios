@@ -991,7 +991,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowMicrosurvey_addsMicrosurveyCoordinator() {
         let subject = createSubject()
 
-        subject.showMicrosurvey(model: MicrosurveyModel())
+        subject.showMicrosurvey(model: MicrosurveyMock.model)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MicrosurveyCoordinator)

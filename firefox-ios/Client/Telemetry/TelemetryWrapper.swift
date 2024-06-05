@@ -110,6 +110,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
 
+        // Set the metric configuration from Nimbus.
+        glean.applyServerKnobsConfig(FxNimbus.shared.features.gleanServerKnobs.value().toJSONString())
+
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
@@ -1576,7 +1579,7 @@ extension TelemetryWrapper {
         case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
             GleanMetrics.Sync.loginCompletedView.record()
             // record the same event for Nimbus' internal event store
-            Experiments.events.recordEvent("sync.login_completed_view")
+            Experiments.events.recordEvent(BehavioralTargetingEvent.syncLoginCompletion)
         case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
@@ -1591,7 +1594,7 @@ extension TelemetryWrapper {
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
             // record the same event for Nimbus' internal event store
-            Experiments.events.recordEvent("app_cycle.foreground")
+            Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
         // MARK: App icon

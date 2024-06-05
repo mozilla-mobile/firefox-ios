@@ -5,6 +5,7 @@
 import WebKit
 import Shared
 import Common
+import CryptoKit
 
 enum BlocklistCategory: CaseIterable {
     case advertising
@@ -126,8 +127,8 @@ class ContentBlocker {
 
         TPStatsBlocklistChecker.shared.startup()
 
-        removeOldListsByDateFromStore {
-            self.removeOldListsByNameFromStore { [weak self] in
+        removeOldListsByHashFromStore { [weak self] in
+            self?.removeOldListsByNameFromStore {
                 self?.compileListsNotInStore {
                     self?.setupCompleted = true
                     NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
@@ -229,29 +230,6 @@ extension ContentBlocker {
         }
     }
 
-    private func lastModifiedSince1970(forFileAtPath path: String) -> Date? {
-        do {
-            let url = URL(fileURLWithPath: path)
-            let attr = try FileManager.default.attributesOfItem(atPath: url.path)
-            guard let date = attr[FileAttributeKey.modificationDate] as? Date else { return nil }
-            return date
-        } catch {
-            return nil
-        }
-    }
-
-    private func dateOfMostRecentBlockerFile() -> Date? {
-        let blocklists = BlocklistFileName.allCases
-
-        return blocklists.reduce(Date(timeIntervalSince1970: 0)) { result, list in
-            guard let path = Bundle.main.path(forResource: list.filename, ofType: "json") else { return result }
-            if let date = lastModifiedSince1970(forFileAtPath: path) {
-                return date > result ? date : result
-            }
-            return result
-        }
-    }
-
     func removeAllRulesInStore(completion: @escaping () -> Void) {
         let dispatchGroup = DispatchGroup()
         ruleStore?.getAvailableContentRuleListIdentifiers { [weak self] available in
@@ -271,28 +249,42 @@ extension ContentBlocker {
         }
     }
 
-    // If any blocker files are newer than the date saved in prefs,
+    private func calculateHash(forFileAtPath path: String) -> String? {
+        guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
+            return nil
+        }
+
+        let hash = SHA256.hash(data: fileData)
+        return hash.compactMap { String(format: "%02x", $0) }.joined()
+    }
+
+    private func hasBlockerFileChanged() -> Bool {
+        let blocklists = BlocklistFileName.allCases
+        let defaults = UserDefaults.standard
+        var hasChanged = false
+
+        for list in blocklists {
+            guard let path = Bundle.main.path(forResource: list.filename, ofType: "json"),
+                  let newHash = calculateHash(forFileAtPath: path) else { continue }
+
+            let oldHash = defaults.string(forKey: list.filename)
+            if oldHash != newHash {
+                defaults.set(newHash, forKey: list.filename)
+                hasChanged = true
+            }
+        }
+
+        return hasChanged
+    }
+
+    // If any blocker files have a newer hash than the hash saved in defaults,
     // remove all the content blockers and reload them.
-    func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
-            guard let fileDate = dateOfMostRecentBlockerFile() else {
-            completion()
-            return
-        }
-
-        guard let prefsNewestDate = UserDefaults.standard.object(forKey: "blocker-file-date") as? Date else {
-            UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
-            completion()
-            return
-        }
-
-        if fileDate <= prefsNewestDate {
-            completion()
-            return
-        }
-
-        UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
-
-        removeAllRulesInStore {
+    func removeOldListsByHashFromStore(completion: @escaping () -> Void) {
+        if hasBlockerFileChanged() {
+            removeAllRulesInStore {
+                completion()
+            }
+        } else {
             completion()
         }
     }

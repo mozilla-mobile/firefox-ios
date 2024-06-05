@@ -76,6 +76,7 @@ class MockMessageData: MessageDataProtocol {
     var buttonLabel: String?
     var experiment: String?
     var actionParams: [String: String]
+    var microsurveyConfig: MicrosurveyConfig?
 
     init(
         surface: MessageSurfaceId = .newTabCard,
@@ -83,7 +84,8 @@ class MockMessageData: MessageDataProtocol {
         title: String? = "Title",
         text: String = "text",
         buttonLabel: String? = "Tap",
-        actionParams: [String: String] = [:]
+        actionParams: [String: String] = [:],
+        microsurveyConfig: MicrosurveyConfig? = nil
     ) {
         self.surface = surface
         self.isControl = isControl
@@ -91,6 +93,7 @@ class MockMessageData: MessageDataProtocol {
         self.text = text
         self.buttonLabel = buttonLabel
         self.actionParams = actionParams
+        self.microsurveyConfig = microsurveyConfig
     }
 }
 
