@@ -49,7 +49,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
     }
