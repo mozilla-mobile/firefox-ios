@@ -127,7 +127,7 @@ struct ToolbarState: ScreenState, Equatable {
             var state = state
             state.addressToolbar.url = action.url
             return state
-            
+
         case ToolbarActionType.backButtonStateChanged:
             guard let isEnabled = action.isButtonEnabled else { return state }
             var state = state
