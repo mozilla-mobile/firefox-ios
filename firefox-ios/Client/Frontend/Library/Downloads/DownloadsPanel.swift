@@ -7,11 +7,6 @@ import Shared
 import Storage
 import Common
 
-extension Notification.Name {
-    // General notification posted when a file has been deleted from the downloads manager
-    public static let DownloadPanelFileWasDeleted = Notification.Name("DownloadPanelFileWasDeleted")
-}
-
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
                       UITableViewDataSource,

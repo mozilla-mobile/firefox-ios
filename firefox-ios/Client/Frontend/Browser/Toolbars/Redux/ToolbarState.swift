@@ -127,6 +127,34 @@ struct ToolbarState: ScreenState, Equatable {
             var state = state
             state.addressToolbar.url = action.url
             return state
+            
+        case ToolbarActionType.backButtonStateChanged:
+            guard let isEnabled = action.isButtonEnabled else { return state }
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .back }) {
+                state.navigationToolbar.actions[index].isEnabled = isEnabled
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .back }) {
+                state.addressToolbar.navigationActions[index].isEnabled = isEnabled
+            }
+
+            return state
+
+        case ToolbarActionType.forwardButtonStateChanged:
+            guard let isEnabled = action.isButtonEnabled else { return state }
+            var state = state
+
+            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .forward }) {
+                state.navigationToolbar.actions[index].isEnabled = isEnabled
+            }
+
+            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .forward }) {
+                state.addressToolbar.navigationActions[index].isEnabled = isEnabled
+            }
+
+            return state
 
         default:
             return state

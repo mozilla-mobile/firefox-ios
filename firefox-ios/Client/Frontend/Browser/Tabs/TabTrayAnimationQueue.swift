@@ -35,7 +35,6 @@ class TabTrayAnimationQueueImplementation: TabTrayAnimationQueue {
         collectionView.performBatchUpdates({
             animation()
         }, completion: { [weak self] (done) in
-            collectionView.reloadData()
             self?.performingChainedOperations = false
             self?.performChainedOperations(for: collectionView)
         })

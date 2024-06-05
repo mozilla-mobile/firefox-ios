@@ -61,7 +61,11 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
 
     private func createSubject(file: StaticString = #file,
                                line: UInt = #line) -> MicrosurveyCoordinator {
-        let subject = MicrosurveyCoordinator(model: MicrosurveyModel(), router: mockRouter, tabManager: mockTabManager)
+        let subject = MicrosurveyCoordinator(
+            model: MicrosurveyMock.model,
+            router: mockRouter,
+            tabManager: mockTabManager
+        )
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
