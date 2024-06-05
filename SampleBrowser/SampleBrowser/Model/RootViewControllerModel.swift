@@ -98,7 +98,8 @@ class RootViewControllerModel {
             urlTextFieldA11yLabel: "Address Bar",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            url: url
+            url: url,
+            searchTerm: nil
         )
 
         // FXIOS-8947: Use scroll position
