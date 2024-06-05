@@ -1759,15 +1759,24 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleNavigationActions(for state: BrowserViewControllerState) {
-        switch state.navigateTo {
+        guard let navigationState = state.navigateTo else { return }
+        updateZoomPageBarVisibility(visible: false)
+
+        switch navigationState {
         case .home:
             didTapOnHome()
         case .back:
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .none:
-            return
+        case .tabTray:
+            focusOnTabSegment()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .tabToolbar,
+                value: .tabView
+            )
         }
     }
 
@@ -1775,7 +1784,6 @@ class BrowserViewController: UIViewController,
         let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateTo == .home
         guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
 
-        updateZoomPageBarVisibility(visible: false)
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
         if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
@@ -1790,7 +1798,6 @@ class BrowserViewController: UIViewController,
         // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goBack()
     }
 
@@ -1799,8 +1806,13 @@ class BrowserViewController: UIViewController,
         // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goForward()
+    }
+
+    func focusOnTabSegment() {
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+        showTabTray(focusedSegment: segmentToFocus)
     }
 
     // MARK: Opening New Tabs

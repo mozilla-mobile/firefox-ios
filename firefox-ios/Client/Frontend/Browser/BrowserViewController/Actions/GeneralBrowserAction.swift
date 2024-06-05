@@ -34,6 +34,7 @@ enum GeneralBrowserActionType: ActionType {
     case goToHomepage
     case navigateBack
     case navigateForward
+    case showTabTray
     case showQRcodeReader
 }
 
