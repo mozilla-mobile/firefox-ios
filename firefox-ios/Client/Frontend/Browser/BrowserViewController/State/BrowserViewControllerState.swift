@@ -270,7 +270,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showQRcodeReader: false,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
-
         default:
             return state
         }
