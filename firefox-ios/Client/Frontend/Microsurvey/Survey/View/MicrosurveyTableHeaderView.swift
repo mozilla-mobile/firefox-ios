@@ -71,7 +71,11 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
 
     func configure(_ text: String, icon: UIImage?) {
         questionLabel.text = text
-        iconView.image = icon ?? UIImage(named: StandardImageIdentifiers.Large.lightbulb)?.withRenderingMode(.alwaysTemplate)
+        guard let icon else {
+            horizontalStackView.removeArrangedView(iconView)
+            return
+        }
+        iconView.image = icon.withRenderingMode(.alwaysTemplate)
     }
 
     // MARK: - ThemeApplicable
