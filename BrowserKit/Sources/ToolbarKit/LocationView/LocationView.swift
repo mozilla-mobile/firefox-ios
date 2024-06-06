@@ -17,6 +17,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     }
 
     private var urlAbsolutePath: String?
+    private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: (() -> Void)?
     private var locationViewDelegate: LocationViewDelegate?
@@ -33,6 +34,13 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         let fontAttributes = [NSAttributedString.Key.font: font]
         let urlTextFieldWidth = text.size(withAttributes: fontAttributes).width
         return urlTextFieldWidth >= locationViewWidth
+    }
+
+    private var dotWidth: CGFloat {
+        guard let font = urlTextField.font else { return 0 }
+        let fontAttributes = [NSAttributedString.Key.font: font]
+        let width = "...".size(withAttributes: fontAttributes).width
+        return CGFloat(width)
     }
 
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
@@ -104,7 +112,9 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         configureURLTextField(state)
         configureA11y(state)
         formatAndTruncateURLTextField()
+        updateIconContainer()
         locationViewDelegate = delegate
+        searchTerm = state.searchTerm
     }
 
     // MARK: - Layout
@@ -125,6 +135,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
+
+        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(
+            equalTo: iconContainerStackView.trailingAnchor)
+        urlTextFieldLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
@@ -174,35 +188,40 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
         // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.leadingAnchor)
+            updateURLTextFieldLeadingConstraint(constant: -dotWidth)
         } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor)
+            updateURLTextFieldLeadingConstraint()
         } else {
-            updateURLTextFieldLeadingConstraint(equalTo: iconContainerStackView.trailingAnchor,
-                                                constant: UX.horizontalSpace)
+            updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         }
     }
 
-    private func updateURLTextFieldLeadingConstraint(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
-        urlTextFieldLeadingConstraint?.isActive = false
-        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: anchor, constant: constant)
-        urlTextFieldLeadingConstraint?.isActive = true
+    private func updateURLTextFieldLeadingConstraint(constant: CGFloat = 0) {
+        urlTextFieldLeadingConstraint?.constant = constant
     }
 
     private func removeContainerIcons() {
         iconContainerStackView.removeAllArrangedViews()
     }
 
+    private func updateIconContainer() {
+        guard !urlTextField.isEditing else {
+            updateUIForSearchEngineDisplay()
+            return
+        }
+
+        if isURLTextFieldEmpty {
+            updateUIForSearchEngineDisplay()
+        } else {
+            updateUIForLockIconDisplay()
+        }
+    }
+
     private func updateUIForSearchEngineDisplay() {
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
         urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
-
-        updateURLTextFieldLeadingConstraint(
-            equalTo: iconContainerStackView.trailingAnchor,
-            constant: UX.horizontalSpace
-        )
-
+        updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         updateGradient()
     }
 
@@ -215,7 +234,8 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
-        urlTextField.text = state.url
+        urlTextField.resignFirstResponder()
+        urlTextField.text = state.url?.absoluteString
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = urlTextField.text
     }
@@ -286,13 +306,10 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             animateURLText(textField, options: .transitionFlipFromBottom, textAlignment: .natural)
         }
 
-        let url = URL(string: textField.text ?? "")
-        let queryText = locationViewDelegate?.locationViewDisplayTextForURL(url)
-
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
-            textField.text = (queryText != nil) ? queryText : urlAbsolutePath
+            textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
             textField.selectAll(nil)
         }
         locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")

@@ -7,13 +7,24 @@ import Redux
 import ToolbarKit
 import UIKit
 
-class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable, StoreSubscriber {
+protocol AddressToolbarContainerDelegate: AnyObject {
+    func searchSuggestions(searchTerm: String)
+    func openBrowser(searchTerm: String)
+    func openSuggestions(searchTerm: String)
+}
+
+class AddressToolbarContainer: UIView,
+                               ThemeApplicable,
+                               TopBottomInterchangeable,
+                               StoreSubscriber,
+                               AddressToolbarDelegate {
     typealias SubscriberStateType = BrowserViewControllerState
 
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var toolbarState: ToolbarState?
     private var model: AddressToolbarContainerModel?
+    private var delegate: AddressToolbarContainerDelegate?
 
     var parent: UIStackView?
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
@@ -28,9 +39,10 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(windowUUID: WindowUUID, profile: Profile) {
+    func configure(windowUUID: WindowUUID, profile: Profile, delegate: AddressToolbarContainerDelegate) {
         self.windowUUID = windowUUID
         self.profile = profile
+        self.delegate = delegate
         subscribeToRedux()
     }
 
@@ -82,8 +94,8 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
                                                  windowUUID: windowUUID)
         self.model = model
 
-        compactToolbar.configure(state: model.addressToolbarState)
-        regularToolbar.configure(state: model.addressToolbarState)
+        compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+        regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
     }
 
     private func setupLayout() {
@@ -111,5 +123,18 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+    }
+
+    // MARK: - AddressToolbarDelegate
+    func searchSuggestions(searchTerm: String) {
+        delegate?.searchSuggestions(searchTerm: searchTerm)
+    }
+
+    func openBrowser(searchTerm: String) {
+        delegate?.openBrowser(searchTerm: searchTerm)
+    }
+
+    func openSuggestions(searchTerm: String) {
+        delegate?.openSuggestions(searchTerm: searchTerm)
     }
 }

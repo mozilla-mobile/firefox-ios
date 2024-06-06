@@ -78,7 +78,8 @@ class ToolbarMiddleware: FeatureFlaggable {
                                    pageActions: loadAddressToolbarPageElements(),
                                    browserActions: [ToolbarState.ActionState](),
                                    displayTopBorder: displayTopBorder,
-                                   displayBottomBorder: displayBottomBorder)
+                                   displayBottomBorder: displayBottomBorder,
+                                   url: nil)
     }
 
     private func loadAddressToolbarPageElements() -> [ToolbarState.ActionState] {

@@ -69,6 +69,7 @@ final class ToolbarManagerTests: XCTestCase {
         let subject = createSubject()
         XCTAssertTrue(subject.shouldDisplayNavigationBorder(toolbarPosition: .top))
     }
+
     func testDisplayNavigationToolbarBorderWhenBottomPlacementThenShouldNotDisplay() {
         let subject = createSubject()
         XCTAssertFalse(subject.shouldDisplayNavigationBorder(toolbarPosition: .bottom))

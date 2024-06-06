@@ -28,7 +28,8 @@ class BrowserViewController: UIViewController,
                              RecentlyClosedPanelDelegate,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
-                             BrowserFrameInfoProvider {
+                             BrowserFrameInfoProvider,
+                             AddressToolbarContainerDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -805,7 +806,7 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
-            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile)
+            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
@@ -1719,7 +1720,13 @@ class BrowserViewController: UIViewController,
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
-        guard !isToolbarRefactorEnabled else { return }
+        guard !isToolbarRefactorEnabled else {
+            let action = ToolbarAction(url: tab.url?.displayURL,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.urlDidChange)
+            store.dispatch(action)
+            return
+        }
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
             let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
@@ -1734,6 +1741,43 @@ class BrowserViewController: UIViewController,
 
         if !isToolbarRefactorEnabled {
             navigationToolbar.updatePageStatus(isPage)
+        }
+    }
+
+    func didSubmitSearchText(_ text: String) {
+        guard let currentTab = tabManager.selectedTab else { return }
+
+        if let fixupURL = URIFixup.getURL(text) {
+            // The user entered a URL, so use it.
+            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
+            return
+        }
+
+        // We couldn't build a URL, so check for a matching search keyword.
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
+        guard let possibleKeywordQuerySeparatorSpace = trimmedText.firstIndex(of: " ") else {
+            submitSearchText(text, forTab: currentTab)
+            return
+        }
+
+        let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
+        let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
+
+        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword).uponQueue(.main) { result in
+            if var urlString = result.successValue ?? "",
+               let escapedQuery = possibleQuery.addingPercentEncoding(
+                withAllowedCharacters: NSCharacterSet.urlQueryAllowed
+               ),
+               let range = urlString.range(of: "%s") {
+                urlString.replaceSubrange(range, with: escapedQuery)
+
+                if let url = URL(string: urlString, invalidCharacters: false) {
+                    self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
+                    return
+                }
+            }
+
+            self.submitSearchText(text, forTab: currentTab)
         }
     }
 
@@ -2563,6 +2607,15 @@ class BrowserViewController: UIViewController,
     func getOverKeyboardContainerSize() -> CGSize {
         return overKeyboardContainer.frame.size
     }
+
+    // MARK: - AddressToolbarContainerDelegate
+    func searchSuggestions(searchTerm: String) {}
+
+    func openBrowser(searchTerm: String) {
+        didSubmitSearchText(searchTerm)
+    }
+
+    func openSuggestions(searchTerm: String) {}
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
