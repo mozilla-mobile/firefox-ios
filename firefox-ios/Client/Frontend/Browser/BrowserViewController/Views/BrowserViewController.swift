@@ -374,8 +374,13 @@ class BrowserViewController: UIViewController,
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
         if isToolbarRefactorEnabled {
-            navigationToolbarContainer.applyTheme(theme: currentTheme())
-            updateTabCountUsingTabManager(self.tabManager)
+            if showToolbar {
+                navigationToolbarContainer.isHidden = false
+                navigationToolbarContainer.applyTheme(theme: currentTheme())
+                updateTabCountUsingTabManager(self.tabManager)
+            } else {
+                navigationToolbarContainer.isHidden = true
+            }
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showToolbar)
