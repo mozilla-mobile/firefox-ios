@@ -35,6 +35,7 @@ enum GeneralBrowserActionType: ActionType {
     case navigateBack
     case navigateForward
     case showQRcodeReader
+    case showBackForwardList
 }
 
 class GeneralBrowserMiddlewareAction: Action {

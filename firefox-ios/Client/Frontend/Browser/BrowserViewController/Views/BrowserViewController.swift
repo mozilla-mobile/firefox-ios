@@ -1744,6 +1744,8 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         } else if state.showQRcodeReader {
             navigationHandler?.showQRCode(delegate: self)
+        } else if state.showBackForwardList {
+            navigationHandler?.showBackForwardList()
         }
     }
 
@@ -1759,15 +1761,14 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleNavigationActions(for state: BrowserViewControllerState) {
-        switch state.navigateTo {
+        guard let navigationState = state.navigateTo else { return }
+        switch navigationState {
         case .home:
             didTapOnHome()
         case .back:
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .none:
-            return
         }
     }
 

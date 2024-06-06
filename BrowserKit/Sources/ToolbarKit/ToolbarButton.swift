@@ -134,7 +134,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     @objc
     private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         if gestureRecognizer.state == .began {
-            let generator = UIImpactFeedbackGenerator(style: .light)
+            let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
             onLongPress?()
         }
