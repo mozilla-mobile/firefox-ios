@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 # Version 107.0 hash
-SHAVAR_COMMIT_HASH="1d71be25893b05ba85850078b1ccedc0824ca958"
+SHAVAR_COMMIT_HASH="91cf7dd142fc69aabe334a1a6e0091a1db228203"
 
 # Install Node.js dependencies and build user scripts
 npm install

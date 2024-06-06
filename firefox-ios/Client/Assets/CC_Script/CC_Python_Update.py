@@ -9,6 +9,7 @@ GITHUB_ACTIONS_TMP_PATH = f"{GITHUB_ACTIONS_PATH}tmp/"
 
 
 FILES_TO_DOWNLOAD = [
+    "browser/extensions/formautofill/content/addressFormLayout.mjs",
     "toolkit/components/formautofill/Constants.ios.mjs",
     "toolkit/modules/CreditCard.sys.mjs",
     "toolkit/components/formautofill/shared/CreditCardRuleset.sys.mjs",

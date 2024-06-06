@@ -23,8 +23,8 @@ private enum LoadingState {
 }
 
 public enum ClientType: String {
-    case Desktop = "deviceDesktopLarge"
-    case Mobile = "deviceMobileLarge"
+    case Desktop = "deviceTypeDesktop"
+    case Mobile = "deviceTypeMobile"
     case Tablet = "deviceTypeTablet"
     case VR = "deviceTypeVR"
     case TV = "deviceTypeTV"
@@ -43,6 +43,19 @@ public enum ClientType: String {
             return ClientType.TV
         default:
             return ClientType.Mobile
+        }
+    }
+
+    var imageName: String {
+        switch self {
+        case .Desktop:
+            return StandardImageIdentifiers.Large.deviceDesktop
+        case .Mobile:
+            return StandardImageIdentifiers.Large.deviceMobile
+        case .Tablet:
+            return StandardImageIdentifiers.Large.deviceTablet
+        default:
+            return StandardImageIdentifiers.Large.deviceMobile
         }
     }
 }
@@ -221,7 +234,7 @@ class DevicePickerViewController: UITableViewController {
                 let hostingCell = tableView.dequeueReusableCell(
                 withIdentifier: HostingTableViewCell<HelpView>.cellIdentifier) as? HostingTableViewCell<HelpView> {
                 let textColor = theme.colors.textPrimary
-                let imageColor = theme.colors.iconPrimary
+                let imageColor = theme.colors.iconDisabled
 
                 let emptyView = HelpView(textColor: textColor,
                                          imageColor: imageColor,

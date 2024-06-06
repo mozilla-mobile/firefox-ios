@@ -4,7 +4,7 @@ This is the subdirectory that contains the Firefox for iOS application.
 
 ## Main branch
 
-Firefox for iOS works with [Xcode 15.2](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 17.2 and above.
+Firefox for iOS works with [Xcode 15.4](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 15.0 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -27,7 +27,11 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Install Node.js dependencies, build user scripts and update content blocker:
+1. Change directories to the project root:
+    ```shell
+    cd firefox-ios
+    ```
+1. From the project root, install Node.js dependencies, build user scripts and update content blocker:
     ```shell
     sh ./bootstrap.sh
     ```

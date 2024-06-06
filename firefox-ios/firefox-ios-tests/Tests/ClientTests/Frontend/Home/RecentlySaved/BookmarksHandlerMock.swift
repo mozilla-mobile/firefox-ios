@@ -6,6 +6,10 @@ import Foundation
 import Storage
 import Shared
 
+import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
+import class MozillaAppServices.BookmarkNodeData
+
 class BookmarksHandlerMock: BookmarksHandler {
     var getRecentBookmarksCallCount = 0
     var getRecentBookmarksCompletion: (([BookmarkItemData]) -> Void)?

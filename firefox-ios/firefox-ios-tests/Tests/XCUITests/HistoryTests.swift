@@ -269,7 +269,10 @@ class HistoryTests: BaseTestCase {
             mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
         XCTAssertTrue(app.staticTexts[bookOfMozilla["title"]!].exists)
-        XCTAssertEqual(userState.numTabs, 2)
+        // userState.numTabs does not work on iOS 15
+        if #available(iOS 16, *) {
+            XCTAssertEqual(userState.numTabs, 2)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307485
@@ -325,9 +328,6 @@ class HistoryTests: BaseTestCase {
         app.cells.buttons[StandardImageIdentifiers.Large.cross].firstMatch.tap()
 
         // On private mode, the "Recently Closed Tabs List" is empty
-        // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/19672
-        navigator.nowAt(BrowserTab)
-        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
         closeKeyboard()

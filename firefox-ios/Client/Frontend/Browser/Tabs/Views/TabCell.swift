@@ -64,7 +64,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var titleText: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 12, weight: .semibold)
+        label.font = FXFontStyles.Bold.caption1.scaledFont()
     }
 
     private lazy var closeButton: UIButton = .build { button in

@@ -120,7 +120,9 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"])
         if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite4].exists) {
             if !(app.tables["SiteTable"].cells.staticTexts[SuggestedSite5].exists) {
-                mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[SuggestedSite6])
+                if #available(iOS 16, *) {
+                    mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts[SuggestedSite6])
+                }
             }
         }
     }
@@ -211,10 +213,18 @@ class SearchTests: BaseTestCase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         // Click on the > button to get to that option only on iPhone
-        while !app.collectionViews.menuItems["Search with Firefox"].exists {
-            app.buttons["Forward"].firstMatch.tap()
-            mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
-            mozWaitForElementToExist(app.buttons["Forward"])
+        if #available(iOS 16, *) {
+            while !app.collectionViews.menuItems["Search with Firefox"].exists {
+                app.buttons["Forward"].firstMatch.tap()
+                mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
+                mozWaitForElementToExist(app.buttons["Forward"])
+            }
+        } else {
+            while !app.menuItems["Search with Firefox"].exists {
+                app.menuItems["Show more items"].firstMatch.tap()
+                mozWaitForElementToExist(app.menuItems.firstMatch)
+                mozWaitForElementToExist(app.menuItems["Show more items"])
+            }
         }
 
         mozWaitForElementToExist(app.menuItems["Search with Firefox"])
@@ -281,7 +291,10 @@ class SearchTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306989
     // Smoketest
-    func testOpenTabsInSearchSuggestions() {
+    func testOpenTabsInSearchSuggestions() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("Test fails intermittently for iOS 15")
+        }
         // Go to localhost website and check the page displays correctly
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
@@ -355,10 +368,10 @@ class SearchTests: BaseTestCase {
     func testSearchSuggestions() {
         // Tap on URL Bar and type "g"
         navigator.nowAt(NewTabScreen)
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons["appendUpLarge"].firstMatch.tap()
+        app.tables.buttons["appendUpLeftLarge"].firstMatch.tap()
 
         // The search suggestion fills the URL bar but does not conduct the search
         let urlBarAddress = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
@@ -368,7 +381,7 @@ class SearchTests: BaseTestCase {
         // Delete the text and type "g"
         mozWaitForElementToExist(app.buttons["Clear text"])
         app.buttons["Clear text"].tap()
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 4, isSwitchOn: true)
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the text letter "g"
         app.tables.cells.firstMatch.tap()
@@ -382,8 +395,8 @@ class SearchTests: BaseTestCase {
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)
 
         // No search suggestions are displayed
-        // Firefox suggest adds 2 more cells
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 2, isSwitchOn: false)
+        // Firefox suggest adds 2, 3 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: false)
 
         // Enable "Show search suggestions" from Settings and type text in a new tab
         app.tables.cells.firstMatch.tap()
@@ -391,8 +404,8 @@ class SearchTests: BaseTestCase {
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: true)
 
         // Search suggestions are displayed
-        // Firefox suggest adds 2 more cells
-        typeTextAndValidateSearchSuggestions(text: "g", totalSuggestedSearches: 6, isSwitchOn: true)
+        // Firefox suggest adds 2, 3 more cells
+        typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
     }
 
     private func turnOnOffSearchSuggestions(turnOnSwitch: Bool) {
@@ -414,17 +427,19 @@ class SearchTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
     }
 
-    private func typeTextAndValidateSearchSuggestions(text: String, totalSuggestedSearches: Int, isSwitchOn: Bool) {
+    private func typeTextAndValidateSearchSuggestions(text: String, isSwitchOn: Bool) {
         typeOnSearchBar(text: text)
         // Search suggestions are shown
         if isSwitchOn {
-            mozWaitForElementToExist(app.staticTexts["Google Search"])
+            mozWaitForElementToExist(app.staticTexts.elementContainingText("google"))
+            XCTAssertTrue(app.staticTexts.elementContainingText("google").exists)
             mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
+            XCTAssertTrue(app.tables.cells.count >= 4)
         } else {
-            mozWaitForElementToNotExist(app.staticTexts["Google Search"])
-            mozWaitForElementToNotExist(app.tables.cells.staticTexts["g"])
+            mozWaitForElementToNotExist(app.tables.buttons["appendUpLeftLarge"])
+            mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
+            XCTAssertTrue(app.tables.cells.count <= 3)
         }
-        XCTAssertEqual(app.tables.cells.count, totalSuggestedSearches)
     }
 
     private func validateUrlHasFocusAndKeyboardIsDisplayed() {

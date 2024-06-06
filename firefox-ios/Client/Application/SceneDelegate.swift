@@ -9,7 +9,6 @@ import Shared
 import Sync
 import UserNotifications
 import Account
-import MozillaAppServices
 import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -42,8 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             Experiments.shared.initializeTooling(url: url)
         }
 
-        routeBuilder.configure(isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate),
-                               prefs: profile.prefs)
+        routeBuilder.configure(prefs: profile.prefs)
 
         let sceneCoordinator = SceneCoordinator(scene: scene)
         self.sceneCoordinator = sceneCoordinator
@@ -63,6 +61,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Notify WindowManager that window is closing
         (AppContainer.shared.resolve() as WindowManager).windowWillClose(uuid: sceneCoordinator.windowUUID)
+        self.sceneCoordinator?.removeAllChildren()
+        self.sceneCoordinator = nil
     }
 
     // MARK: - Transitioning to Foreground
@@ -102,7 +102,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
-        // Configure the route with the latest browsing state.
         guard let url = URLContexts.first?.url else { return }
         handleOpenURL(url)
     }
@@ -134,17 +133,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func handleOpenURL(_ url: URL) {
-        routeBuilder.configure(
-            isPrivate: UserDefaults.standard.bool(
-                forKey: PrefsKeys.LastSessionWasPrivate
-            ),
-            prefs: profile.prefs
-        )
-        guard let route = routeBuilder.makeRoute(url: url) else { return }
-        handle(route: route)
+        routeBuilder.configure(prefs: profile.prefs)
+
+        // Before processing the incoming URL, check if it is a widget that is opening a tab via UUID.
+        // If so, we want to be sure that we select the tab in the correct iPad window.
+        if shouldRerouteIncomingURLToSpecificWindow(url),
+           let tabUUID = URLScanner(url: url)?.value(query: "uuid"),
+           let targetWindow = (AppContainer.shared.resolve() as WindowManager).window(for: tabUUID),
+           targetWindow != sceneCoordinator?.windowUUID {
+            DefaultApplicationHelper().open(url, inWindow: targetWindow)
+        } else {
+            guard let route = routeBuilder.makeRoute(url: url) else { return }
+            handle(route: route)
+        }
     }
 
     // MARK: - Misc. Helpers
+
+    private func shouldRerouteIncomingURLToSpecificWindow(_ url: URL) -> Bool {
+        return routeBuilder.parseURLHost(url)?.shouldRouteDeeplinkToSpecificIPadWindow ?? false
+    }
 
     private func handle(connectionOptions: UIScene.ConnectionOptions) {
         if let context = connectionOptions.urlContexts.first,

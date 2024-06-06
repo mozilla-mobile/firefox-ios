@@ -3,9 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
 
-public protocol RustFirefoxSuggestActor: Actor {
+import class MozillaAppServices.SuggestStore
+import class MozillaAppServices.SuggestStoreBuilder
+import class MozillaAppServices.Viaduct
+import enum MozillaAppServices.SuggestionProvider
+import struct MozillaAppServices.RemoteSettingsConfig
+import struct MozillaAppServices.SuggestIngestionConstraints
+import struct MozillaAppServices.SuggestionQuery
+
+public protocol RustFirefoxSuggestProtocol {
     /// Downloads and stores new Firefox Suggest suggestions.
     func ingest() async throws
 
@@ -17,13 +24,21 @@ public protocol RustFirefoxSuggestActor: Actor {
     ) async throws -> [RustFirefoxSuggestion]
 
     /// Interrupts any ongoing queries for suggestions.
-    nonisolated func interruptReader()
+    func interruptReader()
+
+    /// Interrupts all ongoing operations.
+    func interruptEverything()
 }
 
-/// An actor that wraps the synchronous Rust `SuggestStore` binding to execute
-/// blocking operations on the default global concurrent executor.
-public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
+/// Wraps the synchronous Rust `SuggestStore` binding to execute
+/// blocking operations on a dispatch queue.
+public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
     private let store: SuggestStore
+
+    // Using a pair of serial queues lets read and write operations run
+    // without blocking one another.
+    private let writerQueue = DispatchQueue(label: "RustFirefoxSuggest.writer")
+    private let readerQueue = DispatchQueue(label: "RustFirefoxSuggest.reader")
 
     public init(dataPath: String, cachePath: String, remoteSettingsConfig: RemoteSettingsConfig? = nil) throws {
         var builder = SuggestStoreBuilder()
@@ -42,7 +57,16 @@ public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
         // downloading new suggestions. This is safe to call multiple times.
         Viaduct.shared.useReqwestBackend()
 
-        try store.ingest(constraints: SuggestIngestionConstraints())
+        try await withCheckedThrowingContinuation { continuation in
+            writerQueue.async(qos: .utility) {
+                do {
+                    try self.store.ingest(constraints: SuggestIngestionConstraints())
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
     public func query(
@@ -50,14 +74,27 @@ public actor RustFirefoxSuggest: RustFirefoxSuggestActor {
         providers: [SuggestionProvider],
         limit: Int32
     ) async throws -> [RustFirefoxSuggestion] {
-        return try store.query(query: SuggestionQuery(
-            keyword: keyword,
-            providers: providers,
-            limit: limit
-        )).compactMap(RustFirefoxSuggestion.init)
+        return try await withCheckedThrowingContinuation { continuation in
+            readerQueue.async(qos: .userInitiated) {
+                do {
+                    let suggestions = try self.store.query(query: SuggestionQuery(
+                        keyword: keyword,
+                        providers: providers,
+                        limit: limit
+                    )).compactMap(RustFirefoxSuggestion.init)
+                    continuation.resume(returning: suggestions)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 
-    public nonisolated func interruptReader() {
+    public func interruptReader() {
         store.interrupt()
+    }
+
+    public func interruptEverything() {
+        store.interrupt(kind: .readWrite)
     }
 }

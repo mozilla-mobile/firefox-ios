@@ -11,7 +11,6 @@ import Shared
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
 class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     private struct UX {
-        static let bookmarkTitleFontSize: CGFloat = 12
         static let containerSpacing: CGFloat = 16
         static let heroImageSize = CGSize(width: 126, height: 82)
         static let generalSpacing: CGFloat = 8
@@ -26,8 +25,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     private var heroImageView: HeroImageView = .build { _ in }
 
     let itemTitle: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.bookmarkTitleFontSize)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
 

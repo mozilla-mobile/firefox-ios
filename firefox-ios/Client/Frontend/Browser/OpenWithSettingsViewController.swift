@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 class OpenWithSettingsViewController: ThemedTableViewController {
     struct MailtoProviderEntry {

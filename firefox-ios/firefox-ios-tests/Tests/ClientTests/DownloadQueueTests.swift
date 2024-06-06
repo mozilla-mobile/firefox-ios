@@ -4,6 +4,7 @@
 
 @testable import Client
 import XCTest
+import Common
 
 class DownloadQueueTests: XCTestCase {
     let didStartDownload = "downloadQueue(_:didStartDownload:)"

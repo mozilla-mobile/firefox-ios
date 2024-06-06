@@ -7,23 +7,25 @@ import CoreSpotlight
 import Shared
 
 final class RouteBuilder {
-    private var isPrivate = false
     private var prefs: Prefs?
 
-    func configure(isPrivate: Bool,
-                   prefs: Prefs) {
-        self.isPrivate = isPrivate
+    func configure(prefs: Prefs) {
         self.prefs = prefs
+    }
+
+    func parseURLHost(_ url: URL) -> DeeplinkInput.Host? {
+        guard let urlScanner = URLScanner(url: url), urlScanner.isOurScheme else { return nil }
+        return DeeplinkInput.Host(rawValue: urlScanner.host.lowercased())
     }
 
     func makeRoute(url: URL) -> Route? {
         guard let urlScanner = URLScanner(url: url) else { return nil }
 
-        if urlScanner.isOurScheme, let host = DeeplinkInput.Host(rawValue: urlScanner.host.lowercased()) {
+        if let host = parseURLHost(url) {
             let urlQuery = urlScanner.fullURLQueryItem()?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
-            let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? isPrivate
+            let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? false
 
             recordTelemetry(input: host, isPrivate: isPrivate)
 
@@ -121,7 +123,7 @@ final class RouteBuilder {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
-            return .search(url: url, isPrivate: isPrivate, options: [.focusLocationField])
+            return .search(url: url, isPrivate: false, options: [.focusLocationField])
         } else {
             return nil
         }

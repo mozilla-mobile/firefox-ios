@@ -8,6 +8,8 @@ import TabDataStore
 import Shared
 import Storage
 
+import enum MozillaAppServices.BookmarkRoots
+
 class TabManagerMiddleware {
     private let profile: Profile
     private let logger: Logger
@@ -208,7 +210,7 @@ class TabManagerMiddleware {
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
-                                    isSelected: tab == selectedTab,
+                                    isSelected: tab.tabUUID == selectedTab?.tabUUID,
                                     isPrivate: tab.isPrivate,
                                     isFxHomeTab: tab.isFxHomeTab,
                                     tabTitle: tab.displayTitle,
@@ -301,9 +303,10 @@ class TabManagerMiddleware {
     /// - Parameters:
     ///   - tabUUID: UUID of the tab to be closed/removed
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
-    private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID) async -> Bool {
+    private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
-        let isLastTab = tabManager.normalTabs.count == 1
+        let isLastTab = isPrivate ? tabManager.privateTabs.count == 1 : tabManager.normalTabs.count == 1
+
         await tabManager.removeTab(tabUUID)
         return isLastTab
     }
@@ -312,7 +315,7 @@ class TabManagerMiddleware {
     /// - Parameter tabUUID: UUID of the tab to be closed/removed
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         Task {
-            let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid)
+            let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
             await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
@@ -357,10 +360,10 @@ class TabManagerMiddleware {
     private func undoCloseTab(state: AppState, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid),
-              let backupTab = tabManager.backupCloseTab
+              tabManager.backupCloseTab != nil
         else { return }
 
-        tabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
+        tabManager.undoCloseTab()
 
         let model = getTabsDisplayModel(for: tabsState.isPrivateMode, shouldScrollToTab: false, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
@@ -455,7 +458,10 @@ class TabManagerMiddleware {
         Task {
             if let tabToClose = tabManager.getTabForUUID(uuid: tabUUID) {
                 let index = tabsState.inactiveTabs.firstIndex { $0.tabUUID == tabUUID }
-                tabManager.backupCloseTab = BackupCloseTab(tab: tabToClose, restorePosition: index)
+                tabManager.backupCloseTab = BackupCloseTab(
+                    tab: tabToClose,
+                    restorePosition: index,
+                    isSelected: false)
             }
             await tabManager.removeTab(tabUUID)
 
@@ -474,9 +480,9 @@ class TabManagerMiddleware {
 
     private func undoCloseInactiveTab(uuid: WindowUUID) {
         let windowTabManager = self.tabManager(for: uuid)
-        guard let backupTab = windowTabManager.backupCloseTab else { return }
+        guard windowTabManager.backupCloseTab != nil else { return }
 
-        windowTabManager.undoCloseTab(tab: backupTab.tab, position: backupTab.restorePosition)
+        windowTabManager.undoCloseTab()
         let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
                                                      windowUUID: uuid,
@@ -596,10 +602,6 @@ class TabManagerMiddleware {
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
-        let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
     }
 
     private func changePanel(_ panel: TabTrayPanelType, uuid: WindowUUID) {

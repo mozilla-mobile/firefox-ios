@@ -21,7 +21,6 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         static let sideMarginMultiplier: CGFloat  = 0.05
 
-        static let titleFontSize: CGFloat = 20
         static let titleDistanceFromImage: CGFloat = 16
         static let titleWidth: CGFloat = 343
 
@@ -63,8 +62,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                size: UX.titleFontSize)
+        label.font = FXFontStyles.Bold.title3.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true

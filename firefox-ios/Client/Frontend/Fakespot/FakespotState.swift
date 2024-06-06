@@ -33,17 +33,6 @@ struct FakespotState: ScreenState, Equatable {
     var isSettingsExpanded: Bool { expandState[currentTabUUID]?.isSettingsExpanded ?? false }
     var isHighlightsSectionExpanded: Bool { expandState[currentTabUUID]?.isHighlightsSectionExpanded ?? false }
 
-    init(_ appState: BrowserViewControllerState) {
-        self.init(
-            windowUUID: appState.windowUUID,
-            isOpen: appState.fakespotState.isOpen,
-            sidebarOpenForiPadLandscape: appState.fakespotState.sidebarOpenForiPadLandscape,
-            currentTabUUID: appState.fakespotState.currentTabUUID,
-            expandState: appState.fakespotState.expandState,
-            telemetryState: appState.fakespotState.telemetryState
-        )
-    }
-
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
@@ -84,13 +73,13 @@ struct FakespotState: ScreenState, Equatable {
             return state
 
         case FakespotActionType.reviewQualityDidChange:
-            let isExpanded = action.isExpanded ?? state.isSettingsExpanded
+            let isExpanded = action.isExpanded ?? state.isReviewQualityExpanded
             var state = state
             state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded = isExpanded
             return state
 
         case FakespotActionType.highlightsDidChange:
-            let isExpanded = action.isExpanded ?? state.isSettingsExpanded
+            let isExpanded = action.isExpanded ?? state.isHighlightsSectionExpanded
             var state = state
             state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
             return state
@@ -138,16 +127,14 @@ struct FakespotState: ScreenState, Equatable {
             return state
 
         case FakespotActionType.setAppearanceTo:
-            let isEnabled = action.isExpanded ?? state.isSettingsExpanded
+            let isEnabled = action.isOpen ?? state.isOpen
             var state = state
             state.isOpen = isEnabled
             state.sendSurfaceDisplayedTelemetryEvent = !isEnabled
             return state
 
         case FakespotActionType.surfaceDisplayedEventSend:
-            let isEnabled = action.isExpanded ?? state.isSettingsExpanded
             var state = state
-            state.isOpen = isEnabled
             state.sendSurfaceDisplayedTelemetryEvent = false
             return state
 

@@ -56,16 +56,14 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: 19)
+        label.font = FXFontStyles.Regular.title3.scaledFont()
         return label
     }()
 
     private lazy var subtitleLabel: UILabel = {
         let label = createLabel()
         label.numberOfLines = 0
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
-                                                            size: 13)
+        label.font = FXFontStyles.Regular.footnote.scaledFont()
         return label
     }()
 
@@ -190,11 +188,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         titleLabel.text = item.currentTitle
 
         if item.bold {
-            titleLabel.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                         size: 19)
+            titleLabel.font = FXFontStyles.Bold.title3.scaledFont()
         } else {
-            titleLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                                     size: 17)
+            titleLabel.font = FXFontStyles.Regular.body.scaledFont()
         }
 
         item.customRender?(titleLabel, self)

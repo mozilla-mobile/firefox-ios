@@ -24,8 +24,8 @@ const ENABLED_AUTOFILL_ADDRESSES_SUPPORTED_COUNTRIES_PREF =
   "extensions.formautofill.addresses.supportedCountries";
 const ENABLED_AUTOFILL_CREDITCARDS_PREF =
   "extensions.formautofill.creditCards.enabled";
-const ENABLED_AUTOFILL_CREDITCARDS_REAUTH_PREF =
-  "extensions.formautofill.reauth.enabled";
+const AUTOFILL_CREDITCARDS_REAUTH_PREF =
+  "extensions.formautofill.creditCards.reauth.optout";
 const AUTOFILL_CREDITCARDS_HIDE_UI_PREF =
   "extensions.formautofill.creditCards.hideui";
 const FORM_AUTOFILL_SUPPORT_RTL_PREF = "extensions.formautofill.supportRTL";
@@ -44,7 +44,7 @@ export const FormAutofill = {
   ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF,
   ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
-  ENABLED_AUTOFILL_CREDITCARDS_REAUTH_PREF,
+  AUTOFILL_CREDITCARDS_REAUTH_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
   AUTOFILL_ADDRESSES_AUTOCOMPLETE_OFF_PREF,
 

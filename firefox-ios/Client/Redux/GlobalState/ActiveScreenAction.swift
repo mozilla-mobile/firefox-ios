@@ -4,11 +4,12 @@
 
 import Foundation
 import Redux
+import Common
 
 class ScreenAction: Action {
     let screen: AppScreen
 
-    init(windowUUID: UUID,
+    init(windowUUID: WindowUUID,
          actionType: ActionType,
          screen: AppScreen) {
         self.screen = screen
@@ -25,6 +26,7 @@ enum AppScreen {
     case tabsPanel
     case remoteTabsPanel
     case tabPeek
+    case microsurvey
 }
 
 enum ScreenActionType: ActionType {

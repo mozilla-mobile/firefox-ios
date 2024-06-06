@@ -5,6 +5,8 @@
 import Storage
 import AuthenticationServices
 
+import struct MozillaAppServices.EncryptedLogin
+
 extension LoginRecord {
     public var passwordCredentialIdentity: ASPasswordCredentialIdentity {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)

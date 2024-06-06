@@ -1,6 +1,11 @@
 name: Build and Run Autofill Automation
 permissions: read-all
 on:
+    workflow_call:
+      secrets:
+          SLACK_WEBHOOK_URL:
+            required: true
+    workflow_dispatch: {}
     pull_request:
       paths:
         - 'firefox-ios/Client/Assets/CC_Script/**'
@@ -16,10 +21,14 @@ jobs:
       matrix:
         python-version: [3.9]
         xcode: ["15.2"]
+    continue-on-error: true
     steps:
         - name: Checkout repository
           uses: actions/checkout@v4
-
+        - name: Get the current github action name
+          run: |
+            github_action_name="Update credential provider script"
+            echo "github_action_name=$github_action_name" >> $GITHUB_ENV
         - name: Clone repository
           run: |
             git clone https://github.com/issammani/test-playwright.git
@@ -39,3 +48,17 @@ jobs:
             
             echo "Run tests"
             npm test
+        - name: Set job log URL
+          if: always()
+          run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+        - name: Send Slack notification if tests fail
+          if: '${{ !cancelled() && !github.event.pull_request.head.repo.fork }}'
+          id: slack
+          uses: slackapi/slack-github-action@v1.26.0
+          with:
+            payload-file-path: "./test-fixtures/ci/slack-notification-payload-autofill-test.json"
+          env:
+            JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
+            JOB_STATUS_COLOR: ${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#FF0000' }}
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

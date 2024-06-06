@@ -117,15 +117,17 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
-    var adsTelemetryUrlList: [String] = [String]() {
+    var adsTelemetryUrlList = [String]() {
         didSet {
             startingSearchUrlWithAds = url
         }
     }
-    var adsTelemetryRedirectUrlList: [URL] = [URL]()
+    var adsTelemetryRedirectUrlList = [URL]()
     var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
     var hasHomeScreenshot = false
+    var shouldScrollToTop = false
+
     private var logger: Logger
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
@@ -191,6 +193,10 @@ class Tab: NSObject, ThemeApplicable {
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal
     /// or not, it will resort to other displayable titles.
     var displayTitle: String {
+        if self.isFxHomeTab {
+            return .AppMenu.AppMenuOpenHomePageTitleString
+        }
+
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
             return lastTitle
         }
@@ -198,14 +204,6 @@ class Tab: NSObject, ThemeApplicable {
         // First, check if the webView can give us a title.
         if let title = webView?.title, !title.isEmpty {
             return title
-        }
-
-        // If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData
-        // on this tab. When picking a display title. Tabs with sessionData are pending a restore so show their
-        // old title. To prevent flickering of the display title. If a tab is restoring make sure to use
-        // its lastTitle.
-        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false {
-            return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
         // Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
@@ -412,7 +410,9 @@ class Tab: NSObject, ThemeApplicable {
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
-        self.firstCreatedTime = Date().toTimestamp()
+        let tabCreatedTime = Date().toTimestamp()
+        self.lastExecutedTime = tabCreatedTime
+        self.firstCreatedTime = tabCreatedTime
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
@@ -725,7 +725,7 @@ class Tab: NSObject, ThemeApplicable {
     func hideContent(_ animated: Bool = false) {
         webView?.isUserInteractionEnabled = false
         if animated {
-            UIView.animate(withDuration: 0.25, animations: { () -> Void in
+            UIView.animate(withDuration: 0.25, animations: { () in
                 self.webView?.alpha = 0.0
             })
         } else {
@@ -736,7 +736,7 @@ class Tab: NSObject, ThemeApplicable {
     func showContent(_ animated: Bool = false) {
         webView?.isUserInteractionEnabled = true
         if animated {
-            UIView.animate(withDuration: 0.25, animations: { () -> Void in
+            UIView.animate(withDuration: 0.25, animations: { () in
                 self.webView?.alpha = 1.0
             })
         } else {

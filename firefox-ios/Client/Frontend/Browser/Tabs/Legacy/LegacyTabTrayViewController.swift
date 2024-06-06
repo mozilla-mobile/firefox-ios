@@ -8,6 +8,8 @@ import Foundation
 import UIKit
 import Common
 
+import enum MozillaAppServices.VisitType
+
 enum TabTrayViewAction {
     case addTab
     case deleteTab
@@ -221,7 +223,6 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         viewSetup()
         listenForThemeChange(view)
         applyTheme()
-        updatePrivateUIState()
         changePanel()
     }
 
@@ -268,13 +269,6 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         ])
 
         showPanel(viewModel.tabTrayView)
-    }
-
-    func updatePrivateUIState() {
-        UserDefaults.standard.set(
-            viewModel.tabManager.selectedTab?.isPrivate ?? false,
-            forKey: PrefsKeys.LastSessionWasPrivate
-        )
     }
 
     private func updateTitle() {
@@ -339,7 +333,6 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         }
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
-        updatePrivateUIState()
         updateTitle()
     }
 
@@ -528,9 +521,9 @@ extension LegacyTabTrayViewController: Notifiable {
                       notification.windowUUID == self?.windowUUID
                 else { return }
                 self?.countLabel.text = self?.viewModel.normalTabsCount
-                self?.segmentedControlIphone.setImage(
-                    UIImage(named: ImageIdentifiers.navTabCounter)!.overlayWith(image: label),
-                    forSegmentAt: 0)
+                if let image = UIImage(named: StandardImageIdentifiers.Large.tab) {
+                    self?.segmentedControlIphone.setImage(image.overlayWith(image: label), forSegmentAt: 0)
+                }
             default: break
             }
         }
@@ -589,7 +582,6 @@ extension LegacyTabTrayViewController {
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         // Update Private mode when closing TabTray, if the mode toggle but
         // no tab is pressed with return to previous state
-        updatePrivateUIState()
         viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
         if viewModel.segmentToFocus == .privateTabs {
             TelemetryWrapper.recordEvent(category: .action,

@@ -1,0 +1,18 @@
+# The configuration for the trackingProtection feature
+features:
+  tracking-protection-refactor:
+    description: >
+     The Enhanced Tracking Protection refactor
+    variables:
+      enabled:
+        description: >
+          Whether the Enhanced Tracking Protection refactor is enabled or not
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

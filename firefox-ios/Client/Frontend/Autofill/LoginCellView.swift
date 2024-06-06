@@ -6,6 +6,8 @@ import SwiftUI
 import Common
 import Storage
 
+import struct MozillaAppServices.EncryptedLogin
+
 // MARK: - LoginCellView
 
 extension VerticalAlignment {
@@ -64,7 +66,7 @@ struct LoginCellView: View {
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }

@@ -60,12 +60,6 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
     }
 
-    private var shouldSetInitialScrollToTop: Bool {
-        return tab?.mimeType == MIMEType.PDF && shouldScrollToTop
-    }
-
-    var shouldScrollToTop = false
-
     private var isZoomedOut = false
     private var lastZoomedScale: CGFloat = 0
     private var isUserZoom = false
@@ -159,6 +153,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         }
 
         guard !tabIsLoading() else { return }
+
+        tab?.shouldScrollToTop = false
 
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
@@ -458,7 +454,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll else { return }
 
-        shouldScrollToTop = false
+        tab?.shouldScrollToTop = false
 
         if decelerate || (toolbarState == .animating && !decelerate) {
             if scrollDirection == .up {
@@ -473,7 +469,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // for PDFs, we should set the initial offset to 0 (ZERO)
-        if shouldSetInitialScrollToTop {
+        if let tab, tab.shouldScrollToTop {
             setOffset(y: 0, for: scrollView)
         }
 

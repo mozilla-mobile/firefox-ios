@@ -27,7 +27,8 @@ class ThemeTableViewToggleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc private func toggleSwitched(_ sender: UISwitch) {
+    @objc
+    private func toggleSwitched(_ sender: UISwitch) {
     delegate?.didEnableSystemTheme(sender.isOn)
     }
 }

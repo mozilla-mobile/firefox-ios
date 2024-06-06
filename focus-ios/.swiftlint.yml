@@ -1,9 +1,9 @@
 only_rules: # Only enforce these rules, ignore all others
   # - line_length
+  - class_delegate_protocol
   - blanket_disable_command
-  # - class_delegate_protocol
   - closure_spacing
-  # - closure_parameter_position
+  - closure_parameter_position
   - colon
   - comma
   - comment_spacing
@@ -21,26 +21,26 @@ only_rules: # Only enforce these rules, ignore all others
   - inclusive_language
   - invalid_swiftlint_command
   - large_tuple
-  # - leading_whitespace
-  # - legacy_cggeometry_functions
-  # - legacy_constant
+  - leading_whitespace
+  - legacy_cggeometry_functions
+  - legacy_constant
   - legacy_constructor
-  # - legacy_hashing
+  - legacy_hashing
   - legacy_nsgeometry_functions
-  # - mark
+  - mark
   - no_space_in_method_call
   - ns_number_init_as_function_reference
   - operator_whitespace
   - orphaned_doc_comment
   - private_over_fileprivate
-  # - protocol_property_accessors_order
+  - protocol_property_accessors_order
   - redundant_discardable_let
   - redundant_objc_attribute
   - redundant_optional_initialization
   - redundant_string_enum_value
   - redundant_void_return
   - return_arrow_whitespace
-  # - statement_position
+  - statement_position
   - switch_case_alignment
   - syntactic_sugar
   - trailing_newline
@@ -55,9 +55,9 @@ only_rules: # Only enforce these rules, ignore all others
   - vertical_whitespace
   - void_function_in_ternary
   - void_return
-  # - file_header
+  - file_header
   - redundant_type_annotation
-  # - attributes
+  - attributes
   - closing_brace
   - closure_end_indentation
   - contains_over_filter_count

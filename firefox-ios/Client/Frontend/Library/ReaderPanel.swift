@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import enum MozillaAppServices.VisitType
+
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
@@ -180,7 +182,7 @@ class ReadingListPanel: UITableViewController,
     weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
     var state: LibraryPanelMainState
-    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 class PasswordManagerListViewController: SensitiveViewController, Themeable {
     static let loginsSettingsSection = 0
 

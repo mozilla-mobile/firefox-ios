@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 enum AppScreenState: Equatable {
     case onboardingViewController(OnboardingViewControllerState)
@@ -13,6 +14,7 @@ enum AppScreenState: Equatable {
     case tabsTray(TabTrayState)
     case themeSettings(ThemeSettingsState)
     case tabPeek(TabPeekState)
+    case microsurvey(MicrosurveyState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -30,6 +32,8 @@ enum AppScreenState: Equatable {
             return .remoteTabsPanel(RemoteTabsPanelState.reducer(state, action))
         case .browserViewController(let state):
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
+        case .microsurvey(let state):
+            return .microsurvey(MicrosurveyState.reducer(state, action))
         }
     }
 
@@ -43,6 +47,7 @@ enum AppScreenState: Equatable {
         case .tabsPanel: return .tabsPanel
         case .remoteTabsPanel: return .remoteTabsPanel
         case .tabPeek: return .tabPeek
+        case .microsurvey: return .microsurvey
         }
     }
 
@@ -55,6 +60,7 @@ enum AppScreenState: Equatable {
         case .tabsPanel(let state): return state.windowUUID
         case .themeSettings(let state): return state.windowUUID
         case .tabPeek(let state): return state.windowUUID
+        case .microsurvey(let state): return state.windowUUID
         }
     }
 }
@@ -107,6 +113,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.themeSettings(ThemeSettingsState(windowUUID: uuid)))
             case .tabPeek:
                 screens.append(.tabPeek(TabPeekState(windowUUID: uuid)))
+            case .microsurvey:
+                screens.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
             }
         default:
             return screens

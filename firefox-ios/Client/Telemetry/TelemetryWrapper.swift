@@ -92,6 +92,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     }
 
     func initGlean(_ profile: Profile, sendUsageData: Bool) {
+        // Record default search engine setting to avoid sending a `null` value.
+        // If there's no default search engine, (there's not, at this point), we will
+        // send "unavailable" in order not to send `null`, but still differentiate
+        // the event in the startup sequence.
+        let defaultEngine = profile.searchEngines.defaultEngine
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
+
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
@@ -102,6 +109,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
+
+        // Set the metric configuration from Nimbus.
+        glean.applyServerKnobsConfig(FxNimbus.shared.features.gleanServerKnobs.value().toJSONString())
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
@@ -197,13 +207,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.Preferences.showClipboardBar.set(showClipboardBar)
         } else {
             GleanMetrics.Preferences.showClipboardBar.set(false)
-        }
-
-        // Close private tabs
-        if let closePrivateTabs = prefs.boolForKey("settings.closePrivateTabs") {
-            GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
-        } else {
-            GleanMetrics.Preferences.closePrivateTabs.set(false)
         }
 
         // Tracking protection - enabled
@@ -317,6 +320,7 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        case defaultSearchEngine = "default-search-engine"
         // MARK: Fakespot
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
@@ -354,6 +358,7 @@ extension TelemetryWrapper {
         case tabNormalQuantity = "normal-tab-quantity"
         case tabPrivateQuantity = "private-tab-quantity"
         case tabInactiveQuantity = "inactive-tab-quantity"
+        case iPadWindowCount = "ipad-window-count"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -648,6 +653,7 @@ extension TelemetryWrapper {
         case isRestoreTabsStarted = "is-restore-tabs-started"
         case recordSearchLocation = "recordSearchLocation"
         case recordSearchEngineID = "recordSearchEngineID"
+        case windowCount = "windowCount"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -920,7 +926,12 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
-
+        case(.information, .background, .iPadWindowCount, _, let extras):
+            if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
+                GleanMetrics.Windows.ipadWindowCount.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
@@ -1096,6 +1107,18 @@ extension TelemetryWrapper {
                     extras: extras)
             }
 
+        // MARK: - Search Engine
+        case(.information, .change, .defaultSearchEngine, _, let extras):
+            if let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? ?? "custom" {
+                GleanMetrics.Search.defaultEngine.set(searchEngineID)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
@@ -1556,7 +1579,7 @@ extension TelemetryWrapper {
         case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
             GleanMetrics.Sync.loginCompletedView.record()
             // record the same event for Nimbus' internal event store
-            Experiments.events.recordEvent("sync.login_completed_view")
+            Experiments.events.recordEvent(BehavioralTargetingEvent.syncLoginCompletion)
         case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
@@ -1571,7 +1594,7 @@ extension TelemetryWrapper {
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
             // record the same event for Nimbus' internal event store
-            Experiments.events.recordEvent("app_cycle.foreground")
+            Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
         // MARK: App icon

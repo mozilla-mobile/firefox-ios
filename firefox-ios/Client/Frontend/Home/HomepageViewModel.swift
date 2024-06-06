@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import MozillaAppServices
 import Shared
 
 protocol HomepageViewModelDelegate: AnyObject {
@@ -14,7 +13,7 @@ protocol HomepageDataModelDelegate: AnyObject {
     func reloadView()
 }
 
-class HomepageViewModel: FeatureFlaggable {
+class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     struct UX {
         static let spacingBetweenSections: CGFloat = 62
         static let standardInset: CGFloat = 16
@@ -62,6 +61,7 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    let windowUUID: WindowUUID
     let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool {
@@ -73,6 +73,12 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    // Note: Should reload the view when have inconsistency between childViewModels count
+    // and shownSections count in order to avoid a crash
+    var shouldReloadView: Bool {
+        return childViewModels.filter({ $0.shouldShow }).count != shownSections.count
+    }
+
     var theme: Theme {
         didSet {
             childViewModels.forEach { $0.setTheme(theme: theme) }
@@ -81,6 +87,8 @@ class HomepageViewModel: FeatureFlaggable {
 
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     var viewAppeared = false
+
+    var newSize: CGSize?
 
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
@@ -115,6 +123,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.logger = logger
+        self.windowUUID = tabManager.windowUUID
 
         self.headerViewModel = HomepageHeaderViewModel(profile: profile, theme: theme, tabManager: tabManager)
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
@@ -189,6 +198,7 @@ class HomepageViewModel: FeatureFlaggable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

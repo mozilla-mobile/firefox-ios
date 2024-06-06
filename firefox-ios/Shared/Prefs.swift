@@ -30,6 +30,7 @@ public struct PrefsKeys {
     public static let DidDismissDefaultBrowserMessage = "DidDismissDefaultBrowserCard"
     public static let KeyDidShowDefaultBrowserOnboarding = "didShowDefaultBrowserOnboarding"
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
+    public static let BlockOpeningExternalApps = "blockOpeningExternalApps"
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     public static let GoogleTopSiteAddedKey = "googleTopSiteAddedKey"
     public static let GoogleTopSiteHideKey = "googleTopSiteHideKey"
@@ -46,6 +47,7 @@ public struct PrefsKeys {
         public static let firstWeekAppOpenTimestamps = "firstWeekAppOpenTimestamps"
         public static let firstWeekSearchesTimestamps = "firstWeekSearchesTimestamps"
         public static let didUpdateConversionValue = "didUpdateConversionValue"
+        public static let InternalURLUUID = "InternalURLUUID"
     }
 
     public struct AppVersion {
@@ -160,9 +162,6 @@ public struct PrefsKeys {
     // The last recorded CFR timestamp
     public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
 
-    // Representing whether or not the last user session was private
-    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
-
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
 
@@ -174,11 +173,6 @@ public struct PrefsKeys {
 
     // Used to show splash screen only during first time on fresh install
     public static let splashScreenShownKey = "splashScreenShownKey"
-}
-
-public struct PrefsDefaults {
-    public static let ChineseHomePageURL = "https://mobile.firefoxchina.cn/?ios"
-    public static let ChineseNewTabDefault = "HomePage"
 }
 
 public protocol Prefs {

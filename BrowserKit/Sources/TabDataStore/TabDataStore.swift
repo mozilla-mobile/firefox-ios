@@ -86,19 +86,7 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     private func parseWindowDataFile(fromURL url: URL) -> WindowData? {
-        return parseWindowDataFiles(fromURLs: [url]).first
-    }
-
-    private func parseWindowDataFiles(fromURLs urlList: [URL]) -> [WindowData] {
-        var windowsData: [WindowData] = []
-        for fileURL in urlList {
-            do {
-                if let windowData = try? fileManager.getWindowDataFromPath(path: fileURL) {
-                    windowsData.append(windowData)
-                }
-            }
-        }
-        return windowsData
+        return try? fileManager.getWindowDataFromPath(path: url)
     }
 
     // MARK: - Saving Data

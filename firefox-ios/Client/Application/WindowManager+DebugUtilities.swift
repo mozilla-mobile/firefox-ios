@@ -15,10 +15,13 @@ extension WindowManagerImplementation {
         var result = "----------- Window Debug Info ------------\n"
         result.append("Open windows (\(windows.count)) & normal tabs (via TabManager):\n")
         for (idx, (uuid, _)) in windows.enumerated() {
-            result.append("    \(idx + 1): \(short(uuid))\n")
             let tabMgr = tabManager(for: uuid)
+            let window = windows[uuid]?.sceneCoordinator?.window
+            let frame = window?.frame ?? .zero
+            result.append("    \(idx + 1): \(short(uuid)) (\(tabMgr.normalTabs.count) tabs) (frame: \(frame.debugDescription))\n")
             for (tabIdx, tab) in tabMgr.normalTabs.enumerated() {
-                result.append("        \(tabIdx): \(tab.url?.absoluteString ?? "<nil url>")\n")
+                let memAddr = Unmanaged.passUnretained(tab).toOpaque()
+                result.append("        \(tabIdx + 1) (\(memAddr)): \(tab.url?.absoluteString ?? "<nil url>")\n")
             }
         }
         result.append("\n")
@@ -34,12 +37,15 @@ extension WindowManagerImplementation {
 
         // Note: this is provided as a convenience for internal debugging. See `DefaultTabDataStore.swift`.
         for (idx, uuid) in tabDataStore.fetchWindowDataUUIDs().enumerated() {
-            result.append("    \(idx + 1): Window \(short(uuid))\n")
             let baseURL = fileManager.windowDataDirectory(isBackup: false)!
             let dataURL = baseURL.appendingPathComponent("window-" + uuid.uuidString)
+            if idx == 0 {
+                result.append("    Data dir: \(baseURL.absoluteString)\n")
+            }
+            result.append("    \(idx + 1): Window \(short(uuid))\n")
             guard let data = try? fileManager.getWindowDataFromPath(path: dataURL) else { continue }
             for (tabIdx, tabData) in data.tabData.enumerated() {
-                result.append("        \(tabIdx + 1): \(tabData.siteUrl)\n")
+                result.append("        \(tabIdx + 1): \(tabData.siteUrl) (Window: \(short(data.id))\n")
             }
         }
         return result

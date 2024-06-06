@@ -6,6 +6,9 @@ import Foundation
 import Shared
 import Storage
 import UIKit
+import Common
+
+import struct MozillaAppServices.CreditCard
 
 enum CreditCardSettingsState: String, Equatable, CaseIterable {
     // Default state

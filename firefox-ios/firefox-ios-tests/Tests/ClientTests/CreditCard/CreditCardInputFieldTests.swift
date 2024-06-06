@@ -7,6 +7,7 @@
 import Foundation
 import XCTest
 import SwiftUI
+import Common
 @testable import Client
 
 class CreditCardInputFieldTests: XCTestCase {
@@ -146,7 +147,7 @@ class CreditCardInputFieldTests: XCTestCase {
 
         inputField.handleTextInputWith("125", and: "1250")
         XCTAssertTrue(inputField.isExpirationValid(val: "1250"))
-        XCTAssert(viewModel.expirationIsValid)
+        XCTAssertFalse(viewModel.showExpirationError)
     }
 
     func testInvalidShortenedExpirationInput() {

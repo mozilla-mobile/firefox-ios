@@ -1,5 +1,5 @@
 /* Accessibility label for closing the zoom panel in Zoom Page Bar */
-"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Փակել խոշորացման վահանակը";
+"Menu.ZoomPage.Close.AccessibilityLabel.v113" = "Փակել դիտափոխման վահանակը";
 
 /* Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level */
 "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113" = "Ընթացիկ խոշորացման մակարդակը՝ %@";

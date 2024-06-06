@@ -183,7 +183,9 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        if #available(iOS 16, *) {
+            XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        }
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
@@ -195,12 +197,18 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         mozWaitForElementToExist(app.webViews.staticTexts.firstMatch, timeout: 5)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
+        navigator.nowAt(BrowserTab)
+        if #unavailable(iOS 16) {
+            // iOS 15 displays a toast that covers the reload button
+            sleep(2)
+        }
         navigator.goto(ReloadLongPressMenu)
         navigator.performAction(Action.ToggleRequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // Covering scenario that when reloading the page should preserve Desktop site
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.ReloadURL)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)

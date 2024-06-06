@@ -120,8 +120,7 @@ class AutofillTelemetryBase {
       let element = fieldDetail.element;
       let state = profile[fieldDetail.fieldName] ? "filled" : "not_filled";
       if (
-        section.handler.getFilledStateByElement(element) ==
-          FIELD_STATES.NORMAL &&
+        element.autofillState == FIELD_STATES.NORMAL &&
         (HTMLSelectElement.isInstance(element) ||
           (HTMLInputElement.isInstance(element) && element.value.length))
       ) {
@@ -374,126 +373,9 @@ class CreditCardTelemetry extends AutofillTelemetryBase {
     "cc-exp-year": "cc_exp_year",
   };
 
-  recordLegacyFormEvent(method, flowId, extra = null) {
-    Services.telemetry.recordEvent(
-      this.EVENT_CATEGORY,
-      method,
-      "cc_form",
-      flowId,
-      extra
-    );
-  }
-
   recordGleanFormEvent(eventName, flowId, extra) {
     extra.flow_id = flowId;
     Glean.formautofillCreditcards[eventName].record(extra);
-  }
-
-  recordFormDetected(section) {
-    super.recordFormDetected(section);
-
-    let identified = new Set();
-    section.fieldDetails.forEach(detail => {
-      identified.add(detail.fieldName);
-    });
-    let extra = {
-      cc_name_found: identified.has("cc-name") ? "true" : "false",
-      cc_number_found: identified.has("cc-number") ? "true" : "false",
-      cc_exp_found:
-        identified.has("cc-exp") ||
-        (identified.has("cc-exp-month") && identified.has("cc-exp-year"))
-          ? "true"
-          : "false",
-    };
-
-    this.recordLegacyFormEvent("detected", section.flowId, extra);
-  }
-
-  recordPopupShown(section, fieldName) {
-    super.recordPopupShown(section, fieldName);
-
-    this.recordLegacyFormEvent("popup_shown", section.flowId);
-  }
-
-  recordFormFilled(section, profile) {
-    super.recordFormFilled(section, profile);
-    // Calculate values for telemetry
-    let extra = {
-      cc_name: "unavailable",
-      cc_number: "unavailable",
-      cc_exp: "unavailable",
-    };
-
-    for (let fieldDetail of section.fieldDetails) {
-      let element = fieldDetail.element;
-      let state = profile[fieldDetail.fieldName] ? "filled" : "not_filled";
-      if (
-        section.handler.getFilledStateByElement(element) ==
-          FIELD_STATES.NORMAL &&
-        (HTMLSelectElement.isInstance(element) ||
-          (HTMLInputElement.isInstance(element) && element.value.length))
-      ) {
-        state = "user_filled";
-      }
-      switch (fieldDetail.fieldName) {
-        case "cc-name":
-          extra.cc_name = state;
-          break;
-        case "cc-number":
-          extra.cc_number = state;
-          break;
-        case "cc-exp":
-        case "cc-exp-month":
-        case "cc-exp-year":
-          extra.cc_exp = state;
-          break;
-      }
-    }
-
-    this.recordLegacyFormEvent("filled", section.flowId, extra);
-  }
-
-  recordFilledModified(section, fieldName) {
-    super.recordFilledModified(section, fieldName);
-
-    let extra = { field_name: fieldName };
-    this.recordLegacyFormEvent("filled_modified", section.flowId, extra);
-  }
-
-  /**
-   * Called when a credit card form is submitted
-   *
-   * @param {object} section Section that produces this record
-   * @param {object} record Credit card record filled in the form.
-   * @param {Array<HTMLForm>} form Form that contains the section
-   */
-  recordFormSubmitted(section, record, form) {
-    super.recordFormSubmitted(section, record, form);
-
-    // For legacy cc_form event telemetry
-    let extra = {
-      fields_not_auto: "0",
-      fields_auto: "0",
-      fields_modified: "0",
-    };
-
-    if (record.guid !== null) {
-      let totalCount = form.elements.length;
-      let autofilledCount = Object.keys(record.record).length;
-      let unmodifiedCount = record.untouchedFields.length;
-
-      extra.fields_not_auto = (totalCount - autofilledCount).toString();
-      extra.fields_auto = autofilledCount.toString();
-      extra.fields_modified = (autofilledCount - unmodifiedCount).toString();
-    } else {
-      // If the `guid` is null, we're filling a new form.
-      // In that case, all not-null fields are manually filled.
-      extra.fields_not_auto = Array.from(form.elements)
-        .filter(element => !!element.value?.trim().length)
-        .length.toString();
-    }
-
-    this.recordLegacyFormEvent("submitted", section.flowId, extra);
   }
 
   recordNumberOfUse(records) {
@@ -572,7 +454,7 @@ export class AutofillTelemetry {
    * Utility functions for form event (defined in Events.yaml)
    *
    * Category: address or creditcard
-   * Event name: cc_form, cc_form_v2, or address_form
+   * Event name: cc_form_v2, or address_form
    */
 
   static recordFormInteractionEvent(

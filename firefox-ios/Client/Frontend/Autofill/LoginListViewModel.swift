@@ -6,6 +6,8 @@ import Common
 import Storage
 import Foundation
 
+import struct MozillaAppServices.EncryptedLogin
+
 @MainActor
 class LoginListViewModel: ObservableObject {
     @Published var logins: [EncryptedLogin] = []

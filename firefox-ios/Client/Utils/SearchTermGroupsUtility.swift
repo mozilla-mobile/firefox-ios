@@ -5,7 +5,9 @@
 import Foundation
 import Shared
 import Storage
-import MozillaAppServices
+
+import struct MozillaAppServices.HistoryHighlight
+import struct MozillaAppServices.HistoryMetadata
 
 class SearchTermGroupsUtility {
     public static func getHighlightGroups(
@@ -122,7 +124,7 @@ class SearchTermGroupsUtility {
         and searchTermMetadata: [String: [HistoryMetadata]]
     ) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
         var itemGroupData: [String: [T]] = [:]
-        var itemsInGroups: [T] = [T]()
+        var itemsInGroups = [T]()
 
         outeritemLoop: for item in items {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where historyMetaList
