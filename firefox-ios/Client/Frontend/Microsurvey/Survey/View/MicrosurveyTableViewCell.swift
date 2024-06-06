@@ -57,7 +57,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     var optionA11yValue: String {
         let selectedLabel: String = .Microsurvey.Survey.SelectedRadioButtonAccessibilityLabel
-        let unselectedLabel: String = .Microsurvey.Survey.SelectedRadioButtonAccessibilityLabel
+        let unselectedLabel: String = .Microsurvey.Survey.UnselectedRadioButtonAccessibilityLabel
 
         var a11yValue = checked ? selectedLabel : unselectedLabel
         if let a11yOptionsOrderValue {
@@ -71,7 +71,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         setupLayout()
         selectionStyle = .none
         isAccessibilityElement = true
-        accessibilityIdentifier  = AccessibilityIdentifiers.Microsurvey.Survey.radioButton
+        accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.radioButton
         accessibilityTraits.insert(.button)
     }
 
