@@ -42,7 +42,7 @@ struct ToolbarState: ScreenState, Equatable {
         var a11yLabel: String
         var a11yId: String
 
-        var shouldPerformLongPressAction: Bool {
+        var canPerformLongPressAction: Bool {
             return actionType == .back ||
                    actionType == .forward
         }

@@ -1744,6 +1744,8 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         } else if state.showQRcodeReader {
             navigationHandler?.showQRCode(delegate: self)
+        } else if state.showBackForwardList {
+            navigationHandler?.showBackForwardList()
         }
     }
 
@@ -1767,8 +1769,6 @@ class BrowserViewController: UIViewController,
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .backForwardList:
-            navigationHandler?.showBackForwardList()
         }
     }
 

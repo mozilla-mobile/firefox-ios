@@ -63,7 +63,7 @@ class AddressToolbarContainerModel {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.shouldPerformLongPressAction ? {
+                }, onLongPress: action.canPerformLongPressAction ? {
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          gestureType: .longPress,
                                                          windowUUID: windowUUID,
