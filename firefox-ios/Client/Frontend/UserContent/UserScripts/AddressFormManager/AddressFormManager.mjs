@@ -78,3 +78,5 @@ const toggleEditMode = (isEditable = false) => {
 window.toggleEditMode = toggleEditMode;
 
 window.getCurrentFormData = getCurrentFormData;
+
+window.setTheme = setTheme;

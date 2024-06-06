@@ -4,6 +4,7 @@
 
 import Shared
 import Storage
+import Common
 
 // MARK: - AddressAutofillSettingsViewModel
 
@@ -15,13 +16,18 @@ class AddressAutofillSettingsViewModel {
     lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
 
     /// ViewModel for managing the list of addresses.
-    lazy var addressListViewModel = AddressListViewModel(addressProvider: profile.autofill)
+    lazy var addressListViewModel = AddressListViewModel(
+        windowUUID: windowUUID,
+        addressProvider: profile.autofill
+    )
 
     /// RustAutofill instance for handling autofill functionality.
     var autofill: RustAutofill?
 
     /// Profile associated with the address autofill settings.
     var profile: Profile
+
+    let windowUUID: WindowUUID
 
     /// Boolean indicating whether autofill is currently enabled.
     var isAutofillEnabled: Bool {
@@ -44,8 +50,9 @@ class AddressAutofillSettingsViewModel {
 
     /// Initializes the AddressAutofillSettingsViewModel.
     /// - Parameter profile: The profile associated with the address autofill settings.
-    init(profile: Profile) {
+    init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
+        self.windowUUID = windowUUID
         guard let browserProfile = profile as? BrowserProfile else { return }
         self.autofill = browserProfile.autofill
     }

@@ -8,7 +8,7 @@ import SwiftUI
 import Common
 import struct MozillaAppServices.UpdatableAddressFields
 
-class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable {
     private lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
@@ -18,10 +18,19 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     var model: AddressListViewModel
     private let logger: Logger
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var currentWindowUUID: WindowUUID? { model.windowUUID }
 
-    init(model: AddressListViewModel, logger: Logger = DefaultLogger.shared) {
+    init(
+        themeManager: ThemeManager,
+        model: AddressListViewModel,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.model = model
         self.logger = logger
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -32,6 +41,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     override func loadView() {
         view = webView
         setupWebView()
+        listenForThemeChange(view)
     }
 
     private func setupWebView() {
@@ -114,13 +124,22 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
             }
         }
     }
+
+    func applyTheme() {
+        guard let currentWindowUUID else { return }
+        let isDarkTheme = themeManager.currentTheme(for: currentWindowUUID).type == .dark
+        evaluateJavaScript("setTheme(\(isDarkTheme));")
+    }
 }
 
 struct EditAddressViewControllerRepresentable: UIViewControllerRepresentable {
     var model: AddressListViewModel
 
     func makeUIViewController(context: Context) -> EditAddressViewController {
-        return EditAddressViewController(model: model)
+        return EditAddressViewController(
+            themeManager: AppContainer.shared.resolve(),
+            model: model
+        )
     }
 
     func updateUIViewController(_ uiViewController: EditAddressViewController, context: Context) {
