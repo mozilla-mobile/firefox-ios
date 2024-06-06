@@ -1746,6 +1746,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showQRCode(delegate: self)
         } else if state.showBackForwardList {
             navigationHandler?.showBackForwardList()
+        } else if state.showTabsLongPressActions {
+            presentActionSheet(from: view)
         }
     }
 
@@ -1802,6 +1804,22 @@ class BrowserViewController: UIViewController,
         dismissUrlBar()
         updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goForward()
+    }
+
+    func presentActionSheet(from view: UIView) {
+        guard presentedViewController == nil else { return }
+
+        var actions: [[PhotonRowActions]] = []
+        actions.append(getTabToolbarLongPressActionsForModeSwitching())
+        actions.append(getMoreTabToolbarLongPressActions())
+
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: .overCurrentContext
+        )
+
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     // MARK: Opening New Tabs
