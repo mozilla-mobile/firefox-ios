@@ -174,6 +174,10 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.navigateForward)
             store.dispatch(action)
 
+        case .tabs:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showTabTray)
+            store.dispatch(action)
         default:
             break
         }
