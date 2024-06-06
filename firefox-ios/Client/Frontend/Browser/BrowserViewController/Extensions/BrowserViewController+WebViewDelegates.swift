@@ -646,6 +646,15 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
             }
 
+            // Note: When "Undo" a tab with a Youtube video, navigationAction.request
+            // return the Youtube Homepage URL instead the video URL,
+            // even if the tab have the correct URL.
+            if let tabURL = tab.url, navigationAction.isIncorrectYoutubeURL(tabURL: tabURL) {
+                webView.load(URLRequest(url: tabURL))
+                decisionHandler(.cancel)
+                return
+            }
+
             decisionHandler(.allow)
             return
         }
@@ -1110,5 +1119,14 @@ extension WKNavigationAction {
         }
 
         return false
+    }
+
+    func isIncorrectYoutubeURL(tabURL: URL) -> Bool {
+        let youtubeShortDomain = "m.youtube"
+        guard let requestURL = request.url,
+              tabURL.shortDomain == youtubeShortDomain,
+              requestURL.shortDomain == youtubeShortDomain,
+              requestURL.absoluteString != tabURL.absoluteString else { return false }
+        return true
     }
 }
