@@ -39,9 +39,9 @@ class MicrosurveyPromptMiddleware {
 
     private func initializeMicrosurvey(windowUUID: WindowUUID, model: MicrosurveyModel) {
         let newAction = MicrosurveyPromptMiddlewareAction(
-            microsurveyModel: model, 
             windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.initialize
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize,
+            payload: model
         )
         store.dispatch(newAction)
         microsurveySurfaceManager.handleMessageDisplayed()

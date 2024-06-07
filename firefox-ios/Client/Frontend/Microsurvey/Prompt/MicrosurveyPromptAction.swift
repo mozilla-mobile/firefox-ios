@@ -8,13 +8,7 @@ import Common
 
 class MicrosurveyPromptAction: Action { }
 
-class MicrosurveyPromptMiddlewareAction: Action {
-    let microsurveyModel: MicrosurveyModel?
-    init(microsurveyModel: MicrosurveyModel? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
-        self.microsurveyModel = microsurveyModel
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
+class MicrosurveyPromptMiddlewareAction: Action { }
 
 enum MicrosurveyPromptActionType: ActionType {
     case showPrompt

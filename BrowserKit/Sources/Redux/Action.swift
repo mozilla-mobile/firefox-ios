@@ -9,10 +9,12 @@ import Common
 open class Action {
     public var windowUUID: WindowUUID
     public var actionType: ActionType
+    public var payload: Any?
 
-    public init(windowUUID: WindowUUID, actionType: ActionType) {
+    public init(windowUUID: WindowUUID, actionType: ActionType, payload: Any? = nil) {
         self.windowUUID = windowUUID
         self.actionType = actionType
+        self.payload = payload
     }
 
     func displayString() -> String {

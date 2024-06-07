@@ -35,7 +35,8 @@ struct MicrosurveyPromptState: StateType, Equatable {
 
         switch action.actionType {
         case MicrosurveyPromptMiddlewareActionType.initialize:
-            let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
+//            let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
+            let model = action.payload as? MicrosurveyModel
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
                 showPrompt: true,
