@@ -11,19 +11,14 @@ protocol LocationViewDelegate: AnyObject {
     ///
     /// - Parameter text: The text that was entered.
     func locationViewDidEnterText(_ text: String)
+
     /// Called when the user begins editing text in the location view.
     ///
     /// - Parameter text: The initial text in the location view when the user began editing.
     func locationViewDidBeginEditing(_ text: String)
+
     /// Called when the location view should perform a search based on the entered text.
     ///
     /// - Parameter text: The text for which the location view should search.
     func locationViewShouldSearchFor(_ text: String)
-
-    /// Called to determine the display text for a given URL in the location view.
-    ///
-    /// - Parameter url: The URL for which to determine the display text.
-    /// - Returns: The display text as an optional String. If the URL is nil
-    ///  or cannot be converted to a display text, returns nil.
-    func locationViewDisplayTextForURL(_ url: URL?) -> String?
 }

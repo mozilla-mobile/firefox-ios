@@ -13,7 +13,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
             engineID: "ATester",
             shortName: "ATester",
             image: UIImage(),
-            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
             isCustomEngine: true
         ),
@@ -21,7 +21,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
             engineID: "BTester",
             shortName: "BTester",
             image: UIImage(),
-            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
             isCustomEngine: true
         ),
@@ -29,7 +29,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
             engineID: "CTester",
             shortName: "CTester",
             image: UIImage(),
-            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
             isCustomEngine: true
         ),
@@ -37,7 +37,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
             engineID: "DTester",
             shortName: "DTester",
             image: UIImage(),
-            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
             isCustomEngine: true
         ),
@@ -45,7 +45,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
             engineID: "ETester",
             shortName: "ETester",
             image: UIImage(),
-            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
             isCustomEngine: true
         ),
@@ -53,7 +53,7 @@ class MockSearchEngineProvider: SearchEngineProvider {
             engineID: "FTester",
             shortName: "FTester",
             image: UIImage(),
-            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            searchTemplate: "http://firefox.com/find?q={searchTerms}",
             suggestTemplate: nil,
             isCustomEngine: true
         )

@@ -71,7 +71,7 @@ class RootViewControllerModel {
     }
 
     // MARK: - Address toolbar
-    func addressToolbarContainerModel(url: String?) -> AddressToolbarContainerModel {
+    func addressToolbarContainerModel(url: URL?) -> AddressToolbarContainerModel {
         let pageActions = [ToolbarElement(
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
@@ -98,7 +98,8 @@ class RootViewControllerModel {
             urlTextFieldA11yLabel: "Address Bar",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            url: url
+            url: url,
+            searchTerm: nil
         )
 
         // FXIOS-8947: Use scroll position
