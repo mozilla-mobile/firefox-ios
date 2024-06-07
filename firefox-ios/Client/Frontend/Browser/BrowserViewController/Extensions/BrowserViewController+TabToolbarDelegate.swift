@@ -271,20 +271,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard self.presentedViewController == nil else { return }
-        var actions: [[PhotonRowActions]] = []
-        actions.append(getTabToolbarLongPressActionsForModeSwitching())
-        actions.append(getMoreTabToolbarLongPressActions())
-
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let viewModel = PhotonActionSheetViewModel(
-            actions: actions,
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: .overCurrentContext
-        )
-        presentSheetWith(viewModel: viewModel, on: self, from: button)
+        presentActionSheet(from: button)
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
