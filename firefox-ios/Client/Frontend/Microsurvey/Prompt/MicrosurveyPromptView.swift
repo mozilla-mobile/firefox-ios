@@ -22,6 +22,7 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         static let closeButtonSize = CGSize(width: 30, height: 30)
         static let logoSize = CGSize(width: 24, height: 24)
         static let logoLargeSize = CGSize(width: 48, height: 48)
+        static let borderThickness = 1.0
         static let padding = NSDirectionalEdgeInsets(
             top: 14,
             leading: 16,
@@ -49,6 +50,8 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
 
     private let windowUUID: WindowUUID
     var notificationCenter: NotificationProtocol
+
+    private var topBorderView: UIView = .build()
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
@@ -135,6 +138,7 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         toastView.addArrangedSubview(headerView)
         toastView.addArrangedSubview(surveyButton)
 
+        addSubview(topBorderView)
         addSubview(toastView)
         leadingConstraint = toastView.leadingAnchor.constraint(equalTo: leadingAnchor)
         trailingConstraint = toastView.trailingAnchor.constraint(equalTo: trailingAnchor)
@@ -147,7 +151,12 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         logoHeightConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            toastView.topAnchor.constraint(equalTo: topAnchor, constant: UX.padding.top),
+            topBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            topBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            topBorderView.topAnchor.constraint(equalTo: topAnchor),
+            topBorderView.heightAnchor.constraint(equalToConstant: UX.borderThickness),
+
+            toastView.topAnchor.constraint(equalTo: topBorderView.bottomAnchor, constant: UX.padding.top),
             toastView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: UX.padding.bottom),
             titleLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
@@ -185,6 +194,7 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textSecondary
+        topBorderView.backgroundColor = theme.colors.borderPrimary
         surveyButton.applyTheme(theme: theme)
     }
 
