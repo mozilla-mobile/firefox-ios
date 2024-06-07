@@ -3,36 +3,27 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-
 import Shared
 
 class SensitiveViewController: UIViewController {
     private var backgroundBlurView: UIVisualEffectView?
     private var isAuthenticated = false
-    private var willEnterForegroundNotificationObserver: NSObjectProtocol?
+    private var sceneWillEnterForegroundNotificationObserver: NSObjectProtocol?
     private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(
-            forName: UIApplication.willEnterForegroundNotification,
+        sceneWillEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(
+            forName: UIScene.willEnterForegroundNotification,
             object: nil,
             queue: .main
-        ) { [self] notification in
-            if !isAuthenticated {
-                AppAuthenticator().authenticateWithDeviceOwnerAuthentication { [self] result in
-                    switch result {
-                    case .success:
-                        isAuthenticated = false
-                        removedBlurredOverlay()
-                    case .failure:
-                        isAuthenticated = false
-                        navigationController?.dismiss(animated: true, completion: nil)
-                        dismiss(animated: true)
-                    }
-                }
-            }
+        ) { [weak self] notification in
+            guard let self,
+                  let sensitiveWindowScene = self.view.window?.windowScene,
+                  let notificationScene = notification.object as? UIWindowScene,
+                  sensitiveWindowScene === notificationScene else { return }
+            self.handleCheckAuthentication()
         }
 
         didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(
@@ -50,12 +41,28 @@ class SensitiveViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        if let observer = willEnterForegroundNotificationObserver {
+        [sceneWillEnterForegroundNotificationObserver,
+         didEnterBackgroundNotificationObserver].forEach {
+            guard let observer = $0 else { return }
             NotificationCenter.default.removeObserver(observer)
         }
+    }
 
-        if let observer = didEnterBackgroundNotificationObserver {
-            NotificationCenter.default.removeObserver(observer)
+    // MARK: - Utility func
+
+    private func handleCheckAuthentication() {
+        if !isAuthenticated {
+            AppAuthenticator().authenticateWithDeviceOwnerAuthentication { [self] result in
+                switch result {
+                case .success:
+                    isAuthenticated = false
+                    removedBlurredOverlay()
+                case .failure:
+                    isAuthenticated = false
+                    navigationController?.dismiss(animated: true, completion: nil)
+                    dismiss(animated: true)
+                }
+            }
         }
     }
 }
