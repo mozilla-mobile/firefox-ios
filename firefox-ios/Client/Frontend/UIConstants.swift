@@ -5,14 +5,6 @@
 import UIKit
 import Shared
 
-extension UIColor {
-    // These are colors which we shouldn't use anymore - we'll migrate to use the new theming system
-    struct LegacyDefaults {
-        // This color should exactly match the ios text highlight
-        static let iOSTextHighlightBlue = UIColor(rgb: 0xccdded)
-    }
-}
-
 public struct UIConstants {
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 57
