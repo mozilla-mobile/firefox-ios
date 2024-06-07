@@ -194,6 +194,11 @@ class SettingsCoordinator: BaseCoordinator,
         router.push(firefoxSuggestViewController)
     }
 
+    func showRemoteSettingsOption() {
+        let remoteSettingsOptionViewController = RemoteSettingsOptionViewController()
+        router.push(remoteSettingsOptionViewController)
+    }
+
     func openDebugTestTabs(count: Int) {
         parentCoordinator?.openDebugTestTabs(count: count)
     }

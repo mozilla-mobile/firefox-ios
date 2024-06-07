@@ -254,6 +254,7 @@ class BrowserViewController: UIViewController,
         )
         self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
                                                                        windowUUID: windowUUID)
+
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
