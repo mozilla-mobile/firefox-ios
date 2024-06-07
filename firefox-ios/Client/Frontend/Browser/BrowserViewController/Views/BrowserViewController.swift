@@ -1793,6 +1793,8 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         } else if state.showQRcodeReader {
             navigationHandler?.showQRCode(delegate: self)
+        } else if state.showBackForwardList {
+            navigationHandler?.showBackForwardList()
         }
     }
 

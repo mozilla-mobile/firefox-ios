@@ -186,6 +186,10 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func handleToolbarButtonLongPressActions(actionType: ToolbarState.ActionState.ActionType,
                                                      windowUUID: WindowUUID) {
         switch actionType {
+        case .back, .forward:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showBackForwardList)
+            store.dispatch(action)
         default:
             break
         }
