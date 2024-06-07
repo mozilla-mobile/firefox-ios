@@ -13,7 +13,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         static let searchEngineImageViewCornerRadius: CGFloat = 4
         static let lockIconImageViewSize = CGSize(width: 20, height: 20)
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
-        static let transitionDuration: TimeInterval = 0.3
     }
 
     private var urlAbsolutePath: String?
@@ -264,22 +263,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextField.attributedText = attributedString
     }
 
-    private func animateURLText(
-        _ textField: UITextField,
-        options: UIView.AnimationOptions,
-        textAlignment: NSTextAlignment,
-        completion: (() -> Void)? = nil
-    ) {
-        UIView.transition(
-            with: textField,
-            duration: UX.transitionDuration,
-            options: options) {
-            textField.textAlignment = textAlignment
-        } completion: { _ in
-            completion?()
-        }
-    }
-
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ state: LocationViewState) {
         let lockImage = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
@@ -301,10 +284,6 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         updateUIForSearchEngineDisplay()
-
-        if !isURLTextFieldEmpty {
-            animateURLText(textField, options: .transitionFlipFromBottom, textAlignment: .natural)
-        }
 
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
