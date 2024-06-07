@@ -8,7 +8,11 @@ import Shared
 import Common
 
 class MicrosurveyPromptMiddleware {
-    let microsurveySurfaceManager = MicrosurveySurfaceManager()
+    private let microsurveySurfaceManager: MicrosurveySurfaceManager
+
+    init(microsurveySurfaceManager: MicrosurveySurfaceManager = AppContainer.shared.resolve()) {
+        self.microsurveySurfaceManager = microsurveySurfaceManager
+    }
 
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
@@ -35,8 +39,9 @@ class MicrosurveyPromptMiddleware {
 
     private func initializeMicrosurvey(windowUUID: WindowUUID, model: MicrosurveyModel) {
         let newAction = MicrosurveyPromptMiddlewareAction(
+            microsurveyModel: model, 
             windowUUID: windowUUID,
-            actionType: MicrosurveyPromptMiddlewareActionType.initialize(model)
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize
         )
         store.dispatch(newAction)
         microsurveySurfaceManager.handleMessageDisplayed()
