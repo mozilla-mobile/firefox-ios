@@ -15,12 +15,8 @@ public struct UIConstants {
     static let ZoomPageBarHeight: CGFloat = 54
 
     // Static fonts
-    static let DefaultChromeSize: CGFloat = 16
     static let DefaultChromeSmallSize: CGFloat = 11
-    static let PasscodeEntryFontSize: CGFloat = 36
-    static let DefaultChromeFont = UIFont.systemFont(ofSize: DefaultChromeSize, weight: UIFont.Weight.regular)
     static let DefaultChromeSmallFontBold = UIFont.boldSystemFont(ofSize: DefaultChromeSmallSize)
-    static let PasscodeEntryFont = UIFont.systemFont(ofSize: PasscodeEntryFontSize, weight: UIFont.Weight.bold)
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 1
