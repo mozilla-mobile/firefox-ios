@@ -191,6 +191,10 @@ objects:
     description: >
         Attributes relating to microsurvey messaging.
     fields:
+      utm-content:
+        description: The name used to provide as the utm_content parameter for the privacy notice.
+        type: Option<String>
+        default: null
       icon:
         description: The asset name in our bundle used as the icon shown in the survey.
         type: Image

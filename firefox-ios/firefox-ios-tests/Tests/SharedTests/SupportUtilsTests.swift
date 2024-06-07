@@ -19,4 +19,36 @@ class SupportUtilsTests: XCTestCase {
     func testURLForWhatsNew() {
         XCTAssertEqual(SupportUtils.URLForWhatsNew?.absoluteString, "https://www.mozilla.org/en-US/firefox/ios/notes/")
     }
+
+    func testURLForPrivacyNotice_withoutContentParam() {
+        let appVersion = AppInfo.appVersion
+        let languageIdentifier = Locale.preferredLanguages.first!
+
+        let urlString = SupportUtils.URLForPrivacyNotice(
+            source: "modal",
+            campaign: "microsurvey",
+            content: nil
+        )?.absoluteString
+
+        XCTAssertEqual(
+            urlString,
+            "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=modal&utm_campaign=microsurvey"
+        )
+    }
+
+    func testURLForPrivacyNotice_withContentParam() {
+        let appVersion = AppInfo.appVersion
+        let languageIdentifier = Locale.preferredLanguages.first!
+
+        let urlString = SupportUtils.URLForPrivacyNotice(
+            source: "modal",
+            campaign: "microsurvey",
+            content: "homepage"
+        )?.absoluteString
+
+        XCTAssertEqual(
+            urlString,
+            "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=modal&utm_campaign=microsurvey&utm_content=homepage"
+        )
+    }
 }

@@ -64,6 +64,7 @@ import:
                 text: "How satisfied are you with your Firefox homepage?" # Should not show this message if this is nil
                 button-label: Microsurvey/Microsurvey.Prompt.Button.v127
                 microsurveyConfig:
+                  utm-content: homepage
                   icon: homeLarge
                   options:
                     - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption1.v127

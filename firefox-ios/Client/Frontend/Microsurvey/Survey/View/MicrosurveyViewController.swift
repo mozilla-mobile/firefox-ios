@@ -138,7 +138,7 @@ final class MicrosurveyViewController: UIViewController,
         if microsurveyState.shouldDismiss {
             coordinator?.dismissFlow()
         } else if microsurveyState.showPrivacy {
-            coordinator?.showPrivacy()
+            coordinator?.showPrivacy(with: model.utmContent)
         }
     }
 

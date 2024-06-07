@@ -15,7 +15,8 @@ class MicrosurveyMock {
                 "yes",
                 "no"
             ],
-            icon: nil
+            icon: nil,
+            utmContent: nil
         )
     }
 }

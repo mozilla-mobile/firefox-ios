@@ -37,13 +37,15 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
         let promptButtonLabel = message?.buttonLabel ?? .Microsurvey.Prompt.TakeSurveyButton
         let options: [String] = message?.options ?? defaultSurveyOptions
         let icon = message?.icon
+        let utmContent = message?.utmContent
 
         return MicrosurveyModel(
             promptTitle: promptTitle,
             promptButtonLabel: promptButtonLabel,
             surveyQuestion: surveyQuestion,
             surveyOptions: options,
-            icon: icon
+            icon: icon,
+            utmContent: utmContent
         )
     }
 
