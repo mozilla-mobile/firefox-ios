@@ -78,7 +78,8 @@ class ToolbarMiddleware: FeatureFlaggable {
                                    pageActions: loadAddressToolbarPageElements(),
                                    browserActions: [ToolbarState.ActionState](),
                                    displayTopBorder: displayTopBorder,
-                                   displayBottomBorder: displayBottomBorder)
+                                   displayBottomBorder: displayBottomBorder,
+                                   url: nil)
     }
 
     private func loadAddressToolbarPageElements() -> [ToolbarState.ActionState] {
@@ -173,6 +174,10 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.navigateForward)
             store.dispatch(action)
 
+        case .tabs:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showTabTray)
+            store.dispatch(action)
         default:
             break
         }

@@ -68,8 +68,8 @@ private struct DarkColourPalette: ThemeColourPalette {
     var actionWarning: UIColor = FXColors.Yellow40.withAlphaComponent(0.41)
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
     var actionInfo: UIColor = FXColors.Blue60
-    var actionTabActive: UIColor = FXColors.Purple60
-    var actionTabInactive: UIColor = FXColors.Ink50
+    var actionTabActive: UIColor = FXColors.DarkGrey30
+    var actionTabInactive: UIColor = FXColors.DarkGrey30
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05

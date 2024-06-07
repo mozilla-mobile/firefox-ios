@@ -194,9 +194,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        showTabTray(focusedSegment: segmentToFocus)
+        focusOnTabSegment()
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .press,
