@@ -2,13 +2,9 @@ name: "Focus Smoke Tests"
 
 on:
   push:
-    branches:
-      - "cs/MTE-2907-focus-smoke"
+    branches: [ cs/MTE-2907-focus-smoke ]
   pull_request:
-    branches:
-      - "main" 
-    paths:
-      - ".github/workflows/focus-ios-smoke.yaml"
+    branches: [ main ]
 
 env:
   XCODE_VERSION: 15.4
