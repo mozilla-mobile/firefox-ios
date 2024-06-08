@@ -1,10 +1,6 @@
 name: "Focus Smoke Tests"
 
-on:
-  push:
-    branches:
-      - cs/MTE-2907-focus-smoke
-    workflow_dispatch: {}
+on: [push]
 
 env:
   XCODE_VERSION: 15.4
