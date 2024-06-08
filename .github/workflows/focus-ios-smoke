@@ -1,7 +1,9 @@
 name: "Focus Smoke Tests"
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - cs/MTE-2907-focus-smoke
 env:
   XCODE_VERSION: 15.4
   RUNNER: macos-14
