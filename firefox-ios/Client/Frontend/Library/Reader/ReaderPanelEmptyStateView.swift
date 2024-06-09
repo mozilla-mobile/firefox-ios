@@ -3,6 +3,17 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 class ReaderPanelEmptyStateView: UIView {
+    init(
+        frame: CGRect = .zero,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        super.init(frame: frame)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
