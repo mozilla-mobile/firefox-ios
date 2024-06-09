@@ -77,6 +77,15 @@ struct CreditCardSettingsEmptyView: View {
         }
     }
 
+    private func getCreditCardAutofillToggle() -> some View {
+        return CreditCardAutofillToggle(
+            windowUUID: windowUUID,
+            textColor: toggleTextColor,
+            model: toggleModel)
+        .background(Color.white)
+        .padding(.top, 25)
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         titleTextColor = Color(color.textPrimary)
