@@ -9,6 +9,16 @@ class ReaderPanelEmptyStateView: UIView {
     let windowUUID: WindowUUID
     let themeManager: Common.ThemeManager
 
+    private lazy var welcomeLabel: UILabel = {
+        return .build { label in
+            label.text = .ReaderPanelWelcome
+            label.textAlignment = .center
+            label.font = FXFontStyles.Bold.body.scaledFont()
+            label.adjustsFontSizeToFitWidth = true
+            label.textColor = self.currentTheme().colors.textSecondary
+        }
+    }()
+
     init(
         windowUUID: WindowUUID,
         frame: CGRect = .zero,
