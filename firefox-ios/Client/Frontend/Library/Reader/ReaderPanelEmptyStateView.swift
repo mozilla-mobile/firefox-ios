@@ -28,4 +28,8 @@ class ReaderPanelEmptyStateView: UIView {
     private func setupLayout() {
 
     }
+
+    private func currentTheme() -> Theme {
+        return themeManager.currentTheme(for: windowUUID)
+    }
 }
