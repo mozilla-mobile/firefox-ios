@@ -40,41 +40,7 @@ struct CreditCardItemRow: View {
                     .frame(width: 48, height: 48)
                     .aspectRatio(contentMode: .fit)
 
-                VStack(spacing: 0) {
-                    Text(item.ccName)
-                        .font(.body)
-                        .foregroundColor(titleTextColor)
-                        .frame(maxWidth: .infinity,
-                               alignment: .leading)
-
-                    AdaptiveStack(horizontalAlignment: .leading,
-                                  spacing: isAccessibilityCategory ? 0 : 5,
-                                  isAccessibilityCategory: isAccessibilityCategory) {
-                        Text(item.ccType)
-                            .font(.body)
-                            .foregroundColor(titleTextColor)
-                        Text(verbatim: "••••\(item.ccNumberLast4)")
-                            .font(.subheadline)
-                            .foregroundColor(subTextColor)
-                    }
-                    .frame(maxWidth: .infinity,
-                           alignment: .leading)
-                    .padding(.top, 3)
-                    .padding(.bottom, 3)
-
-                    AdaptiveStack(horizontalAlignment: .leading,
-                                  spacing: isAccessibilityCategory ? 0 : 5,
-                                  isAccessibilityCategory: isAccessibilityCategory) {
-                        Text(String.CreditCard.DisplayCard.ExpiresLabel)
-                            .font(.body)
-                            .foregroundColor(subTextColor)
-                        Text(verbatim: "\(item.ccExpMonth)/\(item.ccExpYear % 100)")
-                            .font(.subheadline)
-                            .foregroundColor(subTextColor)
-                    }
-                    .frame(maxWidth: .infinity,
-                           alignment: .leading)
-                }
+                getCreditCardContent()
             }
             .padding(.leading, 16)
             .padding(.trailing, 16)
