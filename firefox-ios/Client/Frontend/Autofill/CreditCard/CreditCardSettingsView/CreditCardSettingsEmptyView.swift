@@ -81,6 +81,18 @@ struct CreditCardSettingsEmptyView: View {
         .padding(.top, 25)
     }
 
+    private func getCreditCardImage() -> some View {
+        return Image(StandardImageIdentifiers.Large.creditCard)
+            .resizable()
+            .renderingMode(.template)
+            .foregroundColor(imageColor)
+            .frame(width: 200, height: 200)
+            .aspectRatio(contentMode: .fit)
+            .fixedSize()
+            .padding([.top], 10)
+            .accessibility(hidden: true)
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         titleTextColor = Color(color.textPrimary)
