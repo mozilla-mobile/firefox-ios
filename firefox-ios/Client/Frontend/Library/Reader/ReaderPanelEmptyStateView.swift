@@ -6,11 +6,16 @@ import UIKit
 import Common
 
 class ReaderPanelEmptyStateView: UIView {
+    let windowUUID: WindowUUID
+    let themeManager: Common.ThemeManager
+
     init(
         windowUUID: WindowUUID,
         frame: CGRect = .zero,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
+        self.windowUUID = windowUUID
+        self.themeManager = themeManager
         super.init(frame: frame)
 
         setupLayout()
