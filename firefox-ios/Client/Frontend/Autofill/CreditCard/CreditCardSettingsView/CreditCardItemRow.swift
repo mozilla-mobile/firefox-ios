@@ -123,6 +123,14 @@ struct CreditCardItemRow: View {
         }
     }
 
+    private func getCreditCardName() -> some View {
+        return Text(item.ccName)
+            .font(.body)
+            .foregroundColor(titleTextColor)
+            .frame(maxWidth: .infinity,
+                   alignment: .leading)
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         titleTextColor = Color(color.textPrimary)
