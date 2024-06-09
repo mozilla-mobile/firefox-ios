@@ -7,6 +7,7 @@ import Common
 
 class ReaderPanelEmptyStateView: UIView {
     init(
+        windowUUID: WindowUUID,
         frame: CGRect = .zero,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
