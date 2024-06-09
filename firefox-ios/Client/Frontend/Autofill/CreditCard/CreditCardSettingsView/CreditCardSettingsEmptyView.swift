@@ -42,12 +42,7 @@ struct CreditCardSettingsEmptyView: View {
 
     private func getScrollViewContent() -> some View {
         return VStack {
-            CreditCardAutofillToggle(
-                windowUUID: windowUUID,
-                textColor: toggleTextColor,
-                model: toggleModel)
-            .background(Color.white)
-            .padding(.top, 25)
+            getCreditCardAutofillToggle()
             Spacer()
             Image(StandardImageIdentifiers.Large.creditCard)
                 .resizable()
