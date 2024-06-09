@@ -76,6 +76,7 @@ class ReaderPanelEmptyStateView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
 
         setupLayout()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -84,6 +85,10 @@ class ReaderPanelEmptyStateView: UIView {
 
     private func setupLayout() {
         addSubview(emptyStateViewWrapper)
+    }
+
+    private func setupConstraints() {
+        
     }
 
     private func currentTheme() -> Theme {
