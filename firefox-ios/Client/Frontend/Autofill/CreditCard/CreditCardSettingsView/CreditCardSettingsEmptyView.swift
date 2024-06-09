@@ -89,6 +89,16 @@ struct CreditCardSettingsEmptyView: View {
         .padding(.trailing, 10)
     }
 
+    private func getEmptyListDescription() -> some View {
+        return Text(String.CreditCard.Settings.EmptyListDescription)
+            .preferredBodyFont(size: 16)
+            .foregroundColor(subTextColor)
+            .multilineTextAlignment(.center)
+            .padding(.leading, 10)
+            .padding(.trailing, 10)
+            .padding([.top], -5)
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         titleTextColor = Color(color.textPrimary)
