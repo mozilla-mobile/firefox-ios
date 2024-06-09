@@ -127,6 +127,23 @@ struct CreditCardItemRow: View {
                    alignment: .leading)
     }
 
+    private func getCreditCardNumber() -> some View {
+        return AdaptiveStack(horizontalAlignment: .leading,
+                             spacing: isAccessibilityCategory ? 0 : 5,
+                             isAccessibilityCategory: isAccessibilityCategory) {
+            Text(item.ccType)
+                .font(.body)
+                .foregroundColor(titleTextColor)
+            Text(verbatim: "••••\(item.ccNumberLast4)")
+                .font(.subheadline)
+                .foregroundColor(subTextColor)
+        }
+        .frame(maxWidth: .infinity,
+               alignment: .leading)
+        .padding(.top, 3)
+        .padding(.bottom, 3)
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         titleTextColor = Color(color.textPrimary)
