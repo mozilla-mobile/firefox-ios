@@ -87,11 +87,7 @@ struct CreditCardItemRow: View {
 
     private func getCreditCardContent() -> some View {
         return VStack(spacing: 0) {
-            Text(item.ccName)
-                .font(.body)
-                .foregroundColor(titleTextColor)
-                .frame(maxWidth: .infinity,
-                       alignment: .leading)
+            getCreditCardName()
 
             AdaptiveStack(horizontalAlignment: .leading,
                           spacing: isAccessibilityCategory ? 0 : 5,
