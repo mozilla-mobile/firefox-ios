@@ -37,6 +37,15 @@ class ReaderPanelEmptyStateView: UIView {
         }
     }()
 
+    private lazy var readingListLabel: UILabel = {
+        return .build { label in
+            label.text = .ReaderPanelReadingListDescription
+            label.font = FXFontStyles.Regular.body.scaledFont()
+            label.numberOfLines = 0
+            label.textColor = self.currentTheme().colors.textSecondary
+        }
+    }()
+
     init(
         windowUUID: WindowUUID,
         frame: CGRect = .zero,
