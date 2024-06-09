@@ -10249,6 +10249,7 @@
 		7AC7E04E2C160EB600051D4D /* Reader */ = {
 			isa = PBXGroup;
 			children = (
+				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -12116,7 +12117,6 @@
 				2137785B297F1EFF00D01309 /* Downloads */,
 				8A3233FF28627451003E1C33 /* Bookmarks */,
 				96EB6C3627D821A400A9D159 /* HistoryPanel */,
-				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				8A01891B275E9C2A00923EFE /* ClearHistorySheetProvider.swift */,
 				D30B101D1AA7F9C600C01CA3 /* LibraryPanelHelper.swift */,
 				274A36D1239EBAD600A21587 /* LibraryViewController */,
