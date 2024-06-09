@@ -28,6 +28,15 @@ class ReaderPanelEmptyStateView: UIView {
         }
     }()
 
+    private lazy var readerModeImageView: UIImageView = {
+        return .build { imageView in
+            imageView.contentMode = .scaleAspectFit
+            imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?
+                .withRenderingMode(.alwaysTemplate)
+            imageView.tintColor = self.currentTheme().colors.textSecondary
+        }
+    }()
+
     init(
         windowUUID: WindowUUID,
         frame: CGRect = .zero,
