@@ -9497,6 +9497,13 @@
 			path = Generated;
 			sourceTree = "<group>";
 		};
+		7AC7E04E2C160EB600051D4D /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
 		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -11176,6 +11183,7 @@
 		D05434F3225FDA3400FDE4EF /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				7AC7E04E2C160EB600051D4D /* Reader */,
 				2137785B297F1EFF00D01309 /* Downloads */,
 				8A3233FF28627451003E1C33 /* Bookmarks */,
 				96EB6C3627D821A400A9D159 /* HistoryPanel */,
