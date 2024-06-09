@@ -85,7 +85,7 @@ struct CreditCardItemRow: View {
         return Image(decorative: image)
     }
 
-    func getCreditCardContent() -> some View {
+    private func getCreditCardContent() -> some View {
         return VStack(spacing: 0) {
             Text(item.ccName)
                 .font(.body)
