@@ -26,7 +26,7 @@ private struct ReadingListTableViewCellUX {
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 }
 
-private struct ReadingListPanelUX {
+struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
