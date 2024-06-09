@@ -69,6 +69,7 @@ class ReaderPanelEmptyStateView: UIView {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
 
         setupLayout()
     }
