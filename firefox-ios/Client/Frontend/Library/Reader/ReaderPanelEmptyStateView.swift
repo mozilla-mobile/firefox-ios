@@ -11,9 +11,15 @@ class ReaderPanelEmptyStateView: UIView {
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         super.init(frame: frame)
+
+        setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupLayout() {
+
     }
 }
