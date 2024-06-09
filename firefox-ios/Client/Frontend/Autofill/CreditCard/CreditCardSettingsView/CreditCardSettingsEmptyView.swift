@@ -44,15 +44,7 @@ struct CreditCardSettingsEmptyView: View {
         return VStack {
             getCreditCardAutofillToggle()
             Spacer()
-            Image(StandardImageIdentifiers.Large.creditCard)
-                .resizable()
-                .renderingMode(.template)
-                .foregroundColor(imageColor)
-                .frame(width: 200, height: 200)
-                .aspectRatio(contentMode: .fit)
-                .fixedSize()
-                .padding([.top], 10)
-                .accessibility(hidden: true)
+            getCreditCardImage()
             Text(String(format: .CreditCard.Settings.EmptyListTitle,
                         AppName.shortName.rawValue))
             .preferredBodyFont(size: 22)
