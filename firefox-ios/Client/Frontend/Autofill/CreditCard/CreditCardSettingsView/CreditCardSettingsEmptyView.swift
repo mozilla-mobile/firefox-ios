@@ -73,6 +73,43 @@ struct CreditCardSettingsEmptyView: View {
         }
     }
 
+    private func getScrollViewContent() -> some View {
+        return VStack {
+            CreditCardAutofillToggle(
+                windowUUID: windowUUID,
+                textColor: toggleTextColor,
+                model: toggleModel)
+            .background(Color.white)
+            .padding(.top, 25)
+            Spacer()
+            Image(StandardImageIdentifiers.Large.creditCard)
+                .resizable()
+                .renderingMode(.template)
+                .foregroundColor(imageColor)
+                .frame(width: 200, height: 200)
+                .aspectRatio(contentMode: .fit)
+                .fixedSize()
+                .padding([.top], 10)
+                .accessibility(hidden: true)
+            Text(String(format: .CreditCard.Settings.EmptyListTitle,
+                        AppName.shortName.rawValue))
+            .preferredBodyFont(size: 22)
+            .foregroundColor(titleTextColor)
+            .multilineTextAlignment(.center)
+            .padding(.leading, 10)
+            .padding(.trailing, 10)
+            Text(String.CreditCard.Settings.EmptyListDescription)
+                .preferredBodyFont(size: 16)
+                .foregroundColor(subTextColor)
+                .multilineTextAlignment(.center)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
+                .padding([.top], -5)
+            Spacer()
+            Spacer()
+        }
+    }
+
     func applyTheme(theme: Theme) {
         let color = theme.colors
         titleTextColor = Color(color.textPrimary)
