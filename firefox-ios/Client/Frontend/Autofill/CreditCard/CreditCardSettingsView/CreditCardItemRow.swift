@@ -91,18 +91,7 @@ struct CreditCardItemRow: View {
 
             getCreditCardNumber()
 
-            AdaptiveStack(horizontalAlignment: .leading,
-                          spacing: isAccessibilityCategory ? 0 : 5,
-                          isAccessibilityCategory: isAccessibilityCategory) {
-                Text(String.CreditCard.DisplayCard.ExpiresLabel)
-                    .font(.body)
-                    .foregroundColor(subTextColor)
-                Text(verbatim: "\(item.ccExpMonth)/\(item.ccExpYear % 100)")
-                    .font(.subheadline)
-                    .foregroundColor(subTextColor)
-            }
-            .frame(maxWidth: .infinity,
-                   alignment: .leading)
+            getCreditCardExpiration()
         }
     }
 
