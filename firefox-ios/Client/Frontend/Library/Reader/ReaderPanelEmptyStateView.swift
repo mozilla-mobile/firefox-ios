@@ -88,7 +88,76 @@ class ReaderPanelEmptyStateView: UIView {
     }
 
     private func setupConstraints() {
-        
+        NSLayoutConstraint.activate(
+            [
+                // title
+                welcomeLabel.topAnchor.constraint(equalTo: emptyStateViewWrapper.topAnchor),
+                welcomeLabel.leadingAnchor.constraint(equalTo: emptyStateViewWrapper.leadingAnchor),
+                welcomeLabel.trailingAnchor.constraint(equalTo: emptyStateViewWrapper.trailingAnchor),
+
+                // first row
+                readerModeLabel.topAnchor.constraint(
+                    equalTo: welcomeLabel.bottomAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenPadding
+                ),
+                readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+                readerModeLabel.trailingAnchor.constraint(
+                    equalTo: readerModeImageView.leadingAnchor,
+                    constant: -ReadingListPanelUX.WelcomeScreenPadding
+                ),
+
+                readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
+                readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+                readerModeImageView.widthAnchor.constraint(
+                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                ),
+
+                // second row
+                readingListLabel.topAnchor.constraint(
+                    equalTo: readerModeLabel.bottomAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenPadding
+                ),
+                readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
+                readingListLabel.trailingAnchor.constraint(
+                    equalTo: readingListImageView.leadingAnchor,
+                    constant: -ReadingListPanelUX.WelcomeScreenPadding
+                ),
+
+                readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
+                readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
+                readingListImageView.widthAnchor.constraint(
+                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                ),
+
+                readingListLabel.bottomAnchor.constraint(
+                    equalTo: emptyStateViewWrapper.bottomAnchor
+                ).priority(.defaultLow),
+
+                // overall positioning of emptyStateViewWrapper
+                emptyStateViewWrapper.leadingAnchor.constraint(
+                    greaterThanOrEqualTo: leadingAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding
+                ),
+                emptyStateViewWrapper.trailingAnchor.constraint(
+                    lessThanOrEqualTo: trailingAnchor,
+                    constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding
+                ),
+                emptyStateViewWrapper.widthAnchor.constraint(
+                    lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth
+                ),
+
+                emptyStateViewWrapper.centerXAnchor.constraint(equalTo: centerXAnchor),
+                emptyStateViewWrapper.topAnchor.constraint(
+                    equalTo: topAnchor,
+                    constant: ReadingListPanelUX.WelcomeScreenTopPadding
+                ),
+                emptyStateViewWrapper.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ]
+        )
+
+        welcomeLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        readerModeLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        readingListLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private func currentTheme() -> Theme {
