@@ -83,7 +83,7 @@ class ReaderPanelEmptyStateView: UIView {
     }
 
     private func setupLayout() {
-
+        addSubview(emptyStateViewWrapper)
     }
 
     private func currentTheme() -> Theme {
