@@ -4,5 +4,5 @@
 
 import UIKit
 
-class ReaderPanelEmptyState: UIView {
+class ReaderPanelEmptyStateView: UIView {
 }
