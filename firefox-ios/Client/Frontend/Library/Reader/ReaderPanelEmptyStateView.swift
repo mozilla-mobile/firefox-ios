@@ -55,6 +55,12 @@ class ReaderPanelEmptyStateView: UIView {
         }
     }()
 
+    private lazy var emptyStateViewWrapper: UIView = {
+        return .build { view in
+            view.addSubviews(self.welcomeLabel, self.readerModeLabel, self.readerModeImageView, self.readingListLabel, self.readingListImageView)
+        }
+    }()
+
     init(
         windowUUID: WindowUUID,
         frame: CGRect = .zero,
