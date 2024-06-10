@@ -16,6 +16,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 class AddressToolbarContainer: UIView,
                                ThemeApplicable,
                                TopBottomInterchangeable,
+                               AlphaDimmable,
                                StoreSubscriber,
                                AddressToolbarDelegate {
     typealias SubscriberStateType = ToolbarState
@@ -98,6 +99,11 @@ class AddressToolbarContainer: UIView,
 
     func newState(state: ToolbarState) {
         updateModel(toolbarState: state)
+    }
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        compactToolbar.alpha = alpha
+        regularToolbar.alpha = alpha
     }
 
     private func updateModel(toolbarState: ToolbarState) {
