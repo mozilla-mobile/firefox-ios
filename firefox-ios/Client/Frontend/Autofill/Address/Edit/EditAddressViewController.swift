@@ -89,8 +89,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
             webView.loadFileURL(url, allowingReadAccessTo: url)
             webView.load(request)
         }
-
-        webView.configuration.userContentController.add(self, name: "addressFormMessageHandler")
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
