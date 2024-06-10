@@ -31,6 +31,7 @@ Buildings blocks are classes uses by devs to enabled General or Feature componen
 
 - ``BottomSheetViewController``
 - ``CardView``
+- ``CloseButton``
 - ``CollapsibleCardView``
 - ``ContextualHintView``
 - ``LinkButton``
