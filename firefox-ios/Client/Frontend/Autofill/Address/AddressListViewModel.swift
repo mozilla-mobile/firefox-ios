@@ -6,14 +6,8 @@ import SwiftUI
 import Common
 import Shared
 import Storage
-
+import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
-
-// TODO: PHASE-2 FXIOS-7653
-// AddressListViewModelDelegate: A protocol to notify delegates about address updates.
-// protocol AddressListViewModelDelegate: AnyObject {
-//     func didUpdateAddresses(_ addresses: [Address])
-// }
 
 // TODO: Refactor the Address extension for global usage (FXIOS-8337)
 extension Address {
@@ -28,7 +22,23 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     @Published var addresses: [Address] = []
     @Published var showSection = false
-    @Published var selectedAddress: Address?
+    @Published var destination: Destination?
+
+    var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
+
+    enum Destination: Swift.Identifiable, Equatable {
+        case add(Address)
+        case edit(Address)
+
+        var id: String {
+            switch self {
+            case .add(let value):
+                return value.guid
+            case .edit(let value):
+                return value.guid
+            }
+        }
+    }
 
     private let logger: Logger
 
@@ -37,6 +47,8 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
 
     let addressProvider: AddressProvider
+
+    var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
 
     // MARK: - Initializer
 
@@ -94,12 +106,55 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         addressSelectionCallback?(fromAddress(address))
     }
 
-    func onAddressTap(_ address: Address) {
-        selectedAddress = address
+    func addressTapped(_ address: Address) {
+        destination = .edit(address)
     }
 
-    func onCancelButtonTap() {
-        selectedAddress = nil
+    func cancelEditButtonTap() {
+        destination = nil
+    }
+
+    func cancelAddButtonTap() {
+        destination = nil
+    }
+
+    func saveAddressButtonTap() {
+        saveAction? { [weak self] address in
+            guard let self else { return }
+            self.addressProvider.addAddress(address: address) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
+    }
+
+    func addAddressButtonTap() {
+        destination = .add(Address(
+            guid: "",
+            name: "",
+            organization: "",
+            streetAddress: "",
+            addressLevel3: "",
+            addressLevel2: "",
+            addressLevel1: "",
+            postalCode: "",
+            country: currentRegionCode(),
+            tel: "",
+            email: "",
+            timeCreated: 0,
+            timeLastUsed: nil,
+            timeLastModified: 0,
+            timesUsed: 0
+        ))
     }
 
     // MARK: - Inject JSON Data
@@ -107,11 +162,19 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     struct JSONDataError: Error {}
 
     func getInjectJSONDataInit() throws -> String {
-        guard let address = selectedAddress else {
+        guard let destination = self.destination else {
             throw JSONDataError()
         }
 
         do {
+            let address: Address =
+            switch destination {
+            case .add(let address):
+                address
+            case .edit(let address):
+                address
+            }
+
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
 

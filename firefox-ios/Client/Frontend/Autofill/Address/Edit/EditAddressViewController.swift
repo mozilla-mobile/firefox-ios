@@ -4,9 +4,9 @@
 
 import UIKit
 import WebKit
-import Storage
 import SwiftUI
 import Common
+import struct MozillaAppServices.UpdatableAddressFields
 
 class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     private lazy var webView: WKWebView = {
@@ -35,6 +35,45 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func setupWebView() {
+        model.saveAction = { [weak self] completion in
+            self?.webView.evaluateJavaScript("getCurrentFormData();") { result, error in
+                if let error = error {
+                    self?.logger.log(
+                        "JavaScript execution error",
+                        level: .warning,
+                        category: .autofill,
+                        description: "JavaScript execution error: \(error.localizedDescription)"
+                    )
+                    return
+                }
+
+                guard let resultDict = result as? [String: Any] else {
+                    self?.logger.log(
+                        "Result is nil or not a dictionary",
+                        level: .warning,
+                        category: .autofill,
+                        description: "Result is nil or not a dictionary"
+                    )
+                    return
+                }
+
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: resultDict, options: [])
+                    let decoder = JSONDecoder()
+                    decoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
+                    let address = try decoder.decode(UpdatableAddressFields.self, from: jsonData)
+                    completion(address)
+                } catch {
+                    self?.logger.log(
+                        "Failed to decode dictionary",
+                        level: .warning,
+                        category: .autofill,
+                        description: "Failed to decode dictionary \(error.localizedDescription)"
+                    )
+                }
+            }
+        }
+
         if let url = Bundle.main.url(forResource: "AddressFormManager", withExtension: "html") {
             let request = URLRequest(url: url)
             webView.loadFileURL(url, allowingReadAccessTo: url)
@@ -48,29 +87,34 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         do {
             let javascript = try model.getInjectJSONDataInit()
             self.evaluateJavaScript(javascript)
+            if case .add = model.destination {
+                self.evaluateJavaScript("toggleEditMode(true);")
+            }
         } catch {
-            self.logger.log("Error injecting JavaScript",
-                            level: .warning,
-                            category: .autofill,
-                            description: "Error injecting JavaScript: \(error.localizedDescription)")
+            self.logger.log(
+                "Error injecting JavaScript",
+                level: .warning,
+                category: .autofill,
+                description: "Error evaluating JavaScript: \(error.localizedDescription)"
+            )
         }
     }
 
     private func evaluateJavaScript(_ jsCode: String) {
         webView.evaluateJavaScript(jsCode) { result, error in
             if let error = error {
-                self.logger.log("JavaScript execution error",
-                                level: .warning,
-                                category: .autofill,
-                                description: "JavaScript execution error: \(error.localizedDescription)")
+                self.logger.log(
+                    "JavaScript execution error",
+                    level: .warning,
+                    category: .autofill,
+                    description: "JavaScript execution error: \(error.localizedDescription)"
+                )
             }
         }
     }
 }
 
 struct EditAddressViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIViewControllerType = EditAddressViewController
-
     var model: AddressListViewModel
 
     func makeUIViewController(context: Context) -> EditAddressViewController {

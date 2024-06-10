@@ -7,8 +7,6 @@ import Common
 import Shared
 import Storage
 
-import struct MozillaAppServices.Address
-
 // MARK: - AddressListView
 
 /// A view displaying a list of addresses.
@@ -33,7 +31,7 @@ struct AddressListView: View {
                             address: address,
                             onTap: {
                                 if viewModel.isEditingFeatureEnabled {
-                                    viewModel.onAddressTap(address)
+                                    viewModel.addressTapped(address)
                                 }
                             }
                         )
@@ -45,18 +43,33 @@ struct AddressListView: View {
         }
         .listStyle(.plain)
         .listRowInsets(EdgeInsets())
-        .sheet(item: $viewModel.selectedAddress) { address in
+        .sheet(item: $viewModel.destination) { destination in
             NavigationView {
-                EditAddressViewControllerRepresentable(model: viewModel)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .cancellationAction) {
-                            Button {
-                                viewModel.onCancelButtonTap()
-                            } label: {
-                                Text(String.Addresses.Settings.Edit.AutofillCancelButton)
+                switch destination {
+                case .add:
+                    NavigationView {
+                        EditAddressViewControllerRepresentable(model: viewModel)
+                            .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
+                            .navigationBarItems(
+                                leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                                    viewModel.cancelAddButtonTap()
+                                },
+                                trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                                    viewModel.saveAddressButtonTap()
+                                }
+                            )
+                    }
+
+                case .edit:
+                    EditAddressViewControllerRepresentable(model: viewModel)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .cancellationAction) {
+                                Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
+                                    viewModel.cancelEditButtonTap()
+                                }
                             }
                         }
-                    }
+                }
             }
         }
         .onAppear {

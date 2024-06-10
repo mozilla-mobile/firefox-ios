@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import "resource://gre/modules/shared/Helpers.ios.mjs";
-import { createFormLayoutFromRecord } from "resource://gre/modules/shared/addressFormLayout.mjs";
+import { createFormLayoutFromRecord, getCurrentFormData } from "resource://gre/modules/shared/addressFormLayout.mjs";
 
 /**
  * Sets the theme of the webview.
@@ -76,3 +76,5 @@ const toggleEditMode = (isEditable = false) => {
   textFields[0].focus();
 };
 window.toggleEditMode = toggleEditMode;
+
+window.getCurrentFormData = getCurrentFormData;
