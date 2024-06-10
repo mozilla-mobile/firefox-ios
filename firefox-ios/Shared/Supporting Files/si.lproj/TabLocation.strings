@@ -25,6 +25,9 @@
 /* Accessibility label for the shopping button in url bar */
 "TabLocation.Shopping.A11y.Label.v120" = "සමාලෝචන සෝදිසිකරු";
 
+/* Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "පටිති පෙන්වන්න: %@";
+
 /* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
 "TopSites.RemoveButton.LargeContentTitle.v122" = "පිටුව ඉවත් කරන්න";
 
