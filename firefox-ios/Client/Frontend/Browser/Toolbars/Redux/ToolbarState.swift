@@ -32,6 +32,7 @@ struct ToolbarState: ScreenState, Equatable {
             case qrCode
             case share
             case reload
+            case trackingProtection
             case readerMode
             case dataClearance
         }

@@ -27,6 +27,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var navigateTo: NavigationType?
     var showQRcodeReader: Bool
     var showBackForwardList: Bool
+    var showTrackingProtectionDetails: Bool
     var microsurveyState: MicrosurveyPromptState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -51,6 +52,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   navigateTo: bvcState.navigateTo,
                   showQRcodeReader: bvcState.showQRcodeReader,
                   showBackForwardList: bvcState.showBackForwardList,
+                  showTrackingProtectionDetails: bvcState.showTrackingProtectionDetails,
                   microsurveyState: bvcState.microsurveyState)
     }
 
@@ -67,6 +69,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             navigateTo: nil,
             showQRcodeReader: false,
             showBackForwardList: false,
+            showTrackingProtectionDetails: false,
             microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID))
     }
 
@@ -83,6 +86,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         navigateTo: NavigationType? = nil,
         showQRcodeReader: Bool = false,
         showBackForwardList: Bool = false,
+        showTrackingProtectionDetails: Bool = false,
         microsurveyState: MicrosurveyPromptState
     ) {
         self.searchScreenState = searchScreenState
@@ -97,6 +101,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.navigateTo = navigateTo
         self.showQRcodeReader = showQRcodeReader
         self.showBackForwardList = showBackForwardList
+        self.showTrackingProtectionDetails = showTrackingProtectionDetails
         self.microsurveyState = microsurveyState
     }
 
@@ -250,6 +255,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 navigateTo: nil,
                 showQRcodeReader: false,
                 showBackForwardList: true,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showTrackingProtectionDetails:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                toolbarState: state.toolbarState,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                showTrackingProtectionDetails: true,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.navigateBack:
             return BrowserViewControllerState(

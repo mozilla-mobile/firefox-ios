@@ -178,6 +178,11 @@ class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatch(action)
+
+        case .trackingProtection:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
+            store.dispatch(action)
         default:
             break
         }
