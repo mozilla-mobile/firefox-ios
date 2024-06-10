@@ -1274,7 +1274,7 @@ extension String {
     public struct Microsurvey {
         public struct Prompt {
             public static let LogoImageA11yLabel = MZLocalizedString(
-                key: "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129",
+                key: "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v128",
                 tableName: "Microsurvey",
                 value: "%@ Logo",
                 comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name.")
@@ -1297,7 +1297,7 @@ extension String {
 
         public struct Survey {
             public static let LogoImageA11yLabel = MZLocalizedString(
-                key: "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129",
+                key: "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v128",
                 tableName: "Microsurvey",
                 value: "%@ Logo",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name.")
@@ -1312,17 +1312,17 @@ extension String {
                 value: "Close",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
             public static let SelectedRadioButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v129",
+                key: "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v128",
                 tableName: "Microsurvey",
                 value: "Selected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
             public static let UnselectedRadioButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129",
+                key: "Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v128",
                 tableName: "Microsurvey",
                 value: "Unselected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was not selected.")
             public static let OptionsOrderAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129",
+                key: "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v128",
                 tableName: "Microsurvey",
                 value: "%@ out of %@",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order the survey option in the list of options. First placeholder is the number the option is in the list and the second placeholder is the total number of options such as 1 out of 6.")

@@ -21,9 +21,8 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
         static let closeButtonSize = CGSize(width: 30, height: 30)
-        static let logoSize = CGSize(width: 24, height: 24)
-        static let logoLargeSize = CGSize(width: 48, height: 48)
         static let borderThickness = 1.0
+        static let logoSize: CGFloat = 24
         static let padding = NSDirectionalEdgeInsets(
             top: 14,
             leading: 16,
@@ -49,9 +48,8 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     private var logoWidthConstraint: NSLayoutConstraint?
     private var logoHeightConstraint: NSLayoutConstraint?
 
-    private var logoSize: CGSize {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        return contentSizeCategory.isAccessibilityCategory ? UX.logoLargeSize : UX.logoSize
+    private var logoSizeScaled: CGFloat {
+        return UIFontMetrics.default.scaledValue(for: UX.logoSize)
     }
 
     private let windowUUID: WindowUUID
@@ -155,8 +153,8 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         addSubview(toastView)
         leadingConstraint = toastView.leadingAnchor.constraint(equalTo: leadingAnchor)
         trailingConstraint = toastView.trailingAnchor.constraint(equalTo: trailingAnchor)
-        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSize.width)
-        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSize.height)
+        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSizeScaled)
+        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSizeScaled)
 
         leadingConstraint?.isActive = true
         trailingConstraint?.isActive = true
@@ -196,8 +194,8 @@ class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     }
 
     private func adjustIconSize() {
-        logoWidthConstraint?.constant = logoSize.width
-        logoHeightConstraint?.constant = logoSize.height
+        logoWidthConstraint?.constant = logoSizeScaled
+        logoHeightConstraint?.constant = logoSizeScaled
     }
 
     // MARK: ThemeApplicable

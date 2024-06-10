@@ -32,8 +32,7 @@ final class MicrosurveyViewController: UIViewController,
     private struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let scrollStackSpacing: CGFloat = 22
-        static let logoSize = CGSize(width: 24, height: 24)
-        static let logoLargeSize = CGSize(width: 48, height: 48)
+        static let logoSize: CGFloat = 24
         static let borderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 8
         static let estimatedRowHeight: CGFloat = 44
@@ -46,9 +45,8 @@ final class MicrosurveyViewController: UIViewController,
         static let contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 
-    private var logoSize: CGSize {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        return contentSizeCategory.isAccessibilityCategory ? UX.logoLargeSize : UX.logoSize
+    private var logoSizeScaled: CGFloat {
+        return UIFontMetrics.default.scaledValue(for: UX.logoSize)
     }
 
     private lazy var headerView: UIStackView = .build { stack in
@@ -222,8 +220,8 @@ final class MicrosurveyViewController: UIViewController,
 
         view.addSubviews(headerView, scrollView)
 
-        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSize.width)
-        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSize.height)
+        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSizeScaled)
+        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSizeScaled)
         logoWidthConstraint?.isActive = true
         logoHeightConstraint?.isActive = true
 
@@ -271,8 +269,8 @@ final class MicrosurveyViewController: UIViewController,
     }
 
     private func adjustIconSize() {
-        logoWidthConstraint?.constant = logoSize.width
-        logoHeightConstraint?.constant = logoSize.height
+        logoWidthConstraint?.constant = logoSizeScaled
+        logoHeightConstraint?.constant = logoSizeScaled
     }
 
     // MARK: ThemeApplicable
