@@ -1796,7 +1796,7 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showQRCode(delegate: self)
         case _ where state.showBackForwardList:
             navigationHandler?.showBackForwardList()
-        case _ where state.showTabsLongPressActions: 
+        case _ where state.showTabsLongPressActions:
             presentActionSheet(from: view)
         case _ where state.showTrackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)

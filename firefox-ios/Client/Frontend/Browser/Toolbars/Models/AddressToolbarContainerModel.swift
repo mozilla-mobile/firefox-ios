@@ -35,7 +35,7 @@ class AddressToolbarContainerModel {
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
                 store.dispatch(action)
-            }
+        }
         return AddressToolbarState(
             locationViewState: locationViewState,
             navigationActions: navigationActions,
