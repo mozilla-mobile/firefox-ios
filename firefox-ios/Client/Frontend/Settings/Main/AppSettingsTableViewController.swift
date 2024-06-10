@@ -244,7 +244,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             prefKey: "showClipboardBar",
             defaultValue: false,
             titleText: .SettingsOfferClipboardBarTitle,
-            statusText: .SettingsOfferClipboardBarStatus
+            statusText: String(format: .SettingsOfferClipboardBarStatus, "Firefox")
         )
 
         let showLinksPreviewSettings = BoolSetting(

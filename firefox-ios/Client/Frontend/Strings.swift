@@ -3203,8 +3203,8 @@ extension String {
     public static let SettingsOfferClipboardBarStatus = MZLocalizedString(
         key: "Settings.OfferClipboardBar.StatusV2",
         tableName: nil,
-        value: "When opening Firefox",
-        comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
+        value: "When opening %@",
+        comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name.")
 }
 
 // MARK: - Link Previews
