@@ -3201,7 +3201,7 @@ extension String {
         value: "Offer to Open Copied Links",
         comment: "Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
     public static let SettingsOfferClipboardBarStatus = MZLocalizedString(
-        key: "Settings.OfferClipboardBar.StatusV2",
+        key: "Settings.OfferClipboardBar.StatusV3",
         tableName: nil,
         value: "When opening %@",
         comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name.")
