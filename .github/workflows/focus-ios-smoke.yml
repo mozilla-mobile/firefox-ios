@@ -11,7 +11,7 @@ env:
 jobs:
     compile:
         name: Compile source code
-        runs-on: ${{ env.RUNNER }}
+        runs-on: env.RUNNER
         steps:
           - name: Check out source code
             uses: actions/checkout@v4
