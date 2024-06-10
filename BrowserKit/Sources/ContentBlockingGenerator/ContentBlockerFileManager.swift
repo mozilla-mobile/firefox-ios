@@ -60,7 +60,7 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
         do {
             try fileManager.removeItem(at: outputDirectory)
         } catch {
-            // Possibly can't remove and this is fine. Creating directory is the crutial part here.
+            // Possibly can't remove and this is fine. Creating directory is the crucial part here.
         }
 
         do {

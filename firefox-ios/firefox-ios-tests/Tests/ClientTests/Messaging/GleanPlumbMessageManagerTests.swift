@@ -138,7 +138,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     func testManagerGetMessage_happyPath_byMultipleTriggers() throws {
         let expectedId = "infoCard"
         let messages = [
-            // The  trigger expressions _all_ have to be true in order for the messsage to be shown.
+            // The  trigger expressions _all_ have to be true in order for the message to be shown.
             createMessage(messageId: "infoCard-notyet", surface: .newTabCard, trigger: ["true", "false"]),
             createMessage(messageId: expectedId, surface: .newTabCard, trigger: ["true", "true"])
         ]

@@ -159,7 +159,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return self.recentlyClosedTabs.count
     }
 
-    // MARK: - Libray Toolbar actions
+    // MARK: - Library Toolbar actions
     func handleBackButton() {
         // no implementation needed
     }

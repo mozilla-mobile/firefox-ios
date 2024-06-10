@@ -314,7 +314,7 @@ workflows:
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     BrowserKit*|taskcluster*|test-fixtures*)
-                        # Explicity directory changes - build all applications
+                        # Explicitly directory changes - build all applications
                         BUILD_FIREFOX_IOS="true"
                         BUILD_FOCUS_IOS="true"
                         ;;
@@ -1771,7 +1771,7 @@ workflows:
         title: ContentBlockerGen
 
   focus-pull-and-unzip-dependencies:
-    description: Pulls and unzip the dependencis from previous stage 
+    description: Pulls and unzip the dependencies from previous stage 
     steps:
     - pull-intermediate-files@1:
         inputs:

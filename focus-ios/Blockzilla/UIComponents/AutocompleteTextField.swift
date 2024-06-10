@@ -20,7 +20,7 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
 
 public class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
-    // AutocompleteTextLabel repersents the actual autocomplete text.
+    // AutocompleteTextLabel represents the actual autocomplete text.
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?

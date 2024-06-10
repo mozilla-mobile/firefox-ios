@@ -26,7 +26,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testEmptyChilds_whenCreated() {
+    func testEmptyChildren_whenCreated() {
         let subject = createSubject()
         XCTAssertEqual(subject.childCoordinators.count, 0)
     }

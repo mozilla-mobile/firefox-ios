@@ -67,7 +67,7 @@ class OnboardingButtonActionTests: XCTestCase {
         XCTAssertEqual(mockDelegate.action, OnboardingActions.readPrivacyPolicy)
     }
 
-    func testsubject_buttonAction_returnsNotifiactionsAction() {
+    func testsubject_buttonAction_returnsNotificationsAction() {
         let subject = setSubjectUpWith(firstAction: .requestNotifications)
 
         subject.primaryAction()

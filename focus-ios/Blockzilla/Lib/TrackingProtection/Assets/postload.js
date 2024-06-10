@@ -5,6 +5,6 @@
 var messageHandler = window.webkit.messageHandlers.focusTrackingProtectionPostLoad
 var sendMessage = function(url) { messageHandler.postMessage({ url: url }) }
 
-// Send back the sources of every script and image in the dom back to the host applicaiton
+// Send back the sources of every script and image in the dom back to the host application
 Array.prototype.map.call(document.scripts, function(t) { return t.src }).forEach(sendMessage)
 Array.prototype.map.call(document.images, function(t) { return t.src }).forEach(sendMessage)

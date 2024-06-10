@@ -48,7 +48,7 @@ function find(query) {
   let trimmedQuery = query.trim();
 
   // If the trimmed query is empty, use it instead of the escaped
-  // query to prevent searching for nothing but whitepsace.
+  // query to prevent searching for nothing but whitespace.
   let escapedQuery = !trimmedQuery ? trimmedQuery : query.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
   if (escapedQuery === lastEscapedQuery) {
     return;

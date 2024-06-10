@@ -30,7 +30,7 @@ public enum AppEvent: AppEventType {
     // Activities: Browser
     case browserUpdatedForAppActivation(WindowUUID)
 
-    // Activites: Tabs
+    // Activities: Tabs
     case tabRestoration(WindowUUID)
     case selectTab(URL?, WindowUUID)
 }

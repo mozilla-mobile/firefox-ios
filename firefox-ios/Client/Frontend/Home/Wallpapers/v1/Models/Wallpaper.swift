@@ -74,7 +74,7 @@ struct Wallpaper: Equatable {
         return fetchResourceFor(imageType: .landscape)
     }
 
-    // MARK: - Helper fuctions
+    // MARK: - Helper functions
     private func fetchResourceFor(imageType: ImageTypeID) -> UIImage? {
         // If it's a default (empty) wallpaper
         guard type == .other else { return nil }
