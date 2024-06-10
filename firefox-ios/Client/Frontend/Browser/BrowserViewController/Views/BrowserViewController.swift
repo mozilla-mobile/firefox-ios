@@ -168,7 +168,7 @@ class BrowserViewController: UIViewController,
     }
     var keyboardBackdrop: UIView?
 
-    var scrollController = TabScrollingController()
+    lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
     private var keyboardState: KeyboardState?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
