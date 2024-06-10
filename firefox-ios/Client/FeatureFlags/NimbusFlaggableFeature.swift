@@ -26,6 +26,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case isToolbarCFREnabled
     case jumpBackIn
     case loginAutofill
+    case menuRefactor
     case microsurvey
     case nightMode
     case preferSwitchToOpenTabOverDuplicate
@@ -76,6 +77,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
                 .loginAutofill,
+                .menuRefactor,
                 .microsurvey,
                 .nightMode,
                 .preferSwitchToOpenTabOverDuplicate,
