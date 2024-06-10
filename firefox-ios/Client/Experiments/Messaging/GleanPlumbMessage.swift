@@ -89,6 +89,12 @@ struct GleanPlumbMessage {
     var options: [String] {
         return data.microsurveyConfig?.options ?? []
     }
+
+    /// The icon for this message if it has a microsurvey configuration.
+    /// Embedding apps should not read from this directly.
+    var icon: UIImage? {
+        return data.microsurveyConfig?.icon
+    }
 }
 
 /// Public properties for this message.

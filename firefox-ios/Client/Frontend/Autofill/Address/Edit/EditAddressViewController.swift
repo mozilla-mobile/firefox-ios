@@ -107,7 +107,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
                 "Error injecting JavaScript",
                 level: .warning,
                 category: .autofill,
-                description: "Error injecting JavaScript: \(error.localizedDescription)"
+                description: "Error evaluating JavaScript: \(error.localizedDescription)"
             )
         }
     }

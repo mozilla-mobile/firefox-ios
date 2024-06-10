@@ -8,5 +8,4 @@ public protocol AddressToolbarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
-    func shouldDisplayTextForURL(_ url: URL?) -> String?
 }

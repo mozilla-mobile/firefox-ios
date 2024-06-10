@@ -108,7 +108,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func tapKeyboardKey(_ key: Int) {
         let key = app.keyboards.keys.element(boundBy: key)
-        if app.buttons["Continue"].exists == true {
+        if app.buttons["Continue"].isHittable {
             // Attempt to find and tap the Continue button
             // of the keyboard onboarding screen.
             app.buttons.staticTexts["Continue"].tap()

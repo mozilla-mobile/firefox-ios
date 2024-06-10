@@ -1,48 +1,48 @@
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
-"Microsurvey.Prompt.Button.v127" = "ඉදිරියට";
+"Microsurvey.Prompt.Button.v127" = "ดำเนินการต่อ";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
-"Microsurvey.Prompt.Close.AccessibilityLabel.v127" = "සමීක්ෂණ ප්‍රේරකය වසන්න";
+"Microsurvey.Prompt.Close.AccessibilityLabel.v127" = "ปิดพรอมต์แบบสำรวจ";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
-"Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "වසන්න";
+"Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "ปิด";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name. */
-"Microsurvey.Prompt.TitleLabel.v127" = "විනාඩියක් වැය කර %@ වැඩිදියුණුවට සහාය වන්න.";
+"Microsurvey.Prompt.TitleLabel.v127" = "ช่วยเราทำให้ %@ ดีขึ้น โดยสละเวลาเพียงนาทีเดียว";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
-"Microsurvey.Survey.Button.v127" = "යොමන්න";
+"Microsurvey.Survey.Button.v127" = "ส่ง";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
-"Microsurvey.Survey.Close.AccessibilityLabel.v127" = "සමීක්ෂණය වසන්න";
+"Microsurvey.Survey.Close.AccessibilityLabel.v127" = "ปิดแบบสำรวจ";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
-"Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "වසන්න";
+"Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "ปิด";
 
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
-"Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "ඔබගේ ප්‍රතිපෝෂණයට ස්තූතියි!";
+"Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "ขอบคุณสำหรับข้อคิดเห็นของคุณ!";
 
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey. */
-"Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "සමීක්ෂණය සම්පූර්ණයි";
+"Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "แบบสำรวจเสร็จสมบูรณ์";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
-"Microsurvey.Survey.HeaderLabel.v127" = "මෙම සමීක්ෂණය සම්පූර්ණ කරන්න";
+"Microsurvey.Survey.HeaderLabel.v127" = "ทำแบบสำรวจนี้ให้เสร็จสมบูรณ์";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption1.v127" = "ඉතා තෘප්තිමත්";
+"Microsurvey.Survey.Options.LikertScaleOption1.v127" = "พึงพอใจมาก";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption2.v127" = "තෘප්තිමත්";
+"Microsurvey.Survey.Options.LikertScaleOption2.v127" = "พึงพอใจ";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption3.v127" = "මධ්‍යස්ථ";
+"Microsurvey.Survey.Options.LikertScaleOption3.v127" = "เฉยๆ";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption4.v127" = "අතෘප්තිමත්";
+"Microsurvey.Survey.Options.LikertScaleOption4.v127" = "ไม่พอใจ";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption5.v127" = "ඉතා අතෘප්තිමත්";
+"Microsurvey.Survey.Options.LikertScaleOption5.v127" = "ไม่พอใจมาก";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
-"Microsurvey.Survey.PrivacyPolicyLink.v127" = "පෞද්ගලිකත්ව දැන්වීම";
+"Microsurvey.Survey.PrivacyPolicyLink.v127" = "ประกาศความเป็นส่วนตัว";
 

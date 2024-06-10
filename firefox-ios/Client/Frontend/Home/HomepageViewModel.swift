@@ -13,7 +13,7 @@ protocol HomepageDataModelDelegate: AnyObject {
     func reloadView()
 }
 
-class HomepageViewModel: FeatureFlaggable {
+class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     struct UX {
         static let spacingBetweenSections: CGFloat = 62
         static let standardInset: CGFloat = 16
@@ -61,6 +61,7 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    let windowUUID: WindowUUID
     let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool {
@@ -122,6 +123,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.logger = logger
+        self.windowUUID = tabManager.windowUUID
 
         self.headerViewModel = HomepageHeaderViewModel(profile: profile, theme: theme, tabManager: tabManager)
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()

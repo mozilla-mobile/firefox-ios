@@ -251,7 +251,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
     func testManagerOnMessagePressed() {
         let message = createMessage(messageId: messageId, action: "://test-action")
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
@@ -265,7 +265,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         // 2. an existing scheme is left in place.
         // 3. that there is no spurious question mark when there are no parameters
         let message = createMessage(messageId: messageId, action: "itms-apps://itunes.apple.com/app/id{uuid}")
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
@@ -277,7 +277,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     func testManagerOnMessagePressed_linkWithEmbeddedParam() {
         // Test shows query params can be part of the action.
         let message = createMessage(messageId: messageId, action: "itms-apps://itunes.apple.com/app/id?utm_param=foo")
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
@@ -293,7 +293,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                                     actionParams: [
                                         "url": "https://example.com"
                                     ])
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
@@ -308,7 +308,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         // 2. that the mozInternalScheme is used if no scheme is found.
         // 3. that query param values are URL query encoded.
         let message = createMessage(messageId: messageId, action: "://open-url", actionParams: ["url": "https://example.com?foo={uuid}&bar=baz"])
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
@@ -325,7 +325,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
                                         "url": "https://example.com",
                                         "private": "true"
                                     ])
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
@@ -340,7 +340,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     // Reloads for notification
     func testManagerOnMessagePressed_withMalformedURL() {
         let message = createMessage(messageId: messageId, action: "http://www.google.com?q=א")
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 0)

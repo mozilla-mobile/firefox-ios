@@ -355,7 +355,7 @@ final class MicrosurveyViewController: UIViewController,
         ) as? MicrosurveyTableHeaderView else {
             return nil
         }
-        headerView.configure(model.surveyQuestion)
+        headerView.configure(model.surveyQuestion, icon: model.icon)
         headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return headerView
     }
