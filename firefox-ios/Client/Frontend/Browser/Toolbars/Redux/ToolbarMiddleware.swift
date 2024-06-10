@@ -41,6 +41,9 @@ class ToolbarMiddleware: FeatureFlaggable {
                                        actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
 
+        case GeneralBrowserMiddlewareActionType.didScroll:
+            updateScrollPosition(action: action, state: state)
+
         default:
             break
         }
@@ -200,5 +203,40 @@ class ToolbarMiddleware: FeatureFlaggable {
         default:
             break
         }
+    }
+
+    private func updateScrollPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
+        guard let scrollOffset = action.scrollOffset,
+              let browserState = state.screenState(BrowserViewControllerState.self,
+                                                   for: .browserViewController,
+                                                   window: action.windowUUID)
+        else { return }
+
+        let addressToolbarState = browserState.toolbarState.addressToolbar
+        let displayTopBorder = shouldDisplayAddressToolbarBorder(borderPosition: .top,
+                                                                 scrollY: scrollOffset.y,
+                                                                 state: state,
+                                                                 windowUUID: action.windowUUID)
+        let displayBottomBorder = shouldDisplayAddressToolbarBorder(borderPosition: .bottom,
+                                                                    scrollY: scrollOffset.y,
+                                                                    state: state,
+                                                                    windowUUID: action.windowUUID)
+
+        let needsUpdateForTop = addressToolbarState.displayTopBorder != displayTopBorder
+        let needsUpdateForBottom = addressToolbarState.displayBottomBorder != displayBottomBorder
+        guard needsUpdateForTop || needsUpdateForBottom else { return }
+
+        let addressToolbarModel = AddressToolbarModel(
+            navigationActions: addressToolbarState.navigationActions,
+            pageActions: addressToolbarState.pageActions,
+            browserActions: addressToolbarState.browserActions,
+            displayTopBorder: displayTopBorder,
+            displayBottomBorder: displayBottomBorder,
+            url: addressToolbarState.url)
+
+        let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                   windowUUID: action.windowUUID,
+                                   actionType: ToolbarActionType.needsBorderUpdate)
+        store.dispatch(action)
     }
 }

@@ -67,6 +67,14 @@ struct ToolbarState: ScreenState, Equatable {
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 
+        case ToolbarActionType.needsBorderUpdate:
+            guard let addressToolbarModel = action.addressToolbarModel else { return state }
+
+            var state = state
+            state.addressToolbar.displayTopBorder = addressToolbarModel.displayTopBorder
+            state.addressToolbar.displayBottomBorder = addressToolbarModel.displayBottomBorder
+            return state
+
         default:
             return ToolbarState(
                 windowUUID: state.windowUUID,
