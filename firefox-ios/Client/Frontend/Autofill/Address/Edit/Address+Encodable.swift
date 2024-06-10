@@ -14,8 +14,9 @@ enum FormatStyle {
     case kebabCase
 }
 
+struct FormatStyleError: Error {}
+
 extension Address: Encodable {
-    struct FormatStyleError: Error {}
     enum KebabCodingKeys: String, CodingKey {
         case guid
         case name

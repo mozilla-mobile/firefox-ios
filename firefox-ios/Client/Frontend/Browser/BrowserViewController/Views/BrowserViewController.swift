@@ -1796,6 +1796,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showQRCode(delegate: self)
         case _ where state.showBackForwardList:
             navigationHandler?.showBackForwardList()
+        case _ where state.showTabsLongPressActions: 
+            presentActionSheet(from: view)
         case _ where state.showTrackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
@@ -1863,6 +1865,22 @@ class BrowserViewController: UIViewController,
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
         tabManager.selectedTab?.goForward()
+    }
+
+    func presentActionSheet(from view: UIView) {
+        guard presentedViewController == nil else { return }
+
+        var actions: [[PhotonRowActions]] = []
+        actions.append(getTabToolbarLongPressActionsForModeSwitching())
+        actions.append(getMoreTabToolbarLongPressActions())
+
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: .overCurrentContext
+        )
+
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func focusOnTabSegment() {

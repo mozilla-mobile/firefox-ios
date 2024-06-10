@@ -46,7 +46,8 @@ struct ToolbarState: ScreenState, Equatable {
 
         var canPerformLongPressAction: Bool {
             return actionType == .back ||
-                   actionType == .forward
+                   actionType == .forward ||
+                   actionType == .tabs
         }
     }
 

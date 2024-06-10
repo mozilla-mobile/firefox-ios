@@ -28,6 +28,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var showQRcodeReader: Bool
     var showBackForwardList: Bool
     var showTrackingProtectionDetails: Bool
+    var showTabsLongPressActions: Bool
     var microsurveyState: MicrosurveyPromptState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -53,6 +54,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   showQRcodeReader: bvcState.showQRcodeReader,
                   showBackForwardList: bvcState.showBackForwardList,
                   showTrackingProtectionDetails: bvcState.showTrackingProtectionDetails,
+                  showTabsLongPressActions: bvcState.showTabsLongPressActions,
                   microsurveyState: bvcState.microsurveyState)
     }
 
@@ -70,6 +72,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             showQRcodeReader: false,
             showBackForwardList: false,
             showTrackingProtectionDetails: false,
+            showTabsLongPressActions: false,
             microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID))
     }
 
@@ -87,6 +90,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         showQRcodeReader: Bool = false,
         showBackForwardList: Bool = false,
         showTrackingProtectionDetails: Bool = false,
+        showTabsLongPressActions: Bool = false,
         microsurveyState: MicrosurveyPromptState
     ) {
         self.searchScreenState = searchScreenState
@@ -102,6 +106,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.showQRcodeReader = showQRcodeReader
         self.showBackForwardList = showBackForwardList
         self.showTrackingProtectionDetails = showTrackingProtectionDetails
+        self.showTabsLongPressActions = showTabsLongPressActions
         self.microsurveyState = microsurveyState
     }
 
@@ -258,6 +263,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showTrackingProtectionDetails:
             return BrowserViewControllerState(
+                    searchScreenState: state.searchScreenState,
+                    showDataClearanceFlow: state.showDataClearanceFlow,
+                    toolbarState: state.toolbarState,
+                    fakespotState: state.fakespotState,
+                    toast: state.toast,
+                    windowUUID: state.windowUUID,
+                    browserViewType: state.browserViewType,
+                    showTrackingProtectionDetails: true,
+                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showTabsLongPressActions:
+            return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 toolbarState: state.toolbarState,
@@ -265,7 +281,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: state.toast,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                showTrackingProtectionDetails: true,
+                showTabsLongPressActions: true,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.navigateBack:
             return BrowserViewControllerState(
