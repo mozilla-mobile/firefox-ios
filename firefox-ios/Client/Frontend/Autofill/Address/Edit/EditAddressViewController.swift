@@ -16,6 +16,8 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         return webView
     }()
 
+    var activityIndicator: UIActivityIndicatorView!
+
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
@@ -38,13 +40,36 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        view = webView
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
         setupWebView()
+        setupActivityIndicator()
+
         listenForThemeChange(view)
     }
 
+    private func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
     private func setupWebView() {
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(webView)
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
         model.toggleEditModeAction = { [weak self] isEditMode in
             self?.evaluateJavaScript("toggleEditMode(\(isEditMode));")
         }
@@ -97,7 +122,12 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
 
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        activityIndicator.startAnimating()
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        activityIndicator.stopAnimating()
         do {
             let javascript = try model.getInjectJSONDataInit()
             self.evaluateJavaScript(javascript)
