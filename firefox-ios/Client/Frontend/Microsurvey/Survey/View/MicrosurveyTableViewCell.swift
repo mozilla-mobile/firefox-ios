@@ -18,13 +18,13 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let separatorWidth = 0.5
 
         struct Images {
-            // TODO: FXIOS-9028 Fix radio button for accessibility
             static let selected = ImageIdentifiers.radioButtonSelected
             static let notSelected = ImageIdentifiers.radioButtonNotSelected
         }
     }
 
     private var topSeparatorView: UIView = .build()
+    private var a11yOptionsOrderValue: String?
 
     private lazy var horizontalStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -35,7 +35,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private lazy var radioButton: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: UX.Images.notSelected)
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.radioButton
+        imageView.isAccessibilityElement = false
     }
 
     private lazy var optionLabel: UILabel = .build { label in
@@ -43,6 +43,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.isAccessibilityElement = false
     }
 
     var checked = false {
@@ -50,13 +51,28 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
             let checkedButton = UIImage(named: UX.Images.selected)
             let uncheckedButton = UIImage(named: UX.Images.notSelected)
             self.radioButton.image = checked ? checkedButton : uncheckedButton
+            accessibilityValue = optionA11yValue
         }
+    }
+
+    var optionA11yValue: String {
+        let selectedLabel: String = .Microsurvey.Survey.SelectedRadioButtonAccessibilityLabel
+        let unselectedLabel: String = .Microsurvey.Survey.UnselectedRadioButtonAccessibilityLabel
+
+        var a11yValue = checked ? selectedLabel : unselectedLabel
+        if let a11yOptionsOrderValue {
+            a11yValue.append(", \(a11yOptionsOrderValue)")
+        }
+        return a11yValue
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
         selectionStyle = .none
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.radioButton
+        accessibilityTraits.insert(.button)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -102,6 +118,16 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configure(_ text: String) {
         optionLabel.text = text
+        accessibilityLabel = optionLabel.text
+    }
+
+    func setA11yValue(for index: Int, outOf totalCount: Int) {
+        a11yOptionsOrderValue = String(
+            format: .Microsurvey.Survey.OptionsOrderAccessibilityLabel,
+            NSNumber(value: index + 1 as Int),
+            NSNumber(value: totalCount as Int)
+        )
+        accessibilityValue = optionA11yValue
     }
 
     // MARK: - ThemeApplicable

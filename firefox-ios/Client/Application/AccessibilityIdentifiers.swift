@@ -151,6 +151,7 @@ public struct AccessibilityIdentifiers {
 
     struct Microsurvey {
         struct Prompt {
+            static let firefoxLogo = "Microsurvey.Prompt.FirefoxLogo"
             static let closeButton = "Microsurvey.Prompt.CloseButton"
             static let takeSurveyButton = "Microsurvey.Prompt.TakeSurveyButton"
         }
