@@ -1,0 +1,30 @@
+---
+name: "Focus Smoke Tests"
+    
+on:
+    workflow_dispatch:
+    
+env:
+    XCODE_VERSION: 15.4
+    RUNNER: macos-14
+    
+jobs:
+    compile:
+        name: Compile source code
+        runs-on: ${{ env.RUNNER }}
+        steps:
+          - name: Check out source code
+            uses: actions/checkout@v4
+          - name: Setup Python
+            uses: actions/setup-python@v5
+            with:
+                python-version: '3.11'
+          - name: Install Python packages required
+            run: |
+              brew update
+              pip3 install virtualenv pipenv
+          - name: Setup Xcode
+            run: |
+              sudo rm -rf /Applications/Xcode.app
+              sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer
+              xcodebuild -version
