@@ -183,6 +183,9 @@ FormAutofillUtils = {
    * @returns {string}
    */
   getSecurePref(prefName, safeDefaultValue) {
+    if (Services.prefs.getBoolPref("security.nocertdb", false)) {
+      return false;
+    }
     try {
       const encryptedValue = Services.prefs.getStringPref(prefName, "");
       return encryptedValue === ""
@@ -200,6 +203,9 @@ FormAutofillUtils = {
    * @param {string} value -> The value to be set in its encrypted form.
    */
   setSecurePref(prefName, value) {
+    if (Services.prefs.getBoolPref("security.nocertdb", false)) {
+      return;
+    }
     if (value) {
       const encryptedValue = lazy.Crypto.encrypt(value);
       Services.prefs.setStringPref(prefName, encryptedValue);
