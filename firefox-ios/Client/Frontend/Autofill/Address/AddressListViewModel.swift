@@ -37,6 +37,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     @Published var addresses: [Address] = []
     @Published var showSection = false
     @Published var destination: Destination?
+    @Published var isEditMode = false
 
     let windowUUID: WindowUUID
 
@@ -50,6 +51,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
+    var toggleEditModeAction: ((Bool) -> Void)?
 
     let addressProvider: AddressProvider
 
@@ -117,12 +119,24 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         destination = .edit(address)
     }
 
-    func cancelEditButtonTap() {
+    func cancelAddButtonTap() {
         destination = nil
     }
 
-    func cancelAddButtonTap() {
+    func editButtonTap() {
+        toggleEditMode()
+    }
+
+    func saveEditButtonTap() {
+        toggleEditMode()
+    }
+
+    func closeEditButtonTap() {
         destination = nil
+    }
+
+    func cancelEditButtonTap() {
+        toggleEditMode()
     }
 
     func saveAddressButtonTap() {
@@ -162,6 +176,11 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             timeLastModified: 0,
             timesUsed: 0
         ))
+    }
+
+    private func toggleEditMode() {
+        isEditMode.toggle()
+        toggleEditModeAction?(isEditMode)
     }
 
     // MARK: - Inject JSON Data

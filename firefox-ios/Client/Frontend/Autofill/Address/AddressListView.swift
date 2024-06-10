@@ -60,10 +60,29 @@ struct AddressListView: View {
 
                 case .edit:
                     EditAddressViewControllerRepresentable(model: viewModel)
+                        .navigationBarTitle(String.Addresses.Settings.Edit.AutofillEditAddressTitle, displayMode: .inline)
                         .toolbar {
                             ToolbarItemGroup(placement: .cancellationAction) {
-                                Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
-                                    viewModel.cancelEditButtonTap()
+                                if viewModel.isEditMode {
+                                    Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
+                                        viewModel.cancelEditButtonTap()
+                                    }
+                                } else {
+                                    Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                                        viewModel.closeEditButtonTap()
+                                    }
+                                }
+                            }
+
+                            ToolbarItemGroup(placement: .primaryAction) {
+                                if viewModel.isEditMode {
+                                    Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                                        viewModel.saveEditButtonTap()
+                                    }
+                                } else {
+                                    Button(String.Addresses.Settings.Edit.EditNavBarButtonLabel) {
+                                        viewModel.editButtonTap()
+                                    }
                                 }
                             }
                         }

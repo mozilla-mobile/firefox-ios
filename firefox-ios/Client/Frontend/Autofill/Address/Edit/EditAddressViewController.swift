@@ -45,6 +45,10 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func setupWebView() {
+        model.toggleEditModeAction = { [weak self] isEditMode in
+            self?.evaluateJavaScript("toggleEditMode(\(isEditMode));")
+        }
+
         model.saveAction = { [weak self] completion in
             self?.webView.evaluateJavaScript("getCurrentFormData();") { result, error in
                 if let error = error {
