@@ -26,7 +26,9 @@ class AddressAutofillSettingsViewModel {
 
     /// Profile associated with the address autofill settings.
     var profile: Profile
-
+    
+    /// Unique identifier for the window.
+    /// This is used to identify the window that the ViewModel is associated with.
     let windowUUID: WindowUUID
 
     /// Boolean indicating whether autofill is currently enabled.
@@ -50,6 +52,8 @@ class AddressAutofillSettingsViewModel {
 
     /// Initializes the AddressAutofillSettingsViewModel.
     /// - Parameter profile: The profile associated with the address autofill settings.
+    /// - Parameter windowUUID: Unique identifier for the window.
+    /// This is used to identify the window that the ViewModel is associated with.
     init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
         self.windowUUID = windowUUID

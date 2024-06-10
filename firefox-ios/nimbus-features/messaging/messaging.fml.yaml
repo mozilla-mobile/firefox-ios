@@ -191,6 +191,10 @@ objects:
     description: >
         Attributes relating to microsurvey messaging.
     fields:
+      icon:
+        description: The asset name in our bundle used as the icon shown in the survey.
+        type: Image
+        default: lightbulbLarge
       options:
         description: The list of survey options to present to the user.
         type: List<Text>

@@ -94,6 +94,9 @@
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v120" = "S ufran n “Ih, ɛreḍ-it” ad tqebleḍ tiwtilin-a n %@:";
 
+/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
+"Shopping.OptInCard.Disclaimer.Text.v123" = "S ufran n “Ih, ɛreḍ-it” ad tqebleḍ iferdisen-a:";
+
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Ɛreḍ amnir-nneɣ yettwamanen i timawin n ufaris";
 

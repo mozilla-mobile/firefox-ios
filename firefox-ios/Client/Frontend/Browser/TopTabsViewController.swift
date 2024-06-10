@@ -176,10 +176,12 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
 
     func applyTheme() {
         let currentTheme = themeManager.currentTheme(for: windowUUID)
-        view.backgroundColor = currentTheme.colors.layer3
+        let colors = currentTheme.colors
+
+        view.backgroundColor = ToolbarFlagManager.isRefactorEnabled ? colors.layer1 : colors.layer3
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
-        newTab.tintColor = currentTheme.colors.iconPrimary
+        newTab.tintColor = colors.iconPrimary
         collectionView.backgroundColor = view.backgroundColor
         collectionView.reloadData()
         topTabDisplayManager.refreshStore()

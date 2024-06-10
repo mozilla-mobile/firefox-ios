@@ -93,8 +93,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
             webView.loadFileURL(url, allowingReadAccessTo: url)
             webView.load(request)
         }
-
-        webView.configuration.userContentController.add(self, name: "addressFormMessageHandler")
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
@@ -111,7 +109,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
                 "Error injecting JavaScript",
                 level: .warning,
                 category: .autofill,
-                description: "Error injecting JavaScript: \(error.localizedDescription)"
+                description: "Error evaluating JavaScript: \(error.localizedDescription)"
             )
         }
     }

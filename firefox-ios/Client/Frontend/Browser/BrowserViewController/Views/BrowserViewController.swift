@@ -28,7 +28,8 @@ class BrowserViewController: UIViewController,
                              RecentlyClosedPanelDelegate,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
-                             BrowserFrameInfoProvider {
+                             BrowserFrameInfoProvider,
+                             AddressToolbarContainerDelegate {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -374,8 +375,13 @@ class BrowserViewController: UIViewController,
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
         if isToolbarRefactorEnabled {
-            navigationToolbarContainer.applyTheme(theme: currentTheme())
-            updateTabCountUsingTabManager(self.tabManager)
+            if showToolbar {
+                navigationToolbarContainer.isHidden = false
+                navigationToolbarContainer.applyTheme(theme: currentTheme())
+                updateTabCountUsingTabManager(self.tabManager)
+            } else {
+                navigationToolbarContainer.isHidden = true
+            }
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showToolbar)
@@ -805,7 +811,7 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
-            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile)
+            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
@@ -1719,7 +1725,13 @@ class BrowserViewController: UIViewController,
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
-        guard !isToolbarRefactorEnabled else { return }
+        guard !isToolbarRefactorEnabled else {
+            let action = ToolbarAction(url: tab.url?.displayURL,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.urlDidChange)
+            store.dispatch(action)
+            return
+        }
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
             let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
@@ -1737,6 +1749,43 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    func didSubmitSearchText(_ text: String) {
+        guard let currentTab = tabManager.selectedTab else { return }
+
+        if let fixupURL = URIFixup.getURL(text) {
+            // The user entered a URL, so use it.
+            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
+            return
+        }
+
+        // We couldn't build a URL, so check for a matching search keyword.
+        let trimmedText = text.trimmingCharacters(in: .whitespaces)
+        guard let possibleKeywordQuerySeparatorSpace = trimmedText.firstIndex(of: " ") else {
+            submitSearchText(text, forTab: currentTab)
+            return
+        }
+
+        let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
+        let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
+
+        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword).uponQueue(.main) { result in
+            if var urlString = result.successValue ?? "",
+               let escapedQuery = possibleQuery.addingPercentEncoding(
+                withAllowedCharacters: NSCharacterSet.urlQueryAllowed
+               ),
+               let range = urlString.range(of: "%s") {
+                urlString.replaceSubrange(range, with: escapedQuery)
+
+                if let url = URL(string: urlString, invalidCharacters: false) {
+                    self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
+                    return
+                }
+            }
+
+            self.submitSearchText(text, forTab: currentTab)
+        }
+    }
+
     private func executeToolbarActions() {
         guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
 
@@ -1744,6 +1793,10 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         } else if state.showQRcodeReader {
             navigationHandler?.showQRCode(delegate: self)
+        } else if state.showBackForwardList {
+            navigationHandler?.showBackForwardList()
+        } else if state.showTabsLongPressActions {
+            presentActionSheet(from: view)
         }
     }
 
@@ -1759,15 +1812,24 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleNavigationActions(for state: BrowserViewControllerState) {
-        switch state.navigateTo {
+        guard let navigationState = state.navigateTo else { return }
+        updateZoomPageBarVisibility(visible: false)
+
+        switch navigationState {
         case .home:
             didTapOnHome()
         case .back:
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .none:
-            return
+        case .tabTray:
+            focusOnTabSegment()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .tabToolbar,
+                value: .tabView
+            )
         }
     }
 
@@ -1775,7 +1837,6 @@ class BrowserViewController: UIViewController,
         let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateTo == .home
         guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
 
-        updateZoomPageBarVisibility(visible: false)
         let page = NewTabAccessors.getHomePage(self.profile.prefs)
         if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
             tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
@@ -1790,7 +1851,6 @@ class BrowserViewController: UIViewController,
         // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goBack()
     }
 
@@ -1799,8 +1859,29 @@ class BrowserViewController: UIViewController,
         // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
         tabManager.selectedTab?.goForward()
+    }
+
+    func presentActionSheet(from view: UIView) {
+        guard presentedViewController == nil else { return }
+
+        var actions: [[PhotonRowActions]] = []
+        actions.append(getTabToolbarLongPressActionsForModeSwitching())
+        actions.append(getMoreTabToolbarLongPressActions())
+
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: .overCurrentContext
+        )
+
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
+    }
+
+    func focusOnTabSegment() {
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
+        showTabTray(focusedSegment: segmentToFocus)
     }
 
     // MARK: Opening New Tabs
@@ -2563,6 +2644,15 @@ class BrowserViewController: UIViewController,
     func getOverKeyboardContainerSize() -> CGSize {
         return overKeyboardContainer.frame.size
     }
+
+    // MARK: - AddressToolbarContainerDelegate
+    func searchSuggestions(searchTerm: String) {}
+
+    func openBrowser(searchTerm: String) {
+        didSubmitSearchText(searchTerm)
+    }
+
+    func openSuggestions(searchTerm: String) {}
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {

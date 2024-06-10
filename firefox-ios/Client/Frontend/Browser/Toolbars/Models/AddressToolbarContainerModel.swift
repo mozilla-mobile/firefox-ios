@@ -4,6 +4,7 @@
 
 import Common
 import ToolbarKit
+import Shared
 
 class AddressToolbarContainerModel {
     let navigationActions: [ToolbarElement]
@@ -14,6 +15,7 @@ class AddressToolbarContainerModel {
     let displayBottomBorder: Bool
     let windowUUID: UUID
     var profile: Profile
+    let url: URL?
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(
@@ -26,7 +28,8 @@ class AddressToolbarContainerModel {
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: profile.searchEngines.defaultEngine?.image,
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            url: nil)
+            url: url,
+            searchTerm: searchTermFromURL(url, searchEngines: profile.searchEngines))
         return AddressToolbarState(
             locationViewState: locationViewState,
             navigationActions: navigationActions,
@@ -48,6 +51,18 @@ class AddressToolbarContainerModel {
                                                                       windowUUID: windowUUID)
         self.windowUUID = windowUUID
         self.profile = profile
+        self.url = state.addressToolbar.url
+    }
+
+    func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
+        var searchURL: URL? = url
+
+        if let url = searchURL, InternalURL.isValid(url: url) {
+            searchURL = url
+        }
+
+        guard let query = searchEngines.queryForSearchURL(searchURL) else { return nil }
+        return query
     }
 
     private static func mapActions(_ actions: [ToolbarState.ActionState], windowUUID: UUID) -> [ToolbarElement] {
@@ -63,7 +78,13 @@ class AddressToolbarContainerModel {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }
+                }, onLongPress: action.canPerformLongPressAction ? {
+                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         gestureType: .longPress,
+                                                         windowUUID: windowUUID,
+                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
+                    store.dispatch(action)
+                } : nil
             )
         }
     }

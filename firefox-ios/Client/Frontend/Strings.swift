@@ -3960,7 +3960,7 @@ extension String {
                 key: "Menu.EnhancedTrackingProtection.Off.Header.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "%@ is off-duty. We suggest turning protections back on.",
-                comment: "Header for the enhanced tracking protection screen when the user has opted out of the feature.")
+                comment: "Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name")
 
             public static let onNotSecureTitle = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128",
@@ -3983,8 +3983,8 @@ extension String {
             public static let trackersBlockedLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
                 tableName: "EnhancedTrackingProtection",
-                value: "%@ Trackers blocked",
-                comment: "Text to let users know how many trackers were blocked on the current website.")
+                value: "Trackers blocked: %@",
+                comment: "Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked")
 
             public static let noTrackersLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
@@ -3996,19 +3996,19 @@ extension String {
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "%@ Cross-site tracking cookies",
-                comment: "Text to let users know how many cross-site tracking cookies were blocked on the current website.")
+                comment: "Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected")
 
             public static let socialMediaTrackersBlockedLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "%@ Social media tracker",
-                comment: "Text to let users know how many social media trackers were blocked on the current website.")
+                comment: "Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
 
             public static let fingerprinterBlockedLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "%@ Fingerprinter",
-                comment: "Text to let users know how many fingerprinters were blocked on the current website.")
+                comment: "Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected")
 
             public static let connectionSecureLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128",
@@ -4056,7 +4056,7 @@ extension String {
                 key: "Menu.EnhancedTrackingProtection.ClearData.AlertText.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "Removing cookies and site data for %@ might log you out of websites and clear shopping carts.",
-                comment: "The text for the clear cookies and site data alert inside the enhanced tracking protection screen.")
+                comment: "The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website")
 
             public static let clearDataAlertButton = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128",

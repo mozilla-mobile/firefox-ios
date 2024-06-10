@@ -9,4 +9,5 @@ struct MicrosurveyModel: Equatable {
     let promptButtonLabel: String
     let surveyQuestion: String
     let surveyOptions: [String]
+    let icon: UIImage?
 }

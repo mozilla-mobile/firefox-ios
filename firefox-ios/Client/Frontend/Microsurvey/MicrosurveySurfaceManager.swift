@@ -36,12 +36,14 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
         )
         let promptButtonLabel = message?.buttonLabel ?? .Microsurvey.Prompt.TakeSurveyButton
         let options: [String] = message?.options ?? defaultSurveyOptions
+        let icon = message?.icon
 
         return MicrosurveyModel(
             promptTitle: promptTitle,
             promptButtonLabel: promptButtonLabel,
             surveyQuestion: surveyQuestion,
-            surveyOptions: options
+            surveyOptions: options,
+            icon: icon
         )
     }
 
@@ -56,7 +58,8 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
 
     func handleMessagePressed() {
         // TODO: FXIOS-8797: Add telemetry to capture user responses
-        message.map(messagingManager.onMessagePressed)
+        guard let message else { return }
+        messagingManager.onMessagePressed(message, window: nil)
     }
 
     func handleMessageDismiss() {
