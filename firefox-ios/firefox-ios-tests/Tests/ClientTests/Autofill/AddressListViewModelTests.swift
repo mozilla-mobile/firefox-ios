@@ -132,6 +132,7 @@ class AddressListViewModelTests: XCTestCase {
     }
 
     func testInjectJSONDataInitSuccess() throws {
+        viewModel.isDarkTheme = { _ in true }
         let address = dummyAddresses[0]
         viewModel.destination = .edit(address)
 
