@@ -596,7 +596,7 @@ private extension HomepageViewController {
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,
-                sectionType: .recentlySaved
+                sectionType: .bookmarks
             )
         }
 
@@ -609,7 +609,7 @@ private extension HomepageViewController {
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,
-                sectionType: .recentlySaved
+                sectionType: .bookmarks
             )
         }
 

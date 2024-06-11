@@ -56,14 +56,14 @@ class RecentlySavedViewModel {
 // MARK: HomeViewModelProtocol
 extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var sectionType: HomepageSectionType {
-        return .recentlySaved
+        return .bookmarks
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
         let textColor = wallpaperManager.currentWallpaper.textColor
 
         return LabelButtonHeaderViewModel(
-            title: HomepageSectionType.recentlySaved.title,
+            title: HomepageSectionType.bookmarks.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
             isButtonHidden: false,
             buttonTitle: .RecentlySavedShowAllText,
