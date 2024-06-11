@@ -49,7 +49,10 @@ class AddressAutofillCoordinator: BaseCoordinator {
             closeButtonA11yIdentifier:
                 AccessibilityIdentifiers.Autofill.addressCloseButton)
 
-        let viewModel = AddressListViewModel(addressProvider: profile.autofill)
+        let viewModel = AddressListViewModel(
+            windowUUID: tabManager.windowUUID,
+            addressProvider: profile.autofill
+        )
 
         viewModel.addressSelectionCallback = { [weak self] selectedAddress in
             // Perform actions with the selected address, such as injecting it into the form

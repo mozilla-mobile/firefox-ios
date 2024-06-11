@@ -237,9 +237,14 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAddressAutofill() {
-        let viewModel = AddressAutofillSettingsViewModel(profile: profile)
-        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel,
-                                                                   windowUUID: windowUUID)
+        let viewModel = AddressAutofillSettingsViewModel(
+            profile: profile,
+            windowUUID: windowUUID
+        )
+        let viewController = AddressAutofillSettingsViewController(
+            addressAutofillViewModel: viewModel,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
         TelemetryWrapper.recordEvent(
             category: .action,

@@ -18,14 +18,6 @@ extension Address {
 
 // AddressListViewModel: A view model for managing addresses.
 class AddressListViewModel: ObservableObject, FeatureFlaggable {
-    // MARK: - Properties
-
-    @Published var addresses: [Address] = []
-    @Published var showSection = false
-    @Published var destination: Destination?
-
-    var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
-
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
         case edit(Address)
@@ -40,24 +32,39 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         }
     }
 
+    // MARK: - Properties
+
+    @Published var addresses: [Address] = []
+    @Published var showSection = false
+    @Published var destination: Destination?
+
+    let windowUUID: WindowUUID
+
     private let logger: Logger
 
     var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
+    var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
 
     let addressProvider: AddressProvider
 
     var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
+    var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        return themeManager.currentTheme(for: windowUUID).type == .dark
+    }
 
     // MARK: - Initializer
 
     /// Initializes the AddressListViewModel.
     init(
         logger: Logger = DefaultLogger.shared,
+        windowUUID: WindowUUID,
         addressProvider: AddressProvider
     ) {
         self.logger = logger
+        self.windowUUID = windowUUID
         self.addressProvider = addressProvider
     }
 
@@ -178,7 +185,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
 
-            let javascript = "init(\(addressString), \(l10sString));"
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID));"
             return javascript
         } catch {
             logger.log("Failed to encode data",

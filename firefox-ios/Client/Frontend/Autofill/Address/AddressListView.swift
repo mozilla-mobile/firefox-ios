@@ -47,18 +47,16 @@ struct AddressListView: View {
             NavigationView {
                 switch destination {
                 case .add:
-                    NavigationView {
-                        EditAddressViewControllerRepresentable(model: viewModel)
-                            .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
-                            .navigationBarItems(
-                                leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
-                                    viewModel.cancelAddButtonTap()
-                                },
-                                trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                                    viewModel.saveAddressButtonTap()
-                                }
-                            )
-                    }
+                    EditAddressViewControllerRepresentable(model: viewModel)
+                        .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
+                        .navigationBarItems(
+                            leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                                viewModel.cancelAddButtonTap()
+                            },
+                            trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                                viewModel.saveAddressButtonTap()
+                            }
+                        )
 
                 case .edit:
                     EditAddressViewControllerRepresentable(model: viewModel)

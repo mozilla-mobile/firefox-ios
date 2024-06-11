@@ -6,6 +6,7 @@ import Combine
 import MozillaAppServices
 import Storage
 import XCTest
+import Common
 
 @testable import Client
 
@@ -75,7 +76,11 @@ class AddressListViewModelTests: XCTestCase {
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
-        viewModel = AddressListViewModel(logger: mockLogger, addressProvider: mockAutofill)
+        viewModel = AddressListViewModel(
+            logger: mockLogger,
+            windowUUID: WindowUUID(),
+            addressProvider: mockAutofill
+        )
     }
 
     override func tearDown() {
@@ -127,6 +132,7 @@ class AddressListViewModelTests: XCTestCase {
     }
 
     func testInjectJSONDataInitSuccess() throws {
+        viewModel.isDarkTheme = { _ in true }
         let address = dummyAddresses[0]
         viewModel.destination = .edit(address)
 
