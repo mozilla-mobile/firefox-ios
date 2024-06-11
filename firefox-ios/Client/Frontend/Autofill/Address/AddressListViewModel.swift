@@ -42,10 +42,6 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     let windowUUID: WindowUUID
 
     private let logger: Logger
-    private var isDarkTheme: Bool {
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-        return themeManager.currentTheme(for: self.windowUUID).type == .dark
-    }
 
     var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
 
@@ -56,6 +52,10 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     let addressProvider: AddressProvider
 
     var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
+    var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        return themeManager.currentTheme(for: windowUUID).type == .dark
+    }
 
     // MARK: - Initializer
 
@@ -204,7 +204,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
 
-            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme));"
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID));"
             return javascript
         } catch {
             logger.log("Failed to encode data",
