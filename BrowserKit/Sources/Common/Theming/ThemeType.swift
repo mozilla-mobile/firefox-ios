@@ -9,17 +9,18 @@ public enum ThemeType: String {
     case light = "normal" // This needs to match the string used in the legacy system
     case dark
     case privateMode
+    case nightMode
 
     public func getInterfaceStyle() -> UIUserInterfaceStyle {
         return switch self {
-        case .dark, .privateMode: .dark
+        case .dark, .nightMode, .privateMode: .dark
         case .light: .light
         }
     }
 
     public func getBarStyle() -> UIBarStyle {
         return switch self {
-        case .dark, .privateMode: .black
+        case .dark, .nightMode, .privateMode: .black
         case .light: .default
         }
     }
@@ -27,14 +28,14 @@ public enum ThemeType: String {
     public func keyboardAppearence(isPrivate: Bool) -> UIKeyboardAppearance {
         if isPrivate { return .dark }
         return switch self {
-        case .dark, .privateMode: .dark
+        case .dark, .nightMode, .privateMode: .dark
         case .light: .light
         }
     }
 
     public func tabTitleBlurStyle() -> UIBlurEffect.Style {
         return switch self {
-        case .dark, .privateMode: UIBlurEffect.Style.dark
+        case .dark, .nightMode, .privateMode: UIBlurEffect.Style.dark
         case .light: UIBlurEffect.Style.extraLight
         }
     }
