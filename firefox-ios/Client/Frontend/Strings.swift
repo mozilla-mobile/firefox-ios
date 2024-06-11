@@ -4017,24 +4017,6 @@ extension String {
                 value: "No trackers found",
                 comment: "Text to let users know that no trackers were found on the current website.")
 
-            public static let crossSiteTrackersBlockedLabel = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v128",
-                tableName: "EnhancedTrackingProtection",
-                value: "%@ Cross-site tracking cookies",
-                comment: "Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected")
-
-            public static let socialMediaTrackersBlockedLabel = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v128",
-                tableName: "EnhancedTrackingProtection",
-                value: "%@ Social media tracker",
-                comment: "Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
-
-            public static let fingerprinterBlockedLabel = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v128",
-                tableName: "EnhancedTrackingProtection",
-                value: "%@ Fingerprinter",
-                comment: "Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected")
-
             public static let connectionSecureLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128",
                 tableName: "EnhancedTrackingProtection",
