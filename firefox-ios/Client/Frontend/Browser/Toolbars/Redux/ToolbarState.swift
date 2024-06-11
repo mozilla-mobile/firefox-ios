@@ -63,7 +63,7 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.forwardButtonStateChanged:
             return ToolbarState(
                 windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
+                toolbarPosition: action.toolbarPosition ?? state.toolbarPosition,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 

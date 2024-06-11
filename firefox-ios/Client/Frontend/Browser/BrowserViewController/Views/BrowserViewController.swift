@@ -567,6 +567,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
 
         let browserAction = GeneralBrowserMiddlewareAction(
+            toolbarPosition: searchBarPosition,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
         store.dispatch(browserAction)

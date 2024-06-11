@@ -9,12 +9,14 @@ import ToolbarKit
 class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
+    let toolbarPosition: AddressToolbarPosition?
     let numberOfTabs: Int?
     let url: URL?
     let isButtonEnabled: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
+         toolbarPosition: AddressToolbarPosition? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          isButtonEnabled: Bool? = nil,
@@ -22,6 +24,7 @@ class ToolbarAction: Action {
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
         self.navigationToolbarModel = navigationToolbarModel
+        self.toolbarPosition = toolbarPosition
         self.numberOfTabs = numberOfTabs
         self.url = url
         self.isButtonEnabled = isButtonEnabled

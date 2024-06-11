@@ -32,17 +32,25 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         switch action.actionType {
         case GeneralBrowserMiddlewareActionType.browserDidLoad:
-            let addressToolbarModel = loadInitialAddressToolbarState(state: state, windowUUID: action.windowUUID)
-            let navigationToolbarModel = loadInitialNavigationToolbarState(state: state, windowUUID: action.windowUUID)
+            guard let toolbarPosition = action.toolbarPosition else { return }
+
+            let position: AddressToolbarPosition = switch toolbarPosition {
+            case .top: .top
+            case .bottom: .bottom
+            }
+
+            let addressToolbarModel = loadInitialAddressToolbarState(toolbarPosition: position)
+            let navigationToolbarModel = loadInitialNavigationToolbarState(toolbarPosition: position)
 
             let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                        navigationToolbarModel: navigationToolbarModel,
+                                       toolbarPosition: position,
                                        windowUUID: uuid,
                                        actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
 
         case GeneralBrowserMiddlewareActionType.didScroll:
-            updateScrollPosition(action: action, state: state)
+            updateBorderPosition(action: action, state: state)
 
         default:
             break
@@ -69,13 +77,11 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func loadInitialAddressToolbarState(state: AppState, windowUUID: UUID) -> AddressToolbarModel {
+    private func loadInitialAddressToolbarState(toolbarPosition: AddressToolbarPosition) -> AddressToolbarModel {
         let displayTopBorder = shouldDisplayAddressToolbarBorder(borderPosition: .top,
-                                                                 state: state,
-                                                                 windowUUID: windowUUID)
+                                                                 toolbarPosition: toolbarPosition)
         let displayBottomBorder = shouldDisplayAddressToolbarBorder(borderPosition: .bottom,
-                                                                    state: state,
-                                                                    windowUUID: windowUUID)
+                                                                    toolbarPosition: toolbarPosition)
 
         return AddressToolbarModel(navigationActions: [ToolbarActionState](),
                                    pageActions: loadAddressToolbarPageElements(),
@@ -96,9 +102,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         return pageActions
     }
 
-    private func loadInitialNavigationToolbarState(state: AppState, windowUUID: UUID) -> NavigationToolbarModel {
+    private func loadInitialNavigationToolbarState(toolbarPosition: AddressToolbarPosition) -> NavigationToolbarModel {
         let actions = loadNavigationToolbarElements()
-        let displayBorder = shouldDisplayNavigationToolbarBorder(state: state, windowUUID: windowUUID)
+        let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarPosition)
         return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
     }
 
@@ -136,22 +142,15 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func shouldDisplayAddressToolbarBorder(borderPosition: AddressToolbarBorderPosition,
                                                    isPrivate: Bool = false,
                                                    scrollY: CGFloat = 0,
-                                                   state: AppState,
-                                                   windowUUID: WindowUUID) -> Bool {
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID) else { return false }
+                                                   toolbarPosition: AddressToolbarPosition) -> Bool {
         return manager.shouldDisplayAddressBorder(borderPosition: borderPosition,
-                                                  toolbarPosition: toolbarState.toolbarPosition,
+                                                  toolbarPosition: toolbarPosition,
                                                   isPrivate: isPrivate,
                                                   scrollY: scrollY)
     }
 
-    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: WindowUUID) -> Bool {
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID) else { return false }
-        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
+    private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
+        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
     private func handleToolbarButtonTapActions(actionType: ToolbarActionState.ActionType, windowUUID: WindowUUID) {
@@ -205,7 +204,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func updateScrollPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
+    private func updateBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
         guard let scrollOffset = action.scrollOffset,
               let browserState = state.screenState(BrowserViewControllerState.self,
                                                    for: .browserViewController,
@@ -213,14 +212,14 @@ class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         let addressToolbarState = browserState.toolbarState.addressToolbar
-        let displayTopBorder = shouldDisplayAddressToolbarBorder(borderPosition: .top,
-                                                                 scrollY: scrollOffset.y,
-                                                                 state: state,
-                                                                 windowUUID: action.windowUUID)
-        let displayBottomBorder = shouldDisplayAddressToolbarBorder(borderPosition: .bottom,
-                                                                    scrollY: scrollOffset.y,
-                                                                    state: state,
-                                                                    windowUUID: action.windowUUID)
+        let displayTopBorder = shouldDisplayAddressToolbarBorder(
+            borderPosition: .top,
+            scrollY: scrollOffset.y,
+            toolbarPosition: browserState.toolbarState.toolbarPosition)
+        let displayBottomBorder = shouldDisplayAddressToolbarBorder(
+            borderPosition: .bottom,
+            scrollY: scrollOffset.y,
+            toolbarPosition: browserState.toolbarState.toolbarPosition)
 
         let needsUpdateForTop = addressToolbarState.displayTopBorder != displayTopBorder
         let needsUpdateForBottom = addressToolbarState.displayBottomBorder != displayBottomBorder
