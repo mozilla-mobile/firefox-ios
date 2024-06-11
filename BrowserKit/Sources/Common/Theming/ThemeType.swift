@@ -39,4 +39,10 @@ public enum ThemeType: String {
         case .light: UIBlurEffect.Style.extraLight
         }
     }
+    public func isOverridingThemeType() -> Bool {
+        switch self {
+        case .nightMode, .privateMode: return true
+        case .dark, .light: return false
+        }
+    }
 }

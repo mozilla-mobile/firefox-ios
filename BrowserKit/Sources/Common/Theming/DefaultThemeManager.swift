@@ -217,13 +217,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func updateSavedTheme(to newTheme: ThemeType) {
-        // We never want to save the private or night mode theme because it's meant
-        // to override whatever current theme is set. This means that we need to
-        // know the theme before we went into private mode, in order to be able
-        // to return to it.
-        guard newTheme != .privateMode,
-              newTheme != .nightMode
-        else { return }
+        guard !newTheme.isOverridingThemeType() else { return }
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
