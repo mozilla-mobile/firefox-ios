@@ -35,7 +35,7 @@ class BookmarksCell: UICollectionViewCell, ReusableCell {
         super.init(frame: .zero)
 
         isAccessibilityElement = true
-        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell
 
         setupLayout()
     }
@@ -55,7 +55,7 @@ class BookmarksCell: UICollectionViewCell, ReusableCell {
                                                       cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
-    func configure(viewModel: RecentlySavedCellViewModel, theme: Theme) {
+    func configure(viewModel: BookmarksCellViewModel, theme: Theme) {
         let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.site.url,
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)

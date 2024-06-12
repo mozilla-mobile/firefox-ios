@@ -9,7 +9,7 @@ import Shared
 
 import enum MozillaAppServices.VisitType
 
-struct RecentlySavedCellViewModel {
+struct BookmarksCellViewModel {
     let site: Site
     var accessibilityLabel: String {
         return "\(site.title)"
@@ -132,7 +132,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
 
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
-            let viewModel = RecentlySavedCellViewModel(site: site)
+            let viewModel = BookmarksCellViewModel(site: site)
             recentlySavedCell.configure(viewModel: viewModel, theme: theme)
         }
 

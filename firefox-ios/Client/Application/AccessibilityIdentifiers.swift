@@ -123,8 +123,8 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "JumpBackInCell"
         }
 
-        struct RecentlySaved {
-            static let itemCell = "RecentlySavedCell"
+        struct Bookmarks {
+            static let itemCell = "BookmarksCell"
         }
 
         struct SyncedTab {
