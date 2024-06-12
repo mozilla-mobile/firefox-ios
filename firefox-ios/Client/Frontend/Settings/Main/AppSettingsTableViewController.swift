@@ -19,6 +19,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showCreditCardSettings()
     func showExperiments()
     func showFirefoxSuggest()
+    func showRemoteSettingsOption()
     func openDebugTestTabs(count: Int)
     func showPasswordManager(shouldShowOnboarding: Bool)
     func didFinishShowingSettings()
@@ -358,6 +359,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            RemoteSettingsOption(settings: self, settingsDelegate: self)
         ]
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
@@ -389,6 +391,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedFirefoxSuggest() {
         parentCoordinator?.showFirefoxSuggest()
+    }
+    
+    func pressedRemoteSettingsOption() {
+        parentCoordinator?.showRemoteSettingsOption()
     }
 
     func pressedOpenFiftyTabs() {
