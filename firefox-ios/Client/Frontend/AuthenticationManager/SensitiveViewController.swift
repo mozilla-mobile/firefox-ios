@@ -6,8 +6,15 @@ import UIKit
 import Shared
 
 class SensitiveViewController: UIViewController {
+    private enum VisibilityState {
+        case active
+        case inactive
+        case backgrounded
+    }
+
     private var backgroundBlurView: UIVisualEffectView?
     private var isAuthenticated = false
+    private var visibilityState: VisibilityState = .active
     private var sceneWillEnterForegroundObserver: NSObjectProtocol?
     private var didEnterBackgroundObserver: NSObjectProtocol?
     private var willResignActiveObserver: NSObjectProtocol?
@@ -21,24 +28,30 @@ class SensitiveViewController: UIViewController {
                   let sensitiveWindowScene = self.view.window?.windowScene,
                   let notificationScene = notification.object as? UIWindowScene,
                   sensitiveWindowScene === notificationScene else { return }
-            self.handleCheckAuthentication()
+            visibilityState = .active
+            handleCheckAuthentication()
         }
 
         didEnterBackgroundObserver = observe(UIApplication.didEnterBackgroundNotification) { [weak self] notification in
             guard let self else { return }
-            self.isAuthenticated = false
-            self.installBlurredOverlay()
+            visibilityState = .backgrounded
+            isAuthenticated = false
+            installBlurredOverlay()
         }
 
         willResignActiveObserver = observe(UIApplication.willResignActiveNotification) { [weak self] notification in
             guard let self else { return }
-            self.installBlurredOverlay()
+            if visibilityState == .active {
+                visibilityState = .inactive
+                installBlurredOverlay()
+            }
         }
 
         didBecomeActiveObserver = observe(UIApplication.didBecomeActiveNotification) { [weak self] notification in
             guard let self else { return }
-            if isAuthenticated {
-                self.removedBlurredOverlay()
+            if visibilityState == .inactive {
+                visibilityState = .active
+                removedBlurredOverlay()
             }
         }
     }
