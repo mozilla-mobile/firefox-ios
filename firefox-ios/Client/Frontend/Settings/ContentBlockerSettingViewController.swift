@@ -69,6 +69,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
 
+                    if option == .strict {
+                        self.linkButton.isHidden = true
+                    }
+
                     let extras = [
                         TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
                         TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
@@ -81,7 +85,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     )
 
                     if option == .strict {
-                        self.linkButton.isHidden = true
                         TelemetryWrapper.recordEvent(
                             category: .action,
                             method: .tap,
