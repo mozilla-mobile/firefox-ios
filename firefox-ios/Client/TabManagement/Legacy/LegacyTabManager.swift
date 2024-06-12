@@ -321,18 +321,17 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         for tab in tabs where tab !== selectedTab {
             tab.clearAndResetTabHistory()
         }
-
-        removeTab(selectedTab)
-
         let tabToSelect: Tab
         if url.isFxHomeUrl {
-            tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest, isPrivate: selectedTab.isPrivate)
+            tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest,
+                                 afterTab: selectedTab,
+                                 isPrivate: selectedTab.isPrivate)
         } else {
             let request = URLRequest(url: url)
-            tabToSelect = addTab(request, isPrivate: selectedTab.isPrivate)
+            tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
-
         selectTab(tabToSelect)
+        removeTab(selectedTab)
     }
 
     // MARK: - Add tabs
