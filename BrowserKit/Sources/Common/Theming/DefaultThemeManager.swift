@@ -87,7 +87,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public func windowNonspecificTheme() -> Theme {
         switch getNormalSavedTheme() {
-        case .dark, .privateMode: return DarkTheme()
+        case .dark, .nightMode, .privateMode: return DarkTheme()
         case .light: return LightTheme()
         }
     }
@@ -122,6 +122,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         allWindowUUIDs.forEach {
             updateCurrentTheme(to: fetchSavedThemeType(for: $0), for: $0, notify: false)
         }
+
         // After updating all windows, notify (once). We send the UUID of the window for
         // which the change originated though more than 1 window may ultimately update its UI.
         notifyCurrentThemeDidChange(for: window)
@@ -216,10 +217,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func updateSavedTheme(to newTheme: ThemeType) {
-        // We never want to save the private theme because it's meant to override
-        // whatever current theme is set. This means that we need to know the theme
-        // before we went into private mode, in order to be able to return to it.
-        guard newTheme != .privateMode else { return }
+        guard !newTheme.isOverridingThemeType() else { return }
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
@@ -244,7 +242,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func fetchSavedThemeType(for window: WindowUUID) -> ThemeType {
         if privateModeIsOn(for: window) { return .privateMode }
-        if nightModeIsOn { return .dark }
+        if nightModeIsOn { return .nightMode }
+        if systemThemeIsOn { return getSystemThemeType() }
 
         return getNormalSavedTheme()
     }
@@ -259,6 +258,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return LightTheme()
         case .dark:
             return DarkTheme()
+        case .nightMode:
+            return NightModeTheme()
         case .privateMode:
             return PrivateModeTheme()
         }
