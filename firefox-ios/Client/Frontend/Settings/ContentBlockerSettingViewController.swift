@@ -151,6 +151,35 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         return [firstSection, secondSection]
     }
 
+    private func recordEventOnChecked(option: BlockingStrength) {
+        let extras = [
+            TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
+            TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
+        ]
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .change,
+            object: .setting,
+            extras: extras
+        )
+
+        if option == .strict {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .trackingProtectionMenu,
+                extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue]
+            )
+        } else {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .trackingProtectionMenu,
+                extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"]
+            )
+        }
+    }
+
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let _defaultFooter = super.tableView(
