@@ -75,32 +75,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
                         self.linkButton.isHidden = true
                     }
 
-                    let extras = [
-                        TelemetryWrapper.EventExtraKey.preference.rawValue: "ETP-strength",
-                        TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: option.rawValue
-                    ]
-                    TelemetryWrapper.recordEvent(
-                        category: .action,
-                        method: .change,
-                        object: .setting,
-                        extras: extras
-                    )
-
-                    if option == .strict {
-                        TelemetryWrapper.recordEvent(
-                            category: .action,
-                            method: .tap,
-                            object: .trackingProtectionMenu,
-                            extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: option.rawValue]
-                        )
-                    } else {
-                        TelemetryWrapper.recordEvent(
-                            category: .action,
-                            method: .tap,
-                            object: .trackingProtectionMenu,
-                            extras: [TelemetryWrapper.EventExtraKey.etpSetting.rawValue: "standard"]
-                        )
-                    }
+                    self.recordEventOnChecked(option: option)
                 })
 
             let uuid = windowUUID
