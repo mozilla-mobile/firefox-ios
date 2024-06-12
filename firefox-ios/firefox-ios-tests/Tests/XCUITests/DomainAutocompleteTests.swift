@@ -46,7 +46,7 @@ class DomainAutocompleteTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2334558
     func test1Autocomplete() {
         // Basic autocompletion cases
-        // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         if isTablet {
@@ -72,7 +72,7 @@ class DomainAutocompleteTests: BaseTestCase {
     // Test that deleting characters works correctly with autocomplete
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2334647
     func test3AutocompleteDeletingChars() {
-        // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
+        // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.goto(TabTray)

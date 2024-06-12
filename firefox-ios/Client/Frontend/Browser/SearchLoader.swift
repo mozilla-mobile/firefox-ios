@@ -71,7 +71,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                 return
             }
             let sites = historyItems.sorted {
-                // Sort decending by frecency score
+                // Sort descending by frecency score
                 $0.frecency > $1.frecency
             }.map({
                 return Site(url: $0.url, title: $0.title )

@@ -177,8 +177,8 @@ public class RustSyncManager: NSObject, SyncManager {
         let status = result.status
 
         // This is similar to the old `SyncStatusResolver.resolveResults` call. If none of
-        // the engines successfully synced and a network issue occured we return `.bad`.
-        // If none of the engines successfully synced and an auth error occured we return
+        // the engines successfully synced and a network issue occurred we return `.bad`.
+        // If none of the engines successfully synced and an auth error occurred we return
         // `.warning`. Otherwise we return `.good`.
 
         if !hasSynced && status == .authError {

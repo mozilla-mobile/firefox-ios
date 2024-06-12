@@ -12,7 +12,7 @@ constraints etc. To populate it call setFavicon and give it a FaviconImageViewMo
 website you want to load. 
 
 If you have the favicon URL available you can pre-emptively add it to the cache by creating a SiteImageHandler
-and calling cacheFaviconURL. This will avoid an unnecssary visit to the website when the FaviconImageView 
+and calling cacheFaviconURL. This will avoid an unnecessary visit to the website when the FaviconImageView 
 is loaded.
 
 If the favicon cannot be retrieved using the site URL then the system will automatically fallback to 

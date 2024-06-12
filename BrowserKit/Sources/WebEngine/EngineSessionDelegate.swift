@@ -39,7 +39,7 @@ public protocol EngineSessionDelegate: AnyObject {
 
     /// Event to indicate that a contextual menu has been requested for the given URL (typically
     /// as a result of the user long-pressing on link).
-    /// - Parameter linkURL: the link (if any) associatd with the event.
+    /// - Parameter linkURL: the link (if any) associated with the event.
     /// - Returns: a menu configuration, or nil (will not show a menu)
     func onProvideContextualMenu(linkURL: URL?) -> UIContextMenuConfiguration?
 

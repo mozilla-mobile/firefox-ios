@@ -30,7 +30,7 @@ const sendMessage =
 
 // This should be handled by CreditCardRecord.normalizeFields
 // TODO(issam, FXCM-810): Revisit data representation for address and credit card as this has caused a lot of bugs
-// for now we explicitely define the data shape we expect and defaults.
+// for now we explicitly define the data shape we expect and defaults.
 const expectedCreditCardPayloadShape = {
   "cc-name": "",
   "cc-exp-month": "",
@@ -39,7 +39,7 @@ const expectedCreditCardPayloadShape = {
 
 // This should be handled by normalizeFields
 // TODO(issam, FXCM-810): Revisit data representation for address and credit card as this has caused a lot of bugs
-// for now we explicitely define the data shape we expect and defaults.
+// for now we explicitly define the data shape we expect and defaults.
 const expectedAddressPayloadShape = {
   "address-level1": "",
   organization: "",

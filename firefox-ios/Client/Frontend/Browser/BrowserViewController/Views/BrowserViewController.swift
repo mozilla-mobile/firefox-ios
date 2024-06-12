@@ -146,7 +146,7 @@ class BrowserViewController: UIViewController,
     // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
     var contentStackView: SidebarEnabledView = .build()
 
-    // The content container contains the homepage or webview. Embeded by the coordinator.
+    // The content container contains the homepage or webview. Embedded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {

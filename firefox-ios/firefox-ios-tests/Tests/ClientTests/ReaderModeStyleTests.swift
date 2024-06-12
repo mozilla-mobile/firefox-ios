@@ -61,7 +61,7 @@ class ReaderModeStyleTests: XCTestCase {
         )
     }
 
-    func test_initWithDictionnary_succeeds() {
+    func test_initWithDictionary_succeeds() {
         let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
                                               dict: ["theme": ReaderModeTheme.dark.rawValue,
                                                      "fontType": ReaderModeFontType.sansSerif.rawValue,
@@ -72,7 +72,7 @@ class ReaderModeStyleTests: XCTestCase {
         XCTAssertEqual(readerModeStyle?.fontSize, ReaderModeFontSize.size1)
     }
 
-    func test_initWithWrongDictionnary_fails() {
+    func test_initWithWrongDictionary_fails() {
         let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
                                               dict: ["wrong": 1,
                                                      "fontType": ReaderModeFontType.sansSerif,
@@ -81,7 +81,7 @@ class ReaderModeStyleTests: XCTestCase {
         XCTAssertNil(readerModeStyle)
     }
 
-    func test_initWithEmptyDictionnary_fails() {
+    func test_initWithEmptyDictionary_fails() {
         let readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
                                               dict: [:])
 

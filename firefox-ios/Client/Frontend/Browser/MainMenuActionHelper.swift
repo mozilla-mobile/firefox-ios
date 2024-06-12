@@ -801,7 +801,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
-    // MARK: - Conveniance
+    // MARK: - Convenience
 
     private func append(to items: inout [PhotonRowActions], action: PhotonRowActions?) {
         if let action = action {

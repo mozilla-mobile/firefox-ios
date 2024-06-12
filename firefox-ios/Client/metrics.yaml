@@ -3095,7 +3095,7 @@ settings_menu:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-# Search and search releated metrics
+# Search and search related metrics
 search:
   counts:
     type: labeled_counter

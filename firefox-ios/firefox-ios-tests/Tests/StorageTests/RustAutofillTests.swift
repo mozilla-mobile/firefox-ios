@@ -135,7 +135,7 @@ class RustAutofillTests: XCTestCase {
     }
 
     func testListCreditCards() {
-        let expectationCardList = expectation(description: "gettting empty card list")
+        let expectationCardList = expectation(description: "getting empty card list")
         let expectationAddCard = expectation(description: "add card")
         let expectationGetCards = expectation(description: "getting card list")
         autofill.listCreditCards { cards, err in
