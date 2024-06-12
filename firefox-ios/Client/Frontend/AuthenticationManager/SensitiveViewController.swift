@@ -25,18 +25,18 @@ class SensitiveViewController: UIViewController {
         }
 
         didEnterBackgroundObserver = observe(UIApplication.didEnterBackgroundNotification) { [weak self] notification in
-            guard let self = self else { return }
+            guard let self else { return }
             self.isAuthenticated = false
             self.installBlurredOverlay()
         }
 
         willResignActiveObserver = observe(UIApplication.willResignActiveNotification) { [weak self] notification in
-            guard let self = self else { return }
+            guard let self else { return }
             self.installBlurredOverlay()
         }
 
         didBecomeActiveObserver = observe(UIApplication.didBecomeActiveNotification) { [weak self] notification in
-            guard let self = self else { return }
+            guard let self else { return }
             if isAuthenticated {
                 self.removedBlurredOverlay()
             }
