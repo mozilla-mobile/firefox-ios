@@ -146,12 +146,12 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.JumpBackIn)
         )
 
-        let recentlySavedSetting = BoolSetting(
+        let bookmarksSetting = BoolSetting(
             prefs: profile.prefs,
             theme: themeManager.currentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection,
             defaultValue: true,
-            titleText: .Settings.Homepage.CustomizeFirefoxHome.RecentlySaved
+            titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
         )
 
         let historyHighlightsSetting = BoolSetting(
@@ -170,7 +170,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(jumpBackInSetting)
         }
 
-        sectionItems.append(recentlySavedSetting)
+        sectionItems.append(bookmarksSetting)
 
         if isHistoryHighlightsSectionEnabled {
             sectionItems.append(historyHighlightsSetting)
