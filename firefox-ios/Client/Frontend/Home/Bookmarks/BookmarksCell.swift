@@ -8,8 +8,8 @@ import Storage
 import SiteImageView
 import Shared
 
-/// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: UICollectionViewCell, ReusableCell {
+/// A cell used in FxHomeScreen's Bookmarks section.
+class BookmarksCell: UICollectionViewCell, ReusableCell {
     private struct UX {
         static let containerSpacing: CGFloat = 16
         static let heroImageSize = CGSize(width: 126, height: 82)
@@ -107,7 +107,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: - ThemeApplicable
-extension RecentlySavedCell: ThemeApplicable {
+extension BookmarksCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         itemTitle.textColor = theme.colors.textPrimary
         let heroImageColors = HeroImageViewColor(faviconTintColor: theme.colors.iconPrimary,
@@ -120,7 +120,7 @@ extension RecentlySavedCell: ThemeApplicable {
 }
 
 // MARK: - Blurrable
-extension RecentlySavedCell: Blurrable {
+extension BookmarksCell: Blurrable {
     func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {

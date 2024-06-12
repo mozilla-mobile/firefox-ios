@@ -128,7 +128,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension RecentlySavedViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let recentlySavedCell = cell as? RecentlySavedCell else { return UICollectionViewCell() }
+        guard let recentlySavedCell = cell as? BookmarksCell else { return UICollectionViewCell() }
 
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
