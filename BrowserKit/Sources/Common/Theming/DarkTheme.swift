@@ -12,7 +12,7 @@ public struct DarkTheme: Theme {
 }
 
 /// `NightModeTheme` is the same as `DarkTheme` but with a different `type`. This
-/// is is because we want to be able to change theme types even when night mode
+/// is because we want to be able to change theme types even when night mode
 /// is on, so, we have do differentiate between night mode's dark theme
 /// and a regular dark theme.
 public struct NightModeTheme: Theme {
