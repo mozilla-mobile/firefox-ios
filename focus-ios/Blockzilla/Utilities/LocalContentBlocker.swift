@@ -13,7 +13,7 @@ class ContentBlockerHelper {
 
     let ruleStore = WKContentRuleListStore.default()
 
-    init() {
+    func updateContentRuleListIfNeeded() {
         removeOldListsByHashFromStore { [weak self] in
             self?.removeOldListsByNameFromStore {
                 self?.getBlockLists { list in
@@ -23,7 +23,7 @@ class ContentBlockerHelper {
         }
     }
 
-    func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
+    private func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
         var noMatchingIdentifierFoundForRule = false
 
         ruleStore?.getAvailableContentRuleListIdentifiers { available in
@@ -52,7 +52,7 @@ class ContentBlockerHelper {
 
     // If any blocker files have a newer hash than the hash saved in defaults,
     // remove all the content blockers and reload them.
-    func removeOldListsByHashFromStore(completion: @escaping () -> Void) {
+    private func removeOldListsByHashFromStore(completion: @escaping () -> Void) {
         if hasBlockerFileChanged() {
             removeAllRulesInStore {
                 completion()
@@ -62,7 +62,7 @@ class ContentBlockerHelper {
         }
     }
 
-    func removeAllRulesInStore(completion: @escaping () -> Void) {
+    private func removeAllRulesInStore(completion: @escaping () -> Void) {
         let dispatchGroup = DispatchGroup()
         ruleStore?.getAvailableContentRuleListIdentifiers { [weak self] available in
             guard let available = available else {
