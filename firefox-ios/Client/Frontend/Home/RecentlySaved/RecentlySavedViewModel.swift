@@ -66,7 +66,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             title: HomepageSectionType.bookmarks.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
             isButtonHidden: false,
-            buttonTitle: .RecentlySavedShowAllText,
+            buttonTitle: .BookmarksSavedShowAllText,
             buttonAction: headerButtonAction,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved,
             textColor: textColor)
