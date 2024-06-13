@@ -14,6 +14,7 @@ public struct UIConstants {
     static var ToolbarPadding: CGFloat = 17
     static let ZoomPageBarHeight: CGFloat = 54
 
+    
     // Static fonts
     static let DefaultChromeSmallSize: CGFloat = 11
     static let DefaultChromeSmallFontBold = UIFont.boldSystemFont(ofSize: DefaultChromeSmallSize)

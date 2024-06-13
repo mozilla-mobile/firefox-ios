@@ -24,7 +24,8 @@ class CredentialProviderPresenter {
         view?.showWelcome()
     }
 
-    func showPasscodeRequirement() {
+    func showPasscodeRequirement() 
+    {
         view?.showPasscodeRequirement()
     }
 
