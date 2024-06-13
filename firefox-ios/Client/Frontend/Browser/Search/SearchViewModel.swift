@@ -133,15 +133,6 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
         shouldShowBrowsingHistorySuggestions
     }
 
-    /// Determines if a suggestion should be shown based on the view model's privacy mode and
-    /// the specific suggestion's status.
-    private func shouldShowFirefoxSuggestions(_ suggestion: Bool) -> Bool {
-        model.shouldShowPrivateModeFirefoxSuggestions = true
-        return isPrivate ?
-        (suggestion && model.shouldShowPrivateModeFirefoxSuggestions) :
-        suggestion
-    }
-
     var hasFirefoxSuggestions: Bool {
         return hasBookmarksSuggestions
                || hasHistorySuggestions
@@ -351,6 +342,15 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     private func setupSuggestClient(with defaultEngine: OpenSearchEngine) {
         let ua = SearchViewModel.userAgent ?? "FxSearch"
         suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
+    }
+
+    /// Determines if a suggestion should be shown based on the view model's privacy mode and
+    /// the specific suggestion's status.
+    private func shouldShowFirefoxSuggestions(_ suggestion: Bool) -> Bool {
+        model.shouldShowPrivateModeFirefoxSuggestions = true
+        return isPrivate ?
+        (suggestion && model.shouldShowPrivateModeFirefoxSuggestions) :
+        suggestion
     }
 
     // MARK: LoaderListener
