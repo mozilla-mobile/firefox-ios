@@ -54,69 +54,88 @@ let package = Package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
             exact: "8.21.0"),
         .package(url: "https://github.com/nbhasin2/GCDWebServer.git",
-                 branch: "master")
+                 branch: "master"),
+        .package(url: "https://github.com/realm/SwiftLint.git",
+                 exact: "0.55.1")
     ],
     targets: [
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "ComponentLibraryTests",
-            dependencies: ["ComponentLibrary"]),
+            dependencies: ["ComponentLibrary"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView"]),
+            dependencies: ["SiteImageView"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "Common",
             dependencies: ["Dip",
                            "SwiftyBeaver",
                            .product(name: "Sentry", package: "sentry-cocoa")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "CommonTests",
-            dependencies: ["Common"]),
+            dependencies: ["Common"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "TabDataStore",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "TabDataStoreTests",
-            dependencies: ["TabDataStore"]),
+            dependencies: ["TabDataStore"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "Redux",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "ReduxTests",
-            dependencies: ["Redux"]),
+            dependencies: ["Redux"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "WebEngine",
             dependencies: ["Common",
                            .product(name: "GCDWebServers", package: "GCDWebServer")],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "WebEngineTests",
-            dependencies: ["WebEngine"]),
+            dependencies: ["WebEngine"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "ToolbarKit",
             dependencies: ["Common"],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "ToolbarKitTests",
-            dependencies: ["ToolbarKit"]),
+            dependencies: ["ToolbarKit"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .target(
             name: "ContentBlockingGenerator",
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+            swiftSettings: [.unsafeFlags(["-enable-testing"])],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .testTarget(
             name: "ContentBlockingGeneratorTests",
-            dependencies: ["ContentBlockingGenerator"]),
+            dependencies: ["ContentBlockingGenerator"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
         .executableTarget(
             name: "ExecutableContentBlockingGenerator",
-            dependencies: ["ContentBlockingGenerator"]),
+            dependencies: ["ContentBlockingGenerator"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]),
     ]
 )
