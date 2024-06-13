@@ -154,6 +154,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             systemThemeChanged()
         } else if automaticBrightnessIsOn {
             updateThemeBasedOnBrightness()
+        } else {
+            allWindowUUIDs.forEach { reloadTheme(for: $0) }
         }
     }
 
@@ -199,12 +201,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     public func getNormalSavedTheme() -> ThemeType {
-        if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
-           let savedTheme = ThemeType(rawValue: savedThemeDescription) {
-            return savedTheme
-        }
+        guard let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
+              let savedTheme = ThemeType(rawValue: savedThemeDescription)
+        else { return getSystemThemeType() }
 
-        return getSystemThemeType()
+        return savedTheme
     }
 
     // MARK: - Private methods
@@ -218,6 +219,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func updateSavedTheme(to newTheme: ThemeType) {
         guard !newTheme.isOverridingThemeType() else { return }
+        guard !systemThemeIsOn else { return }
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
@@ -226,7 +228,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-
         let style = self.currentTheme(for: window).type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
         if notify {
