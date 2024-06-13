@@ -108,7 +108,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         ThemeSettingsState(windowUUID: windowUUID,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
-                           manualThemeSelected: themeManager.getSavedTheme(),
+                           manualThemeSelected: themeManager.getUserManualTheme(),
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
     }
@@ -126,7 +126,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func updateManualTheme(_ newTheme: ThemeType, for window: UUID) {
-        themeManager.setSystemTheme(isOn: false)
+//        themeManager.setSystemTheme(isOn: false)
         themeManager.changeCurrentTheme(newTheme, for: window)
     }
 

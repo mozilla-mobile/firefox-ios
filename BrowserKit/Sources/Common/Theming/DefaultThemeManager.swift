@@ -85,7 +85,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Window specific functions
     public func windowNonspecificTheme() -> Theme {
-        switch getSavedTheme() {
+        switch getUserManualTheme() {
         case .dark, .nightMode, .privateMode: return DarkTheme()
         case .light: return LightTheme()
         }
@@ -98,7 +98,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public func setWindow(_ window: UIWindow, for uuid: WindowUUID) {
         windows[uuid] = window
-        updateSavedTheme(to: getSavedTheme())
+        updateSavedTheme(to: getUserManualTheme())
         updateTheme(for: uuid, to: fetchSavedThemeType(for: uuid))
     }
 
@@ -109,7 +109,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return DarkTheme()
         }
 
-        return windowThemeState[window] ?? DarkTheme()
+//        return windowThemeState[window] ?? DarkTheme()
+        return getThemeFromType(fetchSavedThemeType(for: window))
     }
 
     public func changeCurrentTheme(_ newTheme: ThemeType, for window: WindowUUID) {
@@ -132,7 +133,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         updateTheme(for: window, to: fetchSavedThemeType(for: window))
     }
 
-    public func getSavedTheme() -> ThemeType {
+    public func reloadThemeForAllWindows() {
+        allWindowUUIDs.forEach { reloadTheme(for: $0) }
+    }
+
+    public func getUserManualTheme() -> ThemeType {
         guard let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
               let savedTheme = ThemeType(rawValue: savedThemeDescription)
         else { return getSystemThemeType() }
@@ -148,7 +153,8 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
                   !privateModeIsOn(for: uuid)
             else { return }
 
-            changeCurrentTheme(getSystemThemeType(), for: uuid)
+            updateTheme(for: uuid, to: getSystemThemeType())
+//            changeCurrentTheme(getSystemThemeType(), for: uuid)
         }
     }
 
@@ -201,8 +207,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func updateThemeBasedOnBrightess() {
         if automaticBrightnessIsOn {
             allWindowUUIDs.forEach { uuid in
-                changeCurrentTheme(getThemeTypeBasedOnBrightness(), for: uuid)
+                updateTheme(for: uuid, to: getThemeTypeBasedOnBrightness())
+//                changeCurrentTheme(getThemeTypeBasedOnBrightness(), for: uuid)
             }
+        } else {
+            allWindowUUIDs.forEach { reloadTheme(for: $0) }
         }
     }
 
@@ -222,6 +231,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private func updateSavedTheme(to newTheme: ThemeType) {
         guard !newTheme.isOverridingThemeType() else { return }
         guard !systemThemeIsOn else { return }
+        guard !automaticBrightnessIsOn else { return }
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
@@ -256,7 +266,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         if systemThemeIsOn { return getSystemThemeType() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
-        return getSavedTheme()
+        return getUserManualTheme()
     }
 
     private func getSystemThemeType() -> ThemeType {
