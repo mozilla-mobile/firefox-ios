@@ -1378,17 +1378,19 @@ class BrowserViewController: UIViewController,
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
-                                              isBottomSearchBar: isBottomSearchBar)
+                                              isBottomSearchBar: isBottomSearchBar,
+                                              profile: profile,
+                                              model: profile.searchEngines,
+                                              tabManager: tabManager)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
-                                                    model: profile.searchEngines,
                                                     tabManager: tabManager)
-        searchController.searchEngines = profile.searchEngines
+        searchViewModel.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
         if !isToolbarRefactorEnabled {
             let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-            searchLoader.addListener(searchController)
+            searchLoader.addListener(searchViewModel)
             self.searchLoader = searchLoader
         }
 

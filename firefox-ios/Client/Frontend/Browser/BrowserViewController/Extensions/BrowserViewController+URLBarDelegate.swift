@@ -316,7 +316,7 @@ extension BrowserViewController: URLBarDelegate {
             configureOverlayView()
         }
 
-        searchController?.searchQuery = text
+        searchController?.viewModel.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
         searchController?.searchTelemetry?.interactionType = .refined
         searchLoader?.setQueryWithoutAutocomplete(text)
@@ -332,7 +332,7 @@ extension BrowserViewController: URLBarDelegate {
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
             theme: self.currentTheme()
         )
-        searchController?.searchQuery = text
+        searchController?.viewModel.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
         searchController?.searchTelemetry?.clearVisibleResults()
         searchLoader?.query = text
