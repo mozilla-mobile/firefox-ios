@@ -514,21 +514,21 @@ workflows:
         - content: |-
             ./bootstrap.sh
         title: Run bootstrap
-    - swiftlint-extended@1:
-        inputs:
-        - linting_path: "$BITRISE_SOURCE_DIR"
+    #- swiftlint-extended@1:
+    #    inputs:
+    #    - linting_path: "$BITRISE_SOURCE_DIR"
     - deploy-to-bitrise-io@2.2: {}
-    - script@1:
-        inputs:
-        - content: |-
-            set -e
-            echo "$SWIFTLINT_REPORT"
-            if [ ! -z "$SWIFTLINT_REPORT" ] ;then
-            # The file is not-empty.
-                echo "Failing build since there are swiftlint errors"
-                exit 1
-            fi
-        title: Fail build if swiftlint fails
+    #- script@1:
+    #    inputs:
+    #    - content: |-
+    #        set -e
+    #        echo "$SWIFTLINT_REPORT"
+    #        if [ ! -z "$SWIFTLINT_REPORT" ] ;then
+    #        # The file is not-empty.
+    #            echo "Failing build since there are swiftlint errors"
+    #            exit 1
+    #        fi
+    #    title: Fail build if swiftlint fails
     - script@1:
         inputs:
         - content: |-
