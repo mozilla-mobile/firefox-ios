@@ -47,7 +47,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.callout.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .natural
     }
 
