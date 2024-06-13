@@ -166,8 +166,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Private theme functions
     public func setPrivateTheme(isOn: Bool, for window: WindowUUID) {
-        let currentSetting = getPrivateThemeIsOn(for: window)
-        guard currentSetting != isOn else { return }
+        guard getPrivateThemeIsOn(for: window) != isOn else { return }
 
         var settings: KeyedPrivateModeFlags
         = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags ?? [:]
@@ -180,9 +179,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public func getPrivateThemeIsOn(for window: WindowUUID) -> Bool {
         let settings = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags
-        if settings == nil {
-            migrateSingleWindowPrivateDefaultsToMultiWindow(for: window)
-        }
+        if settings == nil { migrateSingleWindowPrivateDefaultsToMultiWindow(for: window) }
 
         let boxedBool = settings?[window.uuidString] as? NSNumber
         return boxedBool?.boolValue ?? false
@@ -228,7 +225,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
     }
 
-    private func updateTheme(for window: WindowUUID, to newTheme: ThemeType, notify: Bool = true) {
+    private func updateTheme(
+        for window: WindowUUID,
+        to newTheme: ThemeType,
+        notify: Bool = true
+    ) {
         windowThemeState[window] = getThemeFromType(newTheme)
 
         // Overwrite the user interface style on the window attached to our scene
@@ -242,7 +243,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     private func notifyCurrentThemeDidChange(for window: WindowUUID) {
         mainQueue.ensureMainThread { [weak self] in
-            self?.notificationCenter.post(name: .ThemeDidChange, withUserInfo: window.userInfo)
+            self?.notificationCenter.post(
+                name: .ThemeDidChange,
+                withUserInfo: window.userInfo
+            )
         }
     }
 
@@ -279,7 +283,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         case UIScreen.brightnessDidChangeNotification:
             updateThemeBasedOnBrightess()
         case UIApplication.didBecomeActiveNotification:
-            self.systemThemeChanged()
+            systemThemeChanged()
         default:
             return
         }
