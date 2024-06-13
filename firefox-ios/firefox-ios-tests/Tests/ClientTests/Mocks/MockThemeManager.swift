@@ -25,7 +25,7 @@ class MockThemeManager: ThemeManager {
         return .light
     }
 
-    func changeCurrentTheme(_ newTheme: ThemeType, for window: UUID) {
+    func changeManualTheme(to newTheme: ThemeType, for window: UUID) {
         switch newTheme {
         case .light:
             currentThemeStorage = LightTheme()
@@ -54,9 +54,9 @@ class MockThemeManager: ThemeManager {
         let screenLessThanPref = Float(UIScreen.main.brightness) < value
 
         if screenLessThanPref, currentTheme(for: windowUUID).type == .light {
-            changeCurrentTheme(.dark, for: windowUUID)
+            changeManualTheme(to: .dark, for: windowUUID)
         } else if !screenLessThanPref, currentTheme(for: windowUUID).type == .dark {
-            changeCurrentTheme(.light, for: windowUUID)
+            changeManualTheme(to: .light, for: windowUUID)
         }
     }
 

@@ -68,7 +68,7 @@ final class DefaultThemeManagerTests: XCTestCase {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.dark
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
+        sut.changeManualTheme(to: .dark, for: windowUUID)
 
         XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
         XCTAssertEqual(
@@ -81,8 +81,8 @@ final class DefaultThemeManagerTests: XCTestCase {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.light
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
-        sut.changeCurrentTheme(.light, for: windowUUID)
+        sut.changeManualTheme(to: .dark, for: windowUUID)
+        sut.changeManualTheme(to: .light, for: windowUUID)
 
         XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
         XCTAssertEqual(
@@ -137,7 +137,7 @@ final class DefaultThemeManagerTests: XCTestCase {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.dark.rawValue
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
+        sut.changeManualTheme(to: .dark, for: windowUUID)
         sut.setPrivateTheme(isOn: true, for: windowUUID)
 
         XCTAssertEqual(
@@ -153,9 +153,9 @@ final class DefaultThemeManagerTests: XCTestCase {
         let expectedResult = ThemeType.light
         let currentThemeExpectedResult = ThemeType.privateMode
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
+        sut.changeManualTheme(to: .dark, for: windowUUID)
         sut.setPrivateTheme(isOn: true, for: windowUUID)
-        sut.changeCurrentTheme(.light, for: windowUUID)
+        sut.changeManualTheme(to: .light, for: windowUUID)
 
         XCTAssertEqual(sut.currentTheme(for: windowUUID).type, currentThemeExpectedResult)
         XCTAssertEqual(sut.getUserManualTheme(), expectedResult)

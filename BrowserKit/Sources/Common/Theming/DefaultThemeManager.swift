@@ -31,7 +31,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Variables
 
-    private var windowThemeState: [WindowUUID: Theme] = [:]
     private var windows: [WindowUUID: UIWindow] = [:]
     private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
@@ -93,7 +92,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
 
     public func windowDidClose(uuid: WindowUUID) {
         windows.removeValue(forKey: uuid)
-        windowThemeState.removeValue(forKey: uuid)
     }
 
     public func setWindow(_ window: UIWindow, for uuid: WindowUUID) {
@@ -109,11 +107,10 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return DarkTheme()
         }
 
-//        return windowThemeState[window] ?? DarkTheme()
         return getThemeFromType(fetchSavedThemeType(for: window))
     }
 
-    public func changeCurrentTheme(_ newTheme: ThemeType, for window: WindowUUID) {
+    public func changeManualTheme(to newTheme: ThemeType, for window: WindowUUID) {
         guard currentTheme(for: window).type != newTheme else { return }
 
         updateSavedTheme(to: newTheme)
@@ -154,7 +151,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             else { return }
 
             updateTheme(for: uuid, to: getSystemThemeType())
-//            changeCurrentTheme(getSystemThemeType(), for: uuid)
         }
     }
 
@@ -208,7 +204,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         if automaticBrightnessIsOn {
             allWindowUUIDs.forEach { uuid in
                 updateTheme(for: uuid, to: getThemeTypeBasedOnBrightness())
-//                changeCurrentTheme(getThemeTypeBasedOnBrightness(), for: uuid)
             }
         } else {
             allWindowUUIDs.forEach { reloadTheme(for: $0) }
@@ -240,8 +235,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         to newTheme: ThemeType,
         notify: Bool = true
     ) {
-        windowThemeState[window] = getThemeFromType(newTheme)
-
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
         let style = self.currentTheme(for: window).type.getInterfaceStyle()
