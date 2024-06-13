@@ -138,7 +138,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
     // MARK: - Helper functions
 
     private func initializeSubject() {
-        let subject = RecentlySavedDataAdaptorImplementation(readingList: mockReadingList,
+        let subject = BookmarksDataAdaptorImplementation(readingList: mockReadingList,
                                                              bookmarksHandler: mockBookmarksHandler,
                                                              notificationCenter: mockNotificationCenter)
         subject.delegate = mockDelegate

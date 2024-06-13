@@ -14,7 +14,7 @@ protocol RecentlySavedDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
+class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
     var notificationCenter: NotificationProtocol
     private let bookmarkItemsLimit: UInt = 5
     private let readingListItemsLimit: Int = 5
