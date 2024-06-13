@@ -128,7 +128,7 @@ class AppLaunchUtil {
 
     private func setUserAgent() {
         // Record the user agent for use by search suggestion clients.
-        SearchViewController.userAgent = UserAgent.getUserAgent()
+        SearchViewModel.userAgent = UserAgent.getUserAgent()
     }
 
     private func initializeExperiments() {
