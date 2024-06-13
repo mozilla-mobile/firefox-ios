@@ -100,7 +100,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var headerViewModel: HomepageHeaderViewModel
     var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
-    var recentlySavedViewModel: RecentlySavedViewModel
+    var recentlySavedViewModel: BookmarksViewModel
     var jumpBackInViewModel: JumpBackInViewModel
     var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
@@ -144,7 +144,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             adaptor: jumpBackInAdaptor,
             wallpaperManager: wallpaperManager)
 
-        self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile,
+        self.recentlySavedViewModel = BookmarksViewModel(profile: profile,
                                                              theme: theme,
                                                              wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)

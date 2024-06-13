@@ -16,7 +16,7 @@ struct BookmarksCellViewModel {
     }
 }
 
-class RecentlySavedViewModel {
+class BookmarksViewModel {
     struct UX {
         static let cellWidth: CGFloat = 150
         static let cellHeight: CGFloat = 110
@@ -54,7 +54,7 @@ class RecentlySavedViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var sectionType: HomepageSectionType {
         return .bookmarks
     }
@@ -125,7 +125,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 }
 
 // MARK: FxHomeSectionHandler
-extension RecentlySavedViewModel: HomepageSectionHandler {
+extension BookmarksViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         guard let recentlySavedCell = cell as? BookmarksCell else { return UICollectionViewCell() }
@@ -174,7 +174,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
     }
 }
 
-extension RecentlySavedViewModel: RecentlySavedDelegate {
+extension BookmarksViewModel: RecentlySavedDelegate {
     func didLoadNewData() {
         ensureMainThread {
             self.recentItems = self.recentlySavedDataAdaptor.getRecentlySavedData()
