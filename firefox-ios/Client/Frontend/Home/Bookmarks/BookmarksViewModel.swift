@@ -44,8 +44,7 @@ class BookmarksViewModel {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
-        let adaptor = BookmarksDataAdaptorImplementation(readingList: profile.readingList,
-                                                             bookmarksHandler: profile.places)
+        let adaptor = BookmarksDataAdaptorImplementation(bookmarksHandler: profile.places)
         self.recentlySavedDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
 

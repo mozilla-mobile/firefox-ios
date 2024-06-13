@@ -16,21 +16,16 @@ protocol RecentlySavedDelegate: AnyObject {
 
 class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
     var notificationCenter: NotificationProtocol
-    private let bookmarkItemsLimit: UInt = 5
-    private let readingListItemsLimit: Int = 5
+    private let bookmarkItemsLimit: UInt = 8
     private let recentItemsHelper = RecentItemsHelper()
-    private var readingList: ReadingList
     private var bookmarksHandler: BookmarksHandler
     private var recentBookmarks = [RecentlySavedBookmark]()
-    private var readingListItems = [ReadingListItem]()
 
     weak var delegate: RecentlySavedDelegate?
 
-    init(readingList: ReadingList,
-         bookmarksHandler: BookmarksHandler,
+    init(bookmarksHandler: BookmarksHandler,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.notificationCenter = notificationCenter
-        self.readingList = readingList
         self.bookmarksHandler = bookmarksHandler
 
         setupNotifications(forObserver: self,
@@ -39,13 +34,11 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
                                        .RustPlacesOpened])
 
         getRecentBookmarks()
-        getReadingLists()
     }
 
     func getRecentlySavedData() -> [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
         items.append(contentsOf: recentBookmarks)
-        items.append(contentsOf: readingListItems)
 
         return items
     }
@@ -77,36 +70,10 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
         }
     }
 
-    // MARK: - Reading list
-
-    private func getReadingLists() {
-        let maxItems = readingListItemsLimit
-        readingList.getAvailableRecords { readingList in
-            let items = readingList.prefix(maxItems)
-            self.updateReadingList(readingList: Array(items))
-        }
-    }
-
-    private func updateReadingList(readingList: [ReadingListItem]) {
-        readingListItems = recentItemsHelper.filterStaleItems(recentItems: readingList) as? [ReadingListItem] ?? []
-        delegate?.didLoadNewData()
-
-        let extra = [
-            TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\(readingListItems.count)"
-        ]
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .view,
-                                     object: .firefoxHomepage,
-                                     value: .recentlySavedReadingListView,
-                                     extras: extra)
-    }
-
     // MARK: - Notifiable
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .ReadingListUpdated:
-            getReadingLists()
         case .BookmarksUpdated, .RustPlacesOpened:
             getRecentBookmarks()
         default: break
