@@ -1,30 +1,124 @@
----
-name: "Focus Smoke Tests"
-
+name: "Focus/Firefox Tests"
+    
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 env:
-  XCODE_VERSION: 15.4
-  RUNNER: macos-14
-
+    browser: focus-ios
+    xcode_version: 15.4
+    ios_version: 17.4
+    ios_simulator: iPhone 15
+    xcodebuild_test_plan: SmokeTest
+    xcodebuild_scheme: Focus
+    xcodebuild_target: XCUITest
+    test_results_directory: /Users/runner/tmp
+    
 jobs:
-  compile:
-    name: Compile source code
-    runs-on: ${{ env.RUNNER }}
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-            python-version: '3.11'
-      - name: Install Python packages required
-        run: |
-          brew update
-          pip3 install virtualenv pipenv
-      - name: Setup Xcode
-        run: |
-          sudo rm -rf /Applications/Xcode.app
-          sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer
-          xcodebuild -version
+    run-tests:
+        name: Build and run tests
+        runs-on: macos-14
+        steps:
+            - name: Check out source code
+              uses: actions/checkout@v4.1.7
+            - name: Setup Python
+              uses: actions/setup-python@v5.1.0
+              with:
+                python-version: '3.11'
+            - name: Install packages
+              id: packages
+              run: |
+                brew update
+                pip3 install virtualenv pipenv
+                brew install xctesthtmlreport
+            - name: Setup Xcode
+              id: xcode
+              run: |
+                sudo rm -rf /Applications/Xcode.app
+                sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+                xcodebuild -version
+                xcrun simctl shutdown all
+                xcrun simctl erase all
+                ./checkout.sh
+                ./bootstrap.sh --force
+            - name: Compile source code
+              id: compile
+              run: |
+                xcodebuild \
+                    -resolvePackageDependencies \
+                    -onlyUsePackageVersionsFromResolvedFile
+                xcodebuild \
+                    build-for-testing \
+                    -scheme ${{ env.xcodebuild_scheme }} \
+                    -target ${{ env.xcodebuild_target }} \
+                    -destination 'platform=iOS Simulator,name=${{ env.ios_simulator }},OS=${{ env.ios_version }}'
+              working-directory: ${{ env.browser }}
+            - name: Run tests
+              id: run-tests
+              run: |
+                xcodebuild \
+                    test-without-building \
+                    -scheme ${{ env.xcodebuild_scheme }} \
+                    -target ${{ env.xcodebuild_target }} \
+                    -destination 'platform=iOS Simulator,name=${{ env.ios_simulator }},OS=${{ env.ios_version }}' \
+                    -testPlan ${{ env.xcodebuild_test_plan }} \
+                    -resultBundlePath ${{ env.test_results_directory }}/results \
+                    || touch ${{ env.test_results_directory }}/fail.txt && exit 0
+              working-directory:  ${{ env.browser }}
+            - name: Prettyprint test report
+              id: test-report
+              run: |
+                xchtmlreport ${{ env.test_results_directory }}/results.xcresult
+            - name: Authenticate to Google Cloud
+              id: auth-gcloud
+              uses: google-github-actions/auth@v2.1.3
+              with:
+                credentials_json: ${{ secrets.GCP_SA_KEY }}
+            - name: Upload report to Google Cloud bucket
+              id: upload-gcloud
+              uses: google-github-actions/upload-cloud-storage@v2.1.0
+              with:
+               process_gcloudignore: false
+               path: '${{ env.test_results_directory }}/index.html'
+               destination: 'mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}'
+            - name: Upload xcresult file to Github
+              id: upload-github
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ github.run_number }}
+                path: ${{ env.test_results_directory }}/index.html
+            - name : Process pass/fail info
+              id: pass-fail
+              run: |
+                # fail.txt is created when at least one test fails.
+                # job.status can't be used because the subsequent steps are not
+                # executed once a step fails.
+                if [ -e ${{ env.test_results_directory }}/fail.txt ]; then
+                    echo "pass_fail=❌ Fail" >> "$GITHUB_OUTPUT"
+                    echo "exit_value=1" >> "$GITHUB_OUTPUT"
+                else
+                    echo "pass_fail=✅ Pass" >> "$GITHUB_OUTPUT"
+                    echo "exit_value=0" >> "$GITHUB_OUTPUT"
+                fi
+            - name: Report to Slack
+              id: slack
+              uses: slackapi/slack-github-action@v1.26.0
+              with:
+                # This data can be any valid JSON from a previous step in the GitHub Action
+                payload: |
+                  {
+                    "browser": "${{ env.browser }}",
+                    "status": "${{ steps.pass-fail.outputs.pass_fail }}",
+                    "run_number": "${{ github.run_number }}",
+                    "branch": "${{ github.ref_name }}",
+                    "xcode_version": "${{ env.xcode_version }}",
+                    "ios_simulator": "${{ env.ios_simulator }}",
+                    "ios_version": "${{ env.ios_version }}",
+                    "test_plan": "${{ env.xcodebuild_test_plan }}",
+                    "github_actions_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                    "test_report_url": "https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html"
+                  }
+              env:
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            - name: Report status
+              run: |
+                exit ${{ steps.pass-fail.outputs.exit_value }}
