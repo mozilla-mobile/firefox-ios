@@ -158,7 +158,7 @@ final class DefaultThemeManagerTests: XCTestCase {
         sut.changeCurrentTheme(.light, for: windowUUID)
 
         XCTAssertEqual(sut.currentTheme(for: windowUUID).type, currentThemeExpectedResult)
-        XCTAssertEqual(sut.getNormalSavedTheme(), expectedResult)
+        XCTAssertEqual(sut.getSavedTheme(), expectedResult)
     }
 
     // MARK: - Brightness Tests

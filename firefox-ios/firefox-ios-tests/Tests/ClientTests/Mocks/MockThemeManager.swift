@@ -62,7 +62,7 @@ class MockThemeManager: ThemeManager {
 
     func brightnessChanged() { }
 
-    func getNormalSavedTheme() -> ThemeType { return currentThemeStorage.type }
+    func getSavedTheme() -> ThemeType { return currentThemeStorage.type }
 
     func reloadTheme(for window: UUID) { }
 

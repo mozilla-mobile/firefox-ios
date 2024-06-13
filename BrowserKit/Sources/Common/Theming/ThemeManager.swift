@@ -17,7 +17,7 @@ public protocol ThemeManager {
     func setAutomaticBrightness(isOn: Bool)
     func setAutomaticBrightnessValue(_ value: Float)
     func brightnessChanged()
-    func getNormalSavedTheme() -> ThemeType
+    func getSavedTheme() -> ThemeType
 
     // Window management and window-specific themeing
     func changeCurrentTheme(_ newTheme: ThemeType, for window: WindowUUID)

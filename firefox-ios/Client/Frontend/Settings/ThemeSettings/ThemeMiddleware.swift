@@ -108,7 +108,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         ThemeSettingsState(windowUUID: windowUUID,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
-                           manualThemeSelected: themeManager.getNormalSavedTheme(),
+                           manualThemeSelected: themeManager.getSavedTheme(),
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
     }
