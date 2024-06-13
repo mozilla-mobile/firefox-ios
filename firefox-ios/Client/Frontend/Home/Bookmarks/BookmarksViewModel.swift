@@ -64,7 +64,7 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.bookmarks.title,
-            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlySaved,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.bookmarks,
             isButtonHidden: false,
             buttonTitle: .BookmarksSavedShowAllText,
             buttonAction: headerButtonAction,

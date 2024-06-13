@@ -100,7 +100,7 @@ public struct AccessibilityIdentifiers {
 
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
-            static let recentlySaved = "recentlySavedTitle"
+            static let bookmarks = "bookmarksTitle"
             static let historyHighlights = "historyHightlightsTitle"
             static let pocket = "pocketTitle"
             static let topSites = "topSitesTitle"
