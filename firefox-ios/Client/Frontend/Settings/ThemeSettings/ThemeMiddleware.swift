@@ -135,7 +135,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func updateThemeBasedOnSystemBrightness() {
-        themeManager.brightnessChanged()
+        themeManager.updateThemeBasedOnBrightess()
     }
 
     func getScreenBrightness() -> Float {

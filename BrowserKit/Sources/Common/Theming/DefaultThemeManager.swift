@@ -158,7 +158,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         if isOn {
             systemThemeChanged()
         } else if automaticBrightnessIsOn {
-            updateThemeBasedOnBrightness()
+            updateThemeBasedOnBrightess()
         } else {
             allWindowUUIDs.forEach { reloadTheme(for: $0) }
         }
@@ -193,30 +193,24 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         guard automaticBrightnessIsOn != isOn else { return }
 
         userDefaults.set(isOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
-        brightnessChanged()
+        updateThemeBasedOnBrightess()
     }
 
     public func setAutomaticBrightnessValue(_ value: Float) {
         userDefaults.set(value, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
-        brightnessChanged()
+        updateThemeBasedOnBrightess()
     }
 
-    public func brightnessChanged() {
+    public func updateThemeBasedOnBrightess() {
         if automaticBrightnessIsOn {
-            updateThemeBasedOnBrightness()
-        }
-    }
-
-    private func updateThemeBasedOnBrightness() {
-        allWindowUUIDs.forEach { uuid in
-            let currentValue = Float(UIScreen.main.brightness)
-
-            if currentValue < automaticBrightnessValue {
-                changeCurrentTheme(.dark, for: uuid)
-            } else {
-                changeCurrentTheme(.light, for: uuid)
+            allWindowUUIDs.forEach { uuid in
+                changeCurrentTheme(getThemeTypeBasedOnBrightness(), for: uuid)
             }
         }
+    }
+
+    private func getThemeTypeBasedOnBrightness() -> ThemeType {
+        return Float(UIScreen.main.brightness) < automaticBrightnessValue ? .dark : .light
     }
 
     // MARK: - Private methods
@@ -256,6 +250,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         if privateModeIsOn(for: window) { return .privateMode }
         if nightModeIsOn { return .nightMode }
         if systemThemeIsOn { return getSystemThemeType() }
+        if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
         return getSavedTheme()
     }
@@ -282,7 +277,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIScreen.brightnessDidChangeNotification:
-            brightnessChanged()
+            updateThemeBasedOnBrightess()
         case UIApplication.didBecomeActiveNotification:
             self.systemThemeChanged()
         default:
