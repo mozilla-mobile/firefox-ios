@@ -126,12 +126,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         notifyCurrentThemeDidChange(for: window)
     }
 
-    public func reloadTheme(for window: WindowUUID) {
-        updateTheme(for: window, to: fetchSavedThemeType(for: window))
-    }
-
     public func reloadThemeForAllWindows() {
         allWindowUUIDs.forEach { reloadTheme(for: $0) }
+    }
+
+    public func reloadTheme(for window: WindowUUID) {
+        updateTheme(for: window, to: fetchSavedThemeType(for: window))
     }
 
     public func getUserManualTheme() -> ThemeType {
@@ -143,17 +143,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     // MARK: - System theme functions
-    public func systemThemeChanged() {
-        allWindowUUIDs.forEach { uuid in
-            guard systemThemeIsOn,
-                  !nightModeIsOn,
-                  !privateModeIsOn(for: uuid)
-            else { return }
-
-            updateTheme(for: uuid, to: getSystemThemeType())
-        }
-    }
-
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
 
@@ -163,6 +152,18 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             updateThemeBasedOnBrightess()
         } else {
             allWindowUUIDs.forEach { reloadTheme(for: $0) }
+        }
+    }
+
+
+    public func systemThemeChanged() {
+        allWindowUUIDs.forEach { uuid in
+            guard systemThemeIsOn,
+                  !nightModeIsOn,
+                  !privateModeIsOn(for: uuid)
+            else { return }
+
+            updateTheme(for: uuid, to: getSystemThemeType())
         }
     }
 
