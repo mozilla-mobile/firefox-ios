@@ -257,7 +257,7 @@ class FakespotViewController: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         shadowView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1

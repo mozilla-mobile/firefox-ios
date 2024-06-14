@@ -27,6 +27,6 @@ struct AddressAutoFillBottomSheetView: View {
             Spacer()
         }
         .padding()
-        .background(Color(themeManager.currentTheme(for: windowUUID).colors.layer1))
+        .background(Color(themeManager.getcurrentTheme(for: windowUUID).colors.layer1))
     }
 }

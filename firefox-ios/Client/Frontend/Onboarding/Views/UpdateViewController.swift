@@ -159,7 +159,7 @@ class UpdateViewController: UIViewController,
     // MARK: - Theme
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getcurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

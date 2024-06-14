@@ -20,7 +20,7 @@ class FirefoxSuggestSettingsViewController: SettingsTableViewController, Feature
     }
 
     override func generateSettings() -> [SettingSection] {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         let enabled = BoolSetting(
             with: .firefoxSuggestFeature,
             titleText: NSAttributedString(

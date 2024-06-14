@@ -40,7 +40,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Methods
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getcurrentTheme(for: windowUUID)
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,

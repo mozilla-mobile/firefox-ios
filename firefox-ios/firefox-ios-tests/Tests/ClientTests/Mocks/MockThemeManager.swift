@@ -8,7 +8,7 @@ import Shared
 class MockThemeManager: ThemeManager {
     private var currentThemeStorage: Theme = LightTheme()
 
-    func currentTheme(for window: UUID?) -> Theme {
+    func getcurrentTheme(for window: UUID?) -> Theme {
         return currentThemeStorage
     }
 
@@ -25,7 +25,7 @@ class MockThemeManager: ThemeManager {
         return .light
     }
 
-    func changeManualTheme(to newTheme: ThemeType, for window: UUID) {
+    func setManualTheme(to newTheme: ThemeType, for window: UUID) {
         switch newTheme {
         case .light:
             currentThemeStorage = LightTheme()
@@ -53,10 +53,10 @@ class MockThemeManager: ThemeManager {
     func setAutomaticBrightnessValue(_ value: Float) {
         let screenLessThanPref = Float(UIScreen.main.brightness) < value
 
-        if screenLessThanPref, currentTheme(for: windowUUID).type == .light {
-            changeManualTheme(to: .dark, for: windowUUID)
-        } else if !screenLessThanPref, currentTheme(for: windowUUID).type == .dark {
-            changeManualTheme(to: .light, for: windowUUID)
+        if screenLessThanPref, getcurrentTheme(for: windowUUID).type == .light {
+            setManualTheme(to: .dark, for: windowUUID)
+        } else if !screenLessThanPref, getcurrentTheme(for: windowUUID).type == .dark {
+            setManualTheme(to: .light, for: windowUUID)
         }
     }
 

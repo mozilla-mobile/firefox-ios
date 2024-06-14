@@ -104,7 +104,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         contentView.backgroundColor = theme.colors.layer1
         headerLabel.textColor = theme.colors.textPrimary
         instructionLabel.textColor = theme.colors.textPrimary
@@ -129,7 +129,7 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
         return cell
     }
 

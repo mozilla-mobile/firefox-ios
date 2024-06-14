@@ -229,7 +229,7 @@ class IntroViewController: UIViewController,
 
     // MARK: - Themable
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer2
 
         pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary

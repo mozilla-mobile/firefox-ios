@@ -182,7 +182,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
         return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme(for: windowUUID))])]
+                               children: [DefaultBrowserSetting(theme: themeManager.getcurrentTheme(for: windowUUID))])]
     }
 
     private func getAccountSetting() -> [SettingSection] {
@@ -231,7 +231,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if inactiveTabsAreBuildActive {
             generalSettings.insert(
                 TabsSetting(
-                    theme: themeManager.currentTheme(for: windowUUID),
+                    theme: themeManager.getcurrentTheme(for: windowUUID),
                     settingsDelegate: parentCoordinator
                 ),
                 at: 3
@@ -240,7 +240,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getcurrentTheme(for: windowUUID),
             prefKey: "showClipboardBar",
             defaultValue: false,
             titleText: .SettingsOfferClipboardBarTitle,
@@ -249,7 +249,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let showLinksPreviewSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getcurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
             defaultValue: true,
             titleText: .SettingsShowLinkPreviewsTitle,
@@ -258,7 +258,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let blockOpeningExternalAppsSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getcurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.BlockOpeningExternalApps,
             defaultValue: false,
             titleText: .SettingsBlockOpeningExternalAppsTitle
@@ -285,7 +285,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
         if autofillAddressStatus {
-            privacySettings.append(AddressAutofillSetting(theme: themeManager.currentTheme(for: windowUUID),
+            privacySettings.append(AddressAutofillSetting(theme: themeManager.getcurrentTheme(for: windowUUID),
                                                           profile: profile,
                                                           settingsDelegate: parentCoordinator))
         }
@@ -294,12 +294,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme(for: windowUUID),
+        privacySettings.append(NotificationsSetting(theme: themeManager.getcurrentTheme(for: windowUUID),
                                                     profile: profile,
                                                     settingsDelegate: parentCoordinator))
 
         privacySettings += [
-            PrivacyPolicySetting(theme: themeManager.currentTheme(for: windowUUID),
+            PrivacyPolicySetting(theme: themeManager.getcurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator)
         ]
 
@@ -313,14 +313,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme(for: windowUUID),
+                                          theme: themeManager.getcurrentTheme(for: windowUUID),
                                           settingsDelegate: parentCoordinator),
             StudiesToggleSetting(prefs: profile.prefs,
                                  delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme(for: windowUUID),
+                                 theme: themeManager.getcurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator),
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme(for: windowUUID),
+                                   theme: themeManager.getcurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
         ]
 

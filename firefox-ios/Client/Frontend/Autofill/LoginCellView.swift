@@ -60,14 +60,14 @@ struct LoginCellView: View {
             }
             .padding()
         }
-        .buttonStyle(LoginButtonStyle(theme: themeManager.currentTheme(for: windowUUID)))
+        .buttonStyle(LoginButtonStyle(theme: themeManager.getcurrentTheme(for: windowUUID)))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
         }
     }
 

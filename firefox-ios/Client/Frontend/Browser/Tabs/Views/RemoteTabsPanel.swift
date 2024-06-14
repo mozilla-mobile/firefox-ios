@@ -100,7 +100,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer4
         tableViewController.tableView.backgroundColor =  theme.colors.layer3
         tableViewController.tableView.separatorColor = theme.colors.borderPrimary

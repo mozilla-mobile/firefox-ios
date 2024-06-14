@@ -18,7 +18,7 @@ class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
+        let theme = settings.themeManager.getcurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .FxAManageAccount,
@@ -46,7 +46,7 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        let theme = settingsVC.themeManager.currentTheme(for: settingsVC.windowUUID)
+        let theme = settingsVC.themeManager.getcurrentTheme(for: settingsVC.windowUUID)
         return NSAttributedString(
             string: .SettingsDisconnectSyncButton,
             attributes: [

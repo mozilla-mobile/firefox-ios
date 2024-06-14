@@ -220,7 +220,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
 
         backgroundColor = theme.colors.layer5
         [previousButton, nextButton, doneButton].forEach {

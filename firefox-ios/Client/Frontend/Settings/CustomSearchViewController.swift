@@ -31,7 +31,7 @@ class CustomSearchViewController: SettingsTableViewController {
     var successCallback: (() -> Void)?
     private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
         spinner.style = .medium
-        spinner.color = themeManager.currentTheme(for: windowUUID).colors.iconSpinner
+        spinner.color = themeManager.getcurrentTheme(for: windowUUID).colors.iconSpinner
         spinner.hidesWhenStopped = true
     }
 

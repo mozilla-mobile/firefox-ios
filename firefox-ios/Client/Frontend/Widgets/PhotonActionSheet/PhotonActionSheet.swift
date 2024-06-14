@@ -268,7 +268,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
 
         if viewModel.presentationStyle == .centered {
             setupBackgroundBlur()
@@ -460,7 +460,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         else { return UITableViewCell() }
 
         let actions = viewModel.actions[indexPath.section][indexPath.row]
-        cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.currentTheme(for: windowUUID))
+        cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.getcurrentTheme(for: windowUUID))
         cell.delegate = self
 
         if viewModel.isMainMenuInverted {
@@ -487,7 +487,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = viewModel.getViewHeader(tableView: tableView, section: section)
-        (header as? ThemeApplicable)?.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        (header as? ThemeApplicable)?.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
         return header
     }
 }

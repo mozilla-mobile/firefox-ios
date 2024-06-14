@@ -125,7 +125,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     func applyTheme() {
         guard let currentWindowUUID else { return }
-        let isDarkTheme = themeManager.currentTheme(for: currentWindowUUID).type == .dark
+        let isDarkTheme = themeManager.getcurrentTheme(for: currentWindowUUID).type == .dark
         evaluateJavaScript("setTheme(\(isDarkTheme));")
     }
 }

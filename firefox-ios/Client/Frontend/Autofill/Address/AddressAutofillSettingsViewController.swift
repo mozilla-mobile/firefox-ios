@@ -115,7 +115,7 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     /// Applies the current theme to the view.
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
     }
 

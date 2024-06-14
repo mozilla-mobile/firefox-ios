@@ -130,7 +130,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        let currentTheme = themeManager.getcurrentTheme(for: windowUUID)
         learnMoreButton.applyTheme(theme: currentTheme)
         continueButton.applyTheme(theme: currentTheme)
     }

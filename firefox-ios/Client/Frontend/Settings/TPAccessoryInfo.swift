@@ -24,7 +24,7 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getcurrentTheme(for: windowUUID)
     }
 
     func headerView() -> UIView {

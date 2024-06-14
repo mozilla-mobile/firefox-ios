@@ -89,7 +89,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 
     // MARK: - Theming
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getcurrentTheme(for: windowUUID)
         navigationItem.rightBarButtonItem?.tintColor = theme.colors.actionPrimary
     }
 }

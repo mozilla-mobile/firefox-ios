@@ -398,7 +398,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
-            let themeColors = self.themeManager.currentTheme(for: uuid).colors
+            let themeColors = self.themeManager.getcurrentTheme(for: uuid).colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
                                                    iconColor: themeColors.iconPrimary)
@@ -475,11 +475,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            let windowManager: WindowManager = AppContainer.shared.resolve()
-            let allWindowUUIDS = windowManager.allWindowUUIDs(includingReserved: false)
-            allWindowUUIDS.forEach { uuid in
-                self.themeManager.reloadTheme(for: uuid)
-            }
+            self.themeManager.reloadThemeForAllWindows()
         }.items
         items.append(nightMode)
 

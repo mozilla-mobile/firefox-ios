@@ -86,11 +86,11 @@ struct AddressAutofillToggle: View {
         .background(backgroundColor)
         .onAppear {
             // Apply theme when the view appears
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
         }
     }
 

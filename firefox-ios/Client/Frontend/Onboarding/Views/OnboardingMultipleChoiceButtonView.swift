@@ -174,9 +174,9 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - Theme
     func applyTheme() {
         backgroundColor = .clear
-        titleLabel.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
+        titleLabel.textColor = themeManager.getcurrentTheme(for: windowUUID).colors.textPrimary
         imageView.layer.borderColor = if viewModel.isSelected {
-            themeManager.currentTheme(for: windowUUID).colors.actionPrimary.cgColor
+            themeManager.getcurrentTheme(for: windowUUID).colors.actionPrimary.cgColor
         } else {
             UIColor.clear.cgColor
         }

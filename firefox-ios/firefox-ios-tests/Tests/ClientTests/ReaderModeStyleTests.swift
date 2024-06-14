@@ -91,32 +91,32 @@ class ReaderModeStyleTests: XCTestCase {
     // MARK: - ReaderModeTheme
 
     func test_defaultReaderModeTheme_returnsLight() {
-        themeManager.changeManualTheme(to: .light, for: windowUUID)
+        themeManager.setManualTheme(to: .light, for: windowUUID)
         let defaultTheme = ReaderModeTheme.preferredTheme(for: nil, window: windowUUID)
         XCTAssertEqual(defaultTheme, .light, "Expected light theme (default) if not theme is selected")
     }
 
     func test_appWideThemeDark_returnsDark() {
-        themeManager.changeManualTheme(to: .dark, for: windowUUID)
+        themeManager.setManualTheme(to: .dark, for: windowUUID)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.light, window: windowUUID)
 
         XCTAssertEqual(theme, .dark, "Expected dark theme because of the app theme")
     }
 
     func test_readerThemeSepia_returnsSepia() {
-        themeManager.changeManualTheme(to: .light, for: windowUUID)
+        themeManager.setManualTheme(to: .light, for: windowUUID)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia, window: windowUUID)
         XCTAssertEqual(theme, .sepia, "Expected sepia theme if App theme is not dark")
     }
 
     func test_readerThemeSepiaWithAppDark_returnsSepia() {
-        themeManager.changeManualTheme(to: .dark, for: windowUUID)
+        themeManager.setManualTheme(to: .dark, for: windowUUID)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia, window: windowUUID)
         XCTAssertEqual(theme, .dark, "Expected dark theme if App theme is dark")
     }
 
     func test_preferredColorTheme_changesFromLightToDark() {
-        themeManager.changeManualTheme(to: .dark, for: windowUUID)
+        themeManager.setManualTheme(to: .dark, for: windowUUID)
         var readerModeStyle = ReaderModeStyle(windowUUID: windowUUID,
                                               theme: .light,
                                               fontType: .sansSerif,

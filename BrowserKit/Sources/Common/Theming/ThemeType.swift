@@ -39,14 +39,4 @@ public enum ThemeType: String {
         case .light: UIBlurEffect.Style.extraLight
         }
     }
-
-    /// An overriding theme is a type of theme that overrides whatever theme
-    /// the user currently has selected, because they would be in a special
-    /// theming case, like private mode.
-    public func isOverridingThemeType() -> Bool {
-        switch self {
-        case .nightMode, .privateMode: return true
-        case .dark, .light: return false
-        }
-    }
 }
