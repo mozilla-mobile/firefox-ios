@@ -262,7 +262,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
                     limit: maxNumOfFirefoxSuggestions
             ) else { return }
             await MainActor.run {
-                guard self.searchQuery == tempSearchQuery else { return }
+                guard self.searchQuery == tempSearchQuery, self.firefoxSuggestions != suggestions else { return }
                 self.firefoxSuggestions = suggestions
                 self.delegate?.reloadTableView()
             }
@@ -355,13 +355,16 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     // MARK: LoaderListener
     func loader(dataLoaded data: Cursor<Site>) {
+        let previousData = self.delegate?.searchData
         self.delegate?.searchData = if shouldShowSponsoredSuggestions {
             ArrayCursor<Site>(data: SponsoredContentFilterUtility().filterSponsoredSites(from: data.asArray()))
         } else {
             data
         }
 
-        delegate?.reloadTableView()
+        if previousData?.asArray() != self.delegate?.searchData.asArray() {
+            delegate?.reloadTableView()
+        }
     }
 }
 

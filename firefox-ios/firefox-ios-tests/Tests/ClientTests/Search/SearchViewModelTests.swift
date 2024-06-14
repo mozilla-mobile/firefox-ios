@@ -11,6 +11,7 @@ import XCTest
 
 final class SearchViewModelTests: XCTestCase {
     var profile: MockProfile!
+    var mockDelegate: MockSearchDelegate!
     var engines: SearchEngines!
     var remoteClient: RemoteClient!
 
@@ -22,6 +23,8 @@ final class SearchViewModelTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.set(feature: .firefoxSuggestFeature, to: true)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()
+        mockDelegate = MockSearchDelegate()
+
         engines = SearchEngines(
             prefs: profile.prefs,
             files: profile.files,
@@ -78,6 +81,7 @@ final class SearchViewModelTests: XCTestCase {
 
         await subject.loadFirefoxSuggestions()?.value
         XCTAssertEqual(subject.firefoxSuggestions.count, 0)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
     }
 
     func testFirefoxSuggestionReturnsSponsoredAndNonSponsored() async throws {
@@ -92,6 +96,7 @@ final class SearchViewModelTests: XCTestCase {
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertEqual(subject.firefoxSuggestions.count, 2)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
     func testSyncedTabsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
@@ -176,6 +181,7 @@ final class SearchViewModelTests: XCTestCase {
 
         await subject.loadFirefoxSuggestions()?.value
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
     }
 
     func testNonSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
@@ -187,6 +193,7 @@ final class SearchViewModelTests: XCTestCase {
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
     }
 
     func testNonSponsoredAndSponsoredSuggestionsInPrivateModeWithPrivateSuggestionsOn() async throws {
@@ -198,6 +205,7 @@ final class SearchViewModelTests: XCTestCase {
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
     }
 
     func testNonSponsoredInPrivateModeWithPrivateSuggestionsOn() async throws {
@@ -208,6 +216,7 @@ final class SearchViewModelTests: XCTestCase {
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
     }
 
     func testNonSponsoredAndSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
@@ -217,6 +226,47 @@ final class SearchViewModelTests: XCTestCase {
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 0)
+    }
+
+    func testLoad_forFirefoxSuggestions_doesNotTriggerReloadForSameSuggestions() async throws {
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+            FirefoxSuggestFeature(availableSuggestionsTypes:
+                                    [.amp: false, .ampMobile: true, .wikipedia: true])
+       })
+
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = true
+        let subject = createSubject()
+        await subject.loadFirefoxSuggestions()?.value
+        await subject.loadFirefoxSuggestions()?.value
+
+        XCTAssertEqual(subject.firefoxSuggestions.count, 2)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
+    }
+
+    func testLoad_forHistoryAndBookmarks_doesNotTriggerReloadForSameSuggestions() async throws {
+        engines.shouldShowSponsoredSuggestions = false
+        let subject = createSubject()
+        XCTAssertEqual(subject.delegate?.searchData.count, 0)
+        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site(url: "https://example.com", title: "Test2"),
+                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        subject.loader(dataLoaded: data)
+        XCTAssertEqual(subject.delegate?.searchData.count, 3)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
+    }
+
+    func testLoad_multipleTimes_doesNotTriggerReloadForSameSuggestions() async throws {
+        engines.shouldShowSponsoredSuggestions = false
+        let subject = createSubject()
+        let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
+                                             Site(url: "https://example.com", title: "Test2"),
+                                             Site(url: "https://example.com?a=b&c=d", title: "Test3")])
+        subject.loader(dataLoaded: data)
+        subject.loader(dataLoaded: data)
+        XCTAssertEqual(subject.delegate?.searchData.count, 3)
+        XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
     private func createSubject(
@@ -232,7 +282,20 @@ final class SearchViewModelTests: XCTestCase {
             model: engines,
             tabManager: MockTabManager()
         )
-
+        subject.delegate = mockDelegate
         return subject
+    }
+}
+
+class MockSearchDelegate: SearchViewDelegate {
+    var searchData = Cursor<Site>()
+    var didReloadTableViewCount = 0
+    var didReloadSearchEngines = 0
+
+    func reloadSearchEngines() {
+        didReloadSearchEngines += 1
+    }
+    func reloadTableView() {
+        didReloadTableViewCount += 1
     }
 }
