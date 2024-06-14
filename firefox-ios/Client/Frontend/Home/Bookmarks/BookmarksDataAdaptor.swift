@@ -53,7 +53,7 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
     }
 
     private func updateRecentBookmarks(bookmarks: [RecentlySavedBookmark]) {
-        recentBookmarks = recentItemsHelper.filterStaleItems(recentItems: bookmarks) as? [RecentlySavedBookmark] ?? []
+        recentBookmarks = bookmarks
         delegate?.didLoadNewData()
 
         // Send telemetry if bookmarks aren't empty
