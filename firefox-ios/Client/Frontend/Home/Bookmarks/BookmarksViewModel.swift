@@ -30,7 +30,7 @@ class BookmarksViewModel {
     var theme: Theme
     private let profile: Profile
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
-    private var recentItems = [RecentlySavedItem]()
+    private var recentItems = [BookmarkItem]()
     private var wallpaperManager: WallpaperManager
     var headerButtonAction: ((UIButton) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
@@ -141,7 +141,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-        if let item = recentItems[safe: indexPath.row] as? RecentlySavedBookmark {
+        if let item = recentItems[safe: indexPath.row] as? recentBookmark {
             guard let url = URIFixup.getURL(item.url) else { return }
 
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
@@ -176,7 +176,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
 extension BookmarksViewModel: RecentlySavedDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.recentItems = self.recentlySavedDataAdaptor.getRecentlySavedData()
+            self.recentItems = self.recentlySavedDataAdaptor.getBookmarkData()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

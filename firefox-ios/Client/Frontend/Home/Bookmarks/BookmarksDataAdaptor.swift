@@ -7,7 +7,7 @@ import Storage
 import Common
 
 protocol RecentlySavedDataAdaptor {
-    func getRecentlySavedData() -> [RecentlySavedItem]
+    func getBookmarkData() -> [BookmarkItem]
 }
 
 protocol RecentlySavedDelegate: AnyObject {
@@ -17,9 +17,8 @@ protocol RecentlySavedDelegate: AnyObject {
 class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
     var notificationCenter: NotificationProtocol
     private let bookmarkItemsLimit: UInt = 8
-    private let recentItemsHelper = RecentItemsHelper()
     private var bookmarksHandler: BookmarksHandler
-    private var homepageBookmarks = [RecentlySavedBookmark]()
+    private var homepageBookmarks = [recentBookmark]()
 
     weak var delegate: RecentlySavedDelegate?
 
@@ -35,8 +34,8 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
         getBookmarks()
     }
 
-    func getRecentlySavedData() -> [RecentlySavedItem] {
-        var items = [RecentlySavedItem]()
+    func getBookmarkData() -> [BookmarkItem] {
+        var items = [BookmarkItem]()
         items.append(contentsOf: homepageBookmarks)
 
         return items
@@ -46,12 +45,12 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
 
     private func getBookmarks() {
         bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { bookmarks in
-            let bookmarks = bookmarks.map { RecentlySavedBookmark(bookmark: $0) }
+            let bookmarks = bookmarks.map { recentBookmark(bookmark: $0) }
             self.updateBookmarks(updatedBookmarks: bookmarks)
         }
     }
 
-    private func updateBookmarks(updatedBookmarks: [RecentlySavedBookmark]) {
+    private func updateBookmarks(updatedBookmarks: [recentBookmark]) {
         homepageBookmarks = updatedBookmarks
         delegate?.didLoadNewData()
 
