@@ -6,7 +6,7 @@ on:
 env:
     browser: focus-ios
     xcode_version: 15.4
-    ios_version: 17.4
+    ios_version: 17.5
     ios_simulator: iPhone 15
     xcodebuild_test_plan: SmokeTest
     xcodebuild_scheme: Focus
