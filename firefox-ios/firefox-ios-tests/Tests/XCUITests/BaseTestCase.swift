@@ -236,10 +236,10 @@ class BaseTestCase: XCTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    func checkRecentlySaved() {
+    func checkBookmarks() {
         waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .otherElements
             .otherElements
             .otherElements
@@ -249,10 +249,10 @@ class BaseTestCase: XCTestCase {
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
-    func checkRecentlySavedUpdated() {
+    func checkBookmarksUpdated() {
         waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .otherElements
             .otherElements
             .otherElements
