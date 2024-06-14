@@ -148,7 +148,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
-                                         value: .recentlySavedBookmarkItemAction,
+                                         value: .bookmarkItemAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         }
     }
