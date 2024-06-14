@@ -587,12 +587,12 @@ private extension HomepageViewController {
             )
         }
 
-        // Recently saved
-        viewModel.recentlySavedViewModel.headerButtonAction = { [weak self] button in
+        // Bookmarks
+        viewModel.bookmarksViewModel.headerButtonAction = { [weak self] button in
             self?.openBookmarks(button)
         }
 
-        viewModel.recentlySavedViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+        viewModel.bookmarksViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,

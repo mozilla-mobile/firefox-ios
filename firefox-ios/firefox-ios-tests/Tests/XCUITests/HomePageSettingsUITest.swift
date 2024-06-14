@@ -263,7 +263,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // on iPhone we have the search button instead when we're on a new tab page
         navigator.performAction(Action.ClickSearchButton)
         XCTAssertFalse(
-            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists
+            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks].exists
         )
         mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
         navigator.performAction(Action.CloseURLBarOpen)
@@ -275,9 +275,9 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
             navigator.performAction(Action.CloseURLBarOpen)
         }
-        checkRecentlySaved()
+        checkBookmarks()
         app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -289,7 +289,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(LibraryPanel_ReadingList)
         navigator.performAction(Action.CloseReadingListPanel)
         navigator.goto(NewTabScreen)
-        checkRecentlySavedUpdated()
+        checkBookmarksUpdated()
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923
