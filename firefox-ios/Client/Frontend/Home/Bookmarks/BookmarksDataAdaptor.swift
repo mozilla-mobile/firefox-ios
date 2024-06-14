@@ -62,7 +62,7 @@ class BookmarksDataAdaptorImplementation: BookmarksDataAdaptor, Notifiable {
                 object: .firefoxHomepage,
                 value: .bookmarkItemView,
                 extras: [
-                    TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(updatedBookmarks.count)"
+                    TelemetryWrapper.EventObject.bookmarkImpressions.rawValue: "\(updatedBookmarks.count)"
                 ]
             )
         }

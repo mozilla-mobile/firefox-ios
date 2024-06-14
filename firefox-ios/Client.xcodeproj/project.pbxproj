@@ -949,7 +949,7 @@
 		961577942A39008100391E8D /* SponsoredTileDataUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961577932A39008100391E8D /* SponsoredTileDataUtilityTests.swift */; };
 		961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961D6B822995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift */; };
 		962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */; };
-		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
+		962F394A2672D57A006BDA2A /* BookmarkItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* BookmarkItemsHelper.swift */; };
 		9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92727F5D72D00771F5E /* GleanPlumbMessageManager.swift */; };
 		9636D92A27F767EC00771F5E /* NimbusMessagingEvaluationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92927F767EC00771F5E /* NimbusMessagingEvaluationUtility.swift */; };
 		9636D92C27F9E50100771F5E /* GleanPlumbMessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92B27F9E50100771F5E /* GleanPlumbMessageStore.swift */; };
@@ -6342,7 +6342,7 @@
 		962A450E9186BF349E535413 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		962C6C39297054A700354BE8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		962C6C3F2971F5D400354BE8 /* Dangerfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Dangerfile.swift; path = ../Dangerfile.swift; sourceTree = "<group>"; };
-		962F39492672D57A006BDA2A /* RecentItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelper.swift; sourceTree = "<group>"; };
+		962F39492672D57A006BDA2A /* BookmarkItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkItemsHelper.swift; sourceTree = "<group>"; };
 		9636D92727F5D72D00771F5E /* GleanPlumbMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManager.swift; sourceTree = "<group>"; };
 		9636D92927F767EC00771F5E /* NimbusMessagingEvaluationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMessagingEvaluationUtility.swift; sourceTree = "<group>"; };
 		9636D92B27F9E50100771F5E /* GleanPlumbMessageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageStore.swift; sourceTree = "<group>"; };
@@ -8952,7 +8952,7 @@
 				E1463D012981DA190074E16E /* NotificationManager.swift */,
 				E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */,
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
-				962F39492672D57A006BDA2A /* RecentItemsHelper.swift */,
+				962F39492672D57A006BDA2A /* BookmarkItemsHelper.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
 				E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */,
 			);
@@ -14183,7 +14183,7 @@
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				96A562A327D7B32A0045144A /* Contile.swift in Sources */,
-				962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */,
+				962F394A2672D57A006BDA2A /* BookmarkItemsHelper.swift in Sources */,
 				B2DFB7DF2B619DB80004CEA5 /* AddressListViewModel.swift in Sources */,
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
 				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,

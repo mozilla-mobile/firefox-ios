@@ -512,8 +512,7 @@ extension TelemetryWrapper {
         case jumpBackInTileImpressions = "jump-back-in-tile-impressions"
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
-        case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
-        case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
+        case bookmarkImpressions = "bookmark-impressions"
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
@@ -1792,7 +1791,7 @@ extension TelemetryWrapper {
             GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
 
         case (.action, .view, .firefoxHomepage, .bookmarkItemView, let extras):
-            if let bookmarksCount = extras?[EventObject.recentlySavedBookmarkImpressions.rawValue] as? String {
+            if let bookmarksCount = extras?[EventObject.bookmarkImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(GleanMetrics.FirefoxHomePage.RecentlySavedBookmarkViewExtra(bookmarkCount: bookmarksCount))
             }
         case (.action, .tap, .firefoxHomepage, .bookmarkSectionShowAll, let extras):
