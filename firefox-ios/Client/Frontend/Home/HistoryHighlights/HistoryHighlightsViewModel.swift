@@ -171,7 +171,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
             title: HomepageSectionType.historyHighlights.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
             isButtonHidden: false,
-            buttonTitle: .RecentlySavedShowAllText,
+            buttonTitle: .BookmarksSavedShowAllText,
             buttonAction: headerButtonAction,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights,
             textColor: textColor)

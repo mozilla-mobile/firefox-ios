@@ -587,16 +587,16 @@ private extension HomepageViewController {
             )
         }
 
-        // Recently saved
-        viewModel.recentlySavedViewModel.headerButtonAction = { [weak self] button in
+        // Bookmarks
+        viewModel.bookmarksViewModel.headerButtonAction = { [weak self] button in
             self?.openBookmarks(button)
         }
 
-        viewModel.recentlySavedViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+        viewModel.bookmarksViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,
-                sectionType: .recentlySaved
+                sectionType: .bookmarks
             )
         }
 
@@ -609,7 +609,7 @@ private extension HomepageViewController {
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,
-                sectionType: .recentlySaved
+                sectionType: .bookmarks
             )
         }
 
@@ -737,11 +737,11 @@ private extension HomepageViewController {
     func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
-        if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.bookmarks {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
-                                         value: .recentlySavedSectionShowAll,
+                                         value: .bookmarkSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }

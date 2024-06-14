@@ -92,7 +92,7 @@ public struct AccessibilityIdentifiers {
         }
 
         struct MoreButtons {
-            static let recentlySaved = "recentlySavedSectionMoreButton"
+            static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let historyHighlights = "historyHighlightsSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
@@ -100,7 +100,7 @@ public struct AccessibilityIdentifiers {
 
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
-            static let recentlySaved = "recentlySavedTitle"
+            static let bookmarks = "bookmarksTitle"
             static let historyHighlights = "historyHightlightsTitle"
             static let pocket = "pocketTitle"
             static let topSites = "topSitesTitle"
@@ -123,8 +123,8 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "JumpBackInCell"
         }
 
-        struct RecentlySaved {
-            static let itemCell = "RecentlySavedCell"
+        struct Bookmarks {
+            static let itemCell = "BookmarksCell"
         }
 
         struct SyncedTab {
