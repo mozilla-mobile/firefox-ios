@@ -196,6 +196,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
             currentAccessoryView,
             flexibleSpacer,
             previousButton,
+            fixedSpacer,
             nextButton,
             fixedSpacer,
             doneButton
