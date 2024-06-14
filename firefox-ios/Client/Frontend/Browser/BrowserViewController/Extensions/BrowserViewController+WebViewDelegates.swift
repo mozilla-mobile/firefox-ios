@@ -133,13 +133,13 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
+        guard let url = elementInfo.linkURL else { return }
+
         completionHandler(
             UIContextMenuConfiguration(
                 identifier: nil,
                 previewProvider: {
-                    guard let url = elementInfo.linkURL,
-                          self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true
-                    else { return nil }
+                    guard self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
 
                     let previewViewController = UIViewController()
                     previewViewController.view.isUserInteractionEnabled = false
@@ -159,8 +159,7 @@ extension BrowserViewController: WKUIDelegate {
                     return previewViewController
                 },
                 actionProvider: { [self] (suggested) -> UIMenu? in
-                    guard let url = elementInfo.linkURL,
-                          let currentTab = self.tabManager.selectedTab,
+                    guard let currentTab = tabManager.selectedTab,
                           let contextHelper = currentTab.getContentScript(
                             name: ContextMenuHelper.name()
                           ) as? ContextMenuHelper,
