@@ -103,7 +103,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         return button
     }()
 
-    private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
+    private func syncLoadingView() -> UIStackView {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
         let theme = themeManager.currentTheme(for: windowUUID)
@@ -113,9 +113,10 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         activityIndicator.color = theme.colors.textPrimary
         activityIndicator.startAnimating()
 
-        stackView.addArrangedSubview(syncingLabel)
-        stackView.addArrangedSubview(activityIndicator)
+        let stackView = UIStackView(arrangedSubviews: [syncingLabel, activityIndicator])
         stackView.spacing = 12
+
+        return stackView
     }
 
     private lazy var flexibleSpace: UIBarButtonItem = {
@@ -403,10 +404,10 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
                 guard let self = self else { return }
 
                 self.syncTabButtonIpad.isEnabled = false
-                self.syncTabButtonIpad.customView = self.syncLoadingView
+                self.syncTabButtonIpad.customView = self.syncLoadingView()
 
                 self.syncTabButtonIphone.isEnabled = false
-                self.syncTabButtonIphone.customView = self.syncLoadingView
+                self.syncTabButtonIphone.customView = self.syncLoadingView()
             }
         case .ProfileDidFinishSyncing:
             // Update Sync Tab button
