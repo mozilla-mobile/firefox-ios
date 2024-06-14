@@ -269,6 +269,62 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
+    func testFirefoxSuggestionReturnsSponsored() async {
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+            FirefoxSuggestFeature(availableSuggestionsTypes:
+                                    [.amp: false, .ampMobile: true, .wikipedia: true])
+       })
+
+        engines.shouldShowFirefoxSuggestions = false
+        engines.shouldShowSponsoredSuggestions = true
+        let subject = createSubject()
+        await subject.loadFirefoxSuggestions()?.value
+
+        XCTAssertEqual(subject.firefoxSuggestions[0].title, "Mozilla")
+        XCTAssertEqual(subject.firefoxSuggestions.count, 1)
+    }
+
+    func testFirefoxSuggestionReturnsNonSponsored() async {
+        FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
+            FirefoxSuggestFeature(availableSuggestionsTypes:
+                                    [.amp: false, .ampMobile: true, .wikipedia: true])
+       })
+
+        engines.shouldShowFirefoxSuggestions = true
+        engines.shouldShowSponsoredSuggestions = false
+        let subject = createSubject()
+        await subject.loadFirefoxSuggestions()?.value
+
+        XCTAssertEqual(subject.firefoxSuggestions[0].title, "California")
+        XCTAssertEqual(subject.firefoxSuggestions.count, 1)
+    }
+
+    func testQuickSearchEnginesWithSearchSuggestionsEnabled() {
+        let subject = createSubject()
+        subject.searchEngines = engines
+        let quickSearchEngines = subject.quickSearchEngines
+
+        let expectedEngineNames = ["BTester", "CTester", "DTester", "ETester", "FTester"]
+
+        XCTAssertEqual(subject.searchEngines?.defaultEngine?.shortName, "ATester")
+        XCTAssertEqual(quickSearchEngines.map { $0.shortName }, expectedEngineNames)
+        XCTAssertEqual(quickSearchEngines.count, 5)
+    }
+
+    func testQuickSearchEnginesWithSearchSuggestionsDisabled() {
+        engines.shouldShowSearchSuggestions = false
+        let subject = createSubject()
+        subject.searchEngines = engines
+        let quickSearchEngines = subject.quickSearchEngines
+
+        let expectedEngineNames = ["ATester", "BTester", "CTester", "DTester", "ETester", "FTester"]
+
+        XCTAssertEqual(quickSearchEngines.first?.shortName, "ATester")
+        XCTAssertEqual(subject.searchEngines?.defaultEngine?.shortName, "ATester")
+        XCTAssertEqual(quickSearchEngines.map { $0.shortName }, expectedEngineNames)
+        XCTAssertEqual(quickSearchEngines.count, 6)
+    }
+
     private func createSubject(
         isPrivate: Bool = false,
         isBottomSearchBar: Bool = false,
