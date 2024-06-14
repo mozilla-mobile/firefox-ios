@@ -541,7 +541,7 @@ class BrowserViewController: UIViewController,
         if NightModeHelper.isActivated(),
            !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
             NightModeHelper.turnOff()
-            themeManager.reloadThemeForAllWindows()
+            themeManager.applyThemeUpdatesToWindows()
         }
 
         NightModeHelper.cleanNightModeDefaults()
@@ -1008,7 +1008,7 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            themeManager.reloadThemeForAllWindows()
+            themeManager.applyThemeUpdatesToWindows()
         }
         setupMiddleButtonStatus(isLoading: false)
     }

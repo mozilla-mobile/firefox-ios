@@ -103,7 +103,7 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
     }
 
     func updateThemeFromSystemBrightnessChange(with action: ThemeSettingsViewAction) {
-        themeManager.reloadThemeForAllWindows()
+        themeManager.applyThemeUpdatesToWindows()
         dispatchMiddlewareAction(from: action, to: .systemBrightnessChanged)
     }
 

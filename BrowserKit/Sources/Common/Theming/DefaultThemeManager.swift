@@ -43,10 +43,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return userDefaults.bool(forKey: ThemeKeys.NightMode.isOn)
     }
 
-    private func privateModeIsOn(for window: WindowUUID) -> Bool {
-        return getPrivateThemeIsOn(for: window)
-    }
-
     public var systemThemeIsOn: Bool {
         return userDefaults.bool(forKey: ThemeKeys.systemThemeIsOn)
     }
@@ -82,24 +78,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
                                        UIApplication.didBecomeActiveNotification])
     }
 
-    // MARK: - Window specific functions
-    public func windowNonspecificTheme() -> Theme {
-        switch getUserManualTheme() {
-        case .dark, .nightMode, .privateMode: return DarkTheme()
-        case .light: return LightTheme()
-        }
-    }
-
-    public func windowDidClose(uuid: WindowUUID) {
-        windows.removeValue(forKey: uuid)
-    }
-
-    public func setWindow(_ window: UIWindow, for uuid: WindowUUID) {
-        windows[uuid] = window
-        updateSavedTheme(to: getUserManualTheme())
-        applyThemeChanges(for: uuid, using: fetchSavedThemeType(for: uuid))
-    }
-
     // MARK: - Themeing general functions
     public func getcurrentTheme(for window: WindowUUID?) -> Theme {
         guard let window else {
@@ -107,24 +85,25 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
             return DarkTheme()
         }
 
-        return getThemeFromType(fetchSavedThemeType(for: window))
+        return getThemeFrom(type: determineThemeType(for: window))
     }
 
+    public func applyThemeUpdatesToWindows() {
+        allWindowUUIDs.forEach {
+            applyThemeChanges(for: $0, using: determineThemeType(for: $0))
+        }
+    }
+
+    // MARK: - Manual theme functions
     public func setManualTheme(to newTheme: ThemeType) {
         updateSavedTheme(to: newTheme)
-        reloadThemeForAllWindows()
-    }
-
-    public func reloadThemeForAllWindows() {
-        allWindowUUIDs.forEach {
-            applyThemeChanges(for: $0, using: fetchSavedThemeType(for: $0))
-        }
+        applyThemeUpdatesToWindows()
     }
 
     public func getUserManualTheme() -> ThemeType {
         guard let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
               let savedTheme = ThemeType(rawValue: savedThemeDescription)
-        else { return getSystemThemeType() }
+        else { return getThemeTypeBasedOnSystem() }
 
         return savedTheme
     }
@@ -132,7 +111,11 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - System theme functions
     public func setSystemTheme(isOn: Bool) {
         userDefaults.set(isOn, forKey: ThemeKeys.systemThemeIsOn)
-        reloadThemeForAllWindows()
+        applyThemeUpdatesToWindows()
+    }
+
+    private func getThemeTypeBasedOnSystem() -> ThemeType {
+        return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
     }
 
     // MARK: - Private theme functions
@@ -145,7 +128,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         settings[window.uuidString] = NSNumber(value: isOn)
         userDefaults.set(settings, forKey: ThemeKeys.PrivateMode.byWindowUUID)
 
-        applyThemeChanges(for: window, using: fetchSavedThemeType(for: window))
+        applyThemeChanges(for: window, using: determineThemeType(for: window))
     }
 
     public func getPrivateThemeIsOn(for window: WindowUUID) -> Bool {
@@ -161,7 +144,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         guard automaticBrightnessIsOn != isOn else { return }
 
         userDefaults.set(isOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
-        reloadThemeForAllWindows()
+        applyThemeUpdatesToWindows()
     }
 
     public func setAutomaticBrightnessValue(_ value: Float) {
@@ -172,7 +155,25 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         return Float(UIScreen.main.brightness) < automaticBrightnessValue ? .dark : .light
     }
 
-    // MARK: - Private methods
+    // MARK: - Window specific functions
+    public func windowNonspecificTheme() -> Theme {
+        switch getUserManualTheme() {
+        case .dark, .nightMode, .privateMode: return DarkTheme()
+        case .light: return LightTheme()
+        }
+    }
+
+    public func windowDidClose(uuid: WindowUUID) {
+        windows.removeValue(forKey: uuid)
+    }
+
+    public func setWindow(_ window: UIWindow, for uuid: WindowUUID) {
+        windows[uuid] = window
+        updateSavedTheme(to: getUserManualTheme())
+        applyThemeChanges(for: uuid, using: determineThemeType(for: uuid))
+    }
+
+    // MARK: - Private helper methods
 
     private func migrateSingleWindowPrivateDefaultsToMultiWindow(for window: WindowUUID) {
         // Migrate old private setting to our window-based settings
@@ -204,20 +205,16 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         }
     }
 
-    private func fetchSavedThemeType(for window: WindowUUID) -> ThemeType {
-        if privateModeIsOn(for: window) { return .privateMode }
+    private func determineThemeType(for window: WindowUUID) -> ThemeType {
+        if getPrivateThemeIsOn(for: window) { return .privateMode }
         if nightModeIsOn { return .nightMode }
-        if systemThemeIsOn { return getSystemThemeType() }
+        if systemThemeIsOn { return getThemeTypeBasedOnSystem() }
         if automaticBrightnessIsOn { return getThemeTypeBasedOnBrightness() }
 
         return getUserManualTheme()
     }
 
-    private func getSystemThemeType() -> ThemeType {
-        return UIScreen.main.traitCollection.userInterfaceStyle == .dark ? ThemeType.dark : ThemeType.light
-    }
-
-    private func getThemeFromType(_ type: ThemeType) -> Theme {
+    private func getThemeFrom(type: ThemeType) -> Theme {
         switch type {
         case .light:
             return LightTheme()
@@ -236,7 +233,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         switch notification.name {
         case UIScreen.brightnessDidChangeNotification,
             UIApplication.didBecomeActiveNotification:
-            reloadThemeForAllWindows()
+            applyThemeUpdatesToWindows()
         default:
             return
         }

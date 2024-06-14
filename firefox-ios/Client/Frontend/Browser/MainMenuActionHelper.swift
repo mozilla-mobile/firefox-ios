@@ -475,7 +475,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            self.themeManager.reloadThemeForAllWindows()
+            self.themeManager.applyThemeUpdatesToWindows()
         }.items
         items.append(nightMode)
 
