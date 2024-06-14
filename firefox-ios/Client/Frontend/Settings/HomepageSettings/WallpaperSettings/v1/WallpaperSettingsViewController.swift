@@ -97,7 +97,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     }
 
     func applyTheme() {
-        contentView.backgroundColor = themeManager.getcurrentTheme(for: windowUUID).colors.layer5
+        contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer5
     }
 }
 
@@ -139,7 +139,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
-        cell.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 
@@ -225,7 +225,7 @@ private extension WallpaperSettingsViewController {
                                              buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button)
         let toast = ButtonToast(
             viewModel: viewModel,
-            theme: themeManager.getcurrentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             completion: { buttonPressed in
                 if buttonPressed { self.dismissView() }
             })

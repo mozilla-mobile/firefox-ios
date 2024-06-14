@@ -124,7 +124,7 @@ class BackForwardListViewController: UIViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

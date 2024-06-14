@@ -62,7 +62,7 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
     }
 
     func applyTheme() {
-        setupNavigationBarAppearance(theme: themeManager.getcurrentTheme(for: windowUUID))
+        setupNavigationBarAppearance(theme: themeManager.getCurrentTheme(for: windowUUID))
         setNeedsStatusBarAppearanceUpdate()
     }
 }

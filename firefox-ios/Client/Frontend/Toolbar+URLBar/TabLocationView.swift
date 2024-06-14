@@ -419,7 +419,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 }
 

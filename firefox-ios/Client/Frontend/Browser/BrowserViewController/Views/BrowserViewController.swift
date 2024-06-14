@@ -1298,7 +1298,7 @@ class BrowserViewController: UIViewController,
             })
         }
 
-        microsurvey.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         updateViewConstraints()
     }
@@ -2493,7 +2493,7 @@ class BrowserViewController: UIViewController,
     // MARK: Themeable
 
     func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

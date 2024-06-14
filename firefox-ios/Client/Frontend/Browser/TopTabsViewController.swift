@@ -117,7 +117,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
                                                        reuseID: TopTabCell.cellIdentifier,
                                                        tabDisplayType: .TopTabTray,
                                                        profile: profile,
-                                                       theme: themeManager.getcurrentTheme(for: windowUUID))
+                                                       theme: themeManager.getCurrentTheme(for: windowUUID))
         self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -168,17 +168,17 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let uiLargeContentViewInteraction = UILargeContentViewerInteraction()
         view.addInteraction(uiLargeContentViewInteraction)
 
-        tabsButton.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        tabsButton.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         applyUIMode(
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-            theme: themeManager.getcurrentTheme(for: windowUUID)
+            theme: themeManager.getCurrentTheme(for: windowUUID)
         )
 
         updateTabCount(topTabDisplayManager.dataStore.count, animated: false)
     }
 
     func applyTheme() {
-        let currentTheme = themeManager.getcurrentTheme(for: windowUUID)
+        let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
         view.backgroundColor = ToolbarFlagManager.isRefactorEnabled ? colors.layer1 : colors.layer3
@@ -323,7 +323,7 @@ extension TopTabsViewController: TabDisplayerDelegate {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
-        let theme = themeManager.getcurrentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         tabCell.configureLegacyCellWith(tab: tab,
                                         isSelected: isSelected,
                                         theme: theme)

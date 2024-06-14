@@ -145,10 +145,10 @@ class TabTrayViewController: UIViewController,
     private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        syncingLabel.textColor = themeManager.getcurrentTheme(for: windowUUID).colors.textPrimary
+        syncingLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.color = themeManager.getcurrentTheme(for: windowUUID).colors.textPrimary
+        activityIndicator.color = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
         activityIndicator.startAnimating()
 
         stackView.addArrangedSubview(syncingLabel)
@@ -302,7 +302,7 @@ class TabTrayViewController: UIViewController,
 
     // MARK: Themeable
     func applyTheme() {
-        let theme = themeManager.getcurrentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         navigationToolbar.barTintColor = theme.colors.layer1
         deleteButton.tintColor = theme.colors.iconPrimary

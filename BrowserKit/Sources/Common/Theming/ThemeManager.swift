@@ -6,7 +6,7 @@ import UIKit
 
 public protocol ThemeManager {
     // Current theme
-    func getcurrentTheme(for window: WindowUUID?) -> Theme
+    func getCurrentTheme(for window: WindowUUID?) -> Theme
 
     // System theme and brightness settings
     var systemThemeIsOn: Bool { get }

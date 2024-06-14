@@ -275,7 +275,7 @@ final class MicrosurveyViewController: UIViewController,
 
     // MARK: ThemeApplicable
     func applyTheme() {
-        let theme = themeManager.getcurrentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
 
         headerLabel.textColor = theme.colors.textPrimary
@@ -326,7 +326,7 @@ final class MicrosurveyViewController: UIViewController,
                 confirmationView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             ]
         )
-        confirmationView.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     @objc
@@ -357,7 +357,7 @@ final class MicrosurveyViewController: UIViewController,
         }
         cell.configure(model.surveyOptions[indexPath.row])
         cell.setA11yValue(for: indexPath.row, outOf: tableView.numberOfRows(inSection: .zero))
-        cell.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 
@@ -369,7 +369,7 @@ final class MicrosurveyViewController: UIViewController,
             return nil
         }
         headerView.configure(model.surveyQuestion, icon: model.icon)
-        headerView.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 

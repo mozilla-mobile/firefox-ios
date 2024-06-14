@@ -146,7 +146,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {
@@ -194,7 +194,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         guard status != .none else { return }
         SimpleToast().showAlertWithText(status.message,
                                         bottomContainer: view,
-                                        theme: self.themeManager.getcurrentTheme(for: self.windowUUID))
+                                        theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
     }
 
     @objc

@@ -398,7 +398,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
-            let themeColors = self.themeManager.getcurrentTheme(for: uuid).colors
+            let themeColors = self.themeManager.getCurrentTheme(for: uuid).colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
                                                    iconColor: themeColors.iconPrimary)

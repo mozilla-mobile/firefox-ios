@@ -261,7 +261,7 @@ class ReadingListPanel: UITableViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     @objc

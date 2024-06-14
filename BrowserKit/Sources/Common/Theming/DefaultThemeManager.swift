@@ -79,7 +79,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     // MARK: - Themeing general functions
-    public func getcurrentTheme(for window: WindowUUID?) -> Theme {
+    public func getCurrentTheme(for window: WindowUUID?) -> Theme {
         guard let window else {
             assertionFailure("Attempt to get the theme for a nil window UUID.")
             return DarkTheme()
@@ -189,7 +189,7 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     private func applyThemeChanges(for window: WindowUUID, using newTheme: ThemeType) {
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-        let style = self.getcurrentTheme(for: window).type.getInterfaceStyle()
+        let style = self.getCurrentTheme(for: window).type.getInterfaceStyle()
         self.windows[window]?.overrideUserInterfaceStyle = style
         notifyCurrentThemeDidChange(for: window)
     }

@@ -177,7 +177,7 @@ class LegacyGridTabViewController: UIViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     private func setupView() {

@@ -486,7 +486,7 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 }
 

@@ -186,7 +186,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 }
 

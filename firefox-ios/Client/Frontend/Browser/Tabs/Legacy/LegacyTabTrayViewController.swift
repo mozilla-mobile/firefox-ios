@@ -106,7 +106,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     private func syncLoadingView() -> UIStackView {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        let theme = themeManager.getcurrentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         syncingLabel.textColor = theme.colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
@@ -505,8 +505,8 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     // MARK: - Themable
 
     func applyTheme() {
-        view.backgroundColor = themeManager.getcurrentTheme(for: windowUUID).colors.layer4
-        navigationToolbar.barTintColor = themeManager.getcurrentTheme(for: windowUUID).colors.layer1
+        view.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer4
+        navigationToolbar.barTintColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
     }
 }
 

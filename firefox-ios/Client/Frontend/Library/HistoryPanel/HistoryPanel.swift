@@ -210,7 +210,7 @@ class HistoryPanel: UIViewController,
     // MARK: - Private helpers
 
     private func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     private func setupLayout() {

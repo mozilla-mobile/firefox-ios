@@ -122,7 +122,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     }
 
     func currentTheme() -> Theme {
-        return themeManager.getcurrentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func updateLayout() {
@@ -147,7 +147,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         )
 
         primaryButton.configure(viewModel: buttonViewModel)
-        primaryButton.applyTheme(theme: themeManager.getcurrentTheme(for: windowUUID))
+        primaryButton.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     func setupSecondaryButton() {

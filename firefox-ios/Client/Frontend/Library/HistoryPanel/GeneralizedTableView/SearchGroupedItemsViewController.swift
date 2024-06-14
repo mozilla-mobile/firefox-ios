@@ -150,7 +150,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderWidth = 0.5
                 cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
-                cell.applyTheme(theme: self.themeManager.getcurrentTheme(for: windowUUID))
+                cell.applyTheme(theme: self.themeManager.getCurrentTheme(for: windowUUID))
 
                 return cell
             }
@@ -210,7 +210,7 @@ class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, T
     // MARK: - Themeable
 
     func applyTheme() {
-        let theme = themeManager.getcurrentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         tableView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1
         tableView.separatorColor = theme.colors.borderPrimary
