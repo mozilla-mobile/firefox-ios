@@ -269,7 +269,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(mockDelegate.didReloadTableViewCount, 1)
     }
 
-    func testFirefoxSuggestionReturnsSponsored() async throws {
+    func testFirefoxSuggestionReturnsSponsored() async {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
@@ -284,7 +284,7 @@ final class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(subject.firefoxSuggestions.count, 1)
     }
 
-    func testFirefoxSuggestionReturnsNonSponsored() async throws {
+    func testFirefoxSuggestionReturnsNonSponsored() async {
         FxNimbus.shared.features.firefoxSuggestFeature.with(initializer: { _, _ in
             FirefoxSuggestFeature(availableSuggestionsTypes:
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
