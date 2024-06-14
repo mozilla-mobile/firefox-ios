@@ -741,7 +741,7 @@ private extension HomepageViewController {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
-                                         value: .recentlySavedSectionShowAll,
+                                         value: .bookmarkSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
