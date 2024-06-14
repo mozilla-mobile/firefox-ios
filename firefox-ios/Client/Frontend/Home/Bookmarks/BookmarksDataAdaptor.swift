@@ -19,7 +19,7 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
     private let bookmarkItemsLimit: UInt = 8
     private let recentItemsHelper = RecentItemsHelper()
     private var bookmarksHandler: BookmarksHandler
-    private var recentBookmarks = [RecentlySavedBookmark]()
+    private var homepageBookmarks = [RecentlySavedBookmark]()
 
     weak var delegate: RecentlySavedDelegate?
 
@@ -29,42 +29,41 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
         self.bookmarksHandler = bookmarksHandler
 
         setupNotifications(forObserver: self,
-                           observing: [.ReadingListUpdated,
-                                       .BookmarksUpdated,
+                           observing: [.BookmarksUpdated,
                                        .RustPlacesOpened])
 
-        getRecentBookmarks()
+        getBookmarks()
     }
 
     func getRecentlySavedData() -> [RecentlySavedItem] {
         var items = [RecentlySavedItem]()
-        items.append(contentsOf: recentBookmarks)
+        items.append(contentsOf: homepageBookmarks)
 
         return items
     }
 
     // MARK: - Bookmarks
 
-    private func getRecentBookmarks() {
+    private func getBookmarks() {
         bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { bookmarks in
             let bookmarks = bookmarks.map { RecentlySavedBookmark(bookmark: $0) }
-            self.updateRecentBookmarks(bookmarks: bookmarks)
+            self.updateBookmarks(updatedBookmarks: bookmarks)
         }
     }
 
-    private func updateRecentBookmarks(bookmarks: [RecentlySavedBookmark]) {
-        recentBookmarks = bookmarks
+    private func updateBookmarks(updatedBookmarks: [RecentlySavedBookmark]) {
+        homepageBookmarks = updatedBookmarks
         delegate?.didLoadNewData()
 
         // Send telemetry if bookmarks aren't empty
-        if !recentBookmarks.isEmpty {
+        if !homepageBookmarks.isEmpty {
             TelemetryWrapper.recordEvent(
                 category: .action,
                 method: .view,
                 object: .firefoxHomepage,
                 value: .recentlySavedBookmarkItemView,
                 extras: [
-                    TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(bookmarks.count)"
+                    TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\(updatedBookmarks.count)"
                 ]
             )
         }
@@ -75,7 +74,7 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .BookmarksUpdated, .RustPlacesOpened:
-            getRecentBookmarks()
+            getBookmarks()
         default: break
         }
     }
