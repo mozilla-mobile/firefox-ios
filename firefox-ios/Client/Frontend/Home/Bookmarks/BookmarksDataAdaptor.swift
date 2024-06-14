@@ -6,21 +6,21 @@ import Foundation
 import Storage
 import Common
 
-protocol RecentlySavedDataAdaptor {
+protocol BookmarksDataAdaptor {
     func getBookmarkData() -> [BookmarkItem]
 }
 
-protocol RecentlySavedDelegate: AnyObject {
+protocol BookmarksDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
+class BookmarksDataAdaptorImplementation: BookmarksDataAdaptor, Notifiable {
     var notificationCenter: NotificationProtocol
     private let bookmarkItemsLimit: UInt = 8
     private var bookmarksHandler: BookmarksHandler
-    private var homepageBookmarks = [recentBookmark]()
+    private var homepageBookmarks = [Bookmark]()
 
-    weak var delegate: RecentlySavedDelegate?
+    weak var delegate: BookmarksDelegate?
 
     init(bookmarksHandler: BookmarksHandler,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -45,12 +45,12 @@ class BookmarksDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiable {
 
     private func getBookmarks() {
         bookmarksHandler.getRecentBookmarks(limit: bookmarkItemsLimit) { bookmarks in
-            let bookmarks = bookmarks.map { recentBookmark(bookmark: $0) }
+            let bookmarks = bookmarks.map { Bookmark(bookmark: $0) }
             self.updateBookmarks(updatedBookmarks: bookmarks)
         }
     }
 
-    private func updateBookmarks(updatedBookmarks: [recentBookmark]) {
+    private func updateBookmarks(updatedBookmarks: [Bookmark]) {
         homepageBookmarks = updatedBookmarks
         delegate?.didLoadNewData()
 

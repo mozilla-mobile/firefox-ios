@@ -15,14 +15,12 @@ protocol BookmarkItem {
 
 // This is an intermediary object to allow us to more easily use this data in a thread safe way.
 // Thread safety is difficult to ensure when passing classes around by reference.
-struct recentBookmark: BookmarkItem {
+struct Bookmark: BookmarkItem {
     var title: String
     var url: String
-    var dateAdded: Timestamp
 
     init(bookmark: BookmarkItemData) {
         self.title = bookmark.title
         self.url = bookmark.url
-        self.dateAdded = Timestamp(bookmark.dateAdded)
     }
 }
