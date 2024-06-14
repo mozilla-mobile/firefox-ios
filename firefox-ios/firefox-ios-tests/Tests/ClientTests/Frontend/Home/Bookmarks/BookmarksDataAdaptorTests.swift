@@ -78,7 +78,7 @@ class BookmarksDataAdaptorTests: XCTestCase {
     // MARK: - Helper functions
 
     private func initializeSubject() {
-        let subject = BookmarksDataAdaptorImplementation(bookmarksHandler: mockBookmarksHandler, 
+        let subject = BookmarksDataAdaptorImplementation(bookmarksHandler: mockBookmarksHandler,
                                                          notificationCenter: mockNotificationCenter)
         subject.delegate = mockDelegate
         mockNotificationCenter.notifiableListener = subject

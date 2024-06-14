@@ -145,8 +145,8 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             wallpaperManager: wallpaperManager)
 
         self.bookmarksViewModel = BookmarksViewModel(profile: profile,
-                                                             theme: theme,
-                                                             wallpaperManager: wallpaperManager)
+                                                     theme: theme,
+                                                     wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
