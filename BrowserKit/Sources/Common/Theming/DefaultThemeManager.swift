@@ -142,13 +142,13 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Automatic brightness theme functions
     public func setAutomaticBrightness(isOn: Bool) {
         guard automaticBrightnessIsOn != isOn else { return }
-
         userDefaults.set(isOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
         applyThemeUpdatesToWindows()
     }
 
     public func setAutomaticBrightnessValue(_ value: Float) {
         userDefaults.set(value, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
+        applyThemeUpdatesToWindows()
     }
 
     private func getThemeTypeBasedOnBrightness() -> ThemeType {
@@ -187,8 +187,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     private func applyThemeChanges(for window: WindowUUID, using newTheme: ThemeType) {
-        guard getcurrentTheme(for: window).type != newTheme else { return }
-
         // Overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
         let style = self.getcurrentTheme(for: window).type.getInterfaceStyle()
