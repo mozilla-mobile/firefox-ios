@@ -29,8 +29,8 @@ class BookmarksViewModel {
     var isZeroSearch: Bool
     var theme: Theme
     private let profile: Profile
-    private var recentlySavedDataAdaptor: BookmarksDataAdaptor
-    private var recentItems = [BookmarkItem]()
+    private var bookmarkDataAdaptor: BookmarksDataAdaptor
+    private var bookmarkItems = [BookmarkItem]()
     private var wallpaperManager: WallpaperManager
     var headerButtonAction: ((UIButton) -> Void)?
     var onLongPressTileAction: ((Site, UIView?) -> Void)?
@@ -45,7 +45,7 @@ class BookmarksViewModel {
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         let adaptor = BookmarksDataAdaptorImplementation(bookmarksHandler: profile.places)
-        self.recentlySavedDataAdaptor = adaptor
+        self.bookmarkDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
 
         adaptor.delegate = self
@@ -67,7 +67,7 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             isButtonHidden: false,
             buttonTitle: .BookmarksSavedShowAllText,
             buttonAction: headerButtonAction,
-            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks,
             textColor: textColor)
     }
 
@@ -107,7 +107,7 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func numberOfItemsInSection() -> Int {
-        return recentItems.count
+        return bookmarkItems.count
     }
 
     var isEnabled: Bool {
@@ -115,7 +115,7 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var hasData: Bool {
-        return !recentItems.isEmpty
+        return !bookmarkItems.isEmpty
     }
 
     func setTheme(theme: Theme) {
@@ -129,7 +129,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         guard let recentlySavedCell = cell as? BookmarksCell else { return UICollectionViewCell() }
 
-        if let item = recentItems[safe: indexPath.row] {
+        if let item = bookmarkItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
             let viewModel = BookmarksCellViewModel(site: site)
             recentlySavedCell.configure(viewModel: viewModel, theme: theme)
@@ -141,7 +141,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-        if let item = recentItems[safe: indexPath.row] as? Bookmark {
+        if let item = bookmarkItems[safe: indexPath.row] as? Bookmark {
             guard let url = URIFixup.getURL(item.url) else { return }
 
             homePanelDelegate?.homePanel(didSelectURL: url, visitType: .bookmark, isGoogleTopSite: false)
@@ -150,24 +150,14 @@ extension BookmarksViewModel: HomepageSectionHandler {
                                          object: .firefoxHomepage,
                                          value: .recentlySavedBookmarkItemAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
-        } else if let item = recentItems[safe: indexPath.row] as? ReadingListItem,
-                  let url = URL(string: item.url, invalidCharacters: false),
-                  let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
-            let visitType = VisitType.bookmark
-            libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .firefoxHomepage,
-                                         value: .recentlySavedReadingListAction,
-                                         extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
         }
     }
 
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
         guard let onLongPressTileAction = onLongPressTileAction else { return }
 
-        let site = Site(url: recentItems[indexPath.row].url,
-                        title: recentItems[indexPath.row].title)
+        let site = Site(url: bookmarkItems[indexPath.row].url,
+                        title: bookmarkItems[indexPath.row].title)
         let sourceView = collectionView.cellForItem(at: indexPath)
         onLongPressTileAction(site, sourceView)
     }
@@ -176,7 +166,7 @@ extension BookmarksViewModel: HomepageSectionHandler {
 extension BookmarksViewModel: BookmarksDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.recentItems = self.recentlySavedDataAdaptor.getBookmarkData()
+            self.bookmarkItems = self.bookmarkDataAdaptor.getBookmarkData()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

@@ -737,7 +737,7 @@ private extension HomepageViewController {
     func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
-        if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.bookmarks {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,

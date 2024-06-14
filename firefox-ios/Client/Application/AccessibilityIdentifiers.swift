@@ -92,7 +92,7 @@ public struct AccessibilityIdentifiers {
         }
 
         struct MoreButtons {
-            static let recentlySaved = "recentlySavedSectionMoreButton"
+            static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let historyHighlights = "historyHighlightsSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
