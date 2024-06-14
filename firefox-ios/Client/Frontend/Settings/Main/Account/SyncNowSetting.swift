@@ -127,7 +127,7 @@ class SyncNowSetting: WithAccountSetting {
         let attributedString = NSMutableAttributedString(string: formattedLabel)
         let attributes = [
             NSAttributedString.Key.foregroundColor: theme.colors.textSecondary,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+            NSAttributedString.Key.font: FXFontStyles.Regular.caption1.scaledFont()
         ]
         let range = NSRange(location: 0, length: attributedString.length)
         attributedString.setAttributes(attributes, range: range)
