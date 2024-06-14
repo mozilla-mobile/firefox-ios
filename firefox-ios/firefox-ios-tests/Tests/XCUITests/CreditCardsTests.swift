@@ -476,6 +476,23 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306970
+    func testRedirectionToCreditCardsSection() {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(CreditCardsSettings)
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+        restartInBackground()
+        unlockLoginsView()
+        let addCardButton = app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard]
+        XCTAssertTrue(addCardButton.exists)
+        addCardButton.tap()
+        addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
+        restartInBackground()
+        unlockLoginsView()
+        mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
+    }
+
     private func selectCreditCardOnFormWebsite() {
         mozWaitForElementToExist(app.scrollViews.otherElements.tables.staticTexts["Test"])
         var attempts = 4
