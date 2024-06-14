@@ -12,7 +12,7 @@ final class FirefoxAccountSignInViewControllerTests: XCTestCase {
     private var mockProfile: MockProfile!
     var deeplinkParams: FxALaunchParams!
 
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
