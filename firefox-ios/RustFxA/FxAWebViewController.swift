@@ -90,6 +90,10 @@ class FxAWebViewController: UIViewController {
             self?.endPairingConnectionBackgroundTask()
             self?.dismiss(animated: true)
         }
+
+        viewModel.onPopController = { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
     }
 
     /**
