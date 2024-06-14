@@ -149,7 +149,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         let bookmarksSetting = BoolSetting(
             prefs: profile.prefs,
             theme: themeManager.currentTheme(for: windowUUID),
-            prefKey: PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection,
+            prefKey: PrefsKeys.UserFeatureFlagPrefs.BookmarksSection,
             defaultValue: true,
             titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
         )
