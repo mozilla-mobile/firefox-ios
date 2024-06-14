@@ -41,9 +41,6 @@ class TabManagerMiddleware {
         case TabPeekActionType.addToBookmarks:
             addToBookmarks(with: tabUUID, uuid: action.windowUUID)
 
-        case TabPeekActionType.sendToDevice:
-            sendToDevice(tabID: tabUUID, uuid: action.windowUUID)
-
         case TabPeekActionType.copyURL:
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
@@ -576,19 +573,6 @@ class TabManagerMiddleware {
                                      method: .add,
                                      object: .bookmark,
                                      value: .tabTray)
-    }
-
-    private func sendToDevice(tabID: TabUUID, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabToShare = tabManager.getTabForUUID(uuid: tabID),
-              let url = tabToShare.url
-        else { return }
-
-        let action = TabPanelViewAction(panelType: .tabs,
-                                        shareSheetURL: url,
-                                        windowUUID: uuid,
-                                        actionType: TabPanelViewActionType.showShareSheet)
-        store.dispatch(action)
     }
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {

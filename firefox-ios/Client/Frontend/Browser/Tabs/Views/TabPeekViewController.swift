@@ -107,19 +107,6 @@ class TabPeekViewController: UIViewController,
                 return
             })
         }
-        if tabPeekState.showSendToDevice {
-            actions.append(UIAction(
-                title: .AppMenu.TouchActions.SendToDeviceTitle,
-                image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
-                identifier: nil) { [weak self] _ in
-                    guard let self else { return }
-                    let action = TabPeekAction(tabUUID: self.tab.tabUUID,
-                                               windowUUID: self.windowUUID,
-                                               actionType: TabPeekActionType.sendToDevice)
-                    store.dispatch(action)
-                    return
-            })
-        }
         if tabPeekState.showCopyURL {
             actions.append(UIAction(title: .TabPeekCopyUrl,
                                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.link),
