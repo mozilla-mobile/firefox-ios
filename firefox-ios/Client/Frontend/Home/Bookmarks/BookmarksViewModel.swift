@@ -127,15 +127,15 @@ extension BookmarksViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 extension BookmarksViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let recentlySavedCell = cell as? BookmarksCell else { return UICollectionViewCell() }
+        guard let bookmarksCell = cell as? BookmarksCell else { return UICollectionViewCell() }
 
         if let item = bookmarkItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
             let viewModel = BookmarksCellViewModel(site: site)
-            recentlySavedCell.configure(viewModel: viewModel, theme: theme)
+            bookmarksCell.configure(viewModel: viewModel, theme: theme)
         }
 
-        return recentlySavedCell
+        return bookmarksCell
     }
 
     func didSelectItem(at indexPath: IndexPath,
