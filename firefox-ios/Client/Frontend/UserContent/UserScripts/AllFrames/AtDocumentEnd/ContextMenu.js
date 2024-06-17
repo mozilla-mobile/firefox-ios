@@ -20,13 +20,9 @@ window.__firefox__.includeOnce("ContextMenu", function() {
 
     var data = {};
 
-    if (evt.changedTouches) {
-      data.touchX = evt.changedTouches[0].pageX - window.scrollX;
-      data.touchY = evt.changedTouches[0].pageY - window.scrollY;
-    } else {
-      data.touchX = evt.pageX - window.scrollX;
-      data.touchY = evt.pageY - window.scrollY;
-    }
+    const triggeringEvent = evt.changedTouches?.[0] ?? evt;
+    data.touchX = triggeringEvent.pageX - window.scrollX;
+    data.touchY = triggeringEvent.pageY - window.scrollY;
 
     if (targetLink) {
       data.link = targetLink.href;
