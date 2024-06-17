@@ -29,13 +29,14 @@ class AddressToolbarContainerModel {
             searchEngineImage: profile.searchEngines.defaultEngine?.image,
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
             url: url,
-            searchTerm: searchTermFromURL(url, searchEngines: profile.searchEngines)) {
+            searchTerm: searchTermFromURL(url, searchEngines: profile.searchEngines),
+            onTapLockIcon: {
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      gestureType: .tap,
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
                 store.dispatch(action)
-        }
+            })
         return AddressToolbarState(
             locationViewState: locationViewState,
             navigationActions: navigationActions,
