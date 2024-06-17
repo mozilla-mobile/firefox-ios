@@ -102,8 +102,11 @@ class SettingTest: BaseTestCase {
         let reviewCell = app.cells["settingsViewController.rateFocus"]
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
 
-        app.tables.firstMatch.swipeUp()
-        waitForHittable(reviewCell)
+        var swipes = 3
+        while !reviewCell.isHittable && swipes > 0 {
+            app.swipeUp()
+            swipes = swipes - 1
+        }
         reviewCell.tap()
         waitForExistence(safariApp, timeout: 10)
         XCTAssert(safariApp.state == .runningForeground)
