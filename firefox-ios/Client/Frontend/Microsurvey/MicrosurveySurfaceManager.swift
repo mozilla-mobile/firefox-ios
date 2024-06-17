@@ -59,7 +59,6 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
     }
 
     func handleMessagePressed() {
-        // TODO: FXIOS-8797: Add telemetry to capture user responses
         guard let message else { return }
         messagingManager.onMessagePressed(message, window: nil)
     }
