@@ -1288,7 +1288,7 @@ class BrowserViewController: UIViewController,
         let toolbarState = store.state.screenState(ToolbarState.self,
                                                    for: .toolbar,
                                                    window: windowUUID)
-        let isBottomToolbar = (toolbarState?.toolbarPosition == .bottom) ?? false
+        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
         let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
 
         if isBottomSearch {
@@ -1317,7 +1317,7 @@ class BrowserViewController: UIViewController,
         let toolbarState = store.state.screenState(ToolbarState.self,
                                                    for: .toolbar,
                                                    window: windowUUID)
-        let isBottomToolbar = (toolbarState?.toolbarPosition == .bottom) ?? false
+        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
         let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
 
         if isBottomSearch {
