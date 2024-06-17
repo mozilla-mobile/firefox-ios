@@ -24,7 +24,7 @@ final class ContentBlockerTests: XCTestCase {
         let startDate = Date()
         ContentBlocker.shared.compileListsNotInStore {
             let finishDate = Date()
-            print(finishDate.timeIntervalSince(startDate))
+            NSLog("MT Test Time - \(finishDate.timeIntervalSince(startDate))")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1.0)
