@@ -47,9 +47,7 @@ final class MicrosurveyCoordinator: BaseCoordinator, FeatureFlaggable, Microsurv
             source: UTMParams.source,
             campaign: UTMParams.campaign,
             content: content
-        ) else {
-            return
-        }
+        ) else { return }
         tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
         router.dismiss(animated: true, completion: nil)
         parentCoordinator?.didFinish(from: self)
