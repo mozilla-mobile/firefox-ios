@@ -88,7 +88,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         }
 
         // For everything else use the domain as the key to avoid caching
-        // and fetching unneccessary duplicates
+        // and fetching unnecessary duplicates
         return siteURL.shortDomain ?? siteURL.shortDisplayString
     }
 

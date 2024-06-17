@@ -171,7 +171,7 @@ class LegacyTabMetadataManager {
     }
 
     /// Update observation for Regular sites (not search term)
-    /// if the title isEmpty we don't record because title can be overriden
+    /// if the title isEmpty we don't record because title can be overridden
     /// - Parameters:
     ///   - searchData: Tab Group Data
     ///   - title: Site title from webview can be empty for slow loading pages

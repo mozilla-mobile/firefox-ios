@@ -328,13 +328,13 @@ class FakespotTests: BaseTestCase {
         let optInText4 = "Using the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews."
         let optInText5 = "Our AI model is always improving to protect you as you shop."
         let secondParagraph = optInText4 + " " + optInText5
-        let discalimerText = "By selecting “Yes, Try It” you agree to these items:"
+        let disclaimerText = "By selecting “Yes, Try It” you agree to these items:"
         // Validate screen layout
         mozWaitForElementToExist(app.staticTexts[optInCard.headerTitle])
         XCTAssertEqual(optInQueryStaticText[optInCard.headerTitle].label, "Try our trusted guide to product reviews")
         XCTAssertTrue(optInQueryStaticText.elementContainingText(firstParagraph).exists)
         XCTAssertTrue(optInQueryStaticText.elementContainingText(secondParagraph).exists)
-        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, discalimerText)
+        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, disclaimerText)
         XCTAssertEqual(optInQueryButton[optInCard.learnMoreButton].label, "Learn more")
         XCTAssertEqual(optInQueryButton[optInCard.mainButton].label, "Yes, Try It")
         XCTAssertEqual(optInQueryButton[optInCard.secondaryButton].label, "Not now")

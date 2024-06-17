@@ -128,7 +128,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323802
-    func testBarDissapearsWhenReloading() {
+    func testBarDisappearsWhenReloading() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -142,7 +142,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323803
-    func testBarDissapearsWhenOpeningTabsTray() {
+    func testBarDisappearsWhenOpeningTabsTray() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 

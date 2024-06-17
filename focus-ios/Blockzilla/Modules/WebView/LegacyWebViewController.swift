@@ -151,6 +151,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
+        configuration.ignoresViewportScaleLimits = true
 
         // For consistency we set our user agent similar to Firefox iOS.
         //

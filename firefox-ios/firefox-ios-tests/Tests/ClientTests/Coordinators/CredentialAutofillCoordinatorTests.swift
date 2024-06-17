@@ -144,7 +144,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
                 creditCardViewController.didTapYesClosure?(nil)
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
             } else {
-                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewControler as child")
+                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewController as child")
             }
         } else {
             XCTFail("A BottomSheetViewController has to be presented")
@@ -170,7 +170,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
                 creditCardViewController.didSelectCreditCardToFill?(UnencryptedCreditCardFields())
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
             } else {
-                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewControler as child")
+                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewController as child")
             }
         } else {
             XCTFail("A BottomSheetViewController has to be presented")
@@ -196,7 +196,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
                 creditCardViewController.didTapManageCardsClosure?()
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
             } else {
-                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewControler as child")
+                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewController as child")
             }
         } else {
             XCTFail("A BottomSheetViewController has to be presented")

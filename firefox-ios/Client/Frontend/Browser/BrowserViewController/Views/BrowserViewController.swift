@@ -146,7 +146,7 @@ class BrowserViewController: UIViewController,
     // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
     var contentStackView: SidebarEnabledView = .build()
 
-    // The content container contains the homepage or webview. Embeded by the coordinator.
+    // The content container contains the homepage or webview. Embedded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
@@ -1305,7 +1305,6 @@ class BrowserViewController: UIViewController,
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
         self.microsurvey = MicrosurveyPromptView(state: state, windowUUID: windowUUID)
-
         updateMicrosurveyConstraints()
     }
 
@@ -1379,17 +1378,19 @@ class BrowserViewController: UIViewController,
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
-                                              isBottomSearchBar: isBottomSearchBar)
+                                              isBottomSearchBar: isBottomSearchBar,
+                                              profile: profile,
+                                              model: profile.searchEngines,
+                                              tabManager: tabManager)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
-                                                    model: profile.searchEngines,
                                                     tabManager: tabManager)
-        searchController.searchEngines = profile.searchEngines
+        searchViewModel.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
         if !isToolbarRefactorEnabled {
             let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-            searchLoader.addListener(searchController)
+            searchLoader.addListener(searchViewModel)
             self.searchLoader = searchLoader
         }
 
@@ -1789,14 +1790,19 @@ class BrowserViewController: UIViewController,
     private func executeToolbarActions() {
         guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
 
-        if state.navigateTo != nil {
+        switch state {
+        case _ where state.navigateTo != nil:
             handleNavigationActions(for: state)
-        } else if state.showQRcodeReader {
+        case _ where state.showQRcodeReader:
             navigationHandler?.showQRCode(delegate: self)
-        } else if state.showBackForwardList {
+        case _ where state.showBackForwardList:
             navigationHandler?.showBackForwardList()
-        } else if state.showTabsLongPressActions {
+        case _ where state.showTabsLongPressActions:
             presentActionSheet(from: view)
+        case _ where state.showTrackingProtectionDetails:
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
+            navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+        default: break
         }
     }
 

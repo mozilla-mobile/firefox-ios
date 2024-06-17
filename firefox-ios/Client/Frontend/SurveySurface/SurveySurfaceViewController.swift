@@ -88,7 +88,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         button.addTarget(self, action: #selector(self.dismissAction), for: .touchUpInside)
     }
 
-    // MARK: - View Lifecyle
+    // MARK: - View Lifecycle
     init(windowUUID: WindowUUID,
          viewModel: SurveySurfaceViewModel,
          themeManager: ThemeManager,

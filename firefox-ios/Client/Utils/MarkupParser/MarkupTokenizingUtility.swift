@@ -4,7 +4,7 @@
 
 import Foundation
 
-// Allows the definiton of a custom set of delimiters for parsing text
+// Allows the definition of a custom set of delimiters for parsing text
 private extension CharacterSet {
     static let delimiters = CharacterSet(charactersIn: "*_")
     static let whitespaceAndPunctuation = CharacterSet.whitespacesAndNewlines
@@ -28,7 +28,7 @@ struct MarkupTokenizingUtility {
 
     /// An array of existing left delimiters.
     ///
-    /// Instead of scanning forwards, we can improve perfomance by keeping track
+    /// Instead of scanning forwards, we can improve performance by keeping track
     /// of existing left delimiters and then lookback when we meet right
     /// delimiters to determine if there's a match.
     private var existingLeftDelimiters: [UnicodeScalar] = []

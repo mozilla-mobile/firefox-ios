@@ -107,7 +107,7 @@ class SyncUITests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2449604
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing
-        // and dissapears when no password is typed
+        // and disappears when no password is typed
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)

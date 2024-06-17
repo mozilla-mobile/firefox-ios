@@ -1393,6 +1393,9 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "ෆයර්ෆොක්ස් විවෘත කරන විට";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "ෆයර්ෆොක්ස් විවෘත කරන විට";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "පිටපත් කළ සබැඳි ඇරීමට දක්වන්න";
 
@@ -1434,6 +1437,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "සබැඳි මත දිගු වෙලාවක් එබූ විට";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "සබැඳි මත දිගු වෙලාවක් එබූ විට";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "සබැඳි පෙරදසුන් පෙන්වන්න";

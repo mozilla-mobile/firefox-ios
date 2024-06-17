@@ -6,6 +6,7 @@ import Foundation
 import Common
 import ComponentLibrary
 import Redux
+import Shared
 
 final class MicrosurveyViewController: UIViewController,
                                  UITableViewDataSource,
@@ -31,8 +32,7 @@ final class MicrosurveyViewController: UIViewController,
     private struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let scrollStackSpacing: CGFloat = 22
-        static let logoSize = CGSize(width: 24, height: 24)
-        static let logoLargeSize = CGSize(width: 48, height: 48)
+        static let logoSize: CGFloat = 24
         static let borderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 8
         static let estimatedRowHeight: CGFloat = 44
@@ -45,6 +45,10 @@ final class MicrosurveyViewController: UIViewController,
         static let contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
 
+    private var logoSizeScaled: CGFloat {
+        return UIFontMetrics.default.scaledValue(for: UX.logoSize)
+    }
+
     private lazy var headerView: UIStackView = .build { stack in
         stack.distribution = .fillProportionally
         stack.axis = .horizontal
@@ -55,7 +59,11 @@ final class MicrosurveyViewController: UIViewController,
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
-        // TODO: FXIOS-9028: Add A11y strings
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityLabel = String(
+            format: .Microsurvey.Prompt.LogoImageA11yLabel,
+            AppName.shortName.rawValue
+        )
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo
     }
 
@@ -102,6 +110,7 @@ final class MicrosurveyViewController: UIViewController,
         button.addTarget(self, action: #selector(self.didTapPrivacyPolicy), for: .touchUpInside)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
         button.accessibilityTraits.insert(.link)
+        button.accessibilityTraits.remove(.button)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
@@ -169,6 +178,11 @@ final class MicrosurveyViewController: UIViewController,
         applyTheme()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
+    }
+
     deinit {
         unsubscribeFromRedux()
         tableView.removeFromSuperview()
@@ -206,8 +220,8 @@ final class MicrosurveyViewController: UIViewController,
 
         view.addSubviews(headerView, scrollView)
 
-        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: UX.logoSize.width)
-        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: UX.logoSize.height)
+        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSizeScaled)
+        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSizeScaled)
         logoWidthConstraint?.isActive = true
         logoHeightConstraint?.isActive = true
 
@@ -255,10 +269,8 @@ final class MicrosurveyViewController: UIViewController,
     }
 
     private func adjustIconSize() {
-        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        let logoSize = contentSizeCategory.isAccessibilityCategory ? UX.logoLargeSize : UX.logoSize
-        logoWidthConstraint?.constant = logoSize.width
-        logoHeightConstraint?.constant = logoSize.height
+        logoWidthConstraint?.constant = logoSizeScaled
+        logoHeightConstraint?.constant = logoSizeScaled
     }
 
     // MARK: ThemeApplicable
@@ -344,6 +356,7 @@ final class MicrosurveyViewController: UIViewController,
             return UITableViewCell()
         }
         cell.configure(model.surveyOptions[indexPath.row])
+        cell.setA11yValue(for: indexPath.row, outOf: tableView.numberOfRows(inSection: .zero))
         cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         return cell
     }

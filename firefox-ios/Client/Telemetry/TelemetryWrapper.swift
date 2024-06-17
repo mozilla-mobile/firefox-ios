@@ -246,8 +246,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isRecentlyVisitedEnabled = featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser)
         GleanMetrics.Preferences.recentlyVisited.set(isRecentlyVisitedEnabled)
 
-        let isRecentlySavedEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection) ?? true
-        GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
+        let isBookmarksEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
+        GleanMetrics.Preferences.recentlySaved.set(isBookmarksEnabled)
 
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
         let isPocketEnabled = isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
@@ -512,8 +512,7 @@ extension TelemetryWrapper {
         case jumpBackInTileImpressions = "jump-back-in-tile-impressions"
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
-        case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
-        case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
+        case bookmarkImpressions = "bookmark-impressions"
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
@@ -541,6 +540,9 @@ extension TelemetryWrapper {
         case activityStream = "activity-stream"
         case appIcon = "app-icon"
         case appMenu = "app-menu"
+        case bookmarkItemAction = "bookmark-item-action"
+        case bookmarkSectionShowAll = "bookmark-section-show-all"
+        case bookmarkItemView = "bookmark-item-view"
         case browser = "browser"
         case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
@@ -583,11 +585,6 @@ extension TelemetryWrapper {
         case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
         case jumpBackInSectionSyncedTabShowAll = "jump-back-in-section-synced-tab-show-all"
         case jumpBackInSectionSyncedTabOpened = "jump-back-in-section-synced-tab-opened"
-        case recentlySavedSectionShowAll = "recently-saved-section-show-all"
-        case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
-        case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
-        case recentlySavedReadingListView = "recently-saved-reading-list-view"
-        case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case historyHighlightsShowAll = "history-highlights-show-all"
         case historyHighlightsItemOpened = "history-highlights-item-opened"
         case historyHighlightsGroupOpen = "history-highlights-group-open"
@@ -1793,30 +1790,20 @@ extension TelemetryWrapper {
         case (.action, .open, .firefoxHomepage, .openHomeFromPhotonMenuButton, _):
             GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
 
-        case (.action, .view, .firefoxHomepage, .recentlySavedBookmarkItemView, let extras):
-            if let bookmarksCount = extras?[EventObject.recentlySavedBookmarkImpressions.rawValue] as? String {
+        case (.action, .view, .firefoxHomepage, .bookmarkItemView, let extras):
+            if let bookmarksCount = extras?[EventObject.bookmarkImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(GleanMetrics.FirefoxHomePage.RecentlySavedBookmarkViewExtra(bookmarkCount: bookmarksCount))
             }
-        case (.action, .view, .firefoxHomepage, .recentlySavedReadingListView, let extras):
-            if let readingListItemsCount = extras?[EventObject.recentlySavedReadingItemImpressions.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.readingListView.record(GleanMetrics.FirefoxHomePage.ReadingListViewExtra(readingListCount: readingListItemsCount))
-            }
-        case (.action, .tap, .firefoxHomepage, .recentlySavedSectionShowAll, let extras):
+        case (.action, .tap, .firefoxHomepage, .bookmarkSectionShowAll, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedShowAll.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedShowAllOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, .recentlySavedBookmarkItemAction, let extras):
+        case (.action, .tap, .firefoxHomepage, .bookmarkItemAction, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, .recentlySavedReadingListAction, let extras):
-            GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
-            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.recentlySavedReadOrigin[homePageOrigin].add()
-            }
-
         case (.action, .tap, .firefoxHomepage, .jumpBackInSectionShowAll, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {

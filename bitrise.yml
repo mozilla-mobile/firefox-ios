@@ -314,7 +314,7 @@ workflows:
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     BrowserKit*|taskcluster*|test-fixtures*)
-                        # Explicity directory changes - build all applications
+                        # Explicitly directory changes - build all applications
                         BUILD_FIREFOX_IOS="true"
                         BUILD_FOCUS_IOS="true"
                         ;;
@@ -1771,7 +1771,7 @@ workflows:
         title: ContentBlockerGen
 
   focus-pull-and-unzip-dependencies:
-    description: Pulls and unzip the dependencis from previous stage 
+    description: Pulls and unzip the dependencies from previous stage 
     steps:
     - pull-intermediate-files@1:
         inputs:
@@ -2124,17 +2124,17 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '128.0'
+    BITRISE_RELEASE_VERSION: '129.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '128.0'
+    BITRISE_BETA_VERSION: '129.0'
 
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
-- push_branch: release/v128
+- push_branch: release/v129
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
   pipeline: pipeline_build_and_test

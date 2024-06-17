@@ -165,7 +165,7 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     // Conditions for cards are based on the feature's condition table. A card's
     // conditions (it's prerequisites & disqualifiers) get, respectively, reduced
     // down to a single boolean value. These tests will test the conditions
-    // independently and then in a truth table fashion, reflecting real world evaulation
+    // independently and then in a truth table fashion, reflecting real world evaluation
     //    - (T, T) (T, F), (F, T), and (F, F)
     // Testing for defaults was implicit in the previous tests, as defaults are:
     //    - prerequisities: true

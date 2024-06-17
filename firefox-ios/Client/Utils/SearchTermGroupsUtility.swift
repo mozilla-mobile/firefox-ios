@@ -217,7 +217,7 @@ class SearchTermGroupsUtility {
 
     /// Takes a dictionary and creates ASGroups from it.
     ///
-    /// If dictionary contains `Tab`s, then the group will be assigned a timestap based
+    /// If dictionary contains `Tab`s, then the group will be assigned a timestamp based
     /// on the `firstCreatedTime` of the first item in the group.
     ///
     /// - Parameter groupDictionary: Dictionary that is to be processed
@@ -285,7 +285,7 @@ class SearchTermGroupsUtility {
 class StopWatchTimer {
     private var timer: Timer?
     var isPaused = true
-    // Recored in seconds
+    // Recorded in seconds
     var elapsedTime: Int32 = 0
 
     func startOrResume() {

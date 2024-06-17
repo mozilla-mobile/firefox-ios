@@ -68,7 +68,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         didSet {
             topSiteViewModel.isZeroSearch = isZeroSearch
             jumpBackInViewModel.isZeroSearch = isZeroSearch
-            recentlySavedViewModel.isZeroSearch = isZeroSearch
+            bookmarksViewModel.isZeroSearch = isZeroSearch
             pocketViewModel.isZeroSearch = isZeroSearch
         }
     }
@@ -100,7 +100,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     var headerViewModel: HomepageHeaderViewModel
     var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
-    var recentlySavedViewModel: RecentlySavedViewModel
+    var bookmarksViewModel: BookmarksViewModel
     var jumpBackInViewModel: JumpBackInViewModel
     var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
@@ -144,9 +144,9 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             adaptor: jumpBackInAdaptor,
             wallpaperManager: wallpaperManager)
 
-        self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile,
-                                                             theme: theme,
-                                                             wallpaperManager: wallpaperManager)
+        self.bookmarksViewModel = BookmarksViewModel(profile: profile,
+                                                     theme: theme,
+                                                     wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
@@ -171,7 +171,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
                                 messageCardViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
-                                recentlySavedViewModel,
+                                bookmarksViewModel,
                                 historyHighlightsViewModel,
                                 pocketViewModel,
                                 customizeButtonViewModel]
@@ -180,7 +180,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
-        recentlySavedViewModel.delegate = self
+        bookmarksViewModel.delegate = self
         pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self
         messageCardViewModel.delegate = self

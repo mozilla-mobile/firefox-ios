@@ -299,7 +299,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
             title: HomepageSectionType.jumpBackIn.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.jumpBackIn,
             isButtonHidden: false,
-            buttonTitle: .RecentlySavedShowAllText,
+            buttonTitle: .BookmarksSavedShowAllText,
             buttonAction: headerButtonAction,
             buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn,
             textColor: textColor)

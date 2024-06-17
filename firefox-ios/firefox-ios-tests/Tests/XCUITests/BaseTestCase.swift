@@ -45,7 +45,7 @@ class BaseTestCase: XCTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
-        _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT_LONG)
+        _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
@@ -236,10 +236,10 @@ class BaseTestCase: XCTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    func checkRecentlySaved() {
+    func checkBookmarks() {
         waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .otherElements
             .otherElements
             .otherElements
@@ -249,10 +249,10 @@ class BaseTestCase: XCTestCase {
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
-    func checkRecentlySavedUpdated() {
+    func checkBookmarksUpdated() {
         waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .otherElements
             .otherElements
             .otherElements

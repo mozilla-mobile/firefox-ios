@@ -5,9 +5,14 @@
 import Common
 import Foundation
 import Shared
+import ComponentLibrary
 
 class ContentBlockerSettingViewController: SettingsTableViewController {
-    private let button = UIButton()
+    private struct UX {
+        static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+    }
+
+    private lazy var linkButton: LinkButton = .build()
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
@@ -35,6 +40,11 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        applyTheme()
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -71,7 +81,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                     )
 
                     if option == .strict {
-                        self.button.isHidden = true
+                        self.linkButton.isHidden = true
                         TelemetryWrapper.recordEvent(
                             category: .action,
                             method: .tap,
@@ -145,20 +155,18 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         guard let defaultFooter = _defaultFooter else { return nil }
 
         if section == 0 {
-            // TODO: Get a dedicated string for this.
-            let title: String = .TrackerProtectionLearnMore
+            let linkButtonViewModel = LinkButtonViewModel(
+                title: .TrackerProtectionLearnMore,
+                a11yIdentifier: AccessibilityIdentifiers.Settings.ContentBlocker.title,
+                font: FXFontStyles.Regular.caption1.scaledFont(),
+                contentInsets: UX.buttonContentInsets
+            )
+            linkButton.configure(viewModel: linkButtonViewModel)
 
-            let theme = themeManager.currentTheme(for: windowUUID)
-            let font = FXFontStyles.Regular.caption1.scaledFont()
-            var attributes = [NSAttributedString.Key: AnyObject]()
-            attributes[NSAttributedString.Key.foregroundColor] = theme.colors.actionPrimary
-            attributes[NSAttributedString.Key.font] = font
+            linkButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+            linkButton.isHidden = false
 
-            button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
-            button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-            button.isHidden = false
-
-            defaultFooter.stackView.addArrangedSubview(button)
+            defaultFooter.stackView.addArrangedSubview(linkButton)
 
             return defaultFooter
         }
@@ -184,5 +192,12 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     @objc
     func done() {
         settingsDelegate?.didFinish()
+    }
+
+    // MARK: - ThemeApplicable
+    override func applyTheme() {
+        super.applyTheme()
+        let currentTheme = currentTheme()
+        linkButton.applyTheme(theme: currentTheme)
     }
 }

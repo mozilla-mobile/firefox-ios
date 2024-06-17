@@ -42,23 +42,23 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     }
 
     private lazy var previousButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronUp),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(tappedPreviousButton))
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
-        button.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
-        return button
+        let button = UIButton(type: .system)
+        button.addTarget(self, action: #selector(self.tappedPreviousButton), for: .touchUpInside)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronUp), for: .normal)
+        let barButton = UIBarButtonItem(customView: button)
+        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.previousButton
+        barButton.accessibilityLabel = .KeyboardAccessory.PreviousButtonA11yLabel
+        return barButton
     }()
 
     private lazy var nextButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage(named: StandardImageIdentifiers.Large.chevronDown),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(tappedNextButton))
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
-        button.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
-        return button
+        let button = UIButton(type: .system)
+        button.addTarget(self, action: #selector(self.tappedNextButton), for: .touchUpInside)
+        button.setImage(UIImage(named: StandardImageIdentifiers.Large.chevronDown), for: .normal)
+        let barButton = UIBarButtonItem(customView: button)
+        barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.nextButton
+        barButton.accessibilityLabel = .KeyboardAccessory.NextButtonA11yLabel
+        return barButton
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
@@ -196,6 +196,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
             currentAccessoryView,
             flexibleSpacer,
             previousButton,
+            fixedSpacer,
             nextButton,
             fixedSpacer,
             doneButton
@@ -203,9 +204,9 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
 
         toolbar.accessibilityElements = [
             currentAccessoryView?.customView,
-            previousButton,
-            nextButton,
-            doneButton
+            previousButton.customView,
+            nextButton.customView,
+            doneButton.customView
         ].compactMap { $0 }
 
         addSubview(toolbar)

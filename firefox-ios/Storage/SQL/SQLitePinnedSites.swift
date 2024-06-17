@@ -76,7 +76,7 @@ extension BrowserDBSQLite: PinnedSites {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
 
-        // We insert a dummy guid for backward compatability.
+        // We insert a dummy guid for backward compatibility.
         // in the past, the guid was required, but we removed that requirement.
         // if we do not insert a guid, users who downgrade their version of firefox will
         // crash when loading their pinned tabs.
