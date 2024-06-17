@@ -1007,6 +1007,7 @@ class BrowserViewController: UIViewController,
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        updateToolbarStateForTraitCollection(traitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.systemThemeChanged()
         }
