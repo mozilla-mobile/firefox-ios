@@ -1790,14 +1790,19 @@ class BrowserViewController: UIViewController,
     private func executeToolbarActions() {
         guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
 
-        if state.navigateTo != nil {
+        switch state {
+        case _ where state.navigateTo != nil:
             handleNavigationActions(for: state)
-        } else if state.showQRcodeReader {
+        case _ where state.showQRcodeReader:
             navigationHandler?.showQRCode(delegate: self)
-        } else if state.showBackForwardList {
+        case _ where state.showBackForwardList:
             navigationHandler?.showBackForwardList()
-        } else if state.showTabsLongPressActions {
+        case _ where state.showTabsLongPressActions:
             presentActionSheet(from: view)
+        case _ where state.showTrackingProtectionDetails:
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
+            navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+        default: break
         }
     }
 
