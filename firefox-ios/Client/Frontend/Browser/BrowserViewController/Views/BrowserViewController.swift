@@ -1285,7 +1285,10 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
-        let isBottomToolbar = browserViewControllerState?.toolbarState.toolbarPosition == .bottom
+        let toolbarState = store.state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)
+        let isBottomToolbar = (toolbarState?.toolbarPosition == .bottom) ?? false
         let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
 
         if isBottomSearch {
@@ -1311,7 +1314,10 @@ class BrowserViewController: UIViewController,
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
-        let isBottomToolbar = browserViewControllerState?.toolbarState.toolbarPosition == .bottom
+        let toolbarState = store.state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)
+        let isBottomToolbar = (toolbarState?.toolbarPosition == .bottom) ?? false
         let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
 
         if isBottomSearch {
