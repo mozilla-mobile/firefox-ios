@@ -55,9 +55,9 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     private enum KVOConstants: String, CaseIterable {
-        case URL = "URL"
-        case canGoBack = "canGoBack"
-        case canGoForward = "canGoForward"
+        case URL
+        case canGoBack
+        case canGoForward
     }
 
     weak var delegate: LegacyWebControllerDelegate?
@@ -151,6 +151,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         configuration.allowsInlineMediaPlayback = true
+        configuration.ignoresViewportScaleLimits = true
 
         // For consistency we set our user agent similar to Firefox iOS.
         //
@@ -197,7 +198,8 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         KVOConstants.allCases.forEach { browserView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
-    @objc private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
+    @objc
+    private func reloadBlockers(_ blockLists: [WKContentRuleList]) {
         DispatchQueue.main.async {
             self.browserView.configuration.userContentController.removeAllContentRuleLists()
             blockLists.forEach(self.browserView.configuration.userContentController.add)
@@ -216,7 +218,8 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
         scrollView.refreshControl?.addTarget(self, action: #selector(reloadPage), for: .valueChanged)
     }
 
-    @objc private func reloadPage() {
+    @objc
+    private func reloadPage() {
         reload()
         DispatchQueue.main.async {
             self.scrollView.refreshControl?.endRefreshing()
@@ -224,9 +227,13 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     private func addScript(forResource resource: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly mainFrameOnly: Bool) {
-        let source = try! String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
-        let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-        browserView.configuration.userContentController.addUserScript(script)
+        do {
+            let source = try String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
+            let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+            browserView.configuration.userContentController.addUserScript(script)
+        } catch {
+            fatalError("Invalid data in file \(resource)")
+        }
     }
 
     private func setupTrackingProtectionScripts() {
@@ -337,6 +344,7 @@ class LegacyWebViewController: UIViewController, LegacyWebController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
         searchInContentTelemetry = SearchInContentTelemetry()
     }
@@ -434,17 +442,17 @@ extension LegacyWebViewController: WKNavigationDelegate {
         }
 
         switch navigationAction.navigationType {
-            case .backForward:
-                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
-                if navigatingBack {
-                    delegate?.webControllerDidNavigateBack(self)
-                } else {
-                    delegate?.webControllerDidNavigateForward(self)
-                }
-            case .reload:
-                delegate?.webControllerDidReload(self)
-            default:
-                break
+        case .backForward:
+            let navigatingBack = !webView.backForwardList.backList.contains(where: { $0 == currentBackForwardItem })
+            if navigatingBack {
+                delegate?.webControllerDidNavigateBack(self)
+            } else {
+                delegate?.webControllerDidNavigateForward(self)
+            }
+        case .reload:
+            delegate?.webControllerDidReload(self)
+        default:
+            break
         }
 
         currentBackForwardItem = webView.backForwardList.currentItem
@@ -531,15 +539,14 @@ extension LegacyWebViewController: WKUIDelegate {
         // check if this is a new frame / window
         guard navigationAction.targetFrame == nil else { return nil }
 
-        // validate the URL using URIFixup
-        guard let urlString = navigationAction.request.url?.absoluteString,
-              URIFixup.getURL(entry: urlString) != nil else {
-            // URL failed validation, prevent loading
+        // If URL is a file:// when web application calls window.open() or fails validation, prevent loading
+        guard let url = navigationAction.request.url,
+              let validatedURL = URIFixup.getURL(entry: url.absoluteString) else {
             return nil
         }
 
         // load validated URLs
-        browserView.load(navigationAction.request)
+        browserView.load(URLRequest(url: validatedURL))
 
         // we return nil to not open new window
         return nil

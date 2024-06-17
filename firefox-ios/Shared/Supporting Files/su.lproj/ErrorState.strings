@@ -1,3 +1,6 @@
+/* Sub label error string that gets shown when user enters incorrect input for their expiration date on their credit card in the text box. */
+"CreditCard.ErrorState.CardExpirationDateSublabel.v112" = "Asupkeun tanggal kadaluwarsa anu sah";
+
 /* Sub label error string that gets shown when user enters incorrect input for their number printed on their credit card in the text box. */
 "CreditCard.ErrorState.CardNumberSublabel.v112" = "Asupkeun nomer kartu anu sah";
 

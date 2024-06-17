@@ -244,7 +244,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             prefKey: "showClipboardBar",
             defaultValue: false,
             titleText: .SettingsOfferClipboardBarTitle,
-            statusText: .SettingsOfferClipboardBarStatus
+            statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
         )
 
         let showLinksPreviewSettings = BoolSetting(
@@ -256,9 +256,18 @@ class AppSettingsTableViewController: SettingsTableViewController,
             statusText: .SettingsShowLinkPreviewsStatus
         )
 
+        let blockOpeningExternalAppsSettings = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.currentTheme(for: windowUUID),
+            prefKey: PrefsKeys.BlockOpeningExternalApps,
+            defaultValue: false,
+            titleText: .SettingsBlockOpeningExternalAppsTitle
+        )
+
         generalSettings += [
             offerToOpenCopiedLinksSettings,
-            showLinksPreviewSettings
+            showLinksPreviewSettings,
+            blockOpeningExternalAppsSettings
         ]
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
@@ -282,15 +291,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
-
-        privacySettings += [
-            BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.currentTheme(for: windowUUID),
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
-        ]
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
@@ -384,7 +384,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
         guard let url = URL(string: urlString) else { return }
-        applicationHelper.open(url)
+        applicationHelper.open(url, inWindow: windowUUID)
     }
 
     func pressedFirefoxSuggest() {

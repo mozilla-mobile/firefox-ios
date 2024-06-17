@@ -8,6 +8,7 @@ import WebKit
 import GCDWebServers
 import XCTest
 import Shared
+import Common
 
 class TabEventHandlerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
@@ -81,6 +82,8 @@ class DummyHandler: TabEventHandler {
     // This is not how this should be written in production — the handler shouldn't be keeping track
     // of individual tab state.
     var isFocused: Bool?
+
+    let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .singleWindow(.XCTestDefaultUUID)
 
     init() {
          register(self, forTabEvents: .didGainFocus, .didLoseFocus)

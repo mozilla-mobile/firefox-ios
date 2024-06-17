@@ -8,6 +8,8 @@ import Shared
 import Redux
 import SiteImageView
 
+import enum MozillaAppServices.VisitType
+
 class RemoteTabsTableViewController: UITableViewController,
                                      Themeable,
                                      CollapsibleTableViewSection,
@@ -110,21 +112,19 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     private func reloadUI() {
-        emptyView.isHidden = !isShowingEmptyView
-
-        guard !isShowingEmptyView else {
-            configureEmptyView()
-            return
-        }
-
-        updateRefreshControl()
+        updateUI()
         tableView.reloadData()
     }
 
-    private func updateRefreshControl() {
+    private func updateUI() {
         if state.refreshState == .refreshing {
+            emptyView.isHidden = true
             refreshControl?.beginRefreshing()
         } else {
+            emptyView.isHidden = !isShowingEmptyView
+            if isShowingEmptyView {
+                configureEmptyView()
+            }
             refreshControl?.endRefreshing()
         }
     }

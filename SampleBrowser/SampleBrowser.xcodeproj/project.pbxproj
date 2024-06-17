@@ -34,7 +34,6 @@
 		8A4601EE2B0FE20700FFD17F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A4601ED2B0FE20700FFD17F /* Assets.xcassets */; };
 		8A4601F12B0FE20700FFD17F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A4601EF2B0FE20700FFD17F /* LaunchScreen.storyboard */; };
 		8A4602172B0FE43A00FFD17F /* BrowserSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */; };
-		8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4602182B0FE45200FFD17F /* BrowserToolbar.swift */; };
 		8A46021B2B0FE47C00FFD17F /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021A2B0FE47C00FFD17F /* BrowserViewController.swift */; };
 		8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */; };
 		8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */; };
@@ -48,8 +47,11 @@
 		8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */; };
 		E132973C2BA9E71B0095FF61 /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E132973B2BA9E71B0095FF61 /* ToolbarKit */; };
 		E189C24B2BB2D1140065CEF2 /* DependencyHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */; };
-		E189C24D2BB4802C0065CEF2 /* AddressToolbarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E189C24C2BB4802C0065CEF2 /* AddressToolbarModel.swift */; };
 		E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */; };
+		E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */; };
+		E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */; };
+		E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */; };
+		E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,7 +84,6 @@
 		8A4601F02B0FE20700FFD17F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8A4601F22B0FE20700FFD17F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserSearchBar.swift; sourceTree = "<group>"; };
-		8A4602182B0FE45200FFD17F /* BrowserToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
 		8A46021A2B0FE47C00FFD17F /* BrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		8A46021D2B0FE50D00FFD17F /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		8A46021F2B0FE52F00FFD17F /* UISearchbar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISearchbar+Extension.swift"; sourceTree = "<group>"; };
@@ -95,8 +96,11 @@
 		8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInPage.swift; sourceTree = "<group>"; };
 		8AEBDD702B69A8C300FE9192 /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
 		E189C2492BB2D1140065CEF2 /* DependencyHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyHelper.swift; sourceTree = "<group>"; };
-		E189C24C2BB4802C0065CEF2 /* AddressToolbarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarModel.swift; sourceTree = "<group>"; };
 		E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
+		E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewControllerModel.swift; sourceTree = "<group>"; };
+		E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
+		E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainer.swift; sourceTree = "<group>"; };
+		E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationToolbarContainerModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +148,7 @@
 				8A0F447C2B56FD9600438589 /* SearchModel.swift */,
 				8A0F44742B56FD5300438589 /* SearchViewModel.swift */,
 				1D96A2D62BA14D9500EF7CC7 /* DefaultAdsTrackerDefinitions.swift */,
+				E1C525C52BCFF77900073A6D /* RootViewControllerModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -236,9 +241,10 @@
 			children = (
 				8ADF72CC2B73DE6A00530E7A /* FindInPage.swift */,
 				8A4602162B0FE43A00FFD17F /* BrowserSearchBar.swift */,
-				8A4602182B0FE45200FFD17F /* BrowserToolbar.swift */,
 				E1A58CC42BC3FF8F004009F1 /* AddressToolbarContainer.swift */,
-				E189C24C2BB4802C0065CEF2 /* AddressToolbarModel.swift */,
+				E1CF5D1B2BC82F9E00F2287F /* AddressToolbarContainerModel.swift */,
+				E1F816B02BCEBB940043E2E0 /* NavigationToolbarContainer.swift */,
+				E1F816B22BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -368,6 +374,7 @@
 				8A3DB3352B5AD47500F89705 /* SettingsType.swift in Sources */,
 				8A0F44832B56FE1300438589 /* UIAlertController+Error.swift in Sources */,
 				8A4602172B0FE43A00FFD17F /* BrowserSearchBar.swift in Sources */,
+				E1C525C62BCFF77900073A6D /* RootViewControllerModel.swift in Sources */,
 				8A46021E2B0FE50D00FFD17F /* UIView+Extension.swift in Sources */,
 				8A3DB3332B5AD3EC00F89705 /* SettingsCellViewModel.swift in Sources */,
 				8A46021B2B0FE47C00FFD17F /* BrowserViewController.swift in Sources */,
@@ -383,8 +390,8 @@
 				8A0F44792B56FD6E00438589 /* SuggestionCellViewModel.swift in Sources */,
 				8ADF72CD2B73DE6A00530E7A /* FindInPage.swift in Sources */,
 				8A3DB32D2B5AD3C700F89705 /* SettingsViewController.swift in Sources */,
-				8A4602192B0FE45200FFD17F /* BrowserToolbar.swift in Sources */,
 				8AEBDD712B69A8C300FE9192 /* AppLaunchUtil.swift in Sources */,
+				E1F816B32BCEC4A80043E2E0 /* NavigationToolbarContainerModel.swift in Sources */,
 				8A0F44732B56FD4500438589 /* SuggestionViewController.swift in Sources */,
 				E1A58CC52BC3FF8F004009F1 /* AddressToolbarContainer.swift in Sources */,
 				8A0F446B2B56EDC900438589 /* EngineProvider.swift in Sources */,
@@ -392,8 +399,9 @@
 				8A0F447F2B56FDAD00438589 /* BrowserError.swift in Sources */,
 				8A4601E72B0FE20500FFD17F /* SceneDelegate.swift in Sources */,
 				8A0687612B6D9F990031427A /* SettingsDelegate.swift in Sources */,
-				E189C24D2BB4802C0065CEF2 /* AddressToolbarModel.swift in Sources */,
+				E1CF5D1C2BC82F9E00F2287F /* AddressToolbarContainerModel.swift in Sources */,
 				8A0F44812B56FDEA00438589 /* SearchDataProvider.swift in Sources */,
+				E1F816B12BCEBB940043E2E0 /* NavigationToolbarContainer.swift in Sources */,
 				8A4602202B0FE52F00FFD17F /* UISearchbar+Extension.swift in Sources */,
 				8A3DB3312B5AD3E000F89705 /* SettingsDataSource.swift in Sources */,
 			);

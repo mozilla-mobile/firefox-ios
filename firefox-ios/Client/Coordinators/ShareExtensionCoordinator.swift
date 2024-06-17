@@ -98,7 +98,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
         let themeColors = themeManager.currentTheme(for: windowUUID).colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
+                                               iconColor: themeColors.iconDisabled)
 
         let helper = SendToDeviceHelper(
             shareItem: shareItem,

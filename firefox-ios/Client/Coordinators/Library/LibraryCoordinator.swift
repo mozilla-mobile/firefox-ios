@@ -7,6 +7,8 @@ import Foundation
 import Shared
 import Storage
 
+import enum MozillaAppServices.VisitType
+
 protocol LibraryCoordinatorDelegate: AnyObject, LibraryPanelDelegate, RecentlyClosedPanelDelegate {
     func didFinishLibrary(from coordinator: LibraryCoordinator)
 }
@@ -48,7 +50,8 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
     }
 
     private func makeChildPanels() -> [UINavigationController] {
-        let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile),
+        let bookmarksPanel = BookmarksPanel(viewModel: BookmarksPanelViewModel(profile: profile,
+                                                                               bookmarksHandler: profile.places),
                                             windowUUID: windowUUID)
         let historyPanel = HistoryPanel(profile: profile, windowUUID: windowUUID)
         let downloadsPanel = DownloadsPanel(windowUUID: windowUUID)
@@ -159,7 +162,7 @@ class LibraryCoordinator: BaseCoordinator, LibraryPanelDelegate, LibraryNavigati
         parentCoordinator?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
-    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         parentCoordinator?.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 

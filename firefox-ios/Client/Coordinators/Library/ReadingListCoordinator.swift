@@ -5,6 +5,8 @@
 import Foundation
 import Storage
 
+import enum MozillaAppServices.VisitType
+
 protocol ReadingListNavigationHandler: AnyObject, LibraryPanelCoordinatorDelegate {
     func openUrl(_ url: URL, visitType: VisitType)
 }

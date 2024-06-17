@@ -356,7 +356,7 @@
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Preferenze";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
-"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "I nostri finanzieri è a vostra vita privata";
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "I nostri spunsurizatori è a vostra vita privata";
 
 /* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
 "FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Apre l’unghjetta sincrunizata";
@@ -368,10 +368,10 @@
 "FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Riguarera d’unghjetta";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
-"FirefoxHomepage.Pocket.Sponsored.v103" = "Finanziatu";
+"FirefoxHomepage.Pocket.Sponsored.v103" = "Spunsurizatu";
 
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
-"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Finanziatu";
+"FirefoxHomepage.Shortcuts.Sponsored.v100" = "Spunsurizatu";
 
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Pagina seguente";
@@ -407,19 +407,19 @@
 "FxAPush_DeviceConnected_title" = "Sync cunnessu";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
-"FxAPush_DeviceDisconnected_body" = "%@ hè statu disghjuntu bè.";
+"FxAPush_DeviceDisconnected_body" = "%@ hè statu discunnessu bè.";
 
 /* Body of a notification displayed when this device has been disconnected from FxA by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_body" = "St’apparechju hè statu disghjuntu bè da Firefox Sync.";
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "St’apparechju hè statu discunnessu bè da Firefox Sync.";
 
 /* Title of a notification displayed when this device has been disconnected by another device. */
-"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync disghjuntu";
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "Sync discunnessu";
 
 /* Title of a notification displayed when named device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_title" = "Sync disghjuntu";
+"FxAPush_DeviceDisconnected_title" = "Sync discunnessu";
 
 /* Body of a notification displayed when unnamed device has been disconnected from FxA. */
-"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu disghjuntu da Firefox Sync";
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "Un apparechju hè statu discunnessu da Firefox Sync";
 
 /* On the firefox homepage, the string read by the voice over prompt for accessibility, for the button which changes the wallpaper */
 "FxHomepage.Wallpaper.ButtonLabel.v99" = "Logo Firefox, cambià u sfondu di screnu.";
@@ -646,9 +646,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Sapene di più";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "Per arregistrà è riempie autumaticamente l’identificazioni di cunnessione è e parolle d’intesa, attivate Face ID, Touch ID o un codice d’accessu per l’apparechju.";
-
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "Cuntinuà";
 
@@ -694,23 +691,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrà";
 
-/* Label shown when there are no logins to list. The placeholder will be replaced with the app name. */
-"LoginsList.NoLoginsFound.Description.v119" = "L’identificazioni di cunnessione arregistrate seranu affissate quì. S’è vo avete arregistratu e vostre identificazioni di cunnessione in %@ nant’à un altru apparechju, cunnittitevi à u vostru contu.";
-
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "Alcuna identificazione di cunnessione trova";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "Nisunu risultatu currisponde à a vostra ricerca.";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "Nisuna identificazione di cunnessione currispondente";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "Abbandunà";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "Ricercà identificazioni di cunnessione";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "Selezziunate una parolla d’intesa à riempie";
@@ -745,7 +730,7 @@
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "Aghjunghje à l’accurtatoghji";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Indette";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -757,7 +742,7 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Persunalizà a pagina d’accolta";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Scaricamenti";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
@@ -769,7 +754,7 @@
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Aiutu";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Cronolugia";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
@@ -781,7 +766,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "Attivà u modu nutturnu";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Parolle d’intesa";
 
 /* The title for the button that lets you paste into the location bar */
@@ -790,7 +775,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "Incullà è apre";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "Lista di lettura";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
@@ -1159,9 +1144,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Indirizzu web (Rimpiazzà a ricerca da %s)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v112" = "Riempie autumaticamente u campu di e carte bancarie";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Squassà tutti dati di siti";
 
@@ -1190,16 +1172,16 @@
 "Settings.Disconnect.Body" = "Firefox ùn si sincruniserà più cù u vostru contu, ma ùn squasserà alcunu datu di navigazione nant’à st’apparechju.";
 
 /* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
-"Settings.Disconnect.Button" = "Disghjunghje Sync";
+"Settings.Disconnect.Button" = "Discunnette Sync";
 
 /* Cancel action button in alert when user is prompted for disconnect */
 "Settings.Disconnect.CancelButton" = "Abbandunà";
 
 /* Destructive action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.DestructiveButton" = "Disghjunghje";
+"Settings.Disconnect.DestructiveButton" = "Discunnette";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Disghjunghjessi di Sync ?";
+"Settings.Disconnect.Title" = "Discunnettesi di Sync ?";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Sogliu";
@@ -1367,7 +1349,7 @@
 "Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Accurtatoghji";
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
-"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji finanziati";
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Accurtatoghji spunsurizati";
 
 /* Toggled OFF to hide the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "Disattivatu";

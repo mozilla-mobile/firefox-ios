@@ -19,6 +19,9 @@
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "%@ අභිරුචිකරණය";
 
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "ඔබගේ අද්විතීය පිරික්සුම් ශෛලියට ගැළපෙන පරිදි ඔබගේ තේමාව සහ මෙවලම් තීරුව සකසන්න.";
+
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "පිරික්සීම අරඹන්න";
 

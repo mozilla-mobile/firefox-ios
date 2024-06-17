@@ -7,6 +7,7 @@ import Common
 import WebKit
 import Shared
 import UIKit
+import Photos
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -350,8 +351,15 @@ extension BrowserViewController: WKUIDelegate {
                             identifier: UIAction.Identifier("linkContextMenu.saveImage")
                         ) { _ in
                             getImageData(url) { data in
-                                guard let image = UIImage(data: data) else { return }
-                                self.writeToPhotoAlbum(image: image)
+                                if url.pathExtension.lowercased() == "gif" {
+                                    PHPhotoLibrary.shared().performChanges {
+                                        let creationRequest = PHAssetCreationRequest.forAsset()
+                                        creationRequest.addResource(with: .photo, data: data, options: nil)
+                                    }
+                                } else {
+                                    guard let image = UIImage(data: data) else { return }
+                                    self.writeToPhotoAlbum(image: image)
+                                }
                             }
                         })
 
@@ -467,7 +475,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // are going to a about:reader page. Then we keep it on screen: it will change status
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
-            if !url.isReaderModeURL {
+            if !url.isReaderModeURL, !isToolbarRefactorEnabled {
                 urlBar.updateReaderModeState(ReaderModeState.unavailable)
                 hideReaderModeBar(animated: false)
             }
@@ -505,7 +513,9 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if InternalURL.isValid(url: url) {
-            if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
+            if navigationAction.navigationType != .backForward,
+               navigationAction.isInternalUnprivileged,
+               !url.isReaderModeURL {
                 logger.log("Denying unprivileged request: \(navigationAction.request)",
                            level: .warning,
                            category: .webview)
@@ -629,7 +639,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             if navigationAction.navigationType == .linkActivated {
-                if tab.isPrivate {
+                if tab.isPrivate || (profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false) {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)
                     return
@@ -743,8 +753,10 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             // Open our helper and cancel this response from the webview.
-            if let downloadViewModel = downloadHelper.downloadViewModel(okAction: downloadAction) {
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBar)
+            if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
+                                                                        okAction: downloadAction) {
+                let displayFrom = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar!
+                presentSheetWith(viewModel: downloadViewModel, on: self, from: displayFrom)
             }
             decisionHandler(.cancel)
             return
@@ -817,7 +829,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
-            if let tab = tabManager[webView], tab === tabManager.selectedTab {
+            if !isToolbarRefactorEnabled, let tab = tabManager[webView], tab === tabManager.selectedTab {
                 urlBar.currentURL = tab.url?.displayURL
             }
             return
@@ -862,11 +874,14 @@ extension BrowserViewController: WKNavigationDelegate {
             self,
             challenge: challenge,
             loginsHelper: loginsHelper
-        ).uponQueue(.main) { res in
-            if let credentials = res.successValue {
-                completionHandler(.useCredential, credentials.credentials)
-            } else {
-                completionHandler(.rejectProtectionSpace, nil)
+        ) { res in
+            DispatchQueue.main.async {
+                switch res {
+                case .success(let credentials):
+                    completionHandler(.useCredential, credentials.credentials)
+                case .failure:
+                    completionHandler(.rejectProtectionSpace, nil)
+                }
             }
         }
     }
@@ -1043,19 +1058,25 @@ private extension BrowserViewController {
     func handleServerTrust(challenge: URLAuthenticationChallenge,
                            completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-        // If this is a certificate challenge, see if the certificate has previously been
-        // accepted by the user.
-        let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
+        DispatchQueue.global(qos: .userInitiated).async {
+            // If this is a certificate challenge, see if the certificate has previously been
+            // accepted by the user.
+            let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
 
-        guard let trust = challenge.protectionSpace.serverTrust,
-              let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
-              profile.certStore.containsCertificate(cert[0], forOrigin: origin)
-        else {
-            completionHandler(.performDefaultHandling, nil)
-            return
+            guard let trust = challenge.protectionSpace.serverTrust,
+                  let cert = SecTrustCopyCertificateChain(trust) as? [SecCertificate],
+                  self.profile.certStore.containsCertificate(cert[0], forOrigin: origin)
+            else {
+                DispatchQueue.main.async {
+                    completionHandler(.performDefaultHandling, nil)
+                }
+                return
+            }
+
+            DispatchQueue.main.async {
+                completionHandler(.useCredential, URLCredential(trust: trust))
+            }
         }
-
-        completionHandler(.useCredential, URLCredential(trust: trust))
     }
 
     func updateObservationReferral(metadataManager: LegacyTabMetadataManager, url: String?, isPrivate: Bool) {

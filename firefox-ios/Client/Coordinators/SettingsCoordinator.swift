@@ -237,9 +237,14 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAddressAutofill() {
-        let viewModel = AddressAutofillSettingsViewModel(profile: profile)
-        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel,
-                                                                   windowUUID: windowUUID)
+        let viewModel = AddressAutofillSettingsViewModel(
+            profile: profile,
+            windowUUID: windowUUID
+        )
+        let viewController = AddressAutofillSettingsViewController(
+            addressAutofillViewModel: viewModel,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -328,9 +333,10 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func pressedTheme() {
-        store.dispatch(ActiveScreensStateAction.showScreen(
-            ScreenActionContext(screen: .themeSettings, windowUUID: windowUUID)
-        ))
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .themeSettings)
+        store.dispatch(action)
         router.push(ThemeSettingsController(windowUUID: windowUUID))
     }
 

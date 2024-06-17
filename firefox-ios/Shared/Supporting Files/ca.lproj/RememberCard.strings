@@ -1,12 +1,3 @@
-/* This value is used as the header for the remember card page. The placeholder is for the app name. */
-"CreditCard.RememberCard.Header.v115" = "Deseu la informació de la targeta de manera segura amb el %@ per agilitzar el pagament la pròxima vegada.";
-
-/* This value is used as the title for the Yes button in the remember credit card page */
-"CreditCard.RememberCard.MainButtonTitle.v115" = "Sí";
-
-/* This value is used as the title for the remember credit card page */
-"CreditCard.RememberCard.MainTitle.v115" = "Voleu recordar aquesta targeta?";
-
 /* This value is used as the title for the Not Now button in the remember credit card page */
 "CreditCard.RememberCard.SecondaryButtonTitle.v115" = "Ara no";
 

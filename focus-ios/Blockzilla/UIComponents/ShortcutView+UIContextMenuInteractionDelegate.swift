@@ -24,7 +24,13 @@ extension ShortcutView: UIContextMenuInteractionDelegate {
                 attributes: .destructive) { _ in
                     let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
                     feedbackGenerator.prepare()
-                    CHHapticEngine.capabilitiesForHardware().supportsHaptics ? feedbackGenerator.impactOccurred() : AudioServicesPlaySystemSound(1519)
+
+                    if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
+                        feedbackGenerator.impactOccurred()
+                    } else {
+                        AudioServicesPlaySystemSound(1519)
+                    }
+
                     self.viewModel.send(action: .remove)
             }
             return UIMenu(children: [removeFromShortcutsAction, renameAction])

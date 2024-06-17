@@ -1,5 +1,5 @@
-/* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v115" = "Kreditne kartice";
+/* Toggle for address autofill syncing setting */
+"FirefoxSync.AddressAutofillEngine.v124" = "Naslovi";
 
 /* Toggle for credit cards syncing setting */
 "FirefoxSync.CreditCardsEngine.v122" = "Plačilna sredstva";

@@ -8,6 +8,8 @@ import Storage
 import SiteImageView
 import Common
 
+import enum MozillaAppServices.VisitType
+
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
     static let IconBorderWidth: CGFloat = 0.5
@@ -27,7 +29,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     var state: LibraryPanelMainState = .history(state: .inFolder)
     weak var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
     let profile: Profile
-    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var bottomToolbarItems = [UIBarButtonItem]()
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -157,7 +159,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return self.recentlyClosedTabs.count
     }
 
-    // MARK: - Libray Toolbar actions
+    // MARK: - Library Toolbar actions
     func handleBackButton() {
         // no implementation needed
     }

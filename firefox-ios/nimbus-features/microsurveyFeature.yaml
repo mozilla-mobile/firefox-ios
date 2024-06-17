@@ -1,0 +1,19 @@
+# The configuration for the microsurveyFeature feature
+features:
+  microsurvey-feature:
+    description: >
+        A feature that shows the microsurvey for users to interact with and submit responses.
+    variables:
+      enabled:
+        description: >
+          If true, the feature is active.
+        type: Boolean
+        default: false
+
+    defaults:
+      - channel: beta
+        value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true

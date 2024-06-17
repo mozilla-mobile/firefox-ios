@@ -5,7 +5,11 @@
 import Foundation
 import Common
 import Shared
-@_exported import MozillaAppServices
+
+import class MozillaAppServices.SyncManagerComponent
+import enum MozillaAppServices.SyncManagerError
+import struct MozillaAppServices.SyncParams
+import struct MozillaAppServices.SyncResult
 
 open class RustSyncManagerAPI {
     private let logger: Logger

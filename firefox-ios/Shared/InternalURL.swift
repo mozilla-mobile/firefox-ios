@@ -7,7 +7,20 @@ import Foundation
 
 // Internal URLs helps with error pages, session restore and about pages
 public struct InternalURL {
-    public static let uuid = UUID().uuidString
+    public static var uuid: String {
+        if let storedUUID = UserDefaults.standard.string(
+            forKey: PrefsKeys.Session.InternalURLUUID
+        ) {
+            return storedUUID
+        } else {
+            let newUUID = UUID().uuidString
+            UserDefaults.standard.set(
+                newUUID,
+                forKey: PrefsKeys.Session.InternalURLUUID
+            )
+            return newUUID
+        }
+    }
     public static let scheme = "internal"
     public static let baseUrl = "\(scheme)://local"
     public enum Path: String {

@@ -8,7 +8,7 @@ import Foundation
 
 /// Reference at https://danger.systems/swift/reference.html
 let danger = Danger()
-let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIndentifiers.swift"
+let standardImageIdentifiersPath = "./BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
 
 checkAlphabeticalOrder(inFile: standardImageIdentifiersPath)
 checkBigPullRequest()

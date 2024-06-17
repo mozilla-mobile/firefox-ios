@@ -26,8 +26,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let imageTopSpace: CGFloat = 12
         static let imageBottomSpace: CGFloat = 12
         static let imageLeadingTrailingSpace: CGFloat = 12
-        static let titleFontSize: CGFloat = 12
-        static let sponsorFontSize: CGFloat = 11
     }
 
     private var rootContainer: UIView = .build { view in
@@ -64,8 +62,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.textAlignment = .center
-        titleLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption1,
-                                                                 size: UX.titleFontSize)
+        titleLabel.font = FXFontStyles.Regular.caption1.scaledFont()
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
         titleLabel.backgroundColor = .clear
@@ -74,8 +71,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var sponsoredLabel: UILabel = .build { sponsoredLabel in
         sponsoredLabel.textAlignment = .center
-        sponsoredLabel.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .caption2,
-                                                                     size: UX.sponsorFontSize)
+        sponsoredLabel.font = FXFontStyles.Regular.caption2.scaledFont()
         sponsoredLabel.adjustsFontForContentSizeCategory = true
         sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }

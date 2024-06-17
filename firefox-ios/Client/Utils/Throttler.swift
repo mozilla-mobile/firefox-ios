@@ -8,23 +8,22 @@ import Common
 /// For any work that needs to be delayed, you can wrap it inside a throttler
 /// and specify the delay time, in seconds, and queue.
 class Throttler {
-    private var task = DispatchWorkItem(block: {})
     private let defaultDelay = 0.35
 
-    private let delay: Double
+    private let threshold: Double
     private var queue: DispatchQueueInterface
+    private var lastExecutationTime = Date.distantPast
 
     init(seconds delay: Double? = nil,
          on queue: DispatchQueueInterface = DispatchQueue.main) {
-        self.delay = delay ?? defaultDelay
+        self.threshold = delay ?? defaultDelay
         self.queue = queue
     }
 
     // This debounces; the task will not happen unless a duration of delay passes since the function was called
     func throttle(completion: @escaping () -> Void) {
-        task.cancel()
-        task = DispatchWorkItem { completion() }
-
-        queue.asyncAfter(deadline: .now() + delay, execute: task)
+        guard lastExecutationTime.timeIntervalSinceNow < -threshold else { return }
+        lastExecutationTime = Date()
+        queue.async(execute: completion)
     }
 }

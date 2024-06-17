@@ -55,7 +55,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishEnhancedTrackingProtectionCalled, 1)
     }
 
-    func testEmptyChilds_whenCreated() {
+    func testEmptyChildren_whenCreated() {
         let subject = createSubject()
         XCTAssertEqual(subject.childCoordinators.count, 0)
     }

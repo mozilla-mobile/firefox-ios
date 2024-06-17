@@ -8,10 +8,12 @@ import SwiftUI
 import Storage
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 class CreditCardTableViewModel {
     var toggleModel: ToggleModel?
 
-    var creditCards: [CreditCard] = [CreditCard]() {
+    var creditCards = [CreditCard]() {
         didSet {
             didUpdateCreditCards?()
         }

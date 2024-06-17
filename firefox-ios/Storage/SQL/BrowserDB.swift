@@ -83,7 +83,7 @@ open class BrowserDB {
             return succeed()
         }
 
-        return transaction { connection -> Void in
+        return transaction { connection in
             for (sql, args) in commands {
                 try connection.executeChange(sql, withArgs: args)
             }
@@ -113,7 +113,7 @@ open class BrowserDB {
 }
 
 /// The sqlite-backed implementation of the history protocol.
-/// Currenlty only supports pinned sites and favicons
+/// Currently only supports pinned sites and favicons
 open class BrowserDBSQLite {
     let database: BrowserDB
     let prefs: Prefs

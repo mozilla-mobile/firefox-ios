@@ -22,7 +22,7 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
     var legacyTabs = [LegacySavedTab]()
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         tabDataStore: TabDataStore = AppContainer.shared.resolve(),
+         tabDataStore: TabDataStore,
          logger: Logger = DefaultLogger.shared,
          legacyTabDataRetriever: LegacyTabDataRetriever = LegacyTabDataRetrieverImplementation()) {
         self.prefs = profile.prefs
@@ -100,7 +100,6 @@ class DefaultTabMigrationUtility: TabMigrationUtility {
         }
 
         let windowData = WindowData(id: windowUUID,
-                                    isPrimary: true,
                                     activeTabId: selectTabUUID ?? UUID(),
                                     tabData: tabsToMigrate)
 

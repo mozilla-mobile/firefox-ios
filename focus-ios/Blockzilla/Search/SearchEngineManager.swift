@@ -51,7 +51,7 @@ class SearchEngineManager {
     }
 
     func hasDisabledDefaultEngine() -> Bool {
-        return getDisabledDefaultEngineNames().count > 0
+        return !getDisabledDefaultEngineNames().isEmpty
     }
 
     func restoreDisabledDefaultEngines() {

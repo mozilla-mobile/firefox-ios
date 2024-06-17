@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 @testable import Client
 
@@ -66,7 +67,7 @@ class OnboardingButtonActionTests: XCTestCase {
         XCTAssertEqual(mockDelegate.action, OnboardingActions.readPrivacyPolicy)
     }
 
-    func testsubject_buttonAction_returnsNotifiactionsAction() {
+    func testsubject_buttonAction_returnsNotificationsAction() {
         let subject = setSubjectUpWith(firstAction: .requestNotifications)
 
         subject.primaryAction()

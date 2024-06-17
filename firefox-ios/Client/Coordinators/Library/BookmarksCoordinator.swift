@@ -4,6 +4,9 @@
 
 import Foundation
 import Storage
+import Common
+
+import enum MozillaAppServices.BookmarkNodeType
 
 protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func start(from folder: FxBookmarkNode)
@@ -60,7 +63,9 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
     // MARK: - BookmarksCoordinatorDelegate
 
     func start(from folder: FxBookmarkNode) {
-        let viewModel = BookmarksPanelViewModel(profile: profile, bookmarkFolderGUID: folder.guid)
+        let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarksHandler: profile.places,
+                                                bookmarkFolderGUID: folder.guid)
         let controller = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         controller.bookmarkCoordinatorDelegate = self
         controller.libraryPanelDelegate = parentCoordinator

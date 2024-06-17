@@ -64,13 +64,14 @@ struct TabDisplayOrder: Codable {
 
 class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
-    var performingChainedOperations = false
+    private var performingChainedOperations = false
     var inactiveViewModel: LegacyInactiveTabViewModel?
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
     var tabDisplayType: TabDisplayType = .TabGrid
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let tabManager: TabManager
     private let collectionView: UICollectionView
 
@@ -289,8 +290,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
         isPrivate = isOn
 
-        UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
-
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .tap,
@@ -425,7 +424,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     func undoCloseTab(tab: Tab, index: Int?) {
-        tabManager.undoCloseTab(tab: tab, position: index)
+        tabManager.undoCloseTab()
         _ = profile.recentlyClosedTabs.popFirstTab()
 
         refreshStore { [weak self] in
@@ -548,7 +547,10 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 // MARK: - InactiveTabsDelegate
 extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
     func closeInactiveTab(_ tab: Tab, index: Int) {
-        tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
+        tabManager.backupCloseTab = BackupCloseTab(
+            tab: tab,
+            restorePosition: index,
+            isSelected: false)
         removeSingleInactiveTab(tab)
 
         cfrDelegate?.presentUndoSingleToast { [weak self] undoButtonPressed in
@@ -621,7 +623,7 @@ extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
     }
 
     private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
-        tabManager.undoCloseTab(tab: tab, position: index)
+        tabManager.undoCloseTab()
         inactiveViewModel?.inactiveTabs.insert(tab, at: index)
 
         if inactiveViewModel?.inactiveTabs.count == 1 {
@@ -859,6 +861,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension LegacyTabDisplayManager: TabEventHandler {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
+
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard let indexPath = getIndexPath(tab: tab) else { return }
         refreshCell(atIndexPath: indexPath)

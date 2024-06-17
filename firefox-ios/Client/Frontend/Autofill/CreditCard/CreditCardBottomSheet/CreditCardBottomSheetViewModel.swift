@@ -7,6 +7,9 @@ import Common
 import Storage
 import Shared
 
+import enum MozillaAppServices.AutofillApiError
+import struct MozillaAppServices.CreditCard
+
 enum CreditCardBottomSheetState: String, Equatable, CaseIterable {
     case save
     case update
@@ -75,7 +78,7 @@ class CreditCardBottomSheetViewModel {
 
     var didUpdateCreditCard: (() -> Void)?
     var decryptedCreditCard: UnencryptedCreditCardFields?
-    var storedCreditCards: [CreditCard] = [CreditCard]()
+    var storedCreditCards = [CreditCard]()
     var state: CreditCardBottomSheetState
 
     init(profile: Profile,

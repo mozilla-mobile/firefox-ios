@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import Common
 
 @testable import Client
 
@@ -32,6 +33,9 @@ class MockTabManager: TabManager {
     var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
+
+    var addTabsForURLsCalled = 0
+    var addTabsURLs: [URL] = []
 
     init(windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID) {
         self.windowUUID = windowUUID
@@ -73,7 +77,10 @@ class MockTabManager: TabManager {
 
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {}
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {
+        addTabsForURLsCalled += 1
+        addTabsURLs = urls
+    }
 
     func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
 
@@ -87,7 +94,7 @@ class MockTabManager: TabManager {
 
     func undoCloseAllTabs() {}
 
-    func undoCloseTab(tab: Client.Tab, position: Int?) {}
+    func undoCloseTab() {}
 
     func getTabFor(_ url: URL) -> Tab? {
         return nil

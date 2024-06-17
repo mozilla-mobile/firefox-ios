@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
 import UIKit
 
 /// An enum describing the featureID of all features found in Nimbus.
@@ -12,6 +11,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofill
+    case addressAutofillEdit
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
@@ -26,15 +26,17 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case isToolbarCFREnabled
     case jumpBackIn
     case loginAutofill
+    case menuRefactor
+    case microsurvey
     case nightMode
     case preferSwitchToOpenTabOverDuplicate
     case reduxSearchSettings
     case reportSiteIssue
     case searchHighlights
-    case shareSheetChanges
-    case shareToolbarChanges
     case splashScreen
     case tabTrayRefactor
+    case toolbarRefactor
+    case trackingProtectionRefactor
     case zoomFeature
 }
 
@@ -68,12 +70,15 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .contextualHintForToolbar,
                 .accountSettingsRedux,
                 .addressAutofill,
+                .addressAutofillEdit,
                 .creditCardAutofillStatus,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
                 .loginAutofill,
+                .menuRefactor,
+                .microsurvey,
                 .nightMode,
                 .preferSwitchToOpenTabOverDuplicate,
                 .reduxSearchSettings,
@@ -81,10 +86,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacySimplifiedUI,
                 .feltPrivacyFeltDeletion,
                 .searchHighlights,
-                .shareSheetChanges,
-                .shareToolbarChanges,
                 .splashScreen,
                 .tabTrayRefactor,
+                .toolbarRefactor,
+                .trackingProtectionRefactor,
                 .zoomFeature:
             return nil
         }

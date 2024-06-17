@@ -2,9 +2,6 @@
 "CreditCard.RememberCard.SecondaryButtonTitle.v116" = "ਕਾਰਡ ਦੀ ਜਾਣਕਾਰੀ ਅੱਪਡੇਟ ਕੀਤੀ ਗਈ";
 
 /* This value is used as the title for the update card page */
-"CreditCard.UpdateCard.MainTitle.v115" = "ਇਹ ਕਾਰਡ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
-
-/* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v122" = "ਕਾਰਡ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
 
 /* This value is used as the title for the Manage Cards button from the update credit card page */
@@ -12,9 +9,6 @@
 
 /* This value is used as the title for the Not Now button in the update credit card page */
 "CreditCard.UpdateCard.NotNowButtonTitle.v115" = "ਹੁਣੇ ਨਹੀਂ";
-
-/* This value is used as the title for the button in the update credit card page */
-"CreditCard.UpdateCard.YesButtonTitle.v115" = "ਹਾਂ";
 
 /* This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card. */
 "CreditCard.UpdateCard.YesButtonTitle.v122" = "ਅੱਪਡੇਟ ਕਰੋ";

@@ -13,7 +13,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func didChangeZoomLevel()
 }
 
-class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
+final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     // MARK: - Constants
 
     private struct UX {
@@ -31,7 +31,6 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
         static let separatorHeightMultiplier = 0.74
-        static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
     }
@@ -65,7 +64,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
 
     private lazy var zoomOutButton: UIButton = .build { button in
         self.configureButton(button,
-                             image: UIImage.templateImageNamed(ImageIdentifiers.subtract),
+                             image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.subtract),
                              accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
@@ -74,9 +73,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     }
 
     private lazy var zoomLevel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .callout,
-                                                            size: UX.fontSize,
-                                                            weight: .semibold)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
@@ -218,7 +215,7 @@ class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         gradient.frame = gradientView.bounds
     }
 
-    private func updateZoomLabel() {
+    func updateZoomLabel() {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)

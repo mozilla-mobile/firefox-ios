@@ -225,7 +225,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     let windowUUID: WindowUUID
 
     fileprivate lazy var privateModeBadge = BadgeWithBackdrop(
-        imageName: ImageIdentifiers.privateModeBadge,
+        imageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
         isPrivateBadge: true
     )
 
@@ -247,6 +247,15 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func searchEnginesDidUpdate() {
+        let engineID = profile.searchEngines.defaultEngine?.engineID ?? "custom"
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .change,
+            object: .defaultSearchEngine,
+            value: nil,
+            extras: [TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engineID]
+        )
+
         self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
         self.searchIconImageView.largeContentTitle = profile.searchEngines.defaultEngine?.shortName
         self.searchIconImageView.largeContentImage = nil

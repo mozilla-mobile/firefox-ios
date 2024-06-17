@@ -6,12 +6,8 @@ import SwiftUI
 import Common
 import Shared
 import Storage
-
-// TODO: PHASE-2 FXIOS-7653
-// AddressListViewModelDelegate: A protocol to notify delegates about address updates.
-// protocol AddressListViewModelDelegate: AnyObject {
-//     func didUpdateAddresses(_ addresses: [Address])
-// }
+import struct MozillaAppServices.UpdatableAddressFields
+import struct MozillaAppServices.Address
 
 // TODO: Refactor the Address extension for global usage (FXIOS-8337)
 extension Address {
@@ -21,22 +17,55 @@ extension Address {
 }
 
 // AddressListViewModel: A view model for managing addresses.
-class AddressListViewModel: ObservableObject {
+class AddressListViewModel: ObservableObject, FeatureFlaggable {
+    enum Destination: Swift.Identifiable, Equatable {
+        case add(Address)
+        case edit(Address)
+
+        var id: String {
+            switch self {
+            case .add(let value):
+                return value.guid
+            case .edit(let value):
+                return value.guid
+            }
+        }
+    }
+
     // MARK: - Properties
 
     @Published var addresses: [Address] = []
     @Published var showSection = false
-    private let profile: Profile?
+    @Published var destination: Destination?
+
+    let windowUUID: WindowUUID
+
     private let logger: Logger
+
+    var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
+
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
+    var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
+
+    let addressProvider: AddressProvider
+
+    var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
+    var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        return themeManager.currentTheme(for: windowUUID).type == .dark
+    }
 
     // MARK: - Initializer
 
     /// Initializes the AddressListViewModel.
-    /// - Parameter profile: The profile associated with the address list.
-    init(profile: Profile? = nil, logger: Logger = DefaultLogger.shared) {
-        self.profile = profile
+    init(
+        logger: Logger = DefaultLogger.shared,
+        windowUUID: WindowUUID,
+        addressProvider: AddressProvider
+    ) {
         self.logger = logger
+        self.windowUUID = windowUUID
+        self.addressProvider = addressProvider
     }
 
     // MARK: - Fetch Addresses
@@ -44,7 +73,7 @@ class AddressListViewModel: ObservableObject {
     /// Fetches addresses from the associated profile's autofill.
     func fetchAddresses() {
         // Assuming profile is a class-level variable
-        profile?.autofill.listAllAddresses { [weak self] storedAddresses, error in
+        addressProvider.listAllAddresses { [weak self] storedAddresses, error in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 if let addresses = storedAddresses {
@@ -78,9 +107,105 @@ class AddressListViewModel: ObservableObject {
 
     // MARK: - Handle Address Selection
 
-        /// Handles the selection of an address.
-        /// - Parameter address: The selected address.
-        func handleAddressSelection(_ address: Address) {
-            addressSelectionCallback?(fromAddress(address))
+    /// Handles the selection of an address.
+    /// - Parameter address: The selected address.
+    func handleAddressSelection(_ address: Address) {
+        addressSelectionCallback?(fromAddress(address))
+    }
+
+    func addressTapped(_ address: Address) {
+        destination = .edit(address)
+    }
+
+    func cancelEditButtonTap() {
+        destination = nil
+    }
+
+    func cancelAddButtonTap() {
+        destination = nil
+    }
+
+    func saveAddressButtonTap() {
+        saveAction? { [weak self] address in
+            guard let self else { return }
+            self.addressProvider.addAddress(address: address) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
         }
+    }
+
+    func addAddressButtonTap() {
+        destination = .add(Address(
+            guid: "",
+            name: "",
+            organization: "",
+            streetAddress: "",
+            addressLevel3: "",
+            addressLevel2: "",
+            addressLevel1: "",
+            postalCode: "",
+            country: currentRegionCode(),
+            tel: "",
+            email: "",
+            timeCreated: 0,
+            timeLastUsed: nil,
+            timeLastModified: 0,
+            timesUsed: 0
+        ))
+    }
+
+    // MARK: - Inject JSON Data
+
+    struct JSONDataError: Error {}
+
+    func getInjectJSONDataInit() throws -> String {
+        guard let destination = self.destination else {
+            throw JSONDataError()
+        }
+
+        do {
+            let address: Address =
+            switch destination {
+            case .add(let address):
+                address
+            case .edit(let address):
+                address
+            }
+
+            let addressString = try jsonString(from: address)
+            let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
+
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID));"
+            return javascript
+        } catch {
+            logger.log("Failed to encode data",
+                       level: .warning,
+                       category: .autofill,
+                       description: "Failed to encode data with error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+
+    private func jsonString<T: Encodable>(from object: T) throws -> String {
+        let encoder = JSONEncoder()
+        encoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
+        let data = try encoder.encode(object)
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            throw EncodingError.invalidValue(
+                object,
+                EncodingError.Context(codingPath: [], debugDescription: "Unable to convert data to String")
+            )
+        }
+        return jsonString.replacingOccurrences(of: "\\", with: "\\\\")
+    }
 }

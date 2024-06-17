@@ -77,14 +77,14 @@ class SplashViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { state in
                 switch state {
-                    case .loggedin:
-                        break
+                case .loggedin:
+                    break
 
-                    case .loggedout:
-                        self.state = .default
+                case .loggedout:
+                    self.state = .default
 
-                    case .canceled:
-                        self.state = .needsAuth
+                case .canceled:
+                    self.state = .needsAuth
                 }
             }
     }
@@ -93,7 +93,8 @@ class SplashViewController: UIViewController {
         authButton.isHidden = state == .default
     }
 
-    @objc private func showAuth() {
+    @objc
+    private func showAuth() {
         state = .default
         Task {
             await authenticationManager.authenticateWithBiometrics()

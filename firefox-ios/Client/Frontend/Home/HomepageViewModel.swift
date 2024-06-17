@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import MozillaAppServices
 import Shared
 
 protocol HomepageViewModelDelegate: AnyObject {
@@ -14,7 +13,7 @@ protocol HomepageDataModelDelegate: AnyObject {
     func reloadView()
 }
 
-class HomepageViewModel: FeatureFlaggable {
+class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     struct UX {
         static let spacingBetweenSections: CGFloat = 62
         static let standardInset: CGFloat = 16
@@ -62,15 +61,22 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    let windowUUID: WindowUUID
     let nimbus: FxNimbus
     let profile: Profile
     var isZeroSearch: Bool {
         didSet {
             topSiteViewModel.isZeroSearch = isZeroSearch
             jumpBackInViewModel.isZeroSearch = isZeroSearch
-            recentlySavedViewModel.isZeroSearch = isZeroSearch
+            bookmarksViewModel.isZeroSearch = isZeroSearch
             pocketViewModel.isZeroSearch = isZeroSearch
         }
+    }
+
+    // Note: Should reload the view when have inconsistency between childViewModels count
+    // and shownSections count in order to avoid a crash
+    var shouldReloadView: Bool {
+        return childViewModels.filter({ $0.shouldShow }).count != shownSections.count
     }
 
     var theme: Theme {
@@ -82,6 +88,8 @@ class HomepageViewModel: FeatureFlaggable {
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     var viewAppeared = false
 
+    var newSize: CGSize?
+
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
     private var wallpaperManager: WallpaperManager
@@ -92,7 +100,7 @@ class HomepageViewModel: FeatureFlaggable {
     var headerViewModel: HomepageHeaderViewModel
     var messageCardViewModel: HomepageMessageCardViewModel
     var topSiteViewModel: TopSitesViewModel
-    var recentlySavedViewModel: RecentlySavedViewModel
+    var bookmarksViewModel: BookmarksViewModel
     var jumpBackInViewModel: JumpBackInViewModel
     var historyHighlightsViewModel: HistoryHighlightsViewModel
     var pocketViewModel: PocketViewModel
@@ -115,6 +123,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.logger = logger
+        self.windowUUID = tabManager.windowUUID
 
         self.headerViewModel = HomepageHeaderViewModel(profile: profile, theme: theme, tabManager: tabManager)
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
@@ -135,9 +144,9 @@ class HomepageViewModel: FeatureFlaggable {
             adaptor: jumpBackInAdaptor,
             wallpaperManager: wallpaperManager)
 
-        self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile,
-                                                             theme: theme,
-                                                             wallpaperManager: wallpaperManager)
+        self.bookmarksViewModel = BookmarksViewModel(profile: profile,
+                                                     theme: theme,
+                                                     wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
@@ -162,7 +171,7 @@ class HomepageViewModel: FeatureFlaggable {
                                 messageCardViewModel,
                                 topSiteViewModel,
                                 jumpBackInViewModel,
-                                recentlySavedViewModel,
+                                bookmarksViewModel,
                                 historyHighlightsViewModel,
                                 pocketViewModel,
                                 customizeButtonViewModel]
@@ -171,7 +180,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
         historyHighlightsViewModel.delegate = self
-        recentlySavedViewModel.delegate = self
+        bookmarksViewModel.delegate = self
         pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self
         messageCardViewModel.delegate = self
@@ -189,6 +198,7 @@ class HomepageViewModel: FeatureFlaggable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

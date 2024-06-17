@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
     func shouldDisplay(clipBoardURL url: URL)
@@ -21,7 +22,7 @@ class ClipboardBarDisplayHandler: NSObject {
     private var lastDisplayedURL: String?
     private weak var firstTab: Tab?
     var clipboardToast: ButtonToast?
-    private let windowUUID: UUID
+    private let windowUUID: WindowUUID
 
     init(prefs: Prefs, tabManager: TabManager) {
         self.prefs = prefs

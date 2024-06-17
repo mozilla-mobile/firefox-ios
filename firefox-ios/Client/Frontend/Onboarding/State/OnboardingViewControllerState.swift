@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Shared
+import Common
 
 struct OnboardingViewControllerState: ScreenState, Equatable {
     let windowUUID: WindowUUID

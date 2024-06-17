@@ -4,6 +4,7 @@
 
 import Foundation
 import Redux
+import Common
 
 struct AppState: StateType {
     let activeScreens: ActiveScreensState
@@ -24,6 +25,7 @@ struct AppState: StateType {
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
                 case (.browserViewController(let state), .browserViewController): return state as? S
+                case (.microsurvey(let state), .microsurvey): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -46,27 +48,14 @@ extension AppState {
     }
 }
 
-// Client base ActionContext class.
-class ActionContext {
-    let windowUUID: WindowUUID
-
-    init(windowUUID: WindowUUID) {
-        self.windowUUID = windowUUID
-    }
-}
-
-extension WindowUUID {
-    /// Convenience. Returns an ActionContext object for the receiver.
-    var context: ActionContext {
-        return ActionContext(windowUUID: self)
-    }
-}
-
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
                   middlewares: [
                     FeltPrivacyMiddleware().privacyManagerProvider,
                     ThemeManagerMiddleware().themeManagerProvider,
                     TabManagerMiddleware().tabsPanelProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+                    ToolbarMiddleware().toolbarProvider,
+                    MicrosurveyPromptMiddleware().microsurveyProvider,
+                    MicrosurveyMiddleware().microsurveyProvider
                   ])

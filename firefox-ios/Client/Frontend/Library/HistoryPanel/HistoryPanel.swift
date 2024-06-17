@@ -129,12 +129,11 @@ class HistoryPanel: UIViewController,
     }()
 
     lazy var emptyStateOverlayView: UIView = createEmptyStateOverlayView()
+    private weak var emptyStateOverlayBackgroundColorView: UIView?
     lazy var welcomeLabel: UILabel = .build { label in
         label.text = self.viewModel.emptyStateText
         label.textAlignment = .center
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: 17,
-                                                            weight: .light)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }
@@ -570,12 +569,18 @@ class HistoryPanel: UIViewController,
 
     func updateEmptyPanelState() {
         if viewModel.shouldShowEmptyState(searchText: searchbar.text ?? "") {
+            applyEmptyStateViewTheme(currentTheme())
             welcomeLabel.text = viewModel.emptyStateText
             tableView.tableFooterView = emptyStateOverlayView
         } else {
             tableView.alwaysBounceVertical = true
             tableView.tableFooterView = nil
         }
+    }
+
+    private func applyEmptyStateViewTheme(_ theme: Theme) {
+        welcomeLabel.textColor = theme.colors.textSecondary
+        emptyStateOverlayBackgroundColorView?.backgroundColor = theme.colors.layer1
     }
 
     private func createEmptyStateOverlayView() -> UIView {
@@ -587,6 +592,7 @@ class HistoryPanel: UIViewController,
             view.backgroundColor = self.currentTheme().colors.layer1
         }
         overlayView.addSubview(bgColor)
+        emptyStateOverlayBackgroundColorView = bgColor
 
         NSLayoutConstraint.activate([
             bgColor.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
@@ -628,7 +634,7 @@ class HistoryPanel: UIViewController,
         ]
         bottomSearchButton.tintColor = theme.colors.iconPrimary
         bottomDeleteButton.tintColor = theme.colors.iconPrimary
-        welcomeLabel.textColor = theme.colors.textSecondary
+        applyEmptyStateViewTheme(theme)
 
         tableView.reloadData()
     }

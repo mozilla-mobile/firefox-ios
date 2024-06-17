@@ -12,7 +12,7 @@ struct BottomSheetComponentViewModel: ComponentViewModel {
     private var viewModel: BottomSheetViewModel
 
     init() {
-        viewModel = BottomSheetViewModel(closeButtonA11yLabel: "Close button")
+        viewModel = BottomSheetViewModel(closeButtonA11yLabel: "Close button", closeButtonA11yIdentifier: "a11yCloseButton")
         viewModel.shouldDismissForTapOutside = true
 
         viewController = BottomSheetViewController(

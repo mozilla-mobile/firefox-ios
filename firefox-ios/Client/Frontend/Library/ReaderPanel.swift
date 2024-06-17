@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import enum MozillaAppServices.VisitType
+
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
@@ -70,7 +72,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
     let hostnameLabel: UILabel = .build { label in
         label.numberOfLines = 1
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
+        label.font = FXFontStyles.Regular.body.scaledFont()
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -180,7 +182,7 @@ class ReadingListPanel: UITableViewController,
     weak var navigationHandler: ReadingListNavigationHandler?
     let profile: Profile
     var state: LibraryPanelMainState
-    var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var bottomToolbarItems = [UIBarButtonItem]()
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -340,13 +342,13 @@ class ReadingListPanel: UITableViewController,
         let welcomeLabel: UILabel = .build { label in
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
+            label.font = FXFontStyles.Bold.body.scaledFont()
             label.adjustsFontSizeToFitWidth = true
             label.textColor = self.currentTheme().colors.textSecondary
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
+            label.font = FXFontStyles.Regular.body.scaledFont()
             label.numberOfLines = 0
             label.textColor = self.currentTheme().colors.textSecondary
         }
@@ -358,7 +360,7 @@ class ReadingListPanel: UITableViewController,
         }
         let readingListLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingListDescription
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .light)
+            label.font = FXFontStyles.Regular.body.scaledFont()
             label.numberOfLines = 0
             label.textColor = self.currentTheme().colors.textSecondary
         }

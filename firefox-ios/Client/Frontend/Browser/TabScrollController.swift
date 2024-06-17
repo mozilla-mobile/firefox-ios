@@ -154,6 +154,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
         guard !tabIsLoading() else { return }
 
+        tab?.shouldScrollToTop = false
+
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
             let delta = lastContentOffset - translation.y
@@ -432,6 +434,13 @@ private extension TabScrollingController {
         }
         return 1 - abs(headerTopOffset / topScrollHeight)
     }
+
+    private func setOffset(y: CGFloat, for scrollView: UIScrollView) {
+        scrollView.contentOffset = CGPoint(
+            x: contentOffsetBeforeAnimation.x,
+            y: y
+        )
+    }
 }
 
 extension TabScrollingController: UIGestureRecognizerDelegate {
@@ -445,6 +454,8 @@ extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll else { return }
 
+        tab?.shouldScrollToTop = false
+
         if decelerate || (toolbarState == .animating && !decelerate) {
             if scrollDirection == .up {
                 showToolbars(animated: true)
@@ -457,12 +468,14 @@ extension TabScrollingController: UIScrollViewDelegate {
     // checking if an abrupt scroll event was triggered and adjusting the offset to the one
     // before the WKWebView's contentOffset is reset as a result of the contentView's frame becoming smaller
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // for PDFs, we should set the initial offset to 0 (ZERO)
+        if let tab, tab.shouldScrollToTop {
+            setOffset(y: 0, for: scrollView)
+        }
+
         guard isAnimatingToolbar else { return }
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
-            scrollView.contentOffset = CGPoint(
-                x: contentOffsetBeforeAnimation.x,
-                y: contentOffsetBeforeAnimation.y + self.topScrollHeight
-            )
+            setOffset(y: contentOffsetBeforeAnimation.y + self.topScrollHeight, for: scrollView)
             contentOffsetBeforeAnimation.y = 0
         }
     }

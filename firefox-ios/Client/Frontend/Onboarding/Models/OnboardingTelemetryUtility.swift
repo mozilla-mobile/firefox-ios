@@ -65,7 +65,7 @@ class OnboardingTelemetryUtility: OnboardingTelemetryProtocol {
             extras: buildBaseTelemetryExtras(using: cardName))
     }
 
-    // MARK: - Private fuctions
+    // MARK: - Private functions
     private func buildBaseTelemetryExtras(
         using cardName: String
     ) -> [String: String] {

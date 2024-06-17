@@ -5,27 +5,25 @@
 loader: taskgraph.loader.transform:loader
 
 transforms:
-    - ffios_taskgraph.transforms.bitrise:transforms
-    - taskgraph.transforms.run:transforms
-    - taskgraph.transforms.task:transforms
+    - ffios_taskgraph.transforms.bitrise
+    - taskgraph.transforms.task
 
 
 tasks:
     screenshots:
+        description: Generate build instrumented for screenshots, including en-US pictures
         attributes:
             chunk_locales: ["en-US"]
-        bitrise-workflow: L10nBuild
-        description: Generate build instrumented for screenshots, including en-US pictures
-        index:
-            type: l10n-screenshots
         run-on-tasks-for: []
-        worker:
-            artifacts:
-                - type: file
-                  name: public/build/target.zip
-                  path: /builds/worker/artifacts/l10n-screenshots-dd.zip
         treeherder:
             symbol: B(screenshots)
             kind: build
             tier: 1
             platform: ios/opt
+        worker-type: bitrise
+        bitrise:
+            artifact_prefix: public
+            workflows:
+                - L10nBuild
+        index:
+            type: l10n-screenshots

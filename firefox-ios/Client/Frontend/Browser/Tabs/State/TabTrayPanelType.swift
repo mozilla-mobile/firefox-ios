@@ -35,7 +35,7 @@ enum TabTrayPanelType: Int, CaseIterable {
     var image: UIImage? {
         switch self {
         case .tabs:
-            return UIImage(named: ImageIdentifiers.navTabCounter)
+            return UIImage(named: StandardImageIdentifiers.Large.tab)
         case .privateTabs:
             return UIImage(named: StandardImageIdentifiers.Large.privateMode)
         case .syncedTabs:

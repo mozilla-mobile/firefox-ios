@@ -4,6 +4,7 @@
 
 import WebKit
 import XCTest
+import Common
 
 @testable import Client
 final class InactiveTabsManagerTests: XCTestCase {

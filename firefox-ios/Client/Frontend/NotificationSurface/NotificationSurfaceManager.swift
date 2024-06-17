@@ -73,7 +73,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
               let message = messagingManager.messageForId(messageId)
         else { return }
 
-        messagingManager.onMessagePressed(message)
+        messagingManager.onMessagePressed(message, window: nil)
     }
 
     func didDismissNotification(_ userInfo: [AnyHashable: Any]) {

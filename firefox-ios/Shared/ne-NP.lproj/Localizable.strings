@@ -577,9 +577,6 @@
 /* Title of the Learn More button that links to a support page about device passcode requirements. */
 "Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "थप जान्नुहोस्";
 
-/* Message shown when you enter Logins & Passwords without having a device passcode set. */
-"Logins.DevicePasscodeRequired.Message" = "लग इनहरू र पासवर्डहरू बचत गर्न र स्वत: भर्नको लागि, फेस आईडी, टच आईडी वा यन्त्र पासकोड सक्षम गर्नुहोस्।";
-
 /* Title of the Continue button. */
 "Logins.Onboarding.ContinueButtonTitle" = "जारी राख्नुहोस्";
 
@@ -625,20 +622,11 @@
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "फिल्टर";
 
-/* Label shown when there are no logins saved */
-"LoginsList.NoLoginsFound.Title" = "कुनै पनि लगइनहरु फेला परेनन्";
-
 /* Label that appears after the search if there are no logins matching the search */
 "LoginsList.NoMatchingResult.Subtitle" = "तपाईको खोजसँग मिल्ने कुनै पनि परिणामहरू छैनन्।";
 
-/* Label displayed when a user searches and no matches can be found against the search query */
-"LoginsList.NoMatchingResult.Title" = "कुनै मिल्ने लगइनहरू छैनन्";
-
 /* Title for cancel button for user to stop searching for a particular login */
 "LoginsList.Search.Cancel" = "रद्द गर्नुहोस्";
-
-/* Placeholder text for search field */
-"LoginsList.Search.Placeholder" = "लगइनहरु खोज्नुहोस्";
 
 /* Label displaying select a password to fill instruction */
 "LoginsList.SelectPassword.Title" = "भर्नको लागि कुनै एउटा पासवर्ड चयन गर्नुहोस्";
@@ -673,7 +661,7 @@
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
 "Menu.AddToShortcuts.v99" = "सर्टकटहरु मा थप्नुहोस्";
 
-/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "बुकमार्कहरु";
 
 /* The title for the button that lets you copy the url from the location bar. */
@@ -685,13 +673,13 @@
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "गृहपृष्ठलाई अनुकूलित गर्नुहोस्";
 
-/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "डाउनलोडहरु";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "मद्दत";
 
-/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "इतिहास";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
@@ -703,7 +691,7 @@
 /* Label for the button, displayed in the menu, turns on night mode. */
 "Menu.NightModeTurnOn.Label2" = "रात्री मोड खुल्ला गर्नुहोस्";
 
-/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "पासवर्डहरु";
 
 /* The title for the button that lets you paste into the location bar */
@@ -712,7 +700,7 @@
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "टाँस्नुहोस् र जानुहोस्";
 
-/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+/* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
 "Menu.ReadingList.Label" = "पढ्ने सूची";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */

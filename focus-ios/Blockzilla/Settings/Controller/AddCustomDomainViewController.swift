@@ -59,6 +59,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.autocompleteAddCustomUrl
         navigationController?.navigationBar.tintColor = .accent
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))
@@ -90,7 +91,8 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         ])
     }
 
-    @objc func cancelTapped() {
+    @objc
+    func cancelTapped() {
         finish()
     }
 
@@ -99,7 +101,8 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         return true
     }
 
-    @objc func doneTapped() {
+    @objc
+    func doneTapped() {
         self.resignFirstResponder()
         guard let domain = textInput.text, !domain.isEmpty else {
             Toast(text: UIConstants.strings.autocompleteAddCustomUrlError).show()

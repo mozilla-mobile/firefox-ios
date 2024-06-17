@@ -73,11 +73,13 @@ class TipViewController: UIViewController {
         }
     }
 
-    @objc private func tapTip() {
+    @objc
+    private func tapTip() {
         tipTappedAction(tip)
     }
 
-    @objc private func tapOutside() {
+    @objc
+    private func tapOutside() {
         tapOutsideAction()
     }
 }

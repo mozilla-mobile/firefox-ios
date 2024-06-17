@@ -5,54 +5,55 @@
 import Common
 import Redux
 
-class ThemeTypeContext: ActionContext {
-    let themeType: ThemeType
-    init(themeType: ThemeType, windowUUID: WindowUUID   ) {
-        self.themeType = themeType
-        super.init(windowUUID: windowUUID)
+class ThemeSettingsViewAction: Action {
+    let useSystemAppearance: Bool?
+    let automaticBrightnessEnabled: Bool?
+    let manualThemeType: ThemeType?
+    let userBrightness: Float?
+    let systemBrightness: Float?
+
+    init(useSystemAppearance: Bool? = nil,
+         automaticBrightnessEnabled: Bool? = nil,
+         manualThemeType: ThemeType? = nil,
+         userBrightness: Float? = nil,
+         systemBrightness: Float? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.useSystemAppearance = useSystemAppearance
+        self.automaticBrightnessEnabled = automaticBrightnessEnabled
+        self.manualThemeType = manualThemeType
+        self.userBrightness = userBrightness
+        self.systemBrightness = systemBrightness
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-class ThemeSettingsStateContext: ActionContext {
-    let state: ThemeSettingsState
-    init(state: ThemeSettingsState, windowUUID: WindowUUID) {
-        self.state = state
-        super.init(windowUUID: windowUUID)
+class ThemeSettingsMiddlewareAction: Action {
+    let themeSettingsState: ThemeSettingsState?
+
+    init(themeSettingsState: ThemeSettingsState? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.themeSettingsState = themeSettingsState
+        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
-enum ThemeSettingsAction: Action {
-    // UI trigger actions
-    case themeSettingsDidAppear(ActionContext)
-    case toggleUseSystemAppearance(BoolValueContext)
-    case enableAutomaticBrightness(BoolValueContext)
-    case switchManualTheme(ThemeTypeContext)
-    case updateUserBrightness(FloatValueContext)
-    case receivedSystemBrightnessChange(ActionContext)
+enum ThemeSettingsViewActionType: ActionType {
+    case themeSettingsDidAppear
+    case toggleUseSystemAppearance
+    case enableAutomaticBrightness
+    case switchManualTheme
+    case updateUserBrightness
+    case receivedSystemBrightnessChange
+}
 
-    // Middleware trigger actions
-    case receivedThemeManagerValues(ThemeSettingsStateContext)
-    case systemThemeChanged(BoolValueContext)
-    case automaticBrightnessChanged(BoolValueContext)
-    case manualThemeChanged(ThemeTypeContext)
-    case userBrightnessChanged(FloatValueContext)
-    case systemBrightnessChanged(FloatValueContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .themeSettingsDidAppear(let context),
-                .toggleUseSystemAppearance(let context as ActionContext),
-                .enableAutomaticBrightness(let context as ActionContext),
-                .switchManualTheme(let context as ActionContext),
-                .updateUserBrightness(let context as ActionContext),
-                .receivedSystemBrightnessChange(let context),
-                .receivedThemeManagerValues(let context as ActionContext),
-                .systemThemeChanged(let context as ActionContext),
-                .automaticBrightnessChanged(let context as ActionContext),
-                .manualThemeChanged(let context as ActionContext),
-                .userBrightnessChanged(let context as ActionContext),
-                .systemBrightnessChanged(let context as ActionContext):
-            return context.windowUUID
-        }
-    }
+enum ThemeSettingsMiddlewareActionType: ActionType {
+    case receivedThemeManagerValues
+    case systemThemeChanged
+    case automaticBrightnessChanged
+    case manualThemeChanged
+    case userBrightnessChanged
+    case systemBrightnessChanged
 }

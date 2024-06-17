@@ -39,7 +39,7 @@ class ThemableTests: XCTestCaseRootViewController {
         XCTAssertEqual(result.count, 2, "Two subviews")
     }
 
-    func testGetAllSubviews_twoSubviewsWithChilds() {
+    func testGetAllSubviews_twoSubviewsWithChildren() {
         let childView1 = UIView(), childView2 = UIView()
         let subview1 = UIView(), subview2 = UIView()
         subview1.addSubview(childView1)

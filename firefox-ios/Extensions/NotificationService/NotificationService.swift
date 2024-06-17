@@ -9,6 +9,8 @@ import Storage
 import Sync
 import UserNotifications
 
+import class MozillaAppServices.Viaduct
+
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
     var profile: BrowserProfile?
@@ -113,8 +115,6 @@ class NotificationService: UNNotificationServiceExtension {
 class SyncDataDisplay {
     var contentHandler: (UNNotificationContent) -> Void
     var notificationContent: UNMutableNotificationContent
-
-    var tabQueue: TabQueue?
     var messageDelivered = false
 
     init(content: UNMutableNotificationContent,

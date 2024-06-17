@@ -15,7 +15,7 @@ class MockThemeManager: ThemeManager {
     var window: UIWindow?
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    var systemThemeIsOn: Bool { return true}
+    var systemThemeIsOn = true
 
     var automaticBrightnessIsOn: Bool { return false}
 
@@ -31,6 +31,8 @@ class MockThemeManager: ThemeManager {
             currentThemeStorage = LightTheme()
         case .dark:
             currentThemeStorage = DarkTheme()
+        case .nightMode:
+            currentThemeStorage = NightModeTheme()
         case .privateMode:
             currentThemeStorage = PrivateModeTheme()
         }
@@ -38,7 +40,9 @@ class MockThemeManager: ThemeManager {
 
     func systemThemeChanged() {}
 
-    func setSystemTheme(isOn: Bool) {}
+    func setSystemTheme(isOn: Bool) {
+        systemThemeIsOn = isOn
+    }
 
     func setPrivateTheme(isOn: Bool, for window: UUID) {}
 
@@ -58,7 +62,7 @@ class MockThemeManager: ThemeManager {
 
     func brightnessChanged() { }
 
-    func getNormalSavedTheme() -> ThemeType { return .light }
+    func getNormalSavedTheme() -> ThemeType { return currentThemeStorage.type }
 
     func reloadTheme(for window: UUID) { }
 

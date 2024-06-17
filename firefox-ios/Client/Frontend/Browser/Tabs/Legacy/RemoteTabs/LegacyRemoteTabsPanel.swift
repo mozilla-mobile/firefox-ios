@@ -6,6 +6,8 @@ import UIKit
 import Storage
 import Common
 
+import enum MozillaAppServices.VisitType
+
 protocol RemotePanelDelegateProvider: AnyObject {
     var remotePanelDelegate: RemotePanelDelegate? { get }
 }

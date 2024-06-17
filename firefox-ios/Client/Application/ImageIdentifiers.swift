@@ -10,8 +10,8 @@ import Foundation
 /// Sing the song if you must.
 public struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
-    public static let emptySyncImageName = "emptySync"
     public static let firefoxFavicon = "faviconFox"
+    public static let foxConfirmation = "foxConfirmation"
     public static let homeHeaderLogoBall = "fxHomeHeaderLogoBall"
     public static let homeHeaderLogoText = "fxHomeHeaderLogoText"
     public static let homepagePocket = "homepage-pocket"
@@ -26,21 +26,14 @@ public struct ImageIdentifiers {
     public static let logoVisa = "logo_visa"
     public static let menuBadge = "menuBadge"
     public static let menuWarningMask = "warning-mask"
-    public static let navTabCounter = "nav-tabcounter"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
-    public static let qrCodeLight = "qrcode-light"
-    public static let qrCodeLightTurnedOn = "qrcode-isLighting"
-    public static let privateModeBadge = "privateModeBadge"
     public static let shoppingNoAnalysisImage = "shoppingNoAnalysisImage"
     public static let shoppingOptInCardImage = "shoppingOptInCardImage"
     public static let signinSync = "signin-sync"
-    public static let sponsoredStar = "sponsored-star"
-    public static let starEmpty = "starEmpty"
-    public static let starFill = "starFill"
-    public static let starHalf = "starHalf"
-    public static let subtract = "subtract"
     public static let syncOpenTab = "sync_open_tab"
+    public static let radioButtonNotSelected = "radioButtonNotSelected"
+    public static let radioButtonSelected = "radioButtonSelected"
 
     public struct Onboarding {
         public struct HeaderImages {
@@ -60,8 +53,6 @@ public struct ImageIdentifiers {
             public static let themeLight = "onboardingThemeLight"
             public static let toolbarTop = "onboardingToolbarIconTop"
             public static let toolbarBottom = "onboardingToolbarIconBottom"
-            public static let checkmarkEmpty = "onboardingCheckmarkEmpty"
-            public static let checkmarkFilled = "onboardingCheckmarkFilled"
         }
 
         public struct ChallengeTheDefault {

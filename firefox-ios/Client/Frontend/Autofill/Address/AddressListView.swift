@@ -30,7 +30,9 @@ struct AddressListView: View {
                             windowUUID: windowUUID,
                             address: address,
                             onTap: {
-                                // TODO: PHASE - 2: FXIOS-7653 Handle action when address cell is tapped.
+                                if viewModel.isEditingFeatureEnabled {
+                                    viewModel.addressTapped(address)
+                                }
                             }
                         )
                     }
@@ -41,12 +43,39 @@ struct AddressListView: View {
         }
         .listStyle(.plain)
         .listRowInsets(EdgeInsets())
+        .sheet(item: $viewModel.destination) { destination in
+            NavigationView {
+                switch destination {
+                case .add:
+                    EditAddressViewControllerRepresentable(model: viewModel)
+                        .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
+                        .navigationBarItems(
+                            leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                                viewModel.cancelAddButtonTap()
+                            },
+                            trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                                viewModel.saveAddressButtonTap()
+                            }
+                        )
+
+                case .edit:
+                    EditAddressViewControllerRepresentable(model: viewModel)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .cancellationAction) {
+                                Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
+                                    viewModel.cancelEditButtonTap()
+                                }
+                            }
+                        }
+                }
+            }
+        }
         .onAppear {
             viewModel.fetchAddresses()
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }

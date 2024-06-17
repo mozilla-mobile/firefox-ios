@@ -124,7 +124,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
         moreButton.isHidden = viewModel.isButtonHidden
         if !viewModel.isButtonHidden {
-            let moreButtonViewModel = ActionButtonViewModel(title: .RecentlySavedShowAllText,
+            let moreButtonViewModel = ActionButtonViewModel(title: .BookmarksSavedShowAllText,
                                                             a11yIdentifier: viewModel.buttonA11yIdentifier,
                                                             touchUpAction: viewModel.buttonAction)
             moreButton.configure(viewModel: moreButtonViewModel)

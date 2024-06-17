@@ -74,11 +74,11 @@ extension PhotonActionSheetAnimator {
                 usingSpringWithDamping: 0.8,
                 initialSpringVelocity: 0.3,
                 options: [],
-                animations: { () -> Void in
+                animations: { () in
                     self.shadow.alpha = 1
                     actionSheet.view.frame = containerView.bounds
                     actionSheet.view.layoutIfNeeded()
-                }, completion: { (completed) -> Void in
+                }, completion: { (completed) in
                     transitionContext.completeTransition(completed)
                 })
         } else {
@@ -89,7 +89,7 @@ extension PhotonActionSheetAnimator {
                 initialSpringVelocity: 0.0,
                 options: [],
                 animations: {
-                    () -> Void in
+                    () in
                     self.shadow.alpha = 0
                     actionSheet.view.frame = CGRect(
                         origin: CGPoint(x: 0, y: containerView.frame.size.height),
@@ -97,7 +97,7 @@ extension PhotonActionSheetAnimator {
                     )
                     actionSheet.view.layoutIfNeeded()
                 },
-                completion: { (completed) -> Void in
+                completion: { (completed) in
                     actionSheet.view.removeFromSuperview()
                     self.shadow.removeFromSuperview()
                     transitionContext.completeTransition(completed)

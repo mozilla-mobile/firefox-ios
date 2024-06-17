@@ -15,6 +15,11 @@ class ZoomingTests: BaseTestCase {
     let zoomInLevelsLandscape = ["75%", "90%"]
     let bookOfMozillaTxt = XCUIApplication().staticTexts.containingText("The Book of Mozilla").element(boundBy: 1)
 
+    let websites: [String] = ["http://localhost:\(serverPort)/test-fixture/find-in-page-test.html",
+                              "www.mozilla.org",
+                              "www.google.com"
+    ]
+
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()
@@ -37,8 +42,92 @@ class ZoomingTests: BaseTestCase {
         validateZoomActions()
     }
 
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306949
+    func testZoomForceCloseFirefox() {
+        openWebsiteAndReachZoomSetting(website: 0)
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        // Tap on + and - buttons
+        zoomIn()
+        forceRestartApp()
+        openWebsiteAndReachZoomSetting(website: 0)
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
+        zoomOut()
+        zoomOutButton.tap()
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306948
+    func testSwitchingZoomedTabs() {
+        validateZoomLevelOnSwitchingTabs()
+        // Repeat all steps in private browsing
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+        }
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        validateZoomLevelOnSwitchingTabs()
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609150
+    func testSwitchingZoomedTabsLandscape() {
+        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        validateZoomLevelOnSwitchingTabs()
+    }
+
+    private func validateZoomLevelOnSwitchingTabs() {
+        openWebsiteAndReachZoomSetting(website: 0)
+        tapZoomInButton(tapCount: 4)
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openWebsiteAndReachZoomSetting(website: 1)
+        tapZoomInButton(tapCount: 1)
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 110%")
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        openWebsiteAndReachZoomSetting(website: 2)
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+        selectTabTrayWebsites(tab: 0)
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
+        tapZoomOutButton(tapCount: 4)
+        selectTabTrayWebsites(tab: 1)
+        zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 110%")
+        tapZoomOutButton(tapCount: 1)
+        selectTabTrayWebsites(tab: 2)
+        zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
+        XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
+    }
+
+    private func selectTabTrayWebsites(tab: Int) {
+        navigator.goto(TabTray)
+        mozWaitForElementToExist(app.collectionViews.staticTexts.element)
+        app.collectionViews.staticTexts.element(boundBy: tab).tap()
+        waitUntilPageLoad()
+        // Tap on the hamburger menu -> Tap on Zoom
+        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(PageZoom)
+    }
+
+    private func openWebsiteAndReachZoomSetting(website: Int) {
+        navigator.openURL(websites[website])
+        waitUntilPageLoad()
+        // Tap on the hamburger menu -> Tap on Zoom
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(PageZoom)
+        // The zoom bar is displayed
+        mozWaitForElementToExist(zoomInButton)
+    }
+
     func validateZoomActions() {
-        navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
+        navigator.openURL(websites[0])
         waitUntilPageLoad()
         // Tap on the hamburger menu -> Tap on Zoom
         navigator.goto(BrowserTabMenu)
@@ -112,6 +201,18 @@ class ZoomingTests: BaseTestCase {
             let currentTextSize = bookOfMozillaTxt.frame.size.height
             XCTAssertTrue(currentTextSize != previoustTextSize)
             XCTAssertEqual(zoomLevel.label, "Current Zoom Level: \(zoomInLevelsLandscape[i])")
+        }
+    }
+
+    private func tapZoomInButton(tapCount: Int) {
+        for _ in 1...tapCount {
+            zoomInButton.tap()
+        }
+    }
+
+    private func tapZoomOutButton(tapCount: Int) {
+        for _ in 1...tapCount {
+            zoomOutButton.tap()
         }
     }
 

@@ -116,7 +116,7 @@ struct CreditCardInputField: View {
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }
@@ -183,7 +183,7 @@ struct CreditCardInputField: View {
         // TODO: FXIOS-6984 - use FocusState when iOS 14 is dropped
         TextField(text, text: $text, onEditingChanged: { (changed) in
             if !changed {
-                _ = self.updateInputValidity()
+                _ = self.updateInputValidity(fieldChanged: !changed)
             }
         })
         .preferredBodyFont(size: 17)
@@ -201,6 +201,9 @@ struct CreditCardInputField: View {
         .onChange(of: text) { [oldValue = text] newValue in
             handleTextInputWith(oldValue, and: newValue)
             viewModel.updateRightButtonState()
+            if inputType == .expiration {
+                _ = self.updateInputValidity()
+            }
         }.accessibilityLabel(fieldHeadline)
     }
 
@@ -234,7 +237,7 @@ struct CreditCardInputField: View {
         return creditCardValidator.isExpirationValidFor(date: val)
     }
 
-    func updateInputValidity() -> Bool? {
+    func updateInputValidity(fieldChanged: Bool = false) -> Bool? {
         switch inputType {
         case .name:
             let validity = isNameValid(val: text)
@@ -251,7 +254,7 @@ struct CreditCardInputField: View {
         case .expiration:
             let sanitizedValue = inputFieldHelper.sanitizeInputOn(text)
             let validity = isExpirationValid(val: sanitizedValue)
-            viewModel.expirationIsValid = validity
+            viewModel.showExpirationError = !validity && (sanitizedValue.count == 4 || fieldChanged)
             return validity
         }
     }

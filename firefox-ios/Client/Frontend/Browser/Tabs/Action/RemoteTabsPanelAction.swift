@@ -6,53 +6,30 @@ import Common
 import Redux
 import Storage
 
-class RemoteTabsRefreshDidFailContext: ActionContext {
-    let reason: RemoteTabsPanelEmptyStateReason
-    init(reason: RemoteTabsPanelEmptyStateReason, windowUUID: WindowUUID) {
-        self.reason = reason
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class RemoteTabsRefreshSuccessContext: ActionContext {
-    let clientAndTabs: [ClientAndTabs]
-    init(clientAndTabs: [ClientAndTabs], windowUUID: WindowUUID) {
-        self.clientAndTabs = clientAndTabs
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class URLActionContext: ActionContext {
-    let url: URL
-    init(url: URL, windowUUID: WindowUUID) {
-        self.url = url
-        super.init(windowUUID: windowUUID)
-    }
-}
-
 /// Defines actions sent to Redux for Sync tab in tab tray
-enum RemoteTabsPanelAction: Action {
-    case panelDidAppear(ActionContext)
-    case refreshTabs(ActionContext)
-    case refreshDidBegin(ActionContext)
-    case refreshDidFail(RemoteTabsRefreshDidFailContext)
-    case refreshDidSucceed(RemoteTabsRefreshSuccessContext)
-    case openSelectedURL(URLActionContext)
+class RemoteTabsPanelAction: Action {
+    let clientAndTabs: [ClientAndTabs]?
+    let reason: RemoteTabsPanelEmptyStateReason?
+    let url: URL?
 
-    var windowUUID: UUID {
-        switch self {
-        case .panelDidAppear(let context),
-                .refreshTabs(let context),
-                .refreshDidBegin(let context),
-                .refreshDidFail(let context as ActionContext),
-                .refreshDidSucceed(let context as ActionContext),
-                .openSelectedURL(let context as ActionContext):
-            return context.windowUUID
-        }
+    init(clientAndTabs: [ClientAndTabs]? = nil,
+         reason: RemoteTabsPanelEmptyStateReason? = nil,
+         url: URL? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.clientAndTabs = clientAndTabs
+        self.reason = reason
+        self.url = url
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-struct RemoteTabsPanelCachedResults {
-    let clientAndTabs: [ClientAndTabs]
-    let isUpdating: Bool // Whether we are also fetching updates to cached tabs
+enum RemoteTabsPanelActionType: ActionType {
+    case panelDidAppear
+    case refreshTabs
+    case refreshDidBegin
+    case refreshDidFail
+    case refreshDidSucceed
+    case openSelectedURL
 }

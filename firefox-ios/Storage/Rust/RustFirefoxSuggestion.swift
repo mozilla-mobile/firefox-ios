@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
 import UIKit
+
+import enum MozillaAppServices.Suggestion
 
 /// Additional information about a Firefox Suggestion to record
 /// in telemetry when the user interacts with the suggestion
@@ -20,7 +21,14 @@ public enum RustFirefoxSuggestionTelemetryInfo {
 }
 /// A Firefox Suggest search suggestion. This struct is a Swiftier
 /// representation of the Rust `Suggestion` enum.
-public struct RustFirefoxSuggestion {
+public struct RustFirefoxSuggestion: Equatable {
+    public static func == (lhs: RustFirefoxSuggestion, rhs: RustFirefoxSuggestion) -> Bool {
+        return lhs.title == rhs.title &&
+        lhs.url == rhs.url &&
+        lhs.isSponsored == rhs.isSponsored &&
+        lhs.iconImage == rhs.iconImage
+    }
+
     public let title: String
     public let url: URL
     public let isSponsored: Bool

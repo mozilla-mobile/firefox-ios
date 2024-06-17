@@ -6,10 +6,14 @@ import Foundation
 import Storage
 import WebKit
 
+import struct MozillaAppServices.CreditCard
+
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
-    func show(settings: Route.SettingsSection)
+    /// - Parameter onDismiss: An optional closure that is executed when the settings page is dismissed. 
+    /// This closure takes no parameters and returns no value.
+    func show(settings: Route.SettingsSection, onDismiss: (() -> Void)?)
 
     /// Asks to show a enhancedTrackingProtection page, can be a general 
     /// enhancedTrackingProtection page or a child page
@@ -85,6 +89,8 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Shows the Back Forward List View Controller.
     func showBackForwardList()
+
+    func showMicrosurvey(model: MicrosurveyModel)
 }
 
 extension BrowserNavigationHandler {
@@ -102,5 +108,9 @@ extension BrowserNavigationHandler {
             toastContainer: toastContainer,
             popoverArrowDirection: popoverArrowDirection
         )
+    }
+
+    func show(settings: Route.SettingsSection) {
+        show(settings: settings, onDismiss: nil)
     }
 }

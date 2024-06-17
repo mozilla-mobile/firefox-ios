@@ -1,23 +1,16 @@
+import time
+
 import pytest
 
 
-@pytest.mark.parametrize("load_branches", [("branch")], indirect=True)
+@pytest.mark.smoke
 def test_experiment_unenrolls_after_studies_toggle(xcodebuild, setup_experiment, start_app, load_branches):
-    xcodebuild.install()
-    setup_experiment(load_branches)
-    xcodebuild.test("XCUITests/ExperimentIntegrationTests/testVerifyExperimentEnrolled", erase=False)
+    xcodebuild.install(boot=False)
+    xcodebuild.test("XCUITests/ExperimentIntegrationTests/testAppStartup", build=False, erase=False)
+    setup_experiment()
+    time.sleep(5)
+    xcodebuild.test("XCUITests/ExperimentIntegrationTests/testVerifyExperimentEnrolled", build=False, erase=False)
     start_app()
     xcodebuild.test(
-        "XCUITests/ExperimentIntegrationTests/testStudiesToggleDisablesExperiment", erase=False
-    )
-
-
-@pytest.mark.parametrize("load_branches", [("branch")], indirect=True)
-def test_experiment_unenrolls_after_studies_toggle(xcodebuild, setup_experiment, start_app, load_branches):
-    xcodebuild.install()
-    setup_experiment(load_branches)
-    xcodebuild.test("XCUITests/ExperimentIntegrationTests/testVerifyExperimentEnrolled", erase=False)
-    start_app()
-    xcodebuild.test(
-        "XCUITests/ExperimentIntegrationTests/testStudiesToggleDisablesExperiment", erase=False
+        "XCUITests/ExperimentIntegrationTests/testStudiesToggleDisablesExperiment", build=False, erase=False
     )

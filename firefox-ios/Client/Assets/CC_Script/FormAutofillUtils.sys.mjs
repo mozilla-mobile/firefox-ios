@@ -26,18 +26,25 @@ ChromeUtils.defineLazyGetter(
     )
 );
 
+XPCOMUtils.defineLazyServiceGetter(
+  lazy,
+  "Crypto",
+  "@mozilla.org/login-manager/crypto/SDR;1",
+  "nsILoginManagerCrypto"
+);
+
 export let FormAutofillUtils;
 
 const ADDRESSES_COLLECTION_NAME = "addresses";
 const CREDITCARDS_COLLECTION_NAME = "creditCards";
+const AUTOFILL_CREDITCARDS_REAUTH_PREF =
+  FormAutofill.AUTOFILL_CREDITCARDS_REAUTH_PREF;
 const MANAGE_ADDRESSES_L10N_IDS = [
   "autofill-add-address-title",
   "autofill-manage-addresses-title",
 ];
 const EDIT_ADDRESS_L10N_IDS = [
-  "autofill-address-given-name",
-  "autofill-address-additional-name",
-  "autofill-address-family-name",
+  "autofill-address-name",
   "autofill-address-organization",
   "autofill-address-street",
   "autofill-address-state",
@@ -48,6 +55,27 @@ const EDIT_ADDRESS_L10N_IDS = [
   "autofill-address-postal-code",
   "autofill-address-email",
   "autofill-address-tel",
+  "autofill-edit-address-title",
+  "autofill-address-neighborhood",
+  "autofill-address-village-township",
+  "autofill-address-island",
+  "autofill-address-townland",
+  "autofill-address-district",
+  "autofill-address-county",
+  "autofill-address-post-town",
+  "autofill-address-suburb",
+  "autofill-address-parish",
+  "autofill-address-prefecture",
+  "autofill-address-area",
+  "autofill-address-do-si",
+  "autofill-address-department",
+  "autofill-address-emirate",
+  "autofill-address-oblast",
+  "autofill-address-pin",
+  "autofill-address-eircode",
+  "autofill-address-country-only",
+  "autofill-cancel-button",
+  "autofill-save-button",
 ];
 const MANAGE_CREDITCARDS_L10N_IDS = [
   "autofill-add-card-title",
@@ -61,9 +89,9 @@ const EDIT_CREDITCARD_L10N_IDS = [
   "autofill-card-network",
 ];
 const FIELD_STATES = {
-  NORMAL: "NORMAL",
-  AUTO_FILLED: "AUTO_FILLED",
-  PREVIEW: "PREVIEW",
+  NORMAL: "",
+  AUTO_FILLED: "autofill",
+  PREVIEW: "preview",
 };
 const FORM_SUBMISSION_REASON = {
   FORM_SUBMIT_EVENT: "form-submit-event",
@@ -85,6 +113,7 @@ FormAutofillUtils = {
 
   ADDRESSES_COLLECTION_NAME,
   CREDITCARDS_COLLECTION_NAME,
+  AUTOFILL_CREDITCARDS_REAUTH_PREF,
   MANAGE_ADDRESSES_L10N_IDS,
   EDIT_ADDRESS_L10N_IDS,
   MANAGE_CREDITCARDS_L10N_IDS,
@@ -146,10 +175,94 @@ FormAutofillUtils = {
     return ccNumber && lazy.CreditCard.isValidNumber(ccNumber);
   },
 
-  ensureLoggedIn(promptMessage) {
-    return lazy.OSKeyStore.ensureLoggedIn(
-      this._reauthEnabledByUser && promptMessage ? promptMessage : false
+  /**
+   * Get the decrypted value for a string pref.
+   *
+   * @param {string} prefName -> The pref whose value is needed.
+   * @param {string} safeDefaultValue -> Value to be returned incase the pref is not yet set.
+   * @returns {string}
+   */
+  getSecurePref(prefName, safeDefaultValue) {
+    if (Services.prefs.getBoolPref("security.nocertdb", false)) {
+      return false;
+    }
+    try {
+      const encryptedValue = Services.prefs.getStringPref(prefName, "");
+      return encryptedValue === ""
+        ? safeDefaultValue
+        : lazy.Crypto.decrypt(encryptedValue);
+    } catch {
+      return safeDefaultValue;
+    }
+  },
+
+  /**
+   * Set the pref to the encrypted form of the value.
+   *
+   * @param {string} prefName -> The pref whose value is to be set.
+   * @param {string} value -> The value to be set in its encrypted form.
+   */
+  setSecurePref(prefName, value) {
+    if (Services.prefs.getBoolPref("security.nocertdb", false)) {
+      return;
+    }
+    if (value) {
+      const encryptedValue = lazy.Crypto.encrypt(value);
+      Services.prefs.setStringPref(prefName, encryptedValue);
+    } else {
+      Services.prefs.clearUserPref(prefName);
+    }
+  },
+
+  /**
+   * Get whether the OSAuth is enabled or not.
+   *
+   * @param {string} prefName -> The name of the pref (creditcards or addresses)
+   * @returns {boolean}
+   */
+  getOSAuthEnabled(prefName) {
+    return (
+      lazy.OSKeyStore.canReauth() &&
+      this.getSecurePref(prefName, "") !== "opt out"
     );
+  },
+
+  /**
+   * Set whether the OSAuth is enabled or not.
+   *
+   * @param {string} prefName -> The pref to encrypt.
+   * @param {boolean} enable -> Whether the pref is to be enabled.
+   */
+  setOSAuthEnabled(prefName, enable) {
+    this.setSecurePref(prefName, enable ? null : "opt out");
+  },
+
+  async verifyUserOSAuth(
+    prefName,
+    promptMessage,
+    captionDialog = "",
+    parentWindow = null,
+    generateKeyIfNotAvailable = true
+  ) {
+    if (!this.getOSAuthEnabled(prefName)) {
+      promptMessage = false;
+    }
+    try {
+      return (
+        await lazy.OSKeyStore.ensureLoggedIn(
+          promptMessage,
+          captionDialog,
+          parentWindow,
+          generateKeyIfNotAvailable
+        )
+      ).authenticated;
+    } catch (ex) {
+      // Since Win throws an exception whereas Mac resolves to false upon cancelling.
+      if (ex.result !== Cr.NS_ERROR_FAILURE) {
+        throw ex;
+      }
+    }
+    return false;
   },
 
   /**
@@ -636,7 +749,7 @@ FormAutofillUtils = {
 
   findSelectOption(selectEl, record, fieldName) {
     if (this.isAddressField(fieldName)) {
-      return this.findAddressSelectOption(selectEl, record, fieldName);
+      return this.findAddressSelectOption(selectEl.options, record, fieldName);
     }
     if (this.isCreditCardField(fieldName)) {
       return this.findCreditCardSelectOption(selectEl, record, fieldName);
@@ -710,13 +823,13 @@ FormAutofillUtils = {
    * 3. Second pass try to identify values from address value and options,
    *    and look for a match.
    *
-   * @param   {DOMElement} selectEl
+   * @param   {Array<{text: string, value: string}>} options
    * @param   {object} address
    * @param   {string} fieldName
    * @returns {DOMElement}
    */
-  findAddressSelectOption(selectEl, address, fieldName) {
-    if (selectEl.options.length > 512) {
+  findAddressSelectOption(options, address, fieldName) {
+    if (options.length > 512) {
       // Allow enough space for all countries (roughly 300 distinct values) and all
       // timezones (roughly 400 distinct values), plus some extra wiggle room.
       return null;
@@ -728,7 +841,7 @@ FormAutofillUtils = {
 
     let collators = this.getSearchCollators(address.country);
 
-    for (let option of selectEl.options) {
+    for (const option of options) {
       if (
         this.strCompare(value, option.value, collators) ||
         this.strCompare(value, option.text, collators)
@@ -763,7 +876,7 @@ FormAutofillUtils = {
             "\\b" + this.escapeRegExp(identifiedValue) + "\\b",
             "i"
           );
-          for (let option of selectEl.options) {
+          for (const option of options) {
             let optionValue = this.identifyValue(
               keys,
               names,
@@ -774,7 +887,8 @@ FormAutofillUtils = {
               keys,
               names,
               option.text,
-              collators
+              collators,
+              true
             );
             if (
               identifiedValue === optionValue ||
@@ -789,7 +903,7 @@ FormAutofillUtils = {
       }
       case "country": {
         if (this.getCountryAddressData(value)) {
-          for (let option of selectEl.options) {
+          for (const option of options) {
             if (
               this.identifyCountryCode(option.text, value) ||
               this.identifyCountryCode(option.value, value)
@@ -822,23 +936,13 @@ FormAutofillUtils = {
    * @returns {XULElement}
    */
   findAddressSelectOptionWithMenuPopup(menupopup, address, fieldName) {
-    class MenuitemProxy {
-      constructor(menuitem) {
-        this.menuitem = menuitem;
-      }
-      get text() {
-        return this.menuitem.label;
-      }
-      get value() {
-        return this.menuitem.value;
-      }
-    }
-    const selectEl = {
-      options: Array.from(menupopup.childNodes).map(
-        menuitem => new MenuitemProxy(menuitem)
-      ),
-    };
-    return this.findAddressSelectOption(selectEl, address, fieldName)?.menuitem;
+    const options = Array.from(menupopup.childNodes).map(menuitem => ({
+      text: menuitem.label,
+      value: menuitem.value,
+      menuitem,
+    }));
+
+    return this.findAddressSelectOption(options, address, fieldName)?.menuitem;
   },
 
   findCreditCardSelectOption(selectEl, creditCard, fieldName) {
@@ -935,21 +1039,26 @@ FormAutofillUtils = {
 
   /**
    * Try to match value with keys and names, but always return the key.
+   * If inexactMatch is true, then a substring match is performed, otherwise
+   * the string must match exactly.
    *
    * @param   {Array<string>} keys
    * @param   {Array<string>} names
    * @param   {string} value
    * @param   {Array} collators
+   * @param   {bool} inexactMatch
    * @returns {string}
    */
-  identifyValue(keys, names, value, collators) {
+  identifyValue(keys, names, value, collators, inexactMatch = false) {
     let resultKey = keys.find(key => this.strCompare(value, key, collators));
     if (resultKey) {
       return resultKey;
     }
 
     let index = names.findIndex(name =>
-      this.strCompare(value, name, collators)
+      inexactMatch
+        ? this.strInclude(value, name, collators)
+        : this.strCompare(value, name, collators)
     );
     if (index !== -1) {
       return keys[index];
@@ -1054,6 +1163,86 @@ FormAutofillUtils = {
       ),
       postalCodePattern: dataset.zip,
     };
+  },
+  /**
+   * Converts a Map to an array of objects with `value` and `text` properties ( option like).
+   *
+   * @param {Map} optionsMap
+   * @returns {Array<{ value: string, text: string }>|null}
+   */
+  optionsMapToArray(optionsMap) {
+    return optionsMap?.size
+      ? [...optionsMap].map(([value, text]) => ({ value, text }))
+      : null;
+  },
+
+  /**
+   * Get flattened form layout information of a given country
+   * TODO(Bug 1891730): Remove getFormFormat and use this instead.
+   *
+   * @param {object} record - An object containing at least the 'country' property.
+   * @returns {Array} Flattened array with the address fiels in order.
+   */
+  getFormLayout(record) {
+    const formFormat = this.getFormFormat(record.country);
+    let fieldsInOrder = formFormat.fieldsOrder;
+
+    // Add missing fields that are always present but not in the .fmt of addresses
+    // TODO: extend libaddress later to support this if possible
+    fieldsInOrder = [
+      ...fieldsInOrder,
+      {
+        fieldId: "country",
+        options: this.optionsMapToArray(FormAutofill.countries),
+        required: true,
+      },
+      { fieldId: "tel", type: "tel" },
+      { fieldId: "email", type: "email" },
+    ];
+
+    const addressLevel1Options = this.optionsMapToArray(
+      formFormat.addressLevel1Options
+    );
+
+    const addressLevel1SelectedValue = addressLevel1Options
+      ? this.findAddressSelectOption(
+          addressLevel1Options,
+          record,
+          "address-level1"
+        )?.value
+      : record["address-level1"];
+
+    for (const field of fieldsInOrder) {
+      const flattenedObject = {
+        fieldId: field.fieldId,
+        newLine: field.newLine,
+        l10nId: this.getAddressFieldL10nId(field.fieldId),
+        required: formFormat.countryRequiredFields.includes(field.fieldId),
+        value: record[field.fieldId] ?? "",
+        ...(field.fieldId === "street-address" && {
+          l10nId: "autofill-address-street",
+          multiline: true,
+        }),
+        ...(field.fieldId === "address-level1" && {
+          l10nId: formFormat.addressLevel1L10nId,
+          options: addressLevel1Options,
+          value: addressLevel1SelectedValue,
+        }),
+        ...(field.fieldId === "address-level2" && {
+          l10nId: formFormat.addressLevel2L10nId,
+        }),
+        ...(field.fieldId === "address-level3" && {
+          l10nId: formFormat.addressLevel3L10nId,
+        }),
+        ...(field.fieldId === "postal-code" && {
+          pattern: formFormat.postalCodePattern,
+          l10nId: formFormat.postalCodeL10nId,
+        }),
+      };
+      Object.assign(field, flattenedObject);
+    }
+
+    return fieldsInOrder;
   },
 
   getAddressFieldL10nId(type) {

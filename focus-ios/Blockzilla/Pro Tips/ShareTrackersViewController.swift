@@ -82,7 +82,8 @@ class ShareTrackersViewController: UIViewController {
         ])
     }
 
-    @objc private func shareTapped(sender: UIButton) {
+    @objc
+    private func shareTapped(sender: UIButton) {
         shareTap(sender)
     }
 }

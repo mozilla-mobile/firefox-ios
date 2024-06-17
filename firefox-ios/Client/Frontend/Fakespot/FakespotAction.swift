@@ -5,59 +5,37 @@
 import Common
 import Redux
 
-class FakespotUIContext: ActionContext {
-    let isExpanded: Bool
-    init(isExpanded: Bool, windowUUID: WindowUUID) {
-        self.isExpanded = isExpanded
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class FakespotTabContext: ActionContext {
+class FakespotAction: Action {
+    let isOpen: Bool?
+    let isExpanded: Bool?
     let tabUUID: TabUUID?
-    init(tabUUID: TabUUID?, windowUUID: WindowUUID) {
+    let productId: String?
+
+    init(isOpen: Bool? = nil,
+         isExpanded: Bool? = nil,
+         tabUUID: TabUUID? = nil,
+         productId: String? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.isOpen = isOpen
+        self.isExpanded = isExpanded
         self.tabUUID = tabUUID
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class FakespotProductContext: FakespotTabContext {
-    let productId: String
-    init(productId: String, tabUUID: TabUUID?, windowUUID: WindowUUID) {
         self.productId = productId
-        super.init(tabUUID: tabUUID, windowUUID: windowUUID)
+        super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
-enum FakespotAction: Action {
-    case settingsStateDidChange(FakespotUIContext)
-    case reviewQualityDidChange(FakespotUIContext)
-    case highlightsDidChange(FakespotUIContext)
-    case tabDidChange(FakespotTabContext)
-    case tabDidReload(FakespotProductContext)
-    case pressedShoppingButton(ActionContext)
-    case show(ActionContext)
-    case dismiss(ActionContext)
-    case setAppearanceTo(BoolValueContext)
-    case adsImpressionEventSendFor(FakespotProductContext)
-    case adsExposureEventSendFor(FakespotProductContext)
-    case surfaceDisplayedEventSend(ActionContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .settingsStateDidChange(let context as ActionContext),
-                .reviewQualityDidChange(let context as ActionContext),
-                .highlightsDidChange(let context as ActionContext),
-                .tabDidChange(let context as ActionContext),
-                .tabDidReload(let context as ActionContext),
-                .pressedShoppingButton(let context),
-                .show(let context),
-                .dismiss(let context),
-                .setAppearanceTo(let context as ActionContext),
-                .adsImpressionEventSendFor(let context as ActionContext),
-                .adsExposureEventSendFor(let context as ActionContext),
-                .surfaceDisplayedEventSend(let context):
-            return context.windowUUID
-        }
-    }
+enum FakespotActionType: ActionType {
+    case settingsStateDidChange
+    case reviewQualityDidChange
+    case highlightsDidChange
+    case tabDidChange
+    case tabDidReload
+    case pressedShoppingButton
+    case show
+    case dismiss
+    case setAppearanceTo
+    case adsImpressionEventSendFor
+    case adsExposureEventSendFor
+    case surfaceDisplayedEventSend
 }

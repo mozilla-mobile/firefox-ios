@@ -8,6 +8,8 @@ import Storage
 import SwiftUI
 import UIKit
 
+import struct MozillaAppServices.CreditCard
+
 class CreditCardTableViewController: UIViewController, Themeable {
     // MARK: UX constants
     struct UX {

@@ -8,6 +8,8 @@ import SwiftUI
 import Storage
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 struct CreditCardItemRow: View {
     let item: CreditCard
     let isAccessibilityCategory: Bool
@@ -100,7 +102,7 @@ struct CreditCardItemRow: View {
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
     }

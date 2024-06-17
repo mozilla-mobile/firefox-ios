@@ -49,15 +49,20 @@ class SettingsTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
 
+        // For iOS 15, we must scroll until the switch is visible.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+            mozWaitForElementToExist(app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"])
+        }
         // Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value as? String, "0")
 
         // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].tap()
+        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].tap()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
         app.navigationBars["Settings"].buttons["Done"].tap()
@@ -67,7 +72,7 @@ class SettingsTests: BaseTestCase {
         settingsmenuitemCell.tap()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value3 as? String, "1")
     }
 
@@ -137,25 +142,27 @@ class SettingsTests: BaseTestCase {
         let table = app.tables.element(boundBy: 0)
         let settingsQuery = AccessibilityIdentifiers.Settings.self
         mozWaitForElementToExist(table)
+        let toolbarElement = table.cells[settingsQuery.SearchBar.searchBarSetting]
         let settingsElements = [
-            // There are elements that have missing identifiers. Test will be updated once these will be added
-            // https://github.com/mozilla-mobile/firefox-ios/issues/19729
             table.cells[settingsQuery.DefaultBrowser.defaultBrowser], table.cells[settingsQuery.ConnectSetting.title],
             table.cells[settingsQuery.Search.title], table.cells[settingsQuery.NewTab.title],
             table.cells[settingsQuery.Homepage.homeSettings], table.cells[settingsQuery.Tabs.title],
             table.cells[settingsQuery.OpenWithMail.title], table.cells[settingsQuery.Theme.title],
-            table.cells[settingsQuery.SearchBar.searchBarSetting], table.cells[settingsQuery.Siri.title],
-            table.cells[settingsQuery.BlockPopUp.title], table.cells[settingsQuery.NoImageMode.title],
-            app.switches[settingsQuery.OfferToOpen.title], table.cells[settingsQuery.Logins.title],
-            app.switches[settingsQuery.ShowLink.title], table.cells[settingsQuery.CreditCards.title],
-            table.cells[settingsQuery.Address.title], table.cells[settingsQuery.ClearData.title],
-            app.switches[settingsQuery.ClosePrivateTabs.title], table.cells[settingsQuery.ContentBlocker.title],
-            table.cells[settingsQuery.Notifications.title], table.cells[settingsQuery.ShowIntroduction.title],
-            table.cells[settingsQuery.SendAnonymousUsageData.title], table.cells[settingsQuery.StudiesToggle.title],
-            table.cells[settingsQuery.Version.title], table.cells["Privacy Policy"],
-            table.cells["Send Feedback"], table.cells["Help"], table.cells["Rate on App Store"],
-            table.cells["Licenses"], table.cells["Your Rights"]
+            table.cells[settingsQuery.Siri.title], table.cells[settingsQuery.BlockPopUp.title],
+            table.cells[settingsQuery.NoImageMode.title], app.switches[settingsQuery.OfferToOpen.title],
+            table.cells[settingsQuery.Logins.title], app.switches[settingsQuery.ShowLink.title],
+            table.cells[settingsQuery.CreditCards.title], table.cells[settingsQuery.Address.title],
+            table.cells[settingsQuery.ContentBlocker.title], table.cells[settingsQuery.Notifications.title],
+            table.cells[settingsQuery.ShowIntroduction.title], table.cells[settingsQuery.SendAnonymousUsageData.title],
+            table.cells[settingsQuery.StudiesToggle.title], table.cells[settingsQuery.Version.title],
+            table.cells[settingsQuery.PrivacyPolicy.title], table.cells[settingsQuery.SendFeedback.title],
+            table.cells[settingsQuery.Help.title], table.cells[settingsQuery.RateOnAppStore.title],
+            table.cells[settingsQuery.Licenses.title], table.cells[settingsQuery.YourRights.title]
         ]
+        if !iPad() {
+            mozWaitForElementToExist(toolbarElement)
+            XCTAssertTrue(toolbarElement.isVisible())
+        }
 
         for i in settingsElements {
             scrollToElement(i)

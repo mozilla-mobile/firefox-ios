@@ -17,9 +17,6 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
-        let tabDataStore: TabDataStore = MockTabDataStore()
-        AppContainer.shared.register(service: tabDataStore)
-
         let diskImageStore: DiskImageStore = DefaultDiskImageStore(
             files: profile.files,
             namespace: TabManagerConstants.tabScreenshotNamespace,
@@ -27,8 +24,11 @@ class DependencyHelperMock {
         AppContainer.shared.register(service: diskImageStore)
 
         let windowUUID = WindowUUID.XCTestDefaultUUID
+        let windowManager: WindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
         let tabManager: TabManager =
-        injectedTabManager ?? TabManagerImplementation(profile: profile, uuid: windowUUID)
+        injectedTabManager ?? TabManagerImplementation(profile: profile,
+                                                       uuid: windowUUID,
+                                                       windowManager: windowManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
         AppContainer.shared.register(service: appSessionProvider)
@@ -42,7 +42,6 @@ class DependencyHelperMock {
         let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
-        let windowManager: WindowManager = WindowManagerImplementation()
         AppContainer.shared.register(service: windowManager)
         windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: windowUUID)
 

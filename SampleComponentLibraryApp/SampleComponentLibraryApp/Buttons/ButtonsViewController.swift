@@ -13,8 +13,10 @@ class ButtonsViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private lazy var primaryButton: PrimaryRoundedButton = .build { _ in }
+    private lazy var primaryButtonDisabled: PrimaryRoundedButton = .build { _ in }
     private lazy var secondaryButton: SecondaryRoundedButton = .build { _ in }
     private lazy var linkButton: LinkButton = .build { _ in }
+    private lazy var closeButton: CloseButton = .build { _ in }
     private lazy var enabledOnSwitch: PaddedSwitch = .build { _ in }
     private lazy var enabledOffSwitch: PaddedSwitch = .build { _ in }
     private lazy var disabledOnSwitch: PaddedSwitch = .build { _ in }
@@ -51,6 +53,13 @@ class ButtonsViewController: UIViewController, Themeable {
                                                              a11yIdentifier: "a11yPrimary")
         primaryButton.configure(viewModel: primaryViewModel)
 
+        let primaryViewModelDisabled = PrimaryRoundedButtonViewModel(
+            title: "Primary Disabled",
+            a11yIdentifier: "a11yPrimaryDisabled"
+        )
+        primaryButtonDisabled.configure(viewModel: primaryViewModelDisabled)
+        primaryButtonDisabled.isEnabled = false
+
         let secondaryViewModel = SecondaryRoundedButtonViewModel(title: "Secondary",
                                                                  a11yIdentifier: "a11ySecondary")
         secondaryButton.configure(viewModel: secondaryViewModel)
@@ -58,6 +67,11 @@ class ButtonsViewController: UIViewController, Themeable {
         let linkButtonViewModel = LinkButtonViewModel(title: "This is a link",
                                                       a11yIdentifier: "a11yLink")
         linkButton.configure(viewModel: linkButtonViewModel)
+
+        let closeButtonViewModel = CloseButtonViewModel(
+            a11yLabel: "This is a close button",
+            a11yIdentifier: "a11yCloseButton")
+        closeButton.configure(viewModel: closeButtonViewModel)
 
         let paddedSwitchViewModelOnEnabled = PaddedSwitchViewModel(theme: themeManager.currentTheme,
                                                                    isEnabled: true,
@@ -88,6 +102,7 @@ class ButtonsViewController: UIViewController, Themeable {
         disabledOffSwitch.configure(with: paddedSwitchViewModelOffDisabled)
 
         primaryButton.applyTheme(theme: themeManager.currentTheme)
+        primaryButtonDisabled.applyTheme(theme: themeManager.currentTheme)
         secondaryButton.applyTheme(theme: themeManager.currentTheme)
         linkButton.applyTheme(theme: themeManager.currentTheme)
     }
@@ -95,8 +110,10 @@ class ButtonsViewController: UIViewController, Themeable {
     private func setupView() {
         view.addSubview(buttonStackView)
         buttonStackView.addArrangedSubview(primaryButton)
+        buttonStackView.addArrangedSubview(primaryButtonDisabled)
         buttonStackView.addArrangedSubview(secondaryButton)
         buttonStackView.addArrangedSubview(linkButton)
+        buttonStackView.addArrangedSubview(closeButton)
 
         buttonStackView.addArrangedSubview(offSwitchView)
         offSwitchView.addSubview(enabledOffSwitch)

@@ -72,6 +72,8 @@ struct AddressAutofillToggle: View {
             }
             .accessibilityElement()
             .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
+            .accessibilityValue("\(model.isEnabled ? 1 : 0)")
+            .accessibilityAddTraits(traits)
             .accessibilityAction {
                 model.isEnabled = !model.isEnabled
             }
@@ -87,8 +89,16 @@ struct AddressAutofillToggle: View {
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        }
+    }
+
+    var traits: AccessibilityTraits {
+        if #available(iOS 17.0, *) {
+            return [.isButton, .isToggle]
+        } else {
+            return [.isButton]
         }
     }
 

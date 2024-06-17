@@ -57,6 +57,7 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
 
+        dismissSurveyPrompt()
         nextInPageResultButton.tap()
         mozWaitForElementToExist(app.staticTexts["3/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["3/6"].exists)
@@ -127,7 +128,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323802
-    func testBarDissapearsWhenReloading() {
+    func testBarDisappearsWhenReloading() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -141,7 +142,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323803
-    func testBarDissapearsWhenOpeningTabsTray() {
+    func testBarDisappearsWhenOpeningTabsTray() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
 
@@ -175,10 +176,18 @@ class FindInPageTests: BaseTestCase {
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
         if !iPad() {
-            while !app.collectionViews.menuItems["Find in Page"].exists {
-                app.buttons["Forward"].firstMatch.tap()
-                mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
-                mozWaitForElementToExist(app.buttons["Forward"])
+            while !app.menuItems["Find in Page"].exists {
+                if #available(iOS 16, *) {
+                    app.buttons["Forward"].firstMatch.tap()
+                } else {
+                    app.menuItems["show.next.items.menu.button"].tap()
+                }
+                mozWaitForElementToExist(app.menuItems.firstMatch)
+                if #available(iOS 16, *) {
+                    mozWaitForElementToExist(app.buttons["Forward"])
+                } else {
+                    mozWaitForElementToExist(app.menuItems["show.next.items.menu.button"])
+                }
             }
         }
         mozWaitForElementToExist(app.menuItems["Find in Page"])

@@ -132,7 +132,7 @@ class SearchProviderTest: BaseTestCase {
         XCTAssertFalse(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"].exists)
     }
 
-	private func changeSearchProvider(provider: String) {
+    private func changeSearchProvider(provider: String) {
         waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
@@ -141,37 +141,37 @@ class SearchProviderTest: BaseTestCase {
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
-		app.tables.cells["SettingsViewController.searchCell"].tap()
+        app.tables.cells["SettingsViewController.searchCell"].tap()
         waitForExistence(app.tables.staticTexts[provider], timeout: 5)
-		app.tables.staticTexts[provider].tap()
+        app.tables.staticTexts[provider].tap()
         app.buttons["Done"].tap()
-	}
+    }
 
-	private func doSearch(searchWord: String, provider: String) {
-		let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
+    private func doSearch(searchWord: String, provider: String) {
+        let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         let cancelButton = app.buttons["URLBar.cancelButton"]
-		urlbarUrltextTextField.tap()
-		urlbarUrltextTextField.typeText(searchWord)
+        urlbarUrltextTextField.tap()
+        urlbarUrltextTextField.typeText(searchWord)
         app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
         app.buttons["OverlayView.searchButton"].firstMatch.tap()
         waitForWebPageLoad()
 
-		// Check the correct site is reached
-		switch provider {
-			case "Google":
-                waitForValueContains(urlbarUrltextTextField, value: "google.com")
-                if app.webViews.textFields["Search"].exists {
-                    waitForValueContains(app.webViews.textFields["Search"], value: searchWord)
-                } else if app.webViews.otherElements["Search"].exists {
-                    waitForValueContains(app.webViews.otherElements["Search"], value: searchWord)
-                }
-           case "DuckDuckGo":
-				waitForValueContains(urlbarUrltextTextField, value: "duckduckgo.com")
-				waitForExistence(app.otherElements["mozilla at DuckDuckGo"])
-			case "Wikipedia":
-				waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
-			default:
-				XCTFail("Invalid Search Provider")
-		}
-	}
+        // Check the correct site is reached
+        switch provider {
+        case "Google":
+            waitForValueContains(urlbarUrltextTextField, value: "google.com")
+            if app.webViews.textFields["Search"].exists {
+                waitForValueContains(app.webViews.textFields["Search"], value: searchWord)
+            } else if app.webViews.otherElements["Search"].exists {
+                waitForValueContains(app.webViews.otherElements["Search"], value: searchWord)
+            }
+        case "DuckDuckGo":
+            waitForValueContains(urlbarUrltextTextField, value: "duckduckgo.com")
+            waitForExistence(app.otherElements["mozilla at DuckDuckGo"])
+        case "Wikipedia":
+            waitForValueContains(urlbarUrltextTextField, value: "wikipedia.org")
+        default:
+            XCTFail("Invalid Search Provider")
+        }
+    }
 }

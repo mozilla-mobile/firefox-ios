@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 class NewTabContentSettingsViewController: SettingsTableViewController {
     /* variables for checkmark settings */

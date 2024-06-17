@@ -48,7 +48,7 @@ class CreditCardInputFieldHelperTests: XCTestCase {
         XCTAssertEqual(helper.countNumbersIn(text: "12345"), 5)
     }
 
-    func testCountNumbersOnAlphanumericAndSpecialCharcatersInput() {
+    func testCountNumbersOnAlphanumericAndSpecialCharactersInput() {
         let helper = CreditCardInputFieldHelper(inputType: .expiration)
 
         XCTAssertEqual(helper.countNumbersIn(text: "//123)*gsgki45}{}{:"), 5)

@@ -4,12 +4,17 @@
 
 import Foundation
 import Redux
+import Common
 
-class ScreenActionContext: ActionContext {
+class ScreenAction: Action {
     let screen: AppScreen
-    init(screen: AppScreen, windowUUID: WindowUUID) {
+
+    init(windowUUID: WindowUUID,
+         actionType: ActionType,
+         screen: AppScreen) {
         self.screen = screen
-        super.init(windowUUID: windowUUID)
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
@@ -21,17 +26,10 @@ enum AppScreen {
     case tabsPanel
     case remoteTabsPanel
     case tabPeek
+    case microsurvey
 }
 
-enum ActiveScreensStateAction: Action {
-    case showScreen(ScreenActionContext)
-    case closeScreen(ScreenActionContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .showScreen(let context as ActionContext),
-                .closeScreen(let context as ActionContext):
-            return context.windowUUID
-        }
-    }
+enum ScreenActionType: ActionType {
+    case showScreen
+    case closeScreen
 }
