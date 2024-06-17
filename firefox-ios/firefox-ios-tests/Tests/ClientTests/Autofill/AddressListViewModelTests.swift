@@ -235,11 +235,28 @@ class AddressListViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
     }
+
+    func testTappingOnAddressAndTapCancelDissmissesEditScreen() {
+        let address = dummyAddresses[0]
+
+        viewModel.addressTapped(address)
+        XCTAssertEqual(viewModel.destination, .edit(address))
+
+        viewModel.editButtonTap()
+        XCTAssertTrue(viewModel.isEditMode)
+
+        viewModel.cancelEditButtonTap()
+        XCTAssertFalse(viewModel.isEditMode)
+
+        viewModel.closeEditButtonTap()
+        XCTAssertNil(viewModel.destination)
+    }
 }
 
 class MockAutofill: AddressProvider {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
+    var mockEditAddressResult: Result<Void, Error>?
     var listAllAddressesCalled = false
 
     func addAddress(
@@ -247,6 +264,16 @@ class MockAutofill: AddressProvider {
         completion: @escaping (Result<Address, Error>) -> Void
     ) {
         if let result = mockSaveAddressResult {
+            completion(result)
+        }
+    }
+
+    func updateAddress(
+        id: String,
+        address: MozillaAppServices.UpdatableAddressFields,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
+        if let result = mockEditAddressResult {
             completion(result)
         }
     }

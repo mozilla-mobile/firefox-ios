@@ -129,6 +129,23 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     func saveEditButtonTap() {
         toggleEditMode()
+        saveAction? { [weak self] updatedAddress in
+            guard let self else { return }
+            guard case .edit(let currentAddress) = self.destination else { return }
+            self.addressProvider.updateAddress(id: currentAddress.guid, address: updatedAddress) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
     }
 
     func closeEditButtonTap() {
@@ -203,8 +220,8 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
-
-            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID));"
+            let isDarkTheme = isDarkTheme(windowUUID)
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme));"
             return javascript
         } catch {
             logger.log("Failed to encode data",

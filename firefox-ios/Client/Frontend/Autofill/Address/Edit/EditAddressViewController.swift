@@ -75,42 +75,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         }
 
         model.saveAction = { [weak self] completion in
-            self?.webView.evaluateJavaScript("getCurrentFormData();") { result, error in
-                if let error = error {
-                    self?.logger.log(
-                        "JavaScript execution error",
-                        level: .warning,
-                        category: .autofill,
-                        description: "JavaScript execution error: \(error.localizedDescription)"
-                    )
-                    return
-                }
-
-                guard let resultDict = result as? [String: Any] else {
-                    self?.logger.log(
-                        "Result is nil or not a dictionary",
-                        level: .warning,
-                        category: .autofill,
-                        description: "Result is nil or not a dictionary"
-                    )
-                    return
-                }
-
-                do {
-                    let jsonData = try JSONSerialization.data(withJSONObject: resultDict, options: [])
-                    let decoder = JSONDecoder()
-                    decoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
-                    let address = try decoder.decode(UpdatableAddressFields.self, from: jsonData)
-                    completion(address)
-                } catch {
-                    self?.logger.log(
-                        "Failed to decode dictionary",
-                        level: .warning,
-                        category: .autofill,
-                        description: "Failed to decode dictionary \(error.localizedDescription)"
-                    )
-                }
-            }
+            self?.getCurrentFormData(completion: completion)
         }
 
         if let url = Bundle.main.url(forResource: "AddressFormManager", withExtension: "html") {
@@ -141,6 +106,45 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
                 category: .autofill,
                 description: "Error evaluating JavaScript: \(error.localizedDescription)"
             )
+        }
+    }
+
+    private func getCurrentFormData(completion: @escaping (UpdatableAddressFields) -> Void) {
+        self.webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
+            if let error = error {
+                self?.logger.log(
+                    "JavaScript execution error",
+                    level: .warning,
+                    category: .autofill,
+                    description: "JavaScript execution error: \(error.localizedDescription)"
+                )
+                return
+            }
+
+            guard let resultDict = result as? [String: Any] else {
+                self?.logger.log(
+                    "Result is nil or not a dictionary",
+                    level: .warning,
+                    category: .autofill,
+                    description: "Result is nil or not a dictionary"
+                )
+                return
+            }
+
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: resultDict, options: [])
+                let decoder = JSONDecoder()
+                decoder.userInfo[.formatStyleKey] = FormatStyle.kebabCase
+                let address = try decoder.decode(UpdatableAddressFields.self, from: jsonData)
+                completion(address)
+            } catch {
+                self?.logger.log(
+                    "Failed to decode dictionary",
+                    level: .warning,
+                    category: .autofill,
+                    description: "Failed to decode dictionary \(error.localizedDescription)"
+                )
+            }
         }
     }
 
