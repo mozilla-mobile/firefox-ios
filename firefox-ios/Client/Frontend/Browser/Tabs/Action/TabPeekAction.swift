@@ -23,7 +23,6 @@ enum TabPeekActionType: ActionType {
     // MARK: - View Actions
     case didLoadTabPeek
     case addToBookmarks
-    case sendToDevice
     case copyURL
     case closeTab
 
