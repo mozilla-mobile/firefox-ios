@@ -42,9 +42,8 @@ public struct SupportUtils {
 
         guard let languageIdentifier = Locale.preferredLanguages.first else {
             return defaultURL
-
         }
-        
+
         var privacyNoticeString =
                     "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=\(source)&utm_campaign=\(campaign)"
 
