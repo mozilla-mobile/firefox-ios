@@ -158,7 +158,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
-                cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         case .alternateEngines:
             // The default engine is not an alternate search engine.
@@ -168,7 +168,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 cell.showsReorderControl = true
 
                 let toggle = ThemedSwitch()
-                toggle.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                toggle.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
@@ -183,13 +183,13 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
-                cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             } else {
                 cell.editingAccessoryType = .disclosureIndicator
                 cell.accessibilityLabel = .SettingsAddCustomEngineTitle
                 cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Search.customEngineViewButton
                 cell.textLabel?.text = .SettingsAddCustomEngine
-                cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
 
         case .searchEnginesSuggestions:
@@ -316,7 +316,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true
                 cell.selectionStyle = .none
-                cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
             default:
                 break
@@ -378,7 +378,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 guard let window = self.view.window else { return }
                 SimpleToast().showAlertWithText(.ThirdPartySearchEngineAdded,
                                                 bottomContainer: window,
-                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
+                                                theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
             }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         case .searchEnginesSuggestions:
@@ -541,13 +541,13 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     ) {
         let setting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: prefKey,
             defaultValue: defaultValue,
             titleText: titleText,
             statusText: statusText
         )
-        setting.onConfigureCell(cell, theme: themeManager.currentTheme(for: windowUUID))
+        setting.onConfigureCell(cell, theme: themeManager.getCurrentTheme(for: windowUUID))
         setting.control.switchView.addTarget(
             self,
             action: selector,
@@ -606,7 +606,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     // MARK: - Theming System
     override func applyTheme() {
         super.applyTheme()
-        tableView.separatorColor = themeManager.currentTheme(for: windowUUID).colors.borderPrimary
+        tableView.separatorColor = themeManager.getCurrentTheme(for: windowUUID).colors.borderPrimary
     }
 }
 

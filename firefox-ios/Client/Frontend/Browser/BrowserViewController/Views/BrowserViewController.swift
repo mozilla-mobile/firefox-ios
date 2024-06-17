@@ -541,7 +541,7 @@ class BrowserViewController: UIViewController,
         if NightModeHelper.isActivated(),
            !featureFlags.isFeatureEnabled(.nightMode, checking: .buildOnly) {
             NightModeHelper.turnOff()
-            themeManager.reloadTheme(for: windowUUID)
+            themeManager.applyThemeUpdatesToWindows()
         }
 
         NightModeHelper.cleanNightModeDefaults()
@@ -1008,7 +1008,7 @@ class BrowserViewController: UIViewController,
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            themeManager.systemThemeChanged()
+            themeManager.applyThemeUpdatesToWindows()
         }
         setupMiddleButtonStatus(isLoading: false)
     }
@@ -1298,7 +1298,7 @@ class BrowserViewController: UIViewController,
             })
         }
 
-        microsurvey.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         updateViewConstraints()
     }
@@ -2498,7 +2498,7 @@ class BrowserViewController: UIViewController,
     // MARK: Themeable
 
     func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

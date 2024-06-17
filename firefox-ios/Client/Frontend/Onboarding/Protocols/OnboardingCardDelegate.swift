@@ -143,7 +143,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             style: .plain,
             target: self,
             action: selector)
-        buttonItem.tintColor = themeManager.currentTheme(for: windowUUID).colors.actionPrimary
+        buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 

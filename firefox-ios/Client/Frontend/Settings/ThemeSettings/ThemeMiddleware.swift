@@ -7,10 +7,12 @@ import Redux
 
 protocol ThemeManagerProvider {
     func getCurrentThemeManagerState(windowUUID: WindowUUID) -> ThemeSettingsState
-    func toggleUseSystemAppearance(_ enabled: Bool)
-    func toggleAutomaticBrightness(_ enabled: Bool)
-    func updateManualTheme(_ theme: ThemeType, for window: WindowUUID)
-    func updateUserBrightness(_ value: Float)
+    func updateManualTheme(with action: ThemeSettingsViewAction)
+    func updateSystemTheme(with action: ThemeSettingsViewAction)
+    func updateAutomaticBrightness(with action: ThemeSettingsViewAction)
+    func updateAutomaticBrightnessValue(with action: ThemeSettingsViewAction)
+    func updateThemeFromSystemBrightnessChange(with action: ThemeSettingsViewAction)
+    func updatePrivateMode(with action: PrivateModeAction)
 }
 
 class ThemeManagerMiddleware: ThemeManagerProvider {
@@ -20,83 +22,43 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         self.themeManager = themeManager
     }
 
-    lazy var themeManagerProvider: Middleware<AppState> = { state, action in
+    lazy var themeManagerProvider: Middleware<AppState> = { _, action in
         if let action = action as? ThemeSettingsViewAction {
-            self.resolveThemeSettingsViewActionType(action: action, state: state)
+            self.resolveThemeSettingsViewActionType(action: action)
         } else if let action = action as? PrivateModeAction {
-            self.resolvePrivateModeAction(action: action, state: state)
+            self.resolvePrivateModeAction(action: action)
         }
     }
 
-    private func resolvePrivateModeAction(action: PrivateModeAction, state: AppState) {
+    private func resolvePrivateModeAction(action: PrivateModeAction) {
         switch action.actionType {
         case PrivateModeActionType.privateModeUpdated:
-            guard let isPrivate = action.isPrivate else { return }
-            self.toggleUsePrivateTheme(to: isPrivate, for: action.windowUUID)
+            updatePrivateMode(with: action)
 
         default:
             break
         }
     }
 
-    private func resolveThemeSettingsViewActionType(action: ThemeSettingsViewAction, state: AppState) {
+    private func resolveThemeSettingsViewActionType(action: ThemeSettingsViewAction) {
         switch action.actionType {
         case ThemeSettingsViewActionType.themeSettingsDidAppear:
-            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            let newAction = ThemeSettingsMiddlewareAction(
-                themeSettingsState: currentThemeState,
-                windowUUID: action.windowUUID,
-                actionType: ThemeSettingsMiddlewareActionType.receivedThemeManagerValues)
-            store.dispatch(newAction)
+            dispatchMiddlewareAction(from: action, to: .receivedThemeManagerValues)
 
         case ThemeSettingsViewActionType.toggleUseSystemAppearance:
-            guard let useSystemAppearance = action.useSystemAppearance else { return }
-            self.toggleUseSystemAppearance(useSystemAppearance)
-            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            let action = ThemeSettingsMiddlewareAction(
-                themeSettingsState: currentThemeState,
-                windowUUID: action.windowUUID,
-                actionType: ThemeSettingsMiddlewareActionType.systemThemeChanged)
-            store.dispatch(action)
+            updateSystemTheme(with: action)
 
         case ThemeSettingsViewActionType.enableAutomaticBrightness:
-            guard let automaticBrightnessEnabled = action.automaticBrightnessEnabled else { return }
-            self.toggleAutomaticBrightness(automaticBrightnessEnabled)
-            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            let action = ThemeSettingsMiddlewareAction(
-                themeSettingsState: currentThemeState,
-                windowUUID: action.windowUUID,
-                actionType: ThemeSettingsMiddlewareActionType.automaticBrightnessChanged)
-            store.dispatch(action)
+            updateAutomaticBrightness(with: action)
 
         case ThemeSettingsViewActionType.switchManualTheme:
-            guard let manualThemeType = action.manualThemeType else { return }
-            self.updateManualTheme(manualThemeType, for: action.windowUUID)
-            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            let action = ThemeSettingsMiddlewareAction(
-                themeSettingsState: currentThemeState,
-                windowUUID: action.windowUUID,
-                actionType: ThemeSettingsMiddlewareActionType.manualThemeChanged)
-            store.dispatch(action)
+            updateManualTheme(with: action)
 
         case ThemeSettingsViewActionType.updateUserBrightness:
-            guard let userBrightness = action.userBrightness else { return }
-            self.updateUserBrightness(userBrightness)
-            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            let action = ThemeSettingsMiddlewareAction(
-                themeSettingsState: currentThemeState,
-                windowUUID: action.windowUUID,
-                actionType: ThemeSettingsMiddlewareActionType.userBrightnessChanged)
-            store.dispatch(action)
+            updateAutomaticBrightnessValue(with: action)
 
         case ThemeSettingsViewActionType.receivedSystemBrightnessChange:
-            self.updateThemeBasedOnSystemBrightness()
-            let currentThemeState = self.getCurrentThemeManagerState(windowUUID: action.windowUUID)
-            let action = ThemeSettingsMiddlewareAction(
-                themeSettingsState: currentThemeState,
-                windowUUID: action.windowUUID,
-                actionType: ThemeSettingsMiddlewareActionType.systemBrightnessChanged)
-            store.dispatch(action)
+            updateThemeFromSystemBrightnessChange(with: action)
 
         default:
             break
@@ -108,37 +70,59 @@ class ThemeManagerMiddleware: ThemeManagerProvider {
         ThemeSettingsState(windowUUID: windowUUID,
                            useSystemAppearance: themeManager.systemThemeIsOn,
                            isAutomaticBrightnessEnable: themeManager.automaticBrightnessIsOn,
-                           manualThemeSelected: themeManager.getNormalSavedTheme(),
+                           manualThemeSelected: themeManager.getUserManualTheme(),
                            userBrightnessThreshold: themeManager.automaticBrightnessValue,
                            systemBrightness: getScreenBrightness())
     }
 
-    func toggleUseSystemAppearance(_ enabled: Bool) {
-        themeManager.setSystemTheme(isOn: enabled)
-    }
-
-    func toggleUsePrivateTheme(to state: Bool, for window: WindowUUID) {
-        themeManager.setPrivateTheme(isOn: state, for: window)
-    }
-
-    func toggleAutomaticBrightness(_ enabled: Bool) {
-        themeManager.setAutomaticBrightness(isOn: enabled)
-    }
-
-    func updateManualTheme(_ newTheme: ThemeType, for window: UUID) {
-        themeManager.setSystemTheme(isOn: false)
-        themeManager.changeCurrentTheme(newTheme, for: window)
-    }
-
-    func updateUserBrightness(_ value: Float) {
-        themeManager.setAutomaticBrightnessValue(value)
-    }
-
-    func updateThemeBasedOnSystemBrightness() {
-        themeManager.brightnessChanged()
-    }
-
     func getScreenBrightness() -> Float {
         return Float(UIScreen.main.brightness)
+    }
+
+    func updatePrivateMode(with action: PrivateModeAction) {
+        guard let privateModeState = action.isPrivate else { return }
+        themeManager.setPrivateTheme(isOn: privateModeState, for: action.windowUUID)
+    }
+
+    func updateSystemTheme(with action: ThemeSettingsViewAction) {
+        guard let useSystemAppearance = action.useSystemAppearance else { return }
+        themeManager.setSystemTheme(isOn: useSystemAppearance)
+        dispatchMiddlewareAction(from: action, to: .systemThemeChanged)
+    }
+
+    func updateAutomaticBrightness(with action: ThemeSettingsViewAction) {
+        guard let automaticBrightnessEnabled = action.automaticBrightnessEnabled else { return }
+        themeManager.setAutomaticBrightness(isOn: automaticBrightnessEnabled)
+        dispatchMiddlewareAction(from: action, to: .automaticBrightnessChanged)
+    }
+
+    func updateAutomaticBrightnessValue(with action: ThemeSettingsViewAction) {
+        guard let userBrightness = action.userBrightness else { return }
+        themeManager.setAutomaticBrightnessValue(userBrightness)
+        dispatchMiddlewareAction(from: action, to: .userBrightnessChanged)
+    }
+
+    func updateThemeFromSystemBrightnessChange(with action: ThemeSettingsViewAction) {
+        themeManager.applyThemeUpdatesToWindows()
+        dispatchMiddlewareAction(from: action, to: .systemBrightnessChanged)
+    }
+
+    func updateManualTheme(with action: ThemeSettingsViewAction) {
+        guard let manualThemeType = action.manualThemeType else { return }
+        themeManager.setManualTheme(to: manualThemeType)
+        dispatchMiddlewareAction(from: action, to: .manualThemeChanged)
+    }
+
+    private func dispatchMiddlewareAction(
+        from oldAction: ThemeSettingsViewAction,
+        to newActionType: ThemeSettingsMiddlewareActionType
+    ) {
+        let currentThemeState = getCurrentThemeManagerState(windowUUID: oldAction.windowUUID)
+        let action = ThemeSettingsMiddlewareAction(
+            themeSettingsState: currentThemeState,
+            windowUUID: oldAction.windowUUID,
+            actionType: newActionType)
+
+        store.dispatch(action)
     }
 }

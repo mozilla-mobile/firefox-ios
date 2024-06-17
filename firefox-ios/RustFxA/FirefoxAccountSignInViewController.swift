@@ -227,7 +227,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = theme.colors
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary

@@ -143,7 +143,7 @@ class SiteTableViewController: UIViewController,
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
-        cell.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
+        cell.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
         return cell
     }
 
@@ -157,8 +157,8 @@ class SiteTableViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
-            header.contentView.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer1
+            header.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
+            header.contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
         }
     }
 
@@ -184,7 +184,7 @@ class SiteTableViewController: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.iconAction
         navigationController?.navigationBar.titleTextAttributes = [

@@ -23,7 +23,7 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
         self.settings = settings as? AppSettingsTableViewController
         self.settingsDelegate = settingsDelegate
 
-        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
+        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsAutofillCreditCard,

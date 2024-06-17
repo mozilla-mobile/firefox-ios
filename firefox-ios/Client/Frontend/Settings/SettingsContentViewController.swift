@@ -158,7 +158,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     private func makeInterstitialViews() -> InterstitialViews {
