@@ -268,16 +268,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInUseEmail)
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
-}
 
-// MARK: - QRCodeViewControllerDelegate Functions
-extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
-    func didScanQRCodeWithURL(_ url: URL) {
-        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
-            telemetryObj: telemetryObject
-        )
-
-        // Only show the FxAWebViewController if the correct FxA pairing QR code was captured
+    private func showFxAWebViewController(_ url: URL, completion: @escaping (URL) -> Void) {
         if let accountManager = profile.rustFxA.accountManager {
             let entrypoint = self.deepLinkParams.entrypoint.rawValue
             accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in
@@ -293,16 +285,31 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
                     guard let self = self else { return }
 
                     if case .success(let url) = result {
-                        let vc = FxAWebViewController(
-                            pageType: .qrCode(url: url),
-                            profile: profile,
-                            dismissalStyle: fxaDismissStyle,
-                            deepLinkParams: deepLinkParams,
-                            shouldAskForNotificationPermission: shouldAskForPermission)
-                        navigationController?.pushViewController(vc, animated: true)
+                        completion(url)
                     }
                 }
             }
+        }
+    }
+}
+
+// MARK: - QRCodeViewControllerDelegate Functions
+extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
+    func didScanQRCodeWithURL(_ url: URL) {
+        let shouldAskForPermission = OnboardingNotificationCardHelper().shouldAskForNotificationsPermission(
+            telemetryObj: telemetryObject
+        )
+
+        // Only show the FxAWebViewController if the correct FxA pairing QR code was captured
+        showFxAWebViewController(url) { [weak self] url in
+            guard let self else { return }
+            let vc = FxAWebViewController(
+                pageType: .qrCode(url: url),
+                profile: profile,
+                dismissalStyle: fxaDismissStyle,
+                deepLinkParams: deepLinkParams,
+                shouldAskForNotificationPermission: shouldAskForPermission)
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 

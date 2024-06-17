@@ -106,8 +106,6 @@ class FxAWebViewModel: FeatureFlaggable {
 
     var onDismissController: (() -> Void)?
 
-    var onPopController: (() -> Void)?
-
     func composeTitle(basedOn url: URL?, hasOnlySecureContent: Bool) -> String {
         return (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
     }
