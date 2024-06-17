@@ -8,6 +8,12 @@ import Shared
 import Common
 
 class MicrosurveyMiddleware {
+    private let microsurveySurfaceManager: MicrosurveySurfaceManager
+
+    init(microsurveySurfaceManager: MicrosurveySurfaceManager = AppContainer.shared.resolve()) {
+        self.microsurveySurfaceManager = microsurveySurfaceManager
+    }
+
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         switch action.actionType {
@@ -40,7 +46,7 @@ class MicrosurveyMiddleware {
     }
 
     private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
-        // TODO: FXIOS-8990 - Send telemetry via Mobile messaging infrastructure
+        microsurveySurfaceManager.handleMessageDismiss()
         closeMicrosurveyPrompt(windowUUID: windowUUID)
     }
 
