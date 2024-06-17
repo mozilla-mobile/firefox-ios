@@ -614,7 +614,7 @@
 "URL.addToAutocompleteLabel" = "Adicionar link para ser completado automaticamente";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Colar e ir";
+"URL.contextMenu" = "Colar e abrir";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "APAGAR";
