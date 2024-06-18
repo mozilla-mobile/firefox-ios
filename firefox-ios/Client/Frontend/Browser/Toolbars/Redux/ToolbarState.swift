@@ -66,7 +66,10 @@ struct ToolbarState: ScreenState, Equatable {
             return
         }
 
-        self.init(windowUUID: toolbarState.windowUUID)
+        self.init(windowUUID: toolbarState.windowUUID,
+                  toolbarPosition: toolbarState.toolbarPosition,
+                  addressToolbar: toolbarState.addressToolbar,
+                  navigationToolbar: toolbarState.navigationToolbar)
     }
 
     init(windowUUID: WindowUUID) {

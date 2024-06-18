@@ -88,11 +88,11 @@ class AddressToolbarContainer: UIView,
             store.unsubscribe(self)
             return
         }
+
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
                                   screen: .toolbar)
         store.dispatch(action)
-
         store.unsubscribe(self)
     }
 

@@ -46,11 +46,11 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard let uuid = windowUUID else { return }
+        guard let windowUUID else { return }
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return ToolbarState(appState: appState, uuid: uuid)
+                return ToolbarState(appState: appState, uuid: windowUUID)
             })
         })
     }
