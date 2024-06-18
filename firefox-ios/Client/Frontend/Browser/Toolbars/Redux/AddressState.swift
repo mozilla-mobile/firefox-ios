@@ -51,7 +51,7 @@ struct AddressState: StateType, Equatable {
             return AddressState(
                 windowUUID: state.windowUUID,
                 navigationActions: model.navigationActions,
-                pageActions: model.navigationActions,
+                pageActions: model.pageActions,
                 browserActions: model.browserActions,
                 displayTopBorder: model.displayTopBorder,
                 displayBottomBorder: model.displayBottomBorder,
@@ -70,7 +70,7 @@ struct AddressState: StateType, Equatable {
             return AddressState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: state.navigationActions,
+                pageActions: state.pageActions,
                 browserActions: actions,
                 displayTopBorder: state.displayTopBorder,
                 displayBottomBorder: state.displayBottomBorder,
@@ -81,7 +81,7 @@ struct AddressState: StateType, Equatable {
             return AddressState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: state.navigationActions,
+                pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 displayTopBorder: state.displayTopBorder,
                 displayBottomBorder: state.displayBottomBorder,
@@ -100,7 +100,7 @@ struct AddressState: StateType, Equatable {
             return AddressState(
                 windowUUID: state.windowUUID,
                 navigationActions: actions,
-                pageActions: state.navigationActions,
+                pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 displayTopBorder: state.displayTopBorder,
                 displayBottomBorder: state.displayBottomBorder,
@@ -119,7 +119,7 @@ struct AddressState: StateType, Equatable {
             return AddressState(
                 windowUUID: state.windowUUID,
                 navigationActions: actions,
-                pageActions: state.navigationActions,
+                pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 displayTopBorder: state.displayTopBorder,
                 displayBottomBorder: state.displayBottomBorder,
@@ -130,7 +130,7 @@ struct AddressState: StateType, Equatable {
             return AddressState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: state.navigationActions,
+                pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 displayTopBorder: false,
                 displayBottomBorder: false,
