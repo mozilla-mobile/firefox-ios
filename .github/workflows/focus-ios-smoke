@@ -119,36 +119,18 @@ jobs:
                         "type": "section",
                         "text": {
                           "type": "mrkdwn",
-                          "text": "*Test plan*: ${{ env.xcodebuild_test_plan }}"
-                        }
-                      },
-                      {
-                        "type": "section",
-                        "text": {
-                          "type": "mrkdwn",
                           "text": "*Branch*: `${{ github.ref_name }}`"
-                        }
-                      },
-                      {
-                        "type": "section",
-                        "text": {
-                          "type": "mrkdwn",
-                          "text": "*Simulator*: ${{ env.ios_simulator }} iOS ${{ env.ios_version }}"
-                        }
-                      },
-                      {
-                        "type": "section",
-                        "text": {
-                          "type": "mrkdwn",
-                          "text": "<https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html|*Test Report*> :debug:"
-                        }
-                      },
-                      {
-                        "type": "section",
-                        "text": {
-                          "type": "mrkdwn",
-                          "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|*Github Actions Job*> :github:"
-                        }
+                        },
+                        fields: [
+                          {
+                            "type": "mrkdwn",
+                            "text": "<https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html|*Test Report*> :debug:"
+                          },
+                          {
+                            "type": "mrkdwn",
+                            "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|*Github Actions Job*> :github:"
+                          }
+                        ]
                       },
                       {
                         "type":"divider"
@@ -165,7 +147,7 @@ jobs:
                     ]
                   }
               env:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_T_WEBHOOK }}
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
             - name: Report status
               run: |
                 exit ${{ steps.pass-fail.outputs.exit_value }}
