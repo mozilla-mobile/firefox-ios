@@ -16,11 +16,6 @@ struct ToolbarState: ScreenState, Equatable {
         var url: URL?
     }
 
-    struct NavigationState: Equatable {
-        var actions: [ActionState]
-        var displayBorder: Bool
-    }
-
     struct ActionState: Equatable {
         enum ActionType {
             case back
