@@ -58,7 +58,7 @@ struct AddressListView: View {
                 }
                 .listStyle(.plain)
                 .listRowInsets(EdgeInsets())
-            } else {
+            } else if viewModel.isEditingFeatureEnabled {
                 contentUnavailableView
                     .padding(.top, Constants.contentUnavailableViewTopPadding)
                     .padding(.horizontal, Constants.contentUnavailableViewPadding)
