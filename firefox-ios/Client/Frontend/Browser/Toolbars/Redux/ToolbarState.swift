@@ -7,36 +7,6 @@ import Redux
 import ToolbarKit
 
 struct ToolbarState: ScreenState, Equatable {
-    struct ActionState: Equatable {
-        enum ActionType {
-            case back
-            case forward
-            case home
-            case search
-            case tabs
-            case menu
-            case qrCode
-            case share
-            case reload
-            case trackingProtection
-            case readerMode
-            case dataClearance
-        }
-
-        var actionType: ActionType
-        var iconName: String
-        var numberOfTabs: Int?
-        var isEnabled: Bool
-        var a11yLabel: String
-        var a11yId: String
-
-        var canPerformLongPressAction: Bool {
-            return actionType == .back ||
-                   actionType == .forward ||
-                   actionType == .tabs
-        }
-    }
-
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
     var addressToolbar: AddressState
