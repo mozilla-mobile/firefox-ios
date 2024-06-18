@@ -72,7 +72,7 @@ struct ToolbarState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 toolbarPosition: state.toolbarPosition,
                 addressToolbar: state.addressToolbar,
-                navigationToolbar: NavigationState.reducer(state.navigationToolbar, action))
+                navigationToolbar: state.navigationToolbar)
         }
     }
 }
