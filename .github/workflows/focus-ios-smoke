@@ -115,13 +115,13 @@ jobs:
                       {
                         "type":"divider"
                       },
-                    	{
+                      {
                         "type": "section",
                         "text": {
                           "type": "mrkdwn",
                           "text": "*Branch*: `${{ github.ref_name }}`"
                         },
-                        fields: [
+                        "fields": [
                           {
                             "type": "mrkdwn",
                             "text": "<https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html|*Test Report*> :debug:"
