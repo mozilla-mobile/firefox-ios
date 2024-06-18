@@ -56,13 +56,20 @@ struct ToolbarState: ScreenState, Equatable {
     var addressToolbar: AddressState
     var navigationToolbar: NavigationState
 
-    init(_ appState: BrowserViewControllerState) {
-        self.init(
-            windowUUID: appState.windowUUID,
-            toolbarPosition: appState.toolbarState.toolbarPosition,
-            addressToolbar: appState.toolbarState.addressToolbar,
-            navigationToolbar: appState.toolbarState.navigationToolbar
-        )
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: uuid)
+        else {
+            self.init(windowUUID: uuid)
+            return
+        }
+
+        self.init(windowUUID: toolbarState.windowUUID,
+                  toolbarPosition: toolbarState.toolbarPosition,
+                  addressToolbar: toolbarState.addressToolbar,
+                  navigationToolbar: toolbarState.navigationToolbar)
     }
 
     init(windowUUID: WindowUUID) {
