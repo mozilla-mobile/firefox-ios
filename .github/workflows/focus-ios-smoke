@@ -1,4 +1,4 @@
-name: "Focus/Firefox Tests"
+name: "Focus iPhone Smoke Tests"
     
 on:
     workflow_dispatch:
@@ -36,8 +36,6 @@ jobs:
                 sudo rm -rf /Applications/Xcode.app
                 sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
                 xcodebuild -version
-                xcrun simctl shutdown all
-                xcrun simctl erase all
                 ./checkout.sh
                 ./bootstrap.sh --force
             - name: Compile source code
@@ -93,32 +91,81 @@ jobs:
                 # job.status can't be used because the subsequent steps are not
                 # executed once a step fails.
                 if [ -e ${{ env.test_results_directory }}/fail.txt ]; then
-                    echo "pass_fail=❌ Fail" >> "$GITHUB_OUTPUT"
+                    echo "pass_fail=❌" >> "$GITHUB_OUTPUT"
                     echo "exit_value=1" >> "$GITHUB_OUTPUT"
                 else
-                    echo "pass_fail=✅ Pass" >> "$GITHUB_OUTPUT"
+                    echo "pass_fail=✅" >> "$GITHUB_OUTPUT"
                     echo "exit_value=0" >> "$GITHUB_OUTPUT"
                 fi
             - name: Report to Slack
               id: slack
               uses: slackapi/slack-github-action@v1.26.0
               with:
-                # This data can be any valid JSON from a previous step in the GitHub Action
                 payload: |
                   {
-                    "browser": "${{ env.browser }}",
-                    "status": "${{ steps.pass-fail.outputs.pass_fail }}",
-                    "run_number": "${{ github.run_number }}",
-                    "branch": "${{ github.ref_name }}",
-                    "xcode_version": "${{ env.xcode_version }}",
-                    "ios_simulator": "${{ env.ios_simulator }}",
-                    "ios_version": "${{ env.ios_version }}",
-                    "test_plan": "${{ env.xcodebuild_test_plan }}",
-                    "github_actions_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                    "test_report_url": "https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html"
+                    "blocks":[
+                      {
+                        "type": "header",
+                        "text": {
+                          "type": "plain_text",
+                          "text": "${{ steps.pass-fail.outputs.pass_fail }} ${{ env.browser }} :firefox: ${{ env.xcodebuild_test_plan }} - ${{ env.ios_simulator }} iOS ${{ env.ios_version }}",
+                          "emoji": true
+                        }
+                      },
+                      {
+                        "type":"divider"
+                      },
+                    	{
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "*Test plan*: ${{ env.xcodebuild_test_plan }}"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "*Branch*: `${{ github.ref_name }}`"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "*Simulator*: ${{ env.ios_simulator }} iOS ${{ env.ios_version }}"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "<https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html|*Test Report*> :debug:"
+                        }
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|*Github Actions Job*> :github:"
+                        }
+                      },
+                      {
+                        "type":"divider"
+                      },
+                      {
+                        "type": "context",
+                        "elements": [
+                          {
+                            "type": "mrkdwn",
+                            "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
+                          }
+                        ]
+                      }
+                    ]
                   }
               env:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_T_WEBHOOK }}
             - name: Report status
               run: |
                 exit ${{ steps.pass-fail.outputs.exit_value }}
