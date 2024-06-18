@@ -34,8 +34,8 @@ struct NavigationBarState: StateType, Equatable {
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: model.actions,
-                displayBorder: model.displayBorder
+                actions: model.actions ?? state.actions,
+                displayBorder: model.displayBorder ?? state.displayBorder
             )
 
         case ToolbarActionType.numberOfTabsChanged:
@@ -81,6 +81,16 @@ struct NavigationBarState: StateType, Equatable {
                 windowUUID: state.windowUUID,
                 actions: actions,
                 displayBorder: state.displayBorder
+            )
+
+        case ToolbarActionType.needsBorderUpdate:
+            guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
+            else { return state }
+
+            return NavigationState(
+                windowUUID: state.windowUUID,
+                actions: state.actions,
+                displayBorder: displayBorder
             )
 
         default:

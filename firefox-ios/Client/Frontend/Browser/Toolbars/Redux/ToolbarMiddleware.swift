@@ -220,16 +220,21 @@ class ToolbarMiddleware: FeatureFlaggable {
             borderPosition: .bottom,
             scrollY: scrollOffset.y,
             toolbarPosition: toolbarState.toolbarPosition)
+        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(
+            toolbarPosition: toolbarState.toolbarPosition)
 
         let needsUpdateForTop = addressToolbarState.displayTopBorder != displayTopBorder
         let needsUpdateForBottom = addressToolbarState.displayBottomBorder != displayBottomBorder
-        guard needsUpdateForTop || needsUpdateForBottom else { return }
+        let needsUpdateNavToolbar = toolbarState.navigationToolbar.displayBorder != displayNavToolbarBorder
+        guard needsUpdateForTop || needsUpdateForBottom || needsUpdateNavToolbar else { return }
 
         let addressToolbarModel = AddressToolbarModel(
             displayTopBorder: displayTopBorder,
             displayBottomBorder: displayBottomBorder)
+        let navToolbarModel = NavigationToolbarModel(displayBorder: displayNavToolbarBorder)
 
         let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                   navigationToolbarModel: navToolbarModel,
                                    windowUUID: action.windowUUID,
                                    actionType: ToolbarActionType.needsBorderUpdate)
         store.dispatch(action)
