@@ -16,7 +16,7 @@ env:
 jobs:
     run-tests:
         name: Build and run tests
-        runs-on: macos-14
+        runs-on: macos-14-large
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
