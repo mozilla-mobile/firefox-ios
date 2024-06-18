@@ -126,6 +126,21 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url
             )
 
+        case ToolbarActionType.needsBorderUpdate:
+            guard let displayTopBorder = (action as? ToolbarAction)?.addressToolbarModel?.displayTopBorder,
+                  let displayBottomBorder = (action as? ToolbarAction)?.addressToolbarModel?.displayBottomBorder
+            else { return state }
+
+            return AddressState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                displayTopBorder: displayTopBorder,
+                displayBottomBorder: displayBottomBorder,
+                url: state.url
+            )
+
         default:
             return AddressBarState(
                 windowUUID: state.windowUUID,

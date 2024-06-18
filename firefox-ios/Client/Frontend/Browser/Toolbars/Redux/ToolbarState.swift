@@ -60,20 +60,13 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.numberOfTabsChanged,
             ToolbarActionType.urlDidChange,
             ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged:
+            ToolbarActionType.forwardButtonStateChanged,
+            ToolbarActionType.needsBorderUpdate:
             return ToolbarState(
                 windowUUID: state.windowUUID,
                 toolbarPosition: action.toolbarPosition ?? state.toolbarPosition,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
-
-        case ToolbarActionType.needsBorderUpdate:
-            guard let addressToolbarModel = action.addressToolbarModel else { return state }
-
-            var state = state
-            state.addressToolbar.displayTopBorder = addressToolbarModel.displayTopBorder
-            state.addressToolbar.displayBottomBorder = addressToolbarModel.displayBottomBorder
-            return state
 
         default:
             return ToolbarState(
