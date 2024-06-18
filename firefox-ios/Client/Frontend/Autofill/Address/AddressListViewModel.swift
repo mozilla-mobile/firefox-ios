@@ -185,7 +185,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
 
-            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID));"
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID)));"
             return javascript
         } catch {
             logger.log("Failed to encode data",

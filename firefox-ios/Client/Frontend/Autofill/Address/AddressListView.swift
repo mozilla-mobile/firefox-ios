@@ -11,6 +11,17 @@ import Storage
 
 /// A view displaying a list of addresses.
 struct AddressListView: View {
+    // MARK: - Constants
+
+    enum Constants {
+        static let imageWidth: CGFloat = 200
+        static let contentUnavailableViewPadding: CGFloat = 24
+        static let vStackSpacing: CGFloat = 0
+        static let titleFontSize: CGFloat = 22
+        static let subtitleFontSize: CGFloat = 16
+        static let contentUnavailableViewTopPadding: CGFloat = 125
+    }
+
     // MARK: - Properties
 
     let windowUUID: WindowUUID
@@ -19,30 +30,41 @@ struct AddressListView: View {
     @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
 
+    @State var titleTextColor: Color = .clear
+    @State var subTextColor: Color = .clear
+    @State var imageColor: Color = .clear
+
     // MARK: - Body
 
     var body: some View {
-        List {
+        Group {
             if viewModel.showSection {
-                Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
-                    ForEach(viewModel.addresses, id: \.self) { address in
-                        AddressCellView(
-                            windowUUID: windowUUID,
-                            address: address,
-                            onTap: {
-                                if viewModel.isEditingFeatureEnabled {
-                                    viewModel.addressTapped(address)
+                List {
+                    Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
+                        ForEach(viewModel.addresses, id: \.self) { address in
+                            AddressCellView(
+                                windowUUID: windowUUID,
+                                address: address,
+                                onTap: {
+                                    if viewModel.isEditingFeatureEnabled {
+                                        viewModel.addressTapped(address)
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
+                    .font(.caption)
+                    .foregroundColor(customLightGray)
                 }
-                .font(.caption)
-                .foregroundColor(customLightGray)
+                .listStyle(.plain)
+                .listRowInsets(EdgeInsets())
+            } else {
+                contentUnavailableView
+                    .padding(.top, Constants.contentUnavailableViewTopPadding)
+                    .padding(.horizontal, Constants.contentUnavailableViewPadding)
+                Spacer()
             }
         }
-        .listStyle(.plain)
-        .listRowInsets(EdgeInsets())
         .sheet(item: $viewModel.destination) { destination in
             NavigationView {
                 switch destination {
@@ -87,5 +109,36 @@ struct AddressListView: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         customLightGray = Color(color.textSecondary)
+        titleTextColor = Color(color.textPrimary)
+        subTextColor = Color(color.textSecondary)
+        imageColor = Color(color.iconSecondary)
+    }
+
+    @ViewBuilder var contentUnavailableView: some View {
+        VStack {
+            Image(StandardImageIdentifiers.Large.location)
+                .resizable()
+                .renderingMode(.template)
+                .aspectRatio(contentMode: .fit)
+                .frame(width: Constants.imageWidth)
+                .foregroundColor(imageColor)
+                .accessibility(hidden: true)
+
+            VStack(spacing: Constants.vStackSpacing) {
+                Text(
+                    String(
+                        format: String.Addresses.Settings.SaveAddressesToFirefox,
+                        AppName.shortName.rawValue
+                    )
+                )
+                .preferredBodyFont(size: Constants.titleFontSize)
+                .foregroundColor(titleTextColor)
+
+                Text(String.Addresses.Settings.SecureSaveInfo)
+                    .preferredBodyFont(size: Constants.subtitleFontSize)
+                    .foregroundColor(subTextColor)
+            }
+            .multilineTextAlignment(.center)
+        }
     }
 }
