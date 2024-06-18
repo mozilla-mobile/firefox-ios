@@ -7,15 +7,6 @@ import Redux
 import ToolbarKit
 
 struct ToolbarState: ScreenState, Equatable {
-    struct AddressState: Equatable {
-        var navigationActions: [ActionState]
-        var pageActions: [ActionState]
-        var browserActions: [ActionState]
-        var displayTopBorder: Bool
-        var displayBottomBorder: Bool
-        var url: URL?
-    }
-
     struct ActionState: Equatable {
         enum ActionType {
             case back
