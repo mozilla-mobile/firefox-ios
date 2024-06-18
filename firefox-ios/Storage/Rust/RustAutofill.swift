@@ -368,7 +368,7 @@ public class RustAutofill {
     /// - Parameters:
     ///   - id: The identifier of the address to update.
     ///   - address: The updated address fields.
-    ///   - completion: A closure that is called when the update operation completes. It takes a `Result` object as its parameter, which indicates whether the update was successful or not.
+    ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
     /// - Throws: An error if the update fails.
     /// - Returns: A task that represents the asynchronous update operation.
     public func updateAddress(id: String, address: UpdatableAddressFields, completion: @escaping (Result<Void, Error>) -> Void) {
