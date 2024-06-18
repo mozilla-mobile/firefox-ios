@@ -95,6 +95,10 @@ struct GleanPlumbMessage {
     var icon: UIImage? {
         return data.microsurveyConfig?.icon
     }
+
+    var utmContent: String? {
+        return data.microsurveyConfig?.utmContent
+    }
 }
 
 /// Public properties for this message.

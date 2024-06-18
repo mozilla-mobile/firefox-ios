@@ -37,6 +37,23 @@ public struct SupportUtils {
         return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
 
+    public static func URLForPrivacyNotice(source: String, campaign: String, content: String?) -> URL? {
+        let defaultURL = URL(string: "https://www.mozilla.org/privacy/firefox")
+
+        guard let languageIdentifier = Locale.preferredLanguages.first else {
+            return defaultURL
+        }
+
+        var privacyNoticeString =
+                    "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=\(source)&utm_campaign=\(campaign)"
+
+        if let content {
+            privacyNoticeString.append("&utm_content=\(content)")
+        }
+
+        return URL(string: privacyNoticeString) ?? defaultURL
+    }
+
     public static func URLForReportSiteIssue(_ siteUrl: String?) -> URL? {
         // Construct a NSURL pointing to the webcompat.com server to report an issue.
         //

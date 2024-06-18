@@ -24,7 +24,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.showPrompt, false)
 
-        let action = getAction(for: .initialize(MicrosurveyMock.model))
+        let action = getAction(for: .initialize)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.showPrompt, true)

@@ -57,8 +57,8 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["TopSitesSettings"].staticTexts["On"].exists)
         let jumpBackIn = app.tables.cells.switches["Jump Back In"].value
         XCTAssertEqual("1", jumpBackIn as? String)
-        let recentlySaved = app.tables.cells.switches["Recently Saved"].value
-        XCTAssertEqual("1", recentlySaved as? String)
+        let bookmarks = app.tables.cells.switches["Bookmarks"].value
+        XCTAssertEqual("1", bookmarks as? String)
         // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
         // Reloads for notification
         // let recentlyVisited = app.tables.cells.switches["Recently Visited"].value

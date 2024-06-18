@@ -45,6 +45,9 @@ class DependencyHelperMock {
         AppContainer.shared.register(service: windowManager)
         windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: windowUUID)
 
+        let microsurveyManager = MicrosurveySurfaceManager()
+        AppContainer.shared.register(service: microsurveyManager)
+
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()
     }

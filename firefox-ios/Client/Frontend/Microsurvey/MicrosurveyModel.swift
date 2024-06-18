@@ -10,4 +10,5 @@ struct MicrosurveyModel: Equatable {
     let surveyQuestion: String
     let surveyOptions: [String]
     let icon: UIImage?
+    let utmContent: String?
 }
