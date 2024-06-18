@@ -17,7 +17,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }()
 
     var activityIndicator: UIActivityIndicatorView!
-
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
@@ -45,7 +44,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
         setupWebView()
         setupActivityIndicator()
-
         listenForThemeChange(view)
     }
 
@@ -61,7 +59,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func setupWebView() {
-        webView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(webView)
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
