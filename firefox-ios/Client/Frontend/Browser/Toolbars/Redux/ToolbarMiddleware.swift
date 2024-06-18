@@ -226,12 +226,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard needsUpdateForTop || needsUpdateForBottom else { return }
 
         let addressToolbarModel = AddressToolbarModel(
-            navigationActions: addressToolbarState.navigationActions,
-            pageActions: addressToolbarState.pageActions,
-            browserActions: addressToolbarState.browserActions,
             displayTopBorder: displayTopBorder,
-            displayBottomBorder: displayBottomBorder,
-            url: addressToolbarState.url)
+            displayBottomBorder: displayBottomBorder)
 
         let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                    windowUUID: action.windowUUID,

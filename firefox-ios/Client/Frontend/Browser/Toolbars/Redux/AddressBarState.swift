@@ -50,11 +50,11 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: model.navigationActions,
-                pageActions: model.pageActions,
-                browserActions: model.browserActions,
-                displayTopBorder: model.displayTopBorder,
-                displayBottomBorder: model.displayBottomBorder,
+                navigationActions: model.navigationActions ?? state.navigationActions,
+                pageActions: model.pageActions ?? state.pageActions,
+                browserActions: model.browserActions ?? state.browserActions,
+                displayTopBorder: model.displayTopBorder ?? state.displayTopBorder,
+                displayBottomBorder: model.displayBottomBorder ?? state.displayBottomBorder,
                 url: model.url
             )
 
