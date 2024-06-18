@@ -206,20 +206,20 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func updateBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
         guard let scrollOffset = action.scrollOffset,
-              let browserState = state.screenState(BrowserViewControllerState.self,
-                                                   for: .browserViewController,
+              let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
                                                    window: action.windowUUID)
         else { return }
 
-        let addressToolbarState = browserState.toolbarState.addressToolbar
+        let addressToolbarState = toolbarState.addressToolbar
         let displayTopBorder = shouldDisplayAddressToolbarBorder(
             borderPosition: .top,
             scrollY: scrollOffset.y,
-            toolbarPosition: browserState.toolbarState.toolbarPosition)
+            toolbarPosition: toolbarState.toolbarPosition)
         let displayBottomBorder = shouldDisplayAddressToolbarBorder(
             borderPosition: .bottom,
             scrollY: scrollOffset.y,
-            toolbarPosition: browserState.toolbarState.toolbarPosition)
+            toolbarPosition: toolbarState.toolbarPosition)
 
         let needsUpdateForTop = addressToolbarState.displayTopBorder != displayTopBorder
         let needsUpdateForBottom = addressToolbarState.displayBottomBorder != displayBottomBorder
