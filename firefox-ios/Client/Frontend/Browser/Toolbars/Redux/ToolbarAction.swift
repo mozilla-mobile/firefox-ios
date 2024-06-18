@@ -38,10 +38,10 @@ enum ToolbarActionType: ActionType {
 }
 
 class ToolbarMiddlewareAction: Action {
-    let buttonType: ToolbarState.ActionState.ActionType?
+    let buttonType: ToolbarActionState.ActionType?
     let gestureType: ToolbarButtonGesture?
 
-    init(buttonType: ToolbarState.ActionState.ActionType? = nil,
+    init(buttonType: ToolbarActionState.ActionType? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
