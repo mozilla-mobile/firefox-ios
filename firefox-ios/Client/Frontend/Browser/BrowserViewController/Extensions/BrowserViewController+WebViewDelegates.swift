@@ -464,9 +464,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
-            return
-        }
+        if tabManager.selectedTab?.webView !== webView { return }
 
         updateFindInPageVisibility(visible: false)
 

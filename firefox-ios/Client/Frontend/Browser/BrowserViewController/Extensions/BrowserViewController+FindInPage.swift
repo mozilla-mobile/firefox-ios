@@ -6,10 +6,29 @@ import Shared
 
 extension BrowserViewController {
     func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil) {
+        if #available(iOS 16, *) {
+            useApplesFindInteraction(isVisible: visible)
+        } else {
+            useCustomFindInteraction(visible: visible, tab: tab)
+        }
+    }
+
+    @available(iOS 16, *)
+    private func useApplesFindInteraction(isVisible: Bool) {
+        guard let webView = tabManager.selectedTab?.webView else { return }
+
+        if isVisible {
+            webView.isFindInteractionEnabled = true
+            webView.findInteraction?.presentFindNavigator(showingReplace: false)
+        } else {
+            webView.findInteraction?.dismissFindNavigator()
+            webView.isFindInteractionEnabled = false
+        }
+    }
+
+    private func useCustomFindInteraction(visible: Bool, tab: Tab? = nil) {
         if visible {
-            if findInPageBar == nil {
-                setupFindInPage()
-            }
+            if findInPageBar == nil { setupFindInPage() }
 
             self.findInPageBar?.becomeFirstResponder()
         } else if let findInPageBar = self.findInPageBar {
