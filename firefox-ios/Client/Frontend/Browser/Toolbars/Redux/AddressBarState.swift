@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-struct AddressState: StateType, Equatable {
+struct AddressBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var navigationActions: [ToolbarActionState]
     var pageActions: [ToolbarActionState]
@@ -48,7 +48,7 @@ struct AddressState: StateType, Equatable {
         case ToolbarActionType.didLoadToolbars:
             guard let model = (action as? ToolbarAction)?.addressToolbarModel else { return state }
 
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: model.navigationActions,
                 pageActions: model.pageActions,
@@ -67,7 +67,7 @@ struct AddressState: StateType, Equatable {
                 actions[index].numberOfTabs = numberOfTabs
             }
 
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
@@ -78,7 +78,7 @@ struct AddressState: StateType, Equatable {
             )
 
         case ToolbarActionType.urlDidChange:
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
@@ -97,7 +97,7 @@ struct AddressState: StateType, Equatable {
                 actions[index].isEnabled = isEnabled
             }
 
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: actions,
                 pageActions: state.pageActions,
@@ -116,7 +116,7 @@ struct AddressState: StateType, Equatable {
                 actions[index].isEnabled = isEnabled
             }
 
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: actions,
                 pageActions: state.pageActions,
@@ -127,7 +127,7 @@ struct AddressState: StateType, Equatable {
             )
 
         default:
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,

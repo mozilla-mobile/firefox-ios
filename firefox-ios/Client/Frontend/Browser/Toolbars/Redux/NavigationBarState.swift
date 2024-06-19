@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-struct NavigationState: StateType, Equatable {
+struct NavigationBarState: StateType, Equatable {
     var windowUUID: WindowUUID
     var actions: [ToolbarActionState]
     var displayBorder: Bool
@@ -32,7 +32,7 @@ struct NavigationState: StateType, Equatable {
         case ToolbarActionType.didLoadToolbars:
             guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
-            return NavigationState(
+            return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: model.actions,
                 displayBorder: model.displayBorder
@@ -47,7 +47,7 @@ struct NavigationState: StateType, Equatable {
                 actions[index].numberOfTabs = numberOfTabs
             }
 
-            return NavigationState(
+            return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: actions,
                 displayBorder: state.displayBorder
@@ -62,7 +62,7 @@ struct NavigationState: StateType, Equatable {
                 actions[index].isEnabled = isEnabled
             }
 
-            return NavigationState(
+            return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: actions,
                 displayBorder: state.displayBorder
@@ -77,14 +77,14 @@ struct NavigationState: StateType, Equatable {
                 actions[index].isEnabled = isEnabled
             }
 
-            return NavigationState(
+            return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: actions,
                 displayBorder: state.displayBorder
             )
 
         default:
-            return NavigationState(
+            return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: state.actions,
                 displayBorder: false

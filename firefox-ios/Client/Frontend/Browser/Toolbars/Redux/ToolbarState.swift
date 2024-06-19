@@ -9,8 +9,8 @@ import ToolbarKit
 struct ToolbarState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
-    var addressToolbar: AddressState
-    var navigationToolbar: NavigationState
+    var addressToolbar: AddressBarState
+    var navigationToolbar: NavigationBarState
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = store.state.screenState(
@@ -32,16 +32,16 @@ struct ToolbarState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             toolbarPosition: .top,
-            addressToolbar: AddressState(windowUUID: windowUUID),
-            navigationToolbar: NavigationState(windowUUID: windowUUID)
+            addressToolbar: AddressBarState(windowUUID: windowUUID),
+            navigationToolbar: NavigationBarState(windowUUID: windowUUID)
         )
     }
 
     init(
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
-        addressToolbar: AddressState,
-        navigationToolbar: NavigationState
+        addressToolbar: AddressBarState,
+        navigationToolbar: NavigationBarState
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -64,8 +64,8 @@ struct ToolbarState: ScreenState, Equatable {
             return ToolbarState(
                 windowUUID: state.windowUUID,
                 toolbarPosition: state.toolbarPosition,
-                addressToolbar: AddressState.reducer(state.addressToolbar, action),
-                navigationToolbar: NavigationState.reducer(state.navigationToolbar, action))
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 
         default:
             return ToolbarState(
