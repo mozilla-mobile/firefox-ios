@@ -97,7 +97,7 @@ struct NavigationBarState: StateType, Equatable {
             return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: state.actions,
-                displayBorder: false
+                displayBorder: state.displayBorder
             )
         }
     }

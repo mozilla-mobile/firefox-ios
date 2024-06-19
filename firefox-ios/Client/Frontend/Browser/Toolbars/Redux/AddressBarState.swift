@@ -147,9 +147,9 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
-                displayTopBorder: false,
-                displayBottomBorder: false,
-                url: nil
+                displayTopBorder: state.displayTopBorder,
+                displayBottomBorder: state.displayBottomBorder,
+                url: state.url
             )
         }
     }
