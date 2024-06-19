@@ -104,7 +104,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         let cell = dequeueCellFor(indexPath: indexPath)
         let option = mailProviderSource[indexPath.row]
 
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         cell.textLabel?.attributedText = tableRowTitle(option.name, enabled: option.enabled)
         cell.accessoryType = (currentChoice == option.scheme && option.enabled) ? .checkmark : .none
@@ -142,7 +142,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
 
     private func tableRowTitle(_ string: String, enabled: Bool) -> NSAttributedString {
         var color: [NSAttributedString.Key: UIColor]
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         if enabled {
             color = [
                 NSAttributedString.Key.foregroundColor: theme.colors.textPrimary

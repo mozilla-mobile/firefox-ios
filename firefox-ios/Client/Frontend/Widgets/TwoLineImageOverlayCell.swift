@@ -41,13 +41,13 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var stackView: UIStackView = .build { stackView in
-        stackView.spacing = 8
+        stackView.spacing = 2
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.callout.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .natural
     }
 

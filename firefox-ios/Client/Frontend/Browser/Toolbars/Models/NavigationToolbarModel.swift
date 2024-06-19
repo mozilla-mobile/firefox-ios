@@ -6,6 +6,6 @@ import Foundation
 import ToolbarKit
 
 struct NavigationToolbarModel {
-    let actions: [ToolbarState.ActionState]
+    let actions: [ToolbarActionState]
     let displayBorder: Bool
 }

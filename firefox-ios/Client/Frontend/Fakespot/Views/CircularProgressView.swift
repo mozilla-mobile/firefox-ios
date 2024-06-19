@@ -20,11 +20,11 @@ struct CircularProgressView: View, ThemeApplicable {
     var body: some View {
         progressCircularView
             .onAppear {
-                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
             .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
                 guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
     }
 

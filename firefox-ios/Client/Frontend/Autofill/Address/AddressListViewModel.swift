@@ -54,7 +54,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
     var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        return themeManager.currentTheme(for: windowUUID).type == .dark
+        return themeManager.getCurrentTheme(for: windowUUID).type == .dark
     }
 
     // MARK: - Initializer

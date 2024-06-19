@@ -916,7 +916,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func applyTheme() {
@@ -982,7 +982,7 @@ class SettingsTableViewController: ThemedTableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
-            setting.onConfigureCell(cell, theme: themeManager.currentTheme(for: windowUUID))
+            setting.onConfigureCell(cell, theme: themeManager.getCurrentTheme(for: windowUUID))
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
@@ -995,8 +995,8 @@ class SettingsTableViewController: ThemedTableViewController {
     ) {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
-            setting.onConfigureCell(themedCell, theme: themeManager.currentTheme(for: windowUUID))
-            themedCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            setting.onConfigureCell(themedCell, theme: themeManager.getCurrentTheme(for: windowUUID))
+            themedCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
@@ -1040,7 +1040,7 @@ class SettingsTableViewController: ThemedTableViewController {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 
@@ -1054,7 +1054,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return footerView
     }
 

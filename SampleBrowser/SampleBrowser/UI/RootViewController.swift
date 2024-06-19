@@ -327,6 +327,6 @@ class RootViewController: UIViewController,
     // MARK: Themeable
     func applyTheme() {
         updateThemeApplicableSubviews(view, for: currentWindowUUID)
-        view.backgroundColor = themeManager.currentTheme(for: currentWindowUUID).colors.layer1
+        view.backgroundColor = themeManager.getCurrentTheme(for: currentWindowUUID).colors.layer1
     }
 }

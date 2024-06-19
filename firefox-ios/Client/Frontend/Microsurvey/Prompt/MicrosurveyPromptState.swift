@@ -31,9 +31,11 @@ struct MicrosurveyPromptState: StateType, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        // TODO: FXIOS-9068 Need to test this experience with multiwindow
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+
         switch action.actionType {
-        case MicrosurveyPromptMiddlewareActionType.initialize(let model):
+        case MicrosurveyPromptMiddlewareActionType.initialize:
+            let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
                 showPrompt: true,

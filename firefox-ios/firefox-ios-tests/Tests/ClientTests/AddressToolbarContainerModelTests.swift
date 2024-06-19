@@ -17,12 +17,14 @@ class AddressToolbarContainerModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
 
-        let addressState = ToolbarState.AddressState(navigationActions: [],
-                                                     pageActions: [],
-                                                     browserActions: [],
-                                                     displayTopBorder: false,
-                                                     displayBottomBorder: false)
-        let navigationState = ToolbarState.NavigationState(actions: [], displayBorder: false)
+        let addressState = AddressBarState(windowUUID: windowUUID,
+                                           navigationActions: [],
+                                           pageActions: [],
+                                           browserActions: [],
+                                           displayTopBorder: false,
+                                           displayBottomBorder: false,
+                                           url: nil)
+        let navigationState = NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
         let state = ToolbarState(windowUUID: windowUUID,
                                  toolbarPosition: .top,
                                  addressToolbar: addressState,

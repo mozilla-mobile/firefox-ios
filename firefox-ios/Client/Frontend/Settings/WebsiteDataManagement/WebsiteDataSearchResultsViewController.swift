@@ -42,7 +42,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        footer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
@@ -69,7 +69,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -84,7 +84,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textWarning
+            cell.textLabel?.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
         }

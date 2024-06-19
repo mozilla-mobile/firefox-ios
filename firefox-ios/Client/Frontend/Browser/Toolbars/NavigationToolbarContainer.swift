@@ -8,7 +8,7 @@ import Redux
 import UIKit
 
 class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
-    typealias SubscriberStateType = BrowserViewControllerState
+    typealias SubscriberStateType = ToolbarState
 
     private enum UX {
         static let toolbarHeight: CGFloat = 48
@@ -46,11 +46,11 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard let uuid = windowUUID else { return }
+        guard let windowUUID else { return }
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
+                return ToolbarState(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -59,9 +59,8 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
         store.unsubscribe(self)
     }
 
-    func newState(state: BrowserViewControllerState) {
-        toolbarState = state.toolbarState
-        updateModel(toolbarState: state.toolbarState)
+    func newState(state: ToolbarState) {
+        updateModel(toolbarState: state)
     }
 
     private func updateModel(toolbarState: ToolbarState) {

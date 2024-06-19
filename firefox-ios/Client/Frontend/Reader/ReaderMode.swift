@@ -35,7 +35,7 @@ enum ReaderModeTheme: String {
 
         let appTheme: Theme = {
             guard let uuid = window else { return themeManager.windowNonspecificTheme() }
-            return themeManager.currentTheme(for: uuid)
+            return themeManager.getCurrentTheme(for: uuid)
         }()
 
         guard appTheme.type != .dark else { return .dark }

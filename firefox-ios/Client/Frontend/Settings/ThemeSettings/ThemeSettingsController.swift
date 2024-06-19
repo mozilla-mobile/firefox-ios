@@ -148,7 +148,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func makeSlider(parent: UIView) -> UISlider {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = [StandardImageIdentifiers.Medium.nightMode, StandardImageIdentifiers.Medium.sun].map { name in
             UIImage(imageLiteralResourceName: name)
@@ -202,7 +202,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
             label.font = FXFontStyles.Regular.caption1.scaledFont()
-            label.textColor = self.themeManager.currentTheme(for: self.windowUUID).colors.textSecondary
+            label.textColor = self.themeManager.getCurrentTheme(for: self.windowUUID).colors.textSecondary
         }
         footer.addSubview(label)
         NSLayoutConstraint.activate([
@@ -229,7 +229,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
         let cell = dequeueCellFor(indexPath: indexPath)
         cell.selectionStyle = .none
         let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         switch section {
         case .systemTheme:
             cell.textLabel?.text = .SystemThemeSectionSwitchTitle
@@ -364,7 +364,7 @@ class ThemeSettingsController: ThemedTableViewController, StoreSubscriber {
     }
 
     private func configureAutomaticBrightness(cell: ThemedTableViewCell) {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let deviceBrightnessIndicator = makeSlider(parent: cell.contentView)
         let slider = makeSlider(parent: cell.contentView)
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)

@@ -69,7 +69,7 @@ extension PhotonActionSheetProtocol {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,
-                                                theme: themeManager.currentTheme(for: tabManager.windowUUID))
+                                                theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
             }
         }
 

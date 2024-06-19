@@ -10,7 +10,7 @@ import Common
 final class MicrosurveyViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }

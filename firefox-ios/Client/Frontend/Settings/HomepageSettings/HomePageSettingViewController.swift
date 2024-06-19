@@ -134,7 +134,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let pocketSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.ASPocketStories,
             defaultValue: true,
             titleText: .Settings.Homepage.CustomizeFirefoxHome.ThoughtProvokingStories,
@@ -148,7 +148,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
 
         let bookmarksSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.BookmarksSection,
             defaultValue: true,
             titleText: .Settings.Homepage.CustomizeFirefoxHome.Bookmarks
@@ -315,7 +315,7 @@ extension HomePageSettingViewController {
         override func onClick(_ navigationController: UINavigationController?) {
             guard wallpaperManager.canSettingsBeShown else { return }
 
-            let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
+            let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
             let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
                                                        tabManager: tabManager,
                                                        theme: theme)

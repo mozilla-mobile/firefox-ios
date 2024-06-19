@@ -365,9 +365,9 @@ class BookmarksTests: BaseTestCase {
         waitForTabsButton()
         bookmark()
         navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.staticTexts["Recently Saved"])
-        mozWaitForElementToExist(app.cells["RecentlySavedCell"])
-        app.cells["RecentlySavedCell"].press(forDuration: 1.5)
+        mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+        mozWaitForElementToExist(app.cells["BookmarksCell"])
+        app.cells["BookmarksCell"].press(forDuration: 1.5)
         // The context menu opens, having the correct options
         let ContextMenuTable = app.tables["Context Menu"]
         mozWaitForElementToExist(ContextMenuTable)

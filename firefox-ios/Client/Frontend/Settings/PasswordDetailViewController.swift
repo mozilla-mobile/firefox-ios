@@ -115,7 +115,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

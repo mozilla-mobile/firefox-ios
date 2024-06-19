@@ -251,7 +251,7 @@ class OnboardingInstructionPopupViewController: UIViewController, Themeable {
 
     // MARK: - Themeable
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         titleLabel.textColor = theme.colors.textPrimary
         numeratedLabels.forEach { $0.textColor = theme.colors.textPrimary }
 
