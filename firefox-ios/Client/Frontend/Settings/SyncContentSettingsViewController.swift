@@ -45,7 +45,7 @@ class DisconnectSetting: Setting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
     override var textAlignment: NSTextAlignment { return .center }
 
-    override var title: NSAttributedString? {
+    override var centeredTitle: NSAttributedString? {
         let theme = settingsVC.themeManager.getCurrentTheme(for: settingsVC.windowUUID)
         return NSAttributedString(
             string: .SettingsDisconnectSyncButton,

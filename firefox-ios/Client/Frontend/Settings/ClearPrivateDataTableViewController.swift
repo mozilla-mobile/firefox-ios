@@ -113,9 +113,9 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.selectionStyle = .none
             control.tag = indexPath.item
         } else {
-            cell.textLabel?.text = .SettingsClearPrivateDataClearButton
-            cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = currentTheme().colors.textWarning
+            cell.centeredButtonLabel.text = .SettingsClearPrivateDataClearButton
+            cell.centeredButtonLabel.textAlignment = .center
+            cell.centeredButtonLabel.textColor = currentTheme().colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection
             clearButton = cell

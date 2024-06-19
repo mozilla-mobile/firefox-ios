@@ -10,9 +10,13 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     var viewModel: ThemedTableViewCellViewModel?
     var cellStyle: UITableViewCell.CellStyle
 
+    private var centeredButtonLabelMargin = 15.0
+    lazy var centeredButtonLabel: UILabel = .build()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.cellStyle = style
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.initCenteredButtonLabel()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +34,11 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         var size = super.systemLayoutSizeFitting(targetSize,
                                                  withHorizontalFittingPriority: horizontalFittingPriority,
                                                  verticalFittingPriority: verticalFittingPriority)
-        if cellStyle == .value2 || cellStyle == .value1 {
+        if cellStyle == .default, centeredButtonLabel.text != nil  {
+            let textHeight = centeredButtonLabel.frame.size.height
+            size.height += textHeight
+            return size
+        } else if cellStyle == .value2 || cellStyle == .value1 {
             if let textLabel = self.textLabel, let detailTextLabel = self.detailTextLabel {
                 let detailHeight = detailTextLabel.frame.size.height
                 let isValueTextEmpty = detailTextLabel.text?.isEmpty ?? false
@@ -66,6 +74,8 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         subviews.forEach {
             $0.alpha = 1.0
         }
+
+        initCenteredButtonLabel()
     }
 
     func applyTheme(theme: Theme) {
@@ -79,5 +89,26 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configure(viewModel: ThemedTableViewCellViewModel) {
         self.viewModel = viewModel
+    }
+
+    private func initCenteredButtonLabel() {
+        centeredButtonLabel.text = nil
+        centeredButtonLabel.numberOfLines = 0
+        centeredButtonLabel.font = FXFontStyles.Regular.body.scaledFont()
+        setupCenteredButtonLabelConstraints()
+    }
+
+    private func setupCenteredButtonLabelConstraints() {
+        contentView.addSubview(centeredButtonLabel)
+        NSLayoutConstraint.activate([
+            centeredButtonLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            centeredButtonLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            centeredButtonLabel.leadingAnchor.constraint(
+                greaterThanOrEqualTo: contentView.leadingAnchor,
+                constant: centeredButtonLabelMargin),
+            centeredButtonLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: contentView.trailingAnchor,
+                constant: -centeredButtonLabelMargin)
+        ])
     }
 }

@@ -177,10 +177,11 @@ class WebsiteDataManagementViewController: UIViewController,
                 theme: currentTheme(),
                 type: .destructive
             )
-            cell.textLabel?.text = viewModel.clearButtonTitle
-            cell.textLabel?.textAlignment = .center
+            cell.centeredButtonLabel.text = viewModel.clearButtonTitle
+            cell.centeredButtonLabel.textAlignment = .center
+            cell.centeredButtonLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
-            cell.accessibilityIdentifier = "ClearAllWebsiteData"
+            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.clearAllWebsiteData
             cell.configure(viewModel: cellViewModel)
         }
 
