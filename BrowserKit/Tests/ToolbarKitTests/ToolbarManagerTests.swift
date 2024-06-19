@@ -48,10 +48,18 @@ final class ToolbarManagerTests: XCTestCase {
                                                           scrollY: 0))
     }
 
-    func testDisplayAddressToolbarBottomBorderWhenPrivateModeThenShouldDisplay() {
+    func testDisplayAddressToolbarBottomBorderWhenPrivateModeWithBottomPlacementThenShouldDNotisplay() {
+        let subject = createSubject()
+        XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
+                                                          toolbarPosition: .bottom,
+                                                          isPrivate: true,
+                                                          scrollY: 0))
+    }
+
+    func testDisplayAddressToolbarBottomBorderWhenPrivateModeWithTopPlacementThenShouldDisplay() {
         let subject = createSubject()
         XCTAssertTrue(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
-                                                         toolbarPosition: .bottom,
+                                                         toolbarPosition: .top,
                                                          isPrivate: true,
                                                          scrollY: 0))
     }

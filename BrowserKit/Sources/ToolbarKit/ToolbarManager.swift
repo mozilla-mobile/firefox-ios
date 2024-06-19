@@ -31,11 +31,11 @@ public class DefaultToolbarManager: ToolbarManager {
         // - the toolbar is displayed at the bottom
         // display the bottom border if
         // - the toolbar is displayed at the top and the website was scrolled
-        // - we are in private mode
+        // - the toolbar is displayed at the top and we are in private mode
         if borderPosition == .top {
             return toolbarPosition == .bottom
         } else {
-            return (toolbarPosition == .top && scrollY > 0) || isPrivate
+            return toolbarPosition == .top && (scrollY > 0 || isPrivate)
         }
     }
 
