@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import ToolbarKit
 
 enum AppScreenState: Equatable {
     case onboardingViewController(OnboardingViewControllerState)
@@ -15,6 +16,7 @@ enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
     case tabPeek(TabPeekState)
     case microsurvey(MicrosurveyState)
+    case toolbar(ToolbarState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -34,6 +36,8 @@ enum AppScreenState: Equatable {
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
         case .microsurvey(let state):
             return .microsurvey(MicrosurveyState.reducer(state, action))
+        case .toolbar(let state):
+            return .toolbar(ToolbarState.reducer(state, action))
         }
     }
 
@@ -48,6 +52,7 @@ enum AppScreenState: Equatable {
         case .remoteTabsPanel: return .remoteTabsPanel
         case .tabPeek: return .tabPeek
         case .microsurvey: return .microsurvey
+        case .toolbar: return .toolbar
         }
     }
 
@@ -61,6 +66,7 @@ enum AppScreenState: Equatable {
         case .themeSettings(let state): return state.windowUUID
         case .tabPeek(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
+        case .toolbar(let state): return state.windowUUID
         }
     }
 }
@@ -115,6 +121,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.tabPeek(TabPeekState(windowUUID: uuid)))
             case .microsurvey:
                 screens.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
+            case .toolbar:
+                screens.append(.toolbar(ToolbarState(windowUUID: uuid)))
             }
         default:
             return screens

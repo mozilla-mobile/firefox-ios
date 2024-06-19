@@ -135,10 +135,9 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    scrollY: CGFloat = 0,
                                                    state: AppState,
                                                    windowUUID: WindowUUID) -> Bool {
-        guard let browserState = state.screenState(BrowserViewControllerState.self,
-                                                   for: .browserViewController,
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
                                                    window: windowUUID) else { return false }
-        let toolbarState = browserState.toolbarState
         return manager.shouldDisplayAddressBorder(borderPosition: borderPosition,
                                                   toolbarPosition: toolbarState.toolbarPosition,
                                                   isPrivate: isPrivate,
@@ -146,10 +145,9 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: WindowUUID) -> Bool {
-        guard let browserState = state.screenState(BrowserViewControllerState.self,
-                                                   for: .browserViewController,
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
                                                    window: windowUUID) else { return false }
-        let toolbarState = browserState.toolbarState
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
     }
 
