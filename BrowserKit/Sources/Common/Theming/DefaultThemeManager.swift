@@ -21,17 +21,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
         enum NightMode {
             static let isOn = "profile.NightModeStatus"
         }
-
-        enum PrivateMode {
-            static let byWindowUUID = "profile.PrivateModeWindowStatusByWindowUUID"
-
-            static let legacy_isOn = "profile.PrivateModeStatus"
-        }
     }
 
     // MARK: - Variables
 
     private var windows: [WindowUUID: UIWindow] = [:]
+    private var privateBrowsingState: [WindowUUID: Bool] = [:]
     private var allWindowUUIDs: [WindowUUID] { return Array(windows.keys) }
     public var notificationCenter: NotificationProtocol
 
@@ -121,22 +116,12 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     // MARK: - Private theme functions
     public func setPrivateTheme(isOn: Bool, for window: WindowUUID) {
         guard getPrivateThemeIsOn(for: window) != isOn else { return }
-
-        var settings: KeyedPrivateModeFlags
-        = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags ?? [:]
-
-        settings[window.uuidString] = NSNumber(value: isOn)
-        userDefaults.set(settings, forKey: ThemeKeys.PrivateMode.byWindowUUID)
-
+        privateBrowsingState[window] = isOn
         applyThemeChanges(for: window, using: determineThemeType(for: window))
     }
 
     public func getPrivateThemeIsOn(for window: WindowUUID) -> Bool {
-        let settings = userDefaults.object(forKey: ThemeKeys.PrivateMode.byWindowUUID) as? KeyedPrivateModeFlags
-        if settings == nil { migrateSingleWindowPrivateDefaultsToMultiWindow(for: window) }
-
-        let boxedBool = settings?[window.uuidString] as? NSNumber
-        return boxedBool?.boolValue ?? false
+        return privateBrowsingState[window] ?? false
     }
 
     // MARK: - Automatic brightness theme functions
@@ -174,13 +159,6 @@ public final class DefaultThemeManager: ThemeManager, Notifiable {
     }
 
     // MARK: - Private helper methods
-
-    private func migrateSingleWindowPrivateDefaultsToMultiWindow(for window: WindowUUID) {
-        // Migrate old private setting to our window-based settings
-        let oldPrivateSetting = userDefaults.bool(forKey: ThemeKeys.PrivateMode.legacy_isOn)
-        let newSettings: KeyedPrivateModeFlags = [window.uuidString: NSNumber(value: oldPrivateSetting)]
-        userDefaults.set(newSettings, forKey: ThemeKeys.PrivateMode.byWindowUUID)
-    }
 
     private func updateSavedTheme(to newTheme: ThemeType) {
         userDefaults.set(newTheme.rawValue, forKey: ThemeKeys.themeName)
