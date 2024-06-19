@@ -87,7 +87,7 @@ struct NavigationBarState: StateType, Equatable {
             guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
             else { return state }
 
-            return NavigationState(
+            return NavigationBarState(
                 windowUUID: state.windowUUID,
                 actions: state.actions,
                 displayBorder: displayBorder

@@ -131,7 +131,7 @@ struct AddressBarState: StateType, Equatable {
                   let displayBottomBorder = (action as? ToolbarAction)?.addressToolbarModel?.displayBottomBorder
             else { return state }
 
-            return AddressState(
+            return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
