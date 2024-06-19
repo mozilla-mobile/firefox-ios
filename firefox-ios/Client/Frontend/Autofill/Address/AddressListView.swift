@@ -13,7 +13,7 @@ import Storage
 struct AddressListView: View {
     // MARK: - Constants
 
-    enum Constants {
+    private enum UX {
         static let imageWidth: CGFloat = 200
         static let contentUnavailableViewPadding: CGFloat = 24
         static let vStackSpacing: CGFloat = 0
@@ -60,8 +60,8 @@ struct AddressListView: View {
                 .listRowInsets(EdgeInsets())
             } else if viewModel.isEditingFeatureEnabled {
                 contentUnavailableView
-                    .padding(.top, Constants.contentUnavailableViewTopPadding)
-                    .padding(.horizontal, Constants.contentUnavailableViewPadding)
+                    .padding(.top, UX.contentUnavailableViewTopPadding)
+                    .padding(.horizontal, UX.contentUnavailableViewPadding)
                 Spacer()
             }
         }
@@ -120,22 +120,22 @@ struct AddressListView: View {
                 .resizable()
                 .renderingMode(.template)
                 .aspectRatio(contentMode: .fit)
-                .frame(width: Constants.imageWidth)
+                .frame(width: UX.imageWidth)
                 .foregroundColor(imageColor)
                 .accessibility(hidden: true)
 
-            VStack(spacing: Constants.vStackSpacing) {
+            VStack(spacing: UX.vStackSpacing) {
                 Text(
                     String(
                         format: String.Addresses.Settings.SaveAddressesToFirefox,
                         AppName.shortName.rawValue
                     )
                 )
-                .preferredBodyFont(size: Constants.titleFontSize)
+                .preferredBodyFont(size: UX.titleFontSize)
                 .foregroundColor(titleTextColor)
 
                 Text(String.Addresses.Settings.SecureSaveInfo)
-                    .preferredBodyFont(size: Constants.subtitleFontSize)
+                    .preferredBodyFont(size: UX.subtitleFontSize)
                     .foregroundColor(subTextColor)
             }
             .multilineTextAlignment(.center)
