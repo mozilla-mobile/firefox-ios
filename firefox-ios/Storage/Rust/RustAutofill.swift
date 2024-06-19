@@ -371,7 +371,11 @@ public class RustAutofill {
     ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
     /// - Throws: An error if the update fails.
     /// - Returns: A task that represents the asynchronous update operation.
-    public func updateAddress(id: String, address: UpdatableAddressFields, completion: @escaping (Result<Void, Error>) -> Void) {
+    public func updateAddress(
+        id: String,
+        address: UpdatableAddressFields,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         performDatabaseOperation { error in
             guard error == nil else {
                 completion(.failure(error!))
