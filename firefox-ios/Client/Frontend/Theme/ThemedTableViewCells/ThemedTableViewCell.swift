@@ -34,7 +34,7 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         var size = super.systemLayoutSizeFitting(targetSize,
                                                  withHorizontalFittingPriority: horizontalFittingPriority,
                                                  verticalFittingPriority: verticalFittingPriority)
-        if cellStyle == .default, centeredButtonLabel.text != nil  {
+        if cellStyle == .default, centeredButtonLabel.text != nil {
             let textHeight = centeredButtonLabel.frame.size.height
             size.height += textHeight
             return size
