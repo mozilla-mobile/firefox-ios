@@ -277,7 +277,7 @@ extension String {
                 value: "Securely save your information to get quick access to it later.",
                 comment: "Description text for the content unavailable view informing users they can create or add new addresses.")
             public static let ListItemA11y = MZLocalizedString(
-                key: "", //Addresses.Settings.ListItemA11y.v129
+                key: "", // Addresses.Settings.ListItemA11y.v129
                 tableName: "Settings",
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
