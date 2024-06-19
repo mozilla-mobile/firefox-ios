@@ -6,9 +6,9 @@ import Foundation
 import ToolbarKit
 
 struct AddressToolbarModel {
-    let navigationActions: [ToolbarState.ActionState]
-    let pageActions: [ToolbarState.ActionState]
-    let browserActions: [ToolbarState.ActionState]
+    let navigationActions: [ToolbarActionState]
+    let pageActions: [ToolbarActionState]
+    let browserActions: [ToolbarActionState]
 
     let displayTopBorder: Bool
     let displayBottomBorder: Bool

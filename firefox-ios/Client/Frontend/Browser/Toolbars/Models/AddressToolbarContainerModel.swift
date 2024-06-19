@@ -72,7 +72,7 @@ class AddressToolbarContainerModel {
         return query
     }
 
-    private static func mapActions(_ actions: [ToolbarState.ActionState], windowUUID: UUID) -> [ToolbarElement] {
+    private static func mapActions(_ actions: [ToolbarActionState], windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
