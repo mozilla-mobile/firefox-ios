@@ -126,7 +126,7 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url
             )
 
-        case ToolbarActionType.needsBorderUpdate:
+        case ToolbarActionType.scrollOffsetChanged:
             guard let displayTopBorder = (action as? ToolbarAction)?.addressToolbarModel?.displayTopBorder,
                   let displayBottomBorder = (action as? ToolbarAction)?.addressToolbarModel?.displayBottomBorder
             else { return state }

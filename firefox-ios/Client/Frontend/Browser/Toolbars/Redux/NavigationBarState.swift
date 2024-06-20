@@ -83,7 +83,7 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.needsBorderUpdate:
+        case ToolbarActionType.scrollOffsetChanged:
             guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
             else { return state }
 

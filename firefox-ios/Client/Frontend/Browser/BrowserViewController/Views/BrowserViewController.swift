@@ -348,10 +348,11 @@ class BrowserViewController: UIViewController,
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
 
-        let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollController.contentOffset,
-                                                    toolbarPosition: newSearchBarPosition,
-                                                    windowUUID: windowUUID,
-                                                    actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+        let action = GeneralBrowserMiddlewareAction(
+            scrollOffset: scrollController.contentOffset,
+            toolbarPosition: newSearchBarPosition,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
         store.dispatch(action)
     }
 

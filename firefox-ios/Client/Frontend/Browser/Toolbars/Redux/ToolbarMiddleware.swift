@@ -237,7 +237,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                    navigationToolbarModel: navToolbarModel,
                                    windowUUID: action.windowUUID,
-                                   actionType: ToolbarActionType.needsBorderUpdate)
+                                   actionType: ToolbarActionType.scrollOffsetChanged)
         store.dispatch(action)
     }
 

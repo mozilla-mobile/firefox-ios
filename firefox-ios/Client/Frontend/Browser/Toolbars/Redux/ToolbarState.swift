@@ -64,7 +64,7 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.urlDidChange,
             ToolbarActionType.backButtonStateChanged,
             ToolbarActionType.forwardButtonStateChanged,
-            ToolbarActionType.needsBorderUpdate:
+            ToolbarActionType.scrollOffsetChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,
