@@ -300,7 +300,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
-        return SingleActionViewModel(title: .AppMenu.NewTab,
+        return SingleActionViewModel(title: tab.isPrivate ? .AppMenu.NewPrivateTab : .AppMenu.NewTab,
                                      iconString: StandardImageIdentifiers.Large.plus) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
             self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
