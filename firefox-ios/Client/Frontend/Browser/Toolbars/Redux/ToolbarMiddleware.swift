@@ -213,10 +213,12 @@ class ToolbarMiddleware: FeatureFlaggable {
         let addressToolbarState = toolbarState.addressToolbar
         let displayTopBorder = shouldDisplayAddressToolbarBorder(
             borderPosition: .top,
+            isPrivate: toolbarState.isPrivateMode,
             scrollY: scrollOffset.y,
             toolbarPosition: toolbarState.toolbarPosition)
         let displayBottomBorder = shouldDisplayAddressToolbarBorder(
             borderPosition: .bottom,
+            isPrivate: toolbarState.isPrivateMode,
             scrollY: scrollOffset.y,
             toolbarPosition: toolbarState.toolbarPosition)
         let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(

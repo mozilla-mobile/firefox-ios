@@ -13,6 +13,7 @@ class ToolbarAction: Action {
     let numberOfTabs: Int?
     let url: URL?
     let isButtonEnabled: Bool?
+    let isPrivate: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
@@ -20,6 +21,7 @@ class ToolbarAction: Action {
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          isButtonEnabled: Bool? = nil,
+         isPrivate: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -28,6 +30,7 @@ class ToolbarAction: Action {
         self.numberOfTabs = numberOfTabs
         self.url = url
         self.isButtonEnabled = isButtonEnabled
+        self.isPrivate = isPrivate
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
