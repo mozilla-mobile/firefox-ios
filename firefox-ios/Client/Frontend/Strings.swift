@@ -3786,6 +3786,11 @@ extension String {
             tableName: nil,
             value: "New Tab",
             comment: "Label for the new tab button in the menu page. Pressing this button opens a new tab.")
+        public static let NewPrivateTab = MZLocalizedString(
+            key: "Menu.NewPrivateTab.Label",
+            tableName: nil,
+            value: "New Private Tab",
+            comment: "Label for the new private tab button in the menu page. Pressing this button opens a new private tab.")
         public static let Help = MZLocalizedString(
             key: "Menu.Help.v99",
             tableName: nil,
