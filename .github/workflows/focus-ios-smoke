@@ -1,4 +1,4 @@
-name: "Focus iPhone Smoke Tests"
+name: "Focus iPhone/iPad Smoke Tests"
     
 on:
     workflow_dispatch:
@@ -7,7 +7,6 @@ env:
     browser: focus-ios
     xcode_version: 15.4
     ios_version: 17.5
-    ios_simulator: iPhone 15
     xcodebuild_test_plan: SmokeTest
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
@@ -15,6 +14,9 @@ env:
     
 jobs:
     run-tests:
+        strategy:
+            matrix:
+                ios_simulator: ['iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         name: Build and run tests
         runs-on: macos-14-large
         steps:
@@ -48,7 +50,7 @@ jobs:
                     build-for-testing \
                     -scheme ${{ env.xcodebuild_scheme }} \
                     -target ${{ env.xcodebuild_target }} \
-                    -destination 'platform=iOS Simulator,name=${{ env.ios_simulator }},OS=${{ env.ios_version }}'
+                    -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}'
               working-directory: ${{ env.browser }}
             - name: Run tests
               id: run-tests
@@ -57,7 +59,7 @@ jobs:
                     test-without-building \
                     -scheme ${{ env.xcodebuild_scheme }} \
                     -target ${{ env.xcodebuild_target }} \
-                    -destination 'platform=iOS Simulator,name=${{ env.ios_simulator }},OS=${{ env.ios_version }}' \
+                    -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ env.xcodebuild_test_plan }} \
                     -resultBundlePath ${{ env.test_results_directory }}/results \
                     || touch ${{ env.test_results_directory }}/fail.txt && exit 0
@@ -77,12 +79,12 @@ jobs:
               with:
                process_gcloudignore: false
                path: '${{ env.test_results_directory }}/index.html'
-               destination: 'mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}'
+               destination: 'mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ matrix.ios_simulator }}_${{ github.run_number }}'
             - name: Upload xcresult file to Github
               id: upload-github
               uses: actions/upload-artifact@v4.3.3
               with:
-                name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ github.run_number }}
+                name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-${{ github.run_number }}
                 path: ${{ env.test_results_directory }}/index.html
             - name : Process pass/fail info
               id: pass-fail
@@ -101,53 +103,19 @@ jobs:
               id: slack
               uses: slackapi/slack-github-action@v1.26.0
               with:
-                payload: |
-                  {
-                    "blocks":[
-                      {
-                        "type": "header",
-                        "text": {
-                          "type": "plain_text",
-                          "text": "${{ steps.pass-fail.outputs.pass_fail }} ${{ env.browser }} :firefox: ${{ env.xcodebuild_test_plan }} - ${{ env.ios_simulator }} iOS ${{ env.ios_version }}",
-                          "emoji": true
-                        }
-                      },
-                      {
-                        "type":"divider"
-                      },
-                      {
-                        "type": "section",
-                        "text": {
-                          "type": "mrkdwn",
-                          "text": "*Branch*: `${{ github.ref_name }}`"
-                        },
-                        "fields": [
-                          {
-                            "type": "mrkdwn",
-                            "text": "<https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ github.run_number }}/index.html|*Test Report*> :debug:"
-                          },
-                          {
-                            "type": "mrkdwn",
-                            "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|*Github Actions Job*> :github:"
-                          }
-                        ]
-                      },
-                      {
-                        "type":"divider"
-                      },
-                      {
-                        "type": "context",
-                        "elements": [
-                          {
-                            "type": "mrkdwn",
-                            "text": ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                payload-file-path: "./test-fixtures/ci/slack-notification-xcuitest.json"
               env:
                 SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+                ios_simulator: ${{ matrix.ios_simulator }}
+                pass_fail: ${{ steps.pass-fail.outputs.pass_fail }}
+                ref_name: ${{ github.ref_name }}
+                repository: ${{ github.repository }}
+                run_id: ${{ github.run_id }}
+                run_number: ${{ github.run_number }}
+                server_url: ${{ github.server_url }}
+
             - name: Report status
               run: |
                 exit ${{ steps.pass-fail.outputs.exit_value }}
+              continue-on-error: true
