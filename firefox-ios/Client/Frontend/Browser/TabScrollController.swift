@@ -97,7 +97,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }()
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    private var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
+    var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
