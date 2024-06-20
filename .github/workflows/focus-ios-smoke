@@ -18,7 +18,7 @@ jobs:
             matrix:
                 ios_simulator: ['iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         name: Build and run tests
-        runs-on: macos-14-large
+        runs-on: macos-14
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -68,23 +68,11 @@ jobs:
               id: test-report
               run: |
                 xchtmlreport ${{ env.test_results_directory }}/results.xcresult
-            - name: Authenticate to Google Cloud
-              id: auth-gcloud
-              uses: google-github-actions/auth@v2.1.3
-              with:
-                credentials_json: ${{ secrets.GCP_SA_KEY }}
-            - name: Upload report to Google Cloud bucket
-              id: upload-gcloud
-              uses: google-github-actions/upload-cloud-storage@v2.1.0
-              with:
-               process_gcloudignore: false
-               path: '${{ env.test_results_directory }}/index.html'
-               destination: 'mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result_${{ matrix.ios_simulator }}_${{ github.run_number }}'
             - name: Upload xcresult file to Github
               id: upload-github
               uses: actions/upload-artifact@v4.3.3
               with:
-                name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-${{ github.run_number }}
+                name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-${{ github.id }}
                 path: ${{ env.test_results_directory }}/index.html
             - name : Process pass/fail info
               id: pass-fail
@@ -112,7 +100,6 @@ jobs:
                 ref_name: ${{ github.ref_name }}
                 repository: ${{ github.repository }}
                 run_id: ${{ github.run_id }}
-                run_number: ${{ github.run_number }}
                 server_url: ${{ github.server_url }}
 
             - name: Report status

@@ -15,7 +15,7 @@
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "*Branch*: `${{ env.ref_name }}`\n<https://storage.googleapis.com/mobile-reports/public/${{ env.browser }}/${{ env.xcodebuild_test_plan }}/result__${{ env.ios_simulator }}_${{ env.run_number }}/index.html|*Test Report*> :debug:\n<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|*Github Actions Job*> :github:"
+          "text": "*Branch*: `${{ env.ref_name }}`\n<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|*Github Actions Job*> :github:"
         }
       },
       {
