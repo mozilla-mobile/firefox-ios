@@ -1590,6 +1590,7 @@ extension TelemetryWrapper {
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
+            GleanMetrics.ServerKnobs.validation.record()
             // record the same event for Nimbus' internal event store
             Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         case(.action, .background, .app, _, _):

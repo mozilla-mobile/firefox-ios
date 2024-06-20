@@ -5555,3 +5555,21 @@ windows:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
     unit: quantity of iPad windows
+
+# Server Knobs validation
+server_knobs:
+  validation:
+    disabled: true
+    type: event
+    description: |
+      Temporary metric recorded at the same time as
+      "app_cycle.foreground" to validate that the Glean Server Knobs
+      functionality is working correctly.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688#c2
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - brosa@mozilla.com
+    expires: "2024-09-01"
