@@ -123,9 +123,10 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     }
 
     @MainActor
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let viewModel = LoginListViewModel(
             tabURL: tabURL,
+            field: field,
             loginStorage: profile.logins,
             logger: logger,
             onLoginCellTap: { [weak self] login in

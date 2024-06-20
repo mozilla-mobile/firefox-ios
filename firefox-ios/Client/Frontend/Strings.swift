@@ -6318,6 +6318,11 @@ extension String {
             tableName: "PasswordAutofill",
             value: "Use saved password?",
             comment: "This label is used in the password list screen header as a question, prompting the user if they want to use a saved password for logging in.")
+        public static let LoginListCellNoUsername = MZLocalizedString(
+            key: "PasswordAutofill.LoginListCellNoUsername.v129",
+            tableName: "PasswordAutofill",
+            value: "(no username)",
+            comment: "This label is used in a cell found in the list of autofill login options in place of an actual username to denote that no username was saved for this login")
         public static let ManagePasswordsButton = MZLocalizedString(
             key: "PasswordAutofill.ManagePasswordsButton.v124",
             tableName: "PasswordAutofill",

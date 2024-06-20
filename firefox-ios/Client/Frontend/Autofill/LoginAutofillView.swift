@@ -51,6 +51,7 @@ struct LoginAutofillView: View {
         windowUUID: .XCTestDefaultUUID,
         viewModel: LoginListViewModel(
             tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
+            field: FocusFieldType.username,
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),
             onLoginCellTap: { _ in },
