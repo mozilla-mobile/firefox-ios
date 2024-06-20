@@ -6,19 +6,16 @@ import Foundation
 import Shared
 import Common
 
-import class MozillaAppServices.TabsStorage
+import class MozillaAppServices.TabsStore
 import enum MozillaAppServices.TabsApiError
 import struct MozillaAppServices.ClientRemoteTabs
 import struct MozillaAppServices.RemoteTabRecord
 
 public class RustRemoteTabs {
     let databasePath: String
-
     let queue: DispatchQueue
-    var storage: TabsStorage?
-
+    var store: TabsStore?
     private(set) var isOpen = false
-
     private var didAttemptToMoveToBackup = false
     private let logger: Logger
 
@@ -31,13 +28,13 @@ public class RustRemoteTabs {
     }
 
     private func open() -> NSError? {
-        storage = TabsStorage(databasePath: databasePath)
+        store = TabsStore(path: databasePath)
         isOpen = true
         return nil
     }
 
     private func close() -> NSError? {
-        storage = nil
+        store = nil
         isOpen = false
         return nil
     }
@@ -68,19 +65,16 @@ public class RustRemoteTabs {
 
     public func setLocalTabs(localTabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         let deferred = Deferred<Maybe<Int>>()
-
         queue.async {
-            let tabs = localTabs.map { $0.toRemoteTabRecord() }
-
-            if let storage = self.storage {
-                storage.setLocalTabs(remoteTabs: tabs)
-                deferred.fill(Maybe(success: tabs.count))
-            } else {
-                let error = TabsApiError.UnexpectedTabsError(reason: "Unknown error when setting local Rust Tabs")
+            guard let store = self.store else {
+                let error = TabsApiError.UnexpectedTabsError(reason: "TabsStore is not available")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
+                return
             }
+            let tabs = localTabs.map { $0.toRemoteTabRecord() }
+            store.setLocalTabs(remoteTabs: tabs)
+            deferred.fill(Maybe(success: tabs.count))
         }
-
         return deferred
     }
 
@@ -97,7 +91,7 @@ public class RustRemoteTabs {
                 return
             }
 
-            if let storage = self.storage {
+            if let storage = self.store {
                 let records = storage.getAll()
                 deferred.fill(Maybe(success: records))
             } else {
@@ -168,7 +162,7 @@ public class RustRemoteTabs {
 
     public func registerWithSyncManager() {
         queue.async { [unowned self] in
-           self.storage?.registerWithSyncManager()
+           self.store?.registerWithSyncManager()
         }
     }
 }
