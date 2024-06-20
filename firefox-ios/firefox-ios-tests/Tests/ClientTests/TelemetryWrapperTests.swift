@@ -181,12 +181,12 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - Firefox Home Page
 
     func test_recentlySavedBookmarkViewWithExtras_GleanIsCalled() {
-        let extras: [String: Any] = [TelemetryWrapper.EventObject.recentlySavedBookmarkImpressions.rawValue: "\([String]().count)"]
+        let extras: [String: Any] = [TelemetryWrapper.EventObject.bookmarkImpressions.rawValue: "\([String]().count)"]
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .view,
             object: .firefoxHomepage,
-            value: .recentlySavedBookmarkItemView,
+            value: .bookmarkItemView,
             extras: extras
         )
 
@@ -198,32 +198,9 @@ class TelemetryWrapperTests: XCTestCase {
             category: .action,
             method: .view,
             object: .firefoxHomepage,
-            value: .recentlySavedBookmarkItemView
+            value: .bookmarkItemView
         )
         XCTAssertNil(GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.testGetValue())
-    }
-
-    func test_recentlySavedReadingListViewViewWithExtras_GleanIsCalled() {
-        let extras: [String: Any] = [TelemetryWrapper.EventObject.recentlySavedReadingItemImpressions.rawValue: "\([String]().count)"]
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .firefoxHomepage,
-            value: .recentlySavedReadingListView,
-            extras: extras
-        )
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.FirefoxHomePage.readingListView)
-    }
-
-    func test_recentlySavedReadingListViewWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .view,
-            object: .firefoxHomepage,
-            value: .recentlySavedReadingListView
-        )
-        XCTAssertNil(GleanMetrics.FirefoxHomePage.readingListView.testGetValue())
     }
 
     func test_firefoxHomePageAddView_GleanIsCalled() {

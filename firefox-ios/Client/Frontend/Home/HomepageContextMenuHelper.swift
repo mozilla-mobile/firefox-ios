@@ -67,9 +67,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         } else if sectionType == .pocket,
                   let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
-        } else if sectionType == .recentlySaved,
-                  let recentlySavedActions = getRecentlySavedActions(site: site, with: sourceView) {
-            actions = recentlySavedActions
+        } else if sectionType == .bookmarks,
+                  let bookmarksActions = getBookmarksActions(site: site, with: sourceView) {
+            actions = bookmarksActions
         } else if sectionType == .jumpBackIn,
                   let jumpBackInActions = getJumpBackInActions(site: site, with: sourceView) {
             actions = jumpBackInActions
@@ -140,13 +140,13 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
     }
 
-    // MARK: Recently Saved
+    // MARK: Bookmarks
 
-    private func getRecentlySavedActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
+    private func getBookmarksActions(site: Site, with sourceView: UIView?) -> [PhotonRowActions]? {
         guard let siteURL = site.url.asURL else { return nil }
 
-        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .recentlySaved)
-        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .recentlySaved)
+        let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .bookmarks)
+        let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL, sectionType: .bookmarks)
         let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
