@@ -9,6 +9,7 @@ import struct MozillaAppServices.Address
 protocol AddressProvider {
     func listAllAddresses(completion: @escaping ([Address]?, Error?) -> Void)
     func addAddress(address: UpdatableAddressFields, completion: @escaping (Result<Address, Error>) -> Void)
+    func updateAddress(id: String, address: UpdatableAddressFields, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 extension RustAutofill: AddressProvider {}
