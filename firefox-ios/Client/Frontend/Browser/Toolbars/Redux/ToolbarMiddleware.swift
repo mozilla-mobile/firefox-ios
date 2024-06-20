@@ -34,11 +34,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         case GeneralBrowserMiddlewareActionType.browserDidLoad:
             guard let toolbarPosition = action.toolbarPosition else { return }
 
-            let position: AddressToolbarPosition = switch toolbarPosition {
-            case .top: .top
-            case .bottom: .bottom
-            }
-
+            let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
             let addressToolbarModel = loadInitialAddressToolbarState(toolbarPosition: position)
             let navigationToolbarModel = loadInitialNavigationToolbarState(toolbarPosition: position)
 
