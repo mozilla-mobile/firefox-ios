@@ -347,6 +347,12 @@ class BrowserViewController: UIViewController,
         toolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
+
+        let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollController.contentOffset,
+                                                    toolbarPosition: newSearchBarPosition,
+                                                    windowUUID: windowUUID,
+                                                    actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+        store.dispatch(action)
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {

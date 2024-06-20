@@ -52,6 +52,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         case GeneralBrowserMiddlewareActionType.didScroll:
             updateBorderPosition(action: action, state: state)
 
+        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
+            updateToolbarPosition(action: action, state: state)
+
         default:
             break
         }
@@ -238,5 +241,24 @@ class ToolbarMiddleware: FeatureFlaggable {
                                    windowUUID: action.windowUUID,
                                    actionType: ToolbarActionType.needsBorderUpdate)
         store.dispatch(action)
+    }
+
+    private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
+        guard let toolbarPosition = action.toolbarPosition else { return }
+
+        let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+        let toolbarAction = ToolbarAction(toolbarPosition: position,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.toolbarPositionChanged)
+        store.dispatch(toolbarAction)
+
+        updateBorderPosition(action: action, state: state)
+    }
+
+    private func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition) -> AddressToolbarPosition {
+        switch position {
+        case .top: return .top
+        case .bottom: return .bottom
+        }
     }
 }

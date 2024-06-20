@@ -39,6 +39,7 @@ enum ToolbarActionType: ActionType {
     case backButtonStateChanged
     case forwardButtonStateChanged
     case needsBorderUpdate
+    case toolbarPositionChanged
 }
 
 class ToolbarMiddlewareAction: Action {
