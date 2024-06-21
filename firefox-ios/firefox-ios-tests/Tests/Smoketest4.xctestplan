@@ -110,6 +110,7 @@
         "PrivateBrowsingTest\/testAllPrivateTabsRestore()",
         "PrivateBrowsingTest\/testClearIndexedDB()",
         "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabs()",
+        "PrivateBrowsingTest\/testHamburgerMenuNewPrivateTab()",
         "PrivateBrowsingTest\/testPrivateBrowserPanelView()",
         "PrivateBrowsingTest\/testPrivateTabDoesNotTrackHistory()",
         "PrivateBrowsingTest\/testTabCountShowsOnlyNormalOrPrivateTabCount()",

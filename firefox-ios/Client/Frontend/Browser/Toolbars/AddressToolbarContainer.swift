@@ -18,7 +18,7 @@ class AddressToolbarContainer: UIView,
                                TopBottomInterchangeable,
                                StoreSubscriber,
                                AddressToolbarDelegate {
-    typealias SubscriberStateType = BrowserViewControllerState
+    typealias SubscriberStateType = ToolbarState
 
     private var windowUUID: WindowUUID?
     private var profile: Profile?
@@ -71,20 +71,33 @@ class AddressToolbarContainer: UIView,
     func subscribeToRedux() {
         guard let windowUUID else { return }
 
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .toolbar)
+        store.dispatch(action)
+
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: windowUUID)
+                return ToolbarState(appState: appState, uuid: windowUUID)
             })
         })
     }
 
     func unsubscribeFromRedux() {
+        guard let windowUUID else {
+            store.unsubscribe(self)
+            return
+        }
+
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .toolbar)
+        store.dispatch(action)
         store.unsubscribe(self)
     }
 
-    func newState(state: BrowserViewControllerState) {
-        toolbarState = state.toolbarState
-        updateModel(toolbarState: state.toolbarState)
+    func newState(state: ToolbarState) {
+        updateModel(toolbarState: state)
     }
 
     private func updateModel(toolbarState: ToolbarState) {

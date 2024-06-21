@@ -14,7 +14,8 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
         .Microsurvey.Survey.Options.LikertScaleOption2,
         .Microsurvey.Survey.Options.LikertScaleOption3,
         .Microsurvey.Survey.Options.LikertScaleOption4,
-        .Microsurvey.Survey.Options.LikertScaleOption5
+        .Microsurvey.Survey.Options.LikertScaleOption5,
+        .Microsurvey.Survey.Options.LikertScaleOption6
     ]
 
     init(
@@ -28,16 +29,16 @@ class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
     /// build a `MicrosurveyPromptView` to be presented.
     func showMicrosurveyPrompt() -> MicrosurveyModel? {
         retrieveMessage()
-        guard let surveyQuestion = message?.text else { return nil }
-
+        guard let message else { return nil }
+        let surveyQuestion = message.text
         let promptTitle = String(
-            format: message?.title ?? .Microsurvey.Prompt.TitleLabel,
+            format: message.title ?? .Microsurvey.Prompt.TitleLabel,
             AppName.shortName.rawValue
         )
-        let promptButtonLabel = message?.buttonLabel ?? .Microsurvey.Prompt.TakeSurveyButton
-        let options: [String] = message?.options ?? defaultSurveyOptions
-        let icon = message?.icon
-        let utmContent = message?.utmContent
+        let promptButtonLabel = message.buttonLabel ?? .Microsurvey.Prompt.TakeSurveyButton
+        let options = !message.options.isEmpty ? message.options : defaultSurveyOptions
+        let icon = message.icon
+        let utmContent = message.utmContent
 
         return MicrosurveyModel(
             promptTitle: promptTitle,

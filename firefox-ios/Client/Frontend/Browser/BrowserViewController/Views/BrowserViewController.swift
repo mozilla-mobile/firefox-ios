@@ -487,7 +487,9 @@ class BrowserViewController: UIViewController,
         webViewContainerBackdrop.alpha = 1
         contentStackView.alpha = 0
 
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            addressToolbarContainer.alpha = 0
+        } else {
             urlBar.locationContainer.alpha = 0
         }
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
@@ -505,7 +507,9 @@ class BrowserViewController: UIViewController,
             animations: {
                 self.contentStackView.alpha = 1
 
-                if !self.isToolbarRefactorEnabled {
+                if self.isToolbarRefactorEnabled {
+                    self.addressToolbarContainer.alpha = 1
+                } else {
                     self.urlBar.locationContainer.alpha = 1
                 }
 
@@ -1286,7 +1290,10 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
-        let isBottomToolbar = browserViewControllerState?.toolbarState.toolbarPosition == .bottom
+        let toolbarState = store.state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)
+        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
         let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
 
         if isBottomSearch {
@@ -1312,7 +1319,10 @@ class BrowserViewController: UIViewController,
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
-        let isBottomToolbar = browserViewControllerState?.toolbarState.toolbarPosition == .bottom
+        let toolbarState = store.state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)
+        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
         let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
 
         if isBottomSearch {
@@ -2664,19 +2674,57 @@ class BrowserViewController: UIViewController,
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipBoardURL url: URL) {
-        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
-                                             descriptionText: url.absoluteDisplayString,
-                                             buttonText: .GoButtonTittle)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: currentTheme(),
-                                completion: { [weak self] buttonPressed in
-            if buttonPressed {
-                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
-                self?.openURLInNewTab(url, isPrivate: isPrivate)
+        let viewModel = ButtonToastViewModel(
+            labelText: .GoToCopiedLink,
+            descriptionText: url.absoluteDisplayString,
+            buttonText: .GoButtonTittle
+        )
+
+        let toast = ButtonToast(
+            viewModel: viewModel,
+            theme: currentTheme(),
+            completion: { [weak self] buttonPressed in
+                if buttonPressed {
+                    let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
+                    self?.openURLInNewTab(url, isPrivate: isPrivate)
+                }
             }
-        })
+        )
+
         clipboardBarDisplayHandler?.clipboardToast = toast
         show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+    }
+
+    @available(iOS 16.0, *)
+    func shouldDisplay() {
+        let viewModel = ButtonToastViewModel(
+            labelText: .GoToCopiedLink,
+            descriptionText: "",
+            buttonText: .GoButtonTittle
+        )
+
+        pasteConfiguration = UIPasteConfiguration(acceptableTypeIdentifiers: [UTType.url.identifier])
+
+        let toast = PasteControlToast(
+            viewModel: viewModel,
+            theme: currentTheme(),
+            target: self
+        )
+
+        clipboardBarDisplayHandler?.clipboardToast = toast
+        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
+    }
+
+    override func paste(itemProviders: [NSItemProvider]) {
+        for provider in itemProviders where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
+            _ = provider.loadObject(ofClass: URL.self) { [weak self] url, error in
+                let isPrivate = self?.tabManager.selectedTab?.isPrivate ?? false
+
+                DispatchQueue.main.async {
+                    self?.openURLInNewTab(url, isPrivate: isPrivate)
+                }
+            }
+        }
     }
 }
 

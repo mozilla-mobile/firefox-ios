@@ -30,6 +30,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     @Published var addresses: [Address] = []
     @Published var showSection = false
     @Published var destination: Destination?
+    @Published var isEditMode = false
 
     let windowUUID: WindowUUID
 
@@ -39,6 +40,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
+    var toggleEditModeAction: ((Bool) -> Void)?
 
     let addressProvider: AddressProvider
 
@@ -110,12 +112,41 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         destination = .edit(address)
     }
 
-    func cancelEditButtonTap() {
+    func cancelAddButtonTap() {
         destination = nil
     }
 
-    func cancelAddButtonTap() {
+    func editButtonTap() {
+        toggleEditMode()
+    }
+
+    func saveEditButtonTap() {
+        toggleEditMode()
+        saveAction? { [weak self] updatedAddress in
+            guard let self else { return }
+            guard case .edit(let currentAddress) = self.destination else { return }
+            self.addressProvider.updateAddress(id: currentAddress.guid, address: updatedAddress) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
+    }
+
+    func closeEditButtonTap() {
         destination = nil
+    }
+
+    func cancelEditButtonTap() {
+        toggleEditMode()
     }
 
     func saveAddressButtonTap() {
@@ -157,6 +188,11 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         ))
     }
 
+    private func toggleEditMode() {
+        isEditMode.toggle()
+        toggleEditModeAction?(isEditMode)
+    }
+
     // MARK: - Inject JSON Data
 
     struct JSONDataError: Error {}
@@ -178,7 +214,8 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
 
-            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme(windowUUID)));"
+            let isDarkTheme = isDarkTheme(windowUUID)
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme));"
             return javascript
         } catch {
             logger.log("Failed to encode data",

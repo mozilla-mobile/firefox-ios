@@ -1317,9 +1317,9 @@ extension String {
                 value: "%@ Logo",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name.")
             public static let HeaderLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.HeaderLabel.v127",
+                key: "Microsurvey.Survey.HeaderLabel.v129",
                 tableName: "Microsurvey",
-                value: "Complete this survey",
+                value: "Please complete survey",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "Microsurvey.Survey.Close.Button.AccessibilityLabel.v127",
@@ -1378,6 +1378,11 @@ extension String {
                     tableName: "Microsurvey",
                     value: "Very dissatisfied",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption6 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption6.v129",
+                    tableName: "Microsurvey",
+                    value: "I don't use it",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about.")
             }
 
             public struct ConfirmationPage {
@@ -3801,6 +3806,11 @@ extension String {
             tableName: nil,
             value: "New Tab",
             comment: "Label for the new tab button in the menu page. Pressing this button opens a new tab.")
+        public static let NewPrivateTab = MZLocalizedString(
+            key: "Menu.NewPrivateTab.Label",
+            tableName: nil,
+            value: "New Private Tab",
+            comment: "Label for the new private tab button in the menu page. Pressing this button opens a new private tab.")
         public static let Help = MZLocalizedString(
             key: "Menu.Help.v99",
             tableName: nil,
@@ -6467,6 +6477,14 @@ extension String {
                 tableName: nil,
                 value: "When opening Firefox",
                 comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
+        }
+
+        struct v129 {
+            public static let HeaderLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.HeaderLabel.v127",
+                tableName: "Microsurvey",
+                value: "Complete this survey",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
         }
     }
 }

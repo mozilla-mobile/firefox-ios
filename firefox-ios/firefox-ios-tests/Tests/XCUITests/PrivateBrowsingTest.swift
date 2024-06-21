@@ -241,6 +241,26 @@ class PrivateBrowsingTest: BaseTestCase {
         numTab = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307003
+    func testHamburgerMenuNewPrivateTab() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        // Validate menu option New Private Tab
+        let newPrivateTab = app.tables.otherElements["New Private Tab"]
+        mozWaitForElementToExist(newPrivateTab)
+        scrollToElement(newPrivateTab)
+        // Tap on "New private tab" option
+        newPrivateTab.tap()
+        // Tap on "New private tab" option
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.goto(TabTray)
+        let numTab = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+    }
 }
 
 fileprivate extension BaseTestCase {
