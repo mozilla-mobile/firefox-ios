@@ -12,9 +12,10 @@ class AddressToolbarContainerModel {
     let browserActions: [ToolbarElement]
 
     let borderPosition: AddressToolbarBorderPosition?
+    let url: URL?
+    
     let windowUUID: UUID
     var profile: Profile
-    let url: URL?
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(

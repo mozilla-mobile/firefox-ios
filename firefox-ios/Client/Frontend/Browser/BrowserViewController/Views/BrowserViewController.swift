@@ -1812,13 +1812,13 @@ class BrowserViewController: UIViewController,
         switch state {
         case _ where state.navigateTo != nil:
             handleNavigationActions(for: state)
-        case _ where state.showQRcodeReader:
+        case _ where state.displayView == .qrCodeReader:
             navigationHandler?.showQRCode(delegate: self)
-        case _ where state.showBackForwardList:
+        case _ where state.displayView == .backForwardList:
             navigationHandler?.showBackForwardList()
-        case _ where state.showTabsLongPressActions:
+        case _ where state.displayView == .tabsLongPressActions:
             presentActionSheet(from: view)
-        case _ where state.showTrackingProtectionDetails:
+        case _ where state.displayView == .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         default: break
