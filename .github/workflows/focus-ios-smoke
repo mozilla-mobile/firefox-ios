@@ -15,10 +15,11 @@ env:
 jobs:
     run-tests:
         strategy:
+            fail-fast: false
             matrix:
                 ios_simulator: ['iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         name: Build and run tests
-        runs-on: macos-14
+        runs-on: macos-14-large
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -61,9 +62,9 @@ jobs:
                     -target ${{ env.xcodebuild_target }} \
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ env.xcodebuild_test_plan }} \
-                    -resultBundlePath ${{ env.test_results_directory }}/results \
-                    || touch ${{ env.test_results_directory }}/fail.txt && exit 0
+                    -resultBundlePath ${{ env.test_results_directory }}/results
               working-directory:  ${{ env.browser }}
+              continue-on-error: true
             - name: Prettyprint test report
               id: test-report
               run: |
@@ -74,19 +75,7 @@ jobs:
               with:
                 name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-${{ github.run_number }}
                 path: ${{ env.test_results_directory }}/index.html
-            - name : Process pass/fail info
-              id: pass-fail
-              run: |
-                # fail.txt is created when at least one test fails.
-                # job.status can't be used because the subsequent steps are not
-                # executed once a step fails.
-                if [ -e ${{ env.test_results_directory }}/fail.txt ]; then
-                    echo "pass_fail=❌" >> "$GITHUB_OUTPUT"
-                    echo "exit_value=1" >> "$GITHUB_OUTPUT"
-                else
-                    echo "pass_fail=✅" >> "$GITHUB_OUTPUT"
-                    echo "exit_value=0" >> "$GITHUB_OUTPUT"
-                fi
+                retention-days: 90
             - name: Report to Slack
               id: slack
               uses: slackapi/slack-github-action@v1.26.0
@@ -96,13 +85,8 @@ jobs:
                 SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
                 SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
                 ios_simulator: ${{ matrix.ios_simulator }}
-                pass_fail: ${{ steps.pass-fail.outputs.pass_fail }}
+                pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
                 ref_name: ${{ github.ref_name }}
                 repository: ${{ github.repository }}
                 run_id: ${{ github.run_id }}
                 server_url: ${{ github.server_url }}
-
-            - name: Report status
-              run: |
-                exit ${{ steps.pass-fail.outputs.exit_value }}
-              continue-on-error: true
