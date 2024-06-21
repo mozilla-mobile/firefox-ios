@@ -11,8 +11,7 @@ struct AddressBarState: StateType, Equatable {
     var navigationActions: [ToolbarActionState]
     var pageActions: [ToolbarActionState]
     var browserActions: [ToolbarActionState]
-    var displayTopBorder: Bool
-    var displayBottomBorder: Bool
+    var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
 
     init(windowUUID: WindowUUID) {
@@ -20,8 +19,7 @@ struct AddressBarState: StateType, Equatable {
                   navigationActions: [],
                   pageActions: [],
                   browserActions: [],
-                  displayTopBorder: false,
-                  displayBottomBorder: false,
+                  borderPosition: nil,
                   url: nil)
     }
 
@@ -29,15 +27,13 @@ struct AddressBarState: StateType, Equatable {
          navigationActions: [ToolbarActionState],
          pageActions: [ToolbarActionState],
          browserActions: [ToolbarActionState],
-         displayTopBorder: Bool,
-         displayBottomBorder: Bool,
+         borderPosition: AddressToolbarBorderPosition?,
          url: URL?) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
         self.browserActions = browserActions
-        self.displayTopBorder = displayTopBorder
-        self.displayBottomBorder = displayBottomBorder
+        self.borderPosition = borderPosition
         self.url = url
     }
 
@@ -50,11 +46,10 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: model.navigationActions,
-                pageActions: model.pageActions,
-                browserActions: model.browserActions,
-                displayTopBorder: model.displayTopBorder,
-                displayBottomBorder: model.displayBottomBorder,
+                navigationActions: model.navigationActions ?? state.navigationActions,
+                pageActions: model.pageActions ?? state.pageActions,
+                browserActions: model.browserActions ?? state.browserActions,
+                borderPosition: model.borderPosition ?? state.borderPosition,
                 url: model.url
             )
 
@@ -72,8 +67,7 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: actions,
-                displayTopBorder: state.displayTopBorder,
-                displayBottomBorder: state.displayBottomBorder,
+                borderPosition: state.borderPosition,
                 url: state.url
             )
 
@@ -83,8 +77,7 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
-                displayTopBorder: state.displayTopBorder,
-                displayBottomBorder: state.displayBottomBorder,
+                borderPosition: state.borderPosition,
                 url: (action as? ToolbarAction)?.url
             )
 
@@ -102,8 +95,7 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: actions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
-                displayTopBorder: state.displayTopBorder,
-                displayBottomBorder: state.displayBottomBorder,
+                borderPosition: state.borderPosition,
                 url: state.url
             )
 
@@ -121,8 +113,19 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: actions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
-                displayTopBorder: state.displayTopBorder,
-                displayBottomBorder: state.displayBottomBorder,
+                borderPosition: state.borderPosition,
+                url: state.url
+            )
+
+        case ToolbarActionType.scrollOffsetChanged:
+            let borderPosition = (action as? ToolbarAction)?.addressToolbarModel?.borderPosition
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: borderPosition,
                 url: state.url
             )
 
@@ -132,9 +135,8 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
-                displayTopBorder: false,
-                displayBottomBorder: false,
-                url: nil
+                borderPosition: state.borderPosition,
+                url: state.url
             )
         }
     }

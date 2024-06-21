@@ -168,7 +168,7 @@ class BrowserViewController: UIViewController,
     }
     var keyboardBackdrop: UIView?
 
-    var scrollController = TabScrollingController()
+    lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
     private var keyboardState: KeyboardState?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
@@ -347,6 +347,13 @@ class BrowserViewController: UIViewController,
         toolbar.setNeedsDisplay()
         searchBarView.updateConstraints()
         updateMicrosurveyConstraints()
+
+        let action = GeneralBrowserMiddlewareAction(
+            scrollOffset: scrollController.contentOffset,
+            toolbarPosition: newSearchBarPosition,
+            windowUUID: windowUUID,
+            actionType: GeneralBrowserMiddlewareActionType.toolbarPositionChanged)
+        store.dispatch(action)
     }
 
     func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
@@ -571,6 +578,7 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
 
         let browserAction = GeneralBrowserMiddlewareAction(
+            toolbarPosition: searchBarPosition,
             windowUUID: windowUUID,
             actionType: GeneralBrowserMiddlewareActionType.browserDidLoad)
         store.dispatch(browserAction)

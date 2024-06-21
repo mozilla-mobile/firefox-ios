@@ -375,6 +375,11 @@ class HomepageViewController:
                                                          statusBarFrame: statusBarFrame,
                                                          theme: theme)
         }
+
+        let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
+                                                    windowUUID: windowUUID,
+                                                    actionType: GeneralBrowserMiddlewareActionType.didScroll)
+        store.dispatch(action)
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
