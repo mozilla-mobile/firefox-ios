@@ -14,8 +14,6 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         static let shadowOpacity: Float = 0.6
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let titleIconSize: CGFloat = 24
-        static let titleFontSize: CGFloat = 19
-        static let fontSize: CGFloat = 16
     }
 
     private var breachLink = String()
