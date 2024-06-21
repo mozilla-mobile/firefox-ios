@@ -248,9 +248,8 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openURL(urlExample)
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        // Menu option should be called New Private Tab.
-        // Change to New Private Tab after https://github.com/mozilla-mobile/firefox-ios/issues/14807 is fixed
-        let newPrivateTab = app.tables.otherElements["New Tab"]
+        // Validate menu option New Private Tab
+        let newPrivateTab = app.tables.otherElements["New Private Tab"]
         mozWaitForElementToExist(newPrivateTab)
         scrollToElement(newPrivateTab)
         // Tap on "New private tab" option
