@@ -20,10 +20,12 @@ final class ContentBlockerTests: XCTestCase {
     }
 
     func testCompileListsNotInStore_callsCompletionHandlerSuccessfully() {
-        let expectation = XCTestExpectation()
-        ContentBlocker.shared.compileListsNotInStore {
-            expectation.fulfill()
+        measure {
+            let expectation = XCTestExpectation()
+            ContentBlocker.shared.compileListsNotInStore {
+                expectation.fulfill()
+            }
+            wait(for: [expectation], timeout: 1.0)
         }
-        wait(for: [expectation])
     }
 }
