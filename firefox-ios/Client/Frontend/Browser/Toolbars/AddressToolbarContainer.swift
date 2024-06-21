@@ -102,6 +102,7 @@ class AddressToolbarContainer: UIView,
     }
 
     func updateAlphaForSubviews(_ alpha: CGFloat) {
+        // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
         compactToolbar.alpha = alpha
         regularToolbar.alpha = alpha
     }
