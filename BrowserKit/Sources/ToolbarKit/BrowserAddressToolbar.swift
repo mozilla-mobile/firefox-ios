@@ -33,7 +33,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         }
     }
 
-
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
 
