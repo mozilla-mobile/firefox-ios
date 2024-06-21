@@ -487,7 +487,9 @@ class BrowserViewController: UIViewController,
         webViewContainerBackdrop.alpha = 1
         contentStackView.alpha = 0
 
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            addressToolbarContainer.alpha = 0
+        } else {
             urlBar.locationContainer.alpha = 0
         }
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
@@ -505,7 +507,9 @@ class BrowserViewController: UIViewController,
             animations: {
                 self.contentStackView.alpha = 1
 
-                if !self.isToolbarRefactorEnabled {
+                if self.isToolbarRefactorEnabled {
+                    self.addressToolbarContainer.alpha = 1
+                } else {
                     self.urlBar.locationContainer.alpha = 1
                 }
 
