@@ -9,13 +9,6 @@ import Storage
 import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
-// TODO: Refactor the Address extension for global usage (FXIOS-8337)
-extension Address {
-    var addressCityStateZipcode: String {
-        return "\(addressLevel2), \(addressLevel1) \(postalCode)"
-    }
-}
-
 // AddressListViewModel: A view model for managing addresses.
 class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
