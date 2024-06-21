@@ -242,7 +242,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        let field = FocusFieldType.username
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
