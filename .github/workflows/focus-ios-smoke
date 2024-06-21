@@ -19,7 +19,7 @@ jobs:
             matrix:
                 ios_simulator: ['iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         name: Build and run tests
-        runs-on: macos-14-large
+        runs-on: macos-14
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -90,3 +90,6 @@ jobs:
                 repository: ${{ github.repository }}
                 run_id: ${{ github.run_id }}
                 server_url: ${{ github.server_url }}
+            - name: Return fail status if a test fails
+              run: |
+                exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
