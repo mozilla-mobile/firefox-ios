@@ -26,6 +26,11 @@ class AddressToolbarContainer: UIView,
     private var model: AddressToolbarContainerModel?
     private var delegate: AddressToolbarContainerDelegate?
 
+    private var toolbarType: BrowserAddressToolbar {
+        let isCompact = traitCollection.horizontalSizeClass == .compact
+        return isCompact ? compactToolbar : regularToolbar
+    }
+
     var parent: UIStackView?
     private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
@@ -46,18 +51,22 @@ class AddressToolbarContainer: UIView,
         subscribeToRedux()
     }
 
+    func updateProgressBar(progress: Double) {
+        toolbarType.updateProgressBar(progress: progress)
+    }
+
+    func hideProgressBar() {
+        toolbarType.hideProgressBar()
+    }
+
     override func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        let toolbar = isCompact ? compactToolbar : regularToolbar
-        return toolbar.becomeFirstResponder()
+        return toolbarType.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        let toolbar = isCompact ? compactToolbar : regularToolbar
-        return toolbar.resignFirstResponder()
+        return toolbarType.resignFirstResponder()
     }
 
     // MARK: View Transitions

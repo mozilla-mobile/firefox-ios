@@ -23,6 +23,17 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let locationHeight: CGFloat = 44
     }
 
+    private var isTransitioning = false {
+        didSet {
+            if isTransitioning {
+                // Cancel any pending/in-progress animations related to the progress bar
+                self.progressBar.setProgress(1, animated: false)
+                self.progressBar.alpha = 0.0
+            }
+        }
+    }
+
+
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
 
@@ -42,6 +53,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private lazy var browserActionStack: UIStackView = .build()
     private lazy var toolbarTopBorderView: UIView = .build()
     private lazy var toolbarBottomBorderView: UIView = .build()
+
+    private lazy var progressBar: GradientProgressBar = .build { bar in
+        bar.clipsToBounds = false
+    }
 
     private var leadingBrowserActionConstraint: NSLayoutConstraint?
     private var leadingLocationContainerConstraint: NSLayoutConstraint?
@@ -74,6 +89,17 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         layoutIfNeeded()
     }
 
+    public func updateProgressBar(progress: Double) {
+        progressBar.alpha = 1
+        progressBar.isHidden = false
+        progressBar.setProgress(Float(progress), animated: !isTransitioning)
+    }
+
+    public func hideProgressBar() {
+        progressBar.isHidden = true
+        progressBar.setProgress(0, animated: false)
+    }
+
     override public func becomeFirstResponder() -> Bool {
         return locationView.becomeFirstResponder()
     }
@@ -87,6 +113,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         addSubview(toolbarContainerView)
         addSubview(toolbarTopBorderView)
         addSubview(toolbarBottomBorderView)
+        addSubview(progressBar)
 
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(locationDividerView)
@@ -221,6 +248,25 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
         let bottomBorderHeight = shouldDisplayBottomBorder ? UX.borderHeight : 0
         toolbarBottomBorderHeightConstraint?.constant = bottomBorderHeight
+
+        progressBar.constraints.forEach(removeConstraint)
+
+        let constraints: [NSLayoutConstraint]
+        if shouldDisplayTopBorder {
+            constraints = [
+                progressBar.leadingAnchor.constraint(equalTo: toolbarTopBorderView.leadingAnchor),
+                progressBar.trailingAnchor.constraint(equalTo: toolbarTopBorderView.trailingAnchor),
+                progressBar.bottomAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor)
+            ]
+        } else {
+            constraints = [
+                progressBar.leadingAnchor.constraint(equalTo: toolbarBottomBorderView.leadingAnchor),
+                progressBar.trailingAnchor.constraint(equalTo: toolbarBottomBorderView.trailingAnchor),
+                progressBar.bottomAnchor.constraint(equalTo: toolbarTopBorderView.bottomAnchor)
+            ]
+        }
+
+        NSLayoutConstraint.activate(constraints)
     }
 
     // MARK: - LocationViewDelegate
@@ -246,6 +292,14 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
         locationView.applyTheme(theme: theme)
+        let gradientStartColor = theme.colors.borderAccent
+        let gradientMiddleColor = theme.colors.iconAccentPink
+        let gradientEndColor = theme.colors.iconAccentYellow
+        progressBar.setGradientColors(
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
+        )
         self.theme = theme
     }
 }
