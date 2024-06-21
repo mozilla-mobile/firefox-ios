@@ -21,8 +21,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                            navigationActions: [],
                                            pageActions: [],
                                            browserActions: [],
-                                           displayTopBorder: false,
-                                           displayBottomBorder: false,
+                                           borderPosition: nil,
                                            url: nil)
         let navigationState = NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
         let state = ToolbarState(windowUUID: windowUUID,
