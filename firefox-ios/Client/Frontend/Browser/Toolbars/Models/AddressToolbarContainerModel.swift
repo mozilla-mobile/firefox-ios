@@ -11,8 +11,7 @@ class AddressToolbarContainerModel {
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
 
-    let displayTopBorder: Bool
-    let displayBottomBorder: Bool
+    let borderPosition: AddressToolbarBorderPosition?
     let windowUUID: UUID
     var profile: Profile
     let url: URL?
@@ -42,14 +41,11 @@ class AddressToolbarContainerModel {
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
-            shouldDisplayTopBorder: displayTopBorder,
-            shouldDisplayBottomBorder: displayBottomBorder)
+            borderPosition: borderPosition)
     }
 
     init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
-        self.displayTopBorder = state.addressToolbar.displayTopBorder
-        self.displayBottomBorder = state.addressToolbar.displayBottomBorder
-
+        self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
                                                                          windowUUID: windowUUID)
         self.pageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.pageActions,

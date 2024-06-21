@@ -11,8 +11,7 @@ public class CompactBrowserAddressToolbar: BrowserAddressToolbar {
                                                navigationActions: state.navigationActions,
                                                pageActions: state.pageActions,
                                                browserActions: [],
-                                               shouldDisplayTopBorder: state.shouldDisplayTopBorder,
-                                               shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
+                                               borderPosition: state.borderPosition)
         super.updateActions(state: compactState)
     }
 }

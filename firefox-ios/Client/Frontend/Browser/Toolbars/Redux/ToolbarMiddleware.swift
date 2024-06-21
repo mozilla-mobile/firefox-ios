@@ -77,16 +77,12 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func loadInitialAddressToolbarState(toolbarPosition: AddressToolbarPosition) -> AddressToolbarModel {
-        let displayTopBorder = shouldDisplayAddressToolbarBorder(borderPosition: .top,
-                                                                 toolbarPosition: toolbarPosition)
-        let displayBottomBorder = shouldDisplayAddressToolbarBorder(borderPosition: .bottom,
-                                                                    toolbarPosition: toolbarPosition)
+        let borderPosition = getAddressBorderPosition(toolbarPosition: toolbarPosition)
 
         return AddressToolbarModel(navigationActions: [ToolbarActionState](),
                                    pageActions: loadAddressToolbarPageElements(),
                                    browserActions: [ToolbarActionState](),
-                                   displayTopBorder: displayTopBorder,
-                                   displayBottomBorder: displayBottomBorder,
+                                   borderPosition: borderPosition,
                                    url: nil)
     }
 
@@ -138,14 +134,10 @@ class ToolbarMiddleware: FeatureFlaggable {
         return elements
     }
 
-    private func shouldDisplayAddressToolbarBorder(borderPosition: AddressToolbarBorderPosition,
-                                                   isPrivate: Bool = false,
-                                                   scrollY: CGFloat = 0,
-                                                   toolbarPosition: AddressToolbarPosition) -> Bool {
-        return manager.shouldDisplayAddressBorder(borderPosition: borderPosition,
-                                                  toolbarPosition: toolbarPosition,
-                                                  isPrivate: isPrivate,
-                                                  scrollY: scrollY)
+    private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
+                                          isPrivate: Bool = false,
+                                          scrollY: CGFloat = 0) -> AddressToolbarBorderPosition? {
+        return manager.getAddressBorderPosition(for: toolbarPosition, isPrivate: isPrivate, scrollY: scrollY)
     }
 
     private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
@@ -211,27 +203,17 @@ class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         let addressToolbarState = toolbarState.addressToolbar
-        let displayTopBorder = shouldDisplayAddressToolbarBorder(
-            borderPosition: .top,
-            isPrivate: toolbarState.isPrivateMode,
-            scrollY: scrollOffset.y,
-            toolbarPosition: toolbarState.toolbarPosition)
-        let displayBottomBorder = shouldDisplayAddressToolbarBorder(
-            borderPosition: .bottom,
-            isPrivate: toolbarState.isPrivateMode,
-            scrollY: scrollOffset.y,
-            toolbarPosition: toolbarState.toolbarPosition)
+        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: toolbarState.toolbarPosition,
+                                                             isPrivate: toolbarState.isPrivateMode,
+                                                             scrollY: scrollOffset.y)
         let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(
             toolbarPosition: toolbarState.toolbarPosition)
 
-        let needsUpdateForTop = addressToolbarState.displayTopBorder != displayTopBorder
-        let needsUpdateForBottom = addressToolbarState.displayBottomBorder != displayBottomBorder
-        let needsUpdateNavToolbar = toolbarState.navigationToolbar.displayBorder != displayNavToolbarBorder
-        guard needsUpdateForTop || needsUpdateForBottom || needsUpdateNavToolbar else { return }
+        let needsAddressToolbarUpdate = addressToolbarState.borderPosition != addressBorderPosition
+        let needsNavToolbarUpdate = toolbarState.navigationToolbar.displayBorder != displayNavToolbarBorder
+        guard needsAddressToolbarUpdate || needsNavToolbarUpdate else { return }
 
-        let addressToolbarModel = AddressToolbarModel(
-            displayTopBorder: displayTopBorder,
-            displayBottomBorder: displayBottomBorder)
+        let addressToolbarModel = AddressToolbarModel(borderPosition: addressBorderPosition)
         let navToolbarModel = NavigationToolbarModel(displayBorder: displayNavToolbarBorder)
 
         let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
