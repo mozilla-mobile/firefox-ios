@@ -20,13 +20,12 @@ final class ContentBlockerTests: XCTestCase {
     }
 
     func testCompileListsNotInStore_callsCompletionHandlerSuccessfully() {
-        let expectation = XCTestExpectation()
-        let startDate = Date()
-        ContentBlocker.shared.compileListsNotInStore {
-            let finishDate = Date()
-            NSLog("MT Test Time - \(finishDate.timeIntervalSince(startDate))")
-            expectation.fulfill()
+        measure {
+            let expectation = XCTestExpectation()
+            ContentBlocker.shared.compileListsNotInStore {
+                expectation.fulfill()
+            }
+            wait(for: [expectation], timeout: 1.0)
         }
-        wait(for: [expectation], timeout: 1.0)
     }
 }
