@@ -1312,6 +1312,9 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefoxi avamisel";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "Firefoxi avamisel";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Pakutakse kopeeritud linkide avamist";
 
@@ -1341,6 +1344,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Linkide pikalt puudutamisel";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Linkide pikalt puudutamisel";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Kuvatakse linkide eelvaateid";
