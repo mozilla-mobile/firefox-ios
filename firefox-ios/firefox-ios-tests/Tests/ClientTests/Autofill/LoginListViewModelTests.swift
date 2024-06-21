@@ -61,7 +61,6 @@ class LoginListViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.logins.count, 3)
     }
 
-
     @MainActor
     func testFetchLoginsFailure() async {
         let mockLoginStorage = MockLoginStorage()
