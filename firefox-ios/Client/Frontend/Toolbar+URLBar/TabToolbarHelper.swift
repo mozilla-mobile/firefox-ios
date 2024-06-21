@@ -37,6 +37,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, from: CGRect, with: WindowUUID)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -51,7 +52,7 @@ enum MiddleButtonState {
 }
 
 @objcMembers
-open class TabToolbarHelper: NSObject {
+open class TabToolbarHelper: NSObject, FeatureFlaggable {
     let toolbar: TabToolbarProtocol
     let ImageSearch = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
     let ImageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)
@@ -226,7 +227,16 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didClickMenu() {
-        toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
+            guard let uuid = toolbar.appMenuButton.currentWindowUUID else { return }
+            let rect = CGRect(x: toolbar.appMenuButton.frame.origin.x,
+                              y: toolbar.appMenuButton.frame.origin.y,
+                              width: toolbar.appMenuButton.frame.width,
+                              height: toolbar.appMenuButton.frame.height)
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, from: rect, with: uuid)
+        } else {
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
+        }
     }
 
     func didClickLibrary() {
