@@ -29,7 +29,6 @@ extension UILabel {
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
     private var _title: NSAttributedString?
-    private var _centeredTitle: NSAttributedString?
     private var _footerTitle: NSAttributedString?
     private var _cellHeight: CGFloat?
     private var _image: UIImage?
@@ -42,7 +41,6 @@ class Setting: NSObject {
 
     // The title shown on the pref.
     var title: NSAttributedString? { return _title }
-    var centeredTitle: NSAttributedString? { return _centeredTitle }
     var footerTitle: NSAttributedString? { return _footerTitle }
     var cellHeight: CGFloat? { return _cellHeight}
     fileprivate(set) var accessibilityIdentifier: String?
@@ -66,8 +64,6 @@ class Setting: NSObject {
     var enabled = true
 
     private lazy var backgroundView: UIView = .build()
-    private lazy var centeredLabel: UILabel = .build()
-    private var centeredLabelMargin = 15.0
 
     func accessoryButtonTapped() { onAccessoryButtonTapped?() }
     var onAccessoryButtonTapped: (() -> Void)?
@@ -78,27 +74,23 @@ class Setting: NSObject {
         cell.detailTextLabel?.assign(attributed: status, theme: theme)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
-        if let centeredTitle {
-            centeredLabel.assign(attributed: centeredTitle, theme: theme)
-            centeredLabel.textAlignment = textAlignment
-            centeredLabel.numberOfLines = 0
-            centeredLabel.lineBreakMode = .byTruncatingTail
-            centeredLabel.font = FXFontStyles.Regular.body.scaledFont()
-            setupCenteredLabelConstraints(contentView: cell.contentView)
+        if let cell = cell as? ThemedCenteredTableViewCell {
+            cell.applyTheme(theme: theme)
+            cell.setTitle(to: .SettingsDisconnectSyncButton)
+            cell.accessibilityLabel = .SettingsDisconnectSyncButton
         } else {
             cell.textLabel?.assign(attributed: title, theme: theme)
             cell.textLabel?.textAlignment = textAlignment
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byTruncatingTail
-        }
-        let accessibilityLabelTitle = title?.string ?? centeredTitle?.string
-        if let accessibilityLabelTitle = accessibilityLabelTitle {
-            if let detailText = cell.detailTextLabel?.text {
-                cell.accessibilityLabel = "\(accessibilityLabelTitle), \(detailText)"
-            } else if let status = status?.string {
-                cell.accessibilityLabel = "\(accessibilityLabelTitle), \(status)"
-            } else {
-                cell.accessibilityLabel = accessibilityLabelTitle
+            if let title = title?.string {
+                if let detailText = cell.detailTextLabel?.text {
+                    cell.accessibilityLabel = "\(title), \(detailText)"
+                } else if let status = status?.string {
+                    cell.accessibilityLabel = "\(title), \(status)"
+                } else {
+                    cell.accessibilityLabel = title
+                }
             }
         }
         cell.accessoryType = accessoryType
@@ -136,31 +128,10 @@ class Setting: NSObject {
         enabled: Bool? = nil
     ) {
         self._title = title
-        self._centeredTitle = centeredTitle
         self._footerTitle = footerTitle
         self._cellHeight = cellHeight
         self.delegate = delegate
         self.enabled = enabled ?? true
-    }
-
-    private func setupCenteredLabelConstraints(contentView: UIView) {
-        contentView.addSubview(centeredLabel)
-        NSLayoutConstraint.activate([
-            centeredLabel.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: centeredLabelMargin),
-            centeredLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -centeredLabelMargin),
-            centeredLabel.leadingAnchor.constraint(
-                greaterThanOrEqualTo: contentView.leadingAnchor,
-                constant: centeredLabelMargin),
-            centeredLabel.trailingAnchor.constraint(
-                lessThanOrEqualTo: contentView.trailingAnchor,
-                constant: -centeredLabelMargin),
-            centeredLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            centeredLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-        ])
     }
 }
 
@@ -907,6 +878,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
         tableView.register(cellType: ThemedLeftAlignedTableViewCell.self)
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
+        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
             ThemedTableSectionHeaderFooterView.self,
             forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
@@ -1037,7 +1009,15 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
-        if setting.style == .subtitle {
+        if setting as? DisconnectSetting != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedCenteredTableViewCell else {
+                return ThemedCenteredTableViewCell()
+            }
+            return cell
+        } else if setting.style == .subtitle {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
                 for: indexPath

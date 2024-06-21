@@ -43,17 +43,6 @@ class DisconnectSetting: Setting {
     let settingsVC: SettingsTableViewController
     let profile: Profile
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    override var textAlignment: NSTextAlignment { return .center }
-
-    override var centeredTitle: NSAttributedString? {
-        let theme = settingsVC.themeManager.getCurrentTheme(for: settingsVC.windowUUID)
-        return NSAttributedString(
-            string: .SettingsDisconnectSyncButton,
-            attributes: [
-                NSAttributedString.Key.foregroundColor: theme.colors.textWarning
-            ]
-        )
-    }
 
     init(settings: SettingsTableViewController) {
         self.settingsVC = settings
