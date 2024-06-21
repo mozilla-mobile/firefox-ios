@@ -6,6 +6,7 @@ import SwiftUI
 import Common
 import Shared
 import Storage
+import WebKit
 import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
@@ -33,6 +34,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     @Published var isEditMode = false
 
     let windowUUID: WindowUUID
+    var webView: WKWebView?
 
     private let logger: Logger
 
@@ -61,6 +63,31 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         self.logger = logger
         self.windowUUID = windowUUID
         self.addressProvider = addressProvider
+        preloadWebView()
+    }
+
+    func preloadWebView() {
+        // Reuse existing webview if it exists
+        guard webView == nil else { return }
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView?.translatesAutoresizingMaskIntoConstraints = false
+
+        // Allow Safari Web Inspector (requires toggle in Settings > Safari > Advanced).
+        if #available(iOS 16.4, *) {
+            webView?.isInspectable = true
+        }
+
+        if let url = Bundle.main.url(forResource: "AddressFormManager", withExtension: "html") {
+            let request = URLRequest(url: url)
+            webView?.loadFileURL(url, allowingReadAccessTo: url)
+            webView?.load(request)
+        }
+    }
+
+    func destroyWebView() {
+        webView?.removeFromSuperview()
+        webView = nil
     }
 
     // MARK: - Fetch Addresses

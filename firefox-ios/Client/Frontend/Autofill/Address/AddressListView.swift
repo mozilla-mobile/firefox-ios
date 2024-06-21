@@ -119,6 +119,9 @@ struct AddressListView: View {
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+        .onDisappear {
+            viewModel.destroyWebView()
+        }
     }
 
     // MARK: - Theme Application

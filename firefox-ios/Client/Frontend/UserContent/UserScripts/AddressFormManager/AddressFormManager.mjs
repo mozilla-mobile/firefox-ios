@@ -90,3 +90,11 @@ const toggleEditMode = (isEditable = false) => {
   }
 };
 window.toggleEditMode = toggleEditMode;
+
+/**
+ * Reset form inside the webview.
+ */
+const resetForm = () => {
+  document.querySelector("form").innerHTML = "";
+};
+window.teardownForm = resetForm;
