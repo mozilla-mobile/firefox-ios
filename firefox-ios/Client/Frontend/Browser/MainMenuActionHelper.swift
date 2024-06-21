@@ -74,6 +74,22 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
+    convenience init(
+        profile: Profile,
+        tabManager: TabManager,
+        buttonView: CGRect,
+        toastContainer: UIView,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
+    ) {
+        self.init(
+            profile: profile,
+            tabManager: tabManager,
+            buttonView: UIButton(frame: buttonView),
+            toastContainer: toastContainer,
+            themeManager: themeManager
+        )
+    }
+
     /// MainMenuActionHelper init
     /// - Parameters:
     ///   - profile: the user's profile
@@ -81,11 +97,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     ///   - buttonView: the view from which the menu will be shown
     ///   - toastContainer: the view hosting a toast alert
     ///   - showFXASyncAction: the closure that will be executed for the sync action in the library section
-    init(profile: Profile,
-         tabManager: TabManager,
-         buttonView: UIButton,
-         toastContainer: UIView,
-         themeManager: ThemeManager = AppContainer.shared.resolve()
+    init(
+        profile: Profile,
+        tabManager: TabManager,
+        buttonView: UIButton,
+        toastContainer: UIView,
+        themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.bookmarksHandler = profile.places

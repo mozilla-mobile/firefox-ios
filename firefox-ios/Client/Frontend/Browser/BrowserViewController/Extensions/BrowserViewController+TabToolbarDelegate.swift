@@ -168,10 +168,29 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
         let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-        let menuHelper = MainMenuActionHelper(profile: profile,
-                                              tabManager: tabManager,
-                                              buttonView: button,
-                                              toastContainer: contentContainer)
+
+        let menuHelper: MainMenuActionHelper
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
+            menuHelper = MainMenuActionHelper(
+                profile: profile,
+                tabManager: tabManager,
+                buttonView: CGRect(
+                    x: button.frame.origin.x,
+                    y: button.frame.origin.y,
+                    width: button.frame.width,
+                    height: button.frame.height
+                ),
+                toastContainer: contentContainer
+            )
+        } else {
+            menuHelper = MainMenuActionHelper(
+                profile: profile,
+                tabManager: tabManager,
+                buttonView: button,
+                toastContainer: contentContainer
+            )
+        }
+
         menuHelper.delegate = self
         menuHelper.sendToDeviceDelegate = self
         menuHelper.navigationHandler = navigationHandler
