@@ -267,6 +267,12 @@ extension String {
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
             public struct Edit {
+                public static let RemoveAddressButtonTitle = MZLocalizedString(
+                    key: "", // "Addresses.EditAddress.RemoveAddressButtonTitle.v129"
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for button that offers the user the option to remove an address."
+                )
                 public static let AutofillAddAddressTitle = MZLocalizedString(
                     key: "", // "Addresses.EditAddress.AutofillAddAddressTitle.v129"
                     tableName: "EditAddress",

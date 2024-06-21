@@ -24,6 +24,24 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         return activityIndicator
     }()
 
+    private lazy var removeButton: RemoveAddressButton = {
+        let button = RemoveAddressButton()
+        button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addAction(
+            UIAction { [weak self] _ in self?.model.removeButtonTap() },
+            for: .touchUpInside
+        )
+        return button
+    }()
+
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [webView, removeButton])
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
@@ -51,6 +69,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
         setupWebView()
         setupActivityIndicator()
+        setupRemoveButton()
         listenForThemeChange(view)
     }
 
@@ -62,16 +81,27 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         ])
     }
 
-    private func setupWebView() {
-        self.view.addSubview(webView)
+    private func setupRemoveButton() {
+        removeButton.isHidden = true
+        removeButton.applyTheme(
+            theme: themeManager.getCurrentTheme(for: currentWindowUUID)
+        )
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            removeButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+    private func setupWebView() {
+        self.view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
 
         model.toggleEditModeAction = { [weak self] isEditMode in
+            self?.removeButton.isHidden = !isEditMode
             self?.evaluateJavaScript("toggleEditMode(\(isEditMode));")
         }
 
@@ -164,7 +194,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     func applyTheme() {
         guard let currentWindowUUID else { return }
-        let isDarkTheme = themeManager.getCurrentTheme(for: currentWindowUUID).type == .dark
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        removeButton.applyTheme(theme: theme)
+        let isDarkTheme = theme.type == .dark
         evaluateJavaScript("setTheme(\(isDarkTheme));")
     }
 }

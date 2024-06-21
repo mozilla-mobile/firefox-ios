@@ -195,6 +195,10 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         ))
     }
 
+    func removeButtonTap() {
+        
+    }
+
     private func toggleEditMode() {
         isEditMode.toggle()
         toggleEditModeAction?(isEditMode)

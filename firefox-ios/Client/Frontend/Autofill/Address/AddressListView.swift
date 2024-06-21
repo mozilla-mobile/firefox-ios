@@ -86,6 +86,7 @@ struct AddressListView: View {
                                 }
                             }
                         }
+                    .ignoresSafeArea(.keyboard)
                 }
             }
         }

@@ -933,6 +933,7 @@
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
 		8CBDE8E32AB09804001985BF /* ProductAnalyzeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
+		8CC218A12C24622500DFB5F5 /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC218A02C24622500DFB5F5 /* RemoveAddressButton.swift */; };
 		8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
 		8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4312B8C76AE0026530B /* LoginStorage.swift */; };
@@ -6386,6 +6387,7 @@
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
 		8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAnalyzeResponse.swift; sourceTree = "<group>"; };
 		8CC033F92BA476840033449E /* FormAutofillHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FormAutofillHelper.js; sourceTree = "<group>"; };
+		8CC218A02C24622500DFB5F5 /* RemoveAddressButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportResponse.swift; sourceTree = "<group>"; };
 		8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModelTests.swift; sourceTree = "<group>"; };
@@ -10410,6 +10412,7 @@
 				8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */,
 				8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */,
 				8C29376E2BF79F0300146613 /* EditAddressViewController.swift */,
+				8CC218A02C24622500DFB5F5 /* RemoveAddressButton.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -14284,6 +14287,7 @@
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
+				8CC218A12C24622500DFB5F5 /* RemoveAddressButton.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,
