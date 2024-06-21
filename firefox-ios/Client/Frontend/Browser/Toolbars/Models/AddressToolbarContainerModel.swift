@@ -13,7 +13,7 @@ class AddressToolbarContainerModel {
 
     let borderPosition: AddressToolbarBorderPosition?
     let url: URL?
-    
+
     let windowUUID: UUID
     var profile: Profile
 

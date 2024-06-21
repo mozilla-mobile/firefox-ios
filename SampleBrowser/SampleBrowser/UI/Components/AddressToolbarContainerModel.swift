@@ -21,24 +21,11 @@ struct AddressToolbarContainerModel {
             locationViewState: locationViewState,
             navigationActions: navigationActions,
             pageActions: pageActions,
-            browserActions: browserActions,
-            shouldDisplayTopBorder: shouldDisplayTopBorder,
-            shouldDisplayBottomBorder: shouldDisplayBottomBorder)
+            browserActions: browserActions, 
+            borderPosition: borderPosition)
     }
 
-    private var shouldDisplayTopBorder: Bool {
-        manager.shouldDisplayAddressBorder(
-            borderPosition: .top,
-            toolbarPosition: toolbarPosition,
-            isPrivate: false,
-            scrollY: scrollY)
-    }
-
-    private var shouldDisplayBottomBorder: Bool {
-        manager.shouldDisplayAddressBorder(
-           borderPosition: .bottom,
-           toolbarPosition: toolbarPosition,
-           isPrivate: false,
-           scrollY: scrollY)
+    private var borderPosition: AddressToolbarBorderPosition? {
+        manager.getAddressBorderPosition(for: .top, isPrivate: false, scrollY: scrollY)
     }
 }
