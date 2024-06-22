@@ -6,6 +6,7 @@ import Shared
 import Account
 import Common
 import enum MozillaAppServices.IncomingDeviceCommand
+import enum MozillaAppServices.AccountEvent
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -81,6 +82,22 @@ extension FxAPushMessageHandler {
                     }
                 }
             }
+        }
+    }
+
+    private func getPushMessageError(result: Result<AccountEvent, Error>) -> PushMessageError {
+        if case .failure(let error) = result {
+            self.logger.log("Failed to get any events from FxA",
+                            level: .warning,
+                            category: .sync,
+                            description: error.localizedDescription)
+            return PushMessageError.messageIncomplete(error.localizedDescription)
+        } else {
+            self.logger.log("Got zero events from FxA",
+                            level: .warning,
+                            category: .sync,
+                            description: "No events retrieved from fxa")
+            return PushMessageError.messageIncomplete("empty message")
         }
     }
 }
