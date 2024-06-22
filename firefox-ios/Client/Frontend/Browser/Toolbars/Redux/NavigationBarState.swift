@@ -30,13 +30,7 @@ struct NavigationBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
-                displayBorder: model.displayBorder ?? state.displayBorder
-            )
+            return handleToolbarDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.numberOfTabsChanged:
             guard let numberOfTabs = (action as? ToolbarAction)?.numberOfTabs else { return state }
