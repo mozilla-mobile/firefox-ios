@@ -126,6 +126,16 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                   systemBrightness: state.systemBrightness)
     }
 
+    private static func handleAutomaticBrightnessChanged(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+        let enabled = action.themeSettingsState?.isAutomaticBrightnessEnabled ?? state.isAutomaticBrightnessEnabled
+        return ThemeSettingsState(windowUUID: state.windowUUID,
+                                  useSystemAppearance: state.useSystemAppearance,
+                                  isAutomaticBrightnessEnable: enabled,
+                                  manualThemeSelected: state.manualThemeSelected,
+                                  userBrightnessThreshold: state.userBrightnessThreshold,
+                                  systemBrightness: state.systemBrightness)
+    }
+
     static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
         return lhs.useSystemAppearance == rhs.useSystemAppearance
         && lhs.isAutomaticBrightnessEnabled == rhs.isAutomaticBrightnessEnabled
