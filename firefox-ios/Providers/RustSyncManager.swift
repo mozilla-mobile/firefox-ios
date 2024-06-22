@@ -522,11 +522,9 @@ public class RustSyncManager: NSObject, SyncManager {
                             engines: SyncEngineSelection.some(engines: rustEngines),
                             enabledChanges: self.getEngineEnablementChangesForAccount(),
                             localEncryptionKeys: localEncryptionKeys,
-                            authInfo: SyncAuthInfo(
-                                kid: key.kid,
-                                fxaAccessToken: accessTokenInfo.token,
-                                syncKey: key.k,
-                                tokenserverUrl: tokenServerEndpointURL.absoluteString),
+                            authInfo: self.createSyncAuthInfo(key: key,
+                                                              accessTokenInfo: accessTokenInfo,
+                                                              tokenServerEndpointURL: tokenServerEndpointURL),
                             persistedState:
                                 self.prefs
                                     .stringForKey(PrefsKeys.RustSyncManagerPersistedState),
