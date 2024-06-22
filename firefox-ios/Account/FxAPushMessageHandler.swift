@@ -35,20 +35,7 @@ extension FxAPushMessageHandler {
             RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
                 accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) { result in
                     guard case .success(let event) = result else {
-                        let err: PushMessageError
-                        if case .failure(let error) = result {
-                            self.logger.log("Failed to get any events from FxA",
-                                            level: .warning,
-                                            category: .sync,
-                                            description: error.localizedDescription)
-                            err = PushMessageError.messageIncomplete(error.localizedDescription)
-                        } else {
-                            self.logger.log("Got zero events from FxA",
-                                            level: .warning,
-                                            category: .sync,
-                                            description: "No events retrieved from fxa")
-                            err = PushMessageError.messageIncomplete("empty message")
-                        }
+                        let err = self.getPushMessageError(result: result)
                         completion(.failure(err))
                         return
                     }
