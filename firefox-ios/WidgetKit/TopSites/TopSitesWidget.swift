@@ -53,24 +53,7 @@ struct TopSitesView: View {
         VStack {
             createTopContent()
             Spacer()
-            HStack {
-                if entry.sites.count > 7 {
-                    ForEach(entry.sites[4...7], id: \.url) { tab in
-                        topSitesItem(tab).frame(maxWidth: .infinity)
-                    }
-                } else {
-                    // Ensure there is at least a single site in the second row
-                    if entry.sites.count > 4 {
-                        ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
-                            topSitesItem(tab).frame(maxWidth: .infinity)
-                        }
-                    }
-
-                    ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
-                        emptySquare
-                    }
-                }
-            }.padding([.bottom, .horizontal])
+            createBottomContent()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .widgetBackground(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color)
