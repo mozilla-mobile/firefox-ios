@@ -45,11 +45,7 @@ struct NavigationBarState: StateType, Equatable {
             return handleToolbarScrollOffsetChanged(state: state, action: action)
 
         default:
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: state.actions,
-                displayBorder: state.displayBorder
-            )
+            return state
         }
     }
 
