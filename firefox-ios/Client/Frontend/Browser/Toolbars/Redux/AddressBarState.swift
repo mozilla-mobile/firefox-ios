@@ -60,14 +60,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarScrollOffsetChanged(state: state, action: action)
 
         default:
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url
-            )
+            return state
         }
     }
 
