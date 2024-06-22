@@ -894,6 +894,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
+    func getRegularModeSelector() -> XCUIElement {
+        if isTablet {
+            return app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
+        } else {
+            return app.toolbars["Toolbar"]
+                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
+        }
+    }
+
     // This menu is only available for iPhone, NOT for iPad, no menu when long tapping on tabs button
     if !isTablet {
         map.addScreenState(TabTrayLongPressMenu) { screenState in
