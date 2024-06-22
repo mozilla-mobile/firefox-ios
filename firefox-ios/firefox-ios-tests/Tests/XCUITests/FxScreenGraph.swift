@@ -864,17 +864,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
         }
 
-        var regularModeSelector: XCUIElement
+        var regularModeSelector = getSelectorBoundBy(0)
         var privateModeSelector: XCUIElement
         var syncModeSelector: XCUIElement
 
         if isTablet {
-            regularModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
             syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            regularModeSelector = app.toolbars["Toolbar"]
-                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
             privateModeSelector = app.toolbars["Toolbar"]
                 .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 1)
             syncModeSelector = app.toolbars["Toolbar"]
