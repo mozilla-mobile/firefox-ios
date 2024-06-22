@@ -73,7 +73,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                                     contentsOfFile: readerViewLoadingPath,
                                     encoding: String.Encoding.utf8.rawValue
                                 )
-                                replaceOccurrencesIn(readerViewLoading, url: url)
+                                replaceOccurrencesIn(readerViewLoading: readerViewLoading, url: url)
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }
@@ -112,7 +112,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         return nil
     }
 
-    private static func replaceOccurrencesIn(_ readerViewLoading: NSMutableString, url: URL) {
+    private static func replaceOccurrencesIn(readerViewLoading: NSMutableString, url: URL) {
         readerViewLoading.replaceOccurrences(
             of: "%ORIGINAL-URL%",
             with: url.absoluteString,
