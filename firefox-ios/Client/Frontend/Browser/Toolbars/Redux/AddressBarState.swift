@@ -51,22 +51,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarUrlDidChange(state: state, action: action)
 
         case ToolbarActionType.backButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
-
-            var actions = state.navigationActions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .back }) {
-                actions[index].isEnabled = isEnabled
-            }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: actions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url
-            )
+            return handleToolbarBackButtonStateChanged(state: state, action: action)
 
         case ToolbarActionType.forwardButtonStateChanged:
             guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
