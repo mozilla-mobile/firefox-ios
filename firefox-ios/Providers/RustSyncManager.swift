@@ -543,10 +543,7 @@ public class RustSyncManager: NSObject, SyncManager {
                             persistedState:
                                 self.prefs
                                     .stringForKey(PrefsKeys.RustSyncManagerPersistedState),
-                            deviceSettings: DeviceSettings(
-                                fxaDeviceId: device.id,
-                                name: device.displayName,
-                                kind: device.deviceType))
+                            deviceSettings: self.createDeviceSettings(device: device))
 
                         self.doSync(params: params) { syncResult in
                             deferred.fill(Maybe(success: syncResult))
