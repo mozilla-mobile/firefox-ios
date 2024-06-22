@@ -129,10 +129,8 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         guard let webView else { return }
         webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
             if let error = error {
-                self?.logger.log(
-                    "JavaScript execution error",
-                    level: .warning,
-                    category: .autofill,
+                self?.logError(
+                    message: "JavaScript execution error",
                     description: "JavaScript execution error: \(error.localizedDescription)"
                 )
                 return
