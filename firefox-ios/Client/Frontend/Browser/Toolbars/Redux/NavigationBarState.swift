@@ -101,4 +101,14 @@ struct NavigationBarState: StateType, Equatable {
             )
         }
     }
+
+    private static func handleToolbarDidLoadToolbars(state: Self, action: Action) -> Self {
+        guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: model.actions ?? state.actions,
+            displayBorder: model.displayBorder ?? state.displayBorder
+        )
+    }
 }
