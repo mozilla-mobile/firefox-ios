@@ -3,8 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    private var collections: [ServerCollection] = []
+    private var remoteSettingsUtil = RemoteSettingsUtil(bucket: .defaultBucket, collection: .searchTelemetry)
+    private var logger: Logger
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds)
         tableView.delegate = self
@@ -12,8 +16,15 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
         tableView.register(cellType: OneLineTableViewCell.self)
         return tableView
     }()
-    private var collections: [ServerCollection] = []
-    private var remoteSettingsUtil = RemoteSettingsUtil(bucket: .defaultBucket, collection: .searchTelemetry)
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +33,8 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
         fetchCollections(bucketID: Remotebucket.defaultBucket.rawValue)
     }
 
-    func setupNavigationBar() {
-        let settingsButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
+    private func setupNavigationBar() {
+        let settingsButton = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.settings),
                                              style: .plain,
                                              target: self,
                                              action: #selector(settingsButtonTapped))
@@ -50,11 +61,11 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
         alertController.addAction(fetchAction)
         alertController.addAction(resetAction)
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
+
         present(alertController, animated: true, completion: nil)
     }
 
-    func setupTableView() {
+    private func setupTableView() {
         view.addSubview(tableView)
     }
 
@@ -68,7 +79,9 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
         }
     }
 
+RemoteSettingsOptions/RemoteSettingsOptionViewController.swift
     // MARK: - UITableViewDataSource
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return collections.count
     }
@@ -91,18 +104,19 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
     }
 
     // MARK: - UITableViewDelegate
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let collection = collections[indexPath.row]
         fetchRecords(for: collection)
     }
 
-    func fetchRecords(for collection: ServerCollection) {
+    private func fetchRecords(for collection: ServerCollection) {
         remoteSettingsUtil.updateAndFetchRecords(for: .searchTelemetry) { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let records):
-                    let recordsString = self.remoteSettingsUtil.prettyPrint(records) ?? "No records"
+                    let recordsString = self.prettyPrint(records) ?? "No records"
                     let detailVC = RecordDetailViewController(recordDetails: recordsString)
                     self.navigationController?.pushViewController(detailVC, animated: true)
                 case .failure(let error):
@@ -113,30 +127,45 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
             }
         }
     }
-}
-
-class RecordDetailViewController: UIViewController {
-    var recordDetails: String
-    var textView: UITextView = .build { textViewVal in
-        textViewVal.isEditable = false
-    }
     
-    init(recordDetails: String) {
-        self.recordDetails = recordDetails
-        super.init(nibName: nil, bundle: nil)
+    // MARK: Helper
+
+    private func fetchCollections(bucketID: String) {
+        remoteSettingsUtil.fetchCollections(for: bucketID) { [weak self] collections in
+            DispatchQueue.main.async {
+                self?.collections = collections ?? []
+                self?.tableView.reloadData()
+            }
+        }
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private func prettyPrint<T: Codable>(_ value: [T]) -> String? {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let data = try encoder.encode(value)
+            if var jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupTextView()
-    }
+                for (index, var item) in jsonArray.enumerated() {
+                    // Check if "fields aka RsJsonObject" is a string and parse it as JSON if possible
+                    if let fieldsString = item["fields"] as? String,
+                       let fieldsData = fieldsString.data(using: .utf8),
+                       let fieldsJSON = try? JSONSerialization.jsonObject(with: fieldsData, options: []) {
+                        item["fields"] = fieldsJSON
+                    }
+                    jsonArray[index] = item
+                }
 
-    func setupTextView() {
-        textView.text = recordDetails
-        view.addSubview(textView)
+                let cleanedData = try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
+                return String(data: cleanedData, encoding: .utf8)
+            }
+        } catch {
+            logger.log("Failed to encode JSON",
+                       level: .warning,
+                       category: .remoteSettings,
+                       description: "\(error)")
+            return nil
+        }
+        return nil
     }
 }

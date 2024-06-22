@@ -823,6 +823,10 @@
 		8A88815C2B2103AD009635AE /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815B2B2103AD009635AE /* WebEngine */; };
 		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
 		8A8917692B57283B008B01EA /* HomepageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8917682B57283B008B01EA /* HomepageHeaderCell.swift */; };
+		8A8B2E242C23E4E400134A6E /* RemoteSettingsRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8B2E232C23E4E400134A6E /* RemoteSettingsRecordExtension.swift */; };
+		8A8B2E262C23E51400134A6E /* RemoteSettingsAttachmentExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8B2E252C23E51400134A6E /* RemoteSettingsAttachmentExtension.swift */; };
+		8A8B2E2B2C26506900134A6E /* RecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8B2E2A2C26506900134A6E /* RecordDetailViewController.swift */; };
+		8A8B2E2D2C2651D600134A6E /* RemoteSettingsTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8B2E2C2C2651D600134A6E /* RemoteSettingsTypes.swift */; };
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
 		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
 		8A8BAE162B2119E600D774EB /* InternalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8BAE152B2119E600D774EB /* InternalURL.swift */; };
@@ -6880,6 +6884,10 @@
 		8A87AEE02C1B4D17007428B2 /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
 		8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginViewModelDelegate.swift; sourceTree = "<group>"; };
 		8A8917682B57283B008B01EA /* HomepageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageHeaderCell.swift; sourceTree = "<group>"; };
+		8A8B2E232C23E4E400134A6E /* RemoteSettingsRecordExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsRecordExtension.swift; sourceTree = "<group>"; };
+		8A8B2E252C23E51400134A6E /* RemoteSettingsAttachmentExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsAttachmentExtension.swift; sourceTree = "<group>"; };
+		8A8B2E2A2C26506900134A6E /* RecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordDetailViewController.swift; sourceTree = "<group>"; };
+		8A8B2E2C2C2651D600134A6E /* RemoteSettingsTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsTypes.swift; sourceTree = "<group>"; };
 		8A8BAE152B2119E600D774EB /* InternalURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalURL.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
@@ -9631,7 +9639,6 @@
 				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 				3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */,
 				BCFF93F32AAF9879005B5B71 /* FirefoxSuggestSettingsViewController.swift */,
-				8AA802B52C103417003FB9D9 /* RemoteSettingsOptionViewController.swift */,
 				DFACBF83277B9B36003D5F41 /* HomepageSettings */,
 				C8656D76270F858900E199EA /* TabsSettingsViewControler.swift */,
 				C82F4C2A29AE2DF0005BD116 /* NotificationsSettingsViewController.swift */,
@@ -10581,6 +10588,7 @@
 				8A5D1CA22A30D661005AD35C /* General */,
 				8A19ACAC2A329036001C2147 /* Privacy */,
 				8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */,
+				8A8B2E292C264CB300134A6E /* RemoteSettingsOptions */,
 				8ADAE41C2A33A0D3007BF926 /* Support */,
 				8A720C5F2A4C8B700003018A /* SharedSettingsDelegate.swift */,
 			);
@@ -10793,6 +10801,26 @@
 				8A827E342C20CB44008D5E3C /* MicrosurveyPromptMiddlewareTests.swift */,
 			);
 			path = Microsurvey;
+			sourceTree = "<group>";
+		};
+		8A8B2E222C23E4B600134A6E /* RemoteSettingsUtil */ = {
+			isa = PBXGroup;
+			children = (
+				8A55125D2BF6842500250FA9 /* RemoteSettingsUtil.swift */,
+				8A8B2E232C23E4E400134A6E /* RemoteSettingsRecordExtension.swift */,
+				8A8B2E252C23E51400134A6E /* RemoteSettingsAttachmentExtension.swift */,
+			);
+			path = RemoteSettingsUtil;
+			sourceTree = "<group>";
+		};
+		8A8B2E292C264CB300134A6E /* RemoteSettingsOptions */ = {
+			isa = PBXGroup;
+			children = (
+				8AA802B52C103417003FB9D9 /* RemoteSettingsOptionViewController.swift */,
+				8A8B2E2A2C26506900134A6E /* RecordDetailViewController.swift */,
+				8A8B2E2C2C2651D600134A6E /* RemoteSettingsTypes.swift */,
+			);
+			path = RemoteSettingsOptions;
 			sourceTree = "<group>";
 		};
 		8A93F85C29D36D9F004159D9 /* Coordinators */ = {
@@ -13149,6 +13177,7 @@
 			children = (
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
+				8A8B2E222C23E4B600134A6E /* RemoteSettingsUtil */,
 				E60961841B62B7E100DD640F /* Configuration */,
 				8AD984F12AF1554F00B9FDA4 /* ContentBlocker */,
 				8A93F85C29D36D9F004159D9 /* Coordinators */,
@@ -15183,6 +15212,7 @@
 				810FF3542B178343009F062C /* FeltPrivacyMiddleware.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
+				8A8B2E242C23E4E400134A6E /* RemoteSettingsRecordExtension.swift in Sources */,
 				C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */,
 				C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
@@ -15421,6 +15451,8 @@
 				219935EC2B07110900E5966F /* TabTrayModel.swift in Sources */,
 				8A3EF7F72A2FCF6D00796E3A /* ExportLogDataSetting.swift in Sources */,
 				43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */,
+				8A8B2E262C23E51400134A6E /* RemoteSettingsAttachmentExtension.swift in Sources */,
+				8A8B2E2B2C26506900134A6E /* RecordDetailViewController.swift in Sources */,
 				1DF1167A2BDB0FDA00521158 /* WindowTabsSyncCoordinator.swift in Sources */,
 				AB8EE2D32C750E6100BD0A6B /* TrackingProtectionVerifiedByView.swift in Sources */,
 				8ADAE4202A33A0FD007BF926 /* SendFeedbackSetting.swift in Sources */,
@@ -15553,6 +15585,7 @@
 				C834ACD128D3ACA900203AD1 /* Blurrable.swift in Sources */,
 				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
+				8A8B2E2D2C2651D600134A6E /* RemoteSettingsTypes.swift in Sources */,
 				5A9F83402B2B4AE800272819 /* TabPeekAction.swift in Sources */,
 				C8EDDBF429DF119F003A4C07 /* DeeplinkInput.swift in Sources */,
 				E118B9292862674E00C84831 /* LegacyInactiveTabItemCellModel.swift in Sources */,
