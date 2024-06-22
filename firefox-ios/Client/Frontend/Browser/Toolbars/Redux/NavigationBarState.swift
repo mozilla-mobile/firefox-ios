@@ -36,19 +36,7 @@ struct NavigationBarState: StateType, Equatable {
             return handleToolbarNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.backButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .back }) {
-                actions[index].isEnabled = isEnabled
-            }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: actions,
-                displayBorder: state.displayBorder
-            )
+            return handleToolbarBackButtonStateChanged(state: state, action: action)
 
         case ToolbarActionType.forwardButtonStateChanged:
             guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
