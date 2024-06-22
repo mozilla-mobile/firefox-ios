@@ -35,7 +35,7 @@ extension FxAPushMessageHandler {
             RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
                 accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) { result in
                     guard case .success(let event) = result else {
-                        let err = self.getPushMessageError(result: result)
+                        let err = self.getPushMessageErrorBy(result: result)
                         completion(.failure(err))
                         return
                     }
@@ -72,7 +72,7 @@ extension FxAPushMessageHandler {
         }
     }
 
-    private func getPushMessageError(result: Result<AccountEvent, Error>) -> PushMessageError {
+    private func getPushMessageErrorBy(result: Result<AccountEvent, Error>) -> PushMessageError {
         if case .failure(let error) = result {
             self.logger.log("Failed to get any events from FxA",
                             level: .warning,
