@@ -113,4 +113,20 @@ struct NavigationBarState: StateType, Equatable {
             displayBorder: state.displayBorder
         )
     }
+
+    private static func handleToolbarForwardButtonStateChanged(state: Self, action: Action) -> Self {
+        guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
+
+        var actions = state.actions
+
+        if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
+            actions[index].isEnabled = isEnabled
+        }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: actions,
+            displayBorder: state.displayBorder
+        )
+    }
 }
