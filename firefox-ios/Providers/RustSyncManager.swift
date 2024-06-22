@@ -13,6 +13,7 @@ import class MozillaAppServices.MZKeychainWrapper
 import enum MozillaAppServices.OAuthScope
 import enum MozillaAppServices.SyncEngineSelection
 import enum MozillaAppServices.SyncReason
+import struct MozillaAppServices.Device
 import struct MozillaAppServices.DeviceSettings
 import struct MozillaAppServices.SyncAuthInfo
 import struct MozillaAppServices.SyncParams
@@ -555,6 +556,13 @@ public class RustSyncManager: NSObject, SyncManager {
             }
         }
         return deferred
+    }
+
+    private func createDeviceSettings(device: Device) -> DeviceSettings {
+        return DeviceSettings(
+            fxaDeviceId: device.id,
+            name: device.displayName,
+            kind: device.deviceType)
     }
 
     @discardableResult
