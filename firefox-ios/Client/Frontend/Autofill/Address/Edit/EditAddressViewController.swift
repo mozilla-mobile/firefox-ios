@@ -137,10 +137,8 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
             }
 
             guard let resultDict = result as? [String: Any] else {
-                self?.logger.log(
-                    "Result is nil or not a dictionary",
-                    level: .warning,
-                    category: .autofill,
+                self?.logError(
+                    message: "Result is nil or not a dictionary",
                     description: "Result is nil or not a dictionary"
                 )
                 return
