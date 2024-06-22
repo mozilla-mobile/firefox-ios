@@ -866,13 +866,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         var regularModeSelector = getSelectorBoundBy(0)
         var privateModeSelector = getSelectorBoundBy(1)
-        var syncModeSelector: XCUIElement
+        var syncModeSelector = getSelectorBoundBy(2)
 
         if isTablet {
-            syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            syncModeSelector = app.toolbars["Toolbar"]
-                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 2)
         }
         screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
