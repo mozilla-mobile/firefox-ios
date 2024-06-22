@@ -156,4 +156,23 @@ struct AddressBarState: StateType, Equatable {
             url: state.url
         )
     }
+
+    private static func handleToolbarForwardButtonStateChanged(state: Self, action: Action) -> Self {
+        guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
+
+        var actions = state.navigationActions
+
+        if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
+            actions[index].isEnabled = isEnabled
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: actions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url
+        )
+    }
 }
