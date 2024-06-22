@@ -39,19 +39,7 @@ struct NavigationBarState: StateType, Equatable {
             return handleToolbarBackButtonStateChanged(state: state, action: action)
 
         case ToolbarActionType.forwardButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
-                actions[index].isEnabled = isEnabled
-            }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: actions,
-                displayBorder: state.displayBorder
-            )
+            return handleToolbarForwardButtonStateChanged(state: state, action: action)
 
         case ToolbarActionType.scrollOffsetChanged:
             guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
