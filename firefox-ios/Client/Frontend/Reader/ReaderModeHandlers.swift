@@ -93,26 +93,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                                     contentsOfFile: readerViewLoadingPath,
                                     encoding: String.Encoding.utf8.rawValue
                                 )
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%ORIGINAL-URL%",
-                                    with: url.absoluteString,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%LOADING-TEXT%",
-                                    with: .ReaderModeHandlerLoadingContent,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%LOADING-FAILED-TEXT%",
-                                    with: .ReaderModeHandlerPageCantDisplay,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%LOAD-ORIGINAL-TEXT%",
-                                    with: .ReaderModeHandlerLoadOriginalPage,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
+                                replaceOccurrencesOf(readerViewLoading, url: url)
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }
