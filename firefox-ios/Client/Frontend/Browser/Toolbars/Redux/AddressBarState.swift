@@ -48,14 +48,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: (action as? ToolbarAction)?.url
-            )
+            return handleToolbarUrlDidChange(state: state, action: action)
 
         case ToolbarActionType.backButtonStateChanged:
             guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
