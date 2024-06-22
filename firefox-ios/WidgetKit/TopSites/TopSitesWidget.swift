@@ -95,6 +95,29 @@ struct TopSitesView: View {
         .widgetBackground(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color)
     }
 
+    private func createTopContent() -> some View {
+        return HStack {
+            if entry.sites.isEmpty {
+                ForEach(0..<4, id: \.self) { _ in
+                    emptySquare
+                }
+            } else if entry.sites.count > 3 {
+                ForEach(entry.sites.prefix(4), id: \.url) { tab in
+                    topSitesItem(tab)
+                        .background(Color.clear).frame(maxWidth: .infinity)
+                }
+            } else {
+                ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
+                    topSitesItem(tab).frame(maxWidth: .infinity)
+                }
+
+                ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
+                    emptySquare
+                }
+            }
+        }.padding([.top, .horizontal])
+    }
+
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString, invalidCharacters: false)!
