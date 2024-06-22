@@ -74,30 +74,7 @@ struct AddressListView: View {
                     handleAddAddress()
 
                 case .edit:
-                    EditAddressViewControllerRepresentable(model: viewModel)
-                        .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .cancellationAction) {
-                                Button(viewModel.cancelButtonLabel) {
-                                    if viewModel.isEditMode {
-                                        viewModel.cancelEditButtonTap()
-                                    } else {
-                                        viewModel.closeEditButtonTap()
-                                    }
-                                }
-                            }
-
-                            ToolbarItemGroup(placement: .primaryAction) {
-                                Button(viewModel.primaryButtonLabel) {
-                                    if viewModel.isEditMode {
-                                        viewModel.saveEditButtonTap()
-                                    } else {
-                                        viewModel.editButtonTap()
-                                    }
-                                }
-                            }
-                        }
-                    .ignoresSafeArea(.keyboard)
+                    handleEditAddress()
                 }
             }
         }
