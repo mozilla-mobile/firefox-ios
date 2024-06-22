@@ -77,4 +77,13 @@ struct MicrosurveyPromptState: StateType, Equatable {
             model: state.model
         )
     }
+
+    private static func handleDefault(state: Self) -> Self {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: state.showPrompt,
+            showSurvey: false,
+            model: state.model
+        )
+    }
 }
