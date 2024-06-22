@@ -42,14 +42,7 @@ struct NavigationBarState: StateType, Equatable {
             return handleToolbarForwardButtonStateChanged(state: state, action: action)
 
         case ToolbarActionType.scrollOffsetChanged:
-            guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
-            else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: state.actions,
-                displayBorder: displayBorder
-            )
+            return handleToolbarScrollOffsetChanged(state: state, action: action)
 
         default:
             return NavigationBarState(
