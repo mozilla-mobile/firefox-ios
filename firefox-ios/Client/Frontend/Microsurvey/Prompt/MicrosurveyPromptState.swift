@@ -37,7 +37,7 @@ struct MicrosurveyPromptState: StateType, Equatable {
         case MicrosurveyPromptMiddlewareActionType.initialize:
             return handleInitialize(state: state, action: action)
         case MicrosurveyPromptMiddlewareActionType.dismissPrompt:
-            return handleDismissPrompt(state: state, action: action)
+            return handleDismissPrompt(state: state)
         case MicrosurveyPromptMiddlewareActionType.openSurvey:
             return handleOpenSurvey(state: state)
         default:
@@ -60,7 +60,7 @@ struct MicrosurveyPromptState: StateType, Equatable {
         )
     }
 
-    private static func handleDismissPrompt(state: Self, action: Action) -> Self {
+    private static func handleDismissPrompt(state: Self) -> Self {
         return MicrosurveyPromptState(
             windowUUID: state.windowUUID,
             showPrompt: false,
