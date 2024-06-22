@@ -71,13 +71,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleGeneralBrowserAction(state: state, action: action)
 
         case ToolbarActionType.toolbarPositionChanged:
-            guard let position = (action as? ToolbarAction)?.toolbarPosition else { return state }
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: position,
-                isPrivateMode: state.isPrivateMode,
-                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
+            return handleToolbarPositionChanged(state: state, action: action)
 
         default:
             return ToolbarState(
