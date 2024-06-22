@@ -18,6 +18,8 @@ import struct MozillaAppServices.DeviceSettings
 import struct MozillaAppServices.SyncAuthInfo
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
+import struct MozillaAppServices.ScopedKey
+import struct MozillaAppServices.AccessTokenInfo
 
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
@@ -553,6 +555,14 @@ public class RustSyncManager: NSObject, SyncManager {
             }
         }
         return deferred
+    }
+
+    private func createSyncAuthInfo(key: ScopedKey, accessTokenInfo: AccessTokenInfo, tokenServerEndpointURL: URL) -> SyncAuthInfo {
+        return SyncAuthInfo(
+            kid: key.kid,
+            fxaAccessToken: accessTokenInfo.token,
+            syncKey: key.k,
+            tokenserverUrl: tokenServerEndpointURL.absoluteString)
     }
 
     private func createDeviceSettings(device: Device) -> DeviceSettings {
