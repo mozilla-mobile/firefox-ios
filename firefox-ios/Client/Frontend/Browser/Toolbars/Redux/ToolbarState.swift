@@ -104,4 +104,14 @@ struct ToolbarState: ScreenState, Equatable {
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction))
     }
+
+    private static func handleGeneralBrowserAction(state: Self, action: Action) -> Self {
+        guard let action = action as? GeneralBrowserAction else { return state }
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: state.toolbarPosition,
+            isPrivateMode: action.isPrivateBrowsing ?? state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
+    }
 }
