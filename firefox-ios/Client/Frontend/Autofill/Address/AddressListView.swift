@@ -127,6 +127,33 @@ struct AddressListView: View {
             )
     }
 
+    private func handleEditAddress() -> some View {
+        return EditAddressViewControllerRepresentable(model: viewModel)
+            .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
+            .toolbar {
+                ToolbarItemGroup(placement: .cancellationAction) {
+                    Button(viewModel.cancelButtonLabel) {
+                        if viewModel.isEditMode {
+                            viewModel.cancelEditButtonTap()
+                        } else {
+                            viewModel.closeEditButtonTap()
+                        }
+                    }
+                }
+                
+                ToolbarItemGroup(placement: .primaryAction) {
+                    Button(viewModel.primaryButtonLabel) {
+                        if viewModel.isEditMode {
+                            viewModel.saveEditButtonTap()
+                        } else {
+                            viewModel.editButtonTap()
+                        }
+                    }
+                }
+            }
+            .ignoresSafeArea(.keyboard)
+    }
+
     // MARK: - Theme Application
 
     /// Applies the theme to the view.
