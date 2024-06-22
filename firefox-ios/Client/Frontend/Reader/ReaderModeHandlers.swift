@@ -107,6 +107,30 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         }
     }
 
+    private static func generateHtmlFor(readabilityResult: ReadabilityResult, profile: Profile) -> GCDWebServerDataResponse? {
+        var readerModeStyle = ReaderModeStyle.defaultStyle()
+
+        // We have this page in our cache, so we can display it. Just grab the correct style from the
+        // profile and then generate HTML from the Readability results.
+        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+           let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
+            readerModeStyle = style
+        } else {
+            readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
+        }
+        
+        guard let html = ReaderModeUtils.generateReaderContent(
+            readabilityResult,
+            initialStyle: readerModeStyle
+        ),
+              let response = GCDWebServerDataResponse(html: html) else { return nil }
+        // Apply a Content Security Policy that disallows everything except images from
+        // anywhere and fonts and css from our internal server
+        response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
+                          forAdditionalHeader: "Content-Security-Policy")
+        return response
+    }
+
     private static func replaceOccurrencesIn(_ readerViewLoading: NSMutableString, url: URL) {
         readerViewLoading.replaceOccurrences(
             of: "%ORIGINAL-URL%",
