@@ -894,12 +894,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    func getRegularModeSelector() -> XCUIElement {
+    func getSelectorBoundBy(_ boundBy: Int) -> XCUIElement {
         if isTablet {
-            return app.navigationBars.segmentedControls.buttons.element(boundBy: 0)
+            return app.navigationBars.segmentedControls.buttons.element(boundBy: boundBy)
         } else {
             return app.toolbars["Toolbar"]
-                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
+                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: boundBy)
         }
     }
 
