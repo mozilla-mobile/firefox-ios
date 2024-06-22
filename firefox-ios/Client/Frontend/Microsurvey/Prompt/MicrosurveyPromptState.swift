@@ -72,4 +72,14 @@ struct MicrosurveyPromptState: StateType, Equatable {
             model: state.model
         )
     }
+
+    private static func handleInitialize(state: Self, action: Action) -> Self {
+        let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: true,
+            showSurvey: false,
+            model: model
+        )
+    }
 }
