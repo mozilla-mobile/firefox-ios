@@ -99,6 +99,27 @@ struct TopSitesView: View {
         }.padding([.top, .horizontal])
     }
 
+    private func createBottomContent() -> some View {
+        return HStack {
+            if entry.sites.count > 7 {
+                ForEach(entry.sites[4...7], id: \.url) { tab in
+                    topSitesItem(tab).frame(maxWidth: .infinity)
+                }
+            } else {
+                // Ensure there is at least a single site in the second row
+                if entry.sites.count > 4 {
+                    ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
+                        topSitesItem(tab).frame(maxWidth: .infinity)
+                    }
+                }
+
+                ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
+                    emptySquare
+                }
+            }
+        }.padding([.bottom, .horizontal])
+    }
+
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString, invalidCharacters: false)!
