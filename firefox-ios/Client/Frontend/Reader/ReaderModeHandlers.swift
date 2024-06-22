@@ -125,4 +125,27 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             return GCDWebServerDataResponse(html: errorString) // TODO Needs a proper error page
         }
     }
+
+    private static func replaceOccurrencesOf(_ readerViewLoading: NSMutableString, url: URL) {
+        readerViewLoading.replaceOccurrences(
+            of: "%ORIGINAL-URL%",
+            with: url.absoluteString,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+        readerViewLoading.replaceOccurrences(
+            of: "%LOADING-TEXT%",
+            with: .ReaderModeHandlerLoadingContent,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+        readerViewLoading.replaceOccurrences(
+            of: "%LOADING-FAILED-TEXT%",
+            with: .ReaderModeHandlerPageCantDisplay,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+        readerViewLoading.replaceOccurrences(
+            of: "%LOAD-ORIGINAL-TEXT%",
+            with: .ReaderModeHandlerLoadOriginalPage,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+    }
 }
