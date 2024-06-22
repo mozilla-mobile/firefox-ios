@@ -160,4 +160,17 @@ struct AddressBarState: StateType, Equatable {
             url: state.url
         )
     }
+
+    private static func handleToolbarScrollOffsetChanged(state: Self, action: Action) -> Self {
+        let borderPosition = (action as? ToolbarAction)?.addressToolbarModel?.borderPosition
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: borderPosition,
+            url: state.url
+        )
+    }
 }
