@@ -74,12 +74,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleToolbarPositionChanged(state: state, action: action)
 
         default:
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
-                isPrivateMode: state.isPrivateMode,
-                addressToolbar: state.addressToolbar,
-                navigationToolbar: state.navigationToolbar)
+            return state
         }
     }
 
