@@ -117,4 +117,15 @@ struct NavigationBarState: StateType, Equatable {
             displayBorder: state.displayBorder
         )
     }
+
+    private static func handleToolbarScrollOffsetChanged(state: Self, action: Action) -> Self {
+        guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
+        else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: displayBorder
+        )
+    }
 }
