@@ -557,7 +557,9 @@ public class RustSyncManager: NSObject, SyncManager {
         return deferred
     }
 
-    private func createSyncAuthInfo(key: ScopedKey, accessTokenInfo: AccessTokenInfo, tokenServerEndpointURL: URL) -> SyncAuthInfo {
+    private func createSyncAuthInfo(key: ScopedKey,
+                                    accessTokenInfo: AccessTokenInfo,
+                                    tokenServerEndpointURL: URL) -> SyncAuthInfo {
         return SyncAuthInfo(
             kid: key.kid,
             fxaAccessToken: accessTokenInfo.token,
