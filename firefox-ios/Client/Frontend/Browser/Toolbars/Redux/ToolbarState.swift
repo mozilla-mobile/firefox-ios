@@ -108,4 +108,14 @@ struct ToolbarState: ScreenState, Equatable {
             addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
     }
+
+    private static func handleToolbarPositionChanged(state: Self, action: Action) -> Self {
+        guard let position = (action as? ToolbarAction)?.toolbarPosition else { return state }
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: position,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
+    }
 }
