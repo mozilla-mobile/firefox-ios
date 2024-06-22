@@ -195,12 +195,8 @@ class RustAutofillTests: XCTestCase {
                 expectationGetCard.fulfill()
 
                 let expectedCcExpYear = Int64(2028)
-                let updatedCreditCard = UnencryptedCreditCardFields(ccName: creditCard!.ccName,
-                                                                    ccNumber: creditCard!.ccNumberEnc,
-                                                                    ccNumberLast4: creditCard!.ccNumberLast4,
-                                                                    ccExpMonth: creditCard!.ccExpMonth,
-                                                                    ccExpYear: expectedCcExpYear,
-                                                                    ccType: creditCard!.ccType)
+                let updatedCreditCard = self.createUnencryptedCreditCardFields(creditCard: creditCard!,
+                                                                               expectedCcExpYear: expectedCcExpYear)
                 self.autofill.updateCreditCard(id: creditCard!.guid,
                                                creditCard: updatedCreditCard) { success, err in
                     XCTAssertNotNil(success)
