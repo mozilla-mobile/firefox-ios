@@ -140,4 +140,17 @@ struct AddressBarState: StateType, Equatable {
             )
         }
     }
+
+    private static func handleToolbarDidLoadToolbars(state: Self, action: Action) -> Self {
+        guard let model = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: model.navigationActions ?? state.navigationActions,
+            pageActions: model.pageActions ?? state.pageActions,
+            browserActions: model.browserActions ?? state.browserActions,
+            borderPosition: model.borderPosition ?? state.borderPosition,
+            url: model.url
+        )
+    }
 }
