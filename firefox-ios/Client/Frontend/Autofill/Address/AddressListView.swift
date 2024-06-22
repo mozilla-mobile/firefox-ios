@@ -123,6 +123,19 @@ struct AddressListView: View {
         }
     }
 
+    private func handleAddAddress() -> some View {
+        return EditAddressViewControllerRepresentable(model: viewModel)
+            .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
+            .navigationBarItems(
+                leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                    viewModel.cancelAddButtonTap()
+                },
+                trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                    viewModel.saveAddressButtonTap()
+                }
+            )
+    }
+
     // MARK: - Theme Application
 
     /// Applies the theme to the view.
