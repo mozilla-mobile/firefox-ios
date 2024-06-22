@@ -51,26 +51,7 @@ struct TopSitesView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                if entry.sites.isEmpty {
-                    ForEach(0..<4, id: \.self) { _ in
-                        emptySquare
-                    }
-                } else if entry.sites.count > 3 {
-                    ForEach(entry.sites.prefix(4), id: \.url) { tab in
-                        topSitesItem(tab)
-                            .background(Color.clear).frame(maxWidth: .infinity)
-                    }
-                } else {
-                    ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
-                        topSitesItem(tab).frame(maxWidth: .infinity)
-                    }
-
-                    ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
-                        emptySquare
-                    }
-                }
-            }.padding([.top, .horizontal])
+            createTopContent()
             Spacer()
             HStack {
                 if entry.sites.count > 7 {
