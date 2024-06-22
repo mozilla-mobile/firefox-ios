@@ -223,6 +223,16 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    private func createUnencryptedCreditCardFields(creditCard: CreditCard,
+                                                   expectedCcExpYear: Int64) -> UnencryptedCreditCardFields {
+        return UnencryptedCreditCardFields(ccName: creditCard.ccName,
+                                           ccNumber: creditCard.ccNumberEnc,
+                                           ccNumberLast4: creditCard.ccNumberLast4,
+                                           ccExpMonth: creditCard.ccExpMonth,
+                                           ccExpYear: expectedCcExpYear,
+                                           ccType: creditCard.ccType)
+    }
+
     func testDeleteCreditCard() {
         let expectationAddCard = expectation(description: "completed add card")
         let expectationGetCard = expectation(description: "completed getting card")
