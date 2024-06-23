@@ -48,7 +48,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    fileprivate func mainContent() -> some View {
+    private func mainContent() -> some View {
         return ZStack {
             backgroundColor.ignoresSafeArea()
             formContent()
