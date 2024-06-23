@@ -1082,13 +1082,7 @@ public class RustLogins: LoginsProtocol {
                 GleanMetrics.LoginsStoreKeyRegeneration.other.record()
                 self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
             case (.none, .some(encryptedCanaryPhrase)):
-                // We expected the key to be present, but it's gone missing on us.
-
-                self.logger.log("Logins key lost, new one generated",
-                                level: .warning,
-                                category: .storage)
-                GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
-                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                self.handleMissingKey(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
                 // We didn't expect the key to be present, which either means this is a first-time
                 // call or the key data has been cleared from the keychain.
