@@ -351,8 +351,8 @@ extension ContentBlocker {
     }
 
     private func compileContentRuleListCompletion(dispatchGroup: DispatchGroup,
-                                                      rule: WKContentRuleList?,
-                                                      error: (any Error)?) {
+                                                  rule: WKContentRuleList?,
+                                                  error: (any Error)?) {
         defer {
             dispatchGroup.leave()
         }
