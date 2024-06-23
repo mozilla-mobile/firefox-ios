@@ -1123,10 +1123,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 //        )
 
         tapPinImage(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.link],
-            forAction: Action.CopyAddressPAM
-        )
+        tapLinkImage(screenState)
 
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.bookmark],
