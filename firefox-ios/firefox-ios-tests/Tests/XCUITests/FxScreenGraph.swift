@@ -1012,6 +1012,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
+    func tapSearchButton(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
+            forAction: Action.ClickSearchButton
+        ) { userState in
+        }
+    }
+
     map.addScreenState(ReloadLongPressMenu) { screenState in
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
