@@ -1102,10 +1102,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapBookmarkTrayFillImage(screenState)
         tapHistoryImage(screenState)
         tapDownloadImage(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
-            to: LibraryPanel_ReadingList
-        )
+        tapReadingListImage(screenState)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.avatarCircle],
             to: FxAccountManagementPage
