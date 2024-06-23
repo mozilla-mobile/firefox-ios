@@ -48,7 +48,7 @@ extension SiteImageDownloader {
         }
     }
 
-    fileprivate func handleImageDownload(url: URL) async throws -> any SiteImageLoadingResult {
+    private func handleImageDownload(url: URL) async throws -> any SiteImageLoadingResult {
         return try await withCheckedThrowingContinuation { continuation in
             // Store a copy of the continuation to act on in the case the sleep finishes first
             self.continuation = continuation
