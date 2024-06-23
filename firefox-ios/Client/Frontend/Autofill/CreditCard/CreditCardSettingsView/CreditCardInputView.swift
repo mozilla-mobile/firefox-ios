@@ -98,7 +98,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    fileprivate func nameContent() -> some View {
+    private func nameContent() -> some View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .name,
