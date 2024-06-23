@@ -128,7 +128,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    fileprivate func expirationContent() -> some View {
+    private func expirationContent() -> some View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .expiration,
