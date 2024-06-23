@@ -148,9 +148,9 @@ class Authenticator {
         }
     }
 
-    fileprivate static func handleDuplicatedEntries(logins: [EncryptedLogin],
-                                                    challenge: URLAuthenticationChallenge,
-                                                    loginsProvider: RustLogins) -> URLCredential? {
+    private static func handleDuplicatedEntries(logins: [EncryptedLogin],
+                                                challenge: URLAuthenticationChallenge,
+                                                loginsProvider: RustLogins) -> URLCredential? {
         let credentials = (logins.first(where: { login in
             (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`)
             && !login.hasMalformedHostname
