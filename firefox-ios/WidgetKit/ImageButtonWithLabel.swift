@@ -113,5 +113,21 @@ struct ImageButtonWithLabel: View {
             }
         }
     }
+
+    private func createTextContent() -> some View {
+        return VStack(alignment: .leading) {
+            if isSmall {
+                Text(link.label)
+                    .font(.headline)
+                    .minimumScaleFactor(0.75)
+                    .layoutPriority(1000)
+            } else {
+                Text(link.label)
+                    .font(.footnote)
+                    .minimumScaleFactor(0.75)
+                    .layoutPriority(1000)
+            }
+        }
+    }
 }
 #endif
