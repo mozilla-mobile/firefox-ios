@@ -563,6 +563,7 @@
 		78FE1E892B040E7000338465 /* FirefoxSuggestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */; };
 		7A6DF9EB2BFECC3C00A0C608 /* LegacyTabPeekPreviewActionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A6DF9EA2BFECC3C00A0C608 /* LegacyTabPeekPreviewActionBuilder.swift */; };
 		7AC7E0502C160FF800051D4D /* ReaderPanelEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */; };
+		7ADC1D192C27D35B003ED924 /* ActionProviderBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */; };
 		7B10AA9F1E3A15020002DD08 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AA9E1E3A15020002DD08 /* DataExtensions.swift */; };
 		7B10AABB1E3A1F650002DD08 /* URLRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B10AABA1E3A1F650002DD08 /* URLRequestExtensions.swift */; };
 		7B2142FE1E5E055000CDD3FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B2142FC1E5E055000CDD3FC /* InfoPlist.strings */; };
@@ -5884,6 +5885,7 @@
 		7AC7E04F2C160FF800051D4D /* ReaderPanelEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderPanelEmptyStateView.swift; sourceTree = "<group>"; };
 		7ACC4EB59896863B677D102A /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		7AD14377A3F3B824C049E709 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
+		7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionProviderBuilder.swift; sourceTree = "<group>"; };
 		7AEF4108BAAE5BBD5949E64C /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FindInPage.strings"; sourceTree = "<group>"; };
 		7B0A456E95C86CC158227349 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		7B0B49C7B69DC54BC3CA5972 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
@@ -9381,6 +9383,7 @@
 			isa = PBXGroup;
 			children = (
 				5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */,
+				7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -14889,6 +14892,7 @@
 				4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */,
 				ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */,
 				21AFCFF02AE80D370027E9CE /* RemoteTabsCoordinator.swift in Sources */,
+				7ADC1D192C27D35B003ED924 /* ActionProviderBuilder.swift in Sources */,
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
 				E1380B8D2AEA897C00630AFA /* SidebarEnabledView.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
