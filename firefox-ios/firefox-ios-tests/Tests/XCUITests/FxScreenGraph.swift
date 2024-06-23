@@ -952,11 +952,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         tapHomeButton(screenState)
 
-        screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
-            forAction: Action.ClickSearchButton
-        ) { userState in
-        }
+        tapSearchButton(screenState)
 
         makeToolBarAvailable(screenState)
         let link = app.webViews.element(boundBy: 0).links.element(boundBy: 0)
