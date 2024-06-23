@@ -1232,6 +1232,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
+    func tapNightModeImage(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
+            forAction: Action.ToggleNightMode,
+            transitionTo: BrowserTabMenu
+        ) { userState in
+            userState.nightMode = !userState.nightMode
+        }
+    }
+
     map.addScreenState(TabsSettings) { screenState in
         screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleInactiveTabs)
         screenState.tap(app.switches.element(boundBy: 1), forAction: Action.ToggleTabGroups)
