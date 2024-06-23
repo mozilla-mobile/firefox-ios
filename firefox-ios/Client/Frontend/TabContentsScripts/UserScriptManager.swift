@@ -47,16 +47,9 @@ class UserScriptManager: FeatureFlaggable {
 
             // Autofill scripts
             let autofillName = "Autofill\(name)"
-            if let autofillScriptCompatPath = Bundle.main.path(
-                forResource: autofillName, ofType: "js"),
-                let source = try? NSString(
-                    contentsOfFile: autofillScriptCompatPath,
-                    encoding: String.Encoding.utf8.rawValue) as String {
-                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInDefaultContentWorld(
-                    source: wrappedSource,
-                    injectionTime: injectionTime,
-                    forMainFrameOnly: mainFrameOnly)
+            if let userScript = UserScriptManager.getUserScriptForAutofill(autofillName: autofillName,
+                                                                           injectionTime: injectionTime,
+                                                                           mainFrameOnly: mainFrameOnly) {
                 compiledUserScripts[autofillName] = userScript
             }
 
