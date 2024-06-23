@@ -1155,4 +1155,15 @@ public class RustLogins: LoginsProtocol {
             completion(.failure(error))
         }
     }
+
+    private func handleMissingKey(rustKeys: RustLoginEncryptionKeys,
+                                     completion: @escaping (Result<String, NSError>) -> Void) {
+        // We expected the key to be present, but it's gone missing on us.
+
+        self.logger.log("Logins key lost, new one generated",
+                        level: .warning,
+                        category: .storage)
+        GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
+        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+    }
 }
