@@ -509,6 +509,33 @@ public class RustAutofill {
         self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
     }
 
+    private func handleFirstTimeCallOrClearKeychainKey(rustKeys: RustAutofillEncryptionKeys,
+                                                       completion: @escaping (Result<String, NSError>) -> Void) {
+        // We didn't expect the key to be present, which either means this is a first-time
+        // call or the key data has been cleared from the keychain.
+        self.hasCreditCards { result in
+            switch result {
+            case .success(let hasCreditCards):
+                if hasCreditCards {
+                    // Since the key data isn't present and we have credit card records in
+                    // the database, we both scrub the records and reset the key.
+                    self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+                } else {
+                    // There are no records in the database so we don't need to scrub any
+                    // existing credit card records. We just need to create a new key.
+                    do {
+                        let key = try rustKeys.createAndStoreKey()
+                        completion(.success(key))
+                    } catch let error as NSError {
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let err):
+                completion(.failure(err as NSError))
+            }
+        }
+    }
+
     // MARK: - Private Helper Methods
 
     private func handleDatabaseError(_ error: NSError) {
