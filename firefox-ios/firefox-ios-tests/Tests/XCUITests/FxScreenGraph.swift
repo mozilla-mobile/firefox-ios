@@ -1016,6 +1016,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
+    func tapPrivateModeButton(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.buttons["TopTabsViewController.privateModeButton"],
+            forAction: Action.TogglePrivateModeFromTabBarBrowserTab
+        ) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+    }
+
     map.addScreenState(ReloadLongPressMenu) { screenState in
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
