@@ -169,7 +169,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         }
     }
 
-    fileprivate func configureDatabase(_ arg: String, launchArguments: [String]) {
+    private func configureDatabase(_ arg: String, launchArguments: [String]) {
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             fatalError("Clearing profile and loading a test database is not a supported combination.")
         }
