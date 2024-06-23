@@ -1145,4 +1145,31 @@ public class RustLogins: LoginsProtocol {
             }
         }
     }
+
+    private func handleExpectedKey(rustKeys: RustLoginEncryptionKeys,
+                                   encryptedCanaryPhrase: String?,
+                                   key: String?,
+                                   completion: @escaping (Result<String, NSError>) -> Void) {
+        // We expected the key to be present, and it is.
+        do {
+            let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!,
+                                                text: rustKeys.canaryPhrase,
+                                                encryptionKey: key!)
+            if canaryIsValid {
+                completion(.success(key!))
+            } else {
+                self.logger.log("Logins key was corrupted, new one generated",
+                                level: .warning,
+                                category: .storage)
+                GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
+                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+            }
+        } catch let error as NSError {
+            self.logger.log("Error validating logins encryption key",
+                            level: .warning,
+                            category: .storage,
+                            description: error.localizedDescription)
+            completion(.failure(error))
+        }
+    }
 }
