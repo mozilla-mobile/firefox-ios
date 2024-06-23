@@ -167,10 +167,10 @@ class Authenticator {
         return credentials
     }
 
-    fileprivate static func handleUnmatchedSchemes(logins: [EncryptedLogin],
-                                                   challenge: URLAuthenticationChallenge,
-                                                   loginsProvider: RustLogins,
-                                                   completionHandler: @escaping (Result<URLCredential?, Error>) -> Void) {
+    private static func handleUnmatchedSchemes(logins: [EncryptedLogin],
+                                               challenge: URLAuthenticationChallenge,
+                                               loginsProvider: RustLogins,
+                                               completionHandler: @escaping (Result<URLCredential?, Error>) -> Void) {
         let login = logins[0]
         let credentials = login.credentials
         let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
