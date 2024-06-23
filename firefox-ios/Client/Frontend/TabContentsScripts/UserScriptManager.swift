@@ -99,6 +99,24 @@ class UserScriptManager: FeatureFlaggable {
         return nil
     }
 
+    private static func getUserScriptForAutofill(autofillName: String,
+                                                 injectionTime: WKUserScriptInjectionTime,
+                                                 mainFrameOnly: Bool) -> WKUserScript? {
+        if let autofillScriptCompatPath = Bundle.main.path(
+            forResource: autofillName, ofType: "js"),
+           let source = try? NSString(
+            contentsOfFile: autofillScriptCompatPath,
+            encoding: String.Encoding.utf8.rawValue) as String {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            return WKUserScript.createInDefaultContentWorld(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly)
+        }
+
+        return nil
+    }
+
     public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
