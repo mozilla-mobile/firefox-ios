@@ -1069,27 +1069,10 @@ public class RustLogins: LoginsProtocol {
         getKeychainData(rustKeys: rustKeys) { (key, encryptedCanaryPhrase) in
             switch(key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
-                // We expected the key to be present, and it is.
-                do {
-                    let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!,
-                                                        text: rustKeys.canaryPhrase,
-                                                        encryptionKey: key!)
-                    if canaryIsValid {
-                        completion(.success(key!))
-                    } else {
-                        self.logger.log("Logins key was corrupted, new one generated",
-                                        level: .warning,
-                                        category: .storage)
-                        GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
-                        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
-                    }
-                } catch let error as NSError {
-                    self.logger.log("Error validating logins encryption key",
-                                    level: .warning,
-                                    category: .storage,
-                                    description: error.localizedDescription)
-                    completion(.failure(error))
-                }
+                self.handleExpectedKey(rustKeys: rustKeys,
+                                       encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                       key: key,
+                                       completion: completion)
             case (.some(key), .none):
                 // The key is present, but we didn't expect it to be there.
 
