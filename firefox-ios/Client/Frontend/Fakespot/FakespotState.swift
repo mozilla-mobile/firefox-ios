@@ -150,7 +150,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    fileprivate static func handlePressedShopping(state: FakespotState) -> FakespotState {
+    private static func handlePressedShopping(state: FakespotState) -> FakespotState {
         var state = state
         state.isOpen = !state.isOpen
         state.sidebarOpenForiPadLandscape = state.isOpen
