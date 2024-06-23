@@ -1099,10 +1099,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapSettingsImage(screenState)
         tapSyncImage(screenState)
         tapLoginImage(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
-            to: LibraryPanel_Bookmarks
-        )
+        tapBookmarkTrayFill(screenState)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.history],
             to: LibraryPanel_History
