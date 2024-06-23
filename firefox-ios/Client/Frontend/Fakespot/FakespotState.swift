@@ -157,7 +157,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    fileprivate static func handleTabDidReload(action: FakespotAction, state: FakespotState) -> FakespotState {
+    private static func handleTabDidReload(action: FakespotAction, state: FakespotState) -> FakespotState {
         guard let tabUUID = action.tabUUID,
                 state.currentTabUUID == tabUUID,
                 let productId = action.productId
