@@ -448,7 +448,10 @@ public class RustAutofill {
         getKeychainData(rustKeys: rustKeys) { (key, encryptedCanaryPhrase) in
             switch (key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
-                self.handleExpectedKey(rustKeys: rustKeys, encryptedCanaryPhrase: encryptedCanaryPhrase, key: key, completion: completion)
+                self.handleExpectedKey(rustKeys: rustKeys,
+                                       encryptedCanaryPhrase: encryptedCanaryPhrase,
+                                       key: key,
+                                       completion: completion)
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
                 // The key is present, but we didn't expect it to be there.
                 // or
