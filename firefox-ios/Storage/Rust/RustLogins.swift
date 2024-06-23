@@ -1165,4 +1165,39 @@ public class RustLogins: LoginsProtocol {
         GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
         self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
     }
+
+    private func handleFirstTimeCallOrClearedKeychain(rustKeys: RustLoginEncryptionKeys,
+                                                      completion: @escaping (Result<String, NSError>) -> Void) {
+        // We didn't expect the key to be present, which either means this is a first-time
+        // call or the key data has been cleared from the keychain.
+
+        self.hasSyncedLogins().upon { result in
+            guard result.failureValue == nil else {
+                completion(.failure(result.failureValue! as NSError))
+                return
+            }
+
+            guard let hasLogins = result.successValue else {
+                let msg = "Failed to verify logins count before attempting to reset key"
+                completion(.failure(LoginEncryptionKeyError.dbRecordCountVerificationError(msg) as NSError))
+                return
+            }
+
+            if hasLogins {
+                // Since the key data isn't present and we have login records in
+                // the database, we both clear the database and reset the key.
+                GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
+                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+            } else {
+                // There are no records in the database so we don't need to wipe any
+                // existing login records. We just need to create a new key.
+                do {
+                    let key = try rustKeys.createAndStoreKey()
+                    completion(.success(key))
+                } catch let error as NSError {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }
