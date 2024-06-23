@@ -109,6 +109,28 @@ class UserScriptManager: FeatureFlaggable {
         return nil
     }
 
+    private static func getUserScriptForWebcompat(webcompatName: String,
+                                                  injectionTime: WKUserScriptInjectionTime,
+                                                  mainFrameOnly: Bool) -> WKUserScript? {
+        if let webCompatPath = Bundle.main.path(
+            forResource: webcompatName,
+            ofType: "js"
+        ),
+           let source = try? NSString(
+            contentsOfFile: webCompatPath,
+            encoding: String.Encoding.utf8.rawValue
+           ) as String {
+            let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
+            return WKUserScript.createInPageContentWorld(
+                source: wrappedSource,
+                injectionTime: injectionTime,
+                forMainFrameOnly: mainFrameOnly
+            )
+        }
+
+        return nil
+    }
+
     public func injectUserScriptsIntoWebView(_ webView: WKWebView?, nightMode: Bool, noImageMode: Bool) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
