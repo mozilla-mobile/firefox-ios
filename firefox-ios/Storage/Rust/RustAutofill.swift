@@ -455,7 +455,7 @@ public class RustAutofill {
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
                 self.handleUnexpectedKey(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
-                self.handleFirstTimeCallOrClearKeychainKey(rustKeys: rustKeys, completion: completion)
+                self.handleFirstTimeCallOrClearedKeychain(rustKeys: rustKeys, completion: completion)
             default:
                 // If none of the above cases apply, we're in a state that shouldn't be possible
                 // but is disallowed nonetheless
@@ -505,8 +505,8 @@ public class RustAutofill {
         self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
     }
 
-    private func handleFirstTimeCallOrClearKeychainKey(rustKeys: RustAutofillEncryptionKeys,
-                                                       completion: @escaping (Result<String, NSError>) -> Void) {
+    private func handleFirstTimeCallOrClearedKeychain(rustKeys: RustAutofillEncryptionKeys,
+                                                      completion: @escaping (Result<String, NSError>) -> Void) {
         // We didn't expect the key to be present, which either means this is a first-time
         // call or the key data has been cleared from the keychain.
         self.hasCreditCards { result in
