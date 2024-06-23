@@ -1004,6 +1004,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
+    func tapTrackingProtection(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+            to: TrackingProtectionContextMenuDetails
+        )
+    }
+
     map.addScreenState(ReloadLongPressMenu) { screenState in
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
