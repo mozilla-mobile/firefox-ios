@@ -435,13 +435,7 @@ public class RustAutofill {
                                        key: key,
                                        completion: completion)
             case (.some(key), .none), (.none, .some(encryptedCanaryPhrase)):
-                // The key is present, but we didn't expect it to be there.
-                // or
-                // We expected the key to be present, but it's gone missing on us
-                self.logger.log("Autofill key lost, new one generated",
-                                level: .warning,
-                                category: .storage)
-                self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+                self.handleUnexpectedKey(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
                 // We didn't expect the key to be present, which either means this is a first-time
                 // call or the key data has been cleared from the keychain.
