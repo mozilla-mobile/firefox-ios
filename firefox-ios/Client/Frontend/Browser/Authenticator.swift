@@ -141,7 +141,7 @@ class Authenticator {
         }
     }
 
-    fileprivate static func filterHttpAuthLogins(logins: [EncryptedLogin]) -> [EncryptedLogin] {
+    private static func filterHttpAuthLogins(logins: [EncryptedLogin]) -> [EncryptedLogin] {
         return logins.compactMap {
             // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
             return $0.formSubmitUrl == nil && $0.httpRealm != nil ? $0 : nil
