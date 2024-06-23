@@ -1125,7 +1125,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapPinImage(screenState)
         tapLinkImage(screenState)
 
-        tapBookmark(screenState)
+        tapBookmarkImage(screenState)
         tapReadingListAddImage(screenState)
 
         screenState.dismissOnUse = true
@@ -1265,7 +1265,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
-    func tapBookmark(_ screenState: MMScreenStateNode<FxUserState>) {
+    func tapBookmarkImage(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.bookmark],
             forAction: Action.BookmarkThreeDots,
