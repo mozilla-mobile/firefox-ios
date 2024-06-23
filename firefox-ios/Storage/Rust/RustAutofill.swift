@@ -512,6 +512,36 @@ public class RustAutofill {
         }
     }
 
+    private func handleExpectedKey(rustKeys: RustAutofillEncryptionKeys,
+                                   encryptedCanaryPhrase: String?,
+                                   key: String?,
+                                   completion: @escaping (Result<String, NSError>) -> Void) {
+        // We expected the key to be present, and it is.
+        var canaryIsValid = false
+        do {
+            canaryIsValid = try rustKeys.checkCanary(
+                canary: encryptedCanaryPhrase!,
+                text: rustKeys.canaryPhrase,
+                key: key!
+            )
+        } catch let error as NSError {
+            self.logger.log("Error validating autofill encryption key",
+                            level: .warning,
+                            category: .storage,
+                            description: error.localizedDescription)
+            completion(.failure(error))
+            return
+        }
+        if canaryIsValid {
+            completion(.success(key!))
+        } else {
+            self.logger.log("Autofill key was corrupted, new one generated",
+                            level: .warning,
+                            category: .storage)
+            self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+        }
+    }
+
     // MARK: - Private Helper Methods
 
     private func handleDatabaseError(_ error: NSError) {
