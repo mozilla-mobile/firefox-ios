@@ -1110,11 +1110,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapWhatsNewImage(screenState)
         tapDeviceDesktopSendImage(screenState)
 
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.shareApple],
-            forAction: Action.ShareBrowserTabMenuOption
-        ) { userState in
-        }
+        tapShareAppleImage(screenState)
 
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.deviceDesktop],
