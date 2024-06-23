@@ -66,7 +66,7 @@ extension SiteImageDownloader {
         }
     }
 
-    fileprivate func handleTimeout() async throws -> any SiteImageLoadingResult {
+    private func handleTimeout() async throws -> any SiteImageLoadingResult {
         try await Task.sleep(nanoseconds: self.timeoutDelay * NSEC_PER_SEC)
         try Task.checkCancellation()
         let error = SiteImageError.unableToDownloadImage("Timeout reached")
