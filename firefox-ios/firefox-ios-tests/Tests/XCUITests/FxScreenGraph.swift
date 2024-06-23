@@ -1228,6 +1228,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
+    func tapAvatarCircleImage(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.tables.otherElements[StandardImageIdentifiers.Large.avatarCircle],
+            to: FxAccountManagementPage
+        )
+    }
+
     map.addScreenState(TabsSettings) { screenState in
         screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleInactiveTabs)
         screenState.tap(app.switches.element(boundBy: 1), forAction: Action.ToggleTabGroups)
