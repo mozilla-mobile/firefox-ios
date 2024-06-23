@@ -1000,6 +1000,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
+    func tapSettingsMenuButton(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
+            to: BrowserTabMenu
+        )
+    }
+
     map.addScreenState(ReloadLongPressMenu) { screenState in
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
