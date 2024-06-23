@@ -163,7 +163,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
     }
 
-    fileprivate func configureTabs(_ arg: String, launchArguments: [String]) {
+    private func configureTabs(_ arg: String, launchArguments: [String]) {
         let tabDirectory = "\(self.appRootDir())/profile.profile"
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             fatalError("Clearing profile and loading tabs, not a supported combination.")
