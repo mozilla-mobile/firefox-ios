@@ -39,14 +39,9 @@ class UserScriptManager: FeatureFlaggable {
             let mainframeString = mainFrameOnly ? "MainFrame" : "AllFrames"
             let injectionString = injectionTime == .atDocumentStart ? "Start" : "End"
             let name = mainframeString + "AtDocument" + injectionString
-            if let path = Bundle.main.path(forResource: name, ofType: "js"),
-                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInDefaultContentWorld(
-                    source: wrappedSource,
-                    injectionTime: injectionTime,
-                    forMainFrameOnly: mainFrameOnly
-                )
+            if let userScript = UserScriptManager.getUserScriptForFrame(name: name,
+                                                                        injectionTime: injectionTime,
+                                                                        mainFrameOnly: mainFrameOnly) {
                 compiledUserScripts[name] = userScript
             }
 
