@@ -68,7 +68,7 @@ struct AddressAutofillToggle: View {
         }
     }
 
-    fileprivate func mainContent() -> some View {
+    private func mainContent() -> some View {
         // Horizontal stack containing title, description, and toggle
         return HStack {
             // Left-aligned stack for title and description
