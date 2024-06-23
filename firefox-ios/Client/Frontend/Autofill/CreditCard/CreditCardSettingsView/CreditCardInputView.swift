@@ -113,7 +113,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    fileprivate func numberContent() -> some View {
+    private func numberContent() -> some View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .number,
