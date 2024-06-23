@@ -1150,6 +1150,17 @@ public class RustLogins: LoginsProtocol {
         }
     }
 
+    private func handleUnexpectedKey(rustKeys: RustLoginEncryptionKeys,
+                                     completion: @escaping (Result<String, NSError>) -> Void) {
+        // The key is present, but we didn't expect it to be there.
+
+        self.logger.log("Logins key lost due to storage malfunction, new one generated",
+                        level: .warning,
+                        category: .storage)
+        GleanMetrics.LoginsStoreKeyRegeneration.other.record()
+        self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+    }
+
     private func handleMissingKey(rustKeys: RustLoginEncryptionKeys,
                                   completion: @escaping (Result<String, NSError>) -> Void) {
         // We expected the key to be present, but it's gone missing on us.
