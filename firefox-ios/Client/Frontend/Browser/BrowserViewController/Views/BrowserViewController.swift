@@ -2748,11 +2748,11 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    fileprivate func handleCreditCard(fieldValues: AutofillFieldValuePayload,
-                                      type: FormAutofillPayloadType?,
-                                      tabWebView: TabWebView,
-                                      webView: WKWebView,
-                                      frame: WKFrameInfo?) {
+    private func handleCreditCard(fieldValues: AutofillFieldValuePayload,
+                                  type: FormAutofillPayloadType?,
+                                  tabWebView: TabWebView,
+                                  webView: WKWebView,
+                                  frame: WKFrameInfo?) {
         guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
               let type = type,
               autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
