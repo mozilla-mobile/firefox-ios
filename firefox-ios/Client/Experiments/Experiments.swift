@@ -191,10 +191,10 @@ enum Experiments {
         return isReviewCheckerEnabled
     }
 
-    fileprivate static func buildNimbus(dbPath: String,
-                                        errorReporter: @escaping NimbusErrorReporter,
-                                        initialExperiments: URL?,
-                                        isFirstRun: Bool) -> NimbusInterface {
+    private static func buildNimbus(dbPath: String,
+                                    errorReporter: @escaping NimbusErrorReporter,
+                                    initialExperiments: URL?,
+                                    isFirstRun: Bool) -> NimbusInterface {
         let bundles = [
             Bundle.main,
             Strings.bundle,
