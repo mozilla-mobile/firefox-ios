@@ -649,7 +649,7 @@ class BrowserViewController: UIViewController,
         show(toast: toast)
     }
 
-    fileprivate func handleMicrosurvey(state: BrowserViewControllerState) {
+    private func handleMicrosurvey(state: BrowserViewControllerState) {
         if !state.microsurveyState.showPrompt {
             guard microsurvey != nil else { return }
             removeMicrosurveyPrompt()
