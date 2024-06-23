@@ -70,7 +70,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    fileprivate func formContent() -> some View {
+    private func formContent() -> some View {
         return VStack(spacing: 0) {
             Divider()
                 .frame(height: 0.7)
