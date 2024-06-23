@@ -946,10 +946,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTab) { screenState in
         makeURLBarAvailable(screenState)
-        screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            to: BrowserTabMenu
-        )
+        tapSettingsMenuButton(screenState)
 
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
