@@ -950,11 +950,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         tapTrackingProtection(screenState)
 
-        screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
-            forAction: Action.GoToHomePage
-        ) { userState in
-        }
+        tapHomeButton(screenState)
 
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
