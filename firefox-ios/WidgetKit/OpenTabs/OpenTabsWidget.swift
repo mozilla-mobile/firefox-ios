@@ -120,6 +120,20 @@ struct OpenTabsView: View {
         .widgetBackground(Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00)))
     }
 
+    private func createEmptyContent() -> some View {
+        return VStack {
+            Text(String.NoOpenTabsLabel)
+            HStack {
+                Spacer()
+                Image("externalLinkSmall")
+                Text(String.OpenFirefoxLabel)
+                    .foregroundColor(Color.white).lineLimit(1)
+                    .font(.system(size: 13, weight: .semibold, design: .default))
+                Spacer()
+            }.padding(10)
+        }.foregroundColor(Color.white)
+    }
+
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString, invalidCharacters: false)!
