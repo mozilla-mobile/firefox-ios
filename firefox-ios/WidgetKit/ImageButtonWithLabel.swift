@@ -117,5 +117,17 @@ struct ImageButtonWithLabel: View {
             }
         }
     }
+
+    private func createImageContent() -> some View {
+        if link == .search && isSmall {
+            return Image("searchLarge")
+                .scaledToFit()
+                .frame(height: 24.0)
+        } else {
+            return Image(link.imageName)
+                .scaledToFit()
+                .frame(height: 24.0)
+        }
+    }
 }
 #endif
