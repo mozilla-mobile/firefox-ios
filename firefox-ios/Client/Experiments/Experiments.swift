@@ -183,7 +183,7 @@ enum Experiments {
         )
     }
 
-    fileprivate static func isReviewCheckerEnabled() -> Bool {
+    private static func isReviewCheckerEnabled() -> Bool {
         var isReviewCheckerEnabled = false
         if let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) {
             isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
