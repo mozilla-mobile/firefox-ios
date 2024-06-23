@@ -175,7 +175,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    fileprivate static func handleAppearance(action: FakespotAction, state: FakespotState) -> FakespotState {
+    private static func handleAppearance(action: FakespotAction, state: FakespotState) -> FakespotState {
         let isEnabled = action.isOpen ?? state.isOpen
         var state = state
         state.isOpen = isEnabled
