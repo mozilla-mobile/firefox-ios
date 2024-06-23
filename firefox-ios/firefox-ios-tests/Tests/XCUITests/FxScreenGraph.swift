@@ -1099,7 +1099,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapSettingsImage(screenState)
         tapSyncImage(screenState)
         tapLoginImage(screenState)
-        tapBookmarkTrayFill(screenState)
+        tapBookmarkTrayFillImage(screenState)
         tapHistoryImage(screenState)
         tapDownloadImage(screenState)
         screenState.tap(
@@ -1203,7 +1203,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
-    func tapBookmarkTrayFill(_ screenState: MMScreenStateNode<FxUserState>) {
+    func tapBookmarkTrayFillImage(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
             to: LibraryPanel_Bookmarks
