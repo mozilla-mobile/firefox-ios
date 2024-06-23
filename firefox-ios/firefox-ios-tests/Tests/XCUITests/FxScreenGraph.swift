@@ -1100,7 +1100,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapSyncImage(screenState)
         tapLoginImage(screenState)
         tapBookmarkTrayFill(screenState)
-        tapHistory(screenState)
+        tapHistoryImage(screenState)
         tapDownloadImage(screenState)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
@@ -1210,7 +1210,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
-    func tapHistory(_ screenState: MMScreenStateNode<FxUserState>) {
+    func tapHistoryImage(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.history],
             to: LibraryPanel_History
