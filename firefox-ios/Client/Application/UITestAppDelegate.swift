@@ -109,7 +109,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         return profile
     }
 
-    fileprivate func configureWebserverPort(_ arg: String) {
+    private func configureWebserverPort(_ arg: String) {
         let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
         if let port = Int(portString) {
             AppInfo.webserverPort = port
