@@ -1244,6 +1244,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
+    func tapShareAppleImage(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.tables.otherElements[StandardImageIdentifiers.Large.shareApple],
+            forAction: Action.ShareBrowserTabMenuOption
+        ) { userState in
+        }
+    }
+
     map.addScreenState(TabsSettings) { screenState in
         screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleInactiveTabs)
         screenState.tap(app.switches.element(boundBy: 1), forAction: Action.ToggleTabGroups)
