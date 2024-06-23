@@ -79,31 +79,7 @@ struct OpenTabsView: View {
             if entry.tabs.isEmpty {
                 createEmptyContent()
             } else {
-                VStack(spacing: 8) {
-                    ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
-                        lineItemForTab(tab)
-                    }
-
-                    if entry.tabs.count > numberOfTabsToDisplay {
-                        HStack(alignment: .center, spacing: 15) {
-                            Image("externalLinkSmall").foregroundColor(Color.white).frame(width: 16, height: 16)
-                            Text(
-                                String.localizedStringWithFormat(
-                                    String.MoreTabsLabel,
-                                    (entry.tabs.count - numberOfTabsToDisplay)
-                                )
-                            )
-                            .foregroundColor(Color.white)
-                            .lineLimit(1)
-                            .font(.system(size: 13, weight: .semibold, design: .default))
-                            Spacer()
-                        }.padding([.horizontal])
-                    } else {
-                        openFirefoxButton
-                    }
-
-                    Spacer()
-                }.padding(.top, 14)
+                createTabsContent()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
