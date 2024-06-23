@@ -124,10 +124,10 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
         }
     }
 
-    fileprivate func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
-                                                         timerid: TimerId,
-                                                         historyHighlightsEnabled: Bool,
-                                                         oldValue: String) {
+    private func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
+                                                     timerid: TimerId,
+                                                     historyHighlightsEnabled: Bool,
+                                                     oldValue: String) {
         let results = queries
         defer {
             GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
