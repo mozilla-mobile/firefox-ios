@@ -77,17 +77,7 @@ struct OpenTabsView: View {
     var body: some View {
         Group {
             if entry.tabs.isEmpty {
-                VStack {
-                    Text(String.NoOpenTabsLabel)
-                    HStack {
-                        Spacer()
-                        Image("externalLinkSmall")
-                        Text(String.OpenFirefoxLabel)
-                            .foregroundColor(Color.white).lineLimit(1)
-                            .font(.system(size: 13, weight: .semibold, design: .default))
-                        Spacer()
-                    }.padding(10)
-                }.foregroundColor(Color.white)
+                createEmptyContent()
             } else {
                 VStack(spacing: 8) {
                     ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
