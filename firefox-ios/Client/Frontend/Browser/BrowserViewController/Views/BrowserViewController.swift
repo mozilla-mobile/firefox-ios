@@ -2721,10 +2721,10 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    fileprivate func handleAddressField(type: FormAutofillPayloadType?,
-                                        tabWebView: TabWebView,
-                                        webView: WKWebView,
-                                        frame: WKFrameInfo?) {
+    private func handleAddressField(type: FormAutofillPayloadType?,
+                                    tabWebView: TabWebView,
+                                    webView: WKWebView,
+                                    frame: WKFrameInfo?) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
               AddressLocaleFeatureValidator.isValidRegion(),
               // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
