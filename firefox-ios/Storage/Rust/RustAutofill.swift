@@ -522,6 +522,17 @@ public class RustAutofill {
         }
     }
 
+    private func handleUnexpectedKey(rustKeys: RustAutofillEncryptionKeys,
+                                     completion: @escaping (Result<String, NSError>) -> Void) {
+        // The key is present, but we didn't expect it to be there.
+        // or
+        // We expected the key to be present, but it's gone missing on us
+        self.logger.log("Autofill key lost, new one generated",
+                        level: .warning,
+                        category: .storage)
+        self.resetCreditCardsAndKey(rustKeys: rustKeys, completion: completion)
+    }
+
     // MARK: - Private Helper Methods
 
     private func handleDatabaseError(_ error: NSError) {
