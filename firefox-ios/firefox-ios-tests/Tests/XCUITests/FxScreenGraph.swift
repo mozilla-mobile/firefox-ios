@@ -1107,11 +1107,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         tapNightModeImage(screenState)
 
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
-            forAction: Action.OpenWhatsNewPage
-        ) { userState in
-        }
+        tapWhatsNewImage(screenState)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.deviceDesktopSend],
             forAction: Action.SentToDevice
