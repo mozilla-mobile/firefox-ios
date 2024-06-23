@@ -1126,10 +1126,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapLinkImage(screenState)
 
         tapBookmark(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.readingListAdd],
-            forAction: Action.AddToReadingListBrowserTabMenu
-        )
+        tapReadingListAddImage(screenState)
 
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction
