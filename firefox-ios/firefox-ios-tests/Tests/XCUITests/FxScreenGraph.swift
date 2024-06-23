@@ -1103,10 +1103,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapHistoryImage(screenState)
         tapDownloadImage(screenState)
         tapReadingListImage(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.avatarCircle],
-            to: FxAccountManagementPage
-        )
+        tapAvatarCircleImage(screenState)
 
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
