@@ -1236,6 +1236,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
+    func tapWhatsNewImage(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
+            forAction: Action.OpenWhatsNewPage
+        ) { userState in
+        }
+    }
+
     map.addScreenState(TabsSettings) { screenState in
         screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleInactiveTabs)
         screenState.tap(app.switches.element(boundBy: 1), forAction: Action.ToggleTabGroups)
