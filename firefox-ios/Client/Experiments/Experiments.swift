@@ -175,7 +175,7 @@ enum Experiments {
             .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
     }()
 
-    fileprivate static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
+    private static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
 
         let customTargetingAttributes: [String: Any] =  [
