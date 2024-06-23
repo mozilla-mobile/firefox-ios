@@ -75,19 +75,7 @@ struct ImageButtonWithLabel: View {
 
                 VStack(alignment: .center, spacing: 50.0) {
                     HStack(alignment: .top) {
-                        VStack(alignment: .leading) {
-                            if isSmall {
-                                Text(link.label)
-                                    .font(.headline)
-                                    .minimumScaleFactor(0.75)
-                                    .layoutPriority(1000)
-                            } else {
-                                Text(link.label)
-                                    .font(.footnote)
-                                    .minimumScaleFactor(0.75)
-                                    .layoutPriority(1000)
-                            }
-                        }
+                        createTextContent()
                         Spacer()
                         if link == .search && isSmall {
                             Image("searchLarge")
