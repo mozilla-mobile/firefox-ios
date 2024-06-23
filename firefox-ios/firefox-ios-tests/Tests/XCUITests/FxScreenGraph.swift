@@ -948,10 +948,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         makeURLBarAvailable(screenState)
         tapSettingsMenuButton(screenState)
 
-        screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
-            to: TrackingProtectionContextMenuDetails
-        )
+        tapTrackingProtection(screenState)
 
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
