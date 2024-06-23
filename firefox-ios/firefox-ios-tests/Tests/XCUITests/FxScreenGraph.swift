@@ -1101,10 +1101,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapLoginImage(screenState)
         tapBookmarkTrayFill(screenState)
         tapHistory(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.download],
-            to: LibraryPanel_Downloads
-        )
+        tapDownloadImage(screenState)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
             to: LibraryPanel_ReadingList
