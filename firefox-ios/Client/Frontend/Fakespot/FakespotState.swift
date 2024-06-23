@@ -183,7 +183,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    fileprivate static func handleSurfaceDisplayed(state: FakespotState) -> FakespotState {
+    private static func handleSurfaceDisplayed(state: FakespotState) -> FakespotState {
         var state = state
         state.sendSurfaceDisplayedTelemetryEvent = false
         return state
