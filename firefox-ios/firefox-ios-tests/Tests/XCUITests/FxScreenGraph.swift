@@ -1113,10 +1113,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         tapShareAppleImage(screenState)
 
         tapDeviceDesktopImage(screenState)
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.deviceMobile],
-            to: RequestMobileSite
-        )
+        tapDeviceMobileImage(screenState)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.search],
             to: FindInPage
