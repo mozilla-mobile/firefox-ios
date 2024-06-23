@@ -124,6 +124,34 @@ struct OpenTabsView: View {
         }.foregroundColor(Color.white)
     }
 
+    private func createTabsContent() -> some View {
+        return VStack(spacing: 8) {
+            ForEach(entry.tabs.suffix(numberOfTabsToDisplay), id: \.self) { tab in
+                lineItemForTab(tab)
+            }
+
+            if entry.tabs.count > numberOfTabsToDisplay {
+                HStack(alignment: .center, spacing: 15) {
+                    Image("externalLinkSmall").foregroundColor(Color.white).frame(width: 16, height: 16)
+                    Text(
+                        String.localizedStringWithFormat(
+                            String.MoreTabsLabel,
+                            (entry.tabs.count - numberOfTabsToDisplay)
+                        )
+                    )
+                    .foregroundColor(Color.white)
+                    .lineLimit(1)
+                    .font(.system(size: 13, weight: .semibold, design: .default))
+                    Spacer()
+                }.padding([.horizontal])
+            } else {
+                openFirefoxButton
+            }
+
+            Spacer()
+        }.padding(.top, 14)
+    }
+
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString, invalidCharacters: false)!
