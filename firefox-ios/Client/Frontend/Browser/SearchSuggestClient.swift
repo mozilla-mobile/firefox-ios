@@ -80,7 +80,7 @@ class SearchSuggestClient {
         task?.resume()
     }
 
-    fileprivate func handleInvalidResponseError(callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
+    private func handleInvalidResponseError(callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
         let error = NSError(
             domain: SearchSuggestClientErrorDomain,
             code: SearchSuggestClientErrorInvalidResponse,
