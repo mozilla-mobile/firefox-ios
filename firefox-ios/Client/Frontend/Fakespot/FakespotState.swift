@@ -189,7 +189,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    fileprivate static func handleAdsImpression(action: FakespotAction, state: FakespotState) -> FakespotState {
+    private static func handleAdsImpression(action: FakespotAction, state: FakespotState) -> FakespotState {
         guard let productId = action.productId else { return state }
         var state = state
         if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
