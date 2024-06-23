@@ -166,7 +166,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    fileprivate static func handleTabDidChange(action: FakespotAction, state: FakespotState) -> FakespotState {
+    private static func handleTabDidChange(action: FakespotAction, state: FakespotState) -> FakespotState {
         guard let tabUUID = action.tabUUID else { return state }
         var state = state
         if state.telemetryState[tabUUID] == nil {
