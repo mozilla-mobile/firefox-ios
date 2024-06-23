@@ -1008,6 +1008,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
     }
 
+    func tapHomeButton(_ screenState: MMScreenStateNode<FxUserState>) {
+        screenState.tap(
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
+            forAction: Action.GoToHomePage
+        ) { userState in
+        }
+    }
+
     map.addScreenState(ReloadLongPressMenu) { screenState in
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
