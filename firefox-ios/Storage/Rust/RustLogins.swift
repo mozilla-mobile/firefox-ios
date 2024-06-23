@@ -1074,13 +1074,7 @@ public class RustLogins: LoginsProtocol {
                                              key: key,
                                              completion: completion)
             case (.some(key), .none):
-                // The key is present, but we didn't expect it to be there.
-
-                self.logger.log("Logins key lost due to storage malfunction, new one generated",
-                                level: .warning,
-                                category: .storage)
-                GleanMetrics.LoginsStoreKeyRegeneration.other.record()
-                self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
+                self.handleUnexpectedKey(rustKeys: rustKeys, completion: completion)
             case (.none, .some(encryptedCanaryPhrase)):
                 self.handleMissingKeyAction(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
