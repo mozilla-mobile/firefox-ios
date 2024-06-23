@@ -77,15 +77,7 @@ struct ImageButtonWithLabel: View {
                     HStack(alignment: .top) {
                         createTextContent()
                         Spacer()
-                        if link == .search && isSmall {
-                            Image("searchLarge")
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        } else {
-                            Image(link.imageName)
-                                .scaledToFit()
-                                .frame(height: 24.0)
-                        }
+                        createImageContent()
                     }
                     if isSmall {
                         HStack(alignment: .bottom) {
