@@ -97,4 +97,4 @@ window.toggleEditMode = toggleEditMode;
 const resetForm = () => {
   document.querySelector("form").innerHTML = "";
 };
-window.teardownForm = resetForm;
+window.resetForm = resetForm;

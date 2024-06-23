@@ -114,13 +114,14 @@ struct AddressListView: View {
         .onAppear {
             viewModel.fetchAddresses()
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            viewModel.editAddressWebViewManager.preloadWebView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onDisappear {
-            viewModel.destroyWebView()
+            viewModel.editAddressWebViewManager.teardownWebView()
         }
     }
 

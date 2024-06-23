@@ -15,6 +15,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var currentWindowUUID: WindowUUID? { model.windowUUID }
+    lazy var editAddressWebViewManager = model.editAddressWebViewManager
 
     init(
         themeManager: ThemeManager,
@@ -43,18 +44,18 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        model.webView?.removeFromSuperview()
-        self.evaluateJavaScript("teardownForm();")
+        editAddressWebViewManager.webView?.removeFromSuperview()
+        self.evaluateJavaScript("resetForm();")
     }
 
     private func setupWebView() {
-        guard let webView = model.webView else { return }
-        self.view.addSubview(webView)
+        guard let editAddressWebViewManager = editAddressWebViewManager.webView else { return }
+        self.view.addSubview(editAddressWebViewManager)
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            editAddressWebViewManager.topAnchor.constraint(equalTo: view.topAnchor),
+            editAddressWebViewManager.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            editAddressWebViewManager.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            editAddressWebViewManager.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
         model.toggleEditModeAction = { [weak self] isEditMode in
@@ -88,7 +89,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func getCurrentFormData(completion: @escaping (UpdatableAddressFields) -> Void) {
-        guard let webView = model.webView else { return }
+        guard let webView = editAddressWebViewManager.webView else { return }
         webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
             if let error = error {
                 self?.logger.log(
@@ -128,7 +129,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func evaluateJavaScript(_ jsCode: String) {
-        guard let webView = model.webView else { return }
+        guard let webView = editAddressWebViewManager.webView else { return }
         webView.evaluateJavaScript(jsCode) { result, error in
             if let error = error {
                 self.logger.log(
