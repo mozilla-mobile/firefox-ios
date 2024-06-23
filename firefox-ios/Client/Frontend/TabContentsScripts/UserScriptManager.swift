@@ -54,20 +54,9 @@ class UserScriptManager: FeatureFlaggable {
             }
 
             let webcompatName = "Webcompat\(name)"
-            if let webCompatPath = Bundle.main.path(
-                forResource: webcompatName,
-                ofType: "js"
-            ),
-               let source = try? NSString(
-                contentsOfFile: webCompatPath,
-                encoding: String.Encoding.utf8.rawValue
-               ) as String {
-                let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInPageContentWorld(
-                    source: wrappedSource,
-                    injectionTime: injectionTime,
-                    forMainFrameOnly: mainFrameOnly
-                )
+            if let userScript = UserScriptManager.getUserScriptForWebcompat(webcompatName: webcompatName,
+                                                                            injectionTime: injectionTime,
+                                                                            mainFrameOnly: mainFrameOnly) {
                 compiledUserScripts[webcompatName] = userScript
             }
         }
