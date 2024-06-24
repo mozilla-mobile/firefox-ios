@@ -138,8 +138,6 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         viewModel.theme = theme
         loginDataSource.viewModel = viewModel
-        tableView.reloadSections(IndexSet(integer: PasswordManagerListViewController.loginsSettingsSection),
-                                 with: .none)
 
         view.backgroundColor = theme.colors.layer1
         tableView.separatorColor = theme.colors.borderPrimary
