@@ -1812,15 +1812,8 @@ class BrowserViewController: UIViewController,
         switch state {
         case _ where state.navigateTo != nil:
             handleNavigationActions(for: state)
-        case _ where state.showQRcodeReader:
-            navigationHandler?.showQRCode(delegate: self)
-        case _ where state.showBackForwardList:
-            navigationHandler?.showBackForwardList()
-        case _ where state.showTabsLongPressActions:
-            presentActionSheet(from: view)
-        case _ where state.showTrackingProtectionDetails:
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+        case _ where state.displayView != nil:
+            handleDisplayActions(for: state)
         default: break
         }
     }
@@ -1833,6 +1826,22 @@ class BrowserViewController: UIViewController,
              .forwardButtonStateChanged:
             store.dispatch(action)
         default: break
+        }
+    }
+
+    private func handleDisplayActions(for state: BrowserViewControllerState) {
+        guard let displayState = state.displayView else { return }
+
+        switch displayState {
+        case .qrCodeReader:
+            navigationHandler?.showQRCode(delegate: self)
+        case .backForwardList:
+            navigationHandler?.showBackForwardList()
+        case .tabsLongPressActions:
+            presentActionSheet(from: view)
+        case .trackingProtectionDetails:
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
+            navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         }
     }
 
