@@ -5,7 +5,11 @@
 import Foundation
 import Shared
 
-class MicrosurveySurfaceManager: MobileMessageSurfaceProtocol {
+protocol MicrosurveyManager: MobileMessageSurfaceProtocol {
+    func showMicrosurveyPrompt() -> MicrosurveyModel?
+}
+
+class MicrosurveySurfaceManager: MicrosurveyManager {
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
 

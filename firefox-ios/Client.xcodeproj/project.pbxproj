@@ -752,6 +752,9 @@
 		8A7AE4442BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AE4432BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift */; };
 		8A7AE4472BAC78230072DAEC /* MockLibraryNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7AE4452BAC76B00072DAEC /* MockLibraryNavigationHandler.swift */; };
 		8A7D1AC52BA3542600162F4B /* splashScreen.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A7D1AC42BA3542600162F4B /* splashScreen.json */; };
+		8A827E302C20C7F5008D5E3C /* MicrosurveyMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A827E2E2C20C55E008D5E3C /* MicrosurveyMiddlewareTests.swift */; };
+		8A827E322C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A827E312C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift */; };
+		8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A827E342C20CB44008D5E3C /* MicrosurveyPromptMiddlewareTests.swift */; };
 		8A832A9029DC96C50025D5DD /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A832A8F29DC96C50025D5DD /* LaunchScreenView.swift */; };
 		8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A832A9129DC99790025D5DD /* LaunchScreenViewModel.swift */; };
 		8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A832A9329DC99BA0025D5DD /* LaunchScreenViewController.swift */; };
@@ -6229,6 +6232,9 @@
 		8A7AE4432BAB510B0072DAEC /* LibraryPanelCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		8A7AE4452BAC76B00072DAEC /* MockLibraryNavigationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryNavigationHandler.swift; sourceTree = "<group>"; };
 		8A7D1AC42BA3542600162F4B /* splashScreen.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splashScreen.json; sourceTree = "<group>"; };
+		8A827E2E2C20C55E008D5E3C /* MicrosurveyMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyMiddlewareTests.swift; sourceTree = "<group>"; };
+		8A827E312C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMicrosurveySurfaceManager.swift; sourceTree = "<group>"; };
+		8A827E342C20CB44008D5E3C /* MicrosurveyPromptMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MicrosurveyPromptMiddlewareTests.swift; path = Mock/MicrosurveyPromptMiddlewareTests.swift; sourceTree = "<group>"; };
 		8A832A8F29DC96C50025D5DD /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		8A832A9129DC99790025D5DD /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		8A832A9329DC99BA0025D5DD /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
@@ -9978,6 +9984,15 @@
 			path = Pocket;
 			sourceTree = "<group>";
 		};
+		8A827E332C20C8C0008D5E3C /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				8A827E312C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift */,
+				8A4EA0D72C01125100E4E4F1 /* MicrosurveyMockModel.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
 		8A832A8E29DC96AD0025D5DD /* Launch */ = {
 			isa = PBXGroup;
 			children = (
@@ -9990,12 +10005,14 @@
 		8A8482ED2BE15FEF00F9007B /* Microsurvey */ = {
 			isa = PBXGroup;
 			children = (
+				8A827E332C20C8C0008D5E3C /* Mock */,
 				8A4EA0D22C010BF800E4E4F1 /* MicrosurveySurfaceManagerTests.swift */,
 				8AAEB9FD2BF50718000C02B5 /* MicrosurveyViewControllerTests.swift */,
 				8A8482EE2BE15FFE00F9007B /* MicrosurveyPromptStateTests.swift */,
 				8AAEBA092BF53AB5000C02B5 /* MicrosurveyStateTests.swift */,
 				8A0E5F3D2BFBA49400DE052B /* MicrosurveyCoordinatorTests.swift */,
-				8A4EA0D72C01125100E4E4F1 /* MicrosurveyMockModel.swift */,
+				8A827E2E2C20C55E008D5E3C /* MicrosurveyMiddlewareTests.swift */,
+				8A827E342C20CB44008D5E3C /* MicrosurveyPromptMiddlewareTests.swift */,
 			);
 			path = Microsurvey;
 			sourceTree = "<group>";
@@ -15142,6 +15159,7 @@
 				21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */,
 				F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */,
 				8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */,
+				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				5A31275828906422001F30FA /* BookmarksDelegateMock.swift in Sources */,
 				C2B808B12A77FA3F00A65487 /* DownloadsCoordinatorTests.swift in Sources */,
 				5A475E9129DB8AA7009C13FD /* MockDiskImageStore.swift in Sources */,
@@ -15238,8 +15256,10 @@
 				CA24B53924ABFE250093848C /* PasswordManagerSelectionHelperTests.swift in Sources */,
 				C8610DA82A0EBD4100B79FF1 /* OnboardingButtonActionTests.swift in Sources */,
 				4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */,
+				8A827E322C20C8AE008D5E3C /* MockMicrosurveySurfaceManager.swift in Sources */,
 				39D0DA7629D767DE000760B8 /* NimbusMessagingTriggerTests.swift in Sources */,
 				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
+				8A827E302C20C7F5008D5E3C /* MicrosurveyMiddlewareTests.swift in Sources */,
 				21B548992B1E7FDF00DC1DF8 /* InactiveTabsManagerTests.swift in Sources */,
 				8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,

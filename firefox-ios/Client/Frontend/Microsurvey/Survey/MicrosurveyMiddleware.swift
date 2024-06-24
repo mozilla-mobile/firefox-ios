@@ -8,9 +8,9 @@ import Shared
 import Common
 
 class MicrosurveyMiddleware {
-    private let microsurveySurfaceManager: MicrosurveySurfaceManager
+    private let microsurveySurfaceManager: MicrosurveyManager
 
-    init(microsurveySurfaceManager: MicrosurveySurfaceManager = AppContainer.shared.resolve()) {
+    init(microsurveySurfaceManager: MicrosurveyManager = AppContainer.shared.resolve()) {
         self.microsurveySurfaceManager = microsurveySurfaceManager
     }
 
@@ -35,6 +35,7 @@ class MicrosurveyMiddleware {
         )
         store.dispatch(newAction)
         closeMicrosurveyPrompt(windowUUID: windowUUID)
+        // TODO: FXIOS-8993 - Add Telemetry
     }
 
     private func navigateToPrivacyNotice(windowUUID: WindowUUID) {
@@ -43,6 +44,7 @@ class MicrosurveyMiddleware {
             actionType: MicrosurveyMiddlewareActionType.navigateToPrivacyNotice
         )
         store.dispatch(newAction)
+        // TODO: FXIOS-8993 - Add Telemetry
     }
 
     private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
@@ -57,5 +59,6 @@ class MicrosurveyMiddleware {
                 actionType: MicrosurveyPromptActionType.closePrompt
             )
         )
+        // TODO: FXIOS-8993 - Add Telemetry
     }
 }
