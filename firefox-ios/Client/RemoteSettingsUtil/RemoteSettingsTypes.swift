@@ -6,21 +6,21 @@ import Foundation
 
 /// Contains type definitions for remote settings used in the app
 
-enum RemoteCollection: String {
+public enum RemoteCollection: String {
     case searchTelemetry = "search-telemetry-v2"
 }
 
-enum Remotebucket: String {
+public enum Remotebucket: String {
     case defaultBucket = "main"
 }
 
-enum RemoteSettingsUtilError: Error {
+public enum RemoteSettingsUtilError: Error {
     case decodingError
     case fetchError(Error)
 }
 
 // Collections that are to be fetched from the server
-struct ServerCollection: Codable {
+public struct ServerCollection: Codable {
     let id: String
     let last_modified: Int
     let displayFields: [String]?
@@ -32,6 +32,6 @@ struct ServerCollection: Codable {
     }
 }
 
-struct ServerCollectionsResponse: Codable {
+public struct ServerCollectionsResponse: Codable {
     let data: [ServerCollection]
 }

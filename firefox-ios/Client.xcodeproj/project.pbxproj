@@ -10807,6 +10807,7 @@
 			isa = PBXGroup;
 			children = (
 				8A55125D2BF6842500250FA9 /* RemoteSettingsUtil.swift */,
+				8A8B2E2C2C2651D600134A6E /* RemoteSettingsTypes.swift */,
 				8A8B2E232C23E4E400134A6E /* RemoteSettingsRecordExtension.swift */,
 				8A8B2E252C23E51400134A6E /* RemoteSettingsAttachmentExtension.swift */,
 			);
@@ -10818,7 +10819,6 @@
 			children = (
 				8AA802B52C103417003FB9D9 /* RemoteSettingsOptionViewController.swift */,
 				8A8B2E2A2C26506900134A6E /* RecordDetailViewController.swift */,
-				8A8B2E2C2C2651D600134A6E /* RemoteSettingsTypes.swift */,
 			);
 			path = RemoteSettingsOptions;
 			sourceTree = "<group>";
