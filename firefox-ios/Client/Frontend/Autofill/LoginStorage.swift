@@ -52,14 +52,6 @@ class MockLoginStorage: LoginStorage {
                         persistence: .permanent
                     ),
                     protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
-                ),
-                EncryptedLogin(
-                    credentials: URLCredential(
-                        user: "",
-                        password: "doubletest",
-                        persistence: .permanent
-                    ),
-                    protectionSpace: URLProtectionSpace.fromOrigin("https://test.com")
                 )
             ]
 

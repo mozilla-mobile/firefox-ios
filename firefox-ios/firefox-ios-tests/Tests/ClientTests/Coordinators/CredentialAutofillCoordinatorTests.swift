@@ -61,7 +61,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        let field = FocusFieldType.username
+        let field = FocusFieldType.password
 
         subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
@@ -75,7 +75,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        let field = FocusFieldType.username
+        let field = FocusFieldType.password
 
         subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
@@ -100,7 +100,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        let field = FocusFieldType.username
+        let field = FocusFieldType.password
 
         subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 

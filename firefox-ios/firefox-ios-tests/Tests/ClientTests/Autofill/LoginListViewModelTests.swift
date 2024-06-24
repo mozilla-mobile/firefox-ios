@@ -14,7 +14,7 @@ class LoginListViewModelTests: XCTestCase {
     func testInitialization() {
         let viewModel = LoginListViewModel(
             tabURL: URL(string: "https://example.com")!,
-            field: FocusFieldType.username,
+            field: FocusFieldType.password,
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),
             onLoginCellTap: { _ in },
@@ -26,25 +26,7 @@ class LoginListViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testFetchLoginsSuccessUsernameField() async {
-        let mockLoginStorage = MockLoginStorage()
-
-        let viewModel = LoginListViewModel(
-            tabURL: URL(string: "https://test.com")!,
-            field: FocusFieldType.username,
-            loginStorage: mockLoginStorage,
-            logger: MockLogger(),
-            onLoginCellTap: { _ in },
-            manageLoginInfoAction: { }
-        )
-
-        await viewModel.fetchLogins()
-
-        XCTAssertEqual(viewModel.logins.count, 2)
-    }
-
-    @MainActor
-    func testFetchLoginsSuccessPaswordField() async {
+    func testFetchLoginsSuccess() async {
         let mockLoginStorage = MockLoginStorage()
 
         let viewModel = LoginListViewModel(
@@ -58,7 +40,7 @@ class LoginListViewModelTests: XCTestCase {
 
         await viewModel.fetchLogins()
 
-        XCTAssertEqual(viewModel.logins.count, 3)
+        XCTAssertEqual(viewModel.logins.count, 2)
     }
 
     @MainActor
@@ -71,7 +53,7 @@ class LoginListViewModelTests: XCTestCase {
 
         let viewModel = LoginListViewModel(
             tabURL: URL(string: "https://example.com")!,
-            field: FocusFieldType.username,
+            field: FocusFieldType.password,
             loginStorage: mockLoginStorage,
             logger: mockLogger,
             onLoginCellTap: { _ in },
@@ -91,7 +73,7 @@ class LoginListViewModelTests: XCTestCase {
 
         let viewModel = LoginListViewModel(
             tabURL: URL(string: "https://example.com")!,
-            field: FocusFieldType.username,
+            field: FocusFieldType.password,
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),
             onLoginCellTap: { _ in didTapLogin = true },
@@ -117,7 +99,7 @@ class LoginListViewModelTests: XCTestCase {
 
         let viewModel = LoginListViewModel(
             tabURL: URL(string: "https://example.com")!,
-            field: FocusFieldType.username,
+            field: FocusFieldType.password,
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),
             onLoginCellTap: { _ in },
