@@ -7,20 +7,41 @@ import MozillaAppServices
 import Common
 import Shared
 
-class RemoteSettingsUtil {
+public protocol RemoteSettingsUtilProvider: AnyObject {
+    func saveRemoteSettingsRecord(_ records: [RemoteSettingsRecord], forKey key: String)
+    func fetchLocalRecords(forKey key: String) -> [RemoteSettingsRecord]?
+    func updateAndFetchRecords(for collectionName: RemoteCollection,
+                               completion: @escaping (Result<[RemoteSettingsRecord], Error>) -> Void)
+    func fetchCollections(for bucketID: String, completion: @escaping ([ServerCollection]?) -> Void)
+    func updateCollectionName(to newCollection: RemoteCollection)
+}
+
+class RemoteSettingsUtil: RemoteSettingsUtilProvider {
     private var bucket: Remotebucket
     private var collection: RemoteCollection
     private let logger: Logger
     private let baseURL = "https://firefox.settings.services.mozilla.com/v1/"
+    var remoteSettings: RemoteSettingsProtocol
 
     init(bucket: Remotebucket,
          collection: RemoteCollection,
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         remoteSettings: RemoteSettingsProtocol? = nil) {
+
+        
         self.bucket = bucket
         self.collection = collection
         self.logger = logger
+        
+        // Default implementation if remoteSettings is not provided
+        if let remoteSettings = remoteSettings {
+            self.remoteSettings = remoteSettings
+        } else {
+            let config = RemoteSettingsConfig(collectionName: collection.rawValue)
+            self.remoteSettings = try! RemoteSettings(remoteSettingsConfig: config)
+        }
     }
-
+    
     func saveRemoteSettingsRecord(_ records: [RemoteSettingsRecord], forKey key: String) {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(records) {
@@ -37,13 +58,14 @@ class RemoteSettingsUtil {
         }
         return nil
     }
+    
+    func clearLocalRecords(forKey key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
 
-    private func fetchRemoteRecords(collectionName: RemoteCollection,
-                                    completion: @escaping (Result<[RemoteSettingsRecord], RemoteSettingsUtilError>) -> Void) {
+    private func fetchRemoteRecords(completion: @escaping (Result<[RemoteSettingsRecord], RemoteSettingsUtilError>) -> Void) {
         do {
-            let config = RemoteSettingsConfig(collectionName: collectionName.rawValue)
-            let settings = try RemoteSettings(remoteSettingsConfig: config)
-            let response = try settings.getRecords()
+            let response = try remoteSettings.getRecords()
             completion(.success(response.records))
         } catch {
             completion(.failure(.fetchError(error)))
@@ -63,13 +85,22 @@ class RemoteSettingsUtil {
         return false
     }
 
+    func updateCollectionName(to newCollection: RemoteCollection) {
+        self.collection = newCollection
+        let config = RemoteSettingsConfig(collectionName: newCollection.rawValue)
+        self.remoteSettings = try! RemoteSettings(remoteSettingsConfig: config)
+    }
+
     // MARK: Collections
 
     func updateAndFetchRecords(for collectionName: RemoteCollection,
                                completion: @escaping (Result<[RemoteSettingsRecord], Error>) -> Void) {
+        // Update the collection name when fetching new version
+        updateCollectionName(to: collectionName)
+        
         let localRecords = fetchLocalRecords(forKey: PrefsKeys.remoteSettingsKey) ?? []
         
-        fetchRemoteRecords(collectionName: collectionName) { [weak self] result in
+        fetchRemoteRecords { [weak self] result in
             switch result {
             case .success(let remoteRecords):
                 if self?.areRecordsDifferent(localRecords: localRecords,
