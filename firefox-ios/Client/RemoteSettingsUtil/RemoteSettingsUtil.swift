@@ -11,12 +11,14 @@ public protocol RemoteSettingsUtilProvider: AnyObject {
     func saveRemoteSettingsRecord(_ records: [RemoteSettingsRecord], forKey key: String)
     func fetchLocalRecords(forKey key: String) -> [RemoteSettingsRecord]?
     func updateAndFetchRecords(for collectionName: RemoteCollection,
+                               with key: String,
+                               and records: [RemoteSettingsRecord]?,
                                completion: @escaping (Result<[RemoteSettingsRecord], Error>) -> Void)
     func fetchCollections(for bucketID: String, completion: @escaping ([ServerCollection]?) -> Void)
     func updateCollectionName(to newCollection: RemoteCollection)
 }
 
-class RemoteSettingsUtil: RemoteSettingsUtilProvider {
+class RemoteSettingsUtil: RemoteSettingsUtilProvider {    
     private var bucket: Remotebucket
     private var collection: RemoteCollection
     private let logger: Logger
@@ -92,31 +94,42 @@ class RemoteSettingsUtil: RemoteSettingsUtilProvider {
     }
 
     // MARK: Collections
-
     func updateAndFetchRecords(for collectionName: RemoteCollection,
+                               with key: String = PrefsKeys.remoteSettingsKey,
+                               and records: [RemoteSettingsRecord]? = nil,
                                completion: @escaping (Result<[RemoteSettingsRecord], Error>) -> Void) {
+    
         // Update the collection name when fetching new version
         updateCollectionName(to: collectionName)
         
-        let localRecords = fetchLocalRecords(forKey: PrefsKeys.remoteSettingsKey) ?? []
+        let localRecords = fetchLocalRecords(forKey: key) ?? []
         
-        fetchRemoteRecords { [weak self] result in
-            switch result {
-            case .success(let remoteRecords):
-                if self?.areRecordsDifferent(localRecords: localRecords,
-                                             remoteRecords: remoteRecords) ?? false {
-                    self?.saveRemoteSettingsRecord(remoteRecords, forKey: PrefsKeys.remoteSettingsKey)
+        // If records are provided, bypass fetchRemoteRecords
+        if let providedRecords = records {
+            updateRecords(localRecords: localRecords, remoteRecords: providedRecords, key: key)
+            completion(.success(providedRecords))
+        } else {
+            fetchRemoteRecords { [weak self] result in
+                switch result {
+                case .success(let remoteRecords):
+                    self?.updateRecords(localRecords: localRecords, remoteRecords: remoteRecords, key: key)
                     completion(.success(remoteRecords))
-                } else {
-                    completion(.success(localRecords))
+                case .failure(let error):
+                    self?.logger.log("Failed to get any events from Remote Settings",
+                                     level: .warning,
+                                     category: .remoteSettings,
+                                     description: error.localizedDescription)
+                    completion(.failure(error))
                 }
-            case .failure(let error):
-                self?.logger.log("Failed to get any events from Remote Settings",
-                                       level: .warning,
-                                       category: .remoteSettings,
-                                       description: error.localizedDescription)
-                completion(.failure(error))
             }
+        }
+    }
+
+    private func updateRecords(localRecords: [RemoteSettingsRecord],
+                               remoteRecords: [RemoteSettingsRecord],
+                               key: String = PrefsKeys.remoteSettingsKey) {
+        if areRecordsDifferent(localRecords: localRecords, remoteRecords: remoteRecords) {
+            saveRemoteSettingsRecord(remoteRecords, forKey: key)
         }
     }
 
