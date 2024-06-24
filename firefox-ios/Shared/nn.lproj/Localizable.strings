@@ -1085,7 +1085,7 @@
 "SendTo.NoDevicesFound.Message" = "Du har ingen andre einingar tilkopla til denne Firefox-kontoen som er tilgjengelege for synkronisering.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Ver snill og opne Firefox, gå till Instillingar og logg inn for å fortsetje.";
+"SendTo.NotSignedIn.Message" = "Opne Firefox, gå till Instillingar og logg inn for å halde fram.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Du er ikkje innlogga med Firefox-kontoen din.";
