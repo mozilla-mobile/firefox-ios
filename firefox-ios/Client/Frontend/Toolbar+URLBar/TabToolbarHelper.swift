@@ -52,7 +52,7 @@ enum MiddleButtonState {
 }
 
 @objcMembers
-open class TabToolbarHelper: NSObject, FeatureFlaggable {
+open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
     let ImageSearch = UIImage.templateImageNamed(StandardImageIdentifiers.Large.search)
     let ImageNewTab = UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus)

@@ -74,22 +74,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     weak var sendToDeviceDelegate: SendToDeviceDelegate?
     weak var navigationHandler: BrowserNavigationHandler?
 
-    convenience init(
-        profile: Profile,
-        tabManager: TabManager,
-        buttonView: CGRect,
-        toastContainer: UIView,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
-    ) {
-        self.init(
-            profile: profile,
-            tabManager: tabManager,
-            buttonView: UIButton(frame: buttonView),
-            toastContainer: toastContainer,
-            themeManager: themeManager
-        )
-    }
-
     /// MainMenuActionHelper init
     /// - Parameters:
     ///   - profile: the user's profile
