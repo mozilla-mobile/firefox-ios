@@ -1,4 +1,4 @@
-name: "Focus iPhone/iPad Smoke Tests"
+name: "Focus Smoke Tests"
     
 on:
     workflow_dispatch:
@@ -7,32 +7,19 @@ env:
     browser: focus-ios
     xcode_version: 15.4
     ios_version: 17.5
+    ios_simulator_default: iPhone 15
     xcodebuild_test_plan: SmokeTest
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
     
 jobs:
-    run-tests:
-        strategy:
-            fail-fast: false
-            matrix:
-                ios_simulator: ['iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
-        name: Build and run tests
+    compile:
+        name: Compile
         runs-on: macos-14-large
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
-            - name: Setup Python
-              uses: actions/setup-python@v5.1.0
-              with:
-                python-version: '3.11'
-            - name: Install packages
-              id: packages
-              run: |
-                brew update
-                pip3 install virtualenv pipenv
-                brew install xctesthtmlreport
             - name: Setup Xcode
               id: xcode
               run: |
@@ -45,14 +32,52 @@ jobs:
               id: compile
               run: |
                 xcodebuild \
-                    -resolvePackageDependencies \
-                    -onlyUsePackageVersionsFromResolvedFile
+                  -resolvePackageDependencies \
+                  -onlyUsePackageVersionsFromResolvedFile
                 xcodebuild \
-                    build-for-testing \
-                    -scheme ${{ env.xcodebuild_scheme }} \
-                    -target ${{ env.xcodebuild_target }} \
-                    -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}'
+                  build-for-testing \
+                  -scheme ${{ env.xcodebuild_scheme }} \
+                  -target ${{ env.xcodebuild_target }} \
+                  -derivedDataPath ~/DerivedData \
+                  -destination 'platform=iOS Simulator,name=${{ env.ios_simulator_default }},OS=${{ env.ios_version }}'
               working-directory: ${{ env.browser }}
+            - name: Save Derived Data
+              id: upload-derived-data
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+                path: ~/DerivedData/Build/Products
+                retention-days: 2          
+    run-tests:
+        name: Run tests
+        runs-on: macos-14-large
+        needs: compile
+        strategy:
+            fail-fast: false
+            matrix:
+                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
+        steps:
+            - name: Check out source code
+              uses: actions/checkout@v4.1.7
+            - name: Install packages
+              id: packages
+              run: |
+                brew update
+                brew install xctesthtmlreport
+            - name: Setup Xcode
+              id: xcode
+              run: |
+                sudo rm -rf /Applications/Xcode.app
+                sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+                xcodebuild -version
+                ./checkout.sh
+                ./bootstrap.sh --force
+            - name: Get derived data
+              id: download-derived-data
+              uses: actions/download-artifact@v4
+              with:
+                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+                path: ~/DerivedData/Build/Products
             - name: Run tests
               id: run-tests
               run: |
@@ -60,6 +85,7 @@ jobs:
                     test-without-building \
                     -scheme ${{ env.xcodebuild_scheme }} \
                     -target ${{ env.xcodebuild_target }} \
+                    -derivedDataPath ~/DerivedData \
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ env.xcodebuild_test_plan }} \
                     -resultBundlePath ${{ env.test_results_directory }}/results
