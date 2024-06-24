@@ -21,7 +21,7 @@ struct AddressToolbarContainerModel {
             locationViewState: locationViewState,
             navigationActions: navigationActions,
             pageActions: pageActions,
-            browserActions: browserActions, 
+            browserActions: browserActions,
             borderPosition: borderPosition)
     }
 
