@@ -11,7 +11,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
     struct SharedUX {
         static let topStackViewSpacing: CGFloat = 24
         static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
-        static let descriptionFontSize: CGFloat = 17
 
         // small device
         static let smallTitleFontSize: CGFloat = 20
@@ -69,8 +68,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.textAlignment = .center
         let fontSize = self.shouldUseSmallDeviceLayout ? SharedUX.smallTitleFontSize : SharedUX.titleFontSize
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                size: fontSize)
+        label.font = FXFontStyles.Bold.largeTitle.scaledFont().withSize(fontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
         label.accessibilityTraits.insert(.header)
@@ -79,10 +77,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: SharedUX.descriptionFontSize
-        )
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
