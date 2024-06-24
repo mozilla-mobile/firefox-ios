@@ -227,16 +227,7 @@ open class TabToolbarHelper: NSObject, FeatureFlaggable {
     }
 
     func didClickMenu() {
-        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
-            guard let uuid = toolbar.appMenuButton.currentWindowUUID else { return }
-            let rect = CGRect(x: toolbar.appMenuButton.frame.origin.x,
-                              y: toolbar.appMenuButton.frame.origin.y,
-                              width: toolbar.appMenuButton.frame.width,
-                              height: toolbar.appMenuButton.frame.height)
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, from: rect, with: uuid)
-        } else {
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
-        }
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
     }
 
     func didClickLibrary() {

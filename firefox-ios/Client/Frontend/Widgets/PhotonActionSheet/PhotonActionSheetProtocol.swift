@@ -20,36 +20,11 @@ extension PhotonActionSheetProtocol {
     func presentSheetWith(
         viewModel: PhotonActionSheetViewModel,
         on viewController: PresentableVC,
-        from view: CGRect,
-        with uuid: WindowUUID
-    ) {
-        let tempView = UIView(frame: view)
-        viewController.view.addSubview(tempView)
-        presentSheetWith(
-            viewModel: viewModel,
-            on: viewController,
-            from: tempView,
-            with: uuid
-        )
-        tempView.removeFromSuperview()
-    }
-
-    func presentSheetWith(
-        viewModel: PhotonActionSheetViewModel,
-        on viewController: PresentableVC,
-        from view: UIView
-    ) {
-        // TODO: Regression testing needed here.
-        guard let uuid = view.currentWindowUUID else { return }
-        presentSheetWith(viewModel: viewModel, on: viewController, from: view, with: uuid)
-    }
-
-    private func presentSheetWith(
-        viewModel: PhotonActionSheetViewModel,
-        on viewController: PresentableVC,
         from view: UIView,
         with uuid: WindowUUID
     ) {
+        guard let uuid = view.currentWindowUUID else { return }
+
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: uuid)
         sheet.modalPresentationStyle = viewModel.modalStyle
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()

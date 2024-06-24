@@ -155,55 +155,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                   newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
-    func tabToolbarDidPressMenu(
-        _ tabToolbar: TabToolbarProtocol,
-        from sourceRect: CGRect,
-        with uuid: WindowUUID
-    ) {
-        // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
-
-        // Logs homePageMenu or siteMenu depending if HomePage is open or not
-        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
-        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-
-        let menuHelper: MainMenuActionHelper
-        menuHelper = MainMenuActionHelper(
-            profile: profile,
-            tabManager: tabManager,
-            buttonView: sourceRect,
-            toastContainer: contentContainer
-        )
-        menuHelper.delegate = self
-        menuHelper.sendToDeviceDelegate = self
-        menuHelper.navigationHandler = navigationHandler
-
-        updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
-                trait: self.traitCollection,
-                isBottomSearchBar: self.isBottomSearchBar
-            )
-            let viewModel = PhotonActionSheetViewModel(
-                actions: actions,
-                modalStyle: .popover,
-                isMainMenu: true,
-                isMainMenuInverted: shouldInverse
-            )
-            self.presentSheetWith(
-                viewModel: viewModel,
-                on: self,
-                from: sourceRect,
-                with: uuid)
-        }
-    }
-
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(
@@ -240,7 +191,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 isMainMenu: true,
                 isMainMenuInverted: shouldInverse
             )
-            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
+
+            self.presentSheetWith(
+                viewModel: viewModel,
+                on: self,
+                from: button,
+                with: button.currentWindowUUID
+            )
         }
     }
 
