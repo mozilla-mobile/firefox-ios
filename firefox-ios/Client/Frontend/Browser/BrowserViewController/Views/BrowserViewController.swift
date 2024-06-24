@@ -886,8 +886,6 @@ class BrowserViewController: UIViewController,
 
         browserDelegate?.browserHasLoaded()
         AppEventQueue.signal(event: .browserIsReady)
-
-        setupMicrosurvey()
     }
 
     private func prepareURLOnboardingContextualHint() {
@@ -1360,6 +1358,7 @@ class BrowserViewController: UIViewController,
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
         }
+        setupMicrosurvey()
     }
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
