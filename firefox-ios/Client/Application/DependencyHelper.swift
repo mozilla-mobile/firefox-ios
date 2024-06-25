@@ -38,7 +38,7 @@ class DependencyHelper {
         let themeManager: ThemeManager = appDelegate.themeManager
         AppContainer.shared.register(service: themeManager)
 
-        let microsurveyManager = MicrosurveySurfaceManager()
+        let microsurveyManager: MicrosurveyManager = MicrosurveySurfaceManager()
         AppContainer.shared.register(service: microsurveyManager)
 
         // Tell the container we are done registering

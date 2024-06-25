@@ -53,6 +53,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
+    private let windowUUID: WindowUUID
     private let logger: Logger
 
     private var toolbarsShowing: Bool {
@@ -96,7 +97,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }()
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    private var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
+    var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
@@ -125,7 +126,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
 
-    init(logger: Logger = DefaultLogger.shared) {
+    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+        self.windowUUID = windowUUID
         self.logger = logger
         super.init()
         setupNotifications()
@@ -472,6 +474,11 @@ extension TabScrollingController: UIScrollViewDelegate {
         if let tab, tab.shouldScrollToTop {
             setOffset(y: 0, for: scrollView)
         }
+
+        let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
+                                                    windowUUID: windowUUID,
+                                                    actionType: GeneralBrowserMiddlewareActionType.didScroll)
+        store.dispatch(action)
 
         guard isAnimatingToolbar else { return }
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {

@@ -80,7 +80,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
     var actionInfo: UIColor = FXColors.Blue60
     var actionTabActive: UIColor = FXColors.DarkGrey30
-    var actionTabInactive: UIColor = FXColors.DarkGrey30
+    var actionTabInactive: UIColor = FXColors.DarkGrey80
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05

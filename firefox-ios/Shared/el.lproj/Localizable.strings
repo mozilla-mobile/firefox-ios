@@ -1144,6 +1144,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Αντικατάσταση ερωτήματος με %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Φραγή ανοίγματος εξωτερικών εφαρμογών";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Απαλοιφή όλων των δεδομένων ιστοτόπων";
 

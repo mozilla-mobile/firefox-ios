@@ -15,7 +15,7 @@ import struct MozillaAppServices.UserData
 
 enum FxAPageType: Equatable {
     case emailLoginFlow
-    case qrCode(url: String)
+    case qrCode(url: URL)
     case settingsPage
 }
 
@@ -137,21 +137,8 @@ class FxAWebViewModel: FeatureFlaggable {
                         }
                     }
                 case let .qrCode(url):
-                    accountManager.beginPairingAuthentication(
-                        pairingUrl: url,
-                        entrypoint: "pairing_\(entrypoint)",
-                        // We ask for the session scope because the web content never
-                        // got the session as the user never entered their email and
-                        // password
-                        scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
-                    ) { [weak self] result in
-                        guard let self = self else { return }
-
-                        if case .success(let url) = result {
-                            self.baseURL = url
-                            completion(self.makeRequest(url), .qrPairing)
-                        }
-                    }
+                    self.baseURL = url
+                    completion(self.makeRequest(url), .qrPairing)
                 case .settingsPage:
                     if case .success(let url) = result {
                         self.baseURL = url

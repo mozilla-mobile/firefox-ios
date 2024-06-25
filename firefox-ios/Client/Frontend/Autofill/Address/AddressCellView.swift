@@ -38,15 +38,21 @@ struct AddressCellView: View {
                         .foregroundColor(iconPrimary)
                         .offset(y: -14)
                     VStack(alignment: .leading) {
-                        Text(address.name)
-                            .font(.body)
-                            .foregroundColor(textColor)
-                        Text(address.streetAddress)
-                            .font(.subheadline)
-                            .foregroundColor(customLightGray)
-                        Text(address.addressCityStateZipcode)
-                            .font(.subheadline)
-                            .foregroundColor(customLightGray)
+                        if !address.name.isEmpty {
+                            Text(address.name)
+                                .font(.body)
+                                .foregroundColor(textColor)
+                        }
+                        if !address.streetAddress.isEmpty {
+                            Text(address.streetAddress)
+                                .font(.subheadline)
+                                .foregroundColor(customLightGray)
+                        }
+                        if !address.addressCityStateZipcode.isEmpty {
+                            Text(address.addressCityStateZipcode)
+                                .font(.subheadline)
+                                .foregroundColor(customLightGray)
+                        }
                     }
                     Spacer()
                 }
@@ -65,6 +71,7 @@ struct AddressCellView: View {
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+        .accessibilityLabel(address.a11ySettingsRow)
     }
 
     // MARK: - Theme Application

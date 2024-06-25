@@ -276,7 +276,7 @@ final class MicrosurveyViewController: UIViewController,
     // MARK: ThemeApplicable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
 
         headerLabel.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textSecondary

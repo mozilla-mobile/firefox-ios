@@ -79,8 +79,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
     public func configure(state: AddressToolbarState) {
         updateActions(state: state)
-        updateBorder(shouldDisplayTopBorder: state.shouldDisplayTopBorder,
-                     shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
+        updateBorder(borderPosition: state.borderPosition)
 
         locationView.configure(state.locationViewState, delegate: self)
 
@@ -241,31 +240,18 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint?.constant = hasPageActions ? UX.dividerWidth : 0
     }
 
-    private func updateBorder(shouldDisplayTopBorder: Bool, shouldDisplayBottomBorder: Bool) {
-        let topBorderHeight = shouldDisplayTopBorder ? UX.borderHeight : 0
-        toolbarTopBorderHeightConstraint?.constant = topBorderHeight
-
-        let bottomBorderHeight = shouldDisplayBottomBorder ? UX.borderHeight : 0
-        toolbarBottomBorderHeightConstraint?.constant = bottomBorderHeight
-
-        progressBar.constraints.forEach(removeConstraint)
-
-        let constraints: [NSLayoutConstraint]
-        if shouldDisplayTopBorder {
-            constraints = [
-                progressBar.leadingAnchor.constraint(equalTo: toolbarTopBorderView.leadingAnchor),
-                progressBar.trailingAnchor.constraint(equalTo: toolbarTopBorderView.trailingAnchor),
-                progressBar.bottomAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor)
-            ]
-        } else {
-            constraints = [
-                progressBar.leadingAnchor.constraint(equalTo: toolbarBottomBorderView.leadingAnchor),
-                progressBar.trailingAnchor.constraint(equalTo: toolbarBottomBorderView.trailingAnchor),
-                progressBar.bottomAnchor.constraint(equalTo: toolbarTopBorderView.bottomAnchor)
-            ]
+    private func updateBorder(borderPosition: AddressToolbarBorderPosition?) {
+        switch borderPosition {
+        case .top:
+            toolbarTopBorderHeightConstraint?.constant = UX.borderHeight
+            toolbarBottomBorderHeightConstraint?.constant = 0
+        case .bottom:
+            toolbarTopBorderHeightConstraint?.constant = 0
+            toolbarBottomBorderHeightConstraint?.constant = UX.borderHeight
+        default:
+            toolbarTopBorderHeightConstraint?.constant = 0
+            toolbarBottomBorderHeightConstraint?.constant = 0
         }
-
-        NSLayoutConstraint.activate(constraints)
     }
 
     // MARK: - LocationViewDelegate
