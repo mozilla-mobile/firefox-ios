@@ -8,6 +8,7 @@ import Shared
 
 import class MozillaAppServices.FxAccountManager
 import class MozillaAppServices.FxAConfig
+import enum MozillaAppServices.DeviceCapability
 import enum MozillaAppServices.DeviceType
 import enum MozillaAppServices.OAuthScope
 import struct MozillaAppServices.DeviceConfig
@@ -162,10 +163,18 @@ open class RustFirefoxAccounts {
         }
 
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
+
+        var capabilities: [DeviceCapability] = [.sendTab]
+        // We don't have access to nimbus unfortunately, so we grab the key ourselves here
+        let closeTabsPref = prefs?.boolForKey(PrefsKeys.FeatureFlags.RemoteTabManagement)
+        let isCloseRemoteTabsEnabled = closeTabsPref ?? false
+        if isCloseRemoteTabsEnabled {
+            capabilities.append(.closeTabs)
+        }
         let deviceConfig = DeviceConfig(
             name: DeviceInfo.defaultClientName(),
             deviceType: type,
-            capabilities: [.sendTab]
+            capabilities: capabilities
         )
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)

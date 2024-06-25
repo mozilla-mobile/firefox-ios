@@ -134,13 +134,13 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             // Use a clean profile for each test session.
             profile = BrowserProfile(
                 localName: "testProfile",
-                sendTabDelegate: application.sendTabDelegate,
+                fxaCommandsDelegate: application.fxaCommandsDelegate,
                 clear: true
             )
         } else {
             profile = BrowserProfile(
                 localName: "testProfile",
-                sendTabDelegate: application.sendTabDelegate
+                fxaCommandsDelegate: application.fxaCommandsDelegate
             )
         }
 

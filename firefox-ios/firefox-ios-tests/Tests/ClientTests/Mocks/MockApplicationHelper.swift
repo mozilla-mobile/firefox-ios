@@ -11,6 +11,7 @@ class MockApplicationHelper: ApplicationHelper {
     var openURLCalled = 0
     var openURLInWindowCalled = 0
     var lastOpenURL: URL?
+    var closeTabCalled = 0
 
     func openSettings() {
         openSettingsCalled += 1
@@ -24,5 +25,9 @@ class MockApplicationHelper: ApplicationHelper {
     func open(_ url: URL, inWindow: WindowUUID) {
         openURLInWindowCalled += 1
         lastOpenURL = url
+    }
+
+    func closeTab(_ url: URL) {
+        closeTabCalled += 1
     }
 }

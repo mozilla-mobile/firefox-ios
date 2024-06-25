@@ -75,6 +75,7 @@ public struct PrefsKeys {
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
+        public static let RemoteTabManagement = "RemoteTabManagement"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
     }
 
