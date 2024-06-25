@@ -299,7 +299,7 @@
 "DownloadsPanel.Share.Title" = "Deila";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Sláðu inn lykilorð þitt til að tengjast";
+"Enter your password to connect" = "Settu inn lykilorðið þitt til að tengjast";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Nánar";

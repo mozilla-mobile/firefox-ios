@@ -59,6 +59,7 @@ form {
     min-height: 68px;
     padding: 11px 16px;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight interaction */
 
     span {
       font: -apple-system-subheadline;

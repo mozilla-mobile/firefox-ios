@@ -42,8 +42,22 @@ enum GeneralBrowserActionType: ActionType {
 }
 
 class GeneralBrowserMiddlewareAction: Action {
+    let scrollOffset: CGPoint?
+    let toolbarPosition: SearchBarPosition?
+
+    init(scrollOffset: CGPoint? = nil,
+         toolbarPosition: SearchBarPosition? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.scrollOffset = scrollOffset
+        self.toolbarPosition = toolbarPosition
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
+    }
 }
 
 enum GeneralBrowserMiddlewareActionType: ActionType {
     case browserDidLoad
+    case didScroll
+    case toolbarPositionChanged
 }

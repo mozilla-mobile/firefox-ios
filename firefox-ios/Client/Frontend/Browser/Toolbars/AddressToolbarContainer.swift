@@ -16,6 +16,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 class AddressToolbarContainer: UIView,
                                ThemeApplicable,
                                TopBottomInterchangeable,
+                               AlphaDimmable,
                                StoreSubscriber,
                                AddressToolbarDelegate {
     typealias SubscriberStateType = ToolbarState
@@ -98,6 +99,12 @@ class AddressToolbarContainer: UIView,
 
     func newState(state: ToolbarState) {
         updateModel(toolbarState: state)
+    }
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
+        compactToolbar.alpha = alpha
+        regularToolbar.alpha = alpha
     }
 
     private func updateModel(toolbarState: ToolbarState) {

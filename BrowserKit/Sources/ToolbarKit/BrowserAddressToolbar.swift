@@ -65,8 +65,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
     public func configure(state: AddressToolbarState) {
         updateActions(state: state)
-        updateBorder(shouldDisplayTopBorder: state.shouldDisplayTopBorder,
-                     shouldDisplayBottomBorder: state.shouldDisplayBottomBorder)
+        updateBorder(borderPosition: state.borderPosition)
 
         locationView.configure(state.locationViewState, delegate: self)
 
@@ -215,12 +214,18 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         dividerWidthConstraint?.constant = hasPageActions ? UX.dividerWidth : 0
     }
 
-    private func updateBorder(shouldDisplayTopBorder: Bool, shouldDisplayBottomBorder: Bool) {
-        let topBorderHeight = shouldDisplayTopBorder ? UX.borderHeight : 0
-        toolbarTopBorderHeightConstraint?.constant = topBorderHeight
-
-        let bottomBorderHeight = shouldDisplayBottomBorder ? UX.borderHeight : 0
-        toolbarBottomBorderHeightConstraint?.constant = bottomBorderHeight
+    private func updateBorder(borderPosition: AddressToolbarBorderPosition?) {
+        switch borderPosition {
+        case .top:
+            toolbarTopBorderHeightConstraint?.constant = UX.borderHeight
+            toolbarBottomBorderHeightConstraint?.constant = 0
+        case .bottom:
+            toolbarTopBorderHeightConstraint?.constant = 0
+            toolbarBottomBorderHeightConstraint?.constant = UX.borderHeight
+        default:
+            toolbarTopBorderHeightConstraint?.constant = 0
+            toolbarBottomBorderHeightConstraint?.constant = 0
+        }
     }
 
     // MARK: - LocationViewDelegate

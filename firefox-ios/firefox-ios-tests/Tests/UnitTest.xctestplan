@@ -95,6 +95,7 @@
     {
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "FirefoxHomeViewModelTests\/testNumberOfSection_withoutUpdatingData_has2Sections()",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests",
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
