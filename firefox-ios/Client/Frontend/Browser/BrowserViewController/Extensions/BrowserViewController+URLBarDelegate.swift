@@ -34,7 +34,7 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
 
         if isTabTrayRefactorEnabled {
             let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false

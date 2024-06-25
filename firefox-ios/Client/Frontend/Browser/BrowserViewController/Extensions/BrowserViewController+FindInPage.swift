@@ -5,18 +5,18 @@
 import Shared
 
 extension BrowserViewController {
-    func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil) {
+    func updateFindInPageVisibility(isVisible: Bool, tab: Tab? = nil) {
         // TODO: The find interactions for iOS 16 close themselves, so once the min deployment target is iOS 16,
         // we may be able to remove the `isVisible` flag and let the system manage dismissal.
         if #available(iOS 16, *) {
-            useApplesFindInteraction(isVisible: visible)
+            useSystemFindInteraction(isVisible: isVisible)
         } else {
-            useCustomFindInteraction(visible: visible, tab: tab)
+            useCustomFindInteraction(isVisible: isVisible, tab: tab)
         }
     }
 
     @available(iOS 16, *)
-    private func useApplesFindInteraction(isVisible: Bool) {
+    private func useSystemFindInteraction(isVisible: Bool) {
         guard let webView = tabManager.selectedTab?.webView else { return }
 
         if isVisible {
@@ -28,8 +28,8 @@ extension BrowserViewController {
         }
     }
 
-    private func useCustomFindInteraction(visible: Bool, tab: Tab? = nil) {
-        if visible {
+    private func useCustomFindInteraction(isVisible: Bool, tab: Tab? = nil) {
+        if isVisible {
             if findInPageBar == nil { setupFindInPage() }
 
             self.findInPageBar?.becomeFirstResponder()
@@ -90,7 +90,7 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     }
 
     func findInPageDidPressClose(_ findInPage: FindInPageBar) {
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
     }
 
     fileprivate func find(_ text: String, function: String) {
