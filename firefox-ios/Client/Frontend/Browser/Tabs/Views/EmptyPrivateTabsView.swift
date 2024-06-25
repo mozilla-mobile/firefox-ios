@@ -70,7 +70,7 @@ class EmptyPrivateTabsView: UIView {
     
     private func configureLearnMoreButton() {
         let viewModel = LinkButtonViewModel(title: .PrivateBrowsingLearnMore,
-                                            a11yIdentifier: "a11yLearnMoreButton",
+                                            a11yIdentifier: AccessibilityIdentifiers.TabTray.learnMoreButton,
                                             font: FXFontStyles.Regular.subheadline.scaledFont(),
                                             contentHorizontalAlignment: .center)
         learnMoreButton.configure(viewModel: viewModel)
