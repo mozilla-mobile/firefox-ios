@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
+final class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {
         static let radioButtonSize = CGSize(width: 24, height: 24)
         static let spacing: CGFloat = 12
