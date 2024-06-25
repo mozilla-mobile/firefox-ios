@@ -2,7 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-public struct ToolbarElement {
+import UIKit
+
+public struct ToolbarElement: Equatable {
     /// Icon name of the toolbar element
     let iconName: String
 
@@ -50,5 +52,15 @@ public struct ToolbarElement {
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
         self.a11yId = a11yId
+    }
+
+    public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
+        lhs.iconName == rhs.iconName &&
+        lhs.badgeImageName == rhs.badgeImageName &&
+        lhs.numberOfTabs == rhs.numberOfTabs &&
+        lhs.isEnabled == rhs.isEnabled &&
+        lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
+        lhs.a11yLabel == rhs.a11yLabel &&
+        lhs.a11yId == rhs.a11yId
     }
 }

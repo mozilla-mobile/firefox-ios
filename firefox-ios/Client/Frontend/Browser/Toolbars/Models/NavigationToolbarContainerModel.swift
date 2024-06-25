@@ -5,7 +5,7 @@
 import Common
 import ToolbarKit
 
-struct NavigationToolbarContainerModel {
+struct NavigationToolbarContainerModel: Equatable {
     let actions: [ToolbarElement]
     let displayBorder: Bool
     let windowUUID: WindowUUID

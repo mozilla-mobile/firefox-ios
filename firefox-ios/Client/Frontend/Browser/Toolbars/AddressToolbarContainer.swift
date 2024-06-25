@@ -112,10 +112,12 @@ class AddressToolbarContainer: UIView,
         let model = AddressToolbarContainerModel(state: toolbarState,
                                                  profile: profile,
                                                  windowUUID: windowUUID)
-        self.model = model
+        if self.model != model {
+            self.model = model
 
-        compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
-        regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+            compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+            regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+        }
     }
 
     private func setupLayout() {
