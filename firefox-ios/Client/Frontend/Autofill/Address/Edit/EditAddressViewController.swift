@@ -29,7 +29,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(
-            UIAction { [weak self] _ in self?.model.removeButtonTap() },
+            UIAction { [weak self] _ in self?.presentRemoveAddressAlert() },
             for: .touchUpInside
         )
         return button
@@ -198,6 +198,30 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         removeButton.applyTheme(theme: theme)
         let isDarkTheme = theme.type == .dark
         evaluateJavaScript("setTheme(\(isDarkTheme));")
+    }
+
+    func presentRemoveAddressAlert() {
+        let alertController = UIAlertController(
+            title: String.Addresses.Settings.Edit.RemoveAddressTitle,
+            message: model.hasSyncableAccount() ? String.Addresses.Settings.Edit.RemoveAddressMessage : nil,
+            preferredStyle: .alert
+        )
+
+        alertController.addAction(UIAlertAction(
+            title: String.Addresses.Settings.Edit.CancelButtonTitle,
+            style: .cancel,
+            handler: nil
+        ))
+
+        alertController.addAction(UIAlertAction(
+            title: String.Addresses.Settings.Edit.RemoveButtonTitle,
+            style: .destructive,
+            handler: { _ in
+                self.model.removeConfimationButtonTap()
+            }
+        ))
+
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 

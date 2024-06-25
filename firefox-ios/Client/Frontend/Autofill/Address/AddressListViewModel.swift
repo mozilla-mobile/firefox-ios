@@ -49,6 +49,10 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         return themeManager.getCurrentTheme(for: windowUUID).type == .dark
     }
+    var hasSyncableAccount: () -> Bool = {
+        let profile: Profile = AppContainer.shared.resolve()
+        return profile.hasSyncableAccount()
+    }
 
     // MARK: - Initializer
 
@@ -188,8 +192,24 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         ))
     }
 
-    func removeButtonTap() {
-        
+    func removeConfimationButtonTap() {
+        if case .edit(let address) = destination {
+            addressProvider.deleteAddress(id: address.id) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.toggleEditMode()
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
     }
 
     private func toggleEditMode() {
