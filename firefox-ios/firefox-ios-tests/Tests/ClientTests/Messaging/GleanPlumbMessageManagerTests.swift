@@ -258,6 +258,15 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
 
+    func testManagerOnMessagePressed_withoutExpiring() {
+        let message = createMessage(messageId: messageId, action: "://test-action")
+        subject.onMessagePressed(message, window: nil, shouldExpire: false)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertFalse(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
     func testManagerOnMessagePressed_linkWithScheme() {
         // {uuid} works for the mock message helper, but in reality, you'd use {app_id};
         // this test is showing that:
@@ -436,8 +445,9 @@ class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         }
     }
 
-    func onMessagePressed(_ message: GleanPlumbMessage) {
+    func onMessagePressed(_ message: GleanPlumbMessage, shouldExpire: Bool) {
         let metadata = metadata(for: message)
+        guard shouldExpire else { return }
         onMessageExpired(metadata, surface: message.surface, shouldReport: false)
     }
 

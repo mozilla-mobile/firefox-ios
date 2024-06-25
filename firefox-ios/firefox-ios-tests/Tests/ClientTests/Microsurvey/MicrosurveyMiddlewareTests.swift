@@ -41,7 +41,7 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
 
         let action = getAction(for: .submitSurvey)
         mockStore.dispatch(action)
-        XCTAssertEqual(microsurveyManager.handleMessagePressedCount, 1)
+        // TODO: FXIOS-8797 - Add Telemetry
     }
 
     private func getAction(for actionType: MicrosurveyActionType) -> MicrosurveyMiddlewareAction {
