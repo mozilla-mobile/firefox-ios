@@ -48,7 +48,6 @@ final class MicrosurveyMiddleware {
     }
 
     private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
-        microsurveySurfaceManager.handleMessagePressed()
         closeMicrosurveyPrompt(windowUUID: windowUUID)
     }
 
