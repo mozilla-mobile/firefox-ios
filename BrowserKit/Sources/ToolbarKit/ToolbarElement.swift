@@ -25,7 +25,7 @@ public struct ToolbarElement {
     let a11yId: String
 
     /// Closure that is executed when the toolbar element is tapped
-    let onSelected: (() -> Void)?
+    let onSelected: ((UIButton) -> Void)?
 
     /// Closure that is executed when the toolbar element is long pressed
     let onLongPress: (() -> Void)?
@@ -39,7 +39,7 @@ public struct ToolbarElement {
                 shouldDisplayAsHighlighted: Bool = false,
                 a11yLabel: String,
                 a11yId: String,
-                onSelected: (() -> Void)?,
+                onSelected: ((UIButton) -> Void)?,
                 onLongPress: (() -> Void)? = nil) {
         self.iconName = iconName
         self.badgeImageName = badgeImageName
