@@ -7,7 +7,7 @@ import Redux
 import Shared
 import Common
 
-class MicrosurveyMiddleware {
+final class MicrosurveyMiddleware {
     private let microsurveySurfaceManager: MicrosurveyManager
 
     init(microsurveySurfaceManager: MicrosurveyManager = AppContainer.shared.resolve()) {
