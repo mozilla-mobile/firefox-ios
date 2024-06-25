@@ -10,7 +10,7 @@ class ThemedCenteredTableViewCell: ThemedTableViewCell {
         static let labelMargin: CGFloat = 15
     }
 
-    lazy var centeredLabel: UILabel = .build { label in
+    private lazy var centeredLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
         label.font = FXFontStyles.Regular.body.scaledFont()
@@ -18,7 +18,7 @@ class ThemedCenteredTableViewCell: ThemedTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(centeredLabel)
+        setupLayout()
     }
 
     func setTitle(to title: String) {
@@ -34,7 +34,8 @@ class ThemedCenteredTableViewCell: ThemedTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setConstraints() {
+    private func setupLayout() {
+        contentView.addSubview(centeredLabel)
         NSLayoutConstraint.activate([
             centeredLabel.topAnchor.constraint(
                 greaterThanOrEqualTo: contentView.topAnchor,
@@ -55,12 +56,12 @@ class ThemedCenteredTableViewCell: ThemedTableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        setConstraints()
+        setupLayout()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        contentView.addSubview(centeredLabel)
+        centeredLabel.text = nil
     }
 
     override func applyTheme(theme: Theme) {

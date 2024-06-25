@@ -37,7 +37,6 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
-        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -50,26 +49,30 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
-    private func dequeueCellFor(indexPath: IndexPath, isCenteredTableViewCell: Bool = false) -> ThemedTableViewCell {
-        if isCenteredTableViewCell {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
-                for: indexPath
-            ) as? ThemedCenteredTableViewCell
-            else {
-                return ThemedCenteredTableViewCell()
+    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        if let section = Section(rawValue: indexPath.section) {
+            switch section {
+            case .sites:
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: ThemedTableViewCell.cellIdentifier,
+                    for: indexPath
+                ) as? ThemedTableViewCell
+                else {
+                    return ThemedTableViewCell()
+                }
+                return cell
+            case .clearButton:
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                    for: indexPath
+                ) as? ThemedCenteredTableViewCell
+                else {
+                    return ThemedCenteredTableViewCell()
+                }
+                return cell
             }
-            return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThemedTableViewCell.cellIdentifier,
-                for: indexPath
-            ) as? ThemedTableViewCell
-            else {
-                return ThemedTableViewCell()
-            }
-            return cell
         }
+        return ThemedTableViewCell()
     }
 
     func reloadData() {
@@ -106,7 +109,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
             }
             return cell
         case .clearButton:
-            let cell = dequeueCellFor(indexPath: indexPath, isCenteredTableViewCell: true) as? ThemedCenteredTableViewCell
+            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
             cell?.setTitle(to: viewModel.clearButtonTitle)
             cell?.setAccessibilities(
                 traits: .button,

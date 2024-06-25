@@ -121,7 +121,6 @@ class Setting: NSObject {
 
     init(
         title: NSAttributedString? = nil,
-        centeredTitle: NSAttributedString? = nil,
         footerTitle: NSAttributedString? = nil,
         cellHeight: CGFloat? = nil,
         delegate: SettingsDelegate? = nil,
@@ -878,7 +877,6 @@ class SettingsTableViewController: ThemedTableViewController {
 
         tableView.register(cellType: ThemedLeftAlignedTableViewCell.self)
         tableView.register(cellType: ThemedSubtitleTableViewCell.self)
-        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
             ThemedTableSectionHeaderFooterView.self,
             forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier

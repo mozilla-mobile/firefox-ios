@@ -83,7 +83,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
         title = .SettingsDataManagementTitle
 
-        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
@@ -117,7 +116,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             control.tag = indexPath.item
             return cell
         } else {
-            let cell = dequeueCellFor(indexPath: indexPath, isCenteredTableViewCell: true) as? ThemedCenteredTableViewCell
+            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
             cell?.applyTheme(theme: currentTheme())
             cell?.setTitle(to: .SettingsClearPrivateDataClearButton)
             cell?.setAccessibilities(
@@ -168,26 +167,20 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    private func dequeueCellFor(indexPath: IndexPath, isCenteredTableViewCell: Bool = false) -> ThemedTableViewCell {
-        if isCenteredTableViewCell {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
-                for: indexPath
-            ) as? ThemedCenteredTableViewCell
-            else {
-                return ThemedCenteredTableViewCell()
-            }
-            return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(
+    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        if indexPath.section == sectionArrow || indexPath.section == sectionToggles {
+            if let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedTableViewCell.cellIdentifier,
-                for: indexPath
-            ) as? ThemedTableViewCell
-            else {
-                return ThemedTableViewCell()
+                for: indexPath) as? ThemedTableViewCell {
+                return cell
             }
+        }
+        if let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+            for: indexPath) as? ThemedCenteredTableViewCell {
             return cell
         }
+        return ThemedTableViewCell()
     }
 
     private func clearPrivateData(_ action: UIAlertAction) {

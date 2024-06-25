@@ -179,7 +179,7 @@ class WebsiteDataManagementViewController: UIViewController,
             showMoreButton = cell
             return cell
         case .clearButton:
-            let cell = dequeueCellFor(indexPath: indexPath, isCenteredTableViewCell: true) as? ThemedCenteredTableViewCell
+            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
             cell?.setTitle(to: viewModel.clearButtonTitle)
             cell?.setAccessibilities(
                 traits: .button,
@@ -189,26 +189,30 @@ class WebsiteDataManagementViewController: UIViewController,
         }
     }
 
-    private func dequeueCellFor(indexPath: IndexPath, isCenteredTableViewCell: Bool = false) -> ThemedTableViewCell {
-        if isCenteredTableViewCell {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
-                for: indexPath
-            ) as? ThemedCenteredTableViewCell
-            else {
-                return ThemedCenteredTableViewCell()
+    private func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        if let section = Section(rawValue: indexPath.section) {
+            switch section {
+            case .sites, .showMore:
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: ThemedTableViewCell.cellIdentifier,
+                    for: indexPath
+                ) as? ThemedTableViewCell
+                else {
+                    return ThemedTableViewCell()
+                }
+                return cell
+            case .clearButton:
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                    for: indexPath
+                ) as? ThemedCenteredTableViewCell
+                else {
+                    return ThemedCenteredTableViewCell()
+                }
+                return cell
             }
-            return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThemedTableViewCell.cellIdentifier,
-                for: indexPath
-            ) as? ThemedTableViewCell
-            else {
-                return ThemedTableViewCell()
-            }
-            return cell
         }
+        return ThemedTableViewCell()
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
