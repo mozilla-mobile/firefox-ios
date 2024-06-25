@@ -1841,6 +1841,8 @@ class BrowserViewController: UIViewController,
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+        case .menu:
+        	didTapOnMenu(button: state.buttonTapped)
         }
     }
 
@@ -1893,6 +1895,10 @@ class BrowserViewController: UIViewController,
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
         tabManager.selectedTab?.goForward()
+    }
+
+    func didTapOnMenu(button: UIButton?) {
+        guard let button, isToolbarRefactorEnabled else { return }
     }
 
     func presentActionSheet(from view: UIView) {
