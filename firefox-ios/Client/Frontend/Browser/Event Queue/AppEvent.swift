@@ -31,5 +31,4 @@ public enum AppEvent: AppEventType {
 
     // Activites: Tabs
     case tabRestoration(WindowUUID)
-    case selectTab(URL?, WindowUUID)
 }
