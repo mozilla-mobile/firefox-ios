@@ -391,23 +391,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable {
 
     @MainActor
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
-<<<<<<< HEAD
-        let previous = previous ?? selectedTab
-
-        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
-        tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
-
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if shouldClearPrivateTabs(), !tab.isPrivate {
-            removeAllPrivateTabs()
-        }
-
-        _selectedIndex = tabs.firstIndex(of: tab) ?? -1
-
-        preserveTabs()
-=======
         guard tab == selectedTab else { return }
->>>>>>> f57cb4d74 (Refactor FXIOS-9084 update select tab to be syncronous (#20708))
 
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
