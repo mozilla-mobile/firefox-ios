@@ -192,29 +192,29 @@ extension String {
     }
 
     public func utf8HostToAscii() -> String {
+        // Check if the entire string is already in Unicode Scala
         if isValidUnicodeScala(self) {
             return self
         }
         var labels = self.components(separatedBy: ".")
-        for (i, part) in labels.enumerated() {
-            if !isValidUnicodeScala(part) {
-                let a = encode(part)
-                labels[i] = String.prefixPunycode + a
-            }
+        for (index, part) in labels.enumerated() where !isValidUnicodeScala(part) {
+            let encodedPart = encode(part)
+            labels[index] = String.prefixPunycode + encodedPart
         }
+
         let resultString = labels.joined(separator: ".")
         return resultString
     }
 
     public func asciiHostToUTF8() -> String {
-        var labels = self.components(separatedBy: ".")
-        for (index, part) in labels.enumerated() {
+        let transformedLabels = self.components(separatedBy: ".").enumerated().map { (index, part) -> String in
             if isValidPunycodeScala(part) {
                 let changeStr = String(part[part.index(part.startIndex, offsetBy: 4)...])
-                labels[index] = decode(changeStr)
+                return decode(changeStr)
+            } else {
+                return part
             }
         }
-        let resultString = labels.joined(separator: ".")
-        return resultString
+        return transformedLabels.joined(separator: ".")
     }
 }

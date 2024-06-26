@@ -26,28 +26,25 @@ class SearchHistoryUtils {
     private static var currentStack = [textSearched]()
 
     static func pushSearchToStack(with searchedText: String) {
-        // Check whether the lastSearch is the current search. If not, remove subsequent searches
-        if let lastSearch = currentStack.last, !lastSearch.isCurrentSearch {
-            for index in 0..<currentStack.count {
-                if currentStack[index].isCurrentSearch {
-                    currentStack.removeSubrange(index+1..<currentStack.count)
-                    break
-                }
-            }
+        // Check if the stack is empty and directly append if it is
+        guard !currentStack.isEmpty else {
+            currentStack.append(textSearched(text: searchedText, isCurrentSearch: true))
+            return
         }
 
-        for index in 0..<currentStack.count {
-            currentStack[index].isCurrentSearch = false
+        // Find the last `current search` and truncate the stack beyond this point
+        if let lastIndex = currentStack.lastIndex(where: { $0.isCurrentSearch }) {
+            currentStack = Array(currentStack.prefix(upTo: lastIndex + 1))
         }
 
+        // Mark all as not current in a single pass and append new search
+        currentStack = currentStack.map { textSearched(text: $0.text, isCurrentSearch: false) }
         currentStack.append(textSearched(text: searchedText, isCurrentSearch: true))
     }
 
     static func pullSearchFromStack() -> String? {
-        for search in currentStack {
-            if search.isCurrentSearch {
-                return search.text
-            }
+        for search in currentStack where search.isCurrentSearch {
+            return search.text
         }
 
         return nil

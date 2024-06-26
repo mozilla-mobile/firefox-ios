@@ -192,24 +192,26 @@ private class TPStatsBlocklists {
             return nil
         }
 
-        domainSearch: for rule in rules {
+        for rule in rules {
             // First, test the top-level filters to see if this URL might be blocked.
-            if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
-                // Check the domain exceptions. If a domain exception matches, this filter does not apply.
-                for domainRegex in (rule.domainExceptions ?? []) {
-                    if domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
-                        continue domainSearch
-                    }
-                }
+            guard rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil else {
+                continue
+            }
 
+            let hasDomainException = rule.domainExceptions?.contains { domainRegex in
+                // Check the domain exceptions. If a domain exception matches, this filter does not apply.
+                domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil
+            } ?? false
+            if hasDomainException { continue }
+
+            if let baseDomain = url.baseDomain, !permittedDomains.isEmpty {
                 // Check the whitelist.
-                if let baseDomain = url.baseDomain, !permittedDomains.isEmpty {
-                    let range = NSRange(location: 0, length: baseDomain.count)
-                    for ignoreDomain in permittedDomains {
-                        if ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
-                            return nil
-                        }
-                    }
+                let range = NSRange(location: 0, length: baseDomain.count)
+                let isPermittedDomain = permittedDomains.contains { ignoreDomain in
+                    ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil
+                }
+                guard !isPermittedDomain else {
+                    return nil
                 }
 
                 return rule.list
