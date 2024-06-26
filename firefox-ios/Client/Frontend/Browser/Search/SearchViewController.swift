@@ -889,12 +889,25 @@ class SearchViewController: SiteTableViewController,
             break
         }
     }
+
+    // MARK: - Internal Utilities
+
+    private func firstNonEmptySection(before: Int? = nil, after: Int? = nil) -> Int? {
+        let allSections = SearchListSection.allCases
+        for section in allSections {
+            guard before == nil || section.rawValue < before! else { continue }
+            guard after == nil || section.rawValue > after! else { continue }
+            guard tableView(tableView, numberOfRowsInSection: section.rawValue) > 0 else { continue }
+            return section.rawValue
+        }
+        return nil
+    }
 }
 
 // MARK: - Keyboard shortcuts
 extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
-        let initialSection = SearchListSection.firefoxSuggestions.rawValue
+        let initialSection: Int = firstNonEmptySection() ?? 0
         guard let current = tableView.indexPathForSelectedRow else {
             let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
             if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {
@@ -918,8 +931,10 @@ extension SearchViewController {
                     searchDelegate?.searchViewController(self, didHighlightText: viewModel.searchQuery, search: false)
                     return
                 } else {
-                    nextSection = current.section - 1
-                    nextItem = tableView(tableView, numberOfRowsInSection: nextSection) - 1
+                    let currentSection = current.section
+                    guard let next = firstNonEmptySection(before: currentSection) else { return }
+                    nextSection = next
+                    nextItem = tableView(tableView, numberOfRowsInSection: next) - 1
                 }
             } else {
                 nextSection = current.section
@@ -933,8 +948,9 @@ extension SearchViewController {
                     return
                 } else {
                     // We can go to the next section.
-                    guard current.section + 1 < initialSection else { return }
-                    nextSection = current.section + 1
+                    let currentSection = current.section
+                    guard let next = firstNonEmptySection(after: currentSection) else { return }
+                    nextSection = next
                     nextItem = 0
                 }
             } else {
