@@ -54,14 +54,10 @@ class ThemedCenteredTableViewCell: ThemedTableViewCell {
         ])
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setupLayout()
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
         centeredLabel.text = nil
+        setupLayout()
     }
 
     override func applyTheme(theme: Theme) {

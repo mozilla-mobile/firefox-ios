@@ -47,6 +47,7 @@ class DisconnectSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.settingsVC = settings
         self.profile = settings.profile
+        super.init(title: NSAttributedString(string: .SettingsDisconnectSyncButton))
     }
 
     override var accessibilityIdentifier: String? { return "SignOut" }

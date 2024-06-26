@@ -190,29 +190,29 @@ class WebsiteDataManagementViewController: UIViewController,
     }
 
     private func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        if let section = Section(rawValue: indexPath.section) {
-            switch section {
-            case .sites, .showMore:
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: ThemedTableViewCell.cellIdentifier,
-                    for: indexPath
-                ) as? ThemedTableViewCell
-                else {
-                    return ThemedTableViewCell()
-                }
-                return cell
-            case .clearButton:
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
-                    for: indexPath
-                ) as? ThemedCenteredTableViewCell
-                else {
-                    return ThemedCenteredTableViewCell()
-                }
-                return cell
-            }
+        guard let section = Section(rawValue: indexPath.section) else {
+            return ThemedTableViewCell()
         }
-        return ThemedTableViewCell()
+        switch section {
+        case .sites, .showMore:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedTableViewCell
+            else {
+                return ThemedTableViewCell()
+            }
+            return cell
+        case .clearButton:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedCenteredTableViewCell
+            else {
+                return ThemedCenteredTableViewCell()
+            }
+            return cell
+        }
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -93,6 +93,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = dequeueCellFor(indexPath: indexPath)
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle
@@ -111,15 +113,15 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.selectionStyle = .none
             control.tag = indexPath.item
             return cell
-        } else {
-            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
-            cell?.applyTheme(theme: currentTheme())
-            cell?.setTitle(to: .SettingsClearPrivateDataClearButton)
-            cell?.setAccessibilities(
+        } else if let cell = cell as? ThemedCenteredTableViewCell {
+            cell.setTitle(to: .SettingsClearPrivateDataClearButton)
+            cell.setAccessibilities(
                 traits: .button,
                 identifier: AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection)
             clearButton = cell
-            return cell ?? ThemedTableViewCell()
+            return cell
+        } else {
+            return ThemedTableViewCell()
         }
     }
 

@@ -81,7 +81,11 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let section = Section(rawValue: indexPath.section)!
+        let cell = dequeueCellFor(indexPath: indexPath)
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        guard let section = Section(rawValue: indexPath.section) else {
+            return ThemedTableViewCell()
+        }
         switch section {
         case .sites:
             if let record = filteredSiteRecords[safe: indexPath.row] {
