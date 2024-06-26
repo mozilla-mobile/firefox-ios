@@ -62,7 +62,6 @@ class ToolbarMenuTests: BaseTestCase {
                 "Menu button is not on the right side of tabs button"
             )
         }
-        dismissSurveyPrompt()
         mozWaitForElementToExist(firstPocketCell)
         XCTAssertTrue(
             hamburgerMenu.isAbove(element: firstPocketCell),
