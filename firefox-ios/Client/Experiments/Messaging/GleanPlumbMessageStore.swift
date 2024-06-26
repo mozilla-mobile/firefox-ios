@@ -15,7 +15,7 @@ protocol GleanPlumbMessageStoreProtocol {
     func onMessageDisplayed(_ message: GleanPlumbMessage)
 
     /// Track and persist user interactions with the message.
-    func onMessagePressed(_ message: GleanPlumbMessage)
+    func onMessagePressed(_ message: GleanPlumbMessage, shouldExpire: Bool)
 
     /// Do the bookkeeping for message dismissed Counts and expiry.
     func onMessageDismissed(_ message: GleanPlumbMessage)
@@ -60,11 +60,12 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         set(key: message.id, metadata: message.metadata)
     }
 
-    /// For the MVP, we always expire the message.
-    func onMessagePressed(_ message: GleanPlumbMessage) {
-        onMessageExpired(message.metadata,
-                         surface: message.surface,
-                         shouldReport: false)
+    func onMessagePressed(_ message: GleanPlumbMessage, shouldExpire: Bool) {
+        if shouldExpire {
+            onMessageExpired(message.metadata,
+                             surface: message.surface,
+                             shouldReport: false)
+        }
 
         set(key: message.id, metadata: message.metadata)
     }
