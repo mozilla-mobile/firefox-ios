@@ -76,8 +76,10 @@ class Setting: NSObject {
         cell.detailTextLabel?.numberOfLines = 0
         if let cell = cell as? ThemedCenteredTableViewCell {
             cell.applyTheme(theme: theme)
-            cell.setTitle(to: .SettingsDisconnectSyncButton)
-            cell.accessibilityLabel = .SettingsDisconnectSyncButton
+            if let title = title?.string {
+                cell.setTitle(to: title)
+                cell.accessibilityLabel = title
+            }
         } else {
             cell.textLabel?.assign(attributed: title, theme: theme)
             cell.textLabel?.textAlignment = textAlignment
