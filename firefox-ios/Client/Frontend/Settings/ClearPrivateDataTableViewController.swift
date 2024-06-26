@@ -94,8 +94,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == sectionArrow {
-            let cell = dequeueCellFor(indexPath: indexPath)
-            cell.applyTheme(theme: currentTheme())
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.websiteDataSection
