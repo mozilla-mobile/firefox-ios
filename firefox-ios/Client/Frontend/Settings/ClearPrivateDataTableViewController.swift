@@ -100,8 +100,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             clearButton = cell
             return cell
         } else if indexPath.section == sectionToggles {
-            let cell = dequeueCellFor(indexPath: indexPath)
-            cell.applyTheme(theme: currentTheme())
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             cell.textLabel?.numberOfLines = 0
             let control = ThemedSwitch()
