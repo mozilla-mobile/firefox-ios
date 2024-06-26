@@ -50,27 +50,14 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
     }
 
     override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        if let section = Section(rawValue: indexPath.section) {
-            switch section {
-            case .sites:
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: ThemedTableViewCell.cellIdentifier,
-                    for: indexPath
-                ) as? ThemedTableViewCell
-                else {
-                    return ThemedTableViewCell()
-                }
-                return cell
-            case .clearButton:
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
-                    for: indexPath
-                ) as? ThemedCenteredTableViewCell
-                else {
-                    return ThemedCenteredTableViewCell()
-                }
-                return cell
-            }
+        guard let section = Section(rawValue: indexPath.section), section == .clearButton else {
+            return super.dequeueCellFor(indexPath: indexPath)
+        }
+
+        if let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+            for: indexPath) as? ThemedCenteredTableViewCell {
+            return cell
         }
         return ThemedTableViewCell()
     }
