@@ -40,8 +40,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         view.spacing = UX.actionSpacing
     }
     private lazy var browserActionStack: UIStackView = .build()
-    public private(set) lazy var toolbarTopBorderView: UIView = .build()
-    public private(set) lazy var toolbarBottomBorderView: UIView = .build()
+    private lazy var toolbarTopBorderView: UIView = .build()
+    private lazy var toolbarBottomBorderView: UIView = .build()
 
     private var leadingBrowserActionConstraint: NSLayoutConstraint?
     private var leadingLocationContainerConstraint: NSLayoutConstraint?

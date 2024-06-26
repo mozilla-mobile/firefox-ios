@@ -26,7 +26,7 @@ final class AddressToolbarContainer: UIView,
     private var model: AddressToolbarContainerModel?
     private var delegate: AddressToolbarContainerDelegate?
 
-    private var toolbarType: BrowserAddressToolbar {
+    private var toolbar: BrowserAddressToolbar {
         let isCompact = traitCollection.horizontalSizeClass == .compact
         return isCompact ? compactToolbar : regularToolbar
     }
@@ -41,12 +41,8 @@ final class AddressToolbarContainer: UIView,
         }
     }
 
-    private lazy var toolbarPosition: AddressToolbarPosition? = nil {
-        didSet { updateProgressBarPosition() }
-    }
-
     var parent: UIStackView?
-    private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build()
+    private lazy var compactToolbar: CompactBrowserAddressToolbar = .build()
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
     private lazy var progressBar: GradientProgressBar = .build { bar in
         bar.clipsToBounds = false
@@ -83,12 +79,12 @@ final class AddressToolbarContainer: UIView,
 
     override func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
-        return toolbarType.becomeFirstResponder()
+        return toolbar.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
-        return toolbarType.resignFirstResponder()
+        return toolbar.resignFirstResponder()
     }
 
     // MARK: View Transitions
@@ -143,13 +139,14 @@ final class AddressToolbarContainer: UIView,
                                                  profile: profile,
                                                  windowUUID: windowUUID)
         self.model = model
-        toolbarPosition = toolbarState.toolbarPosition
 
+        updateProgressBarPosition(toolbarState.toolbarPosition)
         compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
         regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
     }
 
     private func setupLayout() {
+        addSubview(progressBar)
         adjustLayout()
     }
 
@@ -157,39 +154,28 @@ final class AddressToolbarContainer: UIView,
         compactToolbar.removeFromSuperview()
         regularToolbar.removeFromSuperview()
 
-        addSubview(toolbarType)
-        toolbarType.addSubview(progressBar)
+        addSubview(toolbar)
 
         NSLayoutConstraint.activate([
-            toolbarType.topAnchor.constraint(equalTo: topAnchor),
-            toolbarType.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toolbarType.bottomAnchor.constraint(equalTo: bottomAnchor),
-            toolbarType.trailingAnchor.constraint(equalTo: trailingAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            toolbar.topAnchor.constraint(equalTo: topAnchor),
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
 
-    private func updateProgressBarPosition() {
-        guard let toolbarPosition else { return }
-
+    private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
         progressBar.constraints.forEach(removeConstraint)
-        let constraints: [NSLayoutConstraint]
 
-        switch toolbarPosition {
+        switch position {
         case .top:
-            constraints = [
-                progressBar.leadingAnchor.constraint(equalTo: toolbarType.toolbarBottomBorderView.leadingAnchor),
-                progressBar.trailingAnchor.constraint(equalTo: toolbarType.toolbarBottomBorderView.trailingAnchor),
-                progressBar.bottomAnchor.constraint(equalTo: toolbarType.toolbarBottomBorderView.bottomAnchor)
-            ]
+            progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor).isActive = true
         case .bottom:
-            constraints = [
-                progressBar.leadingAnchor.constraint(equalTo: toolbarType.toolbarTopBorderView.leadingAnchor),
-                progressBar.trailingAnchor.constraint(equalTo: toolbarType.toolbarTopBorderView.trailingAnchor),
-                progressBar.bottomAnchor.constraint(equalTo: toolbarType.toolbarTopBorderView.topAnchor)
-            ]
+            progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor).isActive = true
         }
-
-        NSLayoutConstraint.activate(constraints)
     }
 
     // MARK: - ThemeApplicable
