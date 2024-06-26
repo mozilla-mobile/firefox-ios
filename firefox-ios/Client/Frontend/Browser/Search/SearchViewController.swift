@@ -895,10 +895,11 @@ class SearchViewController: SiteTableViewController,
     private func firstNonEmptySection(before: Int? = nil, after: Int? = nil) -> Int? {
         let allSections = SearchListSection.allCases
         for section in allSections {
-            guard before == nil || section.rawValue < before! else { continue }
-            guard after == nil || section.rawValue > after! else { continue }
-            guard tableView(tableView, numberOfRowsInSection: section.rawValue) > 0 else { continue }
-            return section.rawValue
+            let sectionValue = section.rawValue
+            guard before == nil || sectionValue < before! else { continue }
+            guard after == nil || sectionValue > after! else { continue }
+            guard tableView(tableView, numberOfRowsInSection: sectionValue) > 0 else { continue }
+            return sectionValue
         }
         return nil
     }
