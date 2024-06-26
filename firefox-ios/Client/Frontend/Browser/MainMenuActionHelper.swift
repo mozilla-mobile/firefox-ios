@@ -273,7 +273,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             if let tab = self.selectedTab,
                 let url = tab.canonicalURL?.displayURL,
-                url.lastPathComponent.suffix(4) == ".pdf"{
+                url.lastPathComponent.suffix(4) == ".pdf" {
                 let downloadPDFAction = getDownloadPDFAction()
                 append(to: &section, action: downloadPDFAction)
             }
