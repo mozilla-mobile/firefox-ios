@@ -49,7 +49,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     var bottomContainerConstraint: Constraint?
     var headerTopConstraint: Constraint?
 
-    private var lastContentOffset: CGFloat = 0
+    private var lastPanTranslation: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
@@ -150,7 +150,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     @objc
     func handlePan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.state != .ended, gesture.state != .cancelled else {
-            lastContentOffset = 0
+            lastPanTranslation = 0
             return
         }
 
@@ -160,7 +160,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
-            let delta = lastContentOffset - translation.y
+            let delta = lastPanTranslation - translation.y
 
             if delta > 0 {
                 scrollDirection = .down
@@ -168,7 +168,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
                 scrollDirection = .up
             }
 
-            lastContentOffset = translation.y
+            lastPanTranslation = translation.y
             if checkRubberbandingForDelta(delta) && isAbleToScroll {
                 let bottomIsNotRubberbanding = contentOffset.y + scrollViewHeight < contentSize.height
                 let topIsRubberbanding = contentOffset.y <= 0
