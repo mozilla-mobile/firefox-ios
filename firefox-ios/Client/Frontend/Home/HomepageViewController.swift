@@ -390,7 +390,6 @@ class HomepageViewController:
                                                         windowUUID: windowUUID,
                                                         actionType: GeneralBrowserMiddlewareActionType.didScroll)
             store.dispatch(action)
-            lastContentOffsetY = scrollView.contentOffset.y
         }
     }
 
