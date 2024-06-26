@@ -356,16 +356,6 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    func shouldShowToolbarForTraitCollection(_ traitCollection: UITraitCollection) -> Bool {
-        return traitCollection.verticalSizeClass != .compact
-               && traitCollection.horizontalSizeClass != .regular
-    }
-
-    func shouldShowTopTabsForTraitCollection(_ traitCollection: UITraitCollection) -> Bool {
-        return traitCollection.verticalSizeClass == .regular
-               && traitCollection.horizontalSizeClass == .regular
-    }
-
     @objc
     fileprivate func appMenuBadgeUpdate() {
         let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
@@ -378,11 +368,11 @@ class BrowserViewController: UIViewController,
     }
 
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
-        let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
-        let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbarForTraitCollection(newCollection)
+        let showTopTabs = ToolbarHelper().shouldShowTopTabsForTraitCollection(newCollection)
 
         if isToolbarRefactorEnabled {
-            if showToolbar {
+            if showNavToolbar {
                 navigationToolbarContainer.isHidden = false
                 navigationToolbarContainer.applyTheme(theme: currentTheme())
                 updateTabCountUsingTabManager(self.tabManager)
@@ -391,10 +381,10 @@ class BrowserViewController: UIViewController,
             }
         } else {
             urlBar.topTabsIsShowing = showTopTabs
-            urlBar.setShowToolbar(!showToolbar)
-            toolbar.addNewTabButton.isHidden = showToolbar
+            urlBar.setShowToolbar(!showNavToolbar)
+            toolbar.addNewTabButton.isHidden = showNavToolbar
 
-            if showToolbar {
+            if showNavToolbar {
                 toolbar.isHidden = false
                 toolbar.tabToolbarDelegate = self
                 toolbar.applyUIMode(
@@ -704,7 +694,7 @@ class BrowserViewController: UIViewController,
         overKeyboardContainer.applyTheme(theme: theme)
         bottomContainer.applyTheme(theme: theme)
         bottomContentStackView.applyTheme(theme: theme)
-        statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
+        statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabsForTraitCollection(traitCollection)
         statusBarOverlay.applyTheme(theme: theme)
 
         // Feature flag for credit card until we fully enable this feature
@@ -943,7 +933,7 @@ class BrowserViewController: UIViewController,
 
         // Adjustment for landscape on the urlbar
         // need to account for inset and remove it when keyboard is showing
-        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let showToolBar = ToolbarHelper().shouldShowNavigationToolbarForTraitCollection(traitCollection)
         let isKeyboardShowing = keyboardState != nil
 
         if !showToolBar && isBottomSearchBar &&
@@ -1149,7 +1139,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let showToolBar = shouldShowToolbarForTraitCollection(traitCollection)
+        let showToolBar = ToolbarHelper().shouldShowNavigationToolbarForTraitCollection(traitCollection)
         let toolBarHeight = showToolBar ? UIConstants.BottomToolbarHeight : 0
         let spacerHeight = keyboardHeight - toolBarHeight
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
@@ -2534,7 +2524,7 @@ class BrowserViewController: UIViewController,
 
     func applyTheme() {
         let currentTheme = currentTheme()
-        statusBarOverlay.hasTopTabs = shouldShowTopTabsForTraitCollection(traitCollection)
+        statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabsForTraitCollection(traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
         webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3

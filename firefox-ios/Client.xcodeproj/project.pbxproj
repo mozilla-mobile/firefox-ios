@@ -1480,6 +1480,7 @@
 		E1463D022981DA190074E16E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D012981DA190074E16E /* NotificationManager.swift */; };
 		E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D032982D0240074E16E /* NotificationManagerTests.swift */; };
 		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
+		E14792A32C2C5C660058211C /* ToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14792A22C2C5C660058211C /* ToolbarHelper.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
@@ -7833,6 +7834,7 @@
 		E1463D012981DA190074E16E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E1463D032982D0240074E16E /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
 		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
+		E14792A22C2C5C660058211C /* ToolbarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarHelper.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModelTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
@@ -11685,6 +11687,7 @@
 				E17798972BD6B44B00F6F0EB /* AddressToolbarContainer.swift */,
 				E18CE8D92BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift */,
 				E17798952BD6B33300F6F0EB /* ToolbarFlagManager.swift */,
+				E14792A22C2C5C660058211C /* ToolbarHelper.swift */,
 			);
 			path = Toolbars;
 			sourceTree = "<group>";
@@ -15019,6 +15022,7 @@
 				E177989E2BD7D75A00F6F0EB /* ToolbarMiddleware.swift in Sources */,
 				C8CD80D72A1E2C6E0097C3AE /* NimbusMessagingHelperUtilityProtocol.swift in Sources */,
 				8ACE9BFB2A54A010001E7A73 /* ExpandButtonState.swift in Sources */,
+				E14792A32C2C5C660058211C /* ToolbarHelper.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
 				8AEDB11529F9F00400F2A53B /* SceneContainer.swift in Sources */,
 				B23620512B9BAAF3000B1DE7 /* AddressFormData.swift in Sources */,
