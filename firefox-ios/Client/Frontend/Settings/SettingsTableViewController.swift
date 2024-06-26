@@ -74,24 +74,32 @@ class Setting: NSObject {
         cell.detailTextLabel?.assign(attributed: status, theme: theme)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
-        cell.textLabel?.assign(attributed: title, theme: theme)
-        cell.textLabel?.textAlignment = textAlignment
-        cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.lineBreakMode = .byTruncatingTail
+        if let cell = cell as? ThemedCenteredTableViewCell {
+            cell.applyTheme(theme: theme)
+            if let title = title?.string {
+                cell.setTitle(to: title)
+                cell.accessibilityLabel = title
+            }
+        } else {
+            cell.textLabel?.assign(attributed: title, theme: theme)
+            cell.textLabel?.textAlignment = textAlignment
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.lineBreakMode = .byTruncatingTail
+            if let title = title?.string {
+                if let detailText = cell.detailTextLabel?.text {
+                    cell.accessibilityLabel = "\(title), \(detailText)"
+                } else if let status = status?.string {
+                    cell.accessibilityLabel = "\(title), \(status)"
+                } else {
+                    cell.accessibilityLabel = title
+                }
+            }
+        }
         cell.accessoryType = accessoryType
         cell.accessoryView = accessoryView
         cell.selectionStyle = enabled ? .default : .none
         cell.accessibilityIdentifier = accessibilityIdentifier
         cell.imageView?.image = _image
-        if let title = title?.string {
-            if let detailText = cell.detailTextLabel?.text {
-                cell.accessibilityLabel = "\(title), \(detailText)"
-            } else if let status = status?.string {
-                cell.accessibilityLabel = "\(title), \(status)"
-            } else {
-                cell.accessibilityLabel = title
-            }
-        }
         cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
         cell.layoutMargins = .zero
@@ -1001,7 +1009,15 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
-        if setting.style == .subtitle {
+        if setting as? DisconnectSetting != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedCenteredTableViewCell else {
+                return ThemedCenteredTableViewCell()
+            }
+            return cell
+        } else if setting.style == .subtitle {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
                 for: indexPath

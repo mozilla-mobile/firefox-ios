@@ -76,6 +76,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         applyTheme()
         listenForThemeChange(view)
     }

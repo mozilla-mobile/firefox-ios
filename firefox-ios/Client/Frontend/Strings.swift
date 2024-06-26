@@ -3776,6 +3776,16 @@ extension String {
             tableName: nil,
             value: "Downloads",
             comment: "Label for the button, displayed in the menu, takes you to Downloads screen when pressed.")
+        public static let AppMenuDownloadPDF = MZLocalizedString(
+            key: "Menu.DownloadPDF.Label.v129",
+            tableName: "Menu",
+            value: "Download PDF",
+            comment: "Label for the button, displayed in the menu, downloads a pdf when pressed.")
+        public static let AppMenuDownloadPDFConfirmMessage = MZLocalizedString(
+            key: "Menu.DownloadPDF.Confirm.v129",
+            tableName: "Menu",
+            value: "Successfully Downloaded PDF",
+            comment: "Toast displayed to user after downlaod pdf was pressed.")
         public static let AppMenuPasswords = MZLocalizedString(
             key: "Menu.Passwords.Label",
             tableName: nil,

@@ -1652,12 +1652,16 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
-                if !isToolbarRefactorEnabled {
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+                } else {
                     urlBar.updateProgressBar(Float(webView.estimatedProgress))
                 }
                 setupMiddleButtonStatus(isLoading: true)
             } else {
-                if !isToolbarRefactorEnabled {
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.hideProgressBar()
+                } else {
                     urlBar.hideProgressBar()
                 }
                 setupMiddleButtonStatus(isLoading: false)
@@ -3241,8 +3245,12 @@ extension BrowserViewController: TabManagerDelegate {
             navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         }
 
-        if !isToolbarRefactorEnabled, let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
-            self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+        if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
+            if isToolbarRefactorEnabled {
+                addressToolbarContainer.updateProgressBar(progress: selected?.estimatedProgress ?? 0)
+            } else {
+                urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+            }
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {

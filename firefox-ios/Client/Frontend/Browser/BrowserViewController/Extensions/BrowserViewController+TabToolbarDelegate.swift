@@ -250,7 +250,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 }
 
 // MARK: - ToolbarActionMenuDelegate
-extension BrowserViewController: ToolBarActionMenuDelegate {
+extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }
@@ -327,5 +327,18 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         presentSignInViewController(fxaParameters.launchParameters,
                                     flowType: fxaParameters.flowType,
                                     referringPage: fxaParameters.referringPage)
+    }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        if !urls.isEmpty {
+            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+        }
+    }
+
+    func showFilePicker(fileURL: URL) {
+        let documentPicker = UIDocumentPickerViewController(forExporting: [fileURL], asCopy: true)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .formSheet
+        showViewController(viewController: documentPicker)
     }
 }
