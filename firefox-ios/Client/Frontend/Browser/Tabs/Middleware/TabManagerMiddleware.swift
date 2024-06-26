@@ -390,7 +390,6 @@ class TabManagerMiddleware {
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
                 } else {
-
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
