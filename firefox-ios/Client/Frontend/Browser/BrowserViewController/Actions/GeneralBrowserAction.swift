@@ -11,16 +11,19 @@ class GeneralBrowserAction: Action {
     let isPrivateBrowsing: Bool?
     let toastType: ToastType?
     let showOverlay: Bool?
+    let buttonTapped: UIButton?
 
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
+         buttonTapped: UIButton? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
         self.toastType = toastType
+        self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
@@ -39,6 +42,7 @@ enum GeneralBrowserActionType: ActionType {
     case showBackForwardList
     case showTrackingProtectionDetails
     case showTabsLongPressActions
+    case showMenu
 }
 
 class GeneralBrowserMiddlewareAction: Action {

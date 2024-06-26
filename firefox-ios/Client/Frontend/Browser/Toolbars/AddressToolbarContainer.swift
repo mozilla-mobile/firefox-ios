@@ -141,11 +141,13 @@ final class AddressToolbarContainer: UIView,
         let model = AddressToolbarContainerModel(state: toolbarState,
                                                  profile: profile,
                                                  windowUUID: windowUUID)
-        self.model = model
+        if self.model != model {
+            self.model = model
 
-        updateProgressBarPosition(toolbarState.toolbarPosition)
-        compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
-        regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+        	updateProgressBarPosition(toolbarState.toolbarPosition)
+            compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+            regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+        }
     }
 
     private func setupLayout() {
