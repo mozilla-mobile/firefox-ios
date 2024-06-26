@@ -31,7 +31,6 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["submit"], timeout: 10)
         app.buttons["submit"].tap()
         mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
-        dismissSurveyPrompt()
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
 
@@ -128,7 +127,6 @@ class LoginTest: BaseTestCase {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.buttons["submit"].tap()
-        dismissSurveyPrompt()
         app.buttons["SaveLoginPrompt.dontSaveButton"].tap()
         // There should not be any login saved
         openLoginsSettings()
@@ -247,7 +245,6 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
-        dismissSurveyPrompt()
         mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 5)
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
