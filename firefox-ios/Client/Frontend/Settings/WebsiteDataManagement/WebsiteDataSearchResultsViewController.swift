@@ -94,13 +94,14 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
             }
             return cell
         case .clearButton:
-            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
-            cell?.setTitle(to: viewModel.clearButtonTitle)
-            cell?.setAccessibilities(
+            guard let cell = cell as? ThemedCenteredTableViewCell else { return ThemedCenteredTableViewCell() }
+
+            cell.setTitle(to: viewModel.clearButtonTitle)
+            cell.setAccessibilities(
                 traits: .button,
                 identifier: AccessibilityIdentifiers.Settings.ClearData.clearAllWebsiteData)
-            cell?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-            return cell ?? ThemedCenteredTableViewCell()
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            return cell
         }
     }
 
