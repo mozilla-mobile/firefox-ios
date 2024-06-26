@@ -50,6 +50,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     var headerTopConstraint: Constraint?
 
     private var lastPanTranslation: CGFloat = 0
+    private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
@@ -453,6 +454,10 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
+    }
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll else { return }
 
@@ -475,10 +480,17 @@ extension TabScrollingController: UIScrollViewDelegate {
             setOffset(y: 0, for: scrollView)
         }
 
-        let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
-                                                    windowUUID: windowUUID,
-                                                    actionType: GeneralBrowserMiddlewareActionType.didScroll)
-        store.dispatch(action)
+        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
+        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
+
+        if scrolledDown || scrolledToTop {
+            lastContentOffsetY = scrollView.contentOffset.y
+            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
+                                                        windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserMiddlewareActionType.didScroll)
+            store.dispatch(action)
+            lastContentOffsetY = scrollView.contentOffset.y
+        }
 
         guard isAnimatingToolbar else { return }
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
