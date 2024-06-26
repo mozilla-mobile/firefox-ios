@@ -62,6 +62,6 @@ final class MicrosurveyPromptMiddleware {
             actionType: MicrosurveyPromptMiddlewareActionType.openSurvey
         )
         store.dispatch(newAction)
-        // TODO: FXIOS-8993 - Add Telemetry
+        microsurveyManager.handleMessagePressed()
     }
 }

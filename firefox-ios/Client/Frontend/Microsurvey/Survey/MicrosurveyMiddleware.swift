@@ -48,8 +48,8 @@ final class MicrosurveyMiddleware {
     }
 
     private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
-        microsurveySurfaceManager.handleMessagePressed()
         closeMicrosurveyPrompt(windowUUID: windowUUID)
+        // TODO: FXIOS-8797 - Add Telemetry
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {

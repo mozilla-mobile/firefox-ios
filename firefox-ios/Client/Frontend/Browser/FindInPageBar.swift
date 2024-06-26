@@ -67,7 +67,7 @@ class FindInPageBar: UIView, ThemeApplicable {
             for: .normal)
         button.accessibilityLabel = .FindInPageDoneAccessibilityLabel
         button.addTarget(self, action: #selector(self.didPressClose), for: .touchUpInside)
-        button.accessibilityIdentifier = "FindInPage.close"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
     }
 
     var currentResult = 0 {

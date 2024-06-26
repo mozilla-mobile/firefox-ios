@@ -1835,6 +1835,8 @@ class BrowserViewController: UIViewController,
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+        case .menu:
+        	didTapOnMenu(button: state.buttonTapped)
         }
     }
 
@@ -1887,6 +1889,45 @@ class BrowserViewController: UIViewController,
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
         tabManager.selectedTab?.goForward()
+    }
+
+    func didTapOnMenu(button: UIButton?) {
+        guard let button else { return }
+
+        // Ensure that any keyboards or spinners are dismissed before presenting the menu
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
+
+        // Logs homePageMenu or siteMenu depending if HomePage is open or not
+        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
+        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
+        let menuHelper = MainMenuActionHelper(profile: profile,
+                                              tabManager: tabManager,
+                                              buttonView: button,
+                                              toastContainer: contentContainer)
+        menuHelper.delegate = self
+        menuHelper.sendToDeviceDelegate = self
+        menuHelper.navigationHandler = navigationHandler
+
+        updateZoomPageBarVisibility(visible: false)
+        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
+            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
+                trait: self.traitCollection,
+                isBottomSearchBar: self.isBottomSearchBar
+            )
+            let viewModel = PhotonActionSheetViewModel(
+                actions: actions,
+                modalStyle: .popover,
+                isMainMenu: true,
+                isMainMenuInverted: shouldInverse
+            )
+            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
+        }
     }
 
     func presentActionSheet(from view: UIView) {
@@ -2888,7 +2929,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
         findInPageBar?.text = selection
     }
 
@@ -3183,7 +3224,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        updateFindInPageVisibility(visible: false, tab: previous)
+        updateFindInPageVisibility(isVisible: false, tab: previous)
         setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
 
         if isToolbarRefactorEnabled {

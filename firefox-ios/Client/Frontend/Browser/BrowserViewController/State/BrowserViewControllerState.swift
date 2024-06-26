@@ -20,6 +20,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case backForwardList
         case trackingProtectionDetails
         case tabsLongPressActions
+        case menu
     }
 
     let windowUUID: WindowUUID
@@ -32,6 +33,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var browserViewType: BrowserViewType
     var navigateTo: NavigationType?
     var displayView: DisplayType?
+    var buttonTapped: UIButton?
     var microsurveyState: MicrosurveyPromptState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -54,6 +56,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   browserViewType: bvcState.browserViewType,
                   navigateTo: bvcState.navigateTo,
                   displayView: bvcState.displayView,
+                  buttonTapped: bvcState.buttonTapped,
                   microsurveyState: bvcState.microsurveyState)
     }
 
@@ -68,6 +71,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             browserViewType: .normalHomepage,
             navigateTo: nil,
             displayView: nil,
+            buttonTapped: nil,
             microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID))
     }
 
@@ -82,6 +86,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         browserViewType: BrowserViewType,
         navigateTo: NavigationType? = nil,
         displayView: DisplayType? = nil,
+        buttonTapped: UIButton? = nil,
         microsurveyState: MicrosurveyPromptState
     ) {
         self.searchScreenState = searchScreenState
@@ -94,6 +99,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.browserViewType = browserViewType
         self.navigateTo = navigateTo
         self.displayView = displayView
+        self.buttonTapped = buttonTapped
         self.microsurveyState = microsurveyState
     }
 
@@ -229,6 +235,18 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                     toast: state.toast,
                     windowUUID: state.windowUUID,
                     browserViewType: state.browserViewType,
+                    displayView: .trackingProtectionDetails,
+                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showMenu:
+            return BrowserViewControllerState(
+                    searchScreenState: state.searchScreenState,
+                    showDataClearanceFlow: state.showDataClearanceFlow,
+                    fakespotState: state.fakespotState,
+                    toast: state.toast,
+                    windowUUID: state.windowUUID,
+                    browserViewType: state.browserViewType,
+                    displayView: .menu,
+                    buttonTapped: action.buttonTapped,
                     microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showTabsLongPressActions:
             return BrowserViewControllerState(
