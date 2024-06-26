@@ -525,6 +525,7 @@ public struct AccessibilityIdentifiers {
             static let title = "ClearPrivateData"
             static let websiteDataSection = "WebsiteData"
             static let clearPrivateDataSection = "ClearPrivateData"
+            static let clearAllWebsiteData = "ClearAllWebsiteData"
         }
 
         struct Notifications {
