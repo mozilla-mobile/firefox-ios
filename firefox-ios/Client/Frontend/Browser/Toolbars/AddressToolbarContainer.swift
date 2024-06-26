@@ -48,6 +48,9 @@ final class AddressToolbarContainer: UIView,
         bar.clipsToBounds = false
     }
 
+    private var progressBarTopConstraint: NSLayoutConstraint?
+    private var progresBarBottomConstraint: NSLayoutConstraint?
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
@@ -168,13 +171,16 @@ final class AddressToolbarContainer: UIView,
     }
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
-        progressBar.constraints.forEach(removeConstraint)
+        progressBarTopConstraint?.isActive = false
+        progresBarBottomConstraint?.isActive = false
 
         switch position {
         case .top:
-            progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor).isActive = true
+            progressBarTopConstraint = progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            progressBarTopConstraint?.isActive = true
         case .bottom:
-            progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor).isActive = true
+            progresBarBottomConstraint = progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor)
+            progresBarBottomConstraint?.isActive = true
         }
     }
 
