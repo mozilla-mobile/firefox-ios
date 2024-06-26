@@ -27,6 +27,7 @@ final class MicrosurveyViewController: UIViewController,
     private let windowUUID: WindowUUID
     private let model: MicrosurveyModel
     private var microsurveyState: MicrosurveyState
+    private var selectedOption: String?
 
     // MARK: UI Elements
     private struct UX {
@@ -180,6 +181,9 @@ final class MicrosurveyViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.surveyDidAppear)
+        )
         UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
@@ -309,7 +313,11 @@ final class MicrosurveyViewController: UIViewController,
 
     private func sendTelemetry() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.submitSurvey)
+            MicrosurveyAction(
+                userSelection: selectedOption,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.submitSurvey
+            )
         )
     }
 
@@ -378,6 +386,7 @@ final class MicrosurveyViewController: UIViewController,
         let selectedCell = tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell
         if selectedCell?.checked == false {
             (tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell)?.checked.toggle()
+            selectedOption = selectedCell?.title
         }
     }
 
