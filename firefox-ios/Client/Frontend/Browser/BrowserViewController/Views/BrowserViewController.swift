@@ -2785,7 +2785,9 @@ extension BrowserViewController: LegacyTabDelegate {
                         guard let recordHostnameURL = URL(string: login.hostname) else { return false }
                         return recordHostnameURL.baseDomain == tabURL.baseDomain
                     }
-                    if !loginsForCurrentTab.isEmpty {
+                    if loginsForCurrentTab.isEmpty {
+                        tab?.webView?.accessoryView.reloadViewFor(.standard)
+                    } else {
                         tab?.webView?.accessoryView.reloadViewFor(.login)
                         tab?.webView?.reloadInputViews()
                         TelemetryWrapper.recordEvent(
@@ -2793,8 +2795,6 @@ extension BrowserViewController: LegacyTabDelegate {
                             method: .view,
                             object: .loginsAutofillPromptShown
                         )
-                    } else {
-                        tab?.webView?.accessoryView.reloadViewFor(.standard)
                     }
                     tab?.webView?.accessoryView.savedLoginsClosure = {
                         Task { @MainActor [weak self] in
