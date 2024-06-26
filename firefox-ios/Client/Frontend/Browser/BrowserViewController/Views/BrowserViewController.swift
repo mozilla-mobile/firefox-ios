@@ -356,14 +356,14 @@ class BrowserViewController: UIViewController,
         store.dispatch(action)
     }
 
-    func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
-        return previousTraitCollection.verticalSizeClass != .compact
-               && previousTraitCollection.horizontalSizeClass != .regular
+    func shouldShowToolbarForTraitCollection(_ traitCollection: UITraitCollection) -> Bool {
+        return traitCollection.verticalSizeClass != .compact
+               && traitCollection.horizontalSizeClass != .regular
     }
 
-    func shouldShowTopTabsForTraitCollection(_ newTraitCollection: UITraitCollection) -> Bool {
-        return newTraitCollection.verticalSizeClass == .regular
-               && newTraitCollection.horizontalSizeClass == .regular
+    func shouldShowTopTabsForTraitCollection(_ traitCollection: UITraitCollection) -> Bool {
+        return traitCollection.verticalSizeClass == .regular
+               && traitCollection.horizontalSizeClass == .regular
     }
 
     @objc
