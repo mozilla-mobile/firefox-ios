@@ -43,6 +43,7 @@ class HomepageViewController:
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+    private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -367,6 +368,10 @@ class HomepageViewController:
         }
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
@@ -376,10 +381,17 @@ class HomepageViewController:
                                                          theme: theme)
         }
 
-        let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
-                                                    windowUUID: windowUUID,
-                                                    actionType: GeneralBrowserMiddlewareActionType.didScroll)
-        store.dispatch(action)
+        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
+        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
+
+        if scrolledDown || scrolledToTop {
+            lastContentOffsetY = scrollView.contentOffset.y
+            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
+                                                        windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserMiddlewareActionType.didScroll)
+            store.dispatch(action)
+            lastContentOffsetY = scrollView.contentOffset.y
+        }
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
