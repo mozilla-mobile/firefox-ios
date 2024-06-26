@@ -168,13 +168,10 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        if indexPath.section == sectionArrow || indexPath.section == sectionToggles {
-            if let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThemedTableViewCell.cellIdentifier,
-                for: indexPath) as? ThemedTableViewCell {
-                return cell
-            }
+        guard indexPath.section == sectionButton else {
+            return super.dequeueCellFor(indexPath: indexPath)
         }
+
         if let cell = tableView.dequeueReusableCell(
             withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
             for: indexPath) as? ThemedCenteredTableViewCell {
@@ -182,7 +179,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         }
         return ThemedTableViewCell()
     }
-
     private func clearPrivateData(_ action: UIAlertAction) {
         let toggles = self.toggles
         self.clearables
