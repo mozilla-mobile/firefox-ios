@@ -337,7 +337,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
     }
 
     func showFindInPage() {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
     }
 
     func showCustomizeHomePage() {

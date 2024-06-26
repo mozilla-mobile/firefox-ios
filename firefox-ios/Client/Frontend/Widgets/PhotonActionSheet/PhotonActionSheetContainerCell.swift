@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 protocol PhotonActionSheetContainerCellDelegate: AnyObject {
-    func didClick(item: SingleActionViewModel?)
+    func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void)
 }
 
 // A PhotonActionSheet cell
@@ -83,7 +83,7 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplic
 
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheetContainerCell: PhotonActionSheetViewDelegate {
-    func didClick(item: SingleActionViewModel?) {
-        delegate?.didClick(item: item)
+    func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void) {
+        delegate?.didClick(item: item, animationCompletion: animationCompletion)
     }
 }

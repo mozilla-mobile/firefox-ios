@@ -2898,7 +2898,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
         findInPageBar?.text = selection
     }
 
@@ -3193,7 +3193,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        updateFindInPageVisibility(visible: false, tab: previous)
+        updateFindInPageVisibility(isVisible: false, tab: previous)
         setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
 
         if isToolbarRefactorEnabled {
