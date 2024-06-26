@@ -489,7 +489,6 @@ extension TabScrollingController: UIScrollViewDelegate {
                                                         windowUUID: windowUUID,
                                                         actionType: GeneralBrowserMiddlewareActionType.didScroll)
             store.dispatch(action)
-            lastContentOffsetY = scrollView.contentOffset.y
         }
 
         guard isAnimatingToolbar else { return }
