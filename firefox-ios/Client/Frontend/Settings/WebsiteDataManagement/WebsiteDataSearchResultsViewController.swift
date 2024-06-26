@@ -84,8 +84,6 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
-            let cell = dequeueCellFor(indexPath: indexPath)
-            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             if let record = filteredSiteRecords[safe: indexPath.row] {
                 cell.textLabel?.text = record.displayName
                 if viewModel.selectedRecords.contains(record) {
