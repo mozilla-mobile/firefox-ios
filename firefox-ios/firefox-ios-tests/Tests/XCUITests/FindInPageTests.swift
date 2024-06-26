@@ -57,8 +57,6 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["2 of 6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2 of 6"].exists)
 
-        // FIXME What is the survey prompt and is it expected that we don't see it now?
-//        dismissSurveyPrompt()
         nextInPageResultButton.tap()
         mozWaitForElementToExist(app.staticTexts["3 of 6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["3 of 6"].exists)
