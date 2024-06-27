@@ -1499,17 +1499,17 @@ class BrowserViewController: UIViewController,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        showBookmarkToast(for: .add)
+        showBookmarkToast(action: .add)
     }
 
     func removeBookmark(url: URL, title: String?) {
         profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(url, title, for: .remove)
+            self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
         }
     }
 
-    private func showBookmarkToast(_ bookmarkURL: URL? = nil, _ title: String? = nil, for action: BookmarkAction) {
+    private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
             self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
@@ -3047,8 +3047,8 @@ extension BrowserViewController: HomePanelDelegate {
         navigationHandler?.show(settings: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
-        showBookmarkToast(for: action)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
+        showBookmarkToast(bookmarkURL: url, action: action)
     }
 }
 
