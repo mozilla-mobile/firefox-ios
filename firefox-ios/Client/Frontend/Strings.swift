@@ -282,6 +282,96 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public struct Edit {
+                public static let AddressRemovedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressRemovedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Removed",
+                    comment: "Toast message confirming that an address has been successfully removed."
+                )
+                public static let AddressSavedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSavedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Saved",
+                    comment: "Toast message confirming that an address has been successfully saved."
+                )
+                public static let AddressSaveError = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSaveError.v129",
+                    tableName: "EditAddress",
+                    value: "Address Couldn’t Be Saved",
+                    comment: "Toast message indicating an error occurred while trying to save an address."
+                )
+                public static let AddressSaveRetrySuggestion = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSaveRetrySuggestion.v129",
+                    tableName: "EditAddress",
+                    value: "Try again",
+                    comment: "Suggestion to try again after an error occurred while trying to save an address."
+                )
+                public static let AddressUpdatedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Information Updated",
+                    comment: "Toast message confirming that an address has been successfully updated."
+                )
+                public static let RemoveAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.Title.v129",
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for the alert indicating the action to remove an address."
+                )
+                public static let CancelButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.CancelButton.v129",
+                    tableName: "EditAddress",
+                    value: "Cancel",
+                    comment: "Title for the cancel button in the remove address alert."
+                )
+                public static let RemoveButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.RemoveButton.v129",
+                    tableName: "EditAddress",
+                    value: "Remove",
+                    comment: "Title for the remove button in the remove address alert."
+                )
+                public static let RemoveAddressMessage = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.Message.v129",
+                    tableName: "EditAddress",
+                    value: "The address will be removed from all of your synced devices.",
+                    comment: "Message explaining the consequences of removing an address from all synced devices."
+                )
+                public static let RemoveAddressButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.RemoveAddressButtonTitle.v129",
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for button that offers the user the option to remove an address."
+                )
+                public static let RemoveAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.Title.v129",
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for the alert indicating the action to remove an address."
+                )
+                public static let CancelButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.CancelButton.v129",
+                    tableName: "EditAddress",
+                    value: "Cancel",
+                    comment: "Title for the cancel button in the remove address alert."
+                )
+                public static let RemoveButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.RemoveButton.v129",
+                    tableName: "EditAddress",
+                    value: "Remove",
+                    comment: "Title for the remove button in the remove address alert."
+                )
+                public static let RemoveAddressMessage = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.Message.v129",
+                    tableName: "EditAddress",
+                    value: "The address will be removed from all of your synced devices.",
+                    comment: "Message explaining the consequences of removing an address from all synced devices."
+                )
+                public static let RemoveAddressButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.RemoveAddressButtonTitle.v129",
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for button that offers the user the option to remove an address."
+                )
                 public static let AutofillAddAddressTitle = MZLocalizedString(
                     key: "Addresses.EditAddress.AutofillAddAddressTitle.v129",
                     tableName: "EditAddress",
@@ -498,7 +588,6 @@ extension String {
                     value: "Edit",
                     comment: "Button label for editing the address details shown in the form."
                 )
-
             }
         }
         public struct BottomSheet {
