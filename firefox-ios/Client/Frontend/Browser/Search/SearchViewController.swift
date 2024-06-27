@@ -660,6 +660,15 @@ class SearchViewController: SiteTableViewController,
         case .history:
             let suggestion = viewModel.historySites[indexPath.item]
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
+        case .searchSuggestions:
+            guard let suggestion = viewModel.suggestions?[indexPath.item] else { return }
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion, search: false)
+        case .remoteTabs:
+            let suggestion = viewModel.remoteClientTabs[indexPath.item]
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion.tab.URL.absoluteString, search: false)
+        case .firefoxSuggestions:
+            let suggestion = viewModel.firefoxSuggestions[indexPath.item]
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion.url.absoluteString, search: false)
         default: return
         }
     }
