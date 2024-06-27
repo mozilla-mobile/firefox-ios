@@ -1381,7 +1381,7 @@ extension String {
                 public static let LikertScaleOption6 = MZLocalizedString(
                     key: "Microsurvey.Survey.Options.LikertScaleOption6.v129",
                     tableName: "Microsurvey",
-                    value: "I don't use it",
+                    value: "I don’t use it",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about.")
             }
 
