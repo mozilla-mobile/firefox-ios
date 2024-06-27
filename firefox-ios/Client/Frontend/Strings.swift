@@ -282,6 +282,31 @@ extension String {
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public struct Edit {
+                public static let AddressRemovedConfirmation = MZLocalizedString(
+                    key: "", // Addresses.Toast.AddressRemovedConfirmation.v129
+                    tableName: "EditAddress",
+                    value: "Address Removed",
+                    comment: "Toast message confirming that an address has been successfully removed.")
+                public static let AddressSavedConfirmation = MZLocalizedString(
+                    key: "", // Addresses.Toast.AddressSavedConfirmation.v129
+                    tableName: "EditAddress",
+                    value: "Address Saved",
+                    comment: "Toast message confirming that an address has been successfully saved.")
+                public static let AddressSaveError = MZLocalizedString(
+                    key: "", // Addresses.Toast.AddressSaveError.v129
+                    tableName: "EditAddress",
+                    value: "Address Couldn’t Be Saved",
+                    comment: "Toast message indicating an error occurred while trying to save an address.")
+                public static let AddressSaveRetrySuggestion = MZLocalizedString(
+                    key: "", // Addresses.Toast.AddressSaveRetrySuggestion.v129
+                    tableName: "EditAddress",
+                    value: "Try again",
+                    comment: "Suggestion to try again after an error occurred while trying to save an address.")
+                public static let AddressUpdatedConfirmation = MZLocalizedString(
+                    key: "", // Addresses.Toast.AddressSavedConfirmation.v129
+                    tableName: "EditAddress",
+                    value: "Address Information Updated",
+                    comment: "Toast message confirming that an address has been successfully updated.")
                 public static let RemoveAddressTitle = MZLocalizedString(
                     key: "", // "Addresses.EditAddress.Alert.Title.v129"
                     tableName: "EditAddress",
