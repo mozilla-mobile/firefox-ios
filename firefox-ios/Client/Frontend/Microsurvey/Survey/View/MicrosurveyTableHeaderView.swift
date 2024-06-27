@@ -23,6 +23,8 @@ final class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCel
         stackView.spacing = UX.spacing
     }
 
+    private lazy var iconContainer: UIView = .build()
+
     private lazy var iconView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
@@ -36,7 +38,8 @@ final class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCel
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        horizontalStackView.addArrangedSubview(iconView)
+        iconContainer.addSubview(iconView)
+        horizontalStackView.addArrangedSubview(iconContainer)
         horizontalStackView.addArrangedSubview(questionLabel)
         contentView.addSubview(horizontalStackView)
 
@@ -59,8 +62,12 @@ final class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCel
                     constant: UX.padding.bottom
                 ),
 
+                iconView.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width),
                 iconView.heightAnchor.constraint(equalToConstant: UX.radioButtonSize.height),
-                iconView.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width)
+                iconView.widthAnchor.constraint(
+                    equalTo: iconContainer.widthAnchor
+                ),
+                iconView.centerYAnchor.constraint(equalTo: iconContainer.centerYAnchor)
             ]
         )
     }
