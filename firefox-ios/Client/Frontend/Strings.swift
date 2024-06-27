@@ -342,36 +342,6 @@ extension String {
                     value: "Remove Address",
                     comment: "Title for button that offers the user the option to remove an address."
                 )
-                public static let RemoveAddressTitle = MZLocalizedString(
-                    key: "Addresses.EditAddress.Alert.Title.v129",
-                    tableName: "EditAddress",
-                    value: "Remove Address",
-                    comment: "Title for the alert indicating the action to remove an address."
-                )
-                public static let CancelButtonTitle = MZLocalizedString(
-                    key: "Addresses.EditAddress.Alert.CancelButton.v129",
-                    tableName: "EditAddress",
-                    value: "Cancel",
-                    comment: "Title for the cancel button in the remove address alert."
-                )
-                public static let RemoveButtonTitle = MZLocalizedString(
-                    key: "Addresses.EditAddress.Alert.RemoveButton.v129",
-                    tableName: "EditAddress",
-                    value: "Remove",
-                    comment: "Title for the remove button in the remove address alert."
-                )
-                public static let RemoveAddressMessage = MZLocalizedString(
-                    key: "Addresses.EditAddress.Alert.Message.v129",
-                    tableName: "EditAddress",
-                    value: "The address will be removed from all of your synced devices.",
-                    comment: "Message explaining the consequences of removing an address from all synced devices."
-                )
-                public static let RemoveAddressButtonTitle = MZLocalizedString(
-                    key: "Addresses.EditAddress.RemoveAddressButtonTitle.v129",
-                    tableName: "EditAddress",
-                    value: "Remove Address",
-                    comment: "Title for button that offers the user the option to remove an address."
-                )
                 public static let AutofillAddAddressTitle = MZLocalizedString(
                     key: "Addresses.EditAddress.AutofillAddAddressTitle.v129",
                     tableName: "EditAddress",
