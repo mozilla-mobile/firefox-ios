@@ -34,12 +34,8 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(view)
-    }
-
-     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         setupWebView()
+        listenForThemeChange(view)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
