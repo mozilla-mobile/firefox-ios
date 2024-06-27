@@ -35,7 +35,8 @@ class ButtonToast: Toast {
 
     private var labelStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.alignment = .leading
     }
 
     private var titleLabel: UILabel = .build { label in
