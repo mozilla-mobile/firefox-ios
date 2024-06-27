@@ -50,7 +50,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         return themeManager.getCurrentTheme(for: windowUUID).type == .dark
     }
 
-    let editAddressWebViewManager: WebViewPreloadManaging = EditAddressWebViewManager()
+    let editAddressWebViewManager: WebViewPreloadManaging
 
     // MARK: - Initializer
 
@@ -58,11 +58,13 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     init(
         logger: Logger = DefaultLogger.shared,
         windowUUID: WindowUUID,
-        addressProvider: AddressProvider
+        addressProvider: AddressProvider,
+        editAddressWebViewManager: WebViewPreloadManaging = EditAddressWebViewManager()
     ) {
         self.logger = logger
         self.windowUUID = windowUUID
         self.addressProvider = addressProvider
+        self.editAddressWebViewManager = editAddressWebViewManager
     }
 
     // MARK: - Fetch Addresses
