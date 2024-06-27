@@ -903,7 +903,8 @@ class SearchViewController: SiteTableViewController,
 
     private func firstNonEmptySection(before: Int? = nil, after: Int? = nil) -> Int? {
         let allSections = SearchListSection.allCases
-        for section in allSections {
+        let sectionsOrdered = before != nil ? allSections.reversed() : allSections
+        for section in sectionsOrdered {
             let sectionValue = section.rawValue
             guard before == nil || sectionValue < before! else { continue }
             guard after == nil || sectionValue > after! else { continue }
