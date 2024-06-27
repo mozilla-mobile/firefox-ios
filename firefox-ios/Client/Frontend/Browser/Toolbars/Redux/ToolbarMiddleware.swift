@@ -81,7 +81,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         return AddressToolbarModel(navigationActions: [ToolbarActionState](),
                                    pageActions: loadAddressToolbarPageElements(),
-                                   browserActions: [ToolbarActionState](),
+                                   browserActions: loadAddressToolbarBrowserElements(),
                                    borderPosition: borderPosition,
                                    url: nil)
     }
@@ -95,6 +95,22 @@ class ToolbarMiddleware: FeatureFlaggable {
             a11yLabel: .QRCode.ToolbarButtonA11yLabel,
             a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode))
         return pageActions
+    }
+
+    private func loadAddressToolbarBrowserElements() -> [ToolbarActionState] {
+        var elements = [ToolbarActionState]()
+        elements.append(ToolbarActionState(actionType: .tabs,
+                                           iconName: StandardImageIdentifiers.Large.tab,
+                                           numberOfTabs: 1,
+                                           isEnabled: true,
+                                           a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
+        elements.append(ToolbarActionState(actionType: .menu,
+                                           iconName: StandardImageIdentifiers.Large.appMenu,
+                                           isEnabled: true,
+                                           a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+        return elements
     }
 
     private func loadInitialNavigationToolbarState(toolbarPosition: AddressToolbarPosition) -> NavigationToolbarModel {
