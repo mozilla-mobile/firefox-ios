@@ -283,222 +283,222 @@ extension String {
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
             public struct Edit {
                 public static let AutofillAddAddressTitle = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddAddressTitle.v129"
+                    key: "Addresses.EditAddress.AutofillAddAddressTitle.v129",
                     tableName: "EditAddress",
                     value: "Add address",
                     comment: "Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information."
                 )
                 public static let AutofillEditStreetAddressTitle = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillEditStreetAddressTitle.v129"
+                    key: "Addresses.EditAddress.AutofillEditStreetAddressTitle.v129",
                     tableName: "EditAddress",
                     value: "Street Address",
                     comment: "Title for the input field where users can enter their street address. This is used within the settings for autofill, allowing users to provide their street address for accurate form autofilling."
                 )
                 public static let AutofillEditAddressTitle = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillEditAddressTitle.v129"
+                    key: "Addresses.EditAddress.AutofillEditAddressTitle.v129",
                     tableName: "EditAddress",
                     value: "Edit address",
                     comment: "Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling."
                 )
                 public static let AutofillViewAddressTitle = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillViewAddressTitle.v129"
+                    key: "Addresses.EditAddress.AutofillViewAddressTitle.v129",
                     tableName: "EditAddress",
                     value: "View address",
                     comment: "Title for the option allowing users to view an existing saved address. This is used within the settings for autofill, enabling users to see their address details for accurate form autofilling."
                 )
                 public static let AutofillAddressName = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressName.v129"
+                    key: "Addresses.EditAddress.AutofillAddressName.v129",
                     tableName: "EditAddress",
                     value: "Name",
                     comment: "Label for the field where the user inputs their full name as part of an address form. Essential for personalized form submissions and ensuring information accuracy in autofilled forms."
                 )
                 public static let AutofillAddressOrganization = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressOrganization.v129"
+                    key: "Addresses.EditAddress.AutofillAddressOrganization.v129",
                     tableName: "EditAddress",
                     value: "Organization",
                     comment: "Label for the input field designated for the organization's name related to the address. Helps in distinguishing addresses used for business or personal purposes in autofill settings."
                 )
                 public static let AutofillAddressNeighborhood = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressNeighborhood.v129"
+                    key: "Addresses.EditAddress.AutofillAddressNeighborhood.v129",
                     tableName: "EditAddress",
                     value: "Neighborhood",
                     comment: "Label for the field where users can input the name of their neighborhood. This detail adds precision to addresses, especially in densely populated areas, improving the accuracy of autofill."
                 )
                 public static let AutofillAddressVillageTownship = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressVillageTownship.v129"
+                    key: "Addresses.EditAddress.AutofillAddressVillageTownship.v129",
                     tableName: "EditAddress",
                     value: "Village or Township",
                     comment: "Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details."
                 )
                 public static let AutofillAddressIsland = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressIsland.v129"
+                    key: "Addresses.EditAddress.AutofillAddressIsland.v129",
                     tableName: "EditAddress",
                     value: "Island",
                     comment: "Label for the field where users specify the name of an island, if applicable. Important for addresses in archipelagic regions, aiding in precise location identification during autofill."
                 )
                 public static let AutofillAddressTownland = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressTownland.v129"
+                    key: "Addresses.EditAddress.AutofillAddressTownland.v129",
                     tableName: "EditAddress",
                     value: "Townland",
                     comment: "Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component."
                 )
                 public static let AutofillAddressCity = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressCity.v129"
+                    key: "Addresses.EditAddress.AutofillAddressCity.v129",
                     tableName: "EditAddress",
                     value: "City",
                     comment: "Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings."
                 )
                 public static let AutofillAddressDistrict = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressDistrict.v129"
+                    key: "Addresses.EditAddress.AutofillAddressDistrict.v129",
                     tableName: "EditAddress",
                     value: "District",
                     comment: "Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill."
                 )
                 public static let AutofillAddressPostTown = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressPostTown.v129"
+                    key: "Addresses.EditAddress.AutofillAddressPostTown.v129",
                     tableName: "EditAddress",
                     value: "Post town",
                     comment: "Label for the post town field, used primarily in the UK and some other regions for mail sorting. Essential for users in applicable areas to specify for correct mail delivery through autofill."
                 )
                 public static let AutofillAddressSuburb = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressSuburb.v129"
+                    key: "Addresses.EditAddress.AutofillAddressSuburb.v129",
                     tableName: "EditAddress",
                     value: "Suburb",
                     comment: "Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality."
                 )
                 public static let AutofillAddressProvince = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressProvince.v129"
+                    key: "Addresses.EditAddress.AutofillAddressProvince.v129",
                     tableName: "EditAddress",
                     value: "Province",
                     comment: "Label for the province field, required in countries where provinces are a primary administrative division. Helps in pinpointing the user's location more accurately for autofill purposes."
                 )
                 public static let AutofillAddressState = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressState.v129"
+                    key: "Addresses.EditAddress.AutofillAddressState.v129",
                     tableName: "EditAddress",
                     value: "State",
                     comment: "Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill."
                 )
                 public static let AutofillAddressCounty = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressCounty.v129"
+                    key: "Addresses.EditAddress.AutofillAddressCounty.v129",
                     tableName: "EditAddress",
                     value: "County",
                     comment: "Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information."
                 )
-
                 public static let AutofillAddressParish = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressParish.v129"
+                    key: "Addresses.EditAddress.AutofillAddressParish.v129",
                     tableName: "EditAddress",
                     value: "Parish",
                     comment: "Label for the parish field, significant in places where parishes are used for local administration and addressing. Ensures users can specify parish details for better autofill accuracy."
                 )
                 public static let AutofillAddressPrefecture = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressPrefecture.v129"
+                    key: "Addresses.EditAddress.AutofillAddressPrefecture.v129",
                     tableName: "EditAddress",
                     value: "Prefecture",
                     comment: "Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill."
                 )
                 public static let AutofillAddressArea = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressArea.v129"
+                    key: "Addresses.EditAddress.AutofillAddressArea.v129",
                     tableName: "EditAddress",
                     value: "Area",
                     comment: "Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses."
                 )
                 public static let AutofillAddressDoSi = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressDoSi.v129"
+                    key: "Addresses.EditAddress.AutofillAddressDoSi.v129",
                     tableName: "EditAddress",
                     value: "Do/Si",
                     comment: "Label for the Do/Si field, pertinent to addresses in South Korea. Do/Si refers to provincial level divisions, and specifying this enhances address accuracy in autofill settings."
                 )
                 public static let AutofillAddressDepartment = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressDepartment.v129"
+                    key: "Addresses.EditAddress.AutofillAddressDepartment.v129",
                     tableName: "EditAddress",
                     value: "Department",
                     comment: "Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled."
                 )
                 public static let AutofillAddressEmirate = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressEmirate.v129"
+                    key: "Addresses.EditAddress.AutofillAddressEmirate.v129",
                     tableName: "EditAddress",
                     value: "Emirate",
                     comment: "Label for the emirate field, essential for addresses in the United Arab Emirates. Including emirate details ensures the autofill feature accurately represents user addresses."
                 )
                 public static let AutofillAddressOblast = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressOblast.v129"
+                    key: "Addresses.EditAddress.AutofillAddressOblast.v129",
                     tableName: "EditAddress",
                     value: "Oblast",
                     comment: "Label for the oblast field, relevant for addresses in countries like Russia and Ukraine. Oblasts are a significant administrative division, and their specification aids in autofill accuracy."
                 )
                 public static let AutofillAddressPin = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressPin.v129"
+                    key: "Addresses.EditAddress.AutofillAddressPin.v129",
                     tableName: "EditAddress",
                     value: "Pin",
                     comment: "Label for the PIN (Postal Index Number) field, used in India. It's a code representing a specific area, crucial for accurate mail delivery and autofill functionality."
                 )
                 public static let AutofillAddressPostalCode = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressPostalCode.v129"
+                    key: "Addresses.EditAddress.AutofillAddressPostalCode.v129",
                     tableName: "EditAddress",
                     value: "Postal Code",
                     comment: "Label for the postal code field, universally used in address forms to specify the area code for mail sorting. Essential for autofill to ensure mail and services are accurately routed."
                 )
                 public static let AutofillAddressZip = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressZip.v129"
+                    key: "Addresses.EditAddress.AutofillAddressZip.v129",
                     tableName: "EditAddress",
                     value: "ZIP Code",
                     comment: "Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision."
                 )
                 public static let AutofillAddressEircode = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressEircode.v129"
+                    key: "Addresses.EditAddress.AutofillAddressEircode.v129",
                     tableName: "EditAddress",
                     value: "Eircode",
                     comment: "Label for the Eircode field, specific to Ireland. It's a unique postal code system that helps in precise location identification, enhancing the effectiveness of autofill."
                 )
                 public static let AutofillAddressCountryRegion = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressCountryRegion.v129"
+                    key: "Addresses.EditAddress.AutofillAddressCountryRegion.v129",
                     tableName: "EditAddress",
                     value: "Country or Region",
                     comment: "Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders."
                 )
                 public static let AutofillAddressCountryOnly = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressCountryOnly.v129"
+                    key: "Addresses.EditAddress.AutofillAddressCountryOnly.v129",
                     tableName: "EditAddress",
                     value: "Country",
                     comment: "Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary."
                 )
                 public static let AutofillAddressTel = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressTel.v129"
+                    key: "Addresses.EditAddress.AutofillAddressTel.v129",
                     tableName: "EditAddress",
                     value: "Phone",
                     comment: "Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly."
                 )
                 public static let AutofillAddressEmail = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillAddressEmail.v129"
+                    key: "Addresses.EditAddress.AutofillAddressEmail.v129",
                     tableName: "EditAddress",
                     value: "Email",
                     comment: "Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately."
                 )
                 public static let AutofillCancelButton = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillCancelButton.v129"
+                    key: "Addresses.EditAddress.AutofillCancelButton.v129",
                     tableName: "EditAddress",
                     value: "Cancel",
                     comment: "Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications."
                 )
                 public static let AutofillSaveButton = MZLocalizedString(
-                    key: "", // "Addresses.EditAddress.AutofillSaveButton.v129"
+                    key: "Addresses.EditAddress.AutofillSaveButton.v129",
                     tableName: "EditAddress",
                     value: "Save",
                     comment: "Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly."
                 )
                 public static let CloseNavBarButtonLabel = MZLocalizedString(
-                    key: "", // Addresses.EditAddress.CloseNavBarButtonLabel.v129
+                    key: "Addresses.EditAddress.CloseNavBarButtonLabel.v129",
                     tableName: "EditAddress",
                     value: "Close",
                     comment: "Button label for closing the view where user can view their address info."
                 )
                 public static let EditNavBarButtonLabel = MZLocalizedString(
-                    key: "", // Addresses.EditAddress.EditNavBarButtonLabel.v129
+                    key: "Addresses.EditAddress.EditNavBarButtonLabel.v129",
                     tableName: "EditAddress",
                     value: "Edit",
                     comment: "Button label for editing the address details shown in the form."
                 )
+
             }
         }
         public struct BottomSheet {
