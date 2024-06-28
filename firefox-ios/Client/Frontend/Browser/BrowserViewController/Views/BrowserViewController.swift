@@ -729,7 +729,9 @@ class BrowserViewController: UIViewController,
         // to make them "persistent" e.g. by being stored in BVC
         pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { [weak self] () -> Bool in
             guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
-            if !isToolbarRefactorEnabled {
+            if isToolbarRefactorEnabled {
+                openBrowser(searchTerm: pasteboardContents)
+            } else {
                 urlBar(urlBar, didSubmitText: pasteboardContents)
             }
             searchController?.searchTelemetry?.interactionType = .pasted
@@ -744,8 +746,8 @@ class BrowserViewController: UIViewController,
         })
         copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { [weak self] () -> Bool in
             guard let self else { return false }
-            let fallbackURL = isToolbarRefactorEnabled ? nil : self.urlBar.currentURL
-            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? fallbackURL {
+            let fallbackURL = isToolbarRefactorEnabled ? tabManager.selectedTab?.currentURL() : urlBar.currentURL
+            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? fallbackURL {
                 UIPasteboard.general.url = url
             }
             return true
@@ -2725,6 +2727,10 @@ class BrowserViewController: UIViewController,
     }
 
     func openSuggestions(searchTerm: String) {}
+
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        locationActionsForURLBar().map { $0.accessibilityCustomAction }
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {

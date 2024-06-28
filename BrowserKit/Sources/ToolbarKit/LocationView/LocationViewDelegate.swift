@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 /// `LocationViewDelegate` protocol defines the delegate methods that respond
 /// to user interactions with a location view.
@@ -21,4 +22,6 @@ protocol LocationViewDelegate: AnyObject {
     ///
     /// - Parameter text: The text for which the location view should search.
     func locationViewShouldSearchFor(_ text: String)
+
+    func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]?
 }

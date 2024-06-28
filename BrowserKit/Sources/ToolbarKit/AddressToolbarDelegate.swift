@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
 
 public protocol AddressToolbarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]?
 }

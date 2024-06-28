@@ -11,6 +11,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
 }
 
 final class AddressToolbarContainer: UIView,
@@ -209,6 +210,10 @@ final class AddressToolbarContainer: UIView,
 
     func openSuggestions(searchTerm: String) {
         delegate?.openSuggestions(searchTerm: searchTerm)
+    }
+
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        delegate?.addressToolbarContainerAccessibilityActions()
     }
 
     // MARK: - MenuHelperURLBarInterface
