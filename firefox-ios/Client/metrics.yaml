@@ -717,6 +717,18 @@ microsurvey:
       - interaction
     expires: "2025-01-01"
 
+  confirmation_shown:
+    type: event
+    description: |
+        Records that the confirmation message in the survey has been viewed by the user.
+    bugs:
+        - https://github.com/mozilla-mobile/firefox-ios/issues/20800
+    data_reviews:
+        - https://github.com/mozilla-mobile/firefox-ios/pull/20840
+    notification_emails:
+        - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+
 # Shopping Experience (Fakespot)
 shopping:
   product_page_visits:

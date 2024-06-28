@@ -335,6 +335,9 @@ final class MicrosurveyViewController: UIViewController,
             ]
         )
         confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        store.dispatch(
+            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.confirmationViewed)
+        )
     }
 
     @objc

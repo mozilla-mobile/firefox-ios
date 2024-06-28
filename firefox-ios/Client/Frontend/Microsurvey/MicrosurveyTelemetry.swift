@@ -22,4 +22,8 @@ struct MicrosurveyTelemetry {
         let userSelectionExtra = GleanMetrics.Microsurvey.SubmitButtonTappedExtra(userSelection: userSelection)
         GleanMetrics.Microsurvey.submitButtonTapped.record(userSelectionExtra)
     }
+
+    func confirmationShown() {
+        GleanMetrics.Microsurvey.confirmationShown.record()
+    }
 }

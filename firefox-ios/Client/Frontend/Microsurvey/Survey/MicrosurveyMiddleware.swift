@@ -21,6 +21,8 @@ final class MicrosurveyMiddleware {
             self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action)
         case MicrosurveyActionType.surveyDidAppear:
             self.microsurveyTelemetry.surveyViewed()
+        case MicrosurveyActionType.confirmationViewed:
+            self.microsurveyTelemetry.confirmationShown()
         default:
            break
         }

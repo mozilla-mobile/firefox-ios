@@ -21,6 +21,7 @@ enum MicrosurveyActionType: ActionType {
     case submitSurvey
     case tapPrivacyNotice
     case surveyDidAppear
+    case confirmationViewed
 }
 
 enum MicrosurveyMiddlewareActionType: ActionType {

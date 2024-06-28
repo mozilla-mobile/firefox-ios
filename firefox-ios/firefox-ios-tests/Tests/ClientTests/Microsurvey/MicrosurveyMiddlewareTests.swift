@@ -63,6 +63,18 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         XCTAssertEqual(resultValue[0].extra?["user_selection"], "Neutral")
     }
 
+    func testConfirmationViewedAction() {
+        let mockStore = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [MicrosurveyMiddleware().microsurveyProvider]
+        )
+
+        let action = getAction(for: .confirmationViewed)
+        mockStore.dispatch(action)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.confirmationShown)
+    }
+
     private func getAction(for actionType: MicrosurveyActionType) -> MicrosurveyMiddlewareAction {
         return MicrosurveyMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
