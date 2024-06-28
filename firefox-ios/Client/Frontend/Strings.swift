@@ -6513,6 +6513,11 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Complete this survey",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
+            public static let switchOffText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Protections are OFF. We suggest turning it back on.",
+                comment: "A switch to disable enhanced tracking protection inside the menu.")
         }
     }
 }
