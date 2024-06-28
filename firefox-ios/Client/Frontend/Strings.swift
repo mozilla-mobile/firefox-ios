@@ -4095,7 +4095,7 @@ extension String {
                 comment: "A switch to disable enhanced tracking protection inside the menu.")
 
             public static let switchOffText = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128",
+                key: "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129",
                 tableName: "EnhancedTrackingProtection",
                 value: "Protections are OFF. We suggest turning them back on.",
                 comment: "A switch to disable enhanced tracking protection inside the menu.")
