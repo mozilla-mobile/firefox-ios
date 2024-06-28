@@ -7,7 +7,7 @@ import Redux
 import Shared
 import Common
 
-class MicrosurveyMiddleware {
+final class MicrosurveyMiddleware {
     private let microsurveySurfaceManager: MicrosurveyManager
 
     init(microsurveySurfaceManager: MicrosurveyManager = AppContainer.shared.resolve()) {
@@ -48,8 +48,8 @@ class MicrosurveyMiddleware {
     }
 
     private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
-        microsurveySurfaceManager.handleMessagePressed()
         closeMicrosurveyPrompt(windowUUID: windowUUID)
+        // TODO: FXIOS-8797 - Add Telemetry
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {

@@ -1652,12 +1652,16 @@ class BrowserViewController: UIViewController,
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
-                if !isToolbarRefactorEnabled {
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.updateProgressBar(progress: webView.estimatedProgress)
+                } else {
                     urlBar.updateProgressBar(Float(webView.estimatedProgress))
                 }
                 setupMiddleButtonStatus(isLoading: true)
             } else {
-                if !isToolbarRefactorEnabled {
+                if isToolbarRefactorEnabled {
+                    addressToolbarContainer.hideProgressBar()
+                } else {
                     urlBar.hideProgressBar()
                 }
                 setupMiddleButtonStatus(isLoading: false)
@@ -1841,6 +1845,8 @@ class BrowserViewController: UIViewController,
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+        case .menu:
+        	didTapOnMenu(button: state.buttonTapped)
         }
     }
 
@@ -1893,6 +1899,45 @@ class BrowserViewController: UIViewController,
         // operating in an overlay mode (`urlBar.inOverlayMode`).
         dismissUrlBar()
         tabManager.selectedTab?.goForward()
+    }
+
+    func didTapOnMenu(button: UIButton?) {
+        guard let button else { return }
+
+        // Ensure that any keyboards or spinners are dismissed before presenting the menu
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
+
+        // Logs homePageMenu or siteMenu depending if HomePage is open or not
+        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
+        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
+        let menuHelper = MainMenuActionHelper(profile: profile,
+                                              tabManager: tabManager,
+                                              buttonView: button,
+                                              toastContainer: contentContainer)
+        menuHelper.delegate = self
+        menuHelper.sendToDeviceDelegate = self
+        menuHelper.navigationHandler = navigationHandler
+
+        updateZoomPageBarVisibility(visible: false)
+        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
+            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
+                trait: self.traitCollection,
+                isBottomSearchBar: self.isBottomSearchBar
+            )
+            let viewModel = PhotonActionSheetViewModel(
+                actions: actions,
+                modalStyle: .popover,
+                isMainMenu: true,
+                isMainMenuInverted: shouldInverse
+            )
+            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
+        }
     }
 
     func presentActionSheet(from view: UIView) {
@@ -2801,10 +2846,13 @@ extension BrowserViewController: LegacyTabDelegate {
                     guard let tabURL = tab?.url else { return }
                     let logins = (try? await self?.profile.logins.listLogins()) ?? []
                     let loginsForCurrentTab = logins.filter { login in
+                        if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
                         guard let recordHostnameURL = URL(string: login.hostname) else { return false }
                         return recordHostnameURL.baseDomain == tabURL.baseDomain
                     }
-                    if !loginsForCurrentTab.isEmpty {
+                    if loginsForCurrentTab.isEmpty {
+                        tab?.webView?.accessoryView.reloadViewFor(.standard)
+                    } else {
                         tab?.webView?.accessoryView.reloadViewFor(.login)
                         tab?.webView?.reloadInputViews()
                         TelemetryWrapper.recordEvent(
@@ -2819,7 +2867,8 @@ extension BrowserViewController: LegacyTabDelegate {
                             webView?.resignFirstResponder()
                             self?.authenticateSelectSavedLoginsClosureBottomSheet(
                                 tabURL: tabURL,
-                                currentRequestId: currentRequestId
+                                currentRequestId: currentRequestId,
+                                field: field
                             )
                         }
                     }
@@ -2868,11 +2917,19 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
     }
 
-    private func authenticateSelectSavedLoginsClosureBottomSheet(tabURL: URL, currentRequestId: String) {
+    private func authenticateSelectSavedLoginsClosureBottomSheet(
+        tabURL: URL,
+        currentRequestId: String,
+        field: FocusFieldType
+    ) {
         appAuthenticator.getAuthenticationState { [unowned self] state in
             switch state {
             case .deviceOwnerAuthenticated:
-                self.navigationHandler?.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
+                self.navigationHandler?.showSavedLoginAutofill(
+                    tabURL: tabURL,
+                    currentRequestId: currentRequestId,
+                    field: field
+                )
             case .deviceOwnerFailed:
                 // Keep showing bvc
                 break
@@ -2894,7 +2951,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
         findInPageBar?.text = selection
     }
 
@@ -3189,7 +3246,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        updateFindInPageVisibility(visible: false, tab: previous)
+        updateFindInPageVisibility(isVisible: false, tab: previous)
         setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
 
         if isToolbarRefactorEnabled {
@@ -3200,8 +3257,12 @@ extension BrowserViewController: TabManagerDelegate {
             navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         }
 
-        if !isToolbarRefactorEnabled, let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
-            self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+        if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
+            if isToolbarRefactorEnabled {
+                addressToolbarContainer.updateProgressBar(progress: selected?.estimatedProgress ?? 0)
+            } else {
+                urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+            }
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {

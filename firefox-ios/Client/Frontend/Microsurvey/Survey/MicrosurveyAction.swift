@@ -5,8 +5,8 @@
 import Foundation
 import Redux
 
-class MicrosurveyAction: Action { }
-class MicrosurveyMiddlewareAction: Action { }
+final class MicrosurveyAction: Action { }
+final class MicrosurveyMiddlewareAction: Action { }
 
 enum MicrosurveyActionType: ActionType {
     case closeSurvey

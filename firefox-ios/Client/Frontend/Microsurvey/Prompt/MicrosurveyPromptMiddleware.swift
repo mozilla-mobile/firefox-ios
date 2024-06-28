@@ -7,7 +7,7 @@ import Redux
 import Shared
 import Common
 
-class MicrosurveyPromptMiddleware {
+final class MicrosurveyPromptMiddleware {
     private let microsurveyManager: MicrosurveyManager
 
     init(microsurveyManager: MicrosurveyManager = AppContainer.shared.resolve()) {
@@ -62,6 +62,6 @@ class MicrosurveyPromptMiddleware {
             actionType: MicrosurveyPromptMiddlewareActionType.openSurvey
         )
         store.dispatch(newAction)
-        // TODO: FXIOS-8993 - Add Telemetry
+        microsurveyManager.handleMessagePressed()
     }
 }

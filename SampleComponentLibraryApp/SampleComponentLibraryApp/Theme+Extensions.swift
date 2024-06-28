@@ -9,7 +9,7 @@ let defaultSampleComponentUUID = UUID(uuidString: "44BA0B7D-097A-484D-8358-91A6E
 
 extension ThemeManager {
     var currentTheme: Theme {
-        return currentTheme(for: defaultSampleComponentUUID)
+        return getCurrentTheme(for: defaultSampleComponentUUID)
     }
 }
 

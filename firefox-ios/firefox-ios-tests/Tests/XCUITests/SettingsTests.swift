@@ -122,6 +122,7 @@ class SettingsTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(blockImagesSwitch)
+        app.swipeUp()
         navigator.performAction(Action.ToggleNoImageMode)
         checkShowImages(showImages: false)
 

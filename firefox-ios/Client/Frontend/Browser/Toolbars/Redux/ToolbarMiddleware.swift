@@ -71,7 +71,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let uuid = action.windowUUID
         switch gestureType {
-        case .tap: handleToolbarButtonTapActions(actionType: buttonType, windowUUID: uuid)
+        case .tap: handleToolbarButtonTapActions(actionType: buttonType, buttonTapped: action.buttonTapped, windowUUID: uuid)
         case .longPress: handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
         }
     }
@@ -144,7 +144,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
-    private func handleToolbarButtonTapActions(actionType: ToolbarActionState.ActionType, windowUUID: WindowUUID) {
+    private func handleToolbarButtonTapActions(actionType: ToolbarActionState.ActionType,
+                                               buttonTapped: UIButton?,
+                                               windowUUID: WindowUUID) {
         switch actionType {
         case .home:
             let action = GeneralBrowserAction(windowUUID: windowUUID,
@@ -174,6 +176,13 @@ class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
             store.dispatch(action)
+
+        case .menu:
+            let action = GeneralBrowserAction(buttonTapped: buttonTapped,
+                                              windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showMenu)
+            store.dispatch(action)
+
         default:
             break
         }

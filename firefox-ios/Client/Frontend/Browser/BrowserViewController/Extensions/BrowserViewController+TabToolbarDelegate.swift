@@ -156,40 +156,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
-
-        // Logs homePageMenu or siteMenu depending if HomePage is open or not
-        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
-        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-        let menuHelper = MainMenuActionHelper(profile: profile,
-                                              tabManager: tabManager,
-                                              buttonView: button,
-                                              toastContainer: contentContainer)
-        menuHelper.delegate = self
-        menuHelper.sendToDeviceDelegate = self
-        menuHelper.navigationHandler = navigationHandler
-
-        updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
-                trait: self.traitCollection,
-                isBottomSearchBar: self.isBottomSearchBar
-            )
-            let viewModel = PhotonActionSheetViewModel(
-                actions: actions,
-                modalStyle: .popover,
-                isMainMenu: true,
-                isMainMenuInverted: shouldInverse
-            )
-            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
-        }
+        didTapOnMenu(button: button)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -283,7 +250,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 }
 
 // MARK: - ToolbarActionMenuDelegate
-extension BrowserViewController: ToolBarActionMenuDelegate {
+extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }
@@ -337,7 +304,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showFindInPage() {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
     }
 
     func showCustomizeHomePage() {
@@ -360,5 +327,18 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         presentSignInViewController(fxaParameters.launchParameters,
                                     flowType: fxaParameters.flowType,
                                     referringPage: fxaParameters.referringPage)
+    }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        if !urls.isEmpty {
+            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+        }
+    }
+
+    func showFilePicker(fileURL: URL) {
+        let documentPicker = UIDocumentPickerViewController(forExporting: [fileURL], asCopy: true)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .formSheet
+        showViewController(viewController: documentPicker)
     }
 }

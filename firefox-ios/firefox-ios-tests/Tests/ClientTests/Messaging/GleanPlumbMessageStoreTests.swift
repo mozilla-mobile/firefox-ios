@@ -33,10 +33,19 @@ class GleanPlumbMessageStoreTests: XCTestCase {
     func testOnMessageExpired_WhenPressed() {
         let message = createMessage(messageId: messageId)
         subject.onMessageDisplayed(message)
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, shouldExpire: true)
 
         XCTAssertEqual(message.metadata.impressions, 1)
         XCTAssertTrue(message.metadata.isExpired)
+    }
+
+    func testOnMessageExpired_WhenPressedAndShouldNotExpire() {
+        let message = createMessage(messageId: messageId)
+        subject.onMessageDisplayed(message)
+        subject.onMessagePressed(message, shouldExpire: false)
+
+        XCTAssertEqual(message.metadata.impressions, 1)
+        XCTAssertFalse(message.metadata.isExpired)
     }
 
     func testOnMessageExpired_WhenDismiss() {

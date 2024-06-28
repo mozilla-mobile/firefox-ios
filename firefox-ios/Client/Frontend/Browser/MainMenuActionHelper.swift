@@ -26,6 +26,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showZoomPage(tab: Tab)
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
+    func showFilePicker(fileURL: URL)
 }
 
 extension ToolBarActionMenuDelegate {
@@ -44,6 +45,7 @@ enum MenuButtonToastAction {
     case pinPage
     case removePinPage
     case closeTab
+    case downloadPDF
 }
 
 /// MainMenuActionHelper handles the main menu (hamburger menu) in the toolbar.
@@ -268,6 +270,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
             let sendToDeviceAction = getSendToDevice()
             append(to: &section, action: sendToDeviceAction)
+
+            if let tab = self.selectedTab,
+                let url = tab.canonicalURL?.displayURL,
+                url.lastPathComponent.suffix(4) == ".pdf" {
+                let downloadPDFAction = getDownloadPDFAction()
+                append(to: &section, action: downloadPDFAction)
+            }
 
             let shareAction = getShareAction()
             append(to: &section, action: shareAction)
@@ -600,6 +609,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     }
                 }
             }
+        }.items
+    }
+
+    private func getDownloadPDFAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .AppMenu.AppMenuDownloadPDF,
+                                     iconString: StandardImageIdentifiers.Large.folder) { _ in
+            guard let tab = self.selectedTab, let temporaryDocument = tab.temporaryDocument else { return }
+                temporaryDocument.getURL { fileURL in
+                    DispatchQueue.main.async {
+                        guard let fileURL = fileURL else {return}
+                        self.delegate?.showFilePicker(fileURL: fileURL)
+                    }
+                }
         }.items
     }
 

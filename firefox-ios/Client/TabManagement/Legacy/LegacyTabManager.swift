@@ -321,18 +321,17 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         for tab in tabs where tab !== selectedTab {
             tab.clearAndResetTabHistory()
         }
-
-        removeTab(selectedTab)
-
         let tabToSelect: Tab
         if url.isFxHomeUrl {
-            tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest, isPrivate: selectedTab.isPrivate)
+            tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest,
+                                 afterTab: selectedTab,
+                                 isPrivate: selectedTab.isPrivate)
         } else {
             let request = URLRequest(url: url)
-            tabToSelect = addTab(request, isPrivate: selectedTab.isPrivate)
+            tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
-
         selectTab(tabToSelect)
+        removeTab(selectedTab)
     }
 
     // MARK: - Add tabs
@@ -557,8 +556,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         )
     }
 
-    @MainActor
-    func removeTab(_ tabUUID: TabUUID) async {
+    func removeTab(_ tabUUID: TabUUID) {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -571,9 +569,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         self.removeTab(tab, flushToDisk: true)
         self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
-
-        // TODO: FXIOS-9084 This is not ideal, follow up in this ticket to make tab selection reasonably synchronous
-        try? await Task.sleep(nanoseconds: NSEC_PER_SEC/10)
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -642,7 +637,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         backupCloseTabs = tabs
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
         storeChanges()
     }

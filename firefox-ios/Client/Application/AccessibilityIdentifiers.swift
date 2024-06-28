@@ -525,6 +525,7 @@ public struct AccessibilityIdentifiers {
             static let title = "ClearPrivateData"
             static let websiteDataSection = "WebsiteData"
             static let clearPrivateDataSection = "ClearPrivateData"
+            static let clearAllWebsiteData = "ClearAllWebsiteData"
         }
 
         struct Notifications {
@@ -684,9 +685,9 @@ public struct AccessibilityIdentifiers {
     }
 
     struct FindInPage {
-        static let findInPageCloseButton = "FindInPage.closeButton"
-        static let findNextButton = "FindInPage.find_next"
-        static let findPreviousButton = "FindInPage.find_previous"
+        static let findInPageCloseButton = "find.doneButton"
+        static let findNextButton = "find.nextButton"
+        static let findPreviousButton = "find.previousButton"
     }
 
     struct RememberCreditCard {
