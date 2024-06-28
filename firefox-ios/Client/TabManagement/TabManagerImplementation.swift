@@ -451,7 +451,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         backupCloseTabs = getInactiveTabs()
         let currentModeTabs = backupCloseTabs
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            self.removeTab(tab.tabUUID)
         }
         storeChanges()
     }
