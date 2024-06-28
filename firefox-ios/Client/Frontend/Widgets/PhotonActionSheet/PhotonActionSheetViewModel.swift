@@ -181,7 +181,7 @@ class PhotonActionSheetViewModel {
     private func getSmallSizeMargins(view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
         // Align menu icons with popover icons
         let extraLandscapeSpacing: CGFloat = UIWindow.isLandscape ? 10 : 0
-        let statusIconSize = PhotonActionSheetView.UX.StatusIconSize.width
+        let statusIconSize = ToolbarFlagManager.isRefactorEnabled ? 0 : PhotonActionSheetView.UX.StatusIconSize.width
         let halfFrameWidth = view.frame.size.width / 2
         let rightInset = halfFrameWidth - PhotonActionSheet.UX.spacing - statusIconSize / 2 + extraLandscapeSpacing
 

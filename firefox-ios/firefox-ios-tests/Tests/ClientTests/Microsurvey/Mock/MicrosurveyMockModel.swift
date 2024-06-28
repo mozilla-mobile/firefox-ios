@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-class MicrosurveyMock {
+final class MicrosurveyMock {
     static var model: MicrosurveyModel {
         return MicrosurveyModel(
             promptTitle: "prompt title",

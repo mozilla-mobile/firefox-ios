@@ -65,7 +65,7 @@ class MicrosurveySurfaceManager: MicrosurveyManager {
 
     func handleMessagePressed() {
         guard let message else { return }
-        messagingManager.onMessagePressed(message, window: nil)
+        messagingManager.onMessagePressed(message, window: nil, shouldExpire: false)
     }
 
     func handleMessageDismiss() {

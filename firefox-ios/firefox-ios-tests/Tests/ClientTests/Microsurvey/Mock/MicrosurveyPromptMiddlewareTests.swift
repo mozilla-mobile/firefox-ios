@@ -69,6 +69,18 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         XCTAssertEqual(microsurveyManager.handleMessageDismissCount, 1)
     }
 
+    func testContinueToSurveyAction() {
+        let mockStore = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: [MicrosurveyPromptMiddleware().microsurveyProvider]
+        )
+
+        let action = getAction(for: .continueToSurvey)
+        mockStore.dispatch(action)
+        XCTAssertEqual(microsurveyManager.handleMessagePressedCount, 1)
+    }
+
     private func getAction(for actionType: MicrosurveyPromptActionType) -> MicrosurveyPromptMiddlewareAction {
         return MicrosurveyPromptMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }

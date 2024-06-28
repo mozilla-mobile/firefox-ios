@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MicrosurveyConfirmationView: UIView, ThemeApplicable {
+final class MicrosurveyConfirmationView: UIView, ThemeApplicable {
     private struct UX {
         static let stackSpacing: CGFloat = 28
         static let padding = NSDirectionalEdgeInsets(

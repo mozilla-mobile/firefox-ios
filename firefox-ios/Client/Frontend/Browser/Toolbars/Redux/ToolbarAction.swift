@@ -47,13 +47,16 @@ enum ToolbarActionType: ActionType {
 
 class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
+    let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
+         buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
+        self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
