@@ -1,4 +1,4 @@
-name: "Focus Smoke Tests"
+name: "Focus Tests"
     
 on:
     workflow_dispatch:
@@ -8,7 +8,6 @@ env:
     xcode_version: 15.4
     ios_version: 17.5
     ios_simulator_default: iPhone 15
-    xcodebuild_test_plan: SmokeTest
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
@@ -55,6 +54,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
+                xcodebuild_test_plan: [ 'SmokeTest' ]
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
@@ -62,8 +62,7 @@ jobs:
             - name: Install packages
               id: packages
               run: |
-                brew update
-                brew install xctesthtmlreport
+                gem install xcpretty
             - name: Setup Xcode
               id: xcode
               run: |
@@ -87,20 +86,26 @@ jobs:
                     -target ${{ env.xcodebuild_target }} \
                     -derivedDataPath ~/DerivedData \
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
-                    -testPlan ${{ env.xcodebuild_test_plan }} \
-                    -resultBundlePath ${{ env.test_results_directory }}/results
+                    -testPlan ${{ matrix.xcodebuild_test_plan }} \
+                    -resultBundlePath ${{ env.test_results_directory }}/results \
+                    | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
               continue-on-error: true
-            - name: Prettyprint test report
+            - name: Print test report
               id: test-report
               run: |
-                xchtmlreport ${{ env.test_results_directory }}/results.xcresult
-            - name: Upload xcresult file to Github
-              id: upload-github
+                python ../test-fixtures/ci/convert_junit_to_markdown.py -f ./build/reports/junit.xml ./github.md
+                cat github.md >> $GITHUB_STEP_SUMMARY
+                python ../test-fixtures/ci/convert_junit_to_markdown.py -s ./build/reports/junit.xml ./slack.md
+                echo "list_of_failures=`cat slack.md`" >> $GITHUB_OUTPUT
+                cat $GITHUB_OUTPUT
+              working-directory:  ${{ env.browser }}
+            - name: Upload log file
+              id: upload-log
               uses: actions/upload-artifact@v4.3.3
               with:
-                name: ${{ env.browser }}-${{ env.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-${{ github.run_number }}
-                path: ${{ env.test_results_directory }}/index.html
+                name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+                path: ${{ env.browser }}/xcodebuild.log
                 retention-days: 90
             - name: Report to Slack
               id: slack
@@ -112,10 +117,12 @@ jobs:
                 SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
                 ios_simulator: ${{ matrix.ios_simulator }}
                 pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+                xcodebuild_test_plan: ${{ matrix.xcodebuild_test_plan }}
                 ref_name: ${{ github.ref_name }}
                 repository: ${{ github.repository }}
                 run_id: ${{ github.run_id }}
                 server_url: ${{ github.server_url }}
+                list_of_failures: ${{ steps.test-report.outputs.list_of_failures }}
             - name: Return fail status if a test fails
               run: |
                 exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
