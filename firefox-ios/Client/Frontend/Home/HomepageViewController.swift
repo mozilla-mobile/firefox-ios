@@ -805,8 +805,8 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
-        homePanelDelegate?.homePanelDidRequestBookmarkToast(for: action)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(url: url, action: action)
     }
 }
 
