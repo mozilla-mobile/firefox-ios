@@ -62,12 +62,18 @@ final class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCel
                     constant: UX.padding.bottom
                 ),
 
-                iconView.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width),
-                iconView.heightAnchor.constraint(equalToConstant: UX.radioButtonSize.height),
+                iconView.widthAnchor.constraint(
+                    equalToConstant: UX.radioButtonSize.width
+                ),
+                iconView.heightAnchor.constraint(
+                    equalToConstant: UX.radioButtonSize.height
+                ),
                 iconView.widthAnchor.constraint(
                     equalTo: iconContainer.widthAnchor
                 ),
-                iconView.centerYAnchor.constraint(equalTo: iconContainer.centerYAnchor)
+                iconView.centerYAnchor.constraint(
+                    equalTo: iconContainer.centerYAnchor
+                )
             ]
         )
     }
