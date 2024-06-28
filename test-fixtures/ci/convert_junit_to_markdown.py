@@ -63,12 +63,12 @@ def convert_to_slack_markdown(test_suites):
     markdown = ""
     for test_suite in test_suites:
         if int(test_suite['failures']):
-            markdown += "{test_suite_name}".format(test_suite_name=test_suite['name'].replace('XCUITest.' ,''))
-            markdown += "```"
+            markdown += "{test_suite_name}\\n".format(test_suite_name=test_suite['name'].replace('XCUITest.' ,''))
+            markdown += "```\\n"
             test_cases = test_suite['test_cases']
             for test_case in test_cases:
                 markdown += "{test_case_name}\\n".format(test_case_name=test_case.get("name"))
-            markdown += "```"
+            markdown += "```\\n"
     if markdown == "":
         markdown += "🎉 No test failures 🎉"
     return markdown    
