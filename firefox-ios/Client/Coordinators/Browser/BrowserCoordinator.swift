@@ -26,6 +26,7 @@ class BrowserCoordinator: BaseCoordinator,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator {
+
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -522,6 +523,18 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
+    /// ROUX
+    private func makeMenuCoordinator() -> MainMenuCoordinator? {
+        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
+            return nil // flow is already handled
+        }
+
+        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        return coordinator
+    }
+
     func showShareExtension(
         url: URL,
         sourceView: UIView,
@@ -714,6 +727,12 @@ class BrowserCoordinator: BaseCoordinator,
                          completion: (() -> Void)? = nil) {
         browserViewController.willNavigateAway()
         router.present(viewController)
+    }
+
+    // MARK: - Main Menu
+    func showMainMenu() {
+        guard let coordinator = makeMenuCoordinator() else { return }
+        coordinator.startModal()
     }
 
     // MARK: - ParentCoordinatorDelegate
