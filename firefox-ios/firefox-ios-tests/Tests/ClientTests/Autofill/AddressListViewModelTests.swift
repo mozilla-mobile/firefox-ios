@@ -10,7 +10,7 @@ import Common
 
 @testable import Client
 
-class AddressListViewModelTests: XCTestCase {
+final class AddressListViewModelTests: XCTestCase {
     var viewModel: AddressListViewModel!
     var mockProfile: MockProfile!
     var mockLogger: MockLogger!
@@ -266,7 +266,7 @@ class AddressListViewModelTests: XCTestCase {
     }
 }
 
-class MockAutofill: AddressProvider {
+final class MockAutofill: AddressProvider {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
     var mockEditAddressResult: Result<Void, Error>?
