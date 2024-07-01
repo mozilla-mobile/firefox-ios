@@ -4,3 +4,6 @@
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully */
 "CreditCard.SnackBar.SavedCardLabel.v112" = "S'ha desat la targeta nova";
 
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
+"CreditCard.SnackBar.UpdatedCardLabel.v122" = "S'ha actualitzat la informació de la targeta";
+
