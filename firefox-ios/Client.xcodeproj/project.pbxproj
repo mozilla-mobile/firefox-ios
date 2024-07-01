@@ -947,6 +947,8 @@
 		8CE1E43A2B8C76C80026530B /* LoginListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4362B8C76C80026530B /* LoginListView.swift */; };
 		8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */; };
 		8CEDF0802BFE138B00D2617B /* AddressProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDF07F2BFE138B00D2617B /* AddressProvider.swift */; };
+		8CFA62292C32ADD6002C2077 /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA62272C32ADD5002C2077 /* RemoveAddressButton.swift */; };
+		8CFA622A2C32ADD6002C2077 /* AddressModifiedStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA62282C32ADD5002C2077 /* AddressModifiedStatus.swift */; };
 		8CFD56882AAF057D003157A6 /* SwitchFakespotProduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD56872AAF057D003157A6 /* SwitchFakespotProduction.swift */; };
 		8CFD56892AAF06D3003157A6 /* ShoppingProductTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
@@ -6446,6 +6448,8 @@
 		8CE1E4362B8C76C80026530B /* LoginListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginListView.swift; sourceTree = "<group>"; };
 		8CEDF07D2BFE04B100D2617B /* AddressListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressListViewModelTests.swift; sourceTree = "<group>"; };
 		8CEDF07F2BFE138B00D2617B /* AddressProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressProvider.swift; sourceTree = "<group>"; };
+		8CFA62272C32ADD5002C2077 /* RemoveAddressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
+		8CFA62282C32ADD5002C2077 /* AddressModifiedStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressModifiedStatus.swift; sourceTree = "<group>"; };
 		8CFD56872AAF057D003157A6 /* SwitchFakespotProduction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchFakespotProduction.swift; sourceTree = "<group>"; };
 		8D1340A4B7E4ACBF43347178 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		8D194DCF9E244D29DA68FDE5 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -10468,6 +10472,8 @@
 		8C2937732BF79F0C00146613 /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				8CFA62282C32ADD5002C2077 /* AddressModifiedStatus.swift */,
+				8CFA62272C32ADD5002C2077 /* RemoveAddressButton.swift */,
 				8C29376F2BF79F0300146613 /* Address+Encodable.swift */,
 				8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */,
 				8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */,
@@ -14222,6 +14228,7 @@
 				8ADAE4262A33A13B007BF926 /* OpenSupportPageSetting.swift in Sources */,
 				8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */,
 				EBB895332193FFF400EB91A0 /* ContentBlockerSettingViewController.swift in Sources */,
+				8CFA622A2C32ADD6002C2077 /* AddressModifiedStatus.swift in Sources */,
 				8A5D1CB42A30D7D9005AD35C /* NoImageModeSetting.swift in Sources */,
 				8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
@@ -14490,6 +14497,7 @@
 				8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */,
 				8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */,
 				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
+				8CFA62292C32ADD6002C2077 /* RemoveAddressButton.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
 				8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
