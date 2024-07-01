@@ -5,7 +5,7 @@
 import Foundation
 
 class ToolbarHelper {
-    func shouldShowNavigationToolbarForTraitCollection(_ traitCollection: UITraitCollection) -> Bool {
+    func shouldShowNavigationToolbar(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass != .compact
                && traitCollection.horizontalSizeClass != .regular
     }
