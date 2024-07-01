@@ -8,11 +8,7 @@ import Shared
 import Common
 
 final class MicrosurveyMiddleware {
-    private let microsurveySurfaceManager: MicrosurveyManager
-
-    init(microsurveySurfaceManager: MicrosurveyManager = AppContainer.shared.resolve()) {
-        self.microsurveySurfaceManager = microsurveySurfaceManager
-    }
+    private let microsurveyTelemetry = MicrosurveyTelemetry()
 
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
@@ -22,7 +18,11 @@ final class MicrosurveyMiddleware {
         case MicrosurveyActionType.tapPrivacyNotice:
             self.navigateToPrivacyNotice(windowUUID: windowUUID)
         case MicrosurveyActionType.submitSurvey:
-            self.sendTelemetryAndClosePrompt(windowUUID: windowUUID)
+            self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action)
+        case MicrosurveyActionType.surveyDidAppear:
+            self.microsurveyTelemetry.surveyViewed()
+        case MicrosurveyActionType.confirmationViewed:
+            self.microsurveyTelemetry.confirmationShown()
         default:
            break
         }
@@ -34,8 +34,8 @@ final class MicrosurveyMiddleware {
             actionType: MicrosurveyMiddlewareActionType.dismissSurvey
         )
         store.dispatch(newAction)
+        microsurveyTelemetry.dismissButtonTapped()
         closeMicrosurveyPrompt(windowUUID: windowUUID)
-        // TODO: FXIOS-8993 - Add Telemetry
     }
 
     private func navigateToPrivacyNotice(windowUUID: WindowUUID) {
@@ -44,12 +44,13 @@ final class MicrosurveyMiddleware {
             actionType: MicrosurveyMiddlewareActionType.navigateToPrivacyNotice
         )
         store.dispatch(newAction)
-        // TODO: FXIOS-8993 - Add Telemetry
+        microsurveyTelemetry.privacyNoticeTapped()
     }
 
-    private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
+    private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID, action: Action) {
         closeMicrosurveyPrompt(windowUUID: windowUUID)
-        // TODO: FXIOS-8797 - Add Telemetry
+        guard let userSelection = (action as? MicrosurveyAction)?.userSelection else { return }
+        microsurveyTelemetry.userResponseSubmitted(userSelection: userSelection)
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {
@@ -59,6 +60,5 @@ final class MicrosurveyMiddleware {
                 actionType: MicrosurveyPromptActionType.closePrompt
             )
         )
-        // TODO: FXIOS-8993 - Add Telemetry
     }
 }
