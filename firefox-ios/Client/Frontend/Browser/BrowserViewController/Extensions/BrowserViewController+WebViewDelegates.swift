@@ -287,7 +287,9 @@ extension BrowserViewController: WKUIDelegate {
             actionBuilder.addBookmarkLink(url: url, title: title, addBookmark: self.addBookmark)
         }
 
-        actionBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
+        if url.scheme != "javascript" {
+            actionBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
+        }
 
         actionBuilder.addCopyLink(url: url)
 
