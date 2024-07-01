@@ -200,9 +200,6 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
-        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
-        // New behaviour on v14, there is no Undo in Private mode
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354579
