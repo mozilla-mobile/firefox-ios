@@ -3736,6 +3736,16 @@ extension String {
         tableName: nil,
         value: "Allow Firefox to open?",
         comment: "Text of the prompt to ask user permission to open a URL from a scanned QR code.")
+    public static let ScanQRCodeURLPromptAllowButton = MZLocalizedString(
+        key: "ScanQRCode.ConfirmOpenURL.AllowButton.v100",
+        tableName: nil,
+        value: "Allow",
+        comment: "Allow button to open URL from scanned QR Code")
+    public static let ScanQRCodeURLPromptDenyButton = MZLocalizedString(
+        key: "ScanQRCode.ConfirmOpenURL.DenyButton.v100",
+        tableName: nil,
+        value: "Deny",
+        comment: "Deny button to cancel opening URL from scanned QR Code")
 
     public struct QRCode {
         public static let ToolbarButtonA11yLabel = MZLocalizedString(

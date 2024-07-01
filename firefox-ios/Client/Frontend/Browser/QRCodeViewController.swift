@@ -351,10 +351,14 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                         message: presentedURL,
                         preferredStyle: .alert)
 
-                    let cancelAction = UIAlertAction(title: .CancelString, style: .default, handler: { _ in
+                    let cancelAction = UIAlertAction(title: .ScanQRCodeURLPromptDenyButton,
+                                                     style: .cancel,
+                                                     handler: { _ in
                         cleanUpAndRemoveQRCodeScanner()
                     })
-                    let openURLAction = UIAlertAction(title: .OKString, style: .destructive, handler: { [weak self] _ in
+                    let openURLAction = UIAlertAction(title: .ScanQRCodeURLPromptAllowButton,
+                                                      style: .default,
+                                                      handler: { [weak self] _ in
                         self?.qrCodeDelegate?.didScanQRCodeWithURL(url)
                         cleanUpAndRemoveQRCodeScanner()
                     })
