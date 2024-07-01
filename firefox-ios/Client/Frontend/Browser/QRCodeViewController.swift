@@ -328,7 +328,6 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {
         func cleanUpAndRemoveQRCodeScanner() {
-            captureSession.stopRunning()
             stopScanLineAnimation()
             dismissController()
         }
@@ -353,6 +352,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             if let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
                let qrCodeDelegate = self.qrCodeDelegate,
                let text = metaData.stringValue {
+                captureSession.stopRunning()
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
                 if let url = URIFixup.getURL(text), url.isWebPage() {
                     let shouldPrompt = qrCodeDelegate.qrCodeScanningPermissionLevel != .allowURLsWithoutPrompt
