@@ -3731,6 +3731,11 @@ extension String {
         tableName: nil,
         value: "OK",
         comment: "OK button to dismiss the error prompt.")
+    public static let ScanQRCodeConfirmOpenURLMessage = MZLocalizedString(
+        key: "ScanQRCode.ConfirmOpenURL.Message.v100",
+        tableName: nil,
+        value: "Allow Firefox to open?",
+        comment: "Text of the prompt to ask user permission to open a URL from a scanned QR code.")
 
     public struct QRCode {
         public static let ToolbarButtonA11yLabel = MZLocalizedString(

@@ -318,6 +318,12 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {
+        func cleanUpAndRemoveQRCodeScanner() {
+            captureSession.stopRunning()
+            stopScanLineAnimation()
+            dismissController()
+        }
+
         if metadataObjects.isEmpty {
             captureSession.stopRunning()
             let alert = AlertController(title: "", message: .ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
@@ -335,14 +341,34 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                let text = metaData.stringValue {
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
                 if let url = URIFixup.getURL(text), url.isWebPage() {
-                    qrCodeDelegate.didScanQRCodeWithURL(url)
+                    // Prompt users before opening scanned URL. Show shortened host (if possible) as the preview.
+                    let websiteHost: String?
+                    if #available(iOS 16.0, *) { websiteHost = url.host() } else { websiteHost = url.host }
+                    let presentedURL = websiteHost ?? text
+
+                    let confirmationAlert = UIAlertController(
+                        title: .ScanQRCodeConfirmOpenURLMessage,
+                        message: presentedURL,
+                        preferredStyle: .alert)
+
+                    let cancelAction = UIAlertAction(title: .CancelString, style: .default, handler: { _ in
+                        cleanUpAndRemoveQRCodeScanner()
+                    })
+                    let openURLAction = UIAlertAction(title: .OKString, style: .destructive, handler: { [weak self] _ in
+                        self?.qrCodeDelegate?.didScanQRCodeWithURL(url)
+                        cleanUpAndRemoveQRCodeScanner()
+                    })
+
+                    confirmationAlert.addAction(cancelAction)
+                    confirmationAlert.addAction(openURLAction)
+
+                    self.present(confirmationAlert, animated: true)
+                    return
                 } else {
                     qrCodeDelegate.didScanQRCodeWithText(text)
                 }
             }
-            captureSession.stopRunning()
-            stopScanLineAnimation()
-            dismissController()
+            cleanUpAndRemoveQRCodeScanner()
         }
     }
 }
