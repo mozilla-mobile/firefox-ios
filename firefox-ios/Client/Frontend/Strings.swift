@@ -3732,18 +3732,18 @@ extension String {
         value: "OK",
         comment: "OK button to dismiss the error prompt.")
     public static let ScanQRCodeConfirmOpenURLMessage = MZLocalizedString(
-        key: "ScanQRCode.ConfirmOpenURL.Message.v100",
-        tableName: nil,
+        key: "ScanQRCode.ConfirmOpenURL.Message.v129",
+        tableName: "ScanQRCode",
         value: "Allow Firefox to open?",
         comment: "Text of the prompt to ask user permission to open a URL from a scanned QR code.")
     public static let ScanQRCodeURLPromptAllowButton = MZLocalizedString(
-        key: "ScanQRCode.ConfirmOpenURL.AllowButton.v100",
-        tableName: nil,
+        key: "ScanQRCode.ConfirmOpenURL.AllowButton.v129",
+        tableName: "ScanQRCode",
         value: "Allow",
         comment: "Allow button to open URL from scanned QR Code")
     public static let ScanQRCodeURLPromptDenyButton = MZLocalizedString(
-        key: "ScanQRCode.ConfirmOpenURL.DenyButton.v100",
-        tableName: nil,
+        key: "ScanQRCode.ConfirmOpenURL.DenyButton.v129",
+        tableName: "ScanQRCode",
         value: "Deny",
         comment: "Deny button to cancel opening URL from scanned QR Code")
 
