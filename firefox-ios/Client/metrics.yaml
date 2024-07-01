@@ -656,6 +656,79 @@ downloads:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
 
+# Microsurvey
+microsurvey:
+  shown:
+    type: event
+    description: |
+        The survey surface (bottom sheet) was shown and visible.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+
+  privacy_notice_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the privacy notice.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2025-01-01"
+
+  dismiss_button_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the close button to dismiss the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2025-01-01"
+
+  submit_button_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the submit button to respond to the survey.
+    extra_keys:
+      user_selection:
+        type: string
+        description: |
+          The user's selected option e.g. "satisfied".
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2025-01-01"
+
+  confirmation_shown:
+    type: event
+    description: |
+        Records that the confirmation message in the survey has been viewed by the user.
+    bugs:
+        - https://github.com/mozilla-mobile/firefox-ios/issues/20800
+    data_reviews:
+        - https://github.com/mozilla-mobile/firefox-ios/pull/20840
+    notification_emails:
+        - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+
 # Shopping Experience (Fakespot)
 shopping:
   product_page_visits:

@@ -953,12 +953,7 @@ class BrowserViewController: UIViewController,
             overKeyboardContainer.removeBottomInsetSpacer()
         }
 
-        // We have to deactivate the original constraint, and remake the constraint
-        // or else funky conflicts happen
-        urlBarHeightConstraint.deactivate()
-        urlBar.snp.makeConstraints { make in
-            self.urlBarHeightConstraint = make.height.equalTo(heightWithPadding).constraint
-        }
+        urlBarHeightConstraint.update(offset: heightWithPadding)
     }
 
     override func willTransition(
@@ -1283,7 +1278,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Microsurvey
     private func setupMicrosurvey() {
-        guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly) else { return }
+        guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
 
         store.dispatch(
             MicrosurveyPromptAction(windowUUID: windowUUID, actionType: MicrosurveyPromptActionType.showPrompt)
@@ -1499,17 +1494,17 @@ class BrowserViewController: UIViewController,
                                                                              withUserData: userData,
                                                                              toApplication: .shared)
 
-        showBookmarkToast(for: .add)
+        showBookmarkToast(action: .add)
     }
 
     func removeBookmark(url: URL, title: String?) {
         profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
             guard result.isSuccess else { return }
-            self.showBookmarkToast(url, title, for: .remove)
+            self.showBookmarkToast(bookmarkURL: url, title: title, action: .remove)
         }
     }
 
-    private func showBookmarkToast(_ bookmarkURL: URL? = nil, _ title: String? = nil, for action: BookmarkAction) {
+    private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
             self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
@@ -3059,8 +3054,8 @@ extension BrowserViewController: HomePanelDelegate {
         navigationHandler?.show(settings: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
-        showBookmarkToast(for: action)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
+        showBookmarkToast(bookmarkURL: url, action: action)
     }
 }
 

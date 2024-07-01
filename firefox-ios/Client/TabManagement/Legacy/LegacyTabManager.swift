@@ -556,7 +556,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         )
     }
 
-    func removeTab(_ tabUUID: TabUUID) {
+    @MainActor
+    func removeTab(_ tabUUID: TabUUID) async {
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
@@ -569,6 +570,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         self.removeTab(tab, flushToDisk: true)
         self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+
+        // TODO: FXIOS-9084 This is not ideal, follow up in this ticket to make tab selection reasonably synchronous
+        try? await Task.sleep(nanoseconds: NSEC_PER_SEC/10)
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -637,7 +641,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
         backupCloseTabs = tabs
         for tab in currentModeTabs {
-            self.removeTab(tab.tabUUID)
+            await self.removeTab(tab.tabUUID)
         }
         storeChanges()
     }
