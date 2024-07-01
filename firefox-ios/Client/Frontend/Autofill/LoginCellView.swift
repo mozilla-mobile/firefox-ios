@@ -6,6 +6,8 @@ import SwiftUI
 import Common
 import Storage
 
+import struct MozillaAppServices.EncryptedLogin
+
 // MARK: - LoginCellView
 
 extension VerticalAlignment {
@@ -46,7 +48,8 @@ struct LoginCellView: View {
                     .foregroundColor(iconPrimary)
                     .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
                 VStack(alignment: .leading) {
-                    Text(login.decryptedUsername.isEmpty ? login.hostname : login.decryptedUsername)
+                    Text(login.decryptedUsername.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
+                         : login.decryptedUsername)
                         .font(.body)
                         .foregroundColor(textColor)
                         .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
@@ -58,14 +61,14 @@ struct LoginCellView: View {
             }
             .padding()
         }
-        .buttonStyle(LoginButtonStyle(theme: themeManager.currentTheme(for: windowUUID)))
+        .buttonStyle(LoginButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 

@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import XCTest
-import WebKit
 import ComponentLibrary
+import MozillaAppServices
+import WebKit
+import XCTest
+
 @testable import Client
 
 final class BrowserCoordinatorTests: XCTestCase {
@@ -240,7 +242,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        let field = FocusFieldType.password
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
@@ -728,7 +731,8 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         // Then
         XCTAssertTrue(result)
-        XCTAssertEqual(mbvc.closePrivateTabsCount, 1)
+        let windowManager = (AppContainer.shared.resolve() as WindowManager) as! MockWindowManager
+        XCTAssertEqual(windowManager.closePrivateTabsMultiActionCalled, 1)
     }
 
     func testHandleShowOnboarding_returnsTrueAndShowsOnboarding() {
@@ -983,6 +987,18 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.first is AddressAutofillCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
+    func testShowMicrosurvey_addsMicrosurveyCoordinator() {
+        let subject = createSubject()
+
+        subject.showMicrosurvey(model: MicrosurveyMock.model)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is MicrosurveyCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is MicrosurveyViewController)
     }
 
     // MARK: - Helpers

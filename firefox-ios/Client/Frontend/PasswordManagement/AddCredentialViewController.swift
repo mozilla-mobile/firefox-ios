@@ -7,6 +7,8 @@ import Shared
 import Storage
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 enum AddCredentialField: Int {
     case websiteItem
     case usernameItem
@@ -57,7 +59,7 @@ class AddCredentialViewController: UIViewController, Themeable {
             action: #selector(addCredential)
         )
         button.isEnabled = false
-        button.tintColor = themeManager.currentTheme(for: windowUUID).colors.actionPrimary
+        button.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
         return button
     }()
 
@@ -160,7 +162,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.usernameField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            loginCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             usernameField = loginCell.descriptionLabel
             if isRTLLanguage {
                 usernameField.textAlignment = .right
@@ -174,7 +176,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.passwordField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            loginCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             passwordField = loginCell.descriptionLabel
             return loginCell
 
@@ -186,7 +188,7 @@ extension AddCredentialViewController: UITableViewDataSource {
                 a11yId: AccessibilityIdentifiers.Settings.Passwords.websiteField,
                 isEditingFieldData: true)
             loginCell.configure(viewModel: cellModel)
-            loginCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            loginCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             websiteField = loginCell.descriptionLabel
             if isRTLLanguage {
                 websiteField.textAlignment = .right
@@ -211,7 +213,7 @@ extension AddCredentialViewController: UITableViewDataSource {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 

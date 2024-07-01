@@ -71,13 +71,54 @@ extension URL {
         if let range = host.range(of: "^(www|mobile|m)\\.", options: .regularExpression) {
             host.replaceSubrange(range, with: "")
         }
-        guard host != publicSuffix else { return nil }
+        // If the host equals the public suffix, it means that the host is already normalized.
+        // Therefore, we return the original host without any modifications.
+        guard host != publicSuffix else { return components.host }
 
         return host
     }
 
     var normalizedHostAndPath: String? {
         return normalizedHost.flatMap { $0 + self.path }
+    }
+
+    /// Extracts the subdomain and host from a given URL string and appends a dot to the subdomain.
+    ///
+    /// This function takes a URL string as input and returns a tuple containing the subdomain and the normalized host.
+    /// If the URL string does not contain a subdomain, the function returns `nil` for the subdomain. 
+    /// If a subdomain is present, it is returned with a trailing dot.
+    ///
+    /// - Parameter urlString: The URL string to extract the subdomain and host from.
+    ///
+    /// - Returns: A tuple containing the subdomain (with a trailing dot) and the normalized host.
+    ///  The subdomain is optional and may be `nil`.
+    ///
+    /// # Example
+    /// ```
+    /// let (subdomain, host) = getSubdomainAndHost(from: "https://docs.github.com")
+    /// print(subdomain) // Prints "docs."
+    /// print(host) // Prints "docs.github.com"
+    /// ```
+    public static func getSubdomainAndHost(from urlString: String) -> (subdomain: String?, normalizedHost: String) {
+        guard let url = URL(string: urlString) else { return (nil, urlString) }
+        let normalizedHost = url.normalizedHost ?? urlString
+
+        guard let publicSuffix = url.publicSuffix else { return (nil, normalizedHost) }
+
+        let publicSuffixComponents = publicSuffix.split(separator: ".")
+
+        let normalizedHostWithoutSuffix = normalizedHost
+            .split(separator: ".")
+            .dropLast(publicSuffixComponents.count)
+            .joined(separator: ".")
+
+        let components = normalizedHostWithoutSuffix.split(separator: ".")
+
+        guard components.count >= 2 else { return (nil, normalizedHost) }
+        let subdomain = components.dropLast()
+                                  .joined(separator: ".")
+                                  .appending(".")
+        return (subdomain, normalizedHost)
     }
 
     /// Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.

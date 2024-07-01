@@ -4,7 +4,6 @@
 
 import Shared
 import Account
-import MozillaAppServices
 import Common
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
@@ -59,6 +58,8 @@ extension FxAPushMessageHandler {
                             let title = tabData.entries.last?.title ?? ""
                             let url = tabData.entries.last?.url ?? ""
                             completion(.success(PushMessage.commandReceived(tab: ["title": title, "url": url])))
+                        default:
+                            break
                         }
                     case .deviceConnected(let deviceName):
                         completion(.success(PushMessage.deviceConnected(deviceName)))

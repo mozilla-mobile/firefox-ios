@@ -16,7 +16,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureDataClearanceContextualHint() {
-        guard contentContainer.hasWebView, tabManager.selectedTab?.url?.displayURL?.isWebPage() == true else {
+        guard !isToolbarRefactorEnabled,
+                contentContainer.hasWebView,
+                tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
+        else {
             resetDataClearanceCFRTimer()
             return
         }
@@ -24,7 +27,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             anchor: navigationToolbar.multiStateButton,
             withArrowDirection: topTabsVisible ? .up : .down,
             andDelegate: self,
-            presentedUsing: { self.presentDataClearanceContextualHint() },
+            presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
             overlayState: overlayManager)
     }
@@ -35,14 +38,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        updateZoomPageBarVisibility(visible: false)
-        let page = NewTabAccessors.getHomePage(self.profile.prefs)
-        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
-            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
-        } else if let homePanelURL = page.url {
-            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
+        didTapOnHome()
     }
 
     // Presents alert to clear users private session data
@@ -120,18 +116,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func dismissUrlBar() {
-        if urlBar.inOverlayMode {
+        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
             urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
 
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
-        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
-        // operating in an overlay mode (`urlBar.inOverlayMode`).
-        dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
-        tabManager.selectedTab?.goBack()
+        didTapOnBack()
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -139,12 +130,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
-        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
-        // operating in an overlay mode (`urlBar.inOverlayMode`).
-        dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
-        tabManager.selectedTab?.goForward()
+        didTapOnForward()
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -170,47 +156,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
-
-        // Logs homePageMenu or siteMenu depending if HomePage is open or not
-        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
-        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-        let menuHelper = MainMenuActionHelper(profile: profile,
-                                              tabManager: tabManager,
-                                              buttonView: button,
-                                              toastContainer: contentContainer)
-        menuHelper.delegate = self
-        menuHelper.sendToDeviceDelegate = self
-        menuHelper.navigationHandler = navigationHandler
-
-        updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
-                trait: self.traitCollection,
-                isBottomSearchBar: self.isBottomSearchBar
-            )
-            let viewModel = PhotonActionSheetViewModel(
-                actions: actions,
-                modalStyle: .popover,
-                isMainMenu: true,
-                isMainMenuInverted: shouldInverse
-            )
-            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
-        }
+        didTapOnMenu(button: button)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        showTabTray(focusedSegment: segmentToFocus)
+        focusOnTabSegment()
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .press,
@@ -233,14 +184,14 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
 
         let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
-                                                        iconString: "nav-tabcounter",
+                                                        iconString: StandardImageIdentifiers.Large.tab,
                                                         iconType: .TabsButton,
                                                         tabCount: tabCount) { _ in
             action()
         }.items
 
         let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
-                                                       iconString: "nav-tabcounter",
+                                                       iconString: StandardImageIdentifiers.Large.tab,
                                                        iconType: .TabsButton,
                                                        tabCount: tabCount) { _ in
             action()
@@ -287,20 +238,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard self.presentedViewController == nil else { return }
-        var actions: [[PhotonRowActions]] = []
-        actions.append(getTabToolbarLongPressActionsForModeSwitching())
-        actions.append(getMoreTabToolbarLongPressActions())
-
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let viewModel = PhotonActionSheetViewModel(
-            actions: actions,
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: .overCurrentContext
-        )
-        presentSheetWith(viewModel: viewModel, on: self, from: button)
+        presentActionSheet(from: button)
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -309,7 +250,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 }
 
 // MARK: - ToolbarActionMenuDelegate
-extension BrowserViewController: ToolBarActionMenuDelegate {
+extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }
@@ -348,8 +289,11 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                                                  textAlignment: .left)
             let toast = ButtonToast(viewModel: viewModel,
                                     theme: currentTheme()) { [weak self] isButtonTapped in
-                guard let self, let closedTab = tabManager.backupCloseTab else { return }
-                isButtonTapped ? self.tabManager.undoCloseTab(tab: closedTab.tab, position: closedTab.restorePosition) : nil
+                guard let self,
+                        tabManager.backupCloseTab != nil,
+                        isButtonTapped
+                else { return }
+                self.tabManager.undoCloseTab()
             }
             show(toast: toast)
         default:
@@ -360,7 +304,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showFindInPage() {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
     }
 
     func showCustomizeHomePage() {
@@ -383,5 +327,18 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         presentSignInViewController(fxaParameters.launchParameters,
                                     flowType: fxaParameters.flowType,
                                     referringPage: fxaParameters.referringPage)
+    }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        if !urls.isEmpty {
+            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+        }
+    }
+
+    func showFilePicker(fileURL: URL) {
+        let documentPicker = UIDocumentPickerViewController(forExporting: [fileURL], asCopy: true)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .formSheet
+        showViewController(viewController: documentPicker)
     }
 }

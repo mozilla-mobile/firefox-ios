@@ -23,7 +23,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     nonisolated let notificationCenter: NotificationProtocol
     private let profile: Profile
     private let tabManager: TabManager
-    private var recentTabs: [Tab] = [Tab]()
+    private var recentTabs = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
     private var hasSyncAccount: Bool?

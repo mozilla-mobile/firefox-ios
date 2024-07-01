@@ -80,7 +80,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             SimpleToast().showAlertWithText(
                 .AppMenu.AppMenuCopyURLConfirmMessage,
                 bottomContainer: alertContainer,
-                theme: themeManager.currentTheme(for: windowUUID))
+                theme: themeManager.getCurrentTheme(for: windowUUID))
             dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
@@ -95,10 +95,10 @@ class ShareExtensionCoordinator: BaseCoordinator,
             shareItem = ShareItem(url: url.absoluteString, title: nil)
         }
 
-        let themeColors = themeManager.currentTheme(for: windowUUID).colors
+        let themeColors = themeManager.getCurrentTheme(for: windowUUID).colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
-                                               iconColor: themeColors.iconPrimary)
+                                               iconColor: themeColors.iconDisabled)
 
         let helper = SendToDeviceHelper(
             shareItem: shareItem,
@@ -165,7 +165,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.alertContainer,
-                                                theme: self.themeManager.currentTheme(for: self.windowUUID))
+                                                theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
             }
         }
     }

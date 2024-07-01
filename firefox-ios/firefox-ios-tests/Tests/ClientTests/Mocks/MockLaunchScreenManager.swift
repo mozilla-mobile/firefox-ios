@@ -4,6 +4,7 @@
 
 import Foundation
 @testable import Client
+import Common
 
 class MockLaunchScreenViewModel: LaunchScreenViewModel {
     var introScreenManager: IntroScreenManager

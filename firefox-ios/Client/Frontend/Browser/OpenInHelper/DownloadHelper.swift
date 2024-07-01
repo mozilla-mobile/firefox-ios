@@ -96,7 +96,8 @@ class DownloadHelper: NSObject {
         self.preflightResponse = response
     }
 
-    func downloadViewModel(okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
+    func downloadViewModel(windowUUID: WindowUUID,
+                           okAction: @escaping (HTTPDownload) -> Void) -> PhotonActionSheetViewModel? {
         var requestUrl = request.url
         if let url = requestUrl, url.scheme == "blob" {
             requestUrl = url.removeBlobFromUrl()
@@ -104,7 +105,8 @@ class DownloadHelper: NSObject {
 
         guard let host = requestUrl?.host else { return nil }
 
-        guard let download = HTTPDownload(cookieStore: cookieStore,
+        guard let download = HTTPDownload(originWindow: windowUUID,
+                                          cookieStore: cookieStore,
                                           preflightResponse: preflightResponse,
                                           request: request)
         else { return nil }
@@ -132,7 +134,7 @@ class DownloadHelper: NSObject {
 
         filenameItem.customRender = { label, contentView in
             label.numberOfLines = 2
-            label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16, weight: .semibold)
+            label.font = FXFontStyles.Bold.body.scaledFont()
             label.lineBreakMode = .byCharWrapping
         }
 

@@ -78,7 +78,8 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     }
 
     func didTapTakeSurvey() {
-        message.map(messagingManager.onMessagePressed)
+        guard let message else { return }
+        messagingManager.onMessagePressed(message, window: nil, shouldExpire: true)
     }
 
     func didTapDismissSurvey() {

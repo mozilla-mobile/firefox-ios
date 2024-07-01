@@ -43,7 +43,7 @@ class OnboardingFactory {
 
     static func make(onboardingType: OnboardingVersion, dismissAction: @escaping () -> Void, telemetry: @escaping (OnboardingTelemetryHelper.Event) -> Void) -> UIViewController {
         switch onboardingType {
-            case .v2:
+        case .v2:
             let onboardingViewModel = OnboardingViewModel(
                 config: .init(title: .onboardingTitle, subtitle: .onboardingSubtitleV2, buttonTitle: .onboardingButtonTitleV2),
                 defaultBrowserConfig: .init(
@@ -76,23 +76,23 @@ class OnboardingFactory {
             controller.isModalInPresentation = true
             return controller
 
-            case .v1:
-                let controller = OnboardingViewController(
-                    config: .init(
-                        onboardingTitle: .onboardingTitle,
-                        onboardingSubtitle: .onboardingSubtitle,
-                        instructions: [
-                            .init(title: .onboardingIncognitoTitle, subtitle: .onboardingIncognitoDescription, image: .privateMode),
-                            .init(title: .onboardingHistoryTitle, subtitle: .onboardingHistoryDescription, image: .history),
-                            .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings)
-                        ],
-                        onboardingButtonTitle: .onboardingButtonTitle
-                    ),
-                    dismissOnboardingScreen: dismissAction
-                )
-                controller.modalPresentationStyle = .formSheet
-                controller.isModalInPresentation = true
-                return controller
+        case .v1:
+            let controller = OnboardingViewController(
+                config: .init(
+                    onboardingTitle: .onboardingTitle,
+                    onboardingSubtitle: .onboardingSubtitle,
+                    instructions: [
+                        .init(title: .onboardingIncognitoTitle, subtitle: .onboardingIncognitoDescription, image: .privateMode),
+                        .init(title: .onboardingHistoryTitle, subtitle: .onboardingHistoryDescription, image: .history),
+                        .init(title: .onboardingProtectionTitle, subtitle: .onboardingProtectionDescription, image: .settings)
+                    ],
+                    onboardingButtonTitle: .onboardingButtonTitle
+                ),
+                dismissOnboardingScreen: dismissAction
+            )
+            controller.modalPresentationStyle = .formSheet
+            controller.isModalInPresentation = true
+            return controller
         }
     }
 }

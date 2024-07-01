@@ -45,9 +45,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
 
     static let shared = TelemetryWrapper()
 
-    // TODO [7856]: Temporary. Additional telemetry updates forthcoming once iPad multi-window enabled.
-    var defaultTabManager: TabManager?
-
     let glean = Glean.shared
     // Boolean flag to temporarily remember if we crashed during the
     // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
@@ -95,6 +92,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
     }
 
     func initGlean(_ profile: Profile, sendUsageData: Bool) {
+        // Record default search engine setting to avoid sending a `null` value.
+        // If there's no default search engine, (there's not, at this point), we will
+        // send "unavailable" in order not to send `null`, but still differentiate
+        // the event in the startup sequence.
+        let defaultEngine = profile.searchEngines.defaultEngine
+        GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
+
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
         if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
@@ -105,6 +109,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
+
+        // Set the metric configuration from Nimbus.
+        glean.applyServerKnobsConfig(FxNimbus.shared.features.gleanServerKnobs.value().toJSONString())
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
@@ -152,10 +159,9 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
-        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-        if let count = defaultTabManager?.count {
-            GleanMetrics.Tabs.cumulativeCount.add(Int32(count))
-        }
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let tabCount = windowManager.allWindowTabManagers().map({ $0.count }).reduce(0, +)
+        GleanMetrics.Tabs.cumulativeCount.add(Int32(tabCount))
 
         // Record other preference settings.
         // If the setting exists at the key location, use that value. Otherwise record the default
@@ -203,13 +209,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.Preferences.showClipboardBar.set(false)
         }
 
-        // Close private tabs
-        if let closePrivateTabs = prefs.boolForKey("settings.closePrivateTabs") {
-            GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
-        } else {
-            GleanMetrics.Preferences.closePrivateTabs.set(false)
-        }
-
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
             GleanMetrics.TrackingProtection.enabled.set(tpEnabled)
@@ -247,8 +246,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isRecentlyVisitedEnabled = featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildAndUser)
         GleanMetrics.Preferences.recentlyVisited.set(isRecentlyVisitedEnabled)
 
-        let isRecentlySavedEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.RecentlySavedSection) ?? true
-        GleanMetrics.Preferences.recentlySaved.set(isRecentlySavedEnabled)
+        let isBookmarksEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.BookmarksSection) ?? true
+        GleanMetrics.Preferences.recentlySaved.set(isBookmarksEnabled)
 
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
         let isPocketEnabled = isFeatureEnabled && PocketProvider.islocaleSupported(Locale.current.identifier)
@@ -321,6 +320,7 @@ extension TelemetryWrapper {
         case downloadLinkButton = "download-link-button"
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
+        case defaultSearchEngine = "default-search-engine"
         // MARK: Fakespot
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
@@ -358,6 +358,7 @@ extension TelemetryWrapper {
         case tabNormalQuantity = "normal-tab-quantity"
         case tabPrivateQuantity = "private-tab-quantity"
         case tabInactiveQuantity = "inactive-tab-quantity"
+        case iPadWindowCount = "ipad-window-count"
         case groupedTab = "grouped-tab"
         case groupedTabPerformSearch = "grouped-tab-perform-search"
         case trackingProtectionStatistics = "tracking-protection-statistics"
@@ -511,8 +512,7 @@ extension TelemetryWrapper {
         case jumpBackInTileImpressions = "jump-back-in-tile-impressions"
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
-        case recentlySavedBookmarkImpressions = "recently-saved-bookmark-impressions"
-        case recentlySavedReadingItemImpressions = "recently-saved-reading-items-impressions"
+        case bookmarkImpressions = "bookmark-impressions"
         case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
@@ -540,6 +540,9 @@ extension TelemetryWrapper {
         case activityStream = "activity-stream"
         case appIcon = "app-icon"
         case appMenu = "app-menu"
+        case bookmarkItemAction = "bookmark-item-action"
+        case bookmarkSectionShowAll = "bookmark-section-show-all"
+        case bookmarkItemView = "bookmark-item-view"
         case browser = "browser"
         case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
@@ -582,11 +585,6 @@ extension TelemetryWrapper {
         case jumpBackInSectionGroupOpened = "jump-back-in-section-group-opened"
         case jumpBackInSectionSyncedTabShowAll = "jump-back-in-section-synced-tab-show-all"
         case jumpBackInSectionSyncedTabOpened = "jump-back-in-section-synced-tab-opened"
-        case recentlySavedSectionShowAll = "recently-saved-section-show-all"
-        case recentlySavedBookmarkItemAction = "recently-saved-bookmark-item-action"
-        case recentlySavedBookmarkItemView = "recently-saved-bookmark-item-view"
-        case recentlySavedReadingListView = "recently-saved-reading-list-view"
-        case recentlySavedReadingListAction = "recently-saved-reading-list-action"
         case historyHighlightsShowAll = "history-highlights-show-all"
         case historyHighlightsItemOpened = "history-highlights-item-opened"
         case historyHighlightsGroupOpen = "history-highlights-group-open"
@@ -652,6 +650,7 @@ extension TelemetryWrapper {
         case isRestoreTabsStarted = "is-restore-tabs-started"
         case recordSearchLocation = "recordSearchLocation"
         case recordSearchEngineID = "recordSearchEngineID"
+        case windowCount = "windowCount"
 
         case preference = "pref"
         case preferenceChanged = "to"
@@ -924,7 +923,12 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
-
+        case(.information, .background, .iPadWindowCount, _, let extras):
+            if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
+                GleanMetrics.Windows.ipadWindowCount.set(quantity)
+            } else {
+                recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
+            }
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
@@ -1100,6 +1104,18 @@ extension TelemetryWrapper {
                     extras: extras)
             }
 
+        // MARK: - Search Engine
+        case(.information, .change, .defaultSearchEngine, _, let extras):
+            if let searchEngineID = extras?[EventExtraKey.recordSearchEngineID.rawValue] as? String? ?? "custom" {
+                GleanMetrics.Search.defaultEngine.set(searchEngineID)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
@@ -1560,7 +1576,7 @@ extension TelemetryWrapper {
         case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
             GleanMetrics.Sync.loginCompletedView.record()
             // record the same event for Nimbus' internal event store
-            Experiments.events.recordEvent("sync.login_completed_view")
+            Experiments.events.recordEvent(BehavioralTargetingEvent.syncLoginCompletion)
         case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
@@ -1574,8 +1590,9 @@ extension TelemetryWrapper {
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
+            GleanMetrics.ServerKnobs.validation.record()
             // record the same event for Nimbus' internal event store
-            Experiments.events.recordEvent("app_cycle.foreground")
+            Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
         // MARK: App icon
@@ -1774,30 +1791,20 @@ extension TelemetryWrapper {
         case (.action, .open, .firefoxHomepage, .openHomeFromPhotonMenuButton, _):
             GleanMetrics.FirefoxHomePage.openFromMenuHomeButton.add()
 
-        case (.action, .view, .firefoxHomepage, .recentlySavedBookmarkItemView, let extras):
-            if let bookmarksCount = extras?[EventObject.recentlySavedBookmarkImpressions.rawValue] as? String {
+        case (.action, .view, .firefoxHomepage, .bookmarkItemView, let extras):
+            if let bookmarksCount = extras?[EventObject.bookmarkImpressions.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkView.record(GleanMetrics.FirefoxHomePage.RecentlySavedBookmarkViewExtra(bookmarkCount: bookmarksCount))
             }
-        case (.action, .view, .firefoxHomepage, .recentlySavedReadingListView, let extras):
-            if let readingListItemsCount = extras?[EventObject.recentlySavedReadingItemImpressions.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.readingListView.record(GleanMetrics.FirefoxHomePage.ReadingListViewExtra(readingListCount: readingListItemsCount))
-            }
-        case (.action, .tap, .firefoxHomepage, .recentlySavedSectionShowAll, let extras):
+        case (.action, .tap, .firefoxHomepage, .bookmarkSectionShowAll, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedShowAll.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedShowAllOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, .recentlySavedBookmarkItemAction, let extras):
+        case (.action, .tap, .firefoxHomepage, .bookmarkItemAction, let extras):
             GleanMetrics.FirefoxHomePage.recentlySavedBookmarkItem.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
                 GleanMetrics.FirefoxHomePage.recentlySavedBookmarkOrigin[homePageOrigin].add()
             }
-        case (.action, .tap, .firefoxHomepage, .recentlySavedReadingListAction, let extras):
-            GleanMetrics.FirefoxHomePage.recentlySavedReadingItem.add()
-            if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {
-                GleanMetrics.FirefoxHomePage.recentlySavedReadOrigin[homePageOrigin].add()
-            }
-
         case (.action, .tap, .firefoxHomepage, .jumpBackInSectionShowAll, let extras):
             GleanMetrics.FirefoxHomePage.jumpBackInShowAll.add()
             if let homePageOrigin = extras?[EventExtraKey.fxHomepageOrigin.rawValue] as? String {

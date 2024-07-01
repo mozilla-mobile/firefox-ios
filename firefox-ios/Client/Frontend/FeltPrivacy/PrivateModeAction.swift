@@ -4,25 +4,21 @@
 
 import Foundation
 import Redux
+import Common
 
-enum PrivateModeMiddlewareAction: Action {
-    case privateModeUpdated(BoolValueContext)
+class PrivateModeAction: Action {
+    let isPrivate: Bool?
 
-    var windowUUID: UUID {
-        switch self {
-        case .privateModeUpdated(let context as ActionContext):
-            return context.windowUUID
-        }
+    init(isPrivate: Bool? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.isPrivate = isPrivate
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-enum PrivateModeUserAction: Action {
-    case setPrivateModeTo(BoolValueContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .setPrivateModeTo(let context as ActionContext):
-            return context.windowUUID
-        }
-    }
+enum PrivateModeActionType: ActionType {
+    case setPrivateModeTo
+    case privateModeUpdated
 }

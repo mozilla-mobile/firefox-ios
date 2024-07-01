@@ -2,10 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
 import ComponentLibrary
+import MozillaAppServices
 import Storage
 import SwiftUI
+import XCTest
+
 @testable import Client
 
 final class CredentialAutofillCoordinatorTests: XCTestCase {
@@ -59,8 +61,9 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
+        let field = FocusFieldType.password
 
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
         XCTAssertEqual(router.presentCalled, 1)
@@ -72,8 +75,9 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
+        let field = FocusFieldType.password
 
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
@@ -96,8 +100,9 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
+        let field = FocusFieldType.password
 
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
@@ -142,7 +147,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
                 creditCardViewController.didTapYesClosure?(nil)
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
             } else {
-                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewControler as child")
+                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewController as child")
             }
         } else {
             XCTFail("A BottomSheetViewController has to be presented")
@@ -168,7 +173,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
                 creditCardViewController.didSelectCreditCardToFill?(UnencryptedCreditCardFields())
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
             } else {
-                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewControler as child")
+                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewController as child")
             }
         } else {
             XCTFail("A BottomSheetViewController has to be presented")
@@ -194,7 +199,7 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
                 creditCardViewController.didTapManageCardsClosure?()
                 XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
             } else {
-                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewControler as child")
+                XCTFail("The BottomSheetViewController has to contains a CreditCardBottomSheetViewController as child")
             }
         } else {
             XCTFail("A BottomSheetViewController has to be presented")

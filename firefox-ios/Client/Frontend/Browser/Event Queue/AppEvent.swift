@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 /// Base event type protocol. Conforming types must be hashable.
 public protocol AppEventType: Hashable { }
@@ -29,7 +30,6 @@ public enum AppEvent: AppEventType {
     // Activities: Browser
     case browserUpdatedForAppActivation(WindowUUID)
 
-    // Activites: Tabs
+    // Activities: Tabs
     case tabRestoration(WindowUUID)
-    case selectTab(URL?, WindowUUID)
 }

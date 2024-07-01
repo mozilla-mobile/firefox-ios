@@ -8,6 +8,8 @@ import Storage
 import WebKit
 
 class MetadataParserHelper: TabEventHandler {
+    let tabEventWindowResponseType: TabEventHandlerWindowResponseType = .allWindows
+
     init() {
         register(self, forTabEvents: .didChangeURL)
     }

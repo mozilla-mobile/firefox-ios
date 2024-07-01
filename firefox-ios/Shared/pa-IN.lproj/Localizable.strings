@@ -1144,6 +1144,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ਕਿਊਰੀ ਨੂੰ %s ਨਾਲ ਬਦਲੋ)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "ਬਾਹਰੀ ਐਪਾਂ ਖੋਲ੍ਹਣ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਓ";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
 
@@ -1399,6 +1402,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "ਜਦੋਂ Firefox ਖੋਲ੍ਹਣਾ ਹੋਵੇ";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "ਜਦੋਂ %@ ਨੂੰ ਖੋਲ੍ਹਣਾ ਹੋਵੇ";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "ਜਦੋਂ Firefox ਖੋਲ੍ਹਣਾ ਹੋਵੇ";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕਾਂ ਨੂੰ ਖੋਲ੍ਹਣ ਦੀ ਪੇਸ਼ਕਸ਼ ਕਰੋ";
 
@@ -1440,6 +1449,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "ਲਿੰਕਾਂ ਨੂੰ ਦੇਰ ਤੱਕ ਦਬਾਉਣ ਵੇਲੇ";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "ਲਿੰਕਾਂ ਨੂੰ ਦੇਰ ਤੱਕ ਦਬਾਉਣ ਵੇਲੇ";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "ਲਿੰਕ ਝਲਕਾਂ ਨੂੰ ਵੇਖੋ";

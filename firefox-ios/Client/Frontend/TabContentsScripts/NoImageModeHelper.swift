@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Shared
+import Common
 
 struct NoImageModePrefsKey {
     static let NoImageModeStatus = PrefsKeys.KeyNoImageModeStatus
@@ -36,9 +37,14 @@ class NoImageModeHelper: TabContentScript {
         return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
 
-    static func toggle(isEnabled: Bool, profile: Profile, tabManager: TabManager) {
+    static func toggle(isEnabled: Bool, profile: Profile) {
         profile.prefs.setBool(isEnabled, forKey: NoImageModePrefsKey.NoImageModeStatus)
-        tabManager.tabs.forEach { $0.noImageMode = isEnabled }
+
+        // We need to ensure we update tabs across all open iPad windows since the
+        // No Image Mode is effectively a global setting (stored on the user profile)
+        let windowManager: WindowManager = AppContainer.shared.resolve()
+        let tabManagers = windowManager.allWindowTabManagers()
+        tabManagers.forEach({ $0.tabs.forEach { $0.noImageMode = isEnabled } })
 
         if isEnabled {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .blockImagesEnabled)

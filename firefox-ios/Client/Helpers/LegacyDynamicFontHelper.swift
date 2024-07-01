@@ -56,9 +56,6 @@ class LegacyDynamicFontHelper: NSObject {
      * Standard
      */
     fileprivate var defaultStandardFontSize: CGFloat
-    var DefaultStandardFontSize: CGFloat {
-        return defaultStandardFontSize
-    }
 
     /**
      * Reader mode

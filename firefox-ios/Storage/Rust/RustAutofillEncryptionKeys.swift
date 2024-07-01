@@ -5,6 +5,13 @@
 import Foundation
 import Common
 
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.AutofillApiError
+import enum MozillaAppServices.MZKeychainItemAccessibility
+import func MozillaAppServices.createAutofillKey
+import func MozillaAppServices.decryptString
+import func MozillaAppServices.encryptString
+
 public extension AutofillApiError {
     var descriptionValue: String {
         switch self {

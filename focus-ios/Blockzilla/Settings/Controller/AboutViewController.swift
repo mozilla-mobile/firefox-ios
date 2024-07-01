@@ -86,6 +86,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     private let headerView = AboutHeaderView()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         headerView.delegate = self
         navigationController?.navigationBar.tintColor = .accent
 
@@ -254,7 +255,8 @@ private class AboutHeaderView: UIView {
         setupSecretMenuActivation()
     }
 
-    @objc private func didPressLearnMore() {
+    @objc
+    private func didPressLearnMore() {
         delegate?.aboutHeaderViewDidPressLearnMore(self)
     }
 
@@ -296,12 +298,21 @@ private class AboutHeaderView: UIView {
         logo.addGestureRecognizer(gestureRecognizer)
     }
 
-    @objc private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
+    @objc
+    private func handleSecretMenuActivation(sender: UITapGestureRecognizer) {
         Settings.set(true, forToggle: .displaySecretMenu)
         // Give the logo a little shake as a confirmation
         logo.transform = CGAffineTransform(translationX: 20, y: 0)
-        UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            self.logo.transform = CGAffineTransform.identity
-        }, completion: nil)
+        UIView.animate(
+            withDuration: 0.25,
+            delay: 0,
+            usingSpringWithDamping: 0.1,
+            initialSpringVelocity: 1,
+            options: .curveEaseInOut,
+            animations: {
+                self.logo.transform = CGAffineTransform.identity
+            },
+            completion: nil
+        )
     }
 }

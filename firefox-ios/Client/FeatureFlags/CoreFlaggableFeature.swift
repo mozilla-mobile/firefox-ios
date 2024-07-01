@@ -4,7 +4,6 @@
 
 import Common
 import Shared
-import MozillaAppServices
 import UIKit
 
 /// Core features are features that are used for developer purposes and are

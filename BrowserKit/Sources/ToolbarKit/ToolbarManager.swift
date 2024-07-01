@@ -10,29 +10,36 @@ public enum AddressToolbarBorderPosition {
 }
 
 public protocol ToolbarManager {
-    /// Determines whether a border on top/bottom of the address toolbar should be displayed
-    func shouldDisplayBorder(borderPosition: AddressToolbarBorderPosition,
-                             toolbarPosition: AddressToolbarPosition,
-                             isPrivate: Bool,
-                             scrollY: Int) -> Bool
+    /// Determines which border should be displayed for the address toolbar
+    func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
+                                  isPrivate: Bool,
+                                  scrollY: CGFloat) -> AddressToolbarBorderPosition?
+
+    /// Determines whether a border on top of the navigation toolbar should be displayed
+    func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool
 }
 
 public class DefaultToolbarManager: ToolbarManager {
     public init() {}
 
-    public func shouldDisplayBorder(borderPosition: AddressToolbarBorderPosition,
-                                    toolbarPosition: AddressToolbarPosition,
-                                    isPrivate: Bool,
-                                    scrollY: Int) -> Bool {
+    public func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
+                                         isPrivate: Bool,
+                                         scrollY: CGFloat) -> AddressToolbarBorderPosition? {
         // display the top border if
         // - the toolbar is displayed at the bottom
         // display the bottom border if
         // - the toolbar is displayed at the top and the website was scrolled
-        // - we are in private mode
-        if borderPosition == .top {
-            return toolbarPosition == .bottom
+        // - the toolbar is displayed at the top and we are in private mode
+        if toolbarPosition == .bottom {
+            return .top
+        } else if toolbarPosition == .top && (scrollY > 0 || isPrivate) {
+            return .bottom
         } else {
-            return (toolbarPosition == .top && scrollY > 0) || isPrivate
+            return nil
         }
+    }
+
+    public func shouldDisplayNavigationBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
+        return toolbarPosition == .top
     }
 }

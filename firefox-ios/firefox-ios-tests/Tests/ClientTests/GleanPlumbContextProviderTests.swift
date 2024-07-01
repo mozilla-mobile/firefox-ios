@@ -10,12 +10,14 @@ import XCTest
 class GleanPlumbContextProviderTests: XCTestCase {
     private var userDefaults: UserDefaultsInterface!
     private var contextProvider: GleanPlumbContextProvider!
+    private var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         userDefaults = MockUserDefaults()
-        contextProvider = GleanPlumbContextProvider()
+        profile = MockProfile()
+        contextProvider = GleanPlumbContextProvider(profile: profile)
         contextProvider.userDefaults = userDefaults
     }
 
@@ -23,6 +25,20 @@ class GleanPlumbContextProviderTests: XCTestCase {
         super.tearDown()
         userDefaults = nil
         contextProvider = nil
+    }
+
+    func testNumberOfLaunches_withFirstLaunch() {
+        profile.prefs.setInt(1, forKey: PrefsKeys.Session.Count)
+        let context = contextProvider.createAdditionalDeviceContext()
+        let numberOfAppLaunches = context["number_of_app_launches"] as? Int32
+        XCTAssertEqual(numberOfAppLaunches, 1)
+    }
+
+    func testNumberOfLaunches_withSecondLaunch() {
+        profile.prefs.setInt(2, forKey: PrefsKeys.Session.Count)
+        let context = contextProvider.createAdditionalDeviceContext()
+        let numberOfAppLaunches = context["number_of_app_launches"] as? Int32
+        XCTAssertEqual(numberOfAppLaunches, 2)
     }
 
     func testIsInactiveNewUser_noFirstAppUse() {

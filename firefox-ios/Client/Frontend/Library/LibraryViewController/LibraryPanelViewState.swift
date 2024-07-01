@@ -39,7 +39,7 @@ enum LibraryPanelMainState: Equatable {
     }
 }
 
-/// Describes the available substates for LibaryPanel states. These are universal
+/// Describes the available substates for LibraryPanel states. These are universal
 /// and thus can be used on each particular panel to describe it's current state.
 enum LibraryPanelSubState {
     case mainView

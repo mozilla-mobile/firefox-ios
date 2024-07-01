@@ -45,7 +45,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         }
     }()
 
-    // Allow endPoint to be overriden for testing
+    // Allow endPoint to be overridden for testing
     init(endPoint: String = PocketProvider.GlobalFeed,
          prefs: Prefs) {
         self.pocketGlobalFeed = endPoint

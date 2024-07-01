@@ -4,9 +4,13 @@
 
 import Foundation
 import Storage
+import XCTest
 
 @testable import Client
-import XCTest
+
+import struct MozillaAppServices.HistoryMetadataKey
+import struct MozillaAppServices.HistoryMetadataObservation
+import struct MozillaAppServices.VisitObservation
 
 class HistoryHighlightsTestEntryProvider {
     private var profile: MockProfile!

@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import ComponentLibrary
 
 class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     private struct UX {
@@ -29,12 +30,14 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
         label.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 
-    private let learnMoreLabel: UILabel = .build { label in
-        label.text = .FirefoxHomepage.Pocket.Footer.LearnMore
-        label.isUserInteractionEnabled = true
-        label.adjustsFontForContentSizeCategory = true
-        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel
-        label.font = FXFontStyles.Regular.caption1.scaledFont()
+    private let learnMoreButton: LinkButton = .build { button in
+        let buttonViewModel = LinkButtonViewModel(
+            title: .FirefoxHomepage.Pocket.Footer.LearnMore,
+            a11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel,
+            font: FXFontStyles.Regular.caption1.scaledFont(),
+            contentInsets: NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        )
+        button.configure(viewModel: buttonViewModel)
     }
 
     private let labelsContainer: UIStackView = .build { stackView in
@@ -62,11 +65,8 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     }
 
     private func setupViews() {
-        let tapGesture = UITapGestureRecognizer(target: self,
-                                                action: #selector(didTapLearnMore))
-        learnMoreLabel.addGestureRecognizer(tapGesture)
-
-        [titleLabel, learnMoreLabel].forEach(labelsContainer.addArrangedSubview)
+        learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
+        [titleLabel, learnMoreButton].forEach(labelsContainer.addArrangedSubview)
         [pocketImageView, labelsContainer].forEach(mainContainer.addArrangedSubview)
 
         addSubview(mainContainer)
@@ -87,8 +87,7 @@ class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable 
     }
 
     func applyTheme(theme: Theme) {
-        let colors = theme.colors
         titleLabel.textColor = wallpaperManager.currentWallpaper.textColor
-        learnMoreLabel.textColor = colors.textAccent
+        learnMoreButton.applyTheme(theme: theme)
     }
 }

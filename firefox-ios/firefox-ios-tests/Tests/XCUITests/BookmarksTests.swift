@@ -365,9 +365,9 @@ class BookmarksTests: BaseTestCase {
         waitForTabsButton()
         bookmark()
         navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.staticTexts["Recently Saved"])
-        mozWaitForElementToExist(app.cells["RecentlySavedCell"])
-        app.cells["RecentlySavedCell"].press(forDuration: 1.5)
+        mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+        mozWaitForElementToExist(app.cells["BookmarksCell"])
+        app.cells["BookmarksCell"].press(forDuration: 1.5)
         // The context menu opens, having the correct options
         let ContextMenuTable = app.tables["Context Menu"]
         mozWaitForElementToExist(ContextMenuTable)
@@ -375,6 +375,16 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.shareApple])
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307054
+    func testBookmark() {
+        navigator.openURL(url_3)
+        waitForTabsButton()
+        bookmark()
+        mozWaitForElementToExist(app.staticTexts["Bookmark Added"])
+        unbookmark()
+        mozWaitForElementToExist(app.staticTexts["Bookmark Removed"])
     }
 
     private func bookmarkPageAndTapEdit() {

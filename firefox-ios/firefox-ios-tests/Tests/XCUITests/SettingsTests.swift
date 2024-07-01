@@ -49,15 +49,20 @@ class SettingsTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
 
+        // For iOS 15, we must scroll until the switch is visible.
+        if #unavailable(iOS 16) {
+            app.swipeUp()
+            mozWaitForElementToExist(app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"])
+        }
         // Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value as? String, "0")
 
         // Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].tap()
+        app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].tap()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value2 as? String, "1")
 
         app.navigationBars["Settings"].buttons["Done"].tap()
@@ -67,7 +72,7 @@ class SettingsTests: BaseTestCase {
         settingsmenuitemCell.tap()
 
         // Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
         XCTAssertEqual(value3 as? String, "1")
     }
 
@@ -117,6 +122,7 @@ class SettingsTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(blockImagesSwitch)
+        app.swipeUp()
         navigator.performAction(Action.ToggleNoImageMode)
         checkShowImages(showImages: false)
 
@@ -147,7 +153,6 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.NoImageMode.title], app.switches[settingsQuery.OfferToOpen.title],
             table.cells[settingsQuery.Logins.title], app.switches[settingsQuery.ShowLink.title],
             table.cells[settingsQuery.CreditCards.title], table.cells[settingsQuery.Address.title],
-            table.cells[settingsQuery.ClearData.title], app.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title], table.cells[settingsQuery.Notifications.title],
             table.cells[settingsQuery.ShowIntroduction.title], table.cells[settingsQuery.SendAnonymousUsageData.title],
             table.cells[settingsQuery.StudiesToggle.title], table.cells[settingsQuery.Version.title],

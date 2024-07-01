@@ -8,6 +8,8 @@ import Glean
 import Common
 import ComponentLibrary
 
+import enum MozillaAppServices.VisitType
+
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
 }
@@ -32,7 +34,7 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
 
         if isTabTrayRefactorEnabled {
             let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
@@ -64,6 +66,7 @@ extension BrowserViewController: URLBarDelegate {
             // If we are showing toptabs a user can just use the top tab bar
             // If in overlay mode switching doesnt correctly dismiss the homepanels
             guard !self.topTabsVisible,
+                  !self.isToolbarRefactorEnabled,
                   !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
             let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
@@ -165,7 +168,9 @@ extension BrowserViewController: URLBarDelegate {
                 )
             },
             andActionForButton: {
-                store.dispatch(FakespotAction.show(windowUUID.context))
+                let action = FakespotAction(windowUUID: windowUUID,
+                                            actionType: FakespotActionType.show)
+                store.dispatch(action)
             },
             overlayState: overlayManager)
     }
@@ -311,7 +316,7 @@ extension BrowserViewController: URLBarDelegate {
             configureOverlayView()
         }
 
-        searchController?.searchQuery = text
+        searchController?.viewModel.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
         searchController?.searchTelemetry?.interactionType = .refined
         searchLoader?.setQueryWithoutAutocomplete(text)
@@ -327,7 +332,7 @@ extension BrowserViewController: URLBarDelegate {
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
             theme: self.currentTheme()
         )
-        searchController?.searchQuery = text
+        searchController?.viewModel.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
         searchController?.searchTelemetry?.clearVisibleResults()
         searchLoader?.query = text
@@ -335,40 +340,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
-        guard let currentTab = tabManager.selectedTab else { return }
-
-        if let fixupURL = URIFixup.getURL(text) {
-            // The user entered a URL, so use it.
-            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
-            return
-        }
-
-        // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        guard let possibleKeywordQuerySeparatorSpace = trimmedText.firstIndex(of: " ") else {
-            submitSearchText(text, forTab: currentTab)
-            return
-        }
-
-        let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
-        let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
-
-        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword).uponQueue(.main) { result in
-            if var urlString = result.successValue ?? "",
-               let escapedQuery = possibleQuery.addingPercentEncoding(
-                withAllowedCharacters: NSCharacterSet.urlQueryAllowed
-               ),
-               let range = urlString.range(of: "%s") {
-                urlString.replaceSubrange(range, with: escapedQuery)
-
-                if let url = URL(string: urlString, invalidCharacters: false) {
-                    self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-                    return
-                }
-            }
-
-            self.submitSearchText(text, forTab: currentTab)
-        }
+        didSubmitSearchText(text)
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {

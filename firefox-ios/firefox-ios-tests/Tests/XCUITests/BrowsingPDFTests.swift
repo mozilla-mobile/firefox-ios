@@ -22,14 +22,12 @@ class BrowsingPDFTests: BaseTestCase {
         app.swipeUp()
         mozWaitForElementToExist(app.staticTexts["1 of 1"])
         app.swipeDown()
-        XCTAssertTrue(app.staticTexts["1 of 1"].exists)
+        mozWaitForElementToExist(app.staticTexts["1 of 1"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307117
-    // Disabled due to link not loading
-    func testOpenLinkFromPDF() throws {
-        // throw XCTSkip("Link inside pdf is not loading anymore")
-        /*
+    // Smoketest
+    func testOpenLinkFromPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
 
@@ -42,7 +40,6 @@ class BrowsingPDFTests: BaseTestCase {
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
         mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
-         */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307118
@@ -55,7 +52,11 @@ class BrowsingPDFTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
         mozWaitForElementToExist(app.buttons["Open"])
         mozWaitForElementToExist(app.buttons["Add to Reading List"])
-        mozWaitForElementToExist(app.buttons["Copy Link"])
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.buttons["Copy Link"])
+        } else {
+            mozWaitForElementToExist(app.buttons["Copy"])
+        }
         mozWaitForElementToExist(app.buttons["Share…"])
     }
 
@@ -78,6 +79,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307120
+    // Smoketest
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -110,6 +112,7 @@ class BrowsingPDFTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307121
+    // Smoketest
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()

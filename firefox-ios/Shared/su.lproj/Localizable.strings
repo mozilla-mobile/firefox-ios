@@ -221,13 +221,13 @@
 "Could not load page." = "Teu bisa muat kaca.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Enhanced Tracking Protection bawaan mantuan ngeureunan iklan nunutur anjeun. Hurungkeun Strict pikeun meungpeuk leuwih loba palacak, iklan, jeung popap.";
+"CoverSheet.v24.ETP.Description" = "Kilung Palacakan anu Ditingkatkeun bawaan mantuan ngeureunan iklan nunutur anjeun. Hurungkeun Strict pikeun meungpeuk leuwih loba palacak, iklan, jeung popap. ";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Buka Setélan";
 
 /* Title for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Title" = "Perlindungan Ngalawan Palacakan Iklan";
+"CoverSheet.v24.ETP.Title" = "Kilung Ngalawan Palacakan Iklan";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Jieun akun";
@@ -860,7 +860,7 @@
 "Menu.ZoomPage.Title.v113" = "Jum (%@)";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
-"mobile device" = "parangkat ider";
+"mobile device" = "parabot ider";
 
 /* Relative date for dates older than a month and less than two months. */
 "more than a month ago" = "leuwih ti sabulan kalarung";
@@ -1144,6 +1144,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Ganti Kuery ku %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Blok Muka Aplikasi éksternal";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Hapusan Sakur Data Raramatloka";
 
@@ -1399,6 +1402,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Nalika Muka Firefox";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Nalika muka %@";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "Nalika Muka Firefox";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Tawaran Muka Tutumbu Tironan";
 
@@ -1440,6 +1449,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Nalika Mencét-lila Tutumbu";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Nalika Mencét-lila Tutumbu";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Témbongkeun Pratayang Tutumbu";

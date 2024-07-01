@@ -74,12 +74,17 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         app.otherElements[StandardImageIdentifiers.Large.shareApple].tap()
 
+        if #unavailable(iOS 16) {
+            mozWaitForElementToExist(app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"])
+            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["Example Domain"])
+            mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
+        }
+        var fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
-        mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["Example Domain"])
-        mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
-        mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
-        var fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
         if #unavailable(iOS 17) {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 
 class RemoteTabsCoordinator: BaseCoordinator,
                              RemoteTabsPanelDelegate,
@@ -56,7 +57,7 @@ class RemoteTabsCoordinator: BaseCoordinator,
         parentCoordinator?.didFinish(from: self)
         let urlString = URL.mozInternalScheme + "://deep-link?url=/settings/fxa"
         guard let url = URL(string: urlString) else { return }
-        applicationHelper.open(url)
+        applicationHelper.open(url, inWindow: windowUUID)
     }
 
     @objc

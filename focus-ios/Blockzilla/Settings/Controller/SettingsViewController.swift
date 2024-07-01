@@ -161,6 +161,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         title = UIConstants.strings.settingsTitle
 
         let navigationBar = navigationController!.navigationBar
@@ -213,7 +214,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    @objc private func applicationDidBecomeActive() {
+    @objc
+    private func applicationDidBecomeActive() {
         // On iOS 9, we detect the blocker status by loading an invisible SafariViewController
         // in the current view. We can only run the detector if the view is visible; otherwise,
         // the detection callback won't fire and the detector won't be cleaned up.
@@ -235,15 +237,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let subtitle: String
 
         switch authenticationManager.biometricType {
-            case .faceID:
-                label = UIConstants.strings.labelFaceIDLogin
-                subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
-            case .touchID:
-                label = UIConstants.strings.labelTouchIDLogin
-                subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
-            default:
-                // Unknown biometric type
-                return nil
+        case .faceID:
+            label = UIConstants.strings.labelFaceIDLogin
+            subtitle = String(format: UIConstants.strings.labelFaceIDLoginDescription, AppInfo.productName)
+        case .touchID:
+            label = UIConstants.strings.labelTouchIDLogin
+            subtitle = String(format: UIConstants.strings.labelTouchIDLoginDescription, AppInfo.productName)
+        default:
+            // Unknown biometric type
+            return nil
         }
 
         let toggle = BlockerToggle(label: label, setting: SettingsToggle.biometricLogin, subtitle: subtitle)
@@ -498,19 +500,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationController?.pushViewController(contentViewController, animated: true)
     }
 
-    @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
+    @objc
+    func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .usageData)
     }
 
-    @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
+    @objc
+    func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .searchSuggestions)
     }
 
-    @objc func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
+    @objc
+    func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .studies)
     }
 
-    @objc private func dismissSettings() {
+    @objc
+    private func dismissSettings() {
         #if DEBUG
         if let browserViewController = presentingViewController as? BrowserViewController {
             browserViewController.refreshTipsDisplay()
@@ -519,12 +525,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         self.dismiss(animated: true, completion: dismissScreenCompletion)
     }
 
-    @objc private func aboutClicked() {
+    @objc
+    private func aboutClicked() {
         navigationController!.pushViewController(AboutViewController(), animated: true)
     }
 
-    @objc private func toggleSwitched(_ sender: UISwitch) {
-        let toggle = toggles.values.filter { $0.values.filter { $0.toggle == sender } != [] }[0].values.filter { $0.toggle == sender }[0]
+    @objc
+    private func toggleSwitched(_ sender: UISwitch) {
+        let toggle = toggles.values.filter { $0.values.contains(where: { $0.toggle == sender }) }[0].values.filter { $0.toggle == sender }[0]
 
         func updateSetting() {
             Settings.set(sender.isOn, forToggle: toggle.setting)

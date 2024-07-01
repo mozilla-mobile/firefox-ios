@@ -4,7 +4,7 @@
 
 import XCTest
 import WebKit
-
+import Common
 @testable import Client
 
 class TabTests: XCTestCase {

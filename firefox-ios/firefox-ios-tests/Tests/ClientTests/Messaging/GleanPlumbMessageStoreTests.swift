@@ -33,10 +33,19 @@ class GleanPlumbMessageStoreTests: XCTestCase {
     func testOnMessageExpired_WhenPressed() {
         let message = createMessage(messageId: messageId)
         subject.onMessageDisplayed(message)
-        subject.onMessagePressed(message)
+        subject.onMessagePressed(message, shouldExpire: true)
 
         XCTAssertEqual(message.metadata.impressions, 1)
         XCTAssertTrue(message.metadata.isExpired)
+    }
+
+    func testOnMessageExpired_WhenPressedAndShouldNotExpire() {
+        let message = createMessage(messageId: messageId)
+        subject.onMessageDisplayed(message)
+        subject.onMessagePressed(message, shouldExpire: false)
+
+        XCTAssertEqual(message.metadata.impressions, 1)
+        XCTAssertFalse(message.metadata.isExpired)
     }
 
     func testOnMessageExpired_WhenDismiss() {
@@ -76,6 +85,7 @@ class MockMessageData: MessageDataProtocol {
     var buttonLabel: String?
     var experiment: String?
     var actionParams: [String: String]
+    var microsurveyConfig: MicrosurveyConfig?
 
     init(
         surface: MessageSurfaceId = .newTabCard,
@@ -83,7 +93,8 @@ class MockMessageData: MessageDataProtocol {
         title: String? = "Title",
         text: String = "text",
         buttonLabel: String? = "Tap",
-        actionParams: [String: String] = [:]
+        actionParams: [String: String] = [:],
+        microsurveyConfig: MicrosurveyConfig? = nil
     ) {
         self.surface = surface
         self.isControl = isControl
@@ -91,6 +102,7 @@ class MockMessageData: MessageDataProtocol {
         self.text = text
         self.buttonLabel = buttonLabel
         self.actionParams = actionParams
+        self.microsurveyConfig = microsurveyConfig
     }
 }
 

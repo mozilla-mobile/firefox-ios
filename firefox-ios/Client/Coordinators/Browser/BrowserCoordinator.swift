@@ -10,6 +10,9 @@ import Storage
 import Redux
 import TabDataStore
 
+import enum MozillaAppServices.VisitType
+import struct MozillaAppServices.CreditCard
+
 class BrowserCoordinator: BaseCoordinator,
                           LaunchCoordinatorDelegate,
                           BrowserDelegate,
@@ -55,10 +58,6 @@ class BrowserCoordinator: BaseCoordinator,
         self.applicationHelper = applicationHelper
         self.glean = glean
         super.init(router: router)
-
-        // TODO [7856]: Additional telemetry updates forthcoming once iPad multi-window enabled.
-        // For now, we only have a single BVC and TabManager. Plug it into our TelemetryWrapper:
-        TelemetryWrapper.shared.defaultTabManager = tabManager
 
         browserViewController.browserDelegate = self
         browserViewController.navigationHandler = self
@@ -250,7 +249,7 @@ class BrowserCoordinator: BaseCoordinator,
         case let .action(routeAction):
             switch routeAction {
             case .closePrivateTabs:
-                handleClosePrivateTabs()
+                handleClosePrivateTabsWidgetAction()
             case .showQRCode:
                 handleQRCode()
             case .showIntroOnboarding:
@@ -280,8 +279,12 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.handleQRCode()
     }
 
-    private func handleClosePrivateTabs() {
-        browserViewController.handleClosePrivateTabs()
+    private func handleClosePrivateTabsWidgetAction() {
+        // Our widget actions will arrive as a URL passed into the client iOS app.
+        // If multiple iPad windows are open the resulting action + route will be
+        // sent to one particular window, but for this action we want to close tabs
+        // for all open windows, so we route this message to the WindowManager.
+        windowManager.performMultiWindowAction(.closeAllPrivateTabs)
     }
 
     private func handle(homepanelSection section: Route.HomepanelSection) {
@@ -326,7 +329,7 @@ class BrowserCoordinator: BaseCoordinator,
         return true
     }
 
-    private func handleSettings(with section: Route.SettingsSection) {
+    private func handleSettings(with section: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         guard !childCoordinators.contains(where: { $0 is SettingsCoordinator }) else {
             return // route is handled with existing child coordinator
         }
@@ -344,6 +347,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         navigationController.onViewDismissed = { [weak self] in
             self?.didFinishSettings(from: settingsCoordinator)
+            onDismiss?()
         }
         present(navigationController)
     }
@@ -408,7 +412,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.dismiss()
     }
 
-    func libraryPanel(didSelectURL url: URL, visitType: Storage.VisitType) {
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         browserViewController.libraryPanel(didSelectURL: url, visitType: visitType)
         router.dismiss()
     }
@@ -435,9 +439,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserNavigationHandler
 
-    func show(settings: Route.SettingsSection) {
+    func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         presentWithModalDismissIfNeeded {
-            self.handleSettings(with: settings)
+            self.handleSettings(with: settings, onDismiss: onDismiss)
         }
     }
 
@@ -563,9 +567,9 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     @MainActor
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
+        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId, field: field)
     }
 
     func showAddressAutofill(frame: WKFrameInfo?) {
@@ -611,6 +615,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        windowManager.postWindowEvent(event: .qrScannerOpened, windowUUID: windowUUID)
         var coordinator: QRCodeCoordinator
         if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
             coordinator = qrCodeCoordinator
@@ -670,6 +675,40 @@ class BrowserCoordinator: BaseCoordinator,
         present(backForwardListVC)
     }
 
+    // MARK: Microsurvey
+    func showMicrosurvey(model: MicrosurveyModel) {
+        guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
+            return
+        }
+
+        let navigationController = DismissableNavigationViewController()
+        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+        setiPadLayoutDetents(for: navigationController)
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        let coordinator = MicrosurveyCoordinator(
+            model: model,
+            router: DefaultRouter(
+                navigationController: navigationController
+            ),
+            tabManager: tabManager
+        )
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        coordinator.start()
+
+        navigationController.onViewDismissed = { [weak self] in
+            // Remove coordinator when user drags down to dismiss modal
+            self?.didFinish(from: coordinator)
+        }
+
+        present(navigationController)
+    }
+
+    private func setiPadLayoutDetents(for controller: UIViewController) {
+        guard controller.shouldUseiPadSetup() else { return }
+        controller.sheetPresentationController?.selectedDetentIdentifier = .large
+    }
+
     private func present(_ viewController: UIViewController,
                          animated: Bool = true,
                          completion: (() -> Void)? = nil) {
@@ -711,10 +750,14 @@ class BrowserCoordinator: BaseCoordinator,
             // Notify theme manager
             themeManager.windowDidClose(uuid: uuid)
 
-            // TODO: Revisit for [FXIOS-8064]. Disabled temporarily to avoid potential KVO crash in WebKit. (FXIOS-8416)
             // Clean up views and ensure BVC for the window is freed
-            // browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
-            // browserViewController.removeFromParent()
+            browserViewController.view.endEditing(true)
+            browserViewController.dismissUrlBar()
+            homepageViewController?.view.removeFromSuperview()
+            homepageViewController?.removeFromParent()
+            homepageViewController = nil
+            browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
+            browserViewController.removeFromParent()
         case .libraryOpened:
             // Auto-close library panel if it was opened in another iPad window. [FXIOS-8095]
             guard uuid != windowUUID else { return }
@@ -726,6 +769,23 @@ class BrowserCoordinator: BaseCoordinator,
             guard uuid != windowUUID else { return }
             performIfCoordinatorRootVCIsPresented(SettingsCoordinator.self) {
                 didFinishSettings(from: $0)
+            }
+        case .syncMenuOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            if let navVCs = (browserPresentedVC as? UINavigationController)?.viewControllers,
+               navVCs.contains(where: {
+                   $0 is FirefoxAccountSignInViewController || $0 is SyncContentSettingsViewController
+               }) {
+                router.dismiss(animated: true, completion: nil)
+            }
+        case .qrScannerOpened:
+            guard uuid != windowUUID else { return }
+            let browserPresentedVC = router.navigationController.presentedViewController
+            let rootVC = (browserPresentedVC as? UINavigationController)?.viewControllers.first
+            if rootVC is QRCodeViewController {
+                router.dismiss(animated: true, completion: nil)
+                remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
             }
         }
     }

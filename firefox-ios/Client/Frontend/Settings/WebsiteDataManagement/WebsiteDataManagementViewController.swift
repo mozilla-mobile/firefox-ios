@@ -52,7 +52,7 @@ class WebsiteDataManagementViewController: UIViewController,
                                                                                           windowUUID: windowUUID)
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func viewDidLoad() {
@@ -69,6 +69,7 @@ class WebsiteDataManagementViewController: UIViewController,
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
             ThemedTableSectionHeaderFooterView.self,
             forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
@@ -144,10 +145,11 @@ class WebsiteDataManagementViewController: UIViewController,
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = dequeueCellFor(indexPath: indexPath)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
+            let cell = dequeueCellFor(indexPath: indexPath)
+            cell.applyTheme(theme: currentTheme())
             if let record = viewModel.siteRecords[safe: indexPath.row] {
                 cell.textLabel?.text = record.displayName
                 if viewModel.selectedRecords.contains(record) {
@@ -161,7 +163,10 @@ class WebsiteDataManagementViewController: UIViewController,
                 type: .standard
             )
             cell.configure(viewModel: cellViewModel)
+            return cell
         case .showMore:
+            let cell = dequeueCellFor(indexPath: indexPath)
+            cell.applyTheme(theme: currentTheme())
             let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(
                 theme: currentTheme(),
@@ -172,31 +177,42 @@ class WebsiteDataManagementViewController: UIViewController,
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             cell.configure(viewModel: cellViewModel)
             showMoreButton = cell
+            return cell
         case .clearButton:
-            let cellViewModel = ThemedTableViewCellViewModel(
-                theme: currentTheme(),
-                type: .destructive
-            )
-            cell.textLabel?.text = viewModel.clearButtonTitle
-            cell.textLabel?.textAlignment = .center
-            cell.accessibilityTraits = UIAccessibilityTraits.button
-            cell.accessibilityIdentifier = "ClearAllWebsiteData"
-            cell.configure(viewModel: cellViewModel)
+            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
+            cell?.setTitle(to: viewModel.clearButtonTitle)
+            cell?.setAccessibilities(
+                traits: .button,
+                identifier: AccessibilityIdentifiers.Settings.ClearData.clearAllWebsiteData)
+            cell?.applyTheme(theme: currentTheme())
+            return cell ?? ThemedCenteredTableViewCell()
         }
-
-        cell.applyTheme(theme: currentTheme())
-        return cell
     }
 
     private func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: ThemedTableViewCell.cellIdentifier,
-            for: indexPath
-        ) as? ThemedTableViewCell
-        else {
+        guard let section = Section(rawValue: indexPath.section) else {
             return ThemedTableViewCell()
         }
-        return cell
+        switch section {
+        case .sites, .showMore:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedTableViewCell
+            else {
+                return ThemedTableViewCell()
+            }
+            return cell
+        case .clearButton:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedCenteredTableViewCell
+            else {
+                return ThemedCenteredTableViewCell()
+            }
+            return cell
+        }
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -235,6 +251,7 @@ class WebsiteDataManagementViewController: UIViewController,
             generator.impactOccurred()
             let alert = viewModel.createAlertToRemove()
             present(alert, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 

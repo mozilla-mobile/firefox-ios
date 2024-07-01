@@ -12,6 +12,16 @@ import Shared
 @testable import Client
 
 final class NimbusMessagingTriggerTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        AppContainer.shared.reset()
+    }
+
     lazy var feature: Messaging = {
         FxNimbus.shared.initialize(with: { nil })
         return FxNimbusMessaging.shared.features.messaging.value()
@@ -19,7 +29,7 @@ final class NimbusMessagingTriggerTests: XCTestCase {
 
     func testTriggers() throws {
         Experiments.events.clearEvents()
-        Experiments.events.recordEvent("app_cycle.foreground")
+        Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         let helper = Experiments.createJexlHelper()!
         let triggers = feature.triggers
 

@@ -8,7 +8,7 @@
 "Alerts.FeltDeletion.Button.Confirm.v122" = "Ջնջել աշխատաշրջանի տվյալները";
 
 /* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
-"Alerts.FeltDeletion.Title.v122" = "Ավարտե՞լ ձեր անձնական աշխատաշրջանը:";
+"Alerts.FeltDeletion.Title.v122" = "Ավարտե՞լ Ձեր գաղտնի աշխատաշրջանը";
 
 /* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
 "Alerts.RestoreTabs.Button.No.v109" = "Ոչ";

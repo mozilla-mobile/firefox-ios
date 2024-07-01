@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "klaatu-ios"
+version = "0.1.0"
+description = "Experiment Integration Tests"
+authors = ["Benjamin Forehand Jr <bforehand@mozilla.com>"]
+license = "Mozilla Public License Version 2.0"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.7.1"
+pytest = "^8.2.0"
+requests = "^2.32.2"
+xcrun = "^0.4"
+isim = "^15.0.0"
+pytest-html = "^4.1.1"
+pytest-variables = "^3.1.0"
+PyYAML = "^6.0.1"
+typing-extensions = "^4.11.0"
+pytest-rerunfailures = "^14.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

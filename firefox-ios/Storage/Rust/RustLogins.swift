@@ -5,8 +5,23 @@
 import Foundation
 import Glean
 import Shared
-@_exported import MozillaAppServices
 import Common
+
+import class MozillaAppServices.LoginsStorage
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.LoginsApiError
+import enum MozillaAppServices.MZKeychainItemAccessibility
+import func MozillaAppServices.checkCanary
+import func MozillaAppServices.createCanary
+import func MozillaAppServices.createKey
+import func MozillaAppServices.decryptLogin
+import func MozillaAppServices.encryptLogin
+import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
+import struct MozillaAppServices.LoginEntry
+import struct MozillaAppServices.LoginFields
+import struct MozillaAppServices.RecordFields
+import struct MozillaAppServices.SecureLoginFields
 
 typealias LoginsStoreError = LoginsApiError
 public typealias LoginRecord = EncryptedLogin
@@ -508,7 +523,7 @@ protocol LoginsProtocol {
     func listLogins(completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
     func updateLogin(id: String, login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
     func use(login: EncryptedLogin, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
-    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+    func searchLoginsWithQuery(_ query: String?, completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
     func deleteLogins(ids: [String], completionHandler: @escaping ([Result<Bool?, Error>]) -> Void)
     func deleteLogin(id: String, completionHandler: @escaping (Result<Bool?, Error>) -> Void)
 }
@@ -688,7 +703,7 @@ public class RustLogins: LoginsProtocol {
 
     public func searchLoginsWithQuery(
         _ query: String?,
-        completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void) {
+        completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void) {
             let rustKeys = RustLoginEncryptionKeys()
             listLogins { result in
                 switch result {
@@ -696,7 +711,7 @@ public class RustLogins: LoginsProtocol {
                     let records = logins
 
                     guard let query = query?.lowercased(), !query.isEmpty else {
-                        completionHandler(.success(records.first))
+                        completionHandler(.success(records))
                         return
                     }
 
@@ -704,11 +719,9 @@ public class RustLogins: LoginsProtocol {
                         let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
                         return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
                     }
-                    if let firstFilteredRecord = filteredRecords.first {
-                        completionHandler(.success(firstFilteredRecord))
-                    } else {
-                        completionHandler(.success(nil))
-                    }
+
+                    completionHandler(.success(filteredRecords))
+
                 case .failure(let error):
                     completionHandler(.failure(error))
                 }

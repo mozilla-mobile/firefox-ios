@@ -125,4 +125,58 @@ class ToolbarTests: BaseTestCase {
             XCTAssertTrue(topElement.isHittable)
         }
    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306870
+    func testOpenNewTabButtonOnToolbar() throws {
+        if iPad() {
+            throw XCTSkip("iPhone only test")
+        } else {
+            // Launch Firefox iOS
+            // A magnifying glass icon is displayed. A "+" icon is displayed
+            validateAddNewTabButtonOnToolbar(isPrivate: false)
+            // Repeat steps on private mode
+            // validateAddNewTabButtonOnToolbar() does not work on iOS 15
+            if #available(iOS 16, *) {
+                navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+                navigator.performAction(Action.OpenNewTabFromTabTray)
+                app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+                validateAddNewTabButtonOnToolbar(isPrivate: true)
+            }
+        }
+    }
+
+    private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
+        if isPrivate {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        restartInBackground()
+        if isPrivate {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
+        } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
+        }
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        // Swipe up to close the app does not work on iOS 15.
+        if #available(iOS 16, *) {
+            closeFromAppSwitcherAndRelaunch()
+            if isPrivate {
+                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
+            } else {
+                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
+            }
+            let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+            mozWaitForElementToExist(addNewTabButton)
+            addNewTabButton.tapOnApp()
+            if !app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].exists {
+                addNewTabButton.tap()
+            }
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as! String, "2")
+        }
+    }
 }

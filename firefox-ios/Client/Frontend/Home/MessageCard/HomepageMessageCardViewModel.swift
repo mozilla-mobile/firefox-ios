@@ -46,7 +46,9 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
     }
 
     func handleMessagePressed() {
-        message.map(messagingManager.onMessagePressed)
+        guard let message else { return }
+        let uuid = (delegate as? InjectedThemeUUIDIdentifiable)?.windowUUID
+        messagingManager.onMessagePressed(message, window: uuid, shouldExpire: true)
         dismissClosure?()
     }
 

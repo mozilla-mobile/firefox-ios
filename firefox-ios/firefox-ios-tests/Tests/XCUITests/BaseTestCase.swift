@@ -8,7 +8,7 @@ import XCTest
 
 let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
-let serverPort = Int.random(in: 1025..<65000)
+let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
 
 func path(forTestPage page: String) -> String {
     return "http://localhost:\(serverPort)/test-fixture/\(page)"
@@ -45,7 +45,7 @@ class BaseTestCase: XCTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         // Let's be sure the app is backgrounded
-        _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT_LONG)
+        _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
@@ -54,6 +54,7 @@ class BaseTestCase: XCTestCase {
     func closeFromAppSwitcherAndRelaunch() {
         let swipeStart = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.999))
         let swipeEnd = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.001))
+        sleep(2)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
@@ -67,6 +68,9 @@ class BaseTestCase: XCTestCase {
 
     func setUpApp() {
         setUpLaunchArguments()
+        if ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] != nil {
+            app.activate()
+        }
         app.launch()
     }
 
@@ -103,6 +107,11 @@ class BaseTestCase: XCTestCase {
         }
         app.launchArguments = launchArguments
         app.activate()
+    }
+
+    func forceRestartApp() {
+        tearDown()
+        setUp()
     }
 
     // If it is a first run, first run window should be gone
@@ -227,10 +236,10 @@ class BaseTestCase: XCTestCase {
         navigator.nowAt(BrowserTab)
     }
 
-    func checkRecentlySaved() {
+    func checkBookmarks() {
         waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .otherElements
             .otherElements
             .otherElements
@@ -240,10 +249,10 @@ class BaseTestCase: XCTestCase {
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
-    func checkRecentlySavedUpdated() {
+    func checkBookmarksUpdated() {
         waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .otherElements
             .otherElements
             .otherElements
@@ -365,6 +374,12 @@ class BaseTestCase: XCTestCase {
         let endCoordinate = app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
         startCoordinate.press(forDuration: 0, thenDragTo: endCoordinate)
         endCoordinate.press(forDuration: 0, thenDragTo: startCoordinate)
+    }
+
+    func dismissSurveyPrompt() {
+        if app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists {
+            app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
+        }
     }
 }
 

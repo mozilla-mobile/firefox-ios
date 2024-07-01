@@ -4,6 +4,9 @@
 
 import Storage
 import Shared
+import Common
+
+import enum MozillaAppServices.VisitType
 
 extension LibraryViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {

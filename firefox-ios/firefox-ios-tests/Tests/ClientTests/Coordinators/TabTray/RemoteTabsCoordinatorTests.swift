@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import Client
 
 final class RemoteTabsCoordinatorTests: XCTestCase {
@@ -47,7 +48,7 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
         let subject = createSubject()
         subject.presentFxAccountSettings()
 
-        XCTAssertEqual(mockApplicationHelper.openURLCalled, 1)
+        XCTAssertEqual(mockApplicationHelper.openURLInWindowCalled, 1)
     }
 
     func testPresentQRCode() {

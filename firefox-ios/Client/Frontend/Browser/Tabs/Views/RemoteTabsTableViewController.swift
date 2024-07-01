@@ -8,6 +8,8 @@ import Shared
 import Redux
 import SiteImageView
 
+import enum MozillaAppServices.VisitType
+
 class RemoteTabsTableViewController: UITableViewController,
                                      Themeable,
                                      CollapsibleTableViewSection,
@@ -110,27 +112,25 @@ class RemoteTabsTableViewController: UITableViewController,
     }
 
     private func reloadUI() {
-        emptyView.isHidden = !isShowingEmptyView
-
-        guard !isShowingEmptyView else {
-            configureEmptyView()
-            return
-        }
-
-        updateRefreshControl()
+        updateUI()
         tableView.reloadData()
     }
 
-    private func updateRefreshControl() {
+    private func updateUI() {
         if state.refreshState == .refreshing {
+            emptyView.isHidden = true
             refreshControl?.beginRefreshing()
         } else {
+            emptyView.isHidden = !isShowingEmptyView
+            if isShowingEmptyView {
+                configureEmptyView()
+            }
             refreshControl?.endRefreshing()
         }
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         emptyView.applyTheme(theme: theme)
         tableView.visibleCells.forEach { ($0 as? ThemeApplicable)?.applyTheme(theme: theme) }
     }
@@ -138,7 +138,7 @@ class RemoteTabsTableViewController: UITableViewController,
     private func configureEmptyView() {
         guard let emptyState = state.showingEmptyState else { return }
         emptyView.configure(state: emptyState, delegate: remoteTabsPanel)
-        emptyView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        emptyView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - Refreshing TableView
@@ -262,7 +262,7 @@ class RemoteTabsTableViewController: UITableViewController,
         cell.descriptionLabel.text = tab.URL.absoluteString
         cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.URL.absoluteString))
         cell.accessoryView = nil
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     @objc
@@ -300,7 +300,7 @@ class RemoteTabsTableViewController: UITableViewController,
         let tapGesture = UITapGestureRecognizer(target: self,
                                                 action: #selector(sectionHeaderTapped(sender:)))
         headerView.addGestureRecognizer(tapGesture)
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         /*
         * (Copied from legacy RemoteTabsClientAndTabsDataSource)
         * A note on timestamps.

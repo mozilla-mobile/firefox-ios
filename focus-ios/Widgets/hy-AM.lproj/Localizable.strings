@@ -1,0 +1,3 @@
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "Որոնել %@-ում";
+

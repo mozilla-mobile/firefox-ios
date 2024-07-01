@@ -26,6 +26,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showZoomPage(tab: Tab)
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
+    func showFilePicker(fileURL: URL)
 }
 
 extension ToolBarActionMenuDelegate {
@@ -44,6 +45,7 @@ enum MenuButtonToastAction {
     case pinPage
     case removePinPage
     case closeTab
+    case downloadPDF
 }
 
 /// MainMenuActionHelper handles the main menu (hamburger menu) in the toolbar.
@@ -263,23 +265,21 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
 
-            // Feature flag for share sheet changes where we moved send to device and copy
-            // away from hamburger menu to the actual system share sheet. When share sheet
-            // changes flag is on we do not append items to the hamburger menu
-            if !featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) {
-                let copyAction = getCopyAction()
-                append(to: &section, action: copyAction)
+            let copyAction = getCopyAction()
+            append(to: &section, action: copyAction)
 
-                let sendToDeviceAction = getSendToDevice()
-                append(to: &section, action: sendToDeviceAction)
+            let sendToDeviceAction = getSendToDevice()
+            append(to: &section, action: sendToDeviceAction)
+
+            if let tab = self.selectedTab,
+                let url = tab.canonicalURL?.displayURL,
+                url.lastPathComponent.suffix(4) == ".pdf" {
+                let downloadPDFAction = getDownloadPDFAction()
+                append(to: &section, action: downloadPDFAction)
             }
 
-            // Feature flag for toolbar share action changes where if the toolbar is showing
-            // share action button then we do not show the share button in hamburger menu
-            if !featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) {
-                let shareAction = getShareAction()
-                append(to: &section, action: shareAction)
-            }
+            let shareAction = getShareAction()
+            append(to: &section, action: shareAction)
         }
 
         return section
@@ -309,7 +309,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
-        return SingleActionViewModel(title: .AppMenu.NewTab,
+        return SingleActionViewModel(title: tab.isPrivate ? .AppMenu.NewPrivateTab : .AppMenu.NewTab,
                                      iconString: StandardImageIdentifiers.Large.plus) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
             self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
@@ -407,7 +407,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
-            let themeColors = self.themeManager.currentTheme(for: uuid).colors
+            let themeColors = self.themeManager.getCurrentTheme(for: uuid).colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
                                                    iconColor: themeColors.iconPrimary)
@@ -467,7 +467,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     private func getNightModeAction() -> [PhotonRowActions] {
-        let uuid = windowUUID
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
@@ -477,7 +476,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             iconString: StandardImageIdentifiers.Large.nightMode,
             isEnabled: nightModeEnabled
         ) { _ in
-            NightModeHelper.toggle(tabManager: self.tabManager)
+            NightModeHelper.toggle()
 
             if NightModeHelper.isActivated() {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
@@ -485,7 +484,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            self.themeManager.reloadTheme(for: uuid)
+            self.themeManager.applyThemeUpdatesToWindows()
         }.items
         items.append(nightMode)
 
@@ -610,6 +609,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     }
                 }
             }
+        }.items
+    }
+
+    private func getDownloadPDFAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .AppMenu.AppMenuDownloadPDF,
+                                     iconString: StandardImageIdentifiers.Large.folder) { _ in
+            guard let tab = self.selectedTab, let temporaryDocument = tab.temporaryDocument else { return }
+                temporaryDocument.getURL { fileURL in
+                    DispatchQueue.main.async {
+                        guard let fileURL = fileURL else {return}
+                        self.delegate?.showFilePicker(fileURL: fileURL)
+                    }
+                }
         }.items
     }
 
@@ -807,7 +819,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
-    // MARK: - Conveniance
+    // MARK: - Convenience
 
     private func append(to items: inout [PhotonRowActions], action: PhotonRowActions?) {
         if let action = action {

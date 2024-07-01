@@ -78,9 +78,38 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
         keyboardSpacerHeight = heightConstraint
     }
 
+    // MARK: - Spacer view
+
+    private var insetSpacer: UIView?
+
+    func addBottomInsetSpacer(spacerHeight: CGFloat) {
+        guard insetSpacer == nil else { return }
+
+        let spacer = UIView()
+        spacer.translatesAutoresizingMaskIntoConstraints = false
+        addArrangedViewToBottom(spacer)
+        NSLayoutConstraint.activate([
+            spacer.heightAnchor.constraint(equalToConstant: spacerHeight),
+            spacer.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            spacer.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            spacer.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        insetSpacer = spacer
+        layoutIfNeeded()
+    }
+
+    func removeBottomInsetSpacer() {
+        guard let insetSpacer = self.insetSpacer else { return }
+
+        removeArrangedView(insetSpacer)
+        self.insetSpacer = nil
+        layoutIfNeeded()
+    }
+
     func applyTheme(theme: Theme) {
         let color = isClearBackground ? .clear : theme.colors.layer1
         backgroundColor = color
         keyboardSpacer?.backgroundColor = color
+        insetSpacer?.backgroundColor = color
     }
 }

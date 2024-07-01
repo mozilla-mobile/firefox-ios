@@ -429,7 +429,8 @@ class OverlayView: UIView {
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
             }
             if let lastSearchButton = searchButtonGroup.last {
-                if searchButtonGroup.count >= 0 && !lastSearchButton.isHidden {
+                let searchButtonCount = searchButtonGroup.count
+                if searchButtonCount >= 0 && !lastSearchButton.isHidden {
                     make.top.equalTo(lastSearchButton.snp.bottom)
                 } else {
                     make.top.equalTo(topBorder.snp.bottom)
@@ -439,7 +440,8 @@ class OverlayView: UIView {
         }
     }
 
-    @objc private func didPressArrowButton(sender: UIButton) {
+    @objc
+    private func didPressArrowButton(sender: UIButton) {
         if let index = arrowButtons.firstIndex(of: sender) {
             delegate?.overlayView(self, didTapArrowText: searchSuggestions[index + 1])
             GleanMetrics
@@ -449,7 +451,8 @@ class OverlayView: UIView {
         }
     }
 
-    @objc private func didPressSearch(sender: IndexedInsetButton) {
+    @objc
+    private func didPressSearch(sender: IndexedInsetButton) {
         // Safeguard against a potential update of searchSuggestions causing this index to no longer exist
         let immutableSearchSuggestions = searchSuggestions
         delegate?.overlayView(self, didSearchForQuery: immutableSearchSuggestions[sender.getIndex()])
@@ -477,16 +480,20 @@ class OverlayView: UIView {
                 )
         }
     }
-    @objc private func didPressCopy() {
+    @objc
+    private func didPressCopy() {
         delegate?.overlayView(self, didSubmitText: UIPasteboard.general.string!)
     }
-    @objc private func didPressFindOnPage() {
+    @objc
+    private func didPressFindOnPage() {
         delegate?.overlayView(self, didSearchOnPage: searchQuery)
     }
-    @objc private func didPressAddToAutocomplete() {
+    @objc
+    private func didPressAddToAutocomplete() {
         delegate?.overlayView(self, didAddToAutocomplete: currentURL)
     }
-    @objc private func didPressSettings() {
+    @objc
+    private func didPressSettings() {
         delegate?.overlayViewDidPressSettings(self)
     }
 

@@ -54,13 +54,13 @@ public class AsyncImageView: UIView {
         loader.loadImage(imageURL) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                    case .success(let image):
-                        self?.activityIndicator.stopAnimating()
-                        self?.imageView.image = image
+                case .success(let image):
+                    self?.activityIndicator.stopAnimating()
+                    self?.imageView.image = image
 
-                    case .failure:
-                        self?.activityIndicator.stopAnimating()
-                        self?.imageView.image = defaultImage
+                case .failure:
+                    self?.activityIndicator.stopAnimating()
+                    self?.imageView.image = defaultImage
                 }
             }
         }

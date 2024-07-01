@@ -6,6 +6,9 @@ import Foundation
 import Storage
 import Common
 
+import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
+
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel
@@ -38,6 +41,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
                    navigationController: UINavigationController?,
                    logger: Logger) {
         let viewModel = BookmarksPanelViewModel(profile: profile,
+                                                bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
         let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {

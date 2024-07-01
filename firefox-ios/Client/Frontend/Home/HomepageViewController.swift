@@ -4,11 +4,12 @@
 
 import Common
 import ComponentLibrary
-import MozillaAppServices
 import Shared
 import Storage
 import Redux
 import UIKit
+
+import enum MozillaAppServices.VisitType
 
 class HomepageViewController:
     UIViewController,
@@ -42,6 +43,7 @@ class HomepageViewController:
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+    private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -80,7 +82,7 @@ class HomepageViewController:
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           theme: themeManager.currentTheme(for: tabManager.windowUUID))
+                                           theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
 
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackIn,
                                                                           with: viewModel.profile)
@@ -184,6 +186,9 @@ class HomepageViewController:
 
         wallpaperView.updateImageForOrientationChange()
 
+        // Note: Saving the newSize for using it, later, in traitCollectionDidChange
+        // because view.frame.size will provide the current size, not the newest one.
+        viewModel.newSize = size
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation(newSize: size)
         }
@@ -196,7 +201,7 @@ class HomepageViewController:
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            reloadOnRotation(newSize: view.frame.size)
+            reloadOnRotation(newSize: viewModel.newSize ?? view.frame.size)
         }
     }
 
@@ -346,7 +351,7 @@ class HomepageViewController:
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
     }
@@ -363,13 +368,28 @@ class HomepageViewController:
         }
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
-            let theme = themeManager.currentTheme(for: windowUUID)
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
                                                          theme: theme)
+        }
+
+        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
+        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
+
+        if scrolledDown || scrolledToTop {
+            lastContentOffsetY = scrollView.contentOffset.y
+            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
+                                                        windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserMiddlewareActionType.didScroll)
+            store.dispatch(action)
         }
     }
 
@@ -390,7 +410,10 @@ class HomepageViewController:
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
         })
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier:
+                AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton)
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
@@ -423,11 +446,12 @@ class HomepageViewController:
             anchor: view,
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: {
+            presentedUsing: { [weak self] in
+                guard let self else { return }
                 self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController)
             },
             sourceRect: rect,
-            andActionForButton: { self.openTabsSettings() },
+            andActionForButton: { [weak self] in self?.openTabsSettings() },
             overlayState: overlayManager)
     }
 
@@ -442,7 +466,8 @@ class HomepageViewController:
             anchor: cell.getContextualHintAnchor(),
             withArrowDirection: .down,
             andDelegate: self,
-            presentedUsing: {
+            presentedUsing: { [weak self] in
+                guard let self else { return }
                 self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController)
             },
             overlayState: overlayManager)
@@ -481,7 +506,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
             let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
             // swiftlint:enable line_length
             headerView.configure(viewModel: headerViewModel,
-                                 theme: themeManager.currentTheme(for: windowUUID))
+                                 theme: themeManager.getCurrentTheme(for: windowUUID))
 
             // Jump back in header specific setup
             if sectionViewModel.sectionType == .jumpBackIn {
@@ -509,13 +534,14 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
                 }
                 self.showSiteWithURLHandler(learnMoreURL)
             }
-            footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             return footerView
         }
         return reusableView
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if viewModel.shouldReloadView { reloadView() }
         return viewModel.shownSections.count
     }
 
@@ -577,16 +603,16 @@ private extension HomepageViewController {
             )
         }
 
-        // Recently saved
-        viewModel.recentlySavedViewModel.headerButtonAction = { [weak self] button in
+        // Bookmarks
+        viewModel.bookmarksViewModel.headerButtonAction = { [weak self] button in
             self?.openBookmarks(button)
         }
 
-        viewModel.recentlySavedViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
+        viewModel.bookmarksViewModel.onLongPressTileAction = { [weak self] (site, sourceView) in
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,
-                sectionType: .recentlySaved
+                sectionType: .bookmarks
             )
         }
 
@@ -599,7 +625,7 @@ private extension HomepageViewController {
             self?.contextMenuHelper.presentContextMenu(
                 for: site,
                 with: sourceView,
-                sectionType: .recentlySaved
+                sectionType: .bookmarks
             )
         }
 
@@ -727,11 +753,11 @@ private extension HomepageViewController {
     func openBookmarks(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
 
-        if sender.accessibilityIdentifier == a11y.MoreButtons.recentlySaved {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.bookmarks {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
-                                         value: .recentlySavedSectionShowAll,
+                                         value: .bookmarkSectionShowAll,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: viewModel.isZeroSearch))
         }
     }
@@ -779,8 +805,8 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
-        homePanelDelegate?.homePanelDidRequestBookmarkToast(for: action)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(url: url, action: action)
     }
 }
 

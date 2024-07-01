@@ -64,11 +64,8 @@
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
         "DragAndDropTests\/testRearrangeTabsTabTray()",
         "ExperimentIntegrationTests",
-        "FakespotTests\/testAcceptTheRejectedOptInNotification()",
         "FakespotTests\/testPriceTagIconAvailableOnlyOnDetailPage()",
         "FakespotTests\/testPriceTagNotDisplayedInPrivateMode()",
-        "FakespotTests\/testReviewQualityCheckBottomSheetUI()",
-        "FakespotTests\/testSettingsSectionUI()",
         "FindInPageTests\/testFindFromMenu()",
         "HistoryTests\/testClearPrivateData()",
         "HistoryTests\/testClearPrivateDataButtonDisabled()",
@@ -150,8 +147,8 @@
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
         "TrackingProtectionTests\/testTrackingProtection()",
         "URLValidationTests",
-        "ZoomingTests",
-        "ZoomingTests\/testZommingActions()"
+        "ZoomingTests\/testZommingActions()",
+        "ZoomingTests\/testZoomingActions()"
       ],
       "target" : {
         "containerPath" : "container:Client.xcodeproj",

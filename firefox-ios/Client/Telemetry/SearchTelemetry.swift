@@ -7,6 +7,22 @@ import WebKit
 import Glean
 import Storage
 
+/// Type-specific information to record in telemetry about a visible search
+/// suggestion.
+enum SearchViewVisibleSuggestionTelemetryInfo {
+    /// Information to record in telemetry about a visible sponsored or
+    /// non-sponsored suggestion from Firefox Suggest.
+    ///
+    /// `position` is the 1-based position of this suggestion relative to the
+    /// top of the search results view. `didTap` indicates if the user
+    /// tapped on this suggestion.
+    case firefoxSuggestion(
+        RustFirefoxSuggestionTelemetryInfo,
+        position: Int,
+        didTap: Bool
+    )
+}
+
 // Search Partner Codes
 // https://docs.google.com/spreadsheets/d/1HMm9UXjfJv-uHhGU1pJlbP4ILkdpSD9w_Fd-3yOd8oY/
 struct SearchPartner {

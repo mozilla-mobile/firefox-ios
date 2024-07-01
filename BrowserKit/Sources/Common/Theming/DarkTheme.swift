@@ -11,6 +11,17 @@ public struct DarkTheme: Theme {
     public init() {}
 }
 
+/// `NightModeTheme` is the same as `DarkTheme` but with a different `type`. This
+/// is because we want to be able to change theme types even when night mode
+/// is on, so, we have do differentiate between night mode's dark theme
+/// and a regular dark theme.
+public struct NightModeTheme: Theme {
+    public var type: ThemeType = .nightMode
+    public var colors: ThemeColourPalette = DarkColourPalette()
+
+    public init() {}
+}
+
 private struct DarkColourPalette: ThemeColourPalette {
     // MARK: - Layers
     var layer1: UIColor = FXColors.DarkGrey60
@@ -20,7 +31,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layer5: UIColor = FXColors.DarkGrey40
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet60, FXColors.Violet70])
     var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
                                                  FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
@@ -57,6 +68,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue30
     var actionPrimaryHover: UIColor = FXColors.Blue20
+    var actionPrimaryDisabled: UIColor = FXColors.Blue30.withAlphaComponent(0.5)
     var actionSecondary: UIColor = FXColors.DarkGrey05
     var actionSecondaryHover: UIColor = FXColors.LightGrey90
     var formSurfaceOff: UIColor = FXColors.DarkGrey05
@@ -67,8 +79,8 @@ private struct DarkColourPalette: ThemeColourPalette {
     var actionWarning: UIColor = FXColors.Yellow40.withAlphaComponent(0.41)
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
     var actionInfo: UIColor = FXColors.Blue60
-    var actionTabActive: UIColor = FXColors.Purple60
-    var actionTabInactive: UIColor = FXColors.Ink50
+    var actionTabActive: UIColor = FXColors.DarkGrey30
+    var actionTabInactive: UIColor = FXColors.DarkGrey80
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05
@@ -79,6 +91,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var textOnDark: UIColor = FXColors.LightGrey05
     var textOnLight: UIColor = FXColors.DarkGrey90
     var textInverted: UIColor = FXColors.DarkGrey90
+    var textInvertedDisabled: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.7)
 
     // MARK: - Icons
     var iconPrimary: UIColor = FXColors.LightGrey05
@@ -93,6 +106,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var iconAccentPink: UIColor = FXColors.Pink20
     var iconAccentGreen: UIColor = FXColors.Green20
     var iconAccentYellow: UIColor = FXColors.Yellow20
+    var iconRatingNeutral: UIColor = FXColors.LightGrey05.withAlphaComponent(0.3)
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.DarkGrey05

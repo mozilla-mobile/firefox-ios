@@ -36,6 +36,9 @@ import:
               INACTIVE_NEW_USER:        "is_inactive_new_user"
               ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
 
+              # Behavioral Targeting Events
+              SECOND_HOMEPAGE_VIEW:  "'homepage_viewed'|eventSum('Years', 4, 0) >= 2"
+
             actions:
               OPEN_SETTINGS:                      ://deep-link?url=settings/general
               OPEN_SETTINGS_NEW_TAB:              ://deep-link?url=settings/newtab
@@ -63,6 +66,9 @@ import:
               DEFAULT:
                 priority: 50
                 max-display-count: 5
+              MICROSURVEY:
+                priority: 50
+                max-display-count: 1
               NOTIFICATION:
                 priority: 50
                 max-display-count: 1

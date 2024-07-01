@@ -6,10 +6,14 @@ import Foundation
 import Storage
 import WebKit
 
+import struct MozillaAppServices.CreditCard
+
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
-    func show(settings: Route.SettingsSection)
+    /// - Parameter onDismiss: An optional closure that is executed when the settings page is dismissed. 
+    /// This closure takes no parameters and returns no value.
+    func show(settings: Route.SettingsSection, onDismiss: (() -> Void)?)
 
     /// Asks to show a enhancedTrackingProtection page, can be a general 
     /// enhancedTrackingProtection page or a child page
@@ -72,7 +76,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials 
     /// to autofill login forms on the specified web page.
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String)
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType)
 
     /// Shows an AddressAutofill view for selecting addresses in order to autofill forms.
     func showAddressAutofill(frame: WKFrameInfo?)
@@ -85,6 +89,8 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Shows the Back Forward List View Controller.
     func showBackForwardList()
+
+    func showMicrosurvey(model: MicrosurveyModel)
 }
 
 extension BrowserNavigationHandler {
@@ -102,5 +108,9 @@ extension BrowserNavigationHandler {
             toastContainer: toastContainer,
             popoverArrowDirection: popoverArrowDirection
         )
+    }
+
+    func show(settings: Route.SettingsSection) {
+        show(settings: settings, onDismiss: nil)
     }
 }

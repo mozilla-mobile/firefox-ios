@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
@@ -14,7 +15,8 @@ class XCRun(object):
         subprocess.check_call(args)
 
     def boot(self, device='iPhone 15'):
-        self._run('boot', device)
+        ios_device = os.environ.get("SIMULATOR_UDID", device)
+        self._run('boot', ios_device)
 
     def install(self, device='all'):
         self._run('install', device)

@@ -35,6 +35,15 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
     /// Hosting controller for the empty state view in address autofill settings.
     var addressAutofillSettingsPageView: UIHostingController<AddressAutofillSettingsView>
 
+    private lazy var addAddressButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(addAddress))
+        button.accessibilityLabel = .Addresses.Settings.Edit.AutofillAddAddressTitle
+        return button
+    }()
+
     // MARK: Initializers
 
     /// Initializes the AddressAutofillSettingsViewController.
@@ -83,6 +92,10 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     /// Sets up the view hierarchy and initial configurations.
     func setupView() {
+        if viewModel.addressListViewModel.isEditingFeatureEnabled {
+            navigationItem.rightBarButtonItem = addAddressButton
+        }
+
         guard let emptyAddressAutofillView = addressAutofillSettingsPageView.view else { return }
         emptyAddressAutofillView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -102,7 +115,12 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
 
     /// Applies the current theme to the view.
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
+    }
+
+    @objc
+    func addAddress() {
+        self.viewModel.addressListViewModel.addAddressButtonTap()
     }
 }

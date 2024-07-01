@@ -21,30 +21,25 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
-    // Smoketest
     func testReviewQualityCheckBottomSheetUI() {
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
         app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+        validateReviewQualityCheckSheet()
+    }
 
-        // Check the content of the Review quality check sheet
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
-        if app.staticTexts["How reliable are these reviews?"].exists {
-            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReliabilityCard.title].firstMatch.label,
-                           "How reliable are these reviews?")
-            XCTAssertTrue(app.staticTexts["Adjusted rating"].exists)
-            validateHighlightsSection()
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358866
+    func testReviewQualityCheckBottomSheetUILandscape() throws {
+        if iPad() {
+            throw XCTSkip("iPhone only test")
         } else {
-            XCTAssertTrue(app.staticTexts["No info about these reviews yet"].exists)
-            XCTAssertTrue(app.buttons["Check Review Quality"].exists)
+            // Change the device orientation to be landscape
+            XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+            reachReviewChecker()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+            app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton].tap()
+            validateReviewQualityCheckSheet()
         }
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
-                       "How we determine review quality")
-        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title].label, "Settings")
-        XCTAssertTrue(app.staticTexts["Review Checker is powered by Fakespot by Mozilla"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358902
@@ -68,7 +63,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358924
-    // Smoketest
     func testAcceptTheRejectedOptInNotification() {
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
@@ -132,7 +126,6 @@ class FakespotTests: BaseTestCase {
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
-    // Smoketest
     func testSettingsSectionUI() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -270,6 +263,26 @@ class FakespotTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
+    private func validateReviewQualityCheckSheet() {
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].label, "Review Checker")
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
+        if app.staticTexts["How reliable are these reviews?"].exists {
+            XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReliabilityCard.title].firstMatch.label,
+                           "How reliable are these reviews?")
+            mozWaitForElementToExist(app.staticTexts["Adjusted rating"])
+            validateHighlightsSection()
+        } else {
+            mozWaitForElementToExist(app.staticTexts["No info about these reviews yet"])
+            mozWaitForElementToExist(app.buttons["Check Review Quality"])
+        }
+        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
+                       "How we determine review quality")
+        XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title].label, "Settings")
+        XCTAssertTrue(app.staticTexts["Review Checker is powered by Fakespot by Mozilla"].exists)
+    }
+
     private func validateMozillaSupportWebpage(_ webpageTitle: String, _ url: String) {
         mozWaitForElementToExist(app.staticTexts[webpageTitle])
         mozWaitForValueContains(app.textFields["url"], value: url)
@@ -330,13 +343,13 @@ class FakespotTests: BaseTestCase {
         let optInText4 = "Using the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews."
         let optInText5 = "Our AI model is always improving to protect you as you shop."
         let secondParagraph = optInText4 + " " + optInText5
-        let discalimerText = "By selecting “Yes, Try It” you agree to these items:"
+        let disclaimerText = "By selecting “Yes, Try It” you agree to these items:"
         // Validate screen layout
         mozWaitForElementToExist(app.staticTexts[optInCard.headerTitle])
         XCTAssertEqual(optInQueryStaticText[optInCard.headerTitle].label, "Try our trusted guide to product reviews")
         XCTAssertTrue(optInQueryStaticText.elementContainingText(firstParagraph).exists)
         XCTAssertTrue(optInQueryStaticText.elementContainingText(secondParagraph).exists)
-        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, discalimerText)
+        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, disclaimerText)
         XCTAssertEqual(optInQueryButton[optInCard.learnMoreButton].label, "Learn more")
         XCTAssertEqual(optInQueryButton[optInCard.mainButton].label, "Yes, Try It")
         XCTAssertEqual(optInQueryButton[optInCard.secondaryButton].label, "Not now")
@@ -418,10 +431,6 @@ class FakespotTests: BaseTestCase {
         while app.webViews.staticTexts["Enter the characters you see below"].exists {
             app.buttons["Reload page"].tap()
             waitUntilPageLoad()
-        }
-        // Workaround for iPad issue: https://github.com/mozilla-mobile/firefox-ios/issues/19346
-        if app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle].exists {
-            app.otherElements.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].tap()
         }
         // Tap the shopping cart icon
         let shoppingButton = app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton]

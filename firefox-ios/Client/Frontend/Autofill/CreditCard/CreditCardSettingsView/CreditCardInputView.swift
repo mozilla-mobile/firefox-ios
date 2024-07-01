@@ -8,6 +8,8 @@ import Storage
 import SwiftUI
 import Shared
 
+import struct MozillaAppServices.CreditCard
+
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
     @State private var isBlurred = false
@@ -62,7 +64,7 @@ struct CreditCardInputView: View {
                     Group {
                         CreditCardInputField(windowUUID: windowUUID,
                                              inputType: .expiration,
-                                             showError: !viewModel.expirationIsValid,
+                                             showError: viewModel.showExpirationError,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
 
@@ -102,11 +104,11 @@ struct CreditCardInputView: View {
             }
             .blur(radius: isBlurred ? 10 : 0)
             .onAppear {
-                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
             .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+                guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+                applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             }
             .onReceive(NotificationCenter.default.publisher(
                 for: UIApplication.willResignActiveNotification)

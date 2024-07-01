@@ -6,14 +6,16 @@ import XCTest
 
 final class ExperimentIntegrationTests: BaseTestCase {
     var secretMenu = false
+    var experimentName = ProcessInfo.processInfo.environment["EXPERIMENT_NAME"] ?? "None"
 
     override func setUpApp() {
         app.activate()
         let closeButton = app.buttons["CloseButton"]
-        if closeButton.exists {
+        if closeButton.waitForExistence(timeout: TIMEOUT_LONG) {
             closeButton.tap()
         }
         super.setUpScreenGraph()
+        UIView.setAnimationsEnabled(false) // IMPORTANT
     }
 
     func enableSecretMenu() {
@@ -57,7 +59,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         enableSecretMenu()
 
         // match json experiment name
-        XCTAssertTrue(checkExperimentEnrollment(experimentName: "Viewpoint"))
+        XCTAssertTrue(checkExperimentEnrollment(experimentName: experimentName))
     }
 
     func testMessageNavigatesCorrectly() throws {
@@ -65,7 +67,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "identifier CONTAINS 'takeSurveyButton'")
         )
 
-        wait(forElement: surveyLink.element, timeout: 15)
+        wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
         mozWaitForValueContains(app.textFields["url"], value: "survey")
     }
@@ -75,7 +77,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "identifier CONTAINS 'dismissSurveyButton'")
         )
 
-        wait(forElement: dismissLink.element, timeout: 15)
+        wait(forElement: dismissLink.element, timeout: TIMEOUT_LONG)
         dismissLink.element.tap()
 
         navigator.goto(NewTabScreen)
@@ -95,7 +97,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "identifier CONTAINS 'dismissSurveyButton'")
         )
 
-        wait(forElement: surveyLink.element, timeout: 15)
+        wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
         mozWaitForValueContains(app.textFields["url"], value: "survey")
     }
@@ -105,7 +107,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "identifier CONTAINS 'HomeTabBanner.goToSettingsButton'")
         )
 
-        wait(forElement: surveyLink.element, timeout: 15)
+        wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
         mozWaitForValueContains(app.textFields["url"], value: "survey")
     }
@@ -115,7 +117,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
             NSPredicate(format: "label CONTAINS 'Close'")
         )
 
-        wait(forElement: surveyLink.element, timeout: 15)
+        wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
 
         navigator.goto(NewTabScreen)
@@ -132,6 +134,6 @@ final class ExperimentIntegrationTests: BaseTestCase {
         )
 
         studiesToggle.element.tap()
-        XCTAssertFalse(checkExperimentEnrollment(experimentName: "Viewpoint"))
+        XCTAssertFalse(checkExperimentEnrollment(experimentName: experimentName))
     }
 }

@@ -182,7 +182,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
         return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme(for: windowUUID))])]
+                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
     }
 
     private func getAccountSetting() -> [SettingSection] {
@@ -231,7 +231,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if inactiveTabsAreBuildActive {
             generalSettings.insert(
                 TabsSetting(
-                    theme: themeManager.currentTheme(for: windowUUID),
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
                     settingsDelegate: parentCoordinator
                 ),
                 at: 3
@@ -240,25 +240,34 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: "showClipboardBar",
             defaultValue: false,
             titleText: .SettingsOfferClipboardBarTitle,
-            statusText: .SettingsOfferClipboardBarStatus
+            statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
         )
 
         let showLinksPreviewSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
             defaultValue: true,
             titleText: .SettingsShowLinkPreviewsTitle,
             statusText: .SettingsShowLinkPreviewsStatus
         )
 
+        let blockOpeningExternalAppsSettings = BoolSetting(
+            prefs: profile.prefs,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            prefKey: PrefsKeys.BlockOpeningExternalApps,
+            defaultValue: false,
+            titleText: .SettingsBlockOpeningExternalAppsTitle
+        )
+
         generalSettings += [
             offerToOpenCopiedLinksSettings,
-            showLinksPreviewSettings
+            showLinksPreviewSettings,
+            blockOpeningExternalAppsSettings
         ]
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
@@ -276,30 +285,21 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
         if autofillAddressStatus {
-            privacySettings.append(AddressAutofillSetting(theme: themeManager.currentTheme(for: windowUUID),
+            privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,
                                                           settingsDelegate: parentCoordinator))
         }
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings += [
-            BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.currentTheme(for: windowUUID),
-                        prefKey: "settings.closePrivateTabs",
-                        defaultValue: false,
-                        titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
-        ]
-
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme(for: windowUUID),
+        privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                     profile: profile,
                                                     settingsDelegate: parentCoordinator))
 
         privacySettings += [
-            PrivacyPolicySetting(theme: themeManager.currentTheme(for: windowUUID),
+            PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator)
         ]
 
@@ -313,14 +313,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme(for: windowUUID),
+                                          theme: themeManager.getCurrentTheme(for: windowUUID),
                                           settingsDelegate: parentCoordinator),
             StudiesToggleSetting(prefs: profile.prefs,
                                  delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme(for: windowUUID),
+                                 theme: themeManager.getCurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator),
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme(for: windowUUID),
+                                   theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
         ]
 
@@ -384,7 +384,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let urlString = URL.mozInternalScheme + "://deep-link?url=/action/show-intro-onboarding"
         guard let url = URL(string: urlString) else { return }
-        applicationHelper.open(url)
+        applicationHelper.open(url, inWindow: windowUUID)
     }
 
     func pressedFirefoxSuggest() {

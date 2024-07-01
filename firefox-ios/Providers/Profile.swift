@@ -14,7 +14,17 @@ import Shared
 import Storage
 import Sync
 import AuthenticationServices
-import MozillaAppServices
+
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.Level
+import enum MozillaAppServices.SyncReason
+import enum MozillaAppServices.VisitType
+import func MozillaAppServices.setLogger
+import func MozillaAppServices.setMaxLevel
+import struct MozillaAppServices.HistoryMigrationResult
+import struct MozillaAppServices.SyncParams
+import struct MozillaAppServices.SyncResult
+import struct MozillaAppServices.VisitObservation
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
@@ -82,7 +92,7 @@ protocol Profile: AnyObject {
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
-    var firefoxSuggest: RustFirefoxSuggestActor? { get }
+    var firefoxSuggest: RustFirefoxSuggestProtocol? { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -306,24 +316,9 @@ open class BrowserProfile: Profile {
             object: nil
         )
 
-        if AppInfo.isChinaEdition {
-            // Set the default homepage.
-            prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
-
-            if prefs.stringForKey(PrefsKeys.KeyNewTab) == nil {
-                prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.NewTabCustomUrlPrefKey)
-                prefs.setString(PrefsDefaults.ChineseNewTabDefault, forKey: PrefsKeys.KeyNewTab)
-            }
-
-            if prefs.stringForKey(PrefsKeys.HomePageTab) == nil {
-                prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.HomeButtonHomePageURL)
-                prefs.setString(PrefsDefaults.ChineseNewTabDefault, forKey: PrefsKeys.HomePageTab)
-            }
-        } else {
-            // Remove the default homepage. This does not change the user's preference,
-            // just the behaviour when there is no homepage.
-            prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
-        }
+        // Remove the default homepage. This does not change the user's preference,
+        // just the behaviour when there is no homepage.
+        prefs.removeObjectForKey(PrefsKeys.KeyDefaultHomePageURL)
 
         // Create the "Downloads" folder in the documents directory.
         if let downloadsPath = try? FileManager.default.url(
@@ -613,6 +608,8 @@ open class BrowserProfile: Profile {
                     case .tabReceived(_, let tabData):
                         let url = tabData.entries.last?.url ?? ""
                         return URL(string: url, invalidCharacters: false)
+                    default:
+                        return nil
                     }
                 }
                 self.sendTabDelegate?.openSendTabs(for: urls)
@@ -628,7 +625,7 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath)
     }()
 
-    lazy var firefoxSuggest: RustFirefoxSuggestActor? = {
+    lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {
             let cacheFileURL = try FileManager.default.url(
                 for: .cachesDirectory,

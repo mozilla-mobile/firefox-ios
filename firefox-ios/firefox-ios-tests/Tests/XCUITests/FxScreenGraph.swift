@@ -674,8 +674,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            app.secureTextFields.element(boundBy: 0).tap()
-            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 1).tap()
+            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
             app.secureTextFields.element(boundBy: 0).tap()
@@ -910,7 +910,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.otherElements["nav-tabcounter"],
+                app.otherElements[StandardImageIdentifiers.Large.tab],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in
@@ -1037,7 +1037,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(FindInPage) { screenState in
-        screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton], to: BrowserTab)
     }
 
     map.addScreenState(PageZoom) { screenState in
@@ -1202,6 +1202,7 @@ extension MMNavigator where T == FxUserState {
             performAction(Action.LoadURLByTyping)
         } else {
             performAction(Action.LoadURL)
+            sleep(5) // Wait for toast to disappear
         }
     }
 

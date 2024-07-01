@@ -528,9 +528,9 @@ class URLBar: UIView {
             .removeDuplicates()
             .map { trackingProtectionStatus -> UIImage in
                 switch trackingProtectionStatus {
-                    case .on: return .trackingProtectionOn
-                    case .off: return .trackingProtectionOff
-                    case .connectionNotSecure: return .connectionNotSecure
+                case .on: return .trackingProtectionOn
+                case .off: return .trackingProtectionOff
+                case .connectionNotSecure: return .connectionNotSecure
                 }
             }
             .sink(receiveValue: { [shieldIcon] image in
@@ -628,7 +628,8 @@ class URLBar: UIView {
         }
     }
 
-    @objc public func activateTextField() {
+    @objc
+    public func activateTextField() {
         urlTextField.isUserInteractionEnabled = true
         urlTextField.becomeFirstResponder()
         isEditing = true
@@ -645,22 +646,26 @@ class URLBar: UIView {
         urlTextField.endEditing(true)
     }
 
-    @objc func addCustomURL() {
+    @objc
+    func addCustomURL() {
         guard let url = self.url else { return }
         delegate?.urlBar(self, didAddCustomURL: url)
     }
 
-    @objc func copyToClipboard() {
+    @objc
+    func copyToClipboard() {
         UIPasteboard.general.string = self.url?.absoluteString ?? ""
     }
 
-    @objc func paste(clipboardString: String) {
+    @objc
+    func paste(clipboardString: String) {
         isEditing = true
         activateTextField()
         urlTextField.text = clipboardString
     }
 
-    @objc func pasteAndGo(clipboardString: String) {
+    @objc
+    func pasteAndGo(clipboardString: String) {
         isEditing = true
         delegate?.urlBarDidActivate(self)
         delegate?.urlBar(self, didSubmitText: clipboardString, source: .action)
@@ -668,12 +673,14 @@ class URLBar: UIView {
         GleanMetrics.UrlInteraction.pasteAndGo.record()
     }
 
-    @objc func pasteAndGoFromContextMenu() {
+    @objc
+    func pasteAndGoFromContextMenu() {
         guard let clipboardString = UIPasteboard.general.string else { return }
         pasteAndGo(clipboardString: clipboardString)
     }
 
-    @objc func copyLink() {
+    @objc
+    func copyLink() {
         self.url
             .map(\.absoluteString)
             .map { UIPasteboard.general.string = $0 }
@@ -838,25 +845,29 @@ class URLBar: UIView {
             backgroundColor = .clear
         }
 
-        UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            self.layoutIfNeeded()
+        UIView.animate(
+            withDuration: UIConstants.layout.urlBarTransitionAnimationDuration,
+            animations: {
+                self.layoutIfNeeded()
 
-            if self.inBrowsingMode && !self.isIPadRegularDimensions {
-                self.updateURLBorderConstraints()
-            }
+                if self.inBrowsingMode && !self.isIPadRegularDimensions {
+                    self.updateURLBorderConstraints()
+                }
 
-            self.urlBarBackgroundView.snp.remakeConstraints { make in
-                make.edges.equalToSuperview().inset(showBackgroundView ? UIConstants.layout.urlBarBorderInset : 1)
-            }
+                self.urlBarBackgroundView.snp.remakeConstraints { make in
+                    make.edges.equalToSuperview().inset(showBackgroundView ? UIConstants.layout.urlBarBorderInset : 1)
+                }
 
-            self.urlBarBorderView.backgroundColor = borderColor
-        }, completion: { finished in
-            if finished {
-                if let isEmpty = self.urlTextField.text?.isEmpty {
-                    self.displayClearButton(shouldDisplay: !isEmpty)
+                self.urlBarBorderView.backgroundColor = borderColor
+            },
+            completion: { finished in
+                if finished {
+                    if let isEmpty = self.urlTextField.text?.isEmpty {
+                        self.displayClearButton(shouldDisplay: !isEmpty)
+                    }
                 }
             }
-        })
+        )
     }
 
     func updateURLBorderConstraints() {
@@ -881,7 +892,8 @@ class URLBar: UIView {
 
     /* This separate @objc function is necessary as selector methods pass sender by default. Calling
      dismiss() directly from a selector would pass the sender as "completion" which results in a crash. */
-    @objc func cancelPressed() {
+    @objc
+    func cancelPressed() {
         isEditing = false
     }
 
@@ -895,7 +907,8 @@ class URLBar: UIView {
         completion?()
     }
 
-    @objc private func didSingleTap(sender: UITapGestureRecognizer) {
+    @objc
+    private func didSingleTap(sender: UITapGestureRecognizer) {
         setTextForURL()
         delegate?.urlBarDidPressScrollTop(self, tap: sender)
     }
@@ -964,14 +977,16 @@ class URLBar: UIView {
         contextMenuButton.animateHidden(!inBrowsingMode ? false : (isIPadRegularDimensions ? false : isHidden), duration: UIConstants.layout.urlBarTransitionAnimationDuration)
     }
 
-    @objc private func didPressClear() {
+    @objc
+    private func didPressClear() {
         urlTextField.text = nil
         userInputText = nil
         displayClearButton(shouldDisplay: false)
         delegate?.urlBar(self, didEnterText: "")
     }
 
-    @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
+    @objc
+    private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.urlBarDidLongPress(self)
             self.isUserInteractionEnabled = true
@@ -1083,7 +1098,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         }
 
         // When text.characters.count == 0, it is the HomeView
-        if let text = autocompleteTextField.text, !isEditing, text.count == 0 {
+        if let text = autocompleteTextField.text, !isEditing, text.isEmpty {
             shouldPresent = true
         }
 

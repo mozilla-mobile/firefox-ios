@@ -5,7 +5,9 @@
 import Foundation
 import Shared
 import Storage
-import MozillaAppServices
+
+import struct MozillaAppServices.HistoryHighlight
+import struct MozillaAppServices.HistoryMetadata
 
 class SearchTermGroupsUtility {
     public static func getHighlightGroups(
@@ -122,7 +124,7 @@ class SearchTermGroupsUtility {
         and searchTermMetadata: [String: [HistoryMetadata]]
     ) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
         var itemGroupData: [String: [T]] = [:]
-        var itemsInGroups: [T] = [T]()
+        var itemsInGroups = [T]()
 
         outeritemLoop: for item in items {
             innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where historyMetaList
@@ -215,7 +217,7 @@ class SearchTermGroupsUtility {
 
     /// Takes a dictionary and creates ASGroups from it.
     ///
-    /// If dictionary contains `Tab`s, then the group will be assigned a timestap based
+    /// If dictionary contains `Tab`s, then the group will be assigned a timestamp based
     /// on the `firstCreatedTime` of the first item in the group.
     ///
     /// - Parameter groupDictionary: Dictionary that is to be processed
@@ -283,7 +285,7 @@ class SearchTermGroupsUtility {
 class StopWatchTimer {
     private var timer: Timer?
     var isPaused = true
-    // Recored in seconds
+    // Recorded in seconds
     var elapsedTime: Int32 = 0
 
     func startOrResume() {

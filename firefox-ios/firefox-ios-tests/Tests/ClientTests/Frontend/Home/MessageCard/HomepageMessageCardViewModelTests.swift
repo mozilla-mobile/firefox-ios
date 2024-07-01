@@ -171,6 +171,7 @@ class MockMessageDataProtocol: MessageDataProtocol {
     var buttonLabel: String?
     var experiment: String?
     var actionParams: [String: String] = [:]
+    var microsurveyConfig: MicrosurveyConfig?
 }
 
 // MARK: - MockStyleDataProtocol
@@ -198,7 +199,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     }
 
     var onMessagePressedCalled = 0
-    func onMessagePressed(_ message: GleanPlumbMessage) {
+    func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?, shouldExpire: Bool) {
         onMessagePressedCalled += 1
     }
 

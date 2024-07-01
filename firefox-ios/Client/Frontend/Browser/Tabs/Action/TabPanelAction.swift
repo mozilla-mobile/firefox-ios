@@ -4,162 +4,87 @@
 
 import Redux
 import Storage
+import Common
 
-class TabDisplayModelContext: ActionContext {
-    let tabDisplayModel: TabDisplayModel
-    init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
-        self.tabDisplayModel = tabDisplayModel
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class BoolValueContext: ActionContext {
-    let boolValue: Bool
-    init(boolValue: Bool, windowUUID: WindowUUID) {
-        self.boolValue = boolValue
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class FloatValueContext: ActionContext {
-    let floatValue: Float
-    init(floatValue: Float, windowUUID: WindowUUID) {
-        self.floatValue = floatValue
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class AddNewTabContext: ActionContext {
-    let urlRequest: URLRequest?
-    let isPrivate: Bool
-    init(urlRequest: URLRequest?, isPrivate: Bool, windowUUID: WindowUUID) {
-        self.urlRequest = urlRequest
-        self.isPrivate = isPrivate
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class URLRequestContext: ActionContext {
-    let urlRequest: URLRequest
-    init(urlRequest: URLRequest, windowUUID: WindowUUID) {
-        self.urlRequest = urlRequest
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class URLContext: ActionContext {
-    let url: URL
-    init(url: URL, windowUUID: WindowUUID) {
-        self.url = url
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class TabUUIDContext: ActionContext {
-    let tabUUID: TabUUID
-    init(tabUUID: TabUUID, windowUUID: WindowUUID) {
-        self.tabUUID = tabUUID
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-class MoveTabContext: ActionContext {
+struct MoveTabData {
     let originIndex: Int
     let destinationIndex: Int
     let isPrivate: Bool
-    init(originIndex: Int, destinationIndex: Int, isPrivate: Bool, windowUUID: WindowUUID) {
-        self.originIndex = originIndex
-        self.destinationIndex = destinationIndex
-        self.isPrivate = isPrivate
-        super.init(windowUUID: windowUUID)
-    }
 }
 
-class ToastTypeContext: ActionContext {
-    let toastType: ToastType
-    init(toastType: ToastType, windowUUID: WindowUUID) {
+class TabPanelViewAction: Action {
+    let panelType: TabTrayPanelType?
+    let isPrivateModeActive: Bool?
+    let urlRequest: URLRequest?
+    let tabUUID: TabUUID?
+    let moveTabData: MoveTabData?
+    let toastType: ToastType?
+    let shareSheetURL: URL?
+
+    init(panelType: TabTrayPanelType,
+         isPrivateModeActive: Bool? = nil,
+         urlRequest: URLRequest? = nil,
+         tabUUID: TabUUID? = nil,
+         moveTabData: MoveTabData? = nil,
+         toastType: ToastType? = nil,
+         shareSheetURL: URL? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.panelType = panelType
+        self.isPrivateModeActive = isPrivateModeActive
+        self.urlRequest = urlRequest
+        self.tabUUID = tabUUID
+        self.moveTabData = moveTabData
         self.toastType = toastType
-        super.init(windowUUID: windowUUID)
+        self.shareSheetURL = shareSheetURL
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-class KeyboardContext: ActionContext {
-    let showOverlay: Bool
-    init(showOverlay: Bool, windowUUID: WindowUUID) {
-        self.showOverlay = showOverlay
-        super.init(windowUUID: windowUUID)
-    }
+enum TabPanelViewActionType: ActionType {
+    case tabPanelDidLoad
+    case tabPanelDidAppear
+    case addNewTab
+    case closeTab
+    case undoClose
+    case closeAllTabs
+    case confirmCloseAllTabs
+    case undoCloseAllTabs
+    case moveTab
+    case toggleInactiveTabs
+    case closeInactiveTabs
+    case undoCloseInactiveTab
+    case closeAllInactiveTabs
+    case undoCloseAllInactiveTabs
+    case learnMorePrivateMode
+    case selectTab
+    case hideUndoToast
+    case showShareSheet
 }
 
-class RefreshTabContext: ActionContext {
-    let tabDisplayModel: TabDisplayModel
-    init(tabDisplayModel: TabDisplayModel, windowUUID: WindowUUID) {
+class TabPanelMiddlewareAction: Action {
+    let tabDisplayModel: TabDisplayModel?
+    let inactiveTabModels: [InactiveTabsModel]?
+    let toastType: ToastType??
+
+    init(tabDisplayModel: TabDisplayModel? = nil,
+         inactiveTabModels: [InactiveTabsModel]? = nil,
+         toastType: ToastType? = nil,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
         self.tabDisplayModel = tabDisplayModel
-        super.init(windowUUID: windowUUID)
+        self.inactiveTabModels = inactiveTabModels
+        self.toastType = toastType
+        super.init(windowUUID: windowUUID,
+                   actionType: actionType)
     }
 }
 
-class RefreshInactiveTabsContext: ActionContext {
-    let inactiveTabModels: [InactiveTabsModel]
-    init(tabModels: [InactiveTabsModel], windowUUID: WindowUUID) {
-        self.inactiveTabModels = tabModels
-        super.init(windowUUID: windowUUID)
-    }
-}
-
-enum TabPanelAction: Action {
-    case tabPanelDidLoad(BoolValueContext)
-    case tabPanelDidAppear(BoolValueContext)
-    case addNewTab(AddNewTabContext)
-    case closeTab(TabUUIDContext)
-    case undoClose(ActionContext)
-    case closeAllTabs(ActionContext)
-    case confirmCloseAllTabs(ActionContext)
-    case undoCloseAllTabs(ActionContext)
-    case moveTab(MoveTabContext)
-    case toggleInactiveTabs(ActionContext)
-    case closeInactiveTabs(TabUUIDContext)
-    case undoCloseInactiveTab(ActionContext)
-    case closeAllInactiveTabs(ActionContext)
-    case undoCloseAllInactiveTabs(ActionContext)
-    case learnMorePrivateMode(URLRequestContext)
-    case selectTab(TabUUIDContext)
-    case showToast(ToastTypeContext)
-    case hideUndoToast(ActionContext)
-    case showShareSheet(URLContext)
-
-    // Middleware actions
-    case didLoadTabPanel(TabDisplayModelContext)
-    case didChangeTabPanel(TabDisplayModelContext)
-    case refreshTab(RefreshTabContext) // Response to all user actions involving tabs ex: add, close and close all tabs
-    case refreshInactiveTabs(RefreshInactiveTabsContext)
-
-    var windowUUID: UUID {
-        switch self {
-        case .tabPanelDidLoad(let context as ActionContext),
-                .tabPanelDidAppear(let context as ActionContext),
-                .addNewTab(let context as ActionContext),
-                .closeTab(let context as ActionContext),
-                .undoClose(let context),
-                .closeAllTabs(let context),
-                .confirmCloseAllTabs(let context),
-                .undoCloseAllTabs(let context),
-                .moveTab(let context as ActionContext),
-                .toggleInactiveTabs(let context),
-                .closeInactiveTabs(let context as ActionContext),
-                .undoCloseInactiveTab(let context),
-                .closeAllInactiveTabs(let context),
-                .undoCloseAllInactiveTabs(let context),
-                .learnMorePrivateMode(let context as ActionContext),
-                .selectTab(let context as ActionContext),
-                .showToast(let context as ActionContext),
-                .hideUndoToast(let context),
-                .showShareSheet(let context as ActionContext),
-                .didLoadTabPanel(let context as ActionContext),
-                .didChangeTabPanel(let context as ActionContext),
-                .refreshTab(let context as ActionContext),
-                .refreshInactiveTabs(let context as ActionContext):
-            return context.windowUUID
-        }
-    }
+enum TabPanelMiddlewareActionType: ActionType {
+    case didLoadTabPanel
+    case didChangeTabPanel
+    case refreshTabs
+    case refreshInactiveTabs
+    case showToast
 }

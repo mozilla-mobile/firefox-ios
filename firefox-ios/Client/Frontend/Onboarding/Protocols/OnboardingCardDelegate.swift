@@ -107,7 +107,10 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
                 )
             }
         )
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier:
+                AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton)
         bottomSheetViewModel.shouldDismissForTapOutside = true
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
@@ -140,7 +143,7 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             style: .plain,
             target: self,
             action: selector)
-        buttonItem.tintColor = themeManager.currentTheme(for: windowUUID).colors.actionPrimary
+        buttonItem.tintColor = themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         (singInSyncVC as? FirefoxAccountSignInViewController)?.qrCodeNavigationHandler = qrCodeNavigationHandler
 

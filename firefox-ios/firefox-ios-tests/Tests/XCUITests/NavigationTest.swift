@@ -290,7 +290,11 @@ class NavigationTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441499
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+        }
         if !iPad() {
             mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
         }
@@ -306,7 +310,11 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+        }
         if !iPad() {
             mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
         }
@@ -387,8 +395,8 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.links["link-created-by-parent"], timeout: TIMEOUT)
     }
 
-    // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307020
+    // Smoketest
     func testVerifyBrowserTabMenu() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
@@ -436,10 +444,10 @@ class NavigationTest: BaseTestCase {
         app.buttons["Open in New Tab"].tap()
         // A new tab loading the article page should open
         navigator.goto(TabTray)
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"])
         let numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
         XCTAssertTrue(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain.").exists)
-        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441773

@@ -3,11 +3,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 @testable import Client
 
 class MockApplicationHelper: ApplicationHelper {
     var openSettingsCalled = 0
     var openURLCalled = 0
+    var openURLInWindowCalled = 0
     var lastOpenURL: URL?
 
     func openSettings() {
@@ -16,6 +18,11 @@ class MockApplicationHelper: ApplicationHelper {
 
     func open(_ url: URL) {
         openURLCalled += 1
+        lastOpenURL = url
+    }
+
+    func open(_ url: URL, inWindow: WindowUUID) {
+        openURLInWindowCalled += 1
         lastOpenURL = url
     }
 }

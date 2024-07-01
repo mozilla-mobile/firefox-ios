@@ -163,6 +163,11 @@ objects:
         type: Option<ExperimentSlug>
         description: The experiment slug that this message is involved in.
         default: null
+        
+      microsurveyConfig:
+        type: Option<MicrosurveyConfig>
+        description: Optional configuration data for a microsurvey.
+        default: null
 
   StyleData:
     description: >
@@ -182,6 +187,23 @@ objects:
           before it is expired.
         default: 5
 
+  MicrosurveyConfig:
+    description: >
+        Attributes relating to microsurvey messaging.
+    fields:
+      utm-content:
+        description: The name used to provide as the utm_content parameter for the privacy notice.
+        type: Option<String>
+        default: null
+      icon:
+        description: The asset name in our bundle used as the icon shown in the survey.
+        type: Image
+        default: lightbulbLarge
+      options:
+        description: The list of survey options to present to the user.
+        type: List<Text>
+        default: [] # Should not be defaulted
+
 enums:
   MessageSurfaceId:
     description: >
@@ -192,6 +214,8 @@ enums:
         description: This is the card that appears at the top on the Firefox Home Page.
       survey:
         description: This is a full-page that appears providing a survey to the user.
+      microsurvey:
+        description: This is a microsurvey that appears on top of the bottom toolbar to the user.
       notification:
         description: This is a local notification send to the user periodically with tips and updates.
       Unknown:

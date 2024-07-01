@@ -246,7 +246,8 @@ public class OnboardingViewController: UIViewController {
         }
     }
 
-    @objc func didTapStartButton() {
+    @objc
+    func didTapStartButton() {
         dismissOnboardingScreen()
     }
 

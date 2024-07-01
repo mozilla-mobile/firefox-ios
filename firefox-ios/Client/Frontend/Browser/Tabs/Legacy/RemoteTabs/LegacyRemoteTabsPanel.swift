@@ -6,6 +6,8 @@ import UIKit
 import Storage
 import Common
 
+import enum MozillaAppServices.VisitType
+
 protocol RemotePanelDelegateProvider: AnyObject {
     var remotePanelDelegate: RemotePanelDelegate? { get }
 }
@@ -79,7 +81,7 @@ class LegacyRemoteTabsPanel: UIViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

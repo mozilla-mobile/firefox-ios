@@ -168,7 +168,7 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Include snapshot here as it is the closest approximation to an element load measurement
                 do {
                     let historyListSnapshot = try historyList.snapshot()
                     let historyListCells = historyListSnapshot.children.filter { $0.elementType == .cell }
@@ -229,7 +229,7 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Include snapshot here as it is the closest approximation to an element load measurement
                 do {
                     let historyListSnapshot = try historyList.snapshot()
                     let historyListCells = historyListSnapshot.children.filter { $0.elementType == .cell }
@@ -290,7 +290,7 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
                 // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
                 do {
@@ -347,7 +347,7 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure cpu cycles
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
-                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
                 // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
                 do {
@@ -404,7 +404,7 @@ class PerformanceTests: BaseTestCase {
             XCTCPUMetric(), // to measure CPU cycles
             XCTStorageMetric(), // to measure storage consumption
             XCTMemoryMetric()]) {
-                // Include snapshot here as it is the closest aproximation to an element load measurement
+                // Include snapshot here as it is the closest approximation to an element load measurement
                 // Take a manual snapshot to avoid unnecessary snapshots by xctrunner (~9s each).
                 // Filter out 'Other' elements and drop 'Desktop Bookmarks' cell for a true bookmark count.
                 do {

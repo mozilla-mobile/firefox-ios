@@ -8,7 +8,8 @@ import Storage
 import Sync
 import UserNotifications
 import Account
-import MozillaAppServices
+
+import struct MozillaAppServices.ConstellationState
 
 /**
  * This exists because the Sync code is extension-safe, and thus doesn't get

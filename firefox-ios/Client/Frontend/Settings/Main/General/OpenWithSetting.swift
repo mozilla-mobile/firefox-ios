@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 class OpenWithSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
@@ -40,7 +41,7 @@ class OpenWithSetting: Setting {
         self.windowUUID = settings.windowUUID
         self.settingsDelegate = settingsDelegate
 
-        let theme = settings.themeManager.currentTheme(for: windowUUID)
+        let theme = settings.themeManager.getCurrentTheme(for: windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsOpenWithSectionName,

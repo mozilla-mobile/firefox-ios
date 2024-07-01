@@ -67,7 +67,7 @@ class AppLaunchUtil {
             forName: .FSReadingListAddReadingListItem,
             object: nil,
             queue: nil
-        ) { (notification) -> Void in
+        ) { (notification) in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
                 let title = (userInfo["Title"] as? String) ?? ""
                 self.profile.readingList.createRecordWithURL(
@@ -128,7 +128,7 @@ class AppLaunchUtil {
 
     private func setUserAgent() {
         // Record the user agent for use by search suggestion clients.
-        SearchViewController.userAgent = UserAgent.getUserAgent()
+        SearchViewModel.userAgent = UserAgent.getUserAgent()
     }
 
     private func initializeExperiments() {

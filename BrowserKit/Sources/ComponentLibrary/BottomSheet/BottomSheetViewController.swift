@@ -23,7 +23,6 @@ public class BottomSheetViewController: UIViewController,
                                         UIGestureRecognizerDelegate {
     private struct UX {
         static let minVisibleTopSpace: CGFloat = 40
-        static let closeButtonWidthHeight: CGFloat = 30
         static let closeButtonTopTrailingSpace: CGFloat = 16
         static let initialSpringVelocity: CGFloat = 1
         static let springWithDamping = 0.7
@@ -52,8 +51,7 @@ public class BottomSheetViewController: UIViewController,
         view.backgroundColor = .clear
     }
 
-    private lazy var closeButton: UIButton = .build { button in
-        button.setImage(UIImage(named: StandardImageIdentifiers.ExtraLarge.crossCircleFill), for: .normal)
+    private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
@@ -85,12 +83,15 @@ public class BottomSheetViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: View lifecyle
+    // MARK: View lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
         sheetView.alpha = 1
         setupChildViewController()
-        closeButton.accessibilityLabel = viewModel.closeButtonA11yLabel
+
+        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: viewModel.closeButtonA11yLabel,
+                                                        a11yIdentifier: "a11yCloseButton")
+        closeButton.configure(viewModel: closeButtonViewModel)
 
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
         contentView.addGestureRecognizer(gesture)
@@ -136,7 +137,7 @@ public class BottomSheetViewController: UIViewController,
 
     public func applyTheme() {
         guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
-        contentView.backgroundColor = themeManager.currentTheme(for: uuid).colors.layer1
+        contentView.backgroundColor = themeManager.getCurrentTheme(for: uuid).colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {
@@ -145,7 +146,7 @@ public class BottomSheetViewController: UIViewController,
         }
     }
 
-    public var currentWindowUUID: UUID? {
+    public var currentWindowUUID: WindowUUID? {
         return (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID
     }
 
@@ -202,8 +203,6 @@ public class BottomSheetViewController: UIViewController,
                                              constant: BottomSheetViewController.UX.closeButtonTopTrailingSpace),
             closeButton.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor,
                                                   constant: -BottomSheetViewController.UX.closeButtonTopTrailingSpace),
-            closeButton.widthAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
-            closeButton.heightAnchor.constraint(equalToConstant: BottomSheetViewController.UX.closeButtonWidthHeight),
 
             scrollContentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             scrollContentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import Shared
 
 class TopSitesRowCountSettingsController: SettingsTableViewController {
@@ -33,6 +34,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()
+                NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
             })
         }
 

@@ -7,6 +7,8 @@ import Common
 import Shared
 import Storage
 
+import struct MozillaAppServices.Address
+
 // MARK: - AddressCellView
 
 /// A view representing a cell displaying address information.
@@ -36,15 +38,21 @@ struct AddressCellView: View {
                         .foregroundColor(iconPrimary)
                         .offset(y: -14)
                     VStack(alignment: .leading) {
-                        Text(address.name)
-                            .font(.body)
-                            .foregroundColor(textColor)
-                        Text(address.streetAddress)
-                            .font(.subheadline)
-                            .foregroundColor(customLightGray)
-                        Text(address.addressCityStateZipcode)
-                            .font(.subheadline)
-                            .foregroundColor(customLightGray)
+                        if !address.name.isEmpty {
+                            Text(address.name)
+                                .font(.body)
+                                .foregroundColor(textColor)
+                        }
+                        if !address.streetAddress.isEmpty {
+                            Text(address.streetAddress)
+                                .font(.subheadline)
+                                .foregroundColor(customLightGray)
+                        }
+                        if !address.addressCityStateZipcode.isEmpty {
+                            Text(address.addressCityStateZipcode)
+                                .font(.subheadline)
+                                .foregroundColor(customLightGray)
+                        }
                     }
                     Spacer()
                 }
@@ -54,15 +62,16 @@ struct AddressCellView: View {
             Divider().frame(height: 1)
         }
         .listRowInsets(EdgeInsets())
-        .buttonStyle(AddressButtonStyle(theme: themeManager.currentTheme(for: windowUUID)))
+        .buttonStyle(AddressButtonStyle(theme: themeManager.getCurrentTheme(for: windowUUID)))
         .listRowSeparator(.hidden)
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-            guard let uuid = notification.object as? UUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
+        .accessibilityLabel(address.a11ySettingsRow)
     }
 
     // MARK: - Theme Application

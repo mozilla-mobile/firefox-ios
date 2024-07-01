@@ -13,7 +13,6 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
-    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
     func tabLocationViewPresentCFR(at sourceView: UIView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions
@@ -46,7 +45,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var themeManager: ThemeManager = AppContainer.shared.resolve()
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
@@ -66,17 +65,9 @@ class TabLocationView: UIView, FeatureFlaggable {
         didSet {
             hideButtons()
             updateTextWithURL()
-            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol(url))
             setNeedsUpdateConstraints()
             showTrackingProtectionButton(for: url)
         }
-    }
-
-    var shouldEnableShareButtonFeature: Bool {
-        guard featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) else {
-            return false
-        }
-        return true
     }
 
     var readerModeState: ReaderModeState {
@@ -94,7 +85,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
-        urlTextField.font = UIConstants.DefaultChromeFont
         urlTextField.backgroundColor = .clear
         urlTextField.accessibilityLabel = .TabLocationAddressBarAccessibilityLabel
         urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
@@ -127,17 +117,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         trackingProtectionButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.lock)
         trackingProtectionButton.largeContentTitle = .TabLocationLockButtonLargeContentTitle
         trackingProtectionButton.accessibilityLabel = .TabLocationLockButtonAccessibilityLabel
-    }
-
-    lazy var shareButton: ShareButton = .build { shareButton in
-        shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
-        shareButton.clipsToBounds = false
-        shareButton.contentHorizontalAlignment = .center
-        shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
-        shareButton.accessibilityLabel = .TabLocationShareAccessibilityLabel
-        shareButton.showsLargeContentViewer = true
-        shareButton.largeContentImage = .templateImageNamed(StandardImageIdentifiers.Large.shareApple)
-        shareButton.largeContentTitle = .TabLocationShareButtonLargeContentTitle
     }
 
     private lazy var shoppingButton: UIButton = .build { button in
@@ -219,7 +198,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             urlTextField,
             shoppingButton,
             readerModeButton,
-            shareButton,
             reloadButton
         ]
         contentView = UIStackView(arrangedSubviews: subviews)
@@ -236,8 +214,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             shoppingButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-            shareButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
-            shareButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             reloadButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
         ])
@@ -262,7 +238,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         urlTextField,
         shoppingButton,
         readerModeButton,
-        shareButton,
         reloadButton
     ]
 
@@ -325,15 +300,12 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     @objc
-    func didPressShareButton(_ button: UIButton) {
-        delegate?.tabLocationViewDidTapShare(self, button: shareButton)
-    }
-
-    @objc
     func didPressShoppingButton(_ button: UIButton) {
         button.isSelected = true
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .shoppingButton)
-        store.dispatch(FakespotAction.pressedShoppingButton(windowUUID.context))
+        let action = FakespotAction(windowUUID: windowUUID,
+                                    actionType: FakespotActionType.pressedShoppingButton)
+        store.dispatch(action)
     }
 
     @objc
@@ -443,11 +415,11 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // Fixes: https://github.com/mozilla-mobile/firefox-ios/issues/17403
     private func hideButtons() {
-        [shoppingButton, shareButton].forEach { $0.isHidden = true }
+        [shoppingButton].forEach { $0.isHidden = true }
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 }
 
@@ -480,7 +452,7 @@ private extension TabLocationView {
                 }
             }
         }
-        UIView.animate(withDuration: 0.1, animations: { () -> Void in
+        UIView.animate(withDuration: 0.1, animations: { () in
             self.readerModeButton.alpha = newReaderModeState == .unavailable ? 0 : 1
         })
     }
@@ -553,7 +525,6 @@ extension TabLocationView: ThemeApplicable {
         urlTextField.textColor = theme.colors.textPrimary
         readerModeButton.applyTheme(theme: theme)
         trackingProtectionButton.applyTheme(theme: theme)
-        shareButton.applyTheme(theme: theme)
         reloadButton.applyTheme(theme: theme)
         shoppingButton.tintColor = theme.colors.textPrimary
         shoppingButton.setImage(UIImage(named: StandardImageIdentifiers.Large.shopping)?
@@ -564,6 +535,8 @@ extension TabLocationView: ThemeApplicable {
 }
 
 extension TabLocationView: TabEventHandler {
+    var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
+
     func tabDidChangeContentBlocking(_ tab: Tab) {
         guard let blocker = tab.contentBlocker else { return }
 

@@ -137,7 +137,7 @@ public class HeroImageView: UIView, SiteImageView {
         ])
     }
 
-    // MARK: - Conveniance methods
+    // MARK: - Convenience methods
 
     private func setHeroImage(image: UIImage) {
         setFallBackFaviconVisibility(isHidden: true)

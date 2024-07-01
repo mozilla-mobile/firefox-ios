@@ -922,6 +922,9 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "பயர்பாஃசைத் திறக்கும் போது";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "பயர்பாஃசைத் திறக்கும் போது";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "திறந்த நகலெத்த தொடுப்புகளுக்கு வழங்கப்படுகிறது";
 
@@ -951,6 +954,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "தொடுப்புகளை தொடர்ந்து அழுத்தும் போது";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "தொடுப்புகளை தொடர்ந்து அழுத்தும் போது";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "தொடுப்பு மாதிரிக்காட்சிகளைக் காட்டு";

@@ -8,6 +8,8 @@ import Account
 import Common
 import ComponentLibrary
 
+import enum MozillaAppServices.OAuthScope
+
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {
     case settings
@@ -24,9 +26,6 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         static let buttonCornerRadius: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
-        static let buttonFontSize: CGFloat = 16
-        static let signInLabelFontSize: CGFloat = 20
-        static let descriptionFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
@@ -66,8 +65,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = .FxASignin_Subtitle
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline,
-                                                                size: UX.signInLabelFontSize)
+        label.font = FXFontStyles.Bold.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -80,8 +78,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: UX.signInLabelFontSize)
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
@@ -89,8 +86,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
             manager.getPairingAuthorityURL { result in
                 guard let url = try? result.get(), let host = url.host else { return }
 
-                let font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                                  size: UX.signInLabelFontSize)
+                let font = FXFontStyles.Regular.headline.scaledFont()
+
                 let shortUrl = host + url.path // "firefox.com" + "/pair"
                 let msg: String = .FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
                 label.attributedText = msg.attributedText(boldString: shortUrl, font: font)
@@ -232,7 +229,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = theme.colors
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
@@ -271,6 +268,29 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInUseEmail)
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
+
+    private func showFxAWebViewController(_ url: URL, completion: @escaping (URL) -> Void) {
+        if let accountManager = profile.rustFxA.accountManager {
+            let entrypoint = self.deepLinkParams.entrypoint.rawValue
+            accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in
+                guard let self = self else { return }
+                accountManager.beginPairingAuthentication(
+                    pairingUrl: url.absoluteString,
+                    entrypoint: "pairing_\(entrypoint)",
+                    // We ask for the session scope because the web content never
+                    // got the session as the user never entered their email and
+                    // password
+                    scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
+                ) { [weak self] result in
+                    guard let self = self else { return }
+
+                    if case .success(let url) = result {
+                        completion(url)
+                    }
+                }
+            }
+        }
+    }
 }
 
 // MARK: - QRCodeViewControllerDelegate Functions
@@ -280,12 +300,17 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
             telemetryObj: telemetryObject
         )
 
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
-                                      profile: profile,
-                                      dismissalStyle: fxaDismissStyle,
-                                      deepLinkParams: deepLinkParams,
-                                      shouldAskForNotificationPermission: shouldAskForPermission)
-        navigationController?.pushViewController(vc, animated: true)
+        // Only show the FxAWebViewController if the correct FxA pairing QR code was captured
+        showFxAWebViewController(url) { [weak self] url in
+            guard let self else { return }
+            let vc = FxAWebViewController(
+                pageType: .qrCode(url: url),
+                profile: profile,
+                dismissalStyle: fxaDismissStyle,
+                deepLinkParams: deepLinkParams,
+                shouldAskForNotificationPermission: shouldAskForPermission)
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     func didScanQRCodeWithText(_ text: String) {

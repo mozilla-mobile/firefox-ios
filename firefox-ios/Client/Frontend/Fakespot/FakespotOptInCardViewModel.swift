@@ -46,7 +46,7 @@ struct FakespotOptInCardViewModel {
     let secondaryButtonA11yId: String = AccessibilityIdentifiers.Shopping.OptInCard.secondaryButton
 
     // MARK: Button Actions
-    var dismissViewController: ((TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
+    var dismissViewController: ((Bool, TelemetryWrapper.EventExtraKey.Shopping?) -> Void)?
     var onOptIn: (() -> Void)?
 
     // MARK: Links
@@ -71,7 +71,7 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingLearnMoreButton)
         guard let fakespotLearnMoreLink else { return }
         tabManager.addTabsForURLs([fakespotLearnMoreLink], zombie: false, shouldSelectTab: true)
-        dismissViewController?(.interactionWithALink)
+        dismissViewController?(false, .interactionWithALink)
     }
 
     func onTapTermsOfUse() {
@@ -80,7 +80,7 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingTermsOfUseButton)
         guard let fakespotTermsOfUseLink else { return }
         tabManager.addTabsForURLs([fakespotTermsOfUseLink], zombie: false, shouldSelectTab: true)
-        dismissViewController?(.interactionWithALink)
+        dismissViewController?(false, .interactionWithALink)
     }
 
     func onTapPrivacyPolicy() {
@@ -89,7 +89,7 @@ struct FakespotOptInCardViewModel {
                                      object: .shoppingPrivacyPolicyButton)
         guard let fakespotPrivacyPolicyLink else { return }
         tabManager.addTabsForURLs([fakespotPrivacyPolicyLink], zombie: false, shouldSelectTab: true)
-        dismissViewController?(.interactionWithALink)
+        dismissViewController?(false, .interactionWithALink)
     }
 
     func onTapMainButton() {
@@ -105,7 +105,7 @@ struct FakespotOptInCardViewModel {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .shoppingNotNowButton)
-        dismissViewController?(nil)
+        dismissViewController?(true, nil)
     }
 
     var orderWebsites: [String] {
