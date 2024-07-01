@@ -10,7 +10,7 @@ class ToolbarHelper {
                && traitCollection.horizontalSizeClass != .regular
     }
 
-    func shouldShowTopTabsForTraitCollection(_ traitCollection: UITraitCollection) -> Bool {
+    func shouldShowTopTabs(for traitCollection: UITraitCollection) -> Bool {
         return traitCollection.verticalSizeClass == .regular
                && traitCollection.horizontalSizeClass == .regular
     }
