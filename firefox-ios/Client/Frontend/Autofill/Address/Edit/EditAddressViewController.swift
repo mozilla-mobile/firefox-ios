@@ -9,21 +9,6 @@ import Common
 import struct MozillaAppServices.UpdatableAddressFields
 
 class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable {
-    private lazy var webView: WKWebView = {
-        let webConfiguration = WKWebViewConfiguration()
-        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.navigationDelegate = self
-        return webView
-    }()
-
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        return activityIndicator
-    }()
-
     private lazy var removeButton: RemoveAddressButton = {
         let button = RemoveAddressButton()
         button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
@@ -36,7 +21,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }()
 
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [webView, removeButton])
+        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -48,6 +33,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var currentWindowUUID: WindowUUID? { model.windowUUID }
+    var webView: WKWebView? { model.editAddressWebViewManager.webView }
 
     init(
         themeManager: ThemeManager,
@@ -66,22 +52,19 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupWebView()
-        setupActivityIndicator()
         setupRemoveButton()
         listenForThemeChange(view)
     }
 
-    private func setupActivityIndicator() {
-        self.view.addSubview(activityIndicator)
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        webView?.removeFromSuperview()
+        self.evaluateJavaScript("resetForm();")
     }
 
     private func setupRemoveButton() {
+        stackView.addArrangedSubview(removeButton)
         removeButton.isHidden = true
         removeButton.applyTheme(
             theme: themeManager.getCurrentTheme(for: currentWindowUUID)
@@ -92,7 +75,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func setupWebView() {
-        self.view.addSubview(stackView)
+        guard let webView else { return }
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(webView)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -109,21 +94,12 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
             self?.getCurrentFormData(completion: completion)
         }
 
-        if let url = Bundle.main.url(forResource: "AddressFormManager", withExtension: "html") {
-            let request = URLRequest(url: url)
-            webView.loadFileURL(url, allowingReadAccessTo: url)
-            webView.load(request)
-        }
+        performPostLoadActions()
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
 
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        activityIndicator.startAnimating()
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        activityIndicator.stopAnimating()
+    func performPostLoadActions() {
         do {
             let javascript = try model.getInjectJSONDataInit()
             self.evaluateJavaScript(javascript)
@@ -141,7 +117,8 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func getCurrentFormData(completion: @escaping (UpdatableAddressFields) -> Void) {
-        self.webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
+        guard let webView else { return }
+        webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
             if let error = error {
                 self?.logger.log(
                     "JavaScript execution error",
@@ -180,6 +157,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func evaluateJavaScript(_ jsCode: String) {
+        guard let webView else { return }
         webView.evaluateJavaScript(jsCode) { result, error in
             if let error = error {
                 self.logger.log(

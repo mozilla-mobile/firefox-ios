@@ -918,6 +918,7 @@
 		8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */; };
 		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
 		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
+		8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */; };
 		8C29376A2BF79EE000146613 /* AddressFormManager.css in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937662BF79EDF00146613 /* AddressFormManager.css */; };
 		8C29376B2BF79EE000146613 /* AddressFormManager.html in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937672BF79EDF00146613 /* AddressFormManager.html */; };
 		8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937682BF79EDF00146613 /* AddressFormManager.mjs */; };
@@ -938,7 +939,6 @@
 		8CAF29A02AA5E76B00DC3486 /* FakespotMessageCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */; };
 		8CBDE8E32AB09804001985BF /* ProductAnalyzeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */; };
 		8CC033FA2BA476840033449E /* FormAutofillHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8CC033F92BA476840033449E /* FormAutofillHelper.js */; };
-		8CC218A12C24622500DFB5F5 /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CC218A02C24622500DFB5F5 /* RemoveAddressButton.swift */; };
 		8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */; };
 		8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */; };
 		8CE1E4322B8C76AE0026530B /* LoginStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1E4312B8C76AE0026530B /* LoginStorage.swift */; };
@@ -1047,6 +1047,7 @@
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */; };
 		BA1C68BC2B7ED153000D9397 /* MockWebKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */; };
+		BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */; };
 		BA8E197F2BF2FB1900590B5F /* AddressFormManager.js in Resources */ = {isa = PBXBuildFile; fileRef = BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */; };
 		BC003F5E2B59F44600929ECB /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */; };
 		BCFF93EE2AAA9F6E005B5B71 /* RustFirefoxSuggest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFF93ED2AAA9C47005B5B71 /* RustFirefoxSuggest.swift */; };
@@ -6409,6 +6410,7 @@
 		8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingHostingController.swift; sourceTree = "<group>"; };
 		8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillFooterView.swift; sourceTree = "<group>"; };
 		8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHeaderView.swift; sourceTree = "<group>"; };
+		8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
 		8C2937662BF79EDF00146613 /* AddressFormManager.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = AddressFormManager.css; sourceTree = "<group>"; };
 		8C2937672BF79EDF00146613 /* AddressFormManager.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AddressFormManager.html; sourceTree = "<group>"; };
@@ -6434,7 +6436,6 @@
 		8CAF299F2AA5E76B00DC3486 /* FakespotMessageCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakespotMessageCardView.swift; sourceTree = "<group>"; };
 		8CBDE8E22AB09804001985BF /* ProductAnalyzeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAnalyzeResponse.swift; sourceTree = "<group>"; };
 		8CC033F92BA476840033449E /* FormAutofillHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FormAutofillHelper.js; sourceTree = "<group>"; };
-		8CC218A02C24622500DFB5F5 /* RemoveAddressButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
 		8CCA45EFA01D41F54715FBCC /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		8CCCB08A2AE26B5C0073ADB9 /* ReportResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportResponse.swift; sourceTree = "<group>"; };
 		8CCD74722B90A945008F919B /* LoginListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModelTests.swift; sourceTree = "<group>"; };
@@ -6893,6 +6894,7 @@
 		BA1C68B92B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKFrameInfoExtensionsTest.swift; sourceTree = "<group>"; };
 		BA1C68BB2B7ED153000D9397 /* MockWebKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWebKit.swift; sourceTree = "<group>"; };
 		BA354251BD3FFF63A161E385 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
+		BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAddressWebViewManager.swift; sourceTree = "<group>"; };
 		BA8E197E2BF2FB1900590B5F /* AddressFormManager.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = AddressFormManager.js; sourceTree = "<group>"; };
 		BA904A3B89BC820A7A802D55 /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/Storage.strings"; sourceTree = "<group>"; };
 		BAA64356B54F1CD258764620 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -10468,11 +10470,12 @@
 		8C2937732BF79F0C00146613 /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */,
 				8C29376F2BF79F0300146613 /* Address+Encodable.swift */,
 				8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */,
 				8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */,
 				8C29376E2BF79F0300146613 /* EditAddressViewController.swift */,
-				8CC218A02C24622500DFB5F5 /* RemoveAddressButton.swift */,
+				BA7A14832C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift */,
 			);
 			path = Edit;
 			sourceTree = "<group>";
@@ -14349,7 +14352,6 @@
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
-				8CC218A12C24622500DFB5F5 /* RemoveAddressButton.swift in Sources */,
 				DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				8A093D832A4B68940099ABA5 /* PrivacySettingsDelegate.swift in Sources */,
@@ -14491,6 +14493,7 @@
 				8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */,
 				8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */,
 				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
+				8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
 				8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
@@ -15034,6 +15037,7 @@
 				C8741FE928C4D30F00030029 /* FileManagerInterface.swift in Sources */,
 				8A93F87229D3A5AD004159D9 /* BrowserCoordinator.swift in Sources */,
 				8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */,
+				BA7A14842C2CCEB3008DF1D9 /* EditAddressWebViewManager.swift in Sources */,
 				8AD40FCA27BADC4B00672675 /* ReaderModeButton.swift in Sources */,
 				E1C437A32A96343A00D188CB /* FakespotFadeLabel.swift in Sources */,
 				8A3EF7FB2A2FCF9D00796E3A /* ForceCrashSetting.swift in Sources */,
