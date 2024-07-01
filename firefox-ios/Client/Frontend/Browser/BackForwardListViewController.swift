@@ -103,8 +103,8 @@ class BackForwardListViewController: UIViewController,
         view.addSubview(shadow)
         view.addSubview(tableView)
 
-        let toolBarShouldShow = ToolbarHelper().shouldShowNavigationToolbarForTraitCollection(traitCollection)
-        snappedToBottom = toolBarShouldShow || isBottomSearchBar
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        snappedToBottom = showNavToolbar || isBottomSearchBar
         tableViewHeightAnchor = tableView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             tableViewHeightAnchor,
@@ -179,8 +179,8 @@ class BackForwardListViewController: UIViewController,
         with coordinator: UIViewControllerTransitionCoordinator
     ) {
         super.willTransition(to: newCollection, with: coordinator)
-        let shouldShowToolbar = ToolbarHelper().shouldShowNavigationToolbarForTraitCollection(newCollection)
-        if shouldShowToolbar != snappedToBottom, !isBottomSearchBar {
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
+        if showNavToolbar != snappedToBottom, !isBottomSearchBar {
             if snappedToBottom {
                 tableViewBottomAnchor.constant = 0
             } else {
