@@ -3734,8 +3734,8 @@ extension String {
     public static let ScanQRCodeConfirmOpenURLMessage = MZLocalizedString(
         key: "ScanQRCode.ConfirmOpenURL.Message.v129",
         tableName: "ScanQRCode",
-        value: "Allow Firefox to open?",
-        comment: "Text of the prompt to ask user permission to open a URL from a scanned QR code.")
+        value: "Allow %@ to open?",
+        comment: "Text of the prompt to ask user permission to open a URL from a scanned QR code. Placeholder is app name.")
     public static let ScanQRCodeURLPromptAllowButton = MZLocalizedString(
         key: "ScanQRCode.ConfirmOpenURL.AllowButton.v129",
         tableName: "ScanQRCode",

@@ -364,21 +364,19 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                         let presentedURL = websiteHost ?? text
 
                         let confirmationAlert = UIAlertController(
-                            title: .ScanQRCodeConfirmOpenURLMessage,
+                            title: String(format: .ScanQRCodeConfirmOpenURLMessage, AppName.shortName.rawValue),
                             message: presentedURL,
                             preferredStyle: .alert)
 
                         let cancelAction = UIAlertAction(title: .ScanQRCodeURLPromptDenyButton,
                                                          style: .cancel,
                                                          handler: { _ in
-                            openScannedQRCodeURL(url)
                             cleanUpAndRemoveQRCodeScanner()
                         })
                         let openURLAction = UIAlertAction(title: .ScanQRCodeURLPromptAllowButton,
                                                           style: .default,
-                                                          handler: { [weak self] _ in
-                            self?.qrCodeDelegate?.didScanQRCodeWithURL(url)
-                            cleanUpAndRemoveQRCodeScanner()
+                                                          handler: { _ in
+                            openScannedQRCodeURL(url)
                         })
 
                         confirmationAlert.addAction(cancelAction)
