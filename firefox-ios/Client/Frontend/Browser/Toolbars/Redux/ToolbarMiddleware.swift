@@ -258,7 +258,6 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
 
-        let addressToolbarState = toolbarState.addressToolbar
         let addressBorderPosition = getAddressBorderPosition(toolbarPosition: position,
                                                              isPrivate: toolbarState.isPrivateMode,
                                                              scrollY: scrollOffset.y)
