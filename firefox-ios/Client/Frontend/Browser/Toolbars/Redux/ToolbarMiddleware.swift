@@ -272,54 +272,52 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     // MARK: Address Toolbar Actions
 
+    private func addressToolbarNavigationActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let traitCollection = action.traitCollection else { return actions }
+
+        if ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) || action.url == nil {
+            // there are no navigation actions if on homepage or when nav toolbar is shown
+            return actions
+        } else if let url = action.url {
+            // back/forward when url exists and nav toolbar is not shown
+            let isBackButtonEnabled = action.canGoBack ?? false
+            let isForwardButtonEnabled = action.canGoForward ?? false
+            actions.append(ToolbarActionState(actionType: .back,
+                                              iconName: StandardImageIdentifiers.Large.back,
+                                              isEnabled: isBackButtonEnabled,
+                                              a11yLabel: .TabToolbarBackAccessibilityLabel,
+                                              a11yId: AccessibilityIdentifiers.Toolbar.backButton))
+            actions.append(ToolbarActionState(actionType: .forward,
+                                              iconName: StandardImageIdentifiers.Large.forward,
+                                              isEnabled: isForwardButtonEnabled,
+                                              a11yLabel: .TabToolbarForwardAccessibilityLabel,
+                                              a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
+        }
+        return actions
+    }
+
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
         guard let traitCollection = action.traitCollection,
               let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
 
-        let navToolbarActions = toolbarState.navigationToolbar.actions
-        let isBackButtonEnabled = action.canGoBack ?? false
-        let isForwardButtonEnabled = action.canGoForward ?? false
+        let navigationActions = addressToolbarNavigationActions(action: action, state: state)
+        let addressToolbarModel = AddressToolbarModel(
+            navigationActions: navigationActions,
+            pageActions: toolbarState.addressToolbar.pageActions,
+            browserActions: toolbarState.addressToolbar.browserActions,
+            borderPosition: toolbarState.addressToolbar.borderPosition,
+            url: action.url)
 
-        if let url = action.url, !ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) {
-            // Show navigation actions in address toolbar when the navigation toolbar is not shown
-            var navigationActions = [ToolbarActionState]()
-            navigationActions.append(ToolbarActionState(actionType: .back,
-                                                        iconName: StandardImageIdentifiers.Large.back,
-                                                        isEnabled: isBackButtonEnabled,
-                                                        a11yLabel: .TabToolbarBackAccessibilityLabel,
-                                                        a11yId: AccessibilityIdentifiers.Toolbar.backButton))
-            navigationActions.append(ToolbarActionState(actionType: .forward,
-                                                        iconName: StandardImageIdentifiers.Large.forward,
-                                                        isEnabled: isForwardButtonEnabled,
-                                                        a11yLabel: .TabToolbarForwardAccessibilityLabel,
-                                                        a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
-
-            let addressToolbarModel = AddressToolbarModel(
-                navigationActions: navigationActions,
-                pageActions: toolbarState.addressToolbar.pageActions,
-                browserActions: toolbarState.addressToolbar.browserActions,
-                borderPosition: toolbarState.addressToolbar.borderPosition,
-                url: action.url)
-
-            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                       url: url,
-                                       windowUUID: action.windowUUID,
-                                       actionType: ToolbarActionType.urlDidChange)
-            store.dispatch(action)
-        } else {
-            // Hide navigation actions in address toolbar when navigation toolbar is shown as they are shown there
-            let addressToolbarModel = AddressToolbarModel(
-                navigationActions: [ToolbarActionState](),
-                pageActions: toolbarState.addressToolbar.pageActions,
-                browserActions: toolbarState.addressToolbar.browserActions,
-                borderPosition: toolbarState.addressToolbar.borderPosition,
-                url: action.url)
-            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                       url: action.url,
-                                       windowUUID: action.windowUUID,
-                                       actionType: ToolbarActionType.urlDidChange)
-            store.dispatch(action)
-        }
+        let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                   url: action.url,
+                                   windowUUID: action.windowUUID,
+                                   actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(action)
     }
 }
