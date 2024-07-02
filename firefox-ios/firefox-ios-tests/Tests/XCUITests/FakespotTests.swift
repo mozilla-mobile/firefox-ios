@@ -405,6 +405,9 @@ class FakespotTests: BaseTestCase {
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
         app.swipeDown()
+        if app.buttons["DONE"].exists {
+            app.buttons["DONE"].tap()
+        }
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
         if !app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].exists {

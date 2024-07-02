@@ -199,9 +199,7 @@ class TopTabsTest: BaseTestCase {
         }
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        // Disabling this part since user ends up in regular mode TBD
-        // New behaviour on v14, there is no Undo in Private mode
-        // mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
+        mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354579
