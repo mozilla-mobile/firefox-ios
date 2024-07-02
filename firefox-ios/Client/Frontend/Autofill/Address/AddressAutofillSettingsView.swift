@@ -45,6 +45,7 @@ struct AddressAutofillSettingsView: View {
             .background(viewBackground)
         }
         .onAppear {
+            addressListViewModel.fetchAddresses()
             // Apply the theme when the view appears
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
