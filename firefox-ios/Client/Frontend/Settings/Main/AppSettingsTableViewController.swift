@@ -358,6 +358,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            ToggleCloseRemoteTabs(settings: self, settingsDelegate: self),
         ]
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]

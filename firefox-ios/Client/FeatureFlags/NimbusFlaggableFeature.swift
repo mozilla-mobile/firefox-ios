@@ -31,6 +31,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case nightMode
     case preferSwitchToOpenTabOverDuplicate
     case reduxSearchSettings
+    case remoteTabManagement
     case reportSiteIssue
     case searchHighlights
     case splashScreen
@@ -65,6 +66,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
+        case .remoteTabManagement:
+            return FlagKeys.RemoteTabManagement
 
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
