@@ -1,9 +1,12 @@
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "S’han suprimit les dades de navegació privada";
+
 /* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
-"FeltPrivacyUI.Body.v121" = "El %@ suprimeix les galetes, l’historial i les dades dels llocs en tancar totes les finestres privades.";
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "El %@ suprimeix les galetes, l’historial i les dades dels llocs en tancar totes les pestanyes privades.";
 
 /* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
-"FeltPrivacyUI.Link.v121" = "Qui podria veure la meva activitat?";
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Qui podria veure la meva activitat?";
 
 /* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
-"FeltPrivacyUI.Title.v121" = "No deixeu rastre en aquest dispositiu";
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "No deixeu rastre en aquest dispositiu";
 
