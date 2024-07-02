@@ -39,6 +39,8 @@ struct AddressAutofillSettingsView: View {
 
                 // Address list view
                 AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
+
+                Spacer()
             }
             .background(viewBackground)
         }
