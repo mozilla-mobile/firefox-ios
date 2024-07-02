@@ -261,7 +261,7 @@ extension BrowserViewController: URLBarDelegate {
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
-    func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
+    func locationActionsForURLBar() -> [AccessibleAction] {
         if UIPasteboard.general.hasStrings {
             return [pasteGoAction, pasteAction, copyAddressAction]
         } else {
@@ -306,7 +306,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
-        return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
+        return locationActionsForURLBar().map { $0.accessibilityCustomAction }
     }
 
     func urlBar(_ urlBar: URLBarView, didRestoreText text: String) {

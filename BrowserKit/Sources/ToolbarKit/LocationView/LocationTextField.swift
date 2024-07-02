@@ -19,6 +19,17 @@ class LocationTextField: UITextField, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    weak var accessibilityActionsSource: AccessibilityActionsSource?
+
+    override var accessibilityCustomActions: [UIAccessibilityCustomAction]? {
+        get {
+            return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
+        }
+        set {
+            super.accessibilityCustomActions = newValue
+        }
+    }
+
     // MARK: - View setup
     override func layoutSubviews() {
         super.layoutSubviews()

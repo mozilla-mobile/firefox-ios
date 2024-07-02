@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
+final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -19,7 +19,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: (() -> Void)?
-    private var locationViewDelegate: LocationViewDelegate?
+    private var delegate: LocationViewDelegate?
 
     private var isURLTextFieldEmpty: Bool {
         urlTextField.text?.isEmpty == true
@@ -73,6 +73,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true
         urlTextField.delegate = self
+        urlTextField.accessibilityActionsSource = self
     }
 
     // MARK: - Init
@@ -87,7 +88,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
             urlTextField.text = urlTextField.text?.lowercased()
             urlAbsolutePath = urlTextField.text
-            locationViewDelegate?.locationViewDidEnterText(urlTextField.text ?? "")
+            delegate?.locationViewDidEnterText(urlTextField.text ?? "")
         }
     }
 
@@ -112,7 +113,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
         configureA11y(state)
         formatAndTruncateURLTextField()
         updateIconContainer()
-        locationViewDelegate = delegate
+        self.delegate = delegate
         searchTerm = state.searchTerm
     }
 
@@ -291,7 +292,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
             textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
             textField.selectAll(nil)
         }
-        locationViewDelegate?.locationViewDidBeginEditing(textField.text ?? "")
+        delegate?.locationViewDidBeginEditing(textField.text ?? "")
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
@@ -305,7 +306,7 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let searchText = textField.text?.lowercased(), !searchText.isEmpty else { return false }
 
-        locationViewDelegate?.locationViewShouldSearchFor(searchText)
+        delegate?.locationViewShouldSearchFor(searchText)
         textField.resignFirstResponder()
         return true
     }
@@ -322,6 +323,11 @@ class LocationView: UIView, UITextFieldDelegate, ThemeApplicable {
 
         urlTextField.accessibilityIdentifier = state.urlTextFieldA11yId
         urlTextField.accessibilityLabel = state.urlTextFieldA11yLabel
+    }
+
+    func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]? {
+        guard view === urlTextField else { return nil }
+        return delegate?.locationViewAccessibilityActions()
     }
 
     // MARK: - ThemeApplicable
