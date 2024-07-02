@@ -15,7 +15,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-14-large
+        runs-on: macos-14
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -49,13 +49,14 @@ jobs:
                 retention-days: 2          
     run-tests:
         name: Run tests
-        runs-on: macos-14-large
+        runs-on: macos-14
         needs: compile
         strategy:
             fail-fast: false
             matrix:
-                xcodebuild_test_plan: [ 'SmokeTest' ]
+                xcodebuild_test_plan: ['SmokeTest']
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
+                # xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -94,11 +95,10 @@ jobs:
             - name: Print test report
               id: test-report
               run: |
-                python ../test-fixtures/ci/convert_junit_to_markdown.py -f ./build/reports/junit.xml ./github.md
+                python ../test-fixtures/ci/convert_junit_to_markdown.py --github ./build/reports/junit.xml ./github.md
                 cat github.md >> $GITHUB_STEP_SUMMARY
-                python ../test-fixtures/ci/convert_junit_to_markdown.py -s ./build/reports/junit.xml ./slack.md
+                python ../test-fixtures/ci/convert_junit_to_markdown.py --slack ./build/reports/junit.xml ./slack.md
                 echo "list_of_failures=`cat slack.md`" >> $GITHUB_OUTPUT
-                cat $GITHUB_OUTPUT
               working-directory:  ${{ env.browser }}
             - name: Upload log file
               id: upload-log
