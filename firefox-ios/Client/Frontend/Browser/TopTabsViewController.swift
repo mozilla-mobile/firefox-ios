@@ -29,6 +29,10 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController, Themeable, Notifiable {
+    private struct UX {
+        static let trailingEdgeSpace: CGFloat = 10
+    }
+
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
@@ -251,7 +255,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     private func setupLayout() {
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
-        view.addSubview(tabsButton)
+
+        if !ToolbarFlagManager.isRefactorEnabled {
+            view.addSubview(tabsButton)
+        }
+
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
@@ -259,14 +267,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             view.heightAnchor.constraint(equalToConstant: TopTabsUX.TopTabsViewHeight),
 
             newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
             newTab.widthAnchor.constraint(equalTo: view.heightAnchor),
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
-
-            tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
-            tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -283,6 +285,20 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
         ])
+
+        if ToolbarFlagManager.isRefactorEnabled {
+            newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                             constant: -UX.trailingEdgeSpace).isActive = true
+        } else {
+            NSLayoutConstraint.activate([
+                newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
+
+                tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace),
+                tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+                tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+            ])
+        }
     }
 
     private func handleFadeOutAfterTabSelection() {
