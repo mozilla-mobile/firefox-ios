@@ -10,7 +10,7 @@ import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
 // AddressListViewModel: A view model for managing addresses.
-class AddressListViewModel: ObservableObject, FeatureFlaggable {
+final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
         case edit(Address)
@@ -48,6 +48,10 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         return themeManager.getCurrentTheme(for: windowUUID).type == .dark
+    }
+    var hasSyncableAccount: () -> Bool = {
+        let profile: Profile = AppContainer.shared.resolve()
+        return profile.hasSyncableAccount()
     }
 
     let editAddressWebViewManager: WebViewPreloadManaging
@@ -190,6 +194,26 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             timeLastModified: 0,
             timesUsed: 0
         ))
+    }
+
+    func removeConfimationButtonTap() {
+        if case .edit(let address) = destination {
+            addressProvider.deleteAddress(id: address.id) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.toggleEditMode()
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
     }
 
     private func toggleEditMode() {

@@ -10,7 +10,7 @@ import Common
 
 @testable import Client
 
-class AddressListViewModelTests: XCTestCase {
+final class AddressListViewModelTests: XCTestCase {
     var viewModel: AddressListViewModel!
     var mockProfile: MockProfile!
     var mockLogger: MockLogger!
@@ -251,13 +251,34 @@ class AddressListViewModelTests: XCTestCase {
         viewModel.closeEditButtonTap()
         XCTAssertNil(viewModel.destination)
     }
+
+    func testRemoveButtonShowOnEditModeTappingRemovesAddress() {
+        let address = dummyAddresses[0]
+
+        viewModel.addressTapped(address)
+        XCTAssertEqual(viewModel.destination, .edit(address))
+
+        viewModel.editButtonTap()
+        XCTAssertTrue(viewModel.isEditMode)
+
+        viewModel.removeConfimationButtonTap()
+        XCTAssertTrue(mockAutofill.deleteAddressesCalled)
+    }
 }
 
-class MockAutofill: AddressProvider {
+final class MockAutofill: AddressProvider {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
     var mockEditAddressResult: Result<Void, Error>?
     var listAllAddressesCalled = false
+    var deleteAddressesCalled = false
+
+    func deleteAddress(
+        id: String,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
+        deleteAddressesCalled = true
+    }
 
     func addAddress(
         address: UpdatableAddressFields,
