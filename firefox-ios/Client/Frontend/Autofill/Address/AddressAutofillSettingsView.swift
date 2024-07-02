@@ -37,10 +37,12 @@ struct AddressAutofillSettingsView: View {
                     .padding(.top, 25)
                     .frame(maxWidth: .infinity)
 
-                // Address list view
-                AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
-
-                Spacer()
+                if addressListViewModel.showSection || addressListViewModel.isEditingFeatureEnabled {
+                    // Address list view
+                    AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
+                } else {
+                    Spacer()
+                }
             }
             .background(viewBackground)
         }
