@@ -41,6 +41,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
     var toggleEditModeAction: ((Bool) -> Void)?
+    var presentToast: ((AddressModifiedStatus) -> Void)?
 
     let addressProvider: AddressProvider
 
@@ -48,6 +49,10 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
         let themeManager: ThemeManager = AppContainer.shared.resolve()
         return themeManager.getCurrentTheme(for: windowUUID).type == .dark
+    }
+    var hasSyncableAccount: () -> Bool = {
+        let profile: Profile = AppContainer.shared.resolve()
+        return profile.hasSyncableAccount()
     }
 
     let editAddressWebViewManager: WebViewPreloadManaging
@@ -133,7 +138,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.updated)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
@@ -160,7 +165,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.saved)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
@@ -190,6 +195,26 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
             timeLastModified: 0,
             timesUsed: 0
         ))
+    }
+
+    func removeConfimationButtonTap() {
+        if case .edit(let address) = destination {
+            addressProvider.deleteAddress(id: address.id) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.presentToast?(.removed)
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.toggleEditMode()
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
     }
 
     private func toggleEditMode() {
