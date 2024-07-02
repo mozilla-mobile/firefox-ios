@@ -61,6 +61,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
+        case ToolbarMiddlewareActionType.urlDidChange:
+            updateAddressToolbarNavigationActions(action: action, state: state)
+
         default:
             break
         }
@@ -264,6 +267,59 @@ class ToolbarMiddleware: FeatureFlaggable {
         switch position {
         case .top: return .top
         case .bottom: return .bottom
+        }
+    }
+
+    // MARK: Address Toolbar Actions
+
+    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let traitCollection = action.traitCollection,
+              let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return }
+
+        let navToolbarActions = toolbarState.navigationToolbar.actions
+        let isBackButtonEnabled = action.canGoBack ?? false
+        let isForwardButtonEnabled = action.canGoForward ?? false
+
+        if let url = action.url, !ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) {
+            // Show navigation actions in address toolbar when the navigation toolbar is not shown
+            var navigationActions = [ToolbarActionState]()
+            navigationActions.append(ToolbarActionState(actionType: .back,
+                                                        iconName: StandardImageIdentifiers.Large.back,
+                                                        isEnabled: isBackButtonEnabled,
+                                                        a11yLabel: .TabToolbarBackAccessibilityLabel,
+                                                        a11yId: AccessibilityIdentifiers.Toolbar.backButton))
+            navigationActions.append(ToolbarActionState(actionType: .forward,
+                                                        iconName: StandardImageIdentifiers.Large.forward,
+                                                        isEnabled: isForwardButtonEnabled,
+                                                        a11yLabel: .TabToolbarForwardAccessibilityLabel,
+                                                        a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
+
+            let addressToolbarModel = AddressToolbarModel(
+                navigationActions: navigationActions,
+                pageActions: toolbarState.addressToolbar.pageActions,
+                browserActions: toolbarState.addressToolbar.browserActions,
+                borderPosition: toolbarState.addressToolbar.borderPosition,
+                url: action.url)
+
+            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                       url: url,
+                                       windowUUID: action.windowUUID,
+                                       actionType: ToolbarActionType.urlDidChange)
+            store.dispatch(action)
+        } else {
+            // Hide navigation actions in address toolbar when navigation toolbar is shown as they are shown there
+            let addressToolbarModel = AddressToolbarModel(
+                navigationActions: [ToolbarActionState](),
+                pageActions: toolbarState.addressToolbar.pageActions,
+                browserActions: toolbarState.addressToolbar.browserActions,
+                borderPosition: toolbarState.addressToolbar.borderPosition,
+                url: action.url)
+            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                       url: action.url,
+                                       windowUUID: action.windowUUID,
+                                       actionType: ToolbarActionType.urlDidChange)
+            store.dispatch(action)
         }
     }
 }
