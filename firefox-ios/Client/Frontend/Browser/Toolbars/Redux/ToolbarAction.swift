@@ -49,19 +49,32 @@ class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
+    let url: URL?
+    let traitCollection: UITraitCollection?
+    let canGoForward: Bool?
+    let canGoBack: Bool?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
+         url: URL? = nil,
+         traitCollection: UITraitCollection? = nil,
+         canGoForward: Bool? = nil,
+         canGoBack: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
+        self.url = url
+        self.traitCollection = traitCollection
+        self.canGoForward = canGoForward
+        self.canGoBack = canGoBack
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
+    case urlDidChange
 }
