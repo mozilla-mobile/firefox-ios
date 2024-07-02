@@ -318,6 +318,10 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
                    level: .info,
                    category: .sync)
     }
+
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
+        return .allowURLsWithoutPrompt
+    }
 }
 
 // MARK: - FxA SignIn Flow

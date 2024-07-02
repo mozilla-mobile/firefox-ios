@@ -10,6 +10,15 @@ import Common
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
     func didScanQRCodeWithText(_ text: String)
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions { get }
+}
+
+/// Defines client behavior when scanning QR code content with security implications (i.e. URLs)
+enum QRCodeScanPermissions {
+    /// Standard; scanned URLs will prompt users before opening.
+    case `default`
+    /// Scanned URLs will not prompt users before opening (sign-in flow etc.)
+    case allowURLsWithoutPrompt
 }
 
 class QRCodeViewController: UIViewController {
@@ -318,6 +327,16 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {
+        func cleanUpAndRemoveQRCodeScanner() {
+            stopScanLineAnimation()
+            dismissController()
+        }
+
+        func openScannedQRCodeURL(_ url: URL) {
+            qrCodeDelegate?.didScanQRCodeWithURL(url)
+            cleanUpAndRemoveQRCodeScanner()
+        }
+
         if metadataObjects.isEmpty {
             captureSession.stopRunning()
             let alert = AlertController(title: "", message: .ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
@@ -333,16 +352,46 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             if let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
                let qrCodeDelegate = self.qrCodeDelegate,
                let text = metaData.stringValue {
+                captureSession.stopRunning()
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
                 if let url = URIFixup.getURL(text), url.isWebPage() {
-                    qrCodeDelegate.didScanQRCodeWithURL(url)
+                    let shouldPrompt = qrCodeDelegate.qrCodeScanningPermissionLevel != .allowURLsWithoutPrompt
+
+                    if shouldPrompt {
+                        // Prompt users before opening scanned URL. Show shortened host (if possible) as the preview.
+                        let websiteHost: String?
+                        if #available(iOS 16.0, *) { websiteHost = url.host() } else { websiteHost = url.host }
+                        let presentedURL = websiteHost ?? text
+
+                        let confirmationAlert = UIAlertController(
+                            title: String(format: .ScanQRCodeConfirmOpenURLMessage, AppName.shortName.rawValue),
+                            message: presentedURL,
+                            preferredStyle: .alert)
+
+                        let cancelAction = UIAlertAction(title: .ScanQRCodeURLPromptDenyButton,
+                                                         style: .cancel,
+                                                         handler: { _ in
+                            cleanUpAndRemoveQRCodeScanner()
+                        })
+                        let openURLAction = UIAlertAction(title: .ScanQRCodeURLPromptAllowButton,
+                                                          style: .default,
+                                                          handler: { _ in
+                            openScannedQRCodeURL(url)
+                        })
+
+                        confirmationAlert.addAction(cancelAction)
+                        confirmationAlert.addAction(openURLAction)
+
+                        self.present(confirmationAlert, animated: true)
+                        return
+                    } else {
+                        openScannedQRCodeURL(url)
+                    }
                 } else {
                     qrCodeDelegate.didScanQRCodeWithText(text)
                 }
             }
-            captureSession.stopRunning()
-            stopScanLineAnimation()
-            dismissController()
+            cleanUpAndRemoveQRCodeScanner()
         }
     }
 }
