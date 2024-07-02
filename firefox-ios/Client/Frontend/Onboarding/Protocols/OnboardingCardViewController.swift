@@ -10,11 +10,15 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // MARK: - Common UX Elements
     struct SharedUX {
         static let topStackViewSpacing: CGFloat = 24
-        static let titleFontSize: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 28 : 22
-        static let descriptionFontSize: CGFloat = 17
+        static let titleFont: UIFont = {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                return FXFontStyles.Bold.title1.scaledFont()
+            } else {
+                return FXFontStyles.Bold.title2.scaledFont()
+            }
+        }()
 
         // small device
-        static let smallTitleFontSize: CGFloat = 20
         static let smallStackViewSpacing: CGFloat = 8
         static let smallScrollViewVerticalPadding: CGFloat = 20
     }
@@ -68,9 +72,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
-        let fontSize = self.shouldUseSmallDeviceLayout ? SharedUX.smallTitleFontSize : SharedUX.titleFontSize
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                size: fontSize)
+        label.font = self.shouldUseSmallDeviceLayout ? FXFontStyles.Bold.title3.scaledFont() : SharedUX.titleFont
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)TitleLabel"
         label.accessibilityTraits.insert(.header)
@@ -79,10 +81,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: SharedUX.descriptionFontSize
-        )
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.a11yIdRoot)DescriptionLabel"
     }
