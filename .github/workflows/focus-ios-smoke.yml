@@ -15,7 +15,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-14
+        runs-on: macos-14-large
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -49,14 +49,14 @@ jobs:
                 retention-days: 2          
     run-tests:
         name: Run tests
-        runs-on: macos-14
+        runs-on: macos-14-large
         needs: compile
         strategy:
             fail-fast: false
             matrix:
                 xcodebuild_test_plan: ['SmokeTest']
-                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
                 # xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
+                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
