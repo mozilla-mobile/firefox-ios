@@ -1,0 +1,12 @@
+/* Accessibility label for the address field in the address toolbar. */
+"AddressToolbar.Location.A11y.Label.v128" = "Serĉu ion aŭ tajpu adreson";
+
+/* Placeholder for the address field in the address toolbar. */
+"AddressToolbar.Location.Placeholder.v128" = "Serĉu ion aŭ tajpu adreson";
+
+/* Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings. */
+"AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128" = "Privatecaj kaj sekurecaj agordoj";
+
+/* Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google). */
+"AddressToolbar.SearchEngine.A11y.Label.v128" = "Serĉilo: %@";
+

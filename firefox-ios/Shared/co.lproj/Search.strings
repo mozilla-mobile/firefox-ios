@@ -2,7 +2,7 @@
 "%@ search" = "Ricerca %@";
 
 /* Label for search settings button. */
-"Search Settings" = "Preferenze di ricerca";
+"Search Settings" = "Parametri di ricerca";
 
 /* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a label for sponsored Firefox suggestions. */
 "Search.SponsoredSuggestionDescription.v119" = "Spunsurizatu";

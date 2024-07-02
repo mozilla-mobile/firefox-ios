@@ -22,6 +22,13 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Povezava ni varna";
 
+/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
+   Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Zavrnjenih sledilcev: %@";
+
+/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Overil %@";
+
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ je izključena. Priporočamo, da zaščito znova vključite.";
 
