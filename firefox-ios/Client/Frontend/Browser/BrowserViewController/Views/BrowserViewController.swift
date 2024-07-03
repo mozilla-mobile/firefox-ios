@@ -324,10 +324,9 @@ class BrowserViewController: UIViewController,
 
     @objc
     func searchBarPositionDidChange(notification: Notification) {
-        guard !isToolbarRefactorEnabled,
-              let dict = notification.object as? NSDictionary,
+        guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
-              urlBar != nil
+              (!isToolbarRefactorEnabled && urlBar != nil) || isToolbarRefactorEnabled
         else { return }
 
         let searchBarView: TopBottomInterchangeable = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar
@@ -2940,7 +2939,7 @@ extension BrowserViewController: LegacyTabDelegate {
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
-        updateFindInPageVisibility(isVisible: true)
+        updateFindInPageVisibility(isVisible: true, withSearchText: selection)
         findInPageBar?.text = selection
     }
 
