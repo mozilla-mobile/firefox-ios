@@ -6,17 +6,8 @@ import UIKit
 import Common
 
 class RemoveAddressButton: UIButton, ThemeApplicable {
-    private let topSeparator: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    private let bottomSeparator: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private let topSeparator: UIView = .build()
+    private let bottomSeparator: UIView = .build()
 
     init() {
         super.init(frame: .zero)
