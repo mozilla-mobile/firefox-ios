@@ -83,7 +83,11 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
     }
 
-    private func getAction(for actionType: MicrosurveyActionType) -> MicrosurveyMiddlewareAction {
-        return MicrosurveyMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    private func getAction(for actionType: MicrosurveyActionType) -> MicrosurveyAction {
+        return MicrosurveyAction(
+            surveyId: "microsurvey-id",
+            windowUUID: .XCTestDefaultUUID,
+            actionType: actionType
+        )
     }
 }
