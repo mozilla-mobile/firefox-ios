@@ -10,6 +10,7 @@ struct ToolbarState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
     var isPrivateMode: Bool
+    var isLoginActionRequired: Bool
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
 
@@ -26,6 +27,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.init(windowUUID: toolbarState.windowUUID,
                   toolbarPosition: toolbarState.toolbarPosition,
                   isPrivateMode: toolbarState.isPrivateMode,
+                  isLoginActionRequired: toolbarState.isLoginActionRequired,
                   addressToolbar: toolbarState.addressToolbar,
                   navigationToolbar: toolbarState.navigationToolbar)
     }
@@ -35,6 +37,7 @@ struct ToolbarState: ScreenState, Equatable {
             windowUUID: windowUUID,
             toolbarPosition: .top,
             isPrivateMode: false,
+            isLoginActionRequired: false,
             addressToolbar: AddressBarState(windowUUID: windowUUID),
             navigationToolbar: NavigationBarState(windowUUID: windowUUID)
         )
@@ -44,12 +47,14 @@ struct ToolbarState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
         isPrivateMode: Bool,
+        isLoginActionRequired: Bool,
         addressToolbar: AddressBarState,
         navigationToolbar: NavigationBarState
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
         self.isPrivateMode = isPrivateMode
+        self.isLoginActionRequired = isLoginActionRequired
         self.addressToolbar = addressToolbar
         self.navigationToolbar = navigationToolbar
     }
@@ -70,6 +75,7 @@ struct ToolbarState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
                 isPrivateMode: state.isPrivateMode,
+                isLoginActionRequired: state.isLoginActionRequired,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction))
 
@@ -79,6 +85,17 @@ struct ToolbarState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 toolbarPosition: state.toolbarPosition,
                 isPrivateMode: action.isPrivateBrowsing ?? state.isPrivateMode,
+                isLoginActionRequired: state.isLoginActionRequired,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
+
+        case GeneralBrowserActionType.showWarningBadge:
+            guard let action = action as? GeneralBrowserAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                isLoginActionRequired: action.isLoginActionRequired ?? state.isLoginActionRequired,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 
@@ -88,6 +105,7 @@ struct ToolbarState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 toolbarPosition: position,
                 isPrivateMode: state.isPrivateMode,
+                isLoginActionRequired: state.isLoginActionRequired,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 
@@ -96,6 +114,7 @@ struct ToolbarState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 toolbarPosition: state.toolbarPosition,
                 isPrivateMode: state.isPrivateMode,
+                isLoginActionRequired: state.isLoginActionRequired,
                 addressToolbar: state.addressToolbar,
                 navigationToolbar: state.navigationToolbar)
         }

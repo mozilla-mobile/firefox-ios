@@ -357,10 +357,17 @@ class BrowserViewController: UIViewController,
 
     @objc
     fileprivate func appMenuBadgeUpdate() {
-        let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
-        let showWarningBadge = actionNeeded
+        let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
+        let showWarningBadge = consume isActionNeeded
 
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            let action = GeneralBrowserAction(
+                isLoginActionRequired: showWarningBadge,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showWarningBadge
+            )
+            store.dispatch(action)
+        } else {
             urlBar.warningMenuBadge(setVisible: showWarningBadge)
             toolbar.warningMenuBadge(setVisible: showWarningBadge)
         }

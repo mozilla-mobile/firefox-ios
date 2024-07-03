@@ -101,12 +101,14 @@ class ToolbarMiddleware: FeatureFlaggable {
         var elements = [ToolbarActionState]()
         elements.append(ToolbarActionState(actionType: .tabs,
                                            iconName: StandardImageIdentifiers.Large.tab,
+                                           badgeImageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
                                            numberOfTabs: 1,
                                            isEnabled: true,
                                            a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
                                            a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
         elements.append(ToolbarActionState(actionType: .menu,
                                            iconName: StandardImageIdentifiers.Large.appMenu,
+                                           badgeImageName: StandardImageIdentifiers.Large.warningFill,
                                            isEnabled: true,
                                            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
                                            a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
@@ -138,12 +140,14 @@ class ToolbarMiddleware: FeatureFlaggable {
                                            a11yId: AccessibilityIdentifiers.Toolbar.homeButton))
         elements.append(ToolbarActionState(actionType: .tabs,
                                            iconName: StandardImageIdentifiers.Large.tab,
+                                           badgeImageName: StandardImageIdentifiers.Medium.privateModeCircleFillPurple,
                                            numberOfTabs: 1,
                                            isEnabled: true,
                                            a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
                                            a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
         elements.append(ToolbarActionState(actionType: .menu,
                                            iconName: StandardImageIdentifiers.Large.appMenu,
+                                           badgeImageName: StandardImageIdentifiers.Large.warningFill,
                                            isEnabled: true,
                                            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
                                            a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))

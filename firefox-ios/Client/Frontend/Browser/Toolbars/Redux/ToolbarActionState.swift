@@ -22,6 +22,7 @@ struct ToolbarActionState: Equatable {
 
     var actionType: ActionType
     var iconName: String
+    var badgeImageName: String?
     var numberOfTabs: Int?
     var isEnabled: Bool
     var a11yLabel: String
@@ -31,5 +32,13 @@ struct ToolbarActionState: Equatable {
         return actionType == .back ||
                actionType == .forward ||
                actionType == .tabs
+    }
+
+    var canShowPrivateBrowsingBadge: Bool {
+        actionType == .tabs
+    }
+
+    var canShowWarningBadge: Bool {
+        actionType == .menu
     }
 }
