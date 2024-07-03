@@ -29,7 +29,6 @@ class RemoveAddressButton: UIButton, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // Set up constraints for the separators
     private func setupSeparatorConstraints() {
         NSLayoutConstraint.activate([
             topSeparator.bottomAnchor.constraint(equalTo: topAnchor),
