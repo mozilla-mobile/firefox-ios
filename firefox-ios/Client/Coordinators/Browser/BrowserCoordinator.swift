@@ -567,9 +567,9 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     @MainActor
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
+        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId, field: field)
     }
 
     func showAddressAutofill(frame: WKFrameInfo?) {

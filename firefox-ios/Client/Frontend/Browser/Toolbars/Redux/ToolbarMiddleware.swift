@@ -81,7 +81,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         return AddressToolbarModel(navigationActions: [ToolbarActionState](),
                                    pageActions: loadAddressToolbarPageElements(),
-                                   browserActions: [ToolbarActionState](),
+                                   browserActions: loadAddressToolbarBrowserElements(),
                                    borderPosition: borderPosition,
                                    url: nil)
     }
@@ -95,6 +95,22 @@ class ToolbarMiddleware: FeatureFlaggable {
             a11yLabel: .QRCode.ToolbarButtonA11yLabel,
             a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode))
         return pageActions
+    }
+
+    private func loadAddressToolbarBrowserElements() -> [ToolbarActionState] {
+        var elements = [ToolbarActionState]()
+        elements.append(ToolbarActionState(actionType: .tabs,
+                                           iconName: StandardImageIdentifiers.Large.tab,
+                                           numberOfTabs: 1,
+                                           isEnabled: true,
+                                           a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
+        elements.append(ToolbarActionState(actionType: .menu,
+                                           iconName: StandardImageIdentifiers.Large.appMenu,
+                                           isEnabled: true,
+                                           a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+        return elements
     }
 
     private func loadInitialNavigationToolbarState(toolbarPosition: AddressToolbarPosition) -> NavigationToolbarModel {
@@ -233,15 +249,28 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
-        guard let toolbarPosition = action.toolbarPosition else { return }
+        guard let toolbarPosition = action.toolbarPosition,
+              let scrollOffset = action.scrollOffset,
+              let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID)
+        else { return }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-        let toolbarAction = ToolbarAction(toolbarPosition: position,
+
+        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: position,
+                                                             isPrivate: toolbarState.isPrivateMode,
+                                                             scrollY: scrollOffset.y)
+        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
+        let addressToolbarModel = AddressToolbarModel(borderPosition: addressBorderPosition)
+        let navToolbarModel = NavigationToolbarModel(displayBorder: displayNavToolbarBorder)
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          toolbarPosition: position,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.toolbarPositionChanged)
         store.dispatch(toolbarAction)
-
-        updateBorderPosition(action: action, state: state)
     }
 
     private func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition) -> AddressToolbarPosition {

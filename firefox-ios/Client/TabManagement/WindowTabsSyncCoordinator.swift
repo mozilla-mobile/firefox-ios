@@ -49,7 +49,14 @@ final class WindowTabsSyncCoordinator {
         // work like querying for top sites.
         DispatchQueue.main.asyncAfter(deadline: .now() + Timing.dbInsertionDelay) { [weak self] in
             self?.logger.log("Storing \(storedTabs.count) total tabs for \(windowCount) windows", level: .info, category: .sync)
-            self?.profile.storeTabs(storedTabs)
+            self?.profile.storeTabs(storedTabs).upon { result in
+                switch result {
+                case .success(let tabCount):
+                    self?.logger.log("Successfully stored \(tabCount) tabs", level: .info, category: .sync)
+                case .failure(let error):
+                    self?.logger.log("Failed to store tabs: \(error.localizedDescription)", level: .warning, category: .sync)
+                }
+            }
         }
     }
 }

@@ -83,11 +83,15 @@ class ZoomingTests: BaseTestCase {
         tapZoomInButton(tapCount: 4)
         zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 175%")
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openWebsiteAndReachZoomSetting(website: 1)
         tapZoomInButton(tapCount: 1)
         zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 110%")
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openWebsiteAndReachZoomSetting(website: 2)
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
@@ -106,6 +110,7 @@ class ZoomingTests: BaseTestCase {
     }
 
     private func selectTabTrayWebsites(tab: Int) {
+        navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.collectionViews.staticTexts.element)
         app.collectionViews.staticTexts.element(boundBy: tab).tap()
