@@ -49,6 +49,7 @@ class DomainAutocompleteTests: BaseTestCase {
         // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         if isTablet {
             navigator.performAction(Action.AcceptRemovingAllTabs)
         } else {

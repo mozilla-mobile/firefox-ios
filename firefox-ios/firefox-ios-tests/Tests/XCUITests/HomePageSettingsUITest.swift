@@ -150,6 +150,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
 
         // Workaround needed after Xcode 11.3 update Issue 5937
