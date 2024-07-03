@@ -67,7 +67,7 @@ class EmptyPrivateTabsView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func configureLearnMoreButton() {
         let viewModel = LinkButtonViewModel(title: .PrivateBrowsingLearnMore,
                                             a11yIdentifier: AccessibilityIdentifiers.TabTray.learnMoreButton,
