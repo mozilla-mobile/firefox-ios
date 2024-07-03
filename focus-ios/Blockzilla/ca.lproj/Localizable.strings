@@ -530,7 +530,7 @@
 "Tip.RequestDesktop.Title" = "Voleu veure la versió completa d'escriptori d'un lloc web?";
 
 /* Text for a label that indicates the description for share trackers tip. The placeholder is the number of trackers blocked. Only shown when there are more than 10 trackers blocked. For locales where we would need plural support, please feel free to translate this string as `Trackers blocked so far: %@` instead. */
-"Tip.ShareTrackers.Description" = "%@ elements de seguiment bloquejats fins ara";
+"Tip.ShareTrackers.Description" = "%@ elements de seguiment blocats fins ara";
 
 /* Text for a label that indicates the title for share trackers tip. The placeholder is replaced with the long product name (Firefox Focus or Firefox Klar). */
 "Tip.ShareTrackers.Title" = "Navegueu sense por, que el %@ ho bloca.";
