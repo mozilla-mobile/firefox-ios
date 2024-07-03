@@ -296,7 +296,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         if ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) || action.url == nil {
             // there are no navigation actions if on homepage or when nav toolbar is shown
             return actions
-        } else if let url = action.url {
+        } else if action.url != nil {
             // back/forward when url exists and nav toolbar is not shown
             let isBackButtonEnabled = action.canGoBack ?? false
             let isForwardButtonEnabled = action.canGoForward ?? false
@@ -315,8 +315,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let traitCollection = action.traitCollection,
-              let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
 
         let navigationActions = addressToolbarNavigationActions(action: action, state: state)
