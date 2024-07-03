@@ -15,6 +15,7 @@ final class AddressListViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockLogger: MockLogger!
     var mockAutofill: MockAutofill!
+    var mockThemeManager: MockThemeManager!
 
     var cancellables: [AnyCancellable] = []
     let dummyAddresses = [
@@ -76,10 +77,13 @@ final class AddressListViewModelTests: XCTestCase {
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
+        mockThemeManager = MockThemeManager()
         viewModel = AddressListViewModel(
             logger: mockLogger,
             windowUUID: WindowUUID(),
-            addressProvider: mockAutofill
+            addressProvider: mockAutofill,
+            themeManager: mockThemeManager,
+            profile: mockProfile
         )
     }
 
@@ -132,7 +136,6 @@ final class AddressListViewModelTests: XCTestCase {
     }
 
     func testInjectJSONDataInitSuccess() throws {
-        viewModel.isDarkTheme = { _ in true }
         let address = dummyAddresses[0]
         viewModel.destination = .edit(address)
 

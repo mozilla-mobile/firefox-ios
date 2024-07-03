@@ -181,7 +181,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     func presentRemoveAddressAlert() {
         let alertController = UIAlertController(
             title: String.Addresses.Settings.Edit.RemoveAddressTitle,
-            message: model.hasSyncableAccount() ? String.Addresses.Settings.Edit.RemoveAddressMessage : nil,
+            message: model.hasSyncableAccount ? String.Addresses.Settings.Edit.RemoveAddressMessage : nil,
             preferredStyle: .alert
         )
 
