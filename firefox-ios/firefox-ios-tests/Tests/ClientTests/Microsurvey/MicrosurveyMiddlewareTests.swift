@@ -21,7 +21,7 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testDismissSurveyAction() {
+    func testDismissSurveyAction() throws {
         let mockStore = Store(
             state: AppState(),
             reducer: AppState.reducer,
@@ -31,9 +31,11 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         let action = getAction(for: .closeSurvey)
         mockStore.dispatch(action)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.dismissButtonTapped)
+        let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.dismissButtonTapped.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
     }
 
-    func testPrivacyNoticeTappedAction() {
+    func testPrivacyNoticeTappedAction() throws {
         let mockStore = Store(
             state: AppState(),
             reducer: AppState.reducer,
@@ -43,6 +45,8 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         let action = getAction(for: .tapPrivacyNotice)
         mockStore.dispatch(action)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.privacyNoticeTapped)
+        let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.privacyNoticeTapped.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
     }
 
     func testSubmitSurveyAction() throws {
@@ -53,6 +57,7 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         )
 
         let action = MicrosurveyAction(
+            surveyId: "microsurvey-id",
             userSelection: "Neutral",
             windowUUID: .XCTestDefaultUUID,
             actionType: MicrosurveyActionType.submitSurvey
@@ -60,10 +65,11 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         mockStore.dispatch(action)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.submitButtonTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.submitButtonTapped.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
         XCTAssertEqual(resultValue[0].extra?["user_selection"], "Neutral")
     }
 
-    func testConfirmationViewedAction() {
+    func testConfirmationViewedAction() throws {
         let mockStore = Store(
             state: AppState(),
             reducer: AppState.reducer,
@@ -73,6 +79,8 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         let action = getAction(for: .confirmationViewed)
         mockStore.dispatch(action)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.confirmationShown)
+        let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.confirmationShown.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
     }
 
     private func getAction(for actionType: MicrosurveyActionType) -> MicrosurveyMiddlewareAction {

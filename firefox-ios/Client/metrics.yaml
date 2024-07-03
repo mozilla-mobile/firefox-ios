@@ -662,6 +662,11 @@ microsurvey:
     type: event
     description: |
         The survey surface (bottom sheet) was shown and visible.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
     data_reviews:
@@ -674,6 +679,11 @@ microsurvey:
     type: event
     description: |
         Records that the user tapped on the privacy notice.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
     data_reviews:
@@ -688,6 +698,11 @@ microsurvey:
     type: event
     description: |
         Records that the user tapped on the close button to dismiss the survey.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
     data_reviews:
@@ -707,6 +722,10 @@ microsurvey:
         type: string
         description: |
           The user's selected option e.g. "satisfied".
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
     data_reviews:
@@ -721,6 +740,11 @@ microsurvey:
     type: event
     description: |
         Records that the confirmation message in the survey has been viewed by the user.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
     bugs:
         - https://github.com/mozilla-mobile/firefox-ios/issues/20800
     data_reviews:
