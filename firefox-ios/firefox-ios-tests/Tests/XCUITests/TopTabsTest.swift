@@ -393,12 +393,7 @@ class TopTabsTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306868
     func testTabTrayCloseMultipleTabs() {
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            validateToastWhenClosingMultipleTabs(fromIndex: 6, toIndex: 2)
-        } else {
-            validateToastWhenClosingMultipleTabs(fromIndex: 4, toIndex: 0)
-        }
-        app.collectionViews.buttons["crossLarge"].tap()
+        validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].tap()
         waitUntilPageLoad()
@@ -417,8 +412,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
         navigator.performAction(Action.TogglePrivateMode)
-        validateToastWhenClosingMultipleTabs(fromIndex: 4, toIndex: 0)
-        app.collectionViews.buttons["crossLarge"].tap()
+        validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].tap()
         // Only the latest tab closed is restored
@@ -430,7 +424,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
 
-    private func validateToastWhenClosingMultipleTabs(fromIndex: Int, toIndex: Int) {
+    private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
         navigator.openURL(urlExample)
         waitUntilPageLoad()
@@ -444,12 +438,15 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
-        for index in stride(from: fromIndex, to: toIndex, by: -1) {
-            app.collectionViews.buttons.element(boundBy: index).tap()
+        for _ in 0...3 {
+            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossLarge"].tap()
             // A toast notification is displayed with the message "Tab Closed" and the Undo option
             mozWaitForElementToExist(app.buttons["Undo"])
             mozWaitForElementToExist(app.staticTexts["Tab Closed"])
         }
+        app.collectionViews.buttons["crossLarge"].tap()
+        mozWaitForElementToExist(app.buttons["Undo"])
+        mozWaitForElementToExist(app.staticTexts["Tab Closed"])
     }
 
     private func addTabsAndUndoCloseTabAction(nrOfTabs: Int) {
