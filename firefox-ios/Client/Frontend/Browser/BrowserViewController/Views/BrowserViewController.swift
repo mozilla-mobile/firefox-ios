@@ -2693,6 +2693,10 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
+        return .default
+    }
+
     // MARK: - BrowserFrameInfoProvider
 
     func getHeaderSize() -> CGSize {
