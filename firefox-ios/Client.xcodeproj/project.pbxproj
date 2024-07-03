@@ -918,6 +918,7 @@
 		8C19532E2B85E7AE00761B20 /* SelfSizingHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */; };
 		8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */; };
 		8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */; };
+		8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */; };
 		8C29376A2BF79EE000146613 /* AddressFormManager.css in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937662BF79EDF00146613 /* AddressFormManager.css */; };
 		8C29376B2BF79EE000146613 /* AddressFormManager.html in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937672BF79EDF00146613 /* AddressFormManager.html */; };
 		8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */ = {isa = PBXBuildFile; fileRef = 8C2937682BF79EDF00146613 /* AddressFormManager.mjs */; };
@@ -6459,6 +6460,7 @@
 		8C19532D2B85E7AE00761B20 /* SelfSizingHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfSizingHostingController.swift; sourceTree = "<group>"; };
 		8C19532F2B85E7EC00761B20 /* AutofillFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillFooterView.swift; sourceTree = "<group>"; };
 		8C1953312B85EAB500761B20 /* AutofillHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillHeaderView.swift; sourceTree = "<group>"; };
+		8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAddressButton.swift; sourceTree = "<group>"; };
 		8C264BF5A1C7B2B6378D4DFF /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/Today.strings; sourceTree = "<group>"; };
 		8C2937662BF79EDF00146613 /* AddressFormManager.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = AddressFormManager.css; sourceTree = "<group>"; };
 		8C2937672BF79EDF00146613 /* AddressFormManager.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = AddressFormManager.html; sourceTree = "<group>"; };
@@ -10519,6 +10521,7 @@
 		8C2937732BF79F0C00146613 /* Edit */ = {
 			isa = PBXGroup;
 			children = (
+				8C1C2E442C32D1470087846C /* RemoveAddressButton.swift */,
 				8C29376F2BF79F0300146613 /* Address+Encodable.swift */,
 				8C4B0F5C2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift */,
 				8C29376D2BF79F0200146613 /* EditAddressLocalization.swift */,
@@ -14542,6 +14545,7 @@
 				8A0D32842A61E1CC007D976D /* StatusBarOverlay.swift in Sources */,
 				8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */,
 				74BBDF472A17979000D3BEFE /* OnboardingDefaultBrowserModelProtocol.swift in Sources */,
+				8C1C2E452C32D1470087846C /* RemoveAddressButton.swift in Sources */,
 				8AD40FC727BADC3400672675 /* ToolbarTextField.swift in Sources */,
 				8A720C5E2A4C85DA0003018A /* AccountSettingsDelegate.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
