@@ -285,7 +285,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     override func saveSessionData(forTab tab: Tab?) {
         guard let tab = tab,
               !tab.isPrivate,
-              let tabSession = tab.webView?.interactionState as? Data, // Nil if window already closed?
+              let tabSession = tab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: tab.tabUUID)
         else { return }
 
