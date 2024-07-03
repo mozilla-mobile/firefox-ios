@@ -79,10 +79,7 @@ def convert_to_slack_markdown(test_suites, is_smoke = True):
 
             test_failure = Section(text=markdown)
             test_suite_footer = Context(
-                elements=[
-                    test_suite.get('name', '').replace('XCUITest.' ,''), 
-                    "<${{ env.server_url }}/${{ env.repository }}/commit/${{ env.sha }}|Commit>"
-                ]
+                elements=[test_suite.get('name', '').replace('XCUITest.' ,'')]
             )
             
             failed_tests_info.append(test_failure)
@@ -99,7 +96,7 @@ def convert_to_slack_markdown(test_suites, is_smoke = True):
         text="${{ env.pass_fail }} ${{ env.browser }} :firefox: ${{ env.xcodebuild_test_plan }} - ${{ env.ios_simulator }} iOS ${{ env.ios_version }}"
     )
     build_info = Section(
-            text="*Branch*: `${{ env.ref_name }}`\n<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|*Github Actions Job*> :github:"
+            text="*Branch*: `${{ env.ref_name }}`\n<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|*Github Actions Job*> :github:\n<${{ env.server_url }}/${{ env.repository }}/commit/${{ env.sha }}|Commit> :pull_request:"
         )
     footer = Context(
         elements=[
