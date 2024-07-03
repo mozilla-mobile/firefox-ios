@@ -1,5 +1,7 @@
 import getopt, sys
 import xml.etree.ElementTree as ET
+import json
+from blockkit import Context, Divider, Header, Message, Section
 
 # Modified from junit_to_markdown
 # https://github.com/stevengoossensB/junit_to_markdown/tree/main
@@ -57,13 +59,13 @@ def count_test_retry_failure(test_name, test_cases):
     return count
 
 def convert_to_slack_markdown(test_suites, is_smoke = True):
-    markdown = ""
+    # Fetch failed tests and put them in Slack format
+    failed_tests_info = []
     for test_suite in test_suites:
         if int(test_suite.get('failures')):
-            markdown += "{test_suite_name}\\n".format(test_suite_name = test_suite.get('name', '').replace('XCUITest.' ,''))
-            test_cases = test_suite.get('test_cases', [])
             done = []
-            
+            markdown = ""
+            test_cases = test_suite.get('test_cases', [])
             for test_case in test_cases:
                 if not test_case.get('status') == '✅' and not test_case.get('name','') in done:        
                     # For smoke test only: See if the test passes in 2nd or 3rd attempt
@@ -72,15 +74,51 @@ def convert_to_slack_markdown(test_suites, is_smoke = True):
                         if fail_count < 3:
                             test_case['status'] = ':warning:'
                     
-                    markdown += "{status} `{test_case_name}`\\n".format(test_case_name=test_case.get("name"), status=test_case.get('status'))
+                    markdown += "`{test_case_name}` {status}\n".format(test_case_name=test_case.get("name"), status=test_case.get('status'))
                     done.append(test_case.get('name', ''))
 
-    if markdown == "":
-        markdown += "🎉 No test failures 🎉"
-    else:
-        markdown = "(⚠️-flaky ❌-Failed)\\n" + markdown
-
-    return markdown    
+            test_failure = Section(text=markdown)
+            test_suite_footer = Context(
+                elements=[
+                    test_suite.get('name', '').replace('XCUITest.' ,''), 
+                    "<${{ env.server_url }}/${{ env.repository }}/commit/${{ env.sha }}|Commit>"
+                ]
+            )
+            
+            failed_tests_info.append(test_failure)
+            failed_tests_info.append(test_suite_footer)
+    
+    # No test failures
+    if len(failed_tests_info) == 0:
+        failed_tests_info = [
+            Section(text="🎉 No test failures 🎉")
+        ]
+    
+    # Put together the Slack message
+    header = Header(
+        text="${{ env.pass_fail }} ${{ env.browser }} :firefox: ${{ env.xcodebuild_test_plan }} - ${{ env.ios_simulator }} iOS ${{ env.ios_version }}"
+    )
+    build_info = Section(
+            text="*Branch*: `${{ env.ref_name }}`\n<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|*Github Actions Job*> :github:"
+        )
+    footer = Context(
+        elements=[
+            ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
+        ]
+    )
+    blocks = []
+    blocks.append(header)
+    blocks.append(Divider())
+    blocks.append(build_info)
+    for test in failed_tests_info:
+        blocks.append(test)
+    blocks.append(Divider())
+    blocks.append(footer)
+    payload = Message (
+        blocks = blocks
+    ).build()
+    
+    return json.dumps(payload, indent=4)  
 
 def convert_to_github_markdown(test_suites, is_smoke = True):
     markdown = ""
@@ -92,8 +130,6 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
     
     if markdown == "":
         markdown += "## 🎉 No test failures 🎉"
-    else:
-        markdown = "(⚠️-flaky ❌-Failed)\n" + markdown
     
     return markdown
 

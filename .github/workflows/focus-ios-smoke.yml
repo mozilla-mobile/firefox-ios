@@ -55,7 +55,6 @@ jobs:
             fail-fast: false
             matrix:
                 xcodebuild_test_plan: ['SmokeTest']
-                # xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
@@ -64,6 +63,7 @@ jobs:
               id: packages
               run: |
                 gem install xcpretty
+                pip install blockkit
             - name: Setup Xcode
               id: xcode
               run: |
@@ -97,8 +97,7 @@ jobs:
               run: |
                 python ../test-fixtures/ci/convert_junit_to_markdown.py --github ./build/reports/junit.xml ./github.md
                 cat github.md >> $GITHUB_STEP_SUMMARY
-                python ../test-fixtures/ci/convert_junit_to_markdown.py --slack ./build/reports/junit.xml ./slack.md
-                echo "list_of_failures=`cat slack.md`" >> $GITHUB_OUTPUT
+                python ../test-fixtures/ci/convert_junit_to_markdown.py --slack ./build/reports/junit.xml ./slack.json
               working-directory:  ${{ env.browser }}
             - name: Upload log file
               id: upload-log
@@ -111,7 +110,7 @@ jobs:
               id: slack
               uses: slackapi/slack-github-action@v1.26.0
               with:
-                payload-file-path: "./test-fixtures/ci/slack-notification-xcuitest.json"
+                payload-file-path: ${{ env.browser }}/slack.json
               env:
                 SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
                 SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
@@ -122,7 +121,7 @@ jobs:
                 repository: ${{ github.repository }}
                 run_id: ${{ github.run_id }}
                 server_url: ${{ github.server_url }}
-                list_of_failures: ${{ steps.test-report.outputs.list_of_failures }}
+                sha: ${{ github.sha }}
             - name: Return fail status if a test fails
               run: |
                 exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
