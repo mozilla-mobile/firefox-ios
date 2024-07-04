@@ -193,21 +193,19 @@ private class TPStatsBlocklists {
         }
 
         // First, test the top-level filters to see if this URL might be blocked.
-        domainSearch: for rule in rules where
-        rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
-
+        domainSearch: for rule in rules where rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
             // Check the domain exceptions. If a domain exception matches, this filter does not apply.
             for domainRegex in (rule.domainExceptions ?? []) where
-            domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
-                continue domainSearch
+                domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
+                    continue domainSearch
             }
 
             // Check the whitelist.
             if let baseDomain = url.baseDomain, !permittedDomains.isEmpty {
                 let range = NSRange(location: 0, length: baseDomain.count)
-                for ignoreDomain in
-                        permittedDomains where ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
-                    return nil
+                for ignoreDomain in permittedDomains where
+                    ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
+                        return nil
                 }
             }
 
