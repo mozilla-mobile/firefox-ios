@@ -168,9 +168,9 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
     else:
         tests_info = count_tests(test_suites)
         if is_smoke:
-            markdown = "Total Tests: {total_tests} Passed: {passed} Flakys: {warnings} Failures: {failures}\n".format(total_tests=tests_info['total_tests'], passed=tests_info['passed'], warnings=total_tests['warnings'], failures=total_tests['failures']) + markdown
+            markdown = "Total Tests: {total_tests} Passed: {passed} Flakys: {warnings} Failures: {failures}\n".format(total_tests=tests_info['total_tests'], passed=tests_info['passed'], warnings=tests_info['warnings'], failures=tests_info['failures']) + markdown
         else:
-            markdown = "Total Tests: {total_tests} Passed: {passed} Failures: {failures}\n".format(total_tests=tests_info['total_tests'], passed=tests_info['passed'], failures=total_tests['failures']) + markdown
+            markdown = "Total Tests: {total_tests} Passed: {passed} Failures: {failures}\n".format(total_tests=tests_info['total_tests'], passed=tests_info['passed'], failures=tests_info['failures']) + markdown
     
     return markdown
 
