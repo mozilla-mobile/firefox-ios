@@ -187,7 +187,7 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
                 total_tests=tests_info['total_tests'], 
                 passed=tests_info['passed'], 
                 failures=tests_info['failures'])
-        markdown = tests_info_markdown + markdown
+        markdown = tests_info_markdown + '\n'+ markdown
 
     return markdown
 
