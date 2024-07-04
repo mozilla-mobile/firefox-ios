@@ -83,7 +83,7 @@ def count_tests(test_suites, is_smoke=True):
                 status = test_case.get('status')
                 if is_smoke:
                     if status == ':white_check_mark:':
-                        tests['failed'] -= 1
+                        tests['failures'] -= 1
                         tests['warnings'] += 1
     tests['total_tests'] = tests['passed'] + tests['failures'] + tests['warnings']
     return tests
