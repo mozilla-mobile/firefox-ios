@@ -86,6 +86,14 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
         setupView()
         listenForThemeChange(view)
         applyTheme()
+        viewModel.addressListViewModel.presentToast = { [weak self] status in
+            guard let self else { return }
+            SimpleToast().showAlertWithText(
+                status.message,
+                bottomContainer: view,
+                theme: themeManager.getCurrentTheme(for: windowUUID)
+            )
+        }
     }
 
     // MARK: View Setup
