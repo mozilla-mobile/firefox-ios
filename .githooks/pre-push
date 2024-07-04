@@ -1,0 +1,15 @@
+#!/bin/sh
+
+remote_url=$(git config --get remote.origin.url)
+
+restricted_remote_url="https://github.com/mozilla-mobile/firefox-ios"
+restricted_branch="main"
+
+current_branch=$(git symbolic-ref --short HEAD)
+
+if [[ "$remote_url" == "$restricted_remote_url" && "$current_branch" == "$restricted_branch" ]]; then
+  echo "Direct push to the main branch is not allowed for $restricted_remote_url."
+  exit 1
+fi
+
+exit 0
