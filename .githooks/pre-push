@@ -1,14 +1,18 @@
 #!/bin/sh
 
-remote_url=$(git config --get remote.origin.url)
+# Get the current branch
+get_current_branch() {
+  current_branch=$(git symbolic-ref --short HEAD)
+  echo "$current_branch"
+}
 
-restricted_remote_url="https://github.com/mozilla-mobile/firefox-ios"
-restricted_branch="main"
+# Save the current branch
+current_branch=$(get_current_branch)
+echo "Current branch: $current_branch"
 
-current_branch=$(git symbolic-ref --short HEAD)
-
-if [[ "$remote_url" == "$restricted_remote_url" && "$current_branch" == "$restricted_branch" ]]; then
-  echo "Direct push to the main branch is not allowed for $restricted_remote_url."
+# Check if the current branch is the restricted branch 'main'
+if [ "$current_branch" = "main" ]; then
+  echo "Direct pushes to the 'main' branch are not allowed."
   exit 1
 fi
 
