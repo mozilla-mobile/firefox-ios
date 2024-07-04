@@ -25,6 +25,7 @@ protocol LocationViewDelegate: AnyObject {
 
     /// Called when requesting custom accessibility actions to be performed on the location view.
     ///
-    /// - Returns: An optional array of `UIAccessibilityCustomAction` objects. Return `nil` if no custom actions are provided.
+    /// - Returns: An optional array of `UIAccessibilityCustomAction` objects.
+    /// Return `nil` if no custom actions are provided.
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]?
 }
