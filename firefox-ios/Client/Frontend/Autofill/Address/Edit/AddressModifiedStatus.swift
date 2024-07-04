@@ -8,12 +8,23 @@ enum AddressModifiedStatus {
     case saved
     case updated
     case removed
+    case error(action: () -> Void)
 
     var message: String {
         switch self {
         case .saved: return .Addresses.Settings.Edit.AddressSavedConfirmation
         case .updated: return .Addresses.Settings.Edit.AddressUpdatedConfirmation
         case .removed: return .Addresses.Settings.Edit.AddressRemovedConfirmation
+        case .error: return .Addresses.Settings.Edit.AddressSaveError
+        }
+    }
+
+    var actionTitle: String {
+        switch self {
+        case .saved: return ""
+        case .updated: return ""
+        case .removed: return ""
+        case .error: return .Addresses.Settings.Edit.AddressSaveRetrySuggestion
         }
     }
 }
