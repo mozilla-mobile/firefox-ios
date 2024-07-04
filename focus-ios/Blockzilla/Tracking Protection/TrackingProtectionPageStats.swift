@@ -192,30 +192,26 @@ private class TPStatsBlocklists {
             return nil
         }
 
-        for rule in rules {
-            // First, test the top-level filters to see if this URL might be blocked.
-            guard rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil else {
-                continue
+        // First, test the top-level filters to see if this URL might be blocked.
+        domainSearch: for rule in rules where
+        rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
+
+            // Check the domain exceptions. If a domain exception matches, this filter does not apply.
+            for domainRegex in (rule.domainExceptions ?? []) where
+            domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
+                continue domainSearch
             }
 
-            let hasDomainException = rule.domainExceptions?.contains { domainRegex in
-                // Check the domain exceptions. If a domain exception matches, this filter does not apply.
-                domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil
-            } ?? false
-            if hasDomainException { continue }
-
+            // Check the whitelist.
             if let baseDomain = url.baseDomain, !permittedDomains.isEmpty {
-                // Check the whitelist.
                 let range = NSRange(location: 0, length: baseDomain.count)
-                let isPermittedDomain = permittedDomains.contains { ignoreDomain in
-                    ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil
-                }
-                guard !isPermittedDomain else {
+                for ignoreDomain in
+                        permittedDomains where ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
                     return nil
                 }
-
-                return rule.list
             }
+
+            return rule.list
         }
 
         return nil

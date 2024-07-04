@@ -38,6 +38,10 @@ public extension UIView {
     }
 
     func removeGradient() {
-        self.layer.sublayers?.compactMap { $0 as? CAGradientLayer }.forEach { $0.removeFromSuperlayer() }
+        if let  buttonSublayers = self.layer.sublayers {
+            for layer in buttonSublayers where layer is CAGradientLayer {
+                layer.removeFromSuperlayer()
+            }
+        }
     }
 }
