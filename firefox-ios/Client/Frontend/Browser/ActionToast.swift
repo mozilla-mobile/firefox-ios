@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-class ActionToast: ThemeApplicable {
+final class ActionToast: ThemeApplicable {
     private let text: String
     private let theme: Theme
     private let buttonTitle: String
