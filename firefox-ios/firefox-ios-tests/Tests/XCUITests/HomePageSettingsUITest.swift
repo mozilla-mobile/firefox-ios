@@ -127,6 +127,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
         mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
 
