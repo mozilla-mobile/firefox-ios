@@ -33,12 +33,4 @@ struct ToolbarActionState: Equatable {
                actionType == .forward ||
                actionType == .tabs
     }
-
-    var canShowPrivateBrowsingBadge: Bool {
-        actionType == .tabs
-    }
-
-    var canShowWarningBadge: Bool {
-        actionType == .menu
-    }
 }

@@ -49,13 +49,10 @@ class AddressToolbarContainerModel: Equatable {
     init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
-                                                                         state: state,
                                                                          windowUUID: windowUUID)
         self.pageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.pageActions,
-                                                                   state: state,
                                                                    windowUUID: windowUUID)
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
-                                                                      state: state,
                                                                       windowUUID: windowUUID)
         self.windowUUID = windowUUID
         self.searchEngineImage = profile.searchEngines.defaultEngine?.image
@@ -74,24 +71,11 @@ class AddressToolbarContainerModel: Equatable {
         return query
     }
 
-    private static func mapActions(
-        _ actions: [ToolbarActionState],
-        state: ToolbarState,
-        windowUUID: UUID
-    ) -> [ToolbarElement] {
+    private static func mapActions(_ actions: [ToolbarActionState], windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
-            let badgeImageName: String? = if state.isPrivateMode && action.canShowPrivateBrowsingBadge {
-                action.badgeImageName
-            } else {
-                if state.isLoginActionRequired && action.canShowWarningBadge {
-                    action.badgeImageName
-                } else {
-                    nil
-                }
-            }
-            return ToolbarElement(
+            ToolbarElement(
                 iconName: action.iconName,
-                badgeImageName: badgeImageName,
+                badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,

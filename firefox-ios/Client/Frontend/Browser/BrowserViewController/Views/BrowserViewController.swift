@@ -361,11 +361,7 @@ class BrowserViewController: UIViewController,
         let showWarningBadge = consume isActionNeeded
 
         if isToolbarRefactorEnabled {
-            let action = GeneralBrowserAction(
-                isLoginActionRequired: showWarningBadge,
-                windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.showWarningBadge
-            )
+            let action = ToolbarMiddlewareAction(windowUUID: windowUUID, actionType: ToolbarActionType.showMenuWarningBadge)
             store.dispatch(action)
         } else {
             urlBar.warningMenuBadge(setVisible: showWarningBadge)

@@ -17,18 +17,9 @@ struct NavigationToolbarContainerModel: Equatable {
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.actions = state.navigationToolbar.actions.map { action in
-            let badgeImageName: String? = if state.isPrivateMode && action.canShowPrivateBrowsingBadge {
-                action.badgeImageName
-            } else {
-                if  state.isLoginActionRequired && action.canShowWarningBadge {
-                    action.badgeImageName
-                } else {
-                    nil
-                }
-            }
-            return ToolbarElement(
+            ToolbarElement(
                 iconName: action.iconName,
-                badgeImageName: badgeImageName,
+                badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,

@@ -83,6 +83,20 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
+        case ToolbarActionType.showMenuWarningBadge:
+            guard let badgeImageName = (action as? ToolbarAction)?.badgeImageName else { return state }
+            var actions = state.actions
+
+            if let index = actions.firstIndex(where: { $0.actionType == .menu }) {
+                actions[index].badgeImageName = badgeImageName
+            }
+
+            return NavigationBarState(
+                windowUUID: state.windowUUID,
+                actions: actions,
+                displayBorder: state.displayBorder
+            )
+
         case ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.toolbarPositionChanged:
             guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder

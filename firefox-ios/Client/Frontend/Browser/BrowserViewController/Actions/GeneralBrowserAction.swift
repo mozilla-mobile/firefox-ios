@@ -46,7 +46,6 @@ enum GeneralBrowserActionType: ActionType {
     case showTrackingProtectionDetails
     case showTabsLongPressActions
     case showMenu
-    case showWarningBadge
 }
 
 class GeneralBrowserMiddlewareAction: Action {
