@@ -298,23 +298,25 @@ extension BrowserViewController: WKUIDelegate {
                         .successValue ?? false
                     actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
-                    actions.append(UIAction(
-                        title: .ContextMenuDownloadLink,
-                        image: UIImage.templateImageNamed(
-                            StandardImageIdentifiers.Large.download
-                        ),
-                        identifier: UIAction.Identifier("linkContextMenu.download")
-                    ) { _ in
-                        // This checks if download is a blob, if yes, begin blob download process
-                        if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                            // if not a blob, set pendingDownloadWebView and load the request in
-                            // the webview, which will trigger the WKWebView navigationResponse
-                            // delegate function and eventually downloadHelper.open()
-                            self.pendingDownloadWebView = currentTab.webView
-                            let request = URLRequest(url: url)
-                            currentTab.webView?.load(request)
-                        }
-                    })
+                    if url.scheme != "javascript" {
+                        actions.append(UIAction(
+                            title: .ContextMenuDownloadLink,
+                            image: UIImage.templateImageNamed(
+                                StandardImageIdentifiers.Large.download
+                            ),
+                            identifier: UIAction.Identifier("linkContextMenu.download")
+                        ) { _ in
+                            // This checks if download is a blob, if yes, begin blob download process
+                            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                                // if not a blob, set pendingDownloadWebView and load the request in
+                                // the webview, which will trigger the WKWebView navigationResponse
+                                // delegate function and eventually downloadHelper.open()
+                                self.pendingDownloadWebView = currentTab.webView
+                                let request = URLRequest(url: url)
+                                currentTab.webView?.load(request)
+                            }
+                        })
+                    }
 
                     actions.append(UIAction(
                         title: .ContextMenuCopyLink,
@@ -464,11 +466,9 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
-            return
-        }
+        if tabManager.selectedTab?.webView !== webView { return }
 
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status

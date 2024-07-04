@@ -46,6 +46,10 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
         label.isAccessibilityElement = false
     }
 
+    var title: String? {
+        optionLabel.text
+    }
+
     var checked = false {
         didSet {
             let checkedButton = UIImage(named: UX.Images.selected)

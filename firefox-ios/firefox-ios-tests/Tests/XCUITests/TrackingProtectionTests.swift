@@ -92,6 +92,7 @@ class TrackingProtectionTests: BaseTestCase {
             XCTAssert(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].isHittable)
             sleep(2)
         }
+        navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
         var switchValue = app.switches.firstMatch.value!
@@ -155,6 +156,7 @@ class TrackingProtectionTests: BaseTestCase {
             sleep(2)
         }
         // Tap "Secure connection"
+        navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
         XCTAssertTrue(app.staticTexts["mozilla.org"].exists)

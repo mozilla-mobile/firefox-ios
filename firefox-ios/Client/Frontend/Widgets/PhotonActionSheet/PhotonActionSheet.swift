@@ -494,7 +494,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - PhotonActionSheetViewDelegate
 extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
-    func didClick(item: SingleActionViewModel?) {
-        dismissVC()
+    func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void) {
+        dismissVC(withCompletion: animationCompletion)
     }
 }
