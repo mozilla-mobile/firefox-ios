@@ -40,7 +40,7 @@ class TPAccessoryInfo: ThemedTableViewController {
 
         lazy var header: UILabel = .build { label in
             label.text = .TPAccessoryInfoBlocksTitle
-            label.font = FXFontStyles.Regular.footnote.scaledFont()
+            label.font = FXFontStyles.Bold.footnote.scaledFont()
         }
 
         let theme = currentTheme()
