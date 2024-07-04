@@ -291,15 +291,15 @@ class ToolbarMiddleware: FeatureFlaggable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        guard let traitCollection = action.traitCollection else { return actions }
+        guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return actions }
 
-        if ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) || action.url == nil {
+        if action.isShowingNavigationToolbar || action.url == nil {
             // there are no navigation actions if on homepage or when nav toolbar is shown
             return actions
         } else if action.url != nil {
             // back/forward when url exists and nav toolbar is not shown
-            let isBackButtonEnabled = action.canGoBack ?? false
-            let isForwardButtonEnabled = action.canGoForward ?? false
+            let isBackButtonEnabled = action.canGoBack
+            let isForwardButtonEnabled = action.canGoForward
             actions.append(ToolbarActionState(actionType: .back,
                                               iconName: StandardImageIdentifiers.Large.back,
                                               isEnabled: isBackButtonEnabled,
@@ -315,7 +315,8 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let action = action as? ToolbarMiddlewareUrlChangeAction,
+              let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
 
         let navigationActions = addressToolbarNavigationActions(action: action, state: state)
@@ -326,10 +327,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             borderPosition: toolbarState.addressToolbar.borderPosition,
             url: action.url)
 
-        let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                   url: action.url,
-                                   windowUUID: action.windowUUID,
-                                   actionType: ToolbarActionType.urlDidChange)
-        store.dispatch(action)
+        let urlDidChangeAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                               url: action.url,
+                                               windowUUID: action.windowUUID,
+                                               actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(urlDidChangeAction)
     }
 }
