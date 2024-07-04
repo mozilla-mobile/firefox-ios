@@ -324,10 +324,9 @@ class BrowserViewController: UIViewController,
 
     @objc
     func searchBarPositionDidChange(notification: Notification) {
-        guard !isToolbarRefactorEnabled,
-              let dict = notification.object as? NSDictionary,
+        guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
-              urlBar != nil
+              (!isToolbarRefactorEnabled && urlBar != nil) || isToolbarRefactorEnabled
         else { return }
 
         let searchBarView: TopBottomInterchangeable = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar
@@ -718,30 +717,26 @@ class BrowserViewController: UIViewController,
         // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
         // to make them "persistent" e.g. by being stored in BVC
         pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { [weak self] () -> Bool in
-            guard let self else { return false }
-            if let pasteboardContents = UIPasteboard.general.string {
-                if !isToolbarRefactorEnabled {
-                    self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
-                }
-                searchController?.searchTelemetry?.interactionType = .pasted
-                return true
+            guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
+            if isToolbarRefactorEnabled {
+                openBrowser(searchTerm: pasteboardContents)
+            } else {
+                urlBar(urlBar, didSubmitText: pasteboardContents)
             }
-            return false
+            searchController?.searchTelemetry?.interactionType = .pasted
+            return true
         })
         pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
-            guard let self else { return false }
-            if let pasteboardContents = UIPasteboard.general.string {
-                // Enter overlay mode and make the search controller appear.
-                self.overlayManager.openSearch(with: pasteboardContents)
-                searchController?.searchTelemetry?.interactionType = .pasted
-                return true
-            }
-            return false
+            guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
+            // Enter overlay mode and make the search controller appear.
+            overlayManager.openSearch(with: pasteboardContents)
+            searchController?.searchTelemetry?.interactionType = .pasted
+            return true
         })
         copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { [weak self] () -> Bool in
             guard let self else { return false }
-            let fallbackURL = isToolbarRefactorEnabled ? nil : self.urlBar.currentURL
-            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? fallbackURL {
+            let fallbackURL = isToolbarRefactorEnabled ? tabManager.selectedTab?.currentURL() : urlBar.currentURL
+            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? fallbackURL {
                 UIPasteboard.general.url = url
             }
             return true
@@ -2694,6 +2689,10 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
+        return .default
+    }
+
     // MARK: - BrowserFrameInfoProvider
 
     func getHeaderSize() -> CGSize {
@@ -2716,6 +2715,10 @@ class BrowserViewController: UIViewController,
     }
 
     func openSuggestions(searchTerm: String) {}
+
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        locationActionsForURLBar().map { $0.accessibilityCustomAction }
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
