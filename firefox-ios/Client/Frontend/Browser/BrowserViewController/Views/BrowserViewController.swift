@@ -728,10 +728,10 @@ class BrowserViewController: UIViewController,
         })
         pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
             guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
-                // Enter overlay mode and make the search controller appear.
-                overlayManager.openSearch(with: pasteboardContents)
-                searchController?.searchTelemetry?.interactionType = .pasted
-                return true
+            // Enter overlay mode and make the search controller appear.
+            overlayManager.openSearch(with: pasteboardContents)
+            searchController?.searchTelemetry?.interactionType = .pasted
+            return true
         })
         copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { [weak self] () -> Bool in
             guard let self else { return false }
