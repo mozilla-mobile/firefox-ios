@@ -64,49 +64,48 @@ def count_test_retry_failure(test_name, test_cases):
             count += 1
     return count
 
-def count_tests(test_suites):
-    tests = []
+def count_tests(test_suites, is_smoke=True):
+    done = []
+    tests = {'passed': 0, 'failures': 0, 'warnings': 0, 'total_tests': 0}
     for test_suite in test_suites:
-        test_cases = test_suites.get('test_cases', [])
+        test_cases = test_suite.get('test_cases', [])
         for test_case in test_cases:
-            if test_case.get('status') == ':white_check_mark:':
-                tests.append(test_case.get('name'))
-        
+            test_name = test_case.get('name')
+            if not test_name in done:
+                done.append(test_name)
+                status = test_case.get('status')
+                if status == ':white_check_mark:':
+                    tests['passed'] += 1
+                if status == ':stop-sign:' or status == ':x:':
+                    tests['failures'] += 1
+            else:
+                # With test retries only
+                status = test_case.get('status')
+                if is_smoke:
+                    if status == ':white_check_mark:':
+                        tests['failed'] -= 1
+                        tests['warnings'] += 1
+    tests['total_tests'] = tests['passed'] + tests['failures'] + tests['warnings']
+    return tests
 
 def convert_to_slack_markdown(test_suites, is_smoke = True):
     # Fetch failed tests and put them in Slack format
     failed_tests_info = []
-    total_tests = 0
-    passed = 0
-    failures = 0
-    warnings = 0
     for test_suite in test_suites:
         if int(test_suite.get('failures')):
             done = []
-            markdown = "*{name}*\n".format(name=test_suite.get('name', '').replace('XCUITest.' ,''))
+            markdown = "*{name}*".format(name=test_suite.get('name', '').replace('XCUITest.' ,''))
             test_cases = test_suite.get('test_cases', [])
             for test_case in test_cases:
-                if not test_case.get('name', '') in done:
-                    total_tests += 1
-                    if test_case.get('status') == ':white_check_mark:':
-                        passed += 1
-                    else:    
-                        # For smoke test only: See if the test passes in 2nd or 3rd attempt
-                        if is_smoke:
-                            fail_count = count_test_retry_failure(test_case.get('name', ''), test_cases)
-                            if fail_count < 3:
-                                test_case['status'] = ':warning:'
-                                warnings += 1
-                            else:
-                                failures += 1
-                        else:
-                            failures += 1
-                        markdown += "* {test_case_name} {status} ".format(test_case_name=test_case.get("name"), status=test_case.get('status'))
+                if not test_case.get('name', '') in done: 
+                    # For smoke test only: See if the test passes in 2nd or 3rd attempt
+                    if is_smoke:
+                        fail_count = count_test_retry_failure(test_case.get('name', ''), test_cases)
+                        if fail_count < 3:
+                            test_case['status'] = ':warning:'
+                    markdown += "\n- {test_case_name} {status}".format(test_case_name=test_case.get('name'), status=test_case.get('status'))
                     done.append(test_case.get('name', ''))
             failed_tests_info.append(Section(text=markdown))
-        else:
-            passed += int(test_suite.get('tests', 0))
-            total_tests += int(test_suite.get('tests', 0))
     
     # No test failures
     if len(failed_tests_info) == 0:
@@ -120,22 +119,23 @@ def convert_to_slack_markdown(test_suites, is_smoke = True):
     )
     build_info = Section(
         fields= [
-            "*Branch*\n`${{ env.ref_name }}`",
-            "*Github Actions Job*\n<${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Link>",
-            "*Commit*\n<${{ env.server_url }}/${{ env.repository }}/commit/${{ env.sha }}|Link>"
+            "*Branch:* `${{ env.ref_name }}`",
+            "*Github Actions Job:* <${{ env.server_url }}/${{ env.repository }}/actions/runs/${{ env.run_id }}|Link>",
+            "*Commit:* <${{ env.server_url }}/${{ env.repository }}/commit/${{ env.sha }}|Link>"
         ]
     )
+    tests_info = count_tests(test_suites)
     summary = Section(
         fields=[
-            "*Total Tests*\n{total_tests}".format(total_tests=total_tests),
-            "*Passed*\n{passed}".format(passed=passed),
-            "*Warnings*\n{warnings}".format(warnings=warnings),
-            "*Failures*\n{failures}".format(failures=failures),
+            "*Total Tests:* {total_tests}".format(total_tests=tests_info['total_tests']),
+            "*Passed:* {passed}".format(passed=tests_info['passed']),
+            "*Flaky:* {warnings}".format(warnings=tests_info['warnings']),
+            "*Failures:* {failures}".format(failures=tests_info['failures']),
         ]
     )
     footer = Context(
         elements=[
-            ":testops-notify: Created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
+            ":testops-notify: created by <https://mozilla-hub.atlassian.net/wiki/spaces/MTE/overview|Mobile Test Engineering>"
         ]
     )
     blocks = []
@@ -143,10 +143,8 @@ def convert_to_slack_markdown(test_suites, is_smoke = True):
     blocks.append(Divider())
     blocks.append(build_info)
     blocks.append(Divider())
-    blocks.append(Section(text="*Summary*"))
     blocks.append(summary)
     blocks.append(Divider())
-    blocks.append(Section(text="*Details*"))
     for test in failed_tests_info:
         blocks.append(test)
     blocks.append(Divider())
@@ -159,7 +157,7 @@ def convert_to_slack_markdown(test_suites, is_smoke = True):
 
 def convert_to_github_markdown(test_suites, is_smoke = True):
     markdown = ""
-    
+
     for test_suite in test_suites:
         if int(test_suite['failures']):
             markdown += "## {name}\n\n".format(name = test_suite.get('name', '').replace('XCUITest.' ,''))
@@ -167,6 +165,12 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
     
     if markdown == "":
         markdown += "## :tada: No test failures :tada:"
+    else:
+        tests_info = count_tests(test_suites)
+        if is_smoke:
+            markdown = "Total Tests: {total_tests} Passed: {passed} Flakys: {warnings} Failures: {failures}\n".format(total_tests=tests_info['total_tests'], passed=tests_info['passed'], warnings=total_tests['warnings'], failures=total_tests['failures']) + markdown
+        else:
+            markdown = "Total Tests: {total_tests} Passed: {passed} Failures: {failures}\n".format(total_tests=tests_info['total_tests'], passed=tests_info['passed'], failures=total_tests['failures']) + markdown
     
     return markdown
 
