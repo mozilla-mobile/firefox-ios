@@ -117,7 +117,9 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
     if browser == 'focus-ios':
         browser_emoji = ':firefox_focus:'
     header = Header(
-        text='${{ env.pass_fail }} ${{ env.browser }} {emoji} ${{ env.xcodebuild_test_plan }} - ${{ env.ios_simulator }} iOS ${{ env.ios_version }}'.format(emoji=browser_emoji)
+        text='${{ env.pass_fail }} ${{ env.browser }} ' 
+            + '{emoji}'.format(emoji=browser_emoji) 
+            + ' ${{ env.xcodebuild_test_plan }} - ${{ env.ios_simulator }} iOS ${{ env.ios_version }}'
     )
     build_info = Section(
         fields= [
@@ -131,7 +133,7 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
         fields=[
             '*Total Tests:* {total_tests}'.format(total_tests=tests_info['total_tests']),
             '*Passed:* {passed}'.format(passed=tests_info['passed']),
-            '*Flaky:* {warnings}'.format(warnings=tests_info['warnings']),
+            '*Flakys:* {warnings}'.format(warnings=tests_info['warnings']),
             '*Failures:* {failures}'.format(failures=tests_info['failures']),
         ]
     )
