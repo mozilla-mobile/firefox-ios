@@ -90,6 +90,9 @@ def count_tests(test_suites, is_smoke=True):
     return tests
 
 def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios'):
+    # Count number of pass/fail tests for reporting
+    tests_info = count_tests(test_suites)
+    
     # Fetch failed tests and put them in Slack format
     failed_tests_info = []
     for test_suite in test_suites:
@@ -128,7 +131,6 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
             '*Commit:* <${{ env.server_url }}/${{ env.repository }}/commit/${{ env.sha }}|Link>'
         ]
     )
-    tests_info = count_tests(test_suites)
     summary = Section(
         fields=[
             '*Total Tests:* {total_tests}'.format(total_tests=tests_info['total_tests']),
@@ -160,8 +162,10 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
     return json.dumps(payload, indent=4)  
 
 def convert_to_github_markdown(test_suites, is_smoke = True):
-    markdown = ''
+    # Count number of pass/fail tests for reporting
+    tests_info = count_tests(test_suites)
 
+    markdown = ''
     for test_suite in test_suites:
         if int(test_suite['failures']):
             markdown += '## {name}\n\n'.format(name = test_suite.get('name', '').replace('XCUITest.' ,''))
@@ -170,7 +174,6 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
     if markdown == '':
         markdown += '## :tada: No test failures :tada:'
     else:
-        tests_info = count_tests(test_suites)
         tests_info_markdown = ''
         if is_smoke:
             tests_info_markdown += '| Total Tests | Passed | Flakys | Failures |\n'
