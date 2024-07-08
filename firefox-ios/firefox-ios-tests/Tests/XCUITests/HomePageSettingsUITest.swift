@@ -107,7 +107,14 @@ class HomePageSettingsUITests: BaseTestCase {
         if #unavailable(iOS 16) {
             sleep(2)
         }
-        app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
+        let textField = app.textFields["HomeAsCustomURLTextField"]
+        textField.press(forDuration: 3)
+        let pasteOption = app.menuItems["Paste"]
+        var nrOfTaps = 3
+        while !pasteOption.exists && nrOfTaps > 0 {
+            textField.press(forDuration: 3)
+            nrOfTaps -= 1
+        }
         mozWaitForElementToExist(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")

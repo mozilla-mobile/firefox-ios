@@ -62,6 +62,27 @@ class ToolbarMiddlewareAction: Action {
     }
 }
 
+class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
+    let url: URL?
+    let isShowingNavigationToolbar: Bool
+    let canGoForward: Bool
+    let canGoBack: Bool
+
+    init(url: URL? = nil,
+         isShowingNavigationToolbar: Bool,
+         canGoForward: Bool,
+         canGoBack: Bool,
+         windowUUID: WindowUUID,
+         actionType: ActionType) {
+        self.url = url
+        self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.canGoForward = canGoForward
+        self.canGoBack = canGoBack
+        super.init(windowUUID: windowUUID, actionType: actionType)
+    }
+}
+
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
+    case urlDidChange
 }

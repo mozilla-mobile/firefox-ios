@@ -452,7 +452,7 @@ class FakespotTests: BaseTestCase {
         if !app.keyboards.element.isHittable {
             searchAmazon.tap()
         }
-        searchAmazon.typeText("Shoe")
+        searchAmazon.typeText("can opener")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
         while website.links.elementContainingText("Sorry! Something went wrong on our end.").exists {

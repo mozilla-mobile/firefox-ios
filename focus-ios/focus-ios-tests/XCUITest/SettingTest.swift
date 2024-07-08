@@ -351,7 +351,7 @@ class SettingTest: BaseTestCase {
         waitForExistence(searchSuggestionsOverlay)
         XCTAssertEqual(urlTextField.value as? String, "mozilla")
     }
- 
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
     func testReEnableAutoComplete() {
         let urlTextField = app.urlTextField
