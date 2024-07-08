@@ -307,7 +307,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     /// This function updates the _selectedIndex.
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
-    override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+    override func selectTab(_ tab: Tab?, previous: Tab? = nil, completion: (() -> Void)? = nil) {
         let url = tab?.url
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
@@ -353,8 +353,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatch(action)
 
-        didSelectTab(url)
-        updateMenuItemsForSelectedTab()
+            didSelectTab(url)
+            updateMenuItemsForSelectedTab()
+            completion?()
+        }
     }
 
     private func willSelectTab(_ url: URL?) {

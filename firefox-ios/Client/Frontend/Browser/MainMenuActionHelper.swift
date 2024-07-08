@@ -15,7 +15,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func addBookmark(url: String, title: String?)
 
     @discardableResult
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool, completion: (() -> Void)?) -> Tab
     func openNewTabFromMenu(focusLocationField: Bool, isPrivate: Bool)
 
     func showLibrary(panel: LibraryPanelType)
@@ -430,7 +430,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .AppMenu.AppMenuReportSiteIssueTitleString,
                                      iconString: StandardImageIdentifiers.Large.lightbulb) { _ in
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
-            self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
+            self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false, completion: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reportSiteIssue)
         }.items
     }
@@ -439,7 +439,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .AppMenu.Help,
                                      iconString: StandardImageIdentifiers.Large.helpCircle) { _ in
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
-                self.delegate?.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
+                self.delegate?.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, completion: nil)
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .help)
         }.items
@@ -554,7 +554,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                                isEnabled: showBadgeForWhatsNew) { _ in
             if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
-                self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
+                self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, completion: nil)
             }
         }.items
         return whatsNewAction

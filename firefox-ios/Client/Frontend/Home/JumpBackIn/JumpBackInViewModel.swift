@@ -68,7 +68,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(tab: Tab) {
-        tabManager.selectTab(tab, previous: nil)
+        tabManager.selectTab(tab, previous: nil, completion: nil)
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .tap,

@@ -34,7 +34,7 @@ protocol TabManager: AnyObject {
     func addDelegate(_ delegate: TabManagerDelegate)
     func addNavigationDelegate(_ delegate: WKNavigationDelegate)
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
-    func selectTab(_ tab: Tab?, previous: Tab?)
+    func selectTab(_ tab: Tab?, previous: Tab?, completion: (() -> Void)?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
@@ -101,8 +101,8 @@ extension TabManager {
         removeDelegate(delegate, completion: nil)
     }
 
-    func selectTab(_ tab: Tab?) {
-        selectTab(tab, previous: nil)
+    func selectTab(_ tab: Tab?, completion: (() -> Void)? = nil ) {
+        selectTab(tab, previous: nil, completion: completion)
     }
 
     func removeTab(_ tab: Tab) {

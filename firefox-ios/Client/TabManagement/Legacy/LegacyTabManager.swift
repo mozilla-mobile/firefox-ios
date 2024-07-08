@@ -261,7 +261,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Select tab
 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
-    func selectTab(_ tab: Tab?, previous: Tab? = nil) { fatalError("should never be called") }
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, completion: (() -> Void)? = nil) { fatalError("should never be called") }
 
     func getMostRecentHomepageTab() -> Tab? {
         let tabsToFilter = selectedTab?.isPrivate ?? false ? privateTabs : normalTabs
