@@ -22,6 +22,15 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Anslutningen är inte säker";
 
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Globala spårningskakor: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Fingeravtrycksspårare: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Sociala media-spårare: %@";
+
 /* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
    Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Blockerade spårare: %@";
@@ -53,6 +62,9 @@
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Skydd är AV. Vi föreslår att du slår på det igen.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Skydd är AV. Vi föreslår att du slår på dem igen.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Om något ser trasigt ut på den här webbplatsen, försök att stänga av det.";

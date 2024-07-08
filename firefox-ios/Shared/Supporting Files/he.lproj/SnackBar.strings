@@ -5,5 +5,5 @@
 "CreditCard.SnackBar.SavedCardLabel.v112" = "כרטיס חדש נשמר";
 
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
-"CreditCard.SnackBar.UpdatedCardLabel.v122" = "מידע הכרטיס עודכן";
+"CreditCard.SnackBar.UpdatedCardLabel.v122" = "פרטי הכרטיס עודכנו";
 
