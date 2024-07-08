@@ -11,14 +11,16 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
 }
 
 final class AddressToolbarContainer: UIView,
-                               ThemeApplicable,
-                               TopBottomInterchangeable,
-                               AlphaDimmable,
-                               StoreSubscriber,
-                               AddressToolbarDelegate {
+                                     ThemeApplicable,
+                                     TopBottomInterchangeable,
+                                     AlphaDimmable,
+                                     StoreSubscriber,
+                                     AddressToolbarDelegate,
+                                     MenuHelperURLBarInterface {
     typealias SubscriberStateType = ToolbarState
 
     private var windowUUID: WindowUUID?
@@ -208,5 +210,23 @@ final class AddressToolbarContainer: UIView,
 
     func openSuggestions(searchTerm: String) {
         delegate?.openSuggestions(searchTerm: searchTerm)
+    }
+
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    // MARK: - MenuHelperURLBarInterface
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelperURLBarModel.selectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    func menuHelperPasteAndGo() {
+        guard let pasteboardContents = UIPasteboard.general.string else { return }
+        delegate?.openBrowser(searchTerm: pasteboardContents)
     }
 }
