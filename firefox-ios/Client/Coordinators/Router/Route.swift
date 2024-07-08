@@ -11,9 +11,8 @@ enum Route: Equatable {
     ///
     /// - Parameters:
     ///   - url: A `URL` object representing the URL to be searched. Pass `nil` if the search does not require a URL.
-    ///   - isPrivate: A boolean value indicating whether the search is private or not.
     ///   - options: An optional set of `SearchOptions` values that can be used to customize the search behavior.
-    case search(url: URL?, isPrivate: Bool, options: Set<SearchOptions>? = nil)
+    case search(url: URL?, options: Set<SearchOptions>? = nil)
 
     /// Represents a search route that takes a URL and a tab identifier.
     ///
@@ -25,7 +24,7 @@ enum Route: Equatable {
     /// Represents a search route that takes a query string.
     ///
     /// - Parameter query: A string representing the query to be searched.
-    case searchQuery(query: String)
+    case searchQuery(query: String, options: Set<SearchOptions>? = nil)
 
     /// Represents a route for sending Glean data.
     ///
@@ -127,5 +126,7 @@ enum Route: Equatable {
 
         /// An option to switch to a privacy mode that may hide or obscure search results and prevent data sharing.
         case switchToPrivacyMode
+
+        case useCurrentBrowsingMode
     }
 }

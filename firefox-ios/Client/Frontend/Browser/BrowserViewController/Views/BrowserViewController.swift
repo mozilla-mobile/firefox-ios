@@ -2069,17 +2069,22 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
-    func handle(query: String) {
-        openBlankNewTab(focusLocationField: false)
+    func handle(query: String, options: Set<Route.SearchOptions>? = nil) {
+        let useCurrentBrowsingMode = options?.contains(.useCurrentBrowsingMode) ?? false
+        let isPrivate = useCurrentBrowsingMode ? tabManager.selectedTab?.isPrivate ?? false : false
+        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         if !isToolbarRefactorEnabled {
             urlBar(urlBar, didSubmitText: query)
         }
     }
 
-    func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+    func handle(url: URL?, options: Set<Route.SearchOptions>? = nil) {
+        let isPrivate = ((options?.contains(.useCurrentBrowsingMode) == true && tabManager.selectedTab?.isPrivate ?? false)
+                         || options?.contains(.switchToPrivacyMode) == true)
+
         if let url = url {
             if options?.contains(.switchToNormalMode) == true {
-                switchToPrivacyMode(isPrivate: false)
+                switchToPrivacyMode(isPrivate: isPrivate)
             }
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {

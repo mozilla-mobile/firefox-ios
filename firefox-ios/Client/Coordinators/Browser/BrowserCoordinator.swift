@@ -230,11 +230,11 @@ class BrowserCoordinator: BaseCoordinator,
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
-        case let .searchQuery(query):
-            handle(query: query)
+        case let .searchQuery(query, options):
+            handle(query: query, options: options)
 
-        case let .search(url, isPrivate, options):
-            handle(url: url, isPrivate: isPrivate, options: options)
+        case let .search(url, options):
+            handle(url: url, options: options)
 
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
@@ -308,12 +308,12 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private func handle(query: String) {
-        browserViewController.handle(query: query)
+    private func handle(query: String, options: Set<Route.SearchOptions>? = nil) {
+        browserViewController.handle(query: query, options: options)
     }
 
-    private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
-        browserViewController.handle(url: url, isPrivate: isPrivate, options: options)
+    private func handle(url: URL?, options: Set<Route.SearchOptions>? = nil) {
+        browserViewController.handle(url: url, options: options)
     }
 
     private func handle(searchURL: URL?, tabId: String) {

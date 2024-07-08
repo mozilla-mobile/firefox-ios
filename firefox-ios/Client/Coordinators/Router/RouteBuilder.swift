@@ -26,6 +26,8 @@ final class RouteBuilder {
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
             let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? false
+            var options: Set<Route.SearchOptions> = isPrivate ? [Route.SearchOptions.switchToPrivacyMode] :
+            [Route.SearchOptions.switchToNormalMode]
 
             recordTelemetry(input: host, isPrivate: isPrivate)
 
@@ -60,7 +62,7 @@ final class RouteBuilder {
             case .openUrl:
                 // If we have a URL query, then make sure to check its a webpage
                 if urlQuery == nil || urlQuery?.isWebPage() ?? false {
-                    return .search(url: urlQuery, isPrivate: isPrivate)
+                    return .search(url: urlQuery, options: options)
                 } else {
                     return nil
                 }
@@ -73,24 +75,27 @@ final class RouteBuilder {
 
             case .widgetMediumTopSitesOpenUrl:
                 // Widget Top sites - open url
-                return .search(url: urlQuery, isPrivate: isPrivate)
+                return .search(url: urlQuery, options: options)
 
             case .widgetSmallQuickLinkOpenUrl:
                 // Widget Quick links - small - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
+                options.insert(.focusLocationField)
+                return .search(url: urlQuery, options: options)
 
             case .widgetMediumQuickLinkOpenUrl:
                 // Widget Quick Actions - medium - open url private or regular
-                return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
+                options.insert(.focusLocationField)
+                return .search(url: urlQuery, options: options)
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
                 if !UIPasteboard.general.hasURLs {
                     let searchText = UIPasteboard.general.string ?? ""
-                    return .searchQuery(query: searchText)
+                    return .searchQuery(query: searchText, options: [.useCurrentBrowsingMode])
                 } else {
                     let url = UIPasteboard.general.url
-                    return .search(url: url, isPrivate: isPrivate)
+                    options = [.useCurrentBrowsingMode]
+                    return .search(url: url, options: [.useCurrentBrowsingMode])
                 }
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
@@ -103,7 +108,7 @@ final class RouteBuilder {
                 if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty, let tab = tabs[uuid] {
                     return .searchURL(url: tab.url, tabId: uuid)
                 } else {
-                    return .search(url: nil, isPrivate: false)
+                    return .search(url: nil, options: [.switchToNormalMode])
                 }
 
             case .widgetTabsLargeOpenUrl:
@@ -113,7 +118,7 @@ final class RouteBuilder {
                     let tab = tabs[uuid]
                     return .searchURL(url: tab?.url, tabId: uuid)
                 } else {
-                    return .search(url: nil, isPrivate: false)
+                    return .search(url: nil, options: [.switchToNormalMode])
                 }
 
             case .fxaSignIn:
@@ -123,7 +128,7 @@ final class RouteBuilder {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
-            return .search(url: url, isPrivate: false, options: [.focusLocationField])
+            return .search(url: url, options: [.focusLocationField, .switchToNormalMode])
         } else {
             return nil
         }
@@ -132,13 +137,13 @@ final class RouteBuilder {
     func makeRoute(userActivity: NSUserActivity) -> Route? {
         // If the user activity is a Siri shortcut to open the app, show a new search tab.
         if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-            return .search(url: nil, isPrivate: false)
+            return .search(url: nil, options: [.switchToNormalMode])
         }
 
         // If the user activity has a webpageURL, it's a deep link or an old history item.
         // Use the URL to create a new search tab.
         if let url = userActivity.webpageURL {
-            return .search(url: url, isPrivate: false)
+            return .search(url: url, options: [.switchToNormalMode])
         }
 
         // If the user activity is a CoreSpotlight item, check its activity identifier to determine
@@ -150,7 +155,7 @@ final class RouteBuilder {
             else {
                 return nil
             }
-            return .search(url: url, isPrivate: false)
+            return .search(url: url, options: [.switchToNormalMode])
         }
 
         // If the user activity does not match any of the above criteria, return nil to indicate that
@@ -163,20 +168,22 @@ final class RouteBuilder {
               let shortcutType = DeeplinkInput.Shortcut(rawValue: shortcutTypeRaw)
         else { return nil }
 
-        let options: Set<Route.SearchOptions> = tabSetting != .homePage ? [.focusLocationField] : []
+        var options: Set<Route.SearchOptions> = tabSetting != .homePage ? [.focusLocationField] : []
 
         switch shortcutType {
         case .newTab:
-            return .search(url: nil, isPrivate: false, options: options)
+            options.insert(.switchToNormalMode)
+            return .search(url: nil, options: options)
         case .newPrivateTab:
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .newPrivateTab,
                                          value: .appIcon)
-            return .search(url: nil, isPrivate: true, options: options)
+            options.insert(.switchToPrivacyMode)
+            return .search(url: nil, options: options)
         case .openLastBookmark:
             if let urlToOpen = (shortcutItem.userInfo?[QuickActionInfos.tabURLKey] as? String)?.asURL {
-                return .search(url: urlToOpen, isPrivate: false, options: [.switchToNormalMode])
+                return .search(url: urlToOpen, options: [.useCurrentBrowsingMode])
             } else {
                 return nil
             }
