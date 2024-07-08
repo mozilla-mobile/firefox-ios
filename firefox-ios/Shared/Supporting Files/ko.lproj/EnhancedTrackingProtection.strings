@@ -22,6 +22,15 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "안전하지 않은 연결";
 
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "교차 사이트 추적 쿠키: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "디지털 지문: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "소셜 미디어 추적자: %@";
+
 /* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
    Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "차단된 추적기: %@";
@@ -53,6 +62,9 @@
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "보호 기능이 꺼져 있습니다. 다시 켜는 것이 좋습니다.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "보호 기능이 꺼져 있습니다. 다시 켜는 것이 좋습니다.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "이 사이트에서 뭔가 손상된 것처럼 보이면 해당 기능을 꺼보세요.";

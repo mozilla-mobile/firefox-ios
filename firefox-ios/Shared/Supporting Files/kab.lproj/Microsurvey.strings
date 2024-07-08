@@ -10,6 +10,9 @@
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name. */
 "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "Alugu %@";
 
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the text that appears on the prompt to inform the user that this is a prompt to take a survey. Placeholder is for the app name. */
+"Microsurvey.Prompt.TitleLabel.v127" = "Ԑawen-aɣ ad nesnerni %@ ugar. Aya ad yeṭṭef cwiṭ n wakud.";
+
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
 "Microsurvey.Survey.Button.v127" = "Azen";
 
@@ -27,6 +30,9 @@
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
 "Microsurvey.Survey.HeaderLabel.v127" = "Smed aḥedqis-a";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
+"Microsurvey.Survey.HeaderLabel.v129" = "Ttxil-k smed aḥedqis";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name. */
 "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "Alugu %@";
