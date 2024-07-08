@@ -85,4 +85,5 @@ class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case urlDidChange
+    case didStartEditingUrl
 }

@@ -210,6 +210,12 @@ final class AddressToolbarContainer: UIView,
 
     func openSuggestions(searchTerm: String) {
         delegate?.openSuggestions(searchTerm: searchTerm)
+
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+        store.dispatch(action)
     }
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {

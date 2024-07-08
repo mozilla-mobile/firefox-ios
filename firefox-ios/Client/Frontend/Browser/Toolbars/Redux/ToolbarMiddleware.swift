@@ -61,7 +61,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.urlDidChange:
+        case ToolbarMiddlewareActionType.urlDidChange,
+            ToolbarMiddlewareActionType.didStartEditingUrl:
             updateAddressToolbarNavigationActions(action: action, state: state)
 
         default:
