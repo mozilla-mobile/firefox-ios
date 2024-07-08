@@ -25,17 +25,17 @@ class URLValidationTests: BaseTestCase {
         for i in urlTypes {
             navigator.openURL(i)
             waitUntilPageLoad()
-            XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists, "The website was not loaded properly")
-            XCTAssertTrue(app.buttons["Menu"].exists)
-            XCTAssertEqual(app.textFields["url"].value as? String, "www.mozilla.org/en-US/")
+            mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
+            mozWaitForElementToExist(app.buttons["Menu"])
+            mozWaitForValueContains(app.textFields["url"], value: "www.mozilla.org/en-US/")
             clearURL()
         }
 
         for i in urlHttpTypes {
             navigator.openURL(i)
             waitUntilPageLoad()
-            XCTAssertTrue(app.otherElements.staticTexts["Example Domain"].exists, "The website was not loaded properly")
-            XCTAssertEqual(app.textFields["url"].value as? String, "example.com/")
+            mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
+            mozWaitForValueContains(app.textFields["url"], value: "example.com/")
             clearURL()
         }
     }
