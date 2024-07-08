@@ -84,7 +84,7 @@ struct NavigationBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            guard let badgeImageName = (action as? ToolbarAction)?.badgeImageName else { return state }
+            let badgeImageName = (action as? ToolbarAction)?.badgeImageName
             var actions = state.actions
 
             if let index = actions.firstIndex(where: { $0.actionType == .menu }) {
