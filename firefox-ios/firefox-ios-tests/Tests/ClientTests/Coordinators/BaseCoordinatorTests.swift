@@ -48,7 +48,7 @@ final class BaseCoordinatorTests: XCTestCase {
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
-        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let route = Route.search(url: URL(string: "https://www.google.com"), options: [.switchToNormalMode])
         let matchingCoordinator = subject.findAndHandle(route: route)
 
         // Then
@@ -67,7 +67,7 @@ final class BaseCoordinatorTests: XCTestCase {
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
-        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let route = Route.search(url: URL(string: "https://www.google.com"), options: [.switchToNormalMode])
         let matchingCoordinator = subject.findAndHandle(route: route)
 
         // Then
@@ -85,7 +85,7 @@ final class BaseCoordinatorTests: XCTestCase {
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
-        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let route = Route.search(url: URL(string: "https://www.google.com"), options: [.switchToNormalMode])
         let matchingCoordinator = subject.findAndHandle(route: route)
 
         // Then
@@ -102,7 +102,7 @@ final class BaseCoordinatorTests: XCTestCase {
         childCoordinator.add(child: grandChildCoordinator)
 
         // When
-        let route = Route.search(url: URL(string: "https://www.google.com"), isPrivate: false)
+        let route = Route.search(url: URL(string: "https://www.google.com"), options: [.switchToNormalMode])
         let matchingCoordinator = subject.findAndHandle(route: route)
 
         // Then

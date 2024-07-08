@@ -16,8 +16,7 @@ class RouteTests: XCTestCase {
             route,
             .search(
                 url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar")!,
-                isPrivate: false,
-                options: [.focusLocationField]
+                options: [.switchToNormalMode, .focusLocationField]
             )
         )
     }
@@ -28,7 +27,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .search(url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar"), isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "http://google.com?a=1&b=2&c=foo%20bar"), options: [.switchToNormalMode]))
     }
 
     func testSearchRouteWithPrivateFlag() {
@@ -37,7 +36,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: true))
+        XCTAssertEqual(route, .search(url: nil, options: [.switchToPrivacyMode]))
     }
 
     func testSettingsRouteWithClearPrivateData() {
@@ -228,7 +227,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), options: [.switchToNormalMode]))
     }
 
     func testWidgetSmallQuicklinkOpenUrlWithPrivateFlag() {
@@ -239,7 +238,7 @@ class RouteTests: XCTestCase {
 
         XCTAssertEqual(
             route,
-            .search(url: URL(string: "https://google.com"), isPrivate: true, options: [.focusLocationField])
+            .search(url: URL(string: "https://google.com"), options: [.focusLocationField, .switchToPrivacyMode])
         )
     }
 
@@ -251,7 +250,7 @@ class RouteTests: XCTestCase {
 
         XCTAssertEqual(
             route,
-            .search(url: URL(string: "https://google.com"), isPrivate: false, options: [.focusLocationField])
+            .search(url: URL(string: "https://google.com"), options: [.focusLocationField, .switchToNormalMode])
         )
     }
 
@@ -262,7 +261,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .searchQuery(query: "test search text"))
+        XCTAssertEqual(route, .searchQuery(query: "test search text", options: [.switchToCurrentBrowsingMode]))
     }
 
     func testWidgetSmallQuicklinkOpenCopiedWithUrl() {
@@ -272,7 +271,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), options: [.switchToCurrentBrowsingMode]))
     }
 
     func testWidgetSmallQuicklinkClosePrivateTabs() {
@@ -326,7 +325,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: false))
+        XCTAssertEqual(route, .search(url: nil, options: [.switchToNormalMode]))
     }
 
     func testInvalidFxaSignIn() {

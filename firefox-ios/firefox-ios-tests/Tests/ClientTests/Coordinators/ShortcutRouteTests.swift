@@ -13,7 +13,7 @@ final class ShortcutRouteTests: XCTestCase {
 
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: false, options: [.focusLocationField]))
+        XCTAssertEqual(route, .search(url: nil, options: [.focusLocationField, .switchToNormalMode]))
     }
 
     func testNewPrivateTabShortcut() {
@@ -23,7 +23,7 @@ final class ShortcutRouteTests: XCTestCase {
 
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: true, options: [.focusLocationField]))
+        XCTAssertEqual(route, .search(url: nil, options: [.focusLocationField, .switchToPrivacyMode]))
     }
 
     func testOpenLastBookmarkShortcutWithValidUrl() {
@@ -38,8 +38,7 @@ final class ShortcutRouteTests: XCTestCase {
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
         XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"),
-                                      isPrivate: false,
-                                      options: [.switchToNormalMode]))
+                                      options: [.switchToCurrentBrowsingMode]))
     }
 
     // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness

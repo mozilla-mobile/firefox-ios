@@ -358,8 +358,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserHasLoaded()
 
         let result = testCanHandleAndHandle(subject, route: .search(url: URL(string: "https://example.com")!,
-                                                                    isPrivate: false,
-                                                                    options: nil))
+                                                                    options: [.switchToNormalMode]))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
@@ -374,7 +373,6 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserHasLoaded()
 
         let result = testCanHandleAndHandle(subject, route: .search(url: URL(string: "https://example.com")!,
-                                                                    isPrivate: false,
                                                                     options: [.switchToNormalMode]))
 
         XCTAssertTrue(result)
@@ -391,7 +389,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let result = testCanHandleAndHandle(subject, route: .search(url: nil, isPrivate: false))
+        let result = testCanHandleAndHandle(subject, route: .search(url: nil, options: [.switchToNormalMode]))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.openBlankNewTabCalled)
@@ -516,7 +514,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserHasLoaded()
 
         // When
-        let result = testCanHandleAndHandle(subject, route: .search(url: nil, isPrivate: true))
+        let result = testCanHandleAndHandle(subject, route: .search(url: nil, options: [.switchToPrivacyMode]))
 
         // Then
         XCTAssertTrue(result)
@@ -533,7 +531,7 @@ final class BrowserCoordinatorTests: XCTestCase {
         subject.browserHasLoaded()
 
         // When
-        let result = testCanHandleAndHandle(subject, route: .search(url: nil, isPrivate: false))
+        let result = testCanHandleAndHandle(subject, route: .search(url: nil, options: [.switchToNormalMode]))
 
         // Then
         XCTAssertTrue(result)

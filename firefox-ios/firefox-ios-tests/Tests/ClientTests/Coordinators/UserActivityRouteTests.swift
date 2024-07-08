@@ -15,7 +15,7 @@ class UserActivityRouteTests: XCTestCase {
 
         let route = subject.makeRoute(userActivity: userActivity)
 
-        XCTAssertEqual(route, .search(url: nil, isPrivate: false))
+        XCTAssertEqual(route, .search(url: nil, options: [.switchToNormalMode]))
     }
 
     // Test the Route initializer with a deep link user activity.
@@ -26,7 +26,7 @@ class UserActivityRouteTests: XCTestCase {
 
         let route = subject.makeRoute(userActivity: userActivity)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), options: [.switchToNormalMode]))
     }
 
     // Test the Route initializer with a CoreSpotlight user activity.
@@ -37,7 +37,7 @@ class UserActivityRouteTests: XCTestCase {
 
         let route = subject.makeRoute(userActivity: userActivity)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false))
+        XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), options: [.switchToNormalMode]))
     }
 
     // Test the Route initializer with an unsupported user activity.

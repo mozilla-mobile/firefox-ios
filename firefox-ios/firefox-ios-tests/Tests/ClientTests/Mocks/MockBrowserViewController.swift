@@ -24,6 +24,7 @@ class MockBrowserViewController: BrowserViewController {
 
     var handleQueryCalled = false
     var handleQuery: String?
+    var handleSearchOptions: Set<Route.SearchOptions>?
     var showLibraryCalled = false
     var showLibraryPanel: LibraryPanelType?
 
@@ -78,9 +79,10 @@ class MockBrowserViewController: BrowserViewController {
         openBlankNewTabCount += 1
     }
 
-    override func handle(query: String) {
+    override func handle(query: String, options: Set<Route.SearchOptions>? = nil) {
         handleQueryCalled = true
         handleQuery = query
+        handleSearchOptions = options
         handleQueryCount += 1
     }
 
