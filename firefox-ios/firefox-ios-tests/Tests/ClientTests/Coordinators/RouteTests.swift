@@ -261,7 +261,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .searchQuery(query: "test search text", options: [.switchToCurrentBrowsingMode]))
+        XCTAssertEqual(route, .searchQuery(query: "test search text", options: [.useCurrentBrowsingMode]))
     }
 
     func testWidgetSmallQuicklinkOpenCopiedWithUrl() {
@@ -271,7 +271,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), options: [.switchToCurrentBrowsingMode]))
+        XCTAssertEqual(route, .search(url: URL(string: "https://google.com"), options: [.useCurrentBrowsingMode]))
     }
 
     func testWidgetSmallQuicklinkClosePrivateTabs() {

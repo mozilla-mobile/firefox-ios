@@ -49,7 +49,7 @@ class MockTabManager: TabManager {
         return nil
     }
 
-    func selectTab(_ tab: Tab?, previous: Tab?) {
+    func selectTab(_ tab: Tab?, previous: Tab?, completion: (() -> Void)? = nil) {
         if let tab = tab {
             lastSelectedTabs.append(tab)
         }

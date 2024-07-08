@@ -71,7 +71,7 @@ class MockBrowserViewController: BrowserViewController {
         switchToTabForURLOrOpenCount += 1
     }
 
-    override func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool, searchFor searchText: String?) {
+    override func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool, searchFor searchText: String?, completion: (() -> Void)? = nil) {
         openBlankNewTabCalled = true
         openBlankNewTabFocusLocationField = focusLocationField
         openBlankNewTabIsPrivate = isPrivate
@@ -92,7 +92,7 @@ class MockBrowserViewController: BrowserViewController {
         showLibraryCount += 1
     }
 
-    override func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab {
+    override func openURLInNewTab(_ url: URL?, isPrivate: Bool, completion: (() -> Void)? = nil) -> Tab {
         openURLInNewTabCalled = true
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
