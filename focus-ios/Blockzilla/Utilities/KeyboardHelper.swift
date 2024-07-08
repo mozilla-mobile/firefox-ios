@@ -81,12 +81,10 @@ public class KeyboardHelper: NSObject {
      * Delegates are weakly held.
      */
     public func addDelegate(delegate: KeyboardHelperDelegate) {
-        for weakDelegate in delegates {
+        for weakDelegate in delegates where weakDelegate.delegate == nil {
             // Reuse any existing slots that have been deallocated.
-            if weakDelegate.delegate == nil {
-                weakDelegate.delegate = delegate
-                return
-            }
+            weakDelegate.delegate = delegate
+            return
         }
 
         delegates.append(WeakKeyboardDelegate(delegate))

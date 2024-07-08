@@ -41,6 +41,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
     var toggleEditModeAction: ((Bool) -> Void)?
+    var presentToast: ((AddressModifiedStatus) -> Void)?
 
     let addressProvider: AddressProvider
     let themeManager: ThemeManager
@@ -143,7 +144,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.updated)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
@@ -170,7 +171,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.saved)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
@@ -209,7 +210,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.removed)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
