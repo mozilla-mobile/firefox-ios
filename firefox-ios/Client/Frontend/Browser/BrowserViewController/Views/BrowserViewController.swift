@@ -360,7 +360,7 @@ class BrowserViewController: UIViewController,
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = consume isActionNeeded
 
-        if isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled && showWarningBadge {
             let action = ToolbarMiddlewareAction(windowUUID: windowUUID, actionType: ToolbarActionType.showMenuWarningBadge)
             store.dispatch(action)
         } else {
