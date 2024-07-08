@@ -9,14 +9,12 @@ import Common
 class GeneralBrowserAction: Action {
     let selectedTabURL: URL?
     let isPrivateBrowsing: Bool?
-    let isLoginActionRequired: Bool?
     let toastType: ToastType?
     let showOverlay: Bool?
     let buttonTapped: UIButton?
 
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
-         isLoginActionRequired: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          buttonTapped: UIButton? = nil,
@@ -24,7 +22,6 @@ class GeneralBrowserAction: Action {
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
         self.isPrivateBrowsing = isPrivateBrowsing
-        self.isLoginActionRequired = isLoginActionRequired
         self.toastType = toastType
         self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
