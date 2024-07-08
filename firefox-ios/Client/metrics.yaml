@@ -669,8 +669,10 @@ microsurvey:
           The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -686,8 +688,10 @@ microsurvey:
           The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
@@ -705,8 +709,10 @@ microsurvey:
           The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
@@ -728,8 +734,10 @@ microsurvey:
           The id of the survey.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
@@ -746,9 +754,11 @@ microsurvey:
         description: |
           The id of the survey.
     bugs:
-        - https://github.com/mozilla-mobile/firefox-ios/issues/20800
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20800
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
     data_reviews:
-        - https://github.com/mozilla-mobile/firefox-ios/pull/20840
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20840
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
     notification_emails:
         - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
