@@ -39,6 +39,7 @@ enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
     case addressToolbarActionsDidChange
+    case urlDidChange
     case backButtonStateChanged
     case forwardButtonStateChanged
     case scrollOffsetChanged

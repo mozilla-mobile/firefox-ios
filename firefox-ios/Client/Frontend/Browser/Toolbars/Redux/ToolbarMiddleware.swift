@@ -61,8 +61,12 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.urlDidChange,
-            ToolbarMiddlewareActionType.didStartEditingUrl:
+        case ToolbarMiddlewareActionType.urlDidChange:
+            guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return }
+            updateUrlAndActions(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.didStartEditingUrl,
+            ToolbarMiddlewareActionType.cancelEdit:
             updateAddressToolbarNavigationActions(action: action, state: state)
 
         default:
@@ -292,7 +296,49 @@ class ToolbarMiddleware: FeatureFlaggable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return actions }
+        switch action.actionType {
+        case is ToolbarMiddlewareActionType:
+            let navActions = addressToolbarNavigationDefaultActions(action: action, state: state)
+            actions.append(contentsOf: navActions)
+
+        case is ToolbarMiddlewareUrlChangeAction:
+            guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return actions }
+            let navActions = addressToolbarNavigationUrlChangeActions(action: action, state: state)
+            actions.append(contentsOf: navActions)
+
+        default:
+            return actions
+        }
+
+        return actions
+    }
+
+    private func addressToolbarNavigationDefaultActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        switch action.actionType as? ToolbarMiddlewareActionType {
+        case .didStartEditingUrl:
+            // back carrot when in edit mode
+            actions.append(ToolbarActionState(actionType: .cancelEdit,
+                                              iconName: StandardImageIdentifiers.Large.chevronLeft,
+                                              isEnabled: true,
+                                              a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
+                                              a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton))
+            return actions
+
+        default:
+            return actions
+        }
+    }
+
+    private func addressToolbarNavigationUrlChangeActions(
+        action: ToolbarMiddlewareUrlChangeAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
 
         if action.isShowingNavigationToolbar || action.url == nil {
             // there are no navigation actions if on homepage or when nav toolbar is shown
@@ -315,9 +361,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         return actions
     }
 
-    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let action = action as? ToolbarMiddlewareUrlChangeAction,
-              let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+    private func updateUrlAndActions(action: ToolbarMiddlewareUrlChangeAction,
+                                     state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return }
 
         let navigationActions = addressToolbarNavigationActions(action: action, state: state)
@@ -328,11 +374,28 @@ class ToolbarMiddleware: FeatureFlaggable {
             borderPosition: toolbarState.addressToolbar.borderPosition,
             url: action.url)
 
-        let urlDidChangeAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                               url: action.url,
-                                               windowUUID: action.windowUUID,
-                                               actionType: ToolbarActionType.urlDidChange)
-        store.dispatch(urlDidChangeAction)
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          url: action.url,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return }
+
+        let navigationActions = addressToolbarNavigationActions(action: action, state: state)
+        let addressToolbarModel = AddressToolbarModel(
+            navigationActions: navigationActions,
+            pageActions: toolbarState.addressToolbar.pageActions,
+            browserActions: toolbarState.addressToolbar.browserActions,
+            borderPosition: toolbarState.addressToolbar.borderPosition,
+            url: toolbarState.addressToolbar.url)
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.addressToolbarActionsDidChange)
+        store.dispatch(toolbarAction)
     }
 }
