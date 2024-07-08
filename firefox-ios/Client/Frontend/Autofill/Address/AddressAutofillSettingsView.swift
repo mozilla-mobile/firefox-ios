@@ -38,7 +38,6 @@ struct AddressAutofillSettingsView: View {
                     .frame(maxWidth: .infinity)
 
                 if addressListViewModel.showSection || addressListViewModel.isEditingFeatureEnabled {
-                    // Address list view
                     AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
                 } else {
                     Spacer()
@@ -48,7 +47,6 @@ struct AddressAutofillSettingsView: View {
         }
         .onAppear {
             addressListViewModel.fetchAddresses()
-            // Apply the theme when the view appears
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
