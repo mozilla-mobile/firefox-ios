@@ -205,7 +205,6 @@ class TabTrayViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        print("Subscribed to Redux")
         subscribeToRedux()
         listenForThemeChange(view)
         updateToolbarItems()
