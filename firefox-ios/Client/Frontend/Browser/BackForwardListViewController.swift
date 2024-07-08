@@ -103,8 +103,7 @@ class BackForwardListViewController: UIViewController,
         view.addSubview(shadow)
         view.addSubview(tableView)
 
-        let toolBarShouldShow = shouldShowToolbarForTraitCollection(traitCollection)
-        snappedToBottom = toolBarShouldShow || isBottomSearchBar
+        snappedToBottom = isDisplayedAtBottom(for: traitCollection, isBottomSearchBar: isBottomSearchBar)
         tableViewHeightAnchor = tableView.heightAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             tableViewHeightAnchor,
@@ -116,11 +115,6 @@ class BackForwardListViewController: UIViewController,
         ])
         remakeVerticalConstraints()
         view.layoutIfNeeded()
-    }
-
-    private func shouldShowToolbarForTraitCollection(_ previousTraitCollection: UITraitCollection) -> Bool {
-        return previousTraitCollection.verticalSizeClass != .compact
-               && previousTraitCollection.horizontalSizeClass != .regular
     }
 
     private func currentTheme() -> Theme {
@@ -184,14 +178,14 @@ class BackForwardListViewController: UIViewController,
         with coordinator: UIViewControllerTransitionCoordinator
     ) {
         super.willTransition(to: newCollection, with: coordinator)
-        if shouldShowToolbarForTraitCollection(newCollection) != snappedToBottom, !isBottomSearchBar {
-            if snappedToBottom {
-                tableViewBottomAnchor.constant = 0
-            } else {
-                tableViewTopAnchor.constant = 0
-            }
+
+        let isDisplayedAtBottom = isDisplayedAtBottom(for: newCollection, isBottomSearchBar: isBottomSearchBar)
+
+        if snappedToBottom != isDisplayedAtBottom {
+            snappedToBottom = isDisplayedAtBottom
+            let anchor = snappedToBottom ? tableViewTopAnchor : tableViewBottomAnchor
+            anchor?.constant = 0
             tableViewHeightAnchor.constant = 0
-            snappedToBottom = !snappedToBottom
         }
     }
 
@@ -207,6 +201,13 @@ class BackForwardListViewController: UIViewController,
             self.remakeVerticalConstraints()
             correctHeight()
         }
+    }
+
+    // the back/forward list can be shown at the top or bottom of the screen
+    // the position depends on the address bar position and whether the navigation toolbar is shown or not
+    private func isDisplayedAtBottom(for traitCollection: UITraitCollection, isBottomSearchBar: Bool) -> Bool {
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        return showNavToolbar || isBottomSearchBar
     }
 
     func remakeVerticalConstraints() {

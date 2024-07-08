@@ -72,9 +72,10 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.urlDidChange:
+            var addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
+                navigationActions: addressToolbarModel?.navigationActions ?? state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
@@ -117,7 +118,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url
             )
 
-        case ToolbarActionType.scrollOffsetChanged:
+        case ToolbarActionType.scrollOffsetChanged,
+            ToolbarActionType.toolbarPositionChanged:
             let borderPosition = (action as? ToolbarAction)?.addressToolbarModel?.borderPosition
 
             return AddressBarState(

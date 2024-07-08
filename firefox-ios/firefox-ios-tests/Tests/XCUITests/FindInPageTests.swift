@@ -105,14 +105,14 @@ class FindInPageTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323718
     func testFindInPageResultsPageShowHideContent() {
-        userState.url = "lorem2.com"
+        userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
-        app.searchFields["find.searchField"].typeText("lorem")
+        app.searchFields["find.searchField"].typeText("Mozilla")
 
         // There should be matches
-        mozWaitForElementToExist(app.staticTexts["1 of 5"], timeout: TIMEOUT)
-        XCTAssertTrue(app.staticTexts["1 of 5"].exists)
+        mozWaitForElementToExist(app.staticTexts["1 of 6"], timeout: TIMEOUT)
+        XCTAssertTrue(app.staticTexts["1 of 6"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323801

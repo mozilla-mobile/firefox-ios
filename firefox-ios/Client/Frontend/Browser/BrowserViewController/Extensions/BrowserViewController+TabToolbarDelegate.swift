@@ -104,9 +104,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let dataClearanceAnimation = DataClearanceAnimation()
         dataClearanceAnimation.startAnimation(
             with: view,
-            for: shouldShowTopTabsForTraitCollection(
-                traitCollection
-            )
+            for: ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         )
 
         completion(timingToMatchGradientOverlay)
