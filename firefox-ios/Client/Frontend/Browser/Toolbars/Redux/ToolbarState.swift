@@ -61,7 +61,7 @@ struct ToolbarState: ScreenState, Equatable {
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars,
             ToolbarActionType.numberOfTabsChanged,
-            ToolbarActionType.urlDidChange,
+            ToolbarActionType.addressToolbarActionsDidChange,
             ToolbarActionType.backButtonStateChanged,
             ToolbarActionType.forwardButtonStateChanged,
             ToolbarActionType.scrollOffsetChanged:

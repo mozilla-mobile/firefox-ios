@@ -71,7 +71,7 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url
             )
 
-        case ToolbarActionType.urlDidChange:
+        case ToolbarActionType.addressToolbarActionsDidChange:
             var addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel
             return AddressBarState(
                 windowUUID: state.windowUUID,

@@ -332,5 +332,6 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                windowUUID: action.windowUUID,
                                                actionType: ToolbarActionType.urlDidChange)
         store.dispatch(urlDidChangeAction)
+                                          actionType: ToolbarActionType.addressToolbarActionsDidChange)
     }
 }
