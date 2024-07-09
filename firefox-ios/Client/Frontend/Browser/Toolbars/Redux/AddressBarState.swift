@@ -138,6 +138,23 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url
             )
 
+        case ToolbarActionType.showMenuWarningBadge:
+            let badgeImageName = (action as? ToolbarAction)?.badgeImageName
+            var actions = state.navigationActions
+
+            if let index = actions.firstIndex(where: { $0.actionType == .menu }) {
+                actions[index].badgeImageName = badgeImageName
+            }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: actions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url
+            )
+
         case ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.toolbarPositionChanged:
             let borderPosition = (action as? ToolbarAction)?.addressToolbarModel?.borderPosition

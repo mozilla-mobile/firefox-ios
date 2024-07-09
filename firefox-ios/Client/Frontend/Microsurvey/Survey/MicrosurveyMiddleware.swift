@@ -12,45 +12,46 @@ final class MicrosurveyMiddleware {
 
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
+        guard let surveyId = (action as? MicrosurveyAction)?.surveyId else { return }
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
-            self.dismissSurvey(windowUUID: windowUUID)
+            self.dismissSurvey(windowUUID: windowUUID, surveyId: surveyId)
         case MicrosurveyActionType.tapPrivacyNotice:
-            self.navigateToPrivacyNotice(windowUUID: windowUUID)
+            self.navigateToPrivacyNotice(windowUUID: windowUUID, surveyId: surveyId)
         case MicrosurveyActionType.submitSurvey:
-            self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action)
+            self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action, surveyId: surveyId)
         case MicrosurveyActionType.surveyDidAppear:
-            self.microsurveyTelemetry.surveyViewed()
+            self.microsurveyTelemetry.surveyViewed(surveyId: surveyId)
         case MicrosurveyActionType.confirmationViewed:
-            self.microsurveyTelemetry.confirmationShown()
+            self.microsurveyTelemetry.confirmationShown(surveyId: surveyId)
         default:
            break
         }
     }
 
-    private func dismissSurvey(windowUUID: WindowUUID) {
+    private func dismissSurvey(windowUUID: WindowUUID, surveyId: String) {
         let newAction = MicrosurveyMiddlewareAction(
             windowUUID: windowUUID,
             actionType: MicrosurveyMiddlewareActionType.dismissSurvey
         )
         store.dispatch(newAction)
-        microsurveyTelemetry.dismissButtonTapped()
+        microsurveyTelemetry.dismissButtonTapped(surveyId: surveyId)
         closeMicrosurveyPrompt(windowUUID: windowUUID)
     }
 
-    private func navigateToPrivacyNotice(windowUUID: WindowUUID) {
+    private func navigateToPrivacyNotice(windowUUID: WindowUUID, surveyId: String) {
         let newAction = MicrosurveyMiddlewareAction(
             windowUUID: windowUUID,
             actionType: MicrosurveyMiddlewareActionType.navigateToPrivacyNotice
         )
         store.dispatch(newAction)
-        microsurveyTelemetry.privacyNoticeTapped()
+        microsurveyTelemetry.privacyNoticeTapped(surveyId: surveyId)
     }
 
-    private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID, action: Action) {
+    private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID, action: Action, surveyId: String) {
         closeMicrosurveyPrompt(windowUUID: windowUUID)
         guard let userSelection = (action as? MicrosurveyAction)?.userSelection else { return }
-        microsurveyTelemetry.userResponseSubmitted(userSelection: userSelection)
+        microsurveyTelemetry.userResponseSubmitted(surveyId: surveyId, userSelection: userSelection)
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {
