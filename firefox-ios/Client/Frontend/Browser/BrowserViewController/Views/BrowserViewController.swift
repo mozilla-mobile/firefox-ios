@@ -596,7 +596,10 @@ class BrowserViewController: UIViewController,
 
             // opens or close sidebar/bottom sheet to match the saved state
             if state.fakespotState.isOpen {
-                guard !isToolbarRefactorEnabled, let productURL = urlBar.currentURL else { return }
+                let productURL = isToolbarRefactorEnabled ?
+                    store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.addressToolbar.url :
+                    urlBar.currentURL
+                guard let productURL else { return }
                 handleFakespotFlow(productURL: productURL)
             } else if !state.fakespotState.isOpen {
                 dismissFakespotIfNeeded()
@@ -978,16 +981,20 @@ class BrowserViewController: UIViewController,
             }
         }
 
-        coordinator.animate(alongsideTransition: { context in
-            self.scrollController.updateMinimumZoom()
-            self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
-            if let popover = self.displayedPopoverController {
-                self.updateDisplayedPopoverProperties?()
-                self.present(popover, animated: true, completion: nil)
+        coordinator.animate(alongsideTransition: { [self] context in
+            scrollController.updateMinimumZoom()
+            topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
+            if let popover = displayedPopoverController {
+                updateDisplayedPopoverProperties?()
+                present(popover, animated: true, completion: nil)
             }
 
-            if !self.isToolbarRefactorEnabled, let productURL = self.urlBar.currentURL, fakespotNeedsUpdate {
-                self.handleFakespotFlow(productURL: productURL)
+            let productURL = isToolbarRefactorEnabled ?
+            store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.addressToolbar.url :
+            urlBar.currentURL
+
+            if let productURL, fakespotNeedsUpdate {
+                handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
             self.scrollController.setMinimumZoom()
