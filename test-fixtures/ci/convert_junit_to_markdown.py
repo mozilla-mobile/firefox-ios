@@ -238,7 +238,7 @@ if __name__ == '__main__':
     
     failures_only = False
     github_markdown = True
-    is_smoke = True
+    is_smoke = False
     browser = 'firefox-ios'
     
     for opt, arg in opts:
@@ -248,6 +248,8 @@ if __name__ == '__main__':
             is_smoke = False
         if opt == '--focus-ios':
             browser = "focus-ios"
+        if opt == '--smoke':
+            is_smoke = True
     
     if github_markdown:
         convert_file_github(args[0], args[1], is_smoke=is_smoke)
