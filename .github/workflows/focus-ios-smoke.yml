@@ -1,7 +1,7 @@
 name: "Focus Tests"
-    
 on:
-    workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
 
 env:
     browser: focus-ios
@@ -54,7 +54,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                xcodebuild_test_plan: ['SmokeTest']
+                xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
@@ -95,9 +95,9 @@ jobs:
             - name: Print test report
               id: test-report
               run: |
-                python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
+                python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
                 cat github.md >> $GITHUB_STEP_SUMMARY
-                python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
+                python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
               working-directory:  ${{ env.browser }}
             - name: Upload log file
               id: upload-log
