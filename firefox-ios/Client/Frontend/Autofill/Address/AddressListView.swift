@@ -108,11 +108,11 @@ struct AddressListView: View {
                                 }
                             }
                         }
+                    .ignoresSafeArea(.keyboard)
                 }
             }
         }
         .onAppear {
-            viewModel.fetchAddresses()
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             viewModel.editAddressWebViewManager.preloadWebView()
         }

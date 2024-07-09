@@ -147,7 +147,14 @@ class CreditCardsTests: BaseTestCase {
             app.swipeUp()
             app.swipeUp()
             mozWaitForElementToExist(cardNumber)
+            if !cardNumber.isHittable {
+                swipeUp(nrOfSwipes: 2)
+            }
             cardNumber.tapOnApp()
+            let menuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
+            if !app.buttons[menuButton].isHittable {
+                cardNumber.tapOnApp()
+            }
             mozWaitForElementToNotExist(app.buttons[useSavedCard])
             dismissSavedCardsPrompt()
             navigator.goto(CreditCardsSettings)

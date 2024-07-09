@@ -156,6 +156,7 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Open in New Tab"].tap()
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)

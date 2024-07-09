@@ -39,23 +39,11 @@ import:
             triggers:
               ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
 
-        - channel: developer
+        - channel: beta
           value:
             messages:
-              # Serves as an example of how survey message might be formatted
-              survey-surface-message:
-                surface: survey
-                style: SURVEY
-                trigger-if-all:
-                  - NEVER
-                text: ResearchSurface/Body.Text.v112
-                button-label: ResearchSurface/PrimaryButton.Label.v112
-                action: OPEN_URL
-                action-params:
-                  url: https://www.macrumors.com
-
               # Serves as an example of how microsurveys may look like
-              microsurvey-message:
+              homepage-microsurvey-message:
                 surface: microsurvey
                 style: MICROSURVEY
                 trigger-if-all:
@@ -72,3 +60,19 @@ import:
                     - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption3.v127
                     - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption4.v127
                     - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption5.v127
+                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption6.v129
+
+        - channel: developer
+          value:
+            messages:
+              # Serves as an example of how survey message might be formatted
+              survey-surface-message:
+                surface: survey
+                style: SURVEY
+                trigger-if-all:
+                  - NEVER
+                text: ResearchSurface/Body.Text.v112
+                button-label: ResearchSurface/PrimaryButton.Label.v112
+                action: OPEN_URL
+                action-params:
+                  url: https://www.macrumors.com

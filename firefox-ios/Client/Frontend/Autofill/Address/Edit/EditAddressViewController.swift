@@ -9,6 +9,24 @@ import Common
 import struct MozillaAppServices.UpdatableAddressFields
 
 class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable {
+    private lazy var removeButton: RemoveAddressButton = {
+        let button = RemoveAddressButton()
+        button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addAction(
+            UIAction { [weak self] _ in self?.presentRemoveAddressAlert() },
+            for: .touchUpInside
+        )
+        return button
+    }()
+
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
@@ -35,6 +53,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
+        setupRemoveButton()
         listenForThemeChange(view)
     }
 
@@ -44,17 +63,30 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         self.evaluateJavaScript("resetForm();")
     }
 
+    private func setupRemoveButton() {
+        stackView.addArrangedSubview(removeButton)
+        removeButton.isHidden = true
+        removeButton.applyTheme(
+            theme: themeManager.getCurrentTheme(for: currentWindowUUID)
+        )
+        NSLayoutConstraint.activate([
+            removeButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
     private func setupWebView() {
         guard let webView else { return }
-        self.view.addSubview(webView)
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(webView)
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
 
         model.toggleEditModeAction = { [weak self] isEditMode in
+            self?.removeButton.isHidden = !isEditMode
             self?.evaluateJavaScript("toggleEditMode(\(isEditMode));")
         }
 
@@ -140,8 +172,34 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     func applyTheme() {
         guard let currentWindowUUID else { return }
-        let isDarkTheme = themeManager.getCurrentTheme(for: currentWindowUUID).type == .dark
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        removeButton.applyTheme(theme: theme)
+        let isDarkTheme = theme.type == .dark
         evaluateJavaScript("setTheme(\(isDarkTheme));")
+    }
+
+    func presentRemoveAddressAlert() {
+        let alertController = UIAlertController(
+            title: String.Addresses.Settings.Edit.RemoveAddressTitle,
+            message: model.hasSyncableAccount ? String.Addresses.Settings.Edit.RemoveAddressMessage : nil,
+            preferredStyle: .alert
+        )
+
+        alertController.addAction(UIAlertAction(
+            title: String.Addresses.Settings.Edit.CancelButtonTitle,
+            style: .cancel,
+            handler: nil
+        ))
+
+        alertController.addAction(UIAlertAction(
+            title: String.Addresses.Settings.Edit.RemoveButtonTitle,
+            style: .destructive,
+            handler: { _ in
+                self.model.removeConfimationButtonTap()
+            }
+        ))
+
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 

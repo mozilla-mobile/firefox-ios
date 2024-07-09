@@ -21,10 +21,8 @@ class WebCacheUtils {
         // Delete other remnants in the cache directory, such as HSTS.plist.
         if let cachesPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first {
             let contents = (try? FileManager.default.contentsOfDirectory(atPath: cachesPath)) ?? []
-            for file in contents {
-                if !PermittedFolderList.contains(file) {
-                    FileManager.default.removeItemAndContents(path: "\(cachesPath)/\(file)")
-                }
+            for file in contents where !PermittedFolderList.contains(file) {
+                FileManager.default.removeItemAndContents(path: "\(cachesPath)/\(file)")
             }
         }
     }

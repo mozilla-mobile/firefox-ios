@@ -35,7 +35,7 @@ class BrowsingPDFTests: BaseTestCase {
         app.links.element(boundBy: 0).tapOnApp()
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields["url"], value: PDF_website["urlValue"]!)
-        XCTAssertTrue(app.staticTexts["Education and schools"].exists)
+        mozWaitForElementToExist(app.staticTexts["Education and schools"])
 
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()

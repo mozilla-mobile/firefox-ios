@@ -243,6 +243,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
     }
 
+    func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        toolbarDelegate?.addressToolbarAccessibilityActions()
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
