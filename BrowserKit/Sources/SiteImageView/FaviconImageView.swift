@@ -16,6 +16,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
     var uniqueID: UUID?
     var imageFetcher: SiteImageHandler
     var currentURLString: String?
+    var currentInFlightURLString: String?
     private var completionHandler: (() -> Void)?
 
     // MARK: - Init

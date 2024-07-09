@@ -7,7 +7,7 @@ import Fuzi
 
 /// Scrapes the HTML at a given site for images
 protocol FaviconURLFetcher {
-    /// Scraptes the HTML at the given url for a favicon image
+    /// Scrapes the HTML at the given url for a favicon image
     /// - Parameter siteURL: The web address we want to retrieve the favicon for
     /// - Parameter completion: Returns a result type of either a URL on success or a SiteImageError on failure
     func fetchFaviconURL(siteURL: URL) async throws -> URL
@@ -63,8 +63,13 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
 
         // Fallback to the favicon at the root of the domain
         // This is a fall back because it's generally low res
-        if let faviconURL = URL(string: siteURL.absoluteString + "/favicon.ico", invalidCharacters: false) {
-            return faviconURL
+
+        if let host = siteURL.host {
+            if let rootDirectoryURL = URL(string: (siteURL.scheme ?? "https") + "://" + host) {
+                let faviconURL = rootDirectoryURL.appendingPathComponent("favicon.ico")
+                print("DBG: url2 \(faviconURL.absoluteString)")
+                return faviconURL
+            }
         }
 
         throw SiteImageError.noFaviconFound

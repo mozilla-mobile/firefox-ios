@@ -20,6 +20,7 @@ public class HeroImageView: UIView, SiteImageView {
     var imageFetcher: SiteImageHandler
     var currentURLString: String?
     private var completionHandler: (() -> Void)?
+    var currentInFlightURLString: String?
 
     private lazy var heroImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
