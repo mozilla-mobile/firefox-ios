@@ -205,11 +205,7 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
-            if toolbarState.addressToolbar.isEditing {
-                _ = becomeFirstResponder()
-            } else {
-                _ = resignFirstResponder()
-            }
+            _ = toolbarState.addressToolbar.isEditing ? becomeFirstResponder() : resignFirstResponder()
         }
     }
 
