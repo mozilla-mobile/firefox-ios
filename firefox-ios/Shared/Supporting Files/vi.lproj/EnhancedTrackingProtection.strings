@@ -22,6 +22,15 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Kết nối không an toàn";
 
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Cookie theo dõi trên nhiều trang web: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Dấu vết: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Trình theo truyền thông xã hội: %@";
+
 /* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
    Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Trình theo dõi bị chặn: %@";
@@ -53,6 +62,9 @@
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Trình chống đã TẮT. Chúng tôi khuyên bạn nên bật lại.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Trình chống đã TẮT. Chúng tôi khuyên bạn nên bật lại.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Nếu có gì đó bị hỏng trên trang web này, hãy thử tắt nó đi.";
