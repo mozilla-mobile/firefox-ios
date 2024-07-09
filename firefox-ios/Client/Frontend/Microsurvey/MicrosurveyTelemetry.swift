@@ -6,24 +6,28 @@ import Foundation
 import Glean
 
 struct MicrosurveyTelemetry {
-    func surveyViewed() {
-        GleanMetrics.Microsurvey.shown.record()
+    func surveyViewed(surveyId: String) {
+        let surveyIdExtra = GleanMetrics.Microsurvey.ShownExtra(surveyId: surveyId)
+        GleanMetrics.Microsurvey.shown.record(surveyIdExtra)
     }
 
-    func privacyNoticeTapped() {
-        GleanMetrics.Microsurvey.privacyNoticeTapped.record()
+    func privacyNoticeTapped(surveyId: String) {
+        let surveyIdExtra = GleanMetrics.Microsurvey.PrivacyNoticeTappedExtra(surveyId: surveyId)
+        GleanMetrics.Microsurvey.privacyNoticeTapped.record(surveyIdExtra)
     }
 
-    func dismissButtonTapped() {
-        GleanMetrics.Microsurvey.dismissButtonTapped.record()
+    func dismissButtonTapped(surveyId: String) {
+        let surveyIdExtra = GleanMetrics.Microsurvey.DismissButtonTappedExtra(surveyId: surveyId)
+        GleanMetrics.Microsurvey.dismissButtonTapped.record(surveyIdExtra)
     }
 
-    func userResponseSubmitted(userSelection: String) {
-        let userSelectionExtra = GleanMetrics.Microsurvey.SubmitButtonTappedExtra(userSelection: userSelection)
-        GleanMetrics.Microsurvey.submitButtonTapped.record(userSelectionExtra)
+    func userResponseSubmitted(surveyId: String, userSelection: String) {
+        let submitExtra = GleanMetrics.Microsurvey.SubmitButtonTappedExtra(surveyId: surveyId, userSelection: userSelection)
+        GleanMetrics.Microsurvey.submitButtonTapped.record(submitExtra)
     }
 
-    func confirmationShown() {
-        GleanMetrics.Microsurvey.confirmationShown.record()
+    func confirmationShown(surveyId: String) {
+        let surveyIdExtra = GleanMetrics.Microsurvey.ConfirmationShownExtra(surveyId: surveyId)
+        GleanMetrics.Microsurvey.confirmationShown.record(surveyIdExtra)
     }
 }
