@@ -5,7 +5,7 @@
 import XCTest
 @testable import Storage
 
-class ZoomLevelStoreTests: XCTestCase {
+final class ZoomLevelStoreTests: XCTestCase {
     var zoomLevelStore: ZoomLevelStore!
 
     let testHost1 = "www.example1.com"
@@ -82,11 +82,20 @@ class ZoomLevelStoreTests: XCTestCase {
     }
 
     func testSaveSameZoomLevel() {
+        let dispatchGroup = DispatchGroup()
+
         let domainZoomLevel = DomainZoomLevel(host: testHost3, zoomLevel: 1.5)
-        zoomLevelStore.save(domainZoomLevel)
+        dispatchGroup.enter()
+        zoomLevelStore.save(domainZoomLevel) {
+            dispatchGroup.leave()
+        }
 
         let updatedDomainZoomLevel = DomainZoomLevel(host: testHost3, zoomLevel: 2.0)
-        zoomLevelStore.save(updatedDomainZoomLevel)
+        dispatchGroup.enter()
+        zoomLevelStore.save(updatedDomainZoomLevel) {
+            dispatchGroup.leave()
+        }
+        dispatchGroup.wait()
 
         XCTAssertTrue(zoomLevelStore.domainZoomLevels.contains(updatedDomainZoomLevel))
         XCTAssertFalse(zoomLevelStore.domainZoomLevels.contains(domainZoomLevel))

@@ -37,7 +37,7 @@ public class ZoomLevelStore {
         domainZoomLevels = loadAll()
     }
 
-    public func save(_ domainZoomLevel: DomainZoomLevel) {
+    public func save(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)? = nil) {
         concurrentQueue.async(flags: .barrier) { [unowned self] in
             if let index = domainZoomLevels.firstIndex(where: {
                 $0.host == domainZoomLevel.host
@@ -56,6 +56,7 @@ public class ZoomLevelStore {
                            level: .debug,
                            category: .storage)
             }
+            completion?()
         }
     }
 
