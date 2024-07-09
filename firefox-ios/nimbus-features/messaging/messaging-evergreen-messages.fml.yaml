@@ -39,7 +39,7 @@ import:
             triggers:
               ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
 
-        - channel: beta
+        - channel: beta, developer
           value:
             messages:
               # Serves as an example of how microsurveys may look like
