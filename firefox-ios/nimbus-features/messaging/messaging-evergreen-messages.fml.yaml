@@ -43,7 +43,7 @@ import:
           value:
             messages:
               # Serves as an example of how microsurveys may look like
-              home-pagemicrosurvey-message:
+              homepage-microsurvey-message:
                 surface: microsurvey
                 style: MICROSURVEY
                 trigger-if-all:
