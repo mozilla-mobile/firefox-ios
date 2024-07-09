@@ -1517,7 +1517,7 @@
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请轻点地址栏中的挂锁图标，关闭对此网站的增强型跟踪保护。";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
@@ -1532,10 +1532,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请轻点地址栏中的挂锁图标，关闭对此网站的增强型跟踪保护。";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "若网站无法正常工作，请轻点地址栏中的挂锁图标，关闭对此网站的增强型跟踪保护。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "允许部分广告跟踪行为，同时让网站功能保持正常。";
