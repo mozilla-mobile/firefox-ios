@@ -149,6 +149,12 @@ final class AddressToolbarContainer: UIView,
         	updateProgressBarPosition(toolbarState.toolbarPosition)
             compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
             regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+
+            if toolbarState.addressToolbar.isEditing {
+                _ = becomeFirstResponder()
+            } else {
+                _ = resignFirstResponder()
+            }
         }
     }
 

@@ -65,9 +65,11 @@ class ToolbarMiddleware: FeatureFlaggable {
             guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return }
             updateUrlAndActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.didStartEditingUrl,
-            ToolbarMiddlewareActionType.cancelEdit:
-            updateAddressToolbarNavigationActions(action: action, state: state)
+        case ToolbarMiddlewareActionType.didStartEditingUrl:
+            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
+
+        case ToolbarMiddlewareActionType.cancelEdit:
+            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
 
         default:
             break
@@ -79,8 +81,10 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let uuid = action.windowUUID
         switch gestureType {
-        case .tap: handleToolbarButtonTapActions(actionType: buttonType, buttonTapped: action.buttonTapped, windowUUID: uuid)
-        case .longPress: handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
+        case .tap:
+            handleToolbarButtonTapActions(action: action, state: state)
+        case .longPress:
+            handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
         }
     }
 
@@ -168,44 +172,45 @@ class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
-    private func handleToolbarButtonTapActions(actionType: ToolbarActionState.ActionType,
-                                               buttonTapped: UIButton?,
-                                               windowUUID: WindowUUID) {
-        switch actionType {
+    private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
+        switch action.buttonType {
         case .home:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
         case .qrCode:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
 
         case .back:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateBack)
             store.dispatch(action)
 
         case .forward:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateForward)
             store.dispatch(action)
 
         case .tabs:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatch(action)
 
         case .trackingProtection:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
             store.dispatch(action)
 
         case .menu:
-            let action = GeneralBrowserAction(buttonTapped: buttonTapped,
-                                              windowUUID: windowUUID,
+            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
+                                              windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showMenu)
             store.dispatch(action)
+
+        case .cancelEdit:
+            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
 
         default:
             break
@@ -297,11 +302,12 @@ class ToolbarMiddleware: FeatureFlaggable {
         var actions = [ToolbarActionState]()
 
         switch action.actionType {
-        case is ToolbarMiddlewareActionType:
+        case ToolbarMiddlewareActionType.didStartEditingUrl,
+            ToolbarMiddlewareActionType.cancelEdit:
             let navActions = addressToolbarNavigationDefaultActions(action: action, state: state)
             actions.append(contentsOf: navActions)
 
-        case is ToolbarMiddlewareUrlChangeAction:
+        case ToolbarMiddlewareActionType.urlDidChange:
             guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return actions }
             let navActions = addressToolbarNavigationUrlChangeActions(action: action, state: state)
             actions.append(contentsOf: navActions)
@@ -363,16 +369,11 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func updateUrlAndActions(action: ToolbarMiddlewareUrlChangeAction,
                                      state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
+                                                                                state: state,
+                                                                                url: action.url,
+                                                                                isEditing: false)
         else { return }
-
-        let navigationActions = addressToolbarNavigationActions(action: action, state: state)
-        let addressToolbarModel = AddressToolbarModel(
-            navigationActions: navigationActions,
-            pageActions: toolbarState.addressToolbar.pageActions,
-            browserActions: toolbarState.addressToolbar.browserActions,
-            borderPosition: toolbarState.addressToolbar.borderPosition,
-            url: action.url)
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                           url: action.url,
@@ -381,9 +382,28 @@ class ToolbarMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
-    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction,
+                                                       state: AppState,
+                                                       isEditing: Bool) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
+              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
+                                                                                state: state,
+                                                                                isEditing: isEditing)
         else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.addressToolbarActionsDidChange)
+        store.dispatch(toolbarAction)
+    }
+
+    private func generateAddressToolbarNavigationActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState,
+        url: URL? = nil,
+        isEditing: Bool? = nil) -> AddressToolbarModel? {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return nil }
 
         let navigationActions = addressToolbarNavigationActions(action: action, state: state)
         let addressToolbarModel = AddressToolbarModel(
@@ -391,11 +411,8 @@ class ToolbarMiddleware: FeatureFlaggable {
             pageActions: toolbarState.addressToolbar.pageActions,
             browserActions: toolbarState.addressToolbar.browserActions,
             borderPosition: toolbarState.addressToolbar.borderPosition,
-            url: toolbarState.addressToolbar.url)
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.addressToolbarActionsDidChange)
-        store.dispatch(toolbarAction)
+            url: url ?? toolbarState.addressToolbar.url,
+            isEditing: isEditing)
+        return addressToolbarModel
     }
 }
