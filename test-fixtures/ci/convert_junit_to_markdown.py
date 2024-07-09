@@ -91,7 +91,7 @@ def count_tests(test_suites, is_smoke=True):
 
 def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios'):
     # Count number of pass/fail tests for reporting
-    tests_info = count_tests(test_suites, is_smoke)
+    tests_info = count_tests(test_suites, is_smoke=is_smoke)
     
     # Fetch failed tests and put them in Slack format
     failed_tests_info = []
@@ -163,7 +163,7 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
 
 def convert_to_github_markdown(test_suites, is_smoke = True):
     # Count number of pass/fail tests for reporting
-    tests_info = count_tests(test_suites, is_smoke)
+    tests_info = count_tests(test_suites, is_smoke=is_smoke)
 
     markdown = ''
     for test_suite in test_suites:
