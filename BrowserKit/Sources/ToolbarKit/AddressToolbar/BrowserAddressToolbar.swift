@@ -224,7 +224,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
         // Navigation action spacing
         let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
-        leadingLocationContainerConstraint?.constant = hasNavigationActions ? -UX.horizontalSpace : 0
+        let isRegular = traitCollection.horizontalSizeClass == .regular
+        leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
 
         // Page action spacing
         let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty
