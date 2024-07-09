@@ -22,6 +22,7 @@ struct ToolbarActionState: Equatable {
 
     var actionType: ActionType
     var iconName: String
+    var badgeImageName: String?
     var numberOfTabs: Int?
     var isEnabled: Bool
     var a11yLabel: String

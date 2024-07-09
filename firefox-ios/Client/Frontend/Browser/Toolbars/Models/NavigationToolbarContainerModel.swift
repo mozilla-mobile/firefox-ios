@@ -19,6 +19,7 @@ struct NavigationToolbarContainerModel: Equatable {
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,
