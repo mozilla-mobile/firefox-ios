@@ -61,11 +61,6 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarActionType.showMenuWarningBadge:
-            let action = ToolbarAction(badgeImageName: StandardImageIdentifiers.Large.warningFill,
-                                       windowUUID: action.windowUUID,
-                                       actionType: ToolbarActionType.showMenuWarningBadge)
-            store.dispatch(action)
         case ToolbarMiddlewareActionType.urlDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state)
 
