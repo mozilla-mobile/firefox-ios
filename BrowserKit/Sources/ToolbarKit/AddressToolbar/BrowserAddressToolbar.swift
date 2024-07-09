@@ -19,7 +19,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let dividerWidth: CGFloat = 4
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
-        static let buttonSize = CGSize(width: 40, height: 40)
+        static let buttonSize = CGSize(width: 44, height: 44)
         static let locationHeight: CGFloat = 44
     }
 
