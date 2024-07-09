@@ -57,7 +57,7 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 
@@ -69,19 +69,20 @@ class ThemedTableViewController: UITableViewController, Themeable, InjectedTheme
             withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
         ) as? ThemedTableSectionHeaderFooterView
         else { return nil }
-        footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return footerView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         applyTheme()
         listenForThemeChange(view)
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
         tableView.reloadData()

@@ -2,9 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import MozillaAppServices
 import Shared
 import Storage
+
+import struct MozillaAppServices.HistoryMetadataKey
+import struct MozillaAppServices.HistoryMetadataObservation
 
 class LegacyTabMetadataManager {
     let metadataObserver: HistoryMetadataObserver
@@ -169,7 +171,7 @@ class LegacyTabMetadataManager {
     }
 
     /// Update observation for Regular sites (not search term)
-    /// if the title isEmpty we don't record because title can be overriden
+    /// if the title isEmpty we don't record because title can be overridden
     /// - Parameters:
     ///   - searchData: Tab Group Data
     ///   - title: Site title from webview can be empty for slow loading pages

@@ -299,7 +299,7 @@
 "DownloadsPanel.Share.Title" = "Deila";
 
 /* Text message in the settings table view */
-"Enter your password to connect" = "Sláðu inn lykilorð þitt til að tengjast";
+"Enter your password to connect" = "Settu inn lykilorðið þitt til að tengjast";
 
 /* Label for button to perform advanced actions on the error page */
 "ErrorPages.Advanced.Button" = "Nánar";
@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Ferill";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Nýr huliðsflipi";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nýr flipi";
 
@@ -1144,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Slóð (skipta út leitarskilyrði fyrir %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Loka á opnun utanaðkomandi forrita";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Eyða öllum gögnum vefsvæðis";
 
@@ -1399,6 +1405,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Þegar Firefox ræsir";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Þegar %@ er opnað";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "Þegar Firefox ræsir";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Bjóða uppá að opna afritaða hlekki";
 
@@ -1440,6 +1452,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Þegar ýtt er lengi á tengla";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Þegar ýtt er lengi á tengla";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Birta forskoðun tengla";

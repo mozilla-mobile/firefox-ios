@@ -8,6 +8,8 @@ import Storage
 import SwiftUI
 import UIKit
 
+import struct MozillaAppServices.CreditCard
+
 class CreditCardTableViewController: UIViewController, Themeable {
     // MARK: UX constants
     struct UX {
@@ -104,7 +106,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
     }
@@ -154,7 +156,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
                 ) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let headerView = CreditCardSectionHeader(windowUUID: windowUUID, textColor: theme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
@@ -178,7 +180,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell()
         }
 
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let row = CreditCardAutofillToggle(windowUUID: windowUUID,
                                            textColor: theme.colors.textPrimary.color,
                                            model: model)

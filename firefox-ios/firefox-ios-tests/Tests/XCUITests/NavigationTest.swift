@@ -290,7 +290,11 @@ class NavigationTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441499
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+        }
         if !iPad() {
             mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
         }
@@ -306,7 +310,11 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+        } else {
+            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+        }
         if !iPad() {
             mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
         }

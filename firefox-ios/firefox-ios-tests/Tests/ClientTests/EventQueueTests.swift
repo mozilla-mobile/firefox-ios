@@ -314,7 +314,7 @@ final class EventQueueTests: XCTestCase {
     // This tests a specific bug where enqueued actions potentially change the state of
     // a dependent event during processing (by moving it from .complete to .inProgress etc.)
     // This is generally not a supported scenario, however if it happens we should respect
-    // the original state of the events as they were when the enqueued action was peformed.
+    // the original state of the events as they were when the enqueued action was performed.
     func testChangingAnEventAsPartOfAnActionStillRemovesTheActionAfterPerformingIt() {
         let expectation = XCTestExpectation(description: "Action block cleaned up.")
         var actionsPerformed = 0

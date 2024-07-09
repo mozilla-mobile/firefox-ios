@@ -124,7 +124,7 @@ class SettingsCoordinator: BaseCoordinator,
                 let viewModel = WallpaperSettingsViewModel(
                     wallpaperManager: wallpaperManager,
                     tabManager: tabManager,
-                    theme: themeManager.currentTheme(for: windowUUID)
+                    theme: themeManager.getCurrentTheme(for: windowUUID)
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
                 wallpaperVC.settingsDelegate = self
@@ -237,9 +237,14 @@ class SettingsCoordinator: BaseCoordinator,
     // MARK: PrivacySettingsDelegate
 
     func pressedAddressAutofill() {
-        let viewModel = AddressAutofillSettingsViewModel(profile: profile)
-        let viewController = AddressAutofillSettingsViewController(addressAutofillViewModel: viewModel,
-                                                                   windowUUID: windowUUID)
+        let viewModel = AddressAutofillSettingsViewModel(
+            profile: profile,
+            windowUUID: windowUUID
+        )
+        let viewController = AddressAutofillSettingsViewController(
+            addressAutofillViewModel: viewModel,
+            windowUUID: windowUUID
+        )
         router.push(viewController)
         TelemetryWrapper.recordEvent(
             category: .action,

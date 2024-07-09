@@ -32,14 +32,24 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         switch action.actionType {
         case GeneralBrowserMiddlewareActionType.browserDidLoad:
-            let addressToolbarModel = loadInitialAddressToolbarState(state: state, windowUUID: action.windowUUID)
-            let navigationToolbarModel = loadInitialNavigationToolbarState(state: state, windowUUID: action.windowUUID)
+            guard let toolbarPosition = action.toolbarPosition else { return }
+
+            let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+            let addressToolbarModel = loadInitialAddressToolbarState(toolbarPosition: position)
+            let navigationToolbarModel = loadInitialNavigationToolbarState(toolbarPosition: position)
 
             let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                        navigationToolbarModel: navigationToolbarModel,
+                                       toolbarPosition: position,
                                        windowUUID: uuid,
                                        actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
+
+        case GeneralBrowserMiddlewareActionType.didScroll:
+            updateBorderPosition(action: action, state: state)
+
+        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
+            updateToolbarPosition(action: action, state: state)
 
         default:
             break
@@ -51,6 +61,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
+        case ToolbarMiddlewareActionType.urlDidChange:
+            updateAddressToolbarNavigationActions(action: action, state: state)
+
         default:
             break
         }
@@ -61,29 +74,24 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let uuid = action.windowUUID
         switch gestureType {
-        case .tap: handleToolbarButtonTapActions(actionType: buttonType, windowUUID: uuid)
+        case .tap: handleToolbarButtonTapActions(actionType: buttonType, buttonTapped: action.buttonTapped, windowUUID: uuid)
         case .longPress: handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
         }
     }
 
-    private func loadInitialAddressToolbarState(state: AppState, windowUUID: UUID) -> AddressToolbarModel {
-        let displayTopBorder = shouldDisplayAddressToolbarBorder(borderPosition: .top,
-                                                                 state: state,
-                                                                 windowUUID: windowUUID)
-        let displayBottomBorder = shouldDisplayAddressToolbarBorder(borderPosition: .bottom,
-                                                                    state: state,
-                                                                    windowUUID: windowUUID)
+    private func loadInitialAddressToolbarState(toolbarPosition: AddressToolbarPosition) -> AddressToolbarModel {
+        let borderPosition = getAddressBorderPosition(toolbarPosition: toolbarPosition)
 
-        return AddressToolbarModel(navigationActions: [ToolbarState.ActionState](),
+        return AddressToolbarModel(navigationActions: [ToolbarActionState](),
                                    pageActions: loadAddressToolbarPageElements(),
-                                   browserActions: [ToolbarState.ActionState](),
-                                   displayTopBorder: displayTopBorder,
-                                   displayBottomBorder: displayBottomBorder)
+                                   browserActions: loadAddressToolbarBrowserElements(),
+                                   borderPosition: borderPosition,
+                                   url: nil)
     }
 
-    private func loadAddressToolbarPageElements() -> [ToolbarState.ActionState] {
-        var pageActions = [ToolbarState.ActionState]()
-        pageActions.append(ToolbarState.ActionState(
+    private func loadAddressToolbarPageElements() -> [ToolbarActionState] {
+        var pageActions = [ToolbarActionState]()
+        pageActions.append(ToolbarActionState(
             actionType: .qrCode,
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
@@ -92,71 +100,75 @@ class ToolbarMiddleware: FeatureFlaggable {
         return pageActions
     }
 
-    private func loadInitialNavigationToolbarState(state: AppState, windowUUID: UUID) -> NavigationToolbarModel {
-        let actions = loadNavigationToolbarElements()
-        let displayBorder = shouldDisplayNavigationToolbarBorder(state: state, windowUUID: windowUUID)
-        return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
-    }
-
-    private func loadNavigationToolbarElements() -> [ToolbarState.ActionState] {
-        var elements = [ToolbarState.ActionState]()
-        elements.append(ToolbarState.ActionState(actionType: .back,
-                                                 iconName: StandardImageIdentifiers.Large.back,
-                                                 isEnabled: false,
-                                                 a11yLabel: .TabToolbarBackAccessibilityLabel,
-                                                 a11yId: AccessibilityIdentifiers.Toolbar.backButton))
-        elements.append(ToolbarState.ActionState(actionType: .forward,
-                                                 iconName: StandardImageIdentifiers.Large.forward,
-                                                 isEnabled: false,
-                                                 a11yLabel: .TabToolbarForwardAccessibilityLabel,
-                                                 a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
-        elements.append(ToolbarState.ActionState(actionType: .home,
-                                                 iconName: StandardImageIdentifiers.Large.home,
-                                                 isEnabled: true,
-                                                 a11yLabel: .TabToolbarHomeAccessibilityLabel,
-                                                 a11yId: AccessibilityIdentifiers.Toolbar.homeButton))
-        elements.append(ToolbarState.ActionState(actionType: .tabs,
-                                                 iconName: StandardImageIdentifiers.Large.tab,
-                                                 numberOfTabs: 1,
-                                                 isEnabled: true,
-                                                 a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
-                                                 a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
-        elements.append(ToolbarState.ActionState(actionType: .menu,
-                                                 iconName: StandardImageIdentifiers.Large.appMenu,
-                                                 isEnabled: true,
-                                                 a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
-                                                 a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+    private func loadAddressToolbarBrowserElements() -> [ToolbarActionState] {
+        var elements = [ToolbarActionState]()
+        elements.append(ToolbarActionState(actionType: .tabs,
+                                           iconName: StandardImageIdentifiers.Large.tab,
+                                           numberOfTabs: 1,
+                                           isEnabled: true,
+                                           a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
+        elements.append(ToolbarActionState(actionType: .menu,
+                                           iconName: StandardImageIdentifiers.Large.appMenu,
+                                           isEnabled: true,
+                                           a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
         return elements
     }
 
-    private func shouldDisplayAddressToolbarBorder(borderPosition: AddressToolbarBorderPosition,
-                                                   isPrivate: Bool = false,
-                                                   scrollY: CGFloat = 0,
-                                                   state: AppState,
-                                                   windowUUID: WindowUUID) -> Bool {
-        guard let browserState = state.screenState(BrowserViewControllerState.self,
-                                                   for: .browserViewController,
-                                                   window: windowUUID) else { return false }
-        let toolbarState = browserState.toolbarState
-        return manager.shouldDisplayAddressBorder(borderPosition: borderPosition,
-                                                  toolbarPosition: toolbarState.toolbarPosition,
-                                                  isPrivate: isPrivate,
-                                                  scrollY: scrollY)
+    private func loadInitialNavigationToolbarState(toolbarPosition: AddressToolbarPosition) -> NavigationToolbarModel {
+        let actions = loadNavigationToolbarElements()
+        let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarPosition)
+        return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
     }
 
-    private func shouldDisplayNavigationToolbarBorder(state: AppState, windowUUID: WindowUUID) -> Bool {
-        guard let browserState = state.screenState(BrowserViewControllerState.self,
-                                                   for: .browserViewController,
-                                                   window: windowUUID) else { return false }
-        let toolbarState = browserState.toolbarState
-        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarState.toolbarPosition)
+    private func loadNavigationToolbarElements() -> [ToolbarActionState] {
+        var elements = [ToolbarActionState]()
+        elements.append(ToolbarActionState(actionType: .back,
+                                           iconName: StandardImageIdentifiers.Large.back,
+                                           isEnabled: false,
+                                           a11yLabel: .TabToolbarBackAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.backButton))
+        elements.append(ToolbarActionState(actionType: .forward,
+                                           iconName: StandardImageIdentifiers.Large.forward,
+                                           isEnabled: false,
+                                           a11yLabel: .TabToolbarForwardAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
+        elements.append(ToolbarActionState(actionType: .home,
+                                           iconName: StandardImageIdentifiers.Large.home,
+                                           isEnabled: true,
+                                           a11yLabel: .TabToolbarHomeAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.homeButton))
+        elements.append(ToolbarActionState(actionType: .tabs,
+                                           iconName: StandardImageIdentifiers.Large.tab,
+                                           numberOfTabs: 1,
+                                           isEnabled: true,
+                                           a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
+        elements.append(ToolbarActionState(actionType: .menu,
+                                           iconName: StandardImageIdentifiers.Large.appMenu,
+                                           isEnabled: true,
+                                           a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+                                           a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+        return elements
     }
 
-    private func handleToolbarButtonTapActions(actionType: ToolbarState.ActionState.ActionType, windowUUID: WindowUUID) {
+    private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
+                                          isPrivate: Bool = false,
+                                          scrollY: CGFloat = 0) -> AddressToolbarBorderPosition? {
+        return manager.getAddressBorderPosition(for: toolbarPosition, isPrivate: isPrivate, scrollY: scrollY)
+    }
+
+    private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
+        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
+    }
+
+    private func handleToolbarButtonTapActions(actionType: ToolbarActionState.ActionType,
+                                               buttonTapped: UIButton?,
+                                               windowUUID: WindowUUID) {
         switch actionType {
         case .home:
-            let action = GeneralBrowserAction(navigateToHome: true,
-                                              windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
         case .qrCode:
@@ -164,16 +176,161 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
 
+        case .back:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.navigateBack)
+            store.dispatch(action)
+
+        case .forward:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.navigateForward)
+            store.dispatch(action)
+
+        case .tabs:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showTabTray)
+            store.dispatch(action)
+
+        case .trackingProtection:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
+            store.dispatch(action)
+
+        case .menu:
+            let action = GeneralBrowserAction(buttonTapped: buttonTapped,
+                                              windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showMenu)
+            store.dispatch(action)
+
         default:
             break
         }
     }
 
-    private func handleToolbarButtonLongPressActions(actionType: ToolbarState.ActionState.ActionType,
+    private func handleToolbarButtonLongPressActions(actionType: ToolbarActionState.ActionType,
                                                      windowUUID: WindowUUID) {
         switch actionType {
+        case .back, .forward:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showBackForwardList)
+            store.dispatch(action)
+        case .tabs:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showTabsLongPressActions)
+            store.dispatch(action)
         default:
             break
         }
+    }
+
+    private func updateBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
+        guard let scrollOffset = action.scrollOffset,
+              let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID)
+        else { return }
+
+        let addressToolbarState = toolbarState.addressToolbar
+        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: toolbarState.toolbarPosition,
+                                                             isPrivate: toolbarState.isPrivateMode,
+                                                             scrollY: scrollOffset.y)
+        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(
+            toolbarPosition: toolbarState.toolbarPosition)
+
+        let needsAddressToolbarUpdate = addressToolbarState.borderPosition != addressBorderPosition
+        let needsNavToolbarUpdate = toolbarState.navigationToolbar.displayBorder != displayNavToolbarBorder
+        guard needsAddressToolbarUpdate || needsNavToolbarUpdate else { return }
+
+        let addressToolbarModel = AddressToolbarModel(borderPosition: addressBorderPosition)
+        let navToolbarModel = NavigationToolbarModel(displayBorder: displayNavToolbarBorder)
+
+        let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                   navigationToolbarModel: navToolbarModel,
+                                   windowUUID: action.windowUUID,
+                                   actionType: ToolbarActionType.scrollOffsetChanged)
+        store.dispatch(action)
+    }
+
+    private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
+        guard let toolbarPosition = action.toolbarPosition,
+              let scrollOffset = action.scrollOffset,
+              let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID)
+        else { return }
+
+        let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+
+        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: position,
+                                                             isPrivate: toolbarState.isPrivateMode,
+                                                             scrollY: scrollOffset.y)
+        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
+        let addressToolbarModel = AddressToolbarModel(borderPosition: addressBorderPosition)
+        let navToolbarModel = NavigationToolbarModel(displayBorder: displayNavToolbarBorder)
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          toolbarPosition: position,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.toolbarPositionChanged)
+        store.dispatch(toolbarAction)
+    }
+
+    private func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition) -> AddressToolbarPosition {
+        switch position {
+        case .top: return .top
+        case .bottom: return .bottom
+        }
+    }
+
+    // MARK: Address Toolbar Actions
+
+    private func addressToolbarNavigationActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return actions }
+
+        if action.isShowingNavigationToolbar || action.url == nil {
+            // there are no navigation actions if on homepage or when nav toolbar is shown
+            return actions
+        } else if action.url != nil {
+            // back/forward when url exists and nav toolbar is not shown
+            let isBackButtonEnabled = action.canGoBack
+            let isForwardButtonEnabled = action.canGoForward
+            actions.append(ToolbarActionState(actionType: .back,
+                                              iconName: StandardImageIdentifiers.Large.back,
+                                              isEnabled: isBackButtonEnabled,
+                                              a11yLabel: .TabToolbarBackAccessibilityLabel,
+                                              a11yId: AccessibilityIdentifiers.Toolbar.backButton))
+            actions.append(ToolbarActionState(actionType: .forward,
+                                              iconName: StandardImageIdentifiers.Large.forward,
+                                              isEnabled: isForwardButtonEnabled,
+                                              a11yLabel: .TabToolbarForwardAccessibilityLabel,
+                                              a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
+        }
+        return actions
+    }
+
+    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let action = action as? ToolbarMiddlewareUrlChangeAction,
+              let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return }
+
+        let navigationActions = addressToolbarNavigationActions(action: action, state: state)
+        let addressToolbarModel = AddressToolbarModel(
+            navigationActions: navigationActions,
+            pageActions: toolbarState.addressToolbar.pageActions,
+            browserActions: toolbarState.addressToolbar.browserActions,
+            borderPosition: toolbarState.addressToolbar.borderPosition,
+            url: action.url)
+
+        let urlDidChangeAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                               url: action.url,
+                                               windowUUID: action.windowUUID,
+                                               actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(urlDidChangeAction)
     }
 }

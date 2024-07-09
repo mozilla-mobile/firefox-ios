@@ -102,8 +102,11 @@ class SettingTest: BaseTestCase {
         let reviewCell = app.cells["settingsViewController.rateFocus"]
         let safariApp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
 
-        app.tables.firstMatch.swipeUp()
-        waitForHittable(reviewCell)
+        var swipes = 3
+        while !reviewCell.isHittable && swipes > 0 {
+            app.swipeUp()
+            swipes = swipes - 1
+        }
         reviewCell.tap()
         waitForExistence(safariApp, timeout: 10)
         XCTAssert(safariApp.state == .runningForeground)
@@ -348,7 +351,7 @@ class SettingTest: BaseTestCase {
         waitForExistence(searchSuggestionsOverlay)
         XCTAssertEqual(urlTextField.value as? String, "mozilla")
     }
- 
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
     func testReEnableAutoComplete() {
         let urlTextField = app.urlTextField

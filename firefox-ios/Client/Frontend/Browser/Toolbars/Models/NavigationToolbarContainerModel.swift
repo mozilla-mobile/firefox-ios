@@ -5,7 +5,7 @@
 import Common
 import ToolbarKit
 
-struct NavigationToolbarContainerModel {
+struct NavigationToolbarContainerModel: Equatable {
     let actions: [ToolbarElement]
     let displayBorder: Bool
     let windowUUID: WindowUUID
@@ -19,17 +19,25 @@ struct NavigationToolbarContainerModel {
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,
                 a11yId: action.a11yId,
-                onSelected: {
+                onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         buttonTapped: button,
                                                          gestureType: .tap,
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }
+                }, onLongPress: action.canPerformLongPressAction ? {
+                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         gestureType: .longPress,
+                                                         windowUUID: windowUUID,
+                                                         actionType: ToolbarMiddlewareActionType.didTapButton)
+                    store.dispatch(action)
+                } : nil
             )
         }
         self.windowUUID = windowUUID

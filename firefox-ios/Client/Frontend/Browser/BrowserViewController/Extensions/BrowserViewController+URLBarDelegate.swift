@@ -8,6 +8,8 @@ import Glean
 import Common
 import ComponentLibrary
 
+import enum MozillaAppServices.VisitType
+
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
 }
@@ -32,7 +34,7 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 extension BrowserViewController: URLBarDelegate {
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayPanelType? = nil) {
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
 
         if isTabTrayRefactorEnabled {
             let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
@@ -259,7 +261,7 @@ extension BrowserViewController: URLBarDelegate {
         presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
-    func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
+    func locationActionsForURLBar() -> [AccessibleAction] {
         if UIPasteboard.general.hasStrings {
             return [pasteGoAction, pasteAction, copyAddressAction]
         } else {
@@ -304,7 +306,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
-        return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
+        return locationActionsForURLBar().map { $0.accessibilityCustomAction }
     }
 
     func urlBar(_ urlBar: URLBarView, didRestoreText text: String) {
@@ -314,7 +316,7 @@ extension BrowserViewController: URLBarDelegate {
             configureOverlayView()
         }
 
-        searchController?.searchQuery = text
+        searchController?.viewModel.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
         searchController?.searchTelemetry?.interactionType = .refined
         searchLoader?.setQueryWithoutAutocomplete(text)
@@ -330,7 +332,7 @@ extension BrowserViewController: URLBarDelegate {
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
             theme: self.currentTheme()
         )
-        searchController?.searchQuery = text
+        searchController?.viewModel.searchQuery = text
         searchController?.searchTelemetry?.searchQuery = text
         searchController?.searchTelemetry?.clearVisibleResults()
         searchLoader?.query = text
@@ -338,40 +340,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
-        guard let currentTab = tabManager.selectedTab else { return }
-
-        if let fixupURL = URIFixup.getURL(text) {
-            // The user entered a URL, so use it.
-            finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
-            return
-        }
-
-        // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        guard let possibleKeywordQuerySeparatorSpace = trimmedText.firstIndex(of: " ") else {
-            submitSearchText(text, forTab: currentTab)
-            return
-        }
-
-        let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
-        let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
-
-        profile.places.getBookmarkURLForKeyword(keyword: possibleKeyword).uponQueue(.main) { result in
-            if var urlString = result.successValue ?? "",
-               let escapedQuery = possibleQuery.addingPercentEncoding(
-                withAllowedCharacters: NSCharacterSet.urlQueryAllowed
-               ),
-               let range = urlString.range(of: "%s") {
-                urlString.replaceSubrange(range, with: escapedQuery)
-
-                if let url = URL(string: urlString, invalidCharacters: false) {
-                    self.finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-                    return
-                }
-            }
-
-            self.submitSearchText(text, forTab: currentTab)
-        }
+        didSubmitSearchText(text)
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {

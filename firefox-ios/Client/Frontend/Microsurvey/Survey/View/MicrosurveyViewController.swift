@@ -6,12 +6,14 @@ import Foundation
 import Common
 import ComponentLibrary
 import Redux
+import Shared
 
 final class MicrosurveyViewController: UIViewController,
                                  UITableViewDataSource,
                                  UITableViewDelegate,
                                  Themeable,
-                                 StoreSubscriber {
+                                 StoreSubscriber,
+                                 Notifiable {
     typealias SubscriberStateType = MicrosurveyState
 
     // MARK: Themable Variables
@@ -25,12 +27,13 @@ final class MicrosurveyViewController: UIViewController,
     private let windowUUID: WindowUUID
     private let model: MicrosurveyModel
     private var microsurveyState: MicrosurveyState
+    private var selectedOption: String?
 
     // MARK: UI Elements
     private struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let scrollStackSpacing: CGFloat = 22
-        static let logoSize = CGSize(width: 24, height: 24)
+        static let logoSize: CGFloat = 24
         static let borderWidth: CGFloat = 1
         static let cornerRadius: CGFloat = 8
         static let estimatedRowHeight: CGFloat = 44
@@ -40,19 +43,28 @@ final class MicrosurveyViewController: UIViewController,
             bottom: -16,
             trailing: -16
         )
+        static let contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+    }
+
+    private var logoSizeScaled: CGFloat {
+        return UIFontMetrics.default.scaledValue(for: UX.logoSize)
     }
 
     private lazy var headerView: UIStackView = .build { stack in
         stack.distribution = .fillProportionally
         stack.axis = .horizontal
-        stack.alignment = self.headerLabel.numberOfLines > 1 ? .top : .center
+        stack.alignment = .top
         stack.spacing = UX.headerStackSpacing
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoBall)
         imageView.contentMode = .scaleAspectFit
-        // TODO: FXIOS-9028: Add A11y strings
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityLabel = String(
+            format: .Microsurvey.Prompt.LogoImageA11yLabel,
+            AppName.shortName.rawValue
+        )
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo
     }
 
@@ -99,9 +111,14 @@ final class MicrosurveyViewController: UIViewController,
         button.addTarget(self, action: #selector(self.didTapPrivacyPolicy), for: .touchUpInside)
         button.setContentCompressionResistancePriority(.required, for: .vertical)
         button.accessibilityTraits.insert(.link)
+        button.accessibilityTraits.remove(.button)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var confirmationView: MicrosurveyConfirmationView = .build()
+
+    private var logoWidthConstraint: NSLayoutConstraint?
+    private var logoHeightConstraint: NSLayoutConstraint?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -117,7 +134,9 @@ final class MicrosurveyViewController: UIViewController,
         microsurveyState = MicrosurveyState(windowUUID: windowUUID)
         self.model = model
         super.init(nibName: nil, bundle: nil)
-        self.sheetPresentationController?.prefersGrabberVisible = true
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+
         subscribeToRedux()
         configureUI()
         setupLayout()
@@ -129,7 +148,7 @@ final class MicrosurveyViewController: UIViewController,
         if microsurveyState.shouldDismiss {
             coordinator?.dismissFlow()
         } else if microsurveyState.showPrivacy {
-            coordinator?.showPrivacy()
+            coordinator?.showPrivacy(with: model.utmContent)
         }
     }
 
@@ -160,6 +179,14 @@ final class MicrosurveyViewController: UIViewController,
         applyTheme()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        store.dispatch(
+            MicrosurveyAction(surveyId: model.id, windowUUID: windowUUID, actionType: MicrosurveyActionType.surveyDidAppear)
+        )
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
+    }
+
     deinit {
         unsubscribeFromRedux()
         tableView.removeFromSuperview()
@@ -176,7 +203,7 @@ final class MicrosurveyViewController: UIViewController,
             title: .Microsurvey.Survey.PrivacyPolicyLinkButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Survey.privacyPolicyLink,
             font: FXFontStyles.Regular.caption2.scaledFont(),
-            contentInsets: NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0),
+            contentInsets: UX.contentInsets,
             contentHorizontalAlignment: .center
         )
         privacyPolicyButton.configure(viewModel: privacyPolicyButtonViewModel)
@@ -197,10 +224,14 @@ final class MicrosurveyViewController: UIViewController,
 
         view.addSubviews(headerView, scrollView)
 
+        logoWidthConstraint = logoImage.widthAnchor.constraint(equalToConstant: logoSizeScaled)
+        logoHeightConstraint = logoImage.heightAnchor.constraint(equalToConstant: logoSizeScaled)
+        logoWidthConstraint?.isActive = true
+        logoHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate(
             [
-                logoImage.widthAnchor.constraint(equalToConstant: UX.logoSize.width),
-                logoImage.heightAnchor.constraint(equalToConstant: UX.logoSize.height),
+                headerLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor),
 
                 headerView.topAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -241,13 +272,21 @@ final class MicrosurveyViewController: UIViewController,
         )
     }
 
+    private func adjustIconSize() {
+        logoWidthConstraint?.constant = logoSizeScaled
+        logoHeightConstraint?.constant = logoSizeScaled
+    }
+
+    // MARK: ThemeApplicable
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer3
 
         headerLabel.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textSecondary
         tableView.backgroundColor = theme.colors.layer2
+        tableView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        tableView.separatorColor = theme.colors.borderPrimary
 
         containerView.backgroundColor = theme.colors.layer2
         containerView.layer.borderColor = theme.colors.borderPrimary.cgColor
@@ -255,6 +294,15 @@ final class MicrosurveyViewController: UIViewController,
 
         submitButton.applyTheme(theme: theme)
         privacyPolicyButton.applyTheme(theme: theme)
+    }
+
+    // MARK: Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustIconSize()
+        default: break
+        }
     }
 
     @objc
@@ -265,7 +313,12 @@ final class MicrosurveyViewController: UIViewController,
 
     private func sendTelemetry() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.submitSurvey)
+            MicrosurveyAction(
+                surveyId: model.id,
+                userSelection: selectedOption,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.submitSurvey
+            )
         )
     }
 
@@ -282,20 +335,35 @@ final class MicrosurveyViewController: UIViewController,
                 confirmationView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             ]
         )
-        confirmationView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        store.dispatch(
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.confirmationViewed
+            )
+        )
     }
 
     @objc
     private func didTapClose() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.closeSurvey)
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.closeSurvey
+            )
         )
     }
 
     @objc
     private func didTapPrivacyPolicy() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.tapPrivacyNotice)
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.tapPrivacyNotice
+            )
         )
     }
 
@@ -312,7 +380,8 @@ final class MicrosurveyViewController: UIViewController,
             return UITableViewCell()
         }
         cell.configure(model.surveyOptions[indexPath.row])
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.setA11yValue(for: indexPath.row, outOf: tableView.numberOfRows(inSection: .zero))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 
@@ -323,8 +392,8 @@ final class MicrosurveyViewController: UIViewController,
         ) as? MicrosurveyTableHeaderView else {
             return nil
         }
-        headerView.configure(model.surveyQuestion)
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.configure(model.surveyQuestion, icon: model.icon)
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 
@@ -333,6 +402,7 @@ final class MicrosurveyViewController: UIViewController,
         let selectedCell = tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell
         if selectedCell?.checked == false {
             (tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell)?.checked.toggle()
+            selectedOption = selectedCell?.title
         }
     }
 

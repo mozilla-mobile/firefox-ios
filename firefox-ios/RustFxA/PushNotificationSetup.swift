@@ -4,7 +4,9 @@
 
 import Common
 import Shared
-import MozillaAppServices
+
+import struct MozillaAppServices.DevicePushSubscription
+import struct MozillaAppServices.SubscriptionResponse
 
 open class PushNotificationSetup {
     /// Disables FxA push notifications for the user

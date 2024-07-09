@@ -8,6 +8,8 @@ import Storage
 import Shared
 import SiteImageView
 
+import enum MozillaAppServices.VisitType
+
 protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }

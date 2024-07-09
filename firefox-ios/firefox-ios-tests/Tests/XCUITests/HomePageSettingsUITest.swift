@@ -57,8 +57,8 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["TopSitesSettings"].staticTexts["On"].exists)
         let jumpBackIn = app.tables.cells.switches["Jump Back In"].value
         XCTAssertEqual("1", jumpBackIn as? String)
-        let recentlySaved = app.tables.cells.switches["Recently Saved"].value
-        XCTAssertEqual("1", recentlySaved as? String)
+        let bookmarks = app.tables.cells.switches["Bookmarks"].value
+        XCTAssertEqual("1", bookmarks as? String)
         // FXIOS-8107: Commented out as history highlights has been disabled to fix app hangs / slowness
         // Reloads for notification
         // let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
@@ -104,7 +104,17 @@ class HomePageSettingsUITests: BaseTestCase {
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
         app.textFields["HomeAsCustomURLTextField"].tap()
-        app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
+        if #unavailable(iOS 16) {
+            sleep(2)
+        }
+        let textField = app.textFields["HomeAsCustomURLTextField"]
+        textField.press(forDuration: 3)
+        let pasteOption = app.menuItems["Paste"]
+        var nrOfTaps = 3
+        while !pasteOption.exists && nrOfTaps > 0 {
+            textField.press(forDuration: 3)
+            nrOfTaps -= 1
+        }
         mozWaitForElementToExist(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
@@ -124,6 +134,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
         mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
 
@@ -147,6 +158,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
 
         // Workaround needed after Xcode 11.3 update Issue 5937
@@ -260,7 +272,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // on iPhone we have the search button instead when we're on a new tab page
         navigator.performAction(Action.ClickSearchButton)
         XCTAssertFalse(
-            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists
+            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks].exists
         )
         mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
         navigator.performAction(Action.CloseURLBarOpen)
@@ -272,9 +284,9 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
             navigator.performAction(Action.CloseURLBarOpen)
         }
-        checkRecentlySaved()
+        checkBookmarks()
         app.scrollViews
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell]
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
             .staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -286,7 +298,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(LibraryPanel_ReadingList)
         navigator.performAction(Action.CloseReadingListPanel)
         navigator.goto(NewTabScreen)
-        checkRecentlySavedUpdated()
+        checkBookmarksUpdated()
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923

@@ -65,7 +65,7 @@ workflows:
             mkdir DerivedData
 
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+            xcodebuild "-project" "/Users/vagrant/git/firefox-ios/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.5" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
 
             ls /Users/vagrant/git/DerivedData/Build/Products
             ls /Users/vagrant/git/DerivedData
@@ -73,10 +73,10 @@ workflows:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 600
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
         - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.4-arm64.xctestrun"
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator17.5-arm64.xctestrun"
         - maximum_test_repetitions: 2
     - save-spm-cache@1:
         is_always_run: true
@@ -106,7 +106,9 @@ workflows:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
+        - pipeline_intermediate_files: |-
+            $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
+            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
@@ -213,11 +215,11 @@ workflows:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         timeout: 1200
         inputs:
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData"
             "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" 
             "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator17.4-arm64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator17.5-arm64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -312,7 +314,7 @@ workflows:
                         BUILD_SAMPLE_BROWSER_IOS="true"
                         ;;
                     BrowserKit*|taskcluster*|test-fixtures*)
-                        # Explicity directory changes - build all applications
+                        # Explicitly directory changes - build all applications
                         BUILD_FIREFOX_IOS="true"
                         BUILD_FOCUS_IOS="true"
                         ;;
@@ -355,9 +357,8 @@ workflows:
 
   firefox_pull_and_unzip_dependencies:
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+    - pull-intermediate-files@1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: build_applications.firefox_configure_build
@@ -367,14 +368,13 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
-
-            derived_data=${BITRISE_ARTIFACT_PATHS##*|}
-            echo "$derived_data"
+            echo "$DERIVED_DATA_DIR"
 
             echo "-- unzip -- "
-            exec unzip "$derived_data"
+            exec unzip "$DERIVED_DATA_DIR"
 
+            echo "show dir"
+            ls
   send_slack_notification:
     steps:
     - slack@3.1:
@@ -751,7 +751,7 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
     - deploy-to-bitrise-io@2.2: {}
     - cache-push@2.4: {}
     - slack@3.1:
@@ -1226,7 +1226,7 @@ workflows:
         inputs:
         - project_path: firefox-ios/Client.xcodeproj
         - scheme: Fennec
-        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.4
+        - destination: platform=iOS Simulator,name=iPhone 15,OS=17.5
         - test_plan: PerformanceTestPlan   
     - script@1.1:
         is_always_run: true
@@ -1608,14 +1608,14 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             #xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Focus" -configuration "FocusDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.5" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Build for Testing Klar
         inputs:
         - content: |
             set -euxo pipefail
             echo "-- build-for-testing --"
-            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.4" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/focus-ios/Blockzilla.xcodeproj" "-scheme" "Klar" -configuration "KlarDebug" "CODE_SIGNING_ALLOWED=NO" "-destination" "platform=iOS Simulator,name=iPhone 15,OS=17.5" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -1638,6 +1638,8 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
+        - pipeline_intermediate_files: |-
+            ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -1681,7 +1683,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.4-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.5" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_SmokeTest_iphonesimulator17.5-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -1712,7 +1714,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.4-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.5" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Klar_UnitTests_iphonesimulator17.5-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -1740,7 +1742,7 @@ workflows:
             mv ./Users/vagrant/git/* .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.4" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.4-arm64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 15,OS=17.5" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Focus_UnitTests_iphonesimulator17.5-arm64.xctestrun"
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
@@ -1769,10 +1771,9 @@ workflows:
         title: ContentBlockerGen
 
   focus-pull-and-unzip-dependencies:
-    description: Pulls and unzip the dependencis from previous stage 
+    description: Pulls and unzip the dependencies from previous stage 
     steps:
-    - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
-        title: Pull artifacts
+    - pull-intermediate-files@1:
         inputs:
         - verbose: true
         - artifact_sources: build_applications.focus_configure_build
@@ -1781,9 +1782,9 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-            echo "$BITRISE_ARTIFACT_PATHS"
+            echo "$DERIVED_DATA_DIR"
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "${DERIVED_DATA_DIR}"
             echo "show dir"
             ls
 
@@ -2123,17 +2124,17 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '128.0'
+    BITRISE_RELEASE_VERSION: '130.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '128.0'
+    BITRISE_BETA_VERSION: '130.0'
 
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
-- push_branch: release/v128
+- push_branch: release/v130
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
   pipeline: pipeline_build_and_test
@@ -2144,6 +2145,6 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-15.3.x
+    stack: osx-xcode-15.4.x
     machine_type_id: g2-m1.8core
 

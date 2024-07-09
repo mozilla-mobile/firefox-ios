@@ -920,7 +920,6 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    @objc
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
             if let scriptMessageHandlerNames = helper.scriptMessageHandlerNames(),

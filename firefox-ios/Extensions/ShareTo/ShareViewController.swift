@@ -8,6 +8,9 @@ import Storage
 import Account
 import Common
 
+import class MozillaAppServices.Viaduct
+import enum MozillaAppServices.BookmarkRoots
+
 extension UIStackView {
     func addBackground(color: UIColor) {
         let subView = UIView(frame: bounds)

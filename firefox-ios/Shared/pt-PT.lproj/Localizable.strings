@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Histórico";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Novo separador privado";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Novo separador";
 
@@ -1144,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Substitua a pesquisa com %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Bloquear abertura de aplicações externas";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Limpar todos os dados de websites";
 
@@ -1399,6 +1405,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Ao abrir o Firefox";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Ao abrir %@";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "Ao abrir o Firefox";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Oferecer para abrir ligações copiadas";
 
@@ -1440,6 +1452,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Quando pressionar algum tempo nas ligações";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Quando pressionar algum tempo nas ligações";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Mostrar pré-visualizações de ligações";

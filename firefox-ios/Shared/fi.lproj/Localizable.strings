@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Historia";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Uusi yksityinen välilehti";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Uusi välilehti";
 
@@ -1144,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Korvaa kysely merkeillä %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Estä ulkoisten sovellusten avaaminen";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Poista kaikki sivustojen tiedot";
 
@@ -1399,6 +1405,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Kun avaat Firefoxin";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Avattaessa %@";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "Kun avaat Firefoxin";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Tarjoa kopioitujen linkkien avaamista";
 
@@ -1440,6 +1452,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Kun pitkään painat linkkejä";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Kun pitkään painat linkkejä";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Näytä linkkien esikatselut";

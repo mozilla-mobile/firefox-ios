@@ -14,7 +14,17 @@ import Shared
 import Storage
 import Sync
 import AuthenticationServices
-import MozillaAppServices
+
+import class MozillaAppServices.MZKeychainWrapper
+import enum MozillaAppServices.Level
+import enum MozillaAppServices.SyncReason
+import enum MozillaAppServices.VisitType
+import func MozillaAppServices.setLogger
+import func MozillaAppServices.setMaxLevel
+import struct MozillaAppServices.HistoryMigrationResult
+import struct MozillaAppServices.SyncParams
+import struct MozillaAppServices.SyncResult
+import struct MozillaAppServices.VisitObservation
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
@@ -82,7 +92,7 @@ protocol Profile: AnyObject {
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
     var logins: RustLogins { get }
-    var firefoxSuggest: RustFirefoxSuggestActor? { get }
+    var firefoxSuggest: RustFirefoxSuggestProtocol? { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
 
@@ -615,7 +625,7 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath)
     }()
 
-    lazy var firefoxSuggest: RustFirefoxSuggestActor? = {
+    lazy var firefoxSuggest: RustFirefoxSuggestProtocol? = {
         do {
             let cacheFileURL = try FileManager.default.url(
                 for: .cachesDirectory,

@@ -7,6 +7,8 @@ import Shared
 import UIKit
 import Storage
 
+import enum MozillaAppServices.FrecencyThresholdOption
+
 /// A provider for frecency and pinned top sites, used for the home page and widgets
 protocol TopSitesProvider {
     /// Get top sites from frecency and pinned tiles

@@ -8,6 +8,8 @@ import Shared
 import Storage
 import SwiftUI
 
+import struct MozillaAppServices.CreditCard
+
 class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     var viewModel: CreditCardSettingsViewModel
     var themeObserver: NSObjectProtocol?
@@ -144,7 +146,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {
@@ -192,7 +194,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         guard status != .none else { return }
         SimpleToast().showAlertWithText(status.message,
                                         bottomContainer: view,
-                                        theme: self.themeManager.currentTheme(for: self.windowUUID))
+                                        theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
     }
 
     @objc

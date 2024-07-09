@@ -151,6 +151,7 @@ class MockSurveyMessageDataProtocol: MessageDataProtocol {
     var buttonLabel: String? = "button label test"
     var experiment: String?
     var actionParams: [String: String] = [:]
+    var microsurveyConfig: MicrosurveyConfig?
 
     init(surface: MessageSurfaceId = .survey) {
         self.surface = surface

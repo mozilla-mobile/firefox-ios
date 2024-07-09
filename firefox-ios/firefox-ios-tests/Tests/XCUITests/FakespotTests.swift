@@ -255,11 +255,11 @@ class FakespotTests: BaseTestCase {
         if app.staticTexts["How reliable are these reviews?"].exists {
             XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReliabilityCard.title].firstMatch.label,
                            "How reliable are these reviews?")
-            XCTAssertTrue(app.staticTexts["Adjusted rating"].exists)
+            mozWaitForElementToExist(app.staticTexts["Adjusted rating"])
             validateHighlightsSection()
         } else {
-            XCTAssertTrue(app.staticTexts["No info about these reviews yet"].exists)
-            XCTAssertTrue(app.buttons["Check Review Quality"].exists)
+            mozWaitForElementToExist(app.staticTexts["No info about these reviews yet"])
+            mozWaitForElementToExist(app.buttons["Check Review Quality"])
         }
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
@@ -328,13 +328,13 @@ class FakespotTests: BaseTestCase {
         let optInText4 = "Using the power of Fakespot by Mozilla, we help you avoid biased and inauthentic reviews."
         let optInText5 = "Our AI model is always improving to protect you as you shop."
         let secondParagraph = optInText4 + " " + optInText5
-        let discalimerText = "By selecting “Yes, Try It” you agree to these items:"
+        let disclaimerText = "By selecting “Yes, Try It” you agree to these items:"
         // Validate screen layout
         mozWaitForElementToExist(app.staticTexts[optInCard.headerTitle])
         XCTAssertEqual(optInQueryStaticText[optInCard.headerTitle].label, "Try our trusted guide to product reviews")
         XCTAssertTrue(optInQueryStaticText.elementContainingText(firstParagraph).exists)
         XCTAssertTrue(optInQueryStaticText.elementContainingText(secondParagraph).exists)
-        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, discalimerText)
+        XCTAssertEqual(optInQueryStaticText[optInCard.disclaimerText].label, disclaimerText)
         XCTAssertEqual(optInQueryButton[optInCard.learnMoreButton].label, "Learn more")
         XCTAssertEqual(optInQueryButton[optInCard.mainButton].label, "Yes, Try It")
         XCTAssertEqual(optInQueryButton[optInCard.secondaryButton].label, "Not now")
@@ -405,6 +405,9 @@ class FakespotTests: BaseTestCase {
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
         app.swipeDown()
+        if app.buttons["DONE"].exists {
+            app.buttons["DONE"].tap()
+        }
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
         if !app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].exists {
@@ -449,7 +452,7 @@ class FakespotTests: BaseTestCase {
         if !app.keyboards.element.isHittable {
             searchAmazon.tap()
         }
-        searchAmazon.typeText("Shoe")
+        searchAmazon.typeText("can opener")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
         while website.links.elementContainingText("Sorry! Something went wrong on our end.").exists {

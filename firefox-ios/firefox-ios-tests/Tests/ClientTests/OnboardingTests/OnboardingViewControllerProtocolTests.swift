@@ -64,7 +64,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
         XCTAssertEqual(result.viewModel.name, cards.sync.rawValue)
     }
 
-    func testProtocol_getsNoViewContoller_afterLastCard() {
+    func testProtocol_getsNoViewController_afterLastCard() {
         let subject = createSubject()
 
         let result = subject.getNextOnboardingCard(
@@ -77,7 +77,7 @@ class OnboardingViewControllerProtocolTests: XCTestCase {
     }
 
     // MARK: - Test `getNextOnboardingCard` backwards
-    func testProtocol_getsNoViewContoller_beforeFirstCard() {
+    func testProtocol_getsNoViewController_beforeFirstCard() {
         let subject = createSubject()
 
         let result = subject.getNextOnboardingCard(

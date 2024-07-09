@@ -57,6 +57,7 @@ public struct AccessibilityIdentifiers {
 
         struct AddressToolbar {
             static let clear = "AddressToolbar.clear"
+            static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
         }
@@ -87,10 +88,11 @@ public struct AccessibilityIdentifiers {
             static let logoID = "FxHomeLogoID"
             static let privateModeToggleButton = "FirefoxHomepage.OtherButtons.PrivateModeToggle"
             static let customizeHome = "FxHomeCustomizeHomeSettingButton"
+            static let closeButton = "FirefoxHomepage.closeButton"
         }
 
         struct MoreButtons {
-            static let recentlySaved = "recentlySavedSectionMoreButton"
+            static let bookmarks = "bookmarksSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
             static let historyHighlights = "historyHighlightsSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
@@ -98,7 +100,7 @@ public struct AccessibilityIdentifiers {
 
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
-            static let recentlySaved = "recentlySavedTitle"
+            static let bookmarks = "bookmarksTitle"
             static let historyHighlights = "historyHightlightsTitle"
             static let pocket = "pocketTitle"
             static let topSites = "topSitesTitle"
@@ -121,8 +123,8 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "JumpBackInCell"
         }
 
-        struct RecentlySaved {
-            static let itemCell = "RecentlySavedCell"
+        struct Bookmarks {
+            static let itemCell = "BookmarksCell"
         }
 
         struct SyncedTab {
@@ -141,8 +143,15 @@ public struct AccessibilityIdentifiers {
         public static let back = "Back"
     }
 
+    struct SaveCardPrompt {
+        struct Prompt {
+            static let closeButton = "a11yCloseButton"
+        }
+    }
+
     struct Microsurvey {
         struct Prompt {
+            static let firefoxLogo = "Microsurvey.Prompt.FirefoxLogo"
             static let closeButton = "Microsurvey.Prompt.CloseButton"
             static let takeSurveyButton = "Microsurvey.Prompt.TakeSurveyButton"
         }
@@ -339,6 +348,7 @@ public struct AccessibilityIdentifiers {
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
+        static let learnMoreButton = "learnMoreButton"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -395,6 +405,7 @@ public struct AccessibilityIdentifiers {
         static let onboarding = "onboarding."
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
+        static let bottomSheetCloseButton = "Onboarding.bottomSheetCloseButton"
 
         struct Wallpaper {
             static let card = "wallpaperCard"
@@ -515,6 +526,7 @@ public struct AccessibilityIdentifiers {
             static let title = "ClearPrivateData"
             static let websiteDataSection = "WebsiteData"
             static let clearPrivateDataSection = "ClearPrivateData"
+            static let clearAllWebsiteData = "ClearAllWebsiteData"
         }
 
         struct Notifications {
@@ -559,10 +571,6 @@ public struct AccessibilityIdentifiers {
 
         struct ShowLink {
             static let title = "showLinkPreviews"
-        }
-
-        struct ClosePrivateTabs {
-            static let title = "settings.closePrivateTabs"
         }
 
         struct SearchBar {
@@ -628,6 +636,7 @@ public struct AccessibilityIdentifiers {
             static let passwordField = "passwordField"
             static let websiteField = "websiteField"
             static let onboardingContinue = "onboardingContinue"
+            static let onboardingLearnMore = "Passwords.onboardingLearnMore"
             static let addCredentialButton = "addCredentialButton"
             static let editButton = "editButton"
         }
@@ -677,9 +686,9 @@ public struct AccessibilityIdentifiers {
     }
 
     struct FindInPage {
-        static let findInPageCloseButton = "FindInPage.closeButton"
-        static let findNextButton = "FindInPage.find_next"
-        static let findPreviousButton = "FindInPage.find_previous"
+        static let findInPageCloseButton = "find.doneButton"
+        static let findNextButton = "find.nextButton"
+        static let findPreviousButton = "find.previousButton"
     }
 
     struct RememberCreditCard {
@@ -691,6 +700,9 @@ public struct AccessibilityIdentifiers {
 
     enum Autofill {
         static let footerPrimaryAction = "Autofill.footerPrimaryAction"
+        static let addressCloseButton = "Autofill.addressCloseButton"
+        static let creditCardCloseButton = "Autofill.creditCardCloseButton"
+        static let loginCloseButton = "Autofill.loginCloseButton"
     }
 }
 // swiftlint:enable line_length

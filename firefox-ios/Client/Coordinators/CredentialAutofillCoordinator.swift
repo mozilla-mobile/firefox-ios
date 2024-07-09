@@ -9,6 +9,8 @@ import Shared
 import WebKit
 import ComponentLibrary
 
+import struct MozillaAppServices.CreditCard
+
 class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Properties
 
@@ -38,7 +40,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     // MARK: - Methods
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -103,7 +105,9 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             }
         }
 
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(
@@ -119,9 +123,10 @@ class CredentialAutofillCoordinator: BaseCoordinator {
     }
 
     @MainActor
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let viewModel = LoginListViewModel(
             tabURL: tabURL,
+            field: field,
             loginStorage: profile.logins,
             logger: logger,
             onLoginCellTap: { [weak self] login in
@@ -175,7 +180,9 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             )
         }
 
-        var bottomSheetViewModel = BottomSheetViewModel(closeButtonA11yLabel: .CloseButtonTitle)
+        var bottomSheetViewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: .CloseButtonTitle,
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton)
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(

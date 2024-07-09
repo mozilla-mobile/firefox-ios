@@ -85,7 +85,6 @@ class TabLocationView: UIView, FeatureFlaggable {
         urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
-        urlTextField.font = UIConstants.DefaultChromeFont
         urlTextField.backgroundColor = .clear
         urlTextField.accessibilityLabel = .TabLocationAddressBarAccessibilityLabel
         urlTextField.font = UIFont.preferredFont(forTextStyle: .body)
@@ -420,7 +419,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 }
 

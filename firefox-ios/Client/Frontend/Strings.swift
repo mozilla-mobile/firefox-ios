@@ -266,6 +266,299 @@ extension String {
                 tableName: "Settings",
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
+            public static let SaveAddressesToFirefox = MZLocalizedString(
+                key: "", // Addresses.Settings.SaveToFirefox.Title.v129
+                tableName: "Settings",
+                value: "Save Addresses to %@",
+                comment: "Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app.")
+            public static let SecureSaveInfo = MZLocalizedString(
+                key: "", // Addresses.Settings.SecureSaveInfo.Description.v129
+                tableName: "Settings",
+                value: "Securely save your information to get quick access to it later.",
+                comment: "Description text for the content unavailable view informing users they can create or add new addresses.")
+            public static let ListItemA11y = MZLocalizedString(
+                key: "", // Addresses.Settings.ListItemA11y.v129
+                tableName: "Settings",
+                value: "Address for %@",
+                comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
+            public struct Edit {
+                public static let AddressRemovedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressRemovedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Removed",
+                    comment: "Toast message confirming that an address has been successfully removed."
+                )
+                public static let AddressSavedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSavedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Saved",
+                    comment: "Toast message confirming that an address has been successfully saved."
+                )
+                public static let AddressSaveError = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSaveError.v129",
+                    tableName: "EditAddress",
+                    value: "Address Couldn’t Be Saved",
+                    comment: "Toast message indicating an error occurred while trying to save an address."
+                )
+                public static let AddressSaveRetrySuggestion = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSaveRetrySuggestion.v129",
+                    tableName: "EditAddress",
+                    value: "Try again",
+                    comment: "Suggestion to try again after an error occurred while trying to save an address."
+                )
+                public static let AddressUpdatedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Information Updated",
+                    comment: "Toast message confirming that an address has been successfully updated."
+                )
+                public static let RemoveAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.Title.v129",
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for the alert indicating the action to remove an address."
+                )
+                public static let CancelButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.CancelButton.v129",
+                    tableName: "EditAddress",
+                    value: "Cancel",
+                    comment: "Title for the cancel button in the remove address alert."
+                )
+                public static let RemoveButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.RemoveButton.v129",
+                    tableName: "EditAddress",
+                    value: "Remove",
+                    comment: "Title for the remove button in the remove address alert."
+                )
+                public static let RemoveAddressMessage = MZLocalizedString(
+                    key: "Addresses.EditAddress.Alert.Message.v129",
+                    tableName: "EditAddress",
+                    value: "The address will be removed from all of your synced devices.",
+                    comment: "Message explaining the consequences of removing an address from all synced devices."
+                )
+                public static let RemoveAddressButtonTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.RemoveAddressButtonTitle.v129",
+                    tableName: "EditAddress",
+                    value: "Remove Address",
+                    comment: "Title for button that offers the user the option to remove an address."
+                )
+                public static let AutofillAddAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddAddressTitle.v129",
+                    tableName: "EditAddress",
+                    value: "Add address",
+                    comment: "Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information."
+                )
+                public static let AutofillEditStreetAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillEditStreetAddressTitle.v129",
+                    tableName: "EditAddress",
+                    value: "Street Address",
+                    comment: "Title for the input field where users can enter their street address. This is used within the settings for autofill, allowing users to provide their street address for accurate form autofilling."
+                )
+                public static let AutofillEditAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillEditAddressTitle.v129",
+                    tableName: "EditAddress",
+                    value: "Edit address",
+                    comment: "Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling."
+                )
+                public static let AutofillViewAddressTitle = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillViewAddressTitle.v129",
+                    tableName: "EditAddress",
+                    value: "View address",
+                    comment: "Title for the option allowing users to view an existing saved address. This is used within the settings for autofill, enabling users to see their address details for accurate form autofilling."
+                )
+                public static let AutofillAddressName = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressName.v129",
+                    tableName: "EditAddress",
+                    value: "Name",
+                    comment: "Label for the field where the user inputs their full name as part of an address form. Essential for personalized form submissions and ensuring information accuracy in autofilled forms."
+                )
+                public static let AutofillAddressOrganization = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressOrganization.v129",
+                    tableName: "EditAddress",
+                    value: "Organization",
+                    comment: "Label for the input field designated for the organization's name related to the address. Helps in distinguishing addresses used for business or personal purposes in autofill settings."
+                )
+                public static let AutofillAddressNeighborhood = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressNeighborhood.v129",
+                    tableName: "EditAddress",
+                    value: "Neighborhood",
+                    comment: "Label for the field where users can input the name of their neighborhood. This detail adds precision to addresses, especially in densely populated areas, improving the accuracy of autofill."
+                )
+                public static let AutofillAddressVillageTownship = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressVillageTownship.v129",
+                    tableName: "EditAddress",
+                    value: "Village or Township",
+                    comment: "Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details."
+                )
+                public static let AutofillAddressIsland = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressIsland.v129",
+                    tableName: "EditAddress",
+                    value: "Island",
+                    comment: "Label for the field where users specify the name of an island, if applicable. Important for addresses in archipelagic regions, aiding in precise location identification during autofill."
+                )
+                public static let AutofillAddressTownland = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressTownland.v129",
+                    tableName: "EditAddress",
+                    value: "Townland",
+                    comment: "Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component."
+                )
+                public static let AutofillAddressCity = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressCity.v129",
+                    tableName: "EditAddress",
+                    value: "City",
+                    comment: "Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings."
+                )
+                public static let AutofillAddressDistrict = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressDistrict.v129",
+                    tableName: "EditAddress",
+                    value: "District",
+                    comment: "Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill."
+                )
+                public static let AutofillAddressPostTown = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressPostTown.v129",
+                    tableName: "EditAddress",
+                    value: "Post town",
+                    comment: "Label for the post town field, used primarily in the UK and some other regions for mail sorting. Essential for users in applicable areas to specify for correct mail delivery through autofill."
+                )
+                public static let AutofillAddressSuburb = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressSuburb.v129",
+                    tableName: "EditAddress",
+                    value: "Suburb",
+                    comment: "Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality."
+                )
+                public static let AutofillAddressProvince = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressProvince.v129",
+                    tableName: "EditAddress",
+                    value: "Province",
+                    comment: "Label for the province field, required in countries where provinces are a primary administrative division. Helps in pinpointing the user's location more accurately for autofill purposes."
+                )
+                public static let AutofillAddressState = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressState.v129",
+                    tableName: "EditAddress",
+                    value: "State",
+                    comment: "Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill."
+                )
+                public static let AutofillAddressCounty = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressCounty.v129",
+                    tableName: "EditAddress",
+                    value: "County",
+                    comment: "Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information."
+                )
+                public static let AutofillAddressParish = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressParish.v129",
+                    tableName: "EditAddress",
+                    value: "Parish",
+                    comment: "Label for the parish field, significant in places where parishes are used for local administration and addressing. Ensures users can specify parish details for better autofill accuracy."
+                )
+                public static let AutofillAddressPrefecture = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressPrefecture.v129",
+                    tableName: "EditAddress",
+                    value: "Prefecture",
+                    comment: "Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill."
+                )
+                public static let AutofillAddressArea = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressArea.v129",
+                    tableName: "EditAddress",
+                    value: "Area",
+                    comment: "Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses."
+                )
+                public static let AutofillAddressDoSi = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressDoSi.v129",
+                    tableName: "EditAddress",
+                    value: "Do/Si",
+                    comment: "Label for the Do/Si field, pertinent to addresses in South Korea. Do/Si refers to provincial level divisions, and specifying this enhances address accuracy in autofill settings."
+                )
+                public static let AutofillAddressDepartment = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressDepartment.v129",
+                    tableName: "EditAddress",
+                    value: "Department",
+                    comment: "Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled."
+                )
+                public static let AutofillAddressEmirate = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressEmirate.v129",
+                    tableName: "EditAddress",
+                    value: "Emirate",
+                    comment: "Label for the emirate field, essential for addresses in the United Arab Emirates. Including emirate details ensures the autofill feature accurately represents user addresses."
+                )
+                public static let AutofillAddressOblast = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressOblast.v129",
+                    tableName: "EditAddress",
+                    value: "Oblast",
+                    comment: "Label for the oblast field, relevant for addresses in countries like Russia and Ukraine. Oblasts are a significant administrative division, and their specification aids in autofill accuracy."
+                )
+                public static let AutofillAddressPin = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressPin.v129",
+                    tableName: "EditAddress",
+                    value: "Pin",
+                    comment: "Label for the PIN (Postal Index Number) field, used in India. It's a code representing a specific area, crucial for accurate mail delivery and autofill functionality."
+                )
+                public static let AutofillAddressPostalCode = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressPostalCode.v129",
+                    tableName: "EditAddress",
+                    value: "Postal Code",
+                    comment: "Label for the postal code field, universally used in address forms to specify the area code for mail sorting. Essential for autofill to ensure mail and services are accurately routed."
+                )
+                public static let AutofillAddressZip = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressZip.v129",
+                    tableName: "EditAddress",
+                    value: "ZIP Code",
+                    comment: "Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision."
+                )
+                public static let AutofillAddressEircode = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressEircode.v129",
+                    tableName: "EditAddress",
+                    value: "Eircode",
+                    comment: "Label for the Eircode field, specific to Ireland. It's a unique postal code system that helps in precise location identification, enhancing the effectiveness of autofill."
+                )
+                public static let AutofillAddressCountryRegion = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressCountryRegion.v129",
+                    tableName: "EditAddress",
+                    value: "Country or Region",
+                    comment: "Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders."
+                )
+                public static let AutofillAddressCountryOnly = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressCountryOnly.v129",
+                    tableName: "EditAddress",
+                    value: "Country",
+                    comment: "Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary."
+                )
+                public static let AutofillAddressTel = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressTel.v129",
+                    tableName: "EditAddress",
+                    value: "Phone",
+                    comment: "Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly."
+                )
+                public static let AutofillAddressEmail = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillAddressEmail.v129",
+                    tableName: "EditAddress",
+                    value: "Email",
+                    comment: "Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately."
+                )
+                public static let AutofillCancelButton = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillCancelButton.v129",
+                    tableName: "EditAddress",
+                    value: "Cancel",
+                    comment: "Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications."
+                )
+                public static let AutofillSaveButton = MZLocalizedString(
+                    key: "Addresses.EditAddress.AutofillSaveButton.v129",
+                    tableName: "EditAddress",
+                    value: "Save",
+                    comment: "Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly."
+                )
+                public static let CloseNavBarButtonLabel = MZLocalizedString(
+                    key: "Addresses.EditAddress.CloseNavBarButtonLabel.v129",
+                    tableName: "EditAddress",
+                    value: "Close",
+                    comment: "Button label for closing the view where user can view their address info."
+                )
+                public static let EditNavBarButtonLabel = MZLocalizedString(
+                    key: "Addresses.EditAddress.EditNavBarButtonLabel.v129",
+                    tableName: "EditAddress",
+                    value: "Edit",
+                    comment: "Button label for editing the address details shown in the form."
+                )
+            }
         }
         public struct BottomSheet {
             public static let UseASavedAddress = MZLocalizedString(
@@ -1054,6 +1347,11 @@ extension String {
 extension String {
     public struct Microsurvey {
         public struct Prompt {
+            public static let LogoImageA11yLabel = MZLocalizedString(
+                key: "Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129",
+                tableName: "Microsurvey",
+                value: "%@ Logo",
+                comment: "On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name.")
             public static let TitleLabel = MZLocalizedString(
                 key: "Microsurvey.Prompt.TitleLabel.v127",
                 tableName: "Microsurvey",
@@ -1072,16 +1370,36 @@ extension String {
         }
 
         public struct Survey {
-            public static let HeaderLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.HeaderLabel.v127",
+            public static let LogoImageA11yLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129",
                 tableName: "Microsurvey",
-                value: "Complete this survey",
+                value: "%@ Logo",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name.")
+            public static let HeaderLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.HeaderLabel.v129",
+                tableName: "Microsurvey",
+                value: "Please complete survey",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
             public static let CloseButtonAccessibilityLabel = MZLocalizedString(
                 key: "Microsurvey.Survey.Close.Button.AccessibilityLabel.v127",
                 tableName: "Microsurvey",
                 value: "Close",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
+            public static let SelectedRadioButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v129",
+                tableName: "Microsurvey",
+                value: "Selected",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
+            public static let UnselectedRadioButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129",
+                tableName: "Microsurvey",
+                value: "Unselected",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was not selected.")
+            public static let OptionsOrderAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129",
+                tableName: "Microsurvey",
+                value: "%@ out of %@",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order the survey option in the list of options. First placeholder is the number the option is in the list and the second placeholder is the total number of options such as 1 out of 6.")
             public static let PrivacyPolicyLinkButtonTitle = MZLocalizedString(
                 key: "Microsurvey.Survey.PrivacyPolicyLink.v127",
                 tableName: "Microsurvey",
@@ -1119,6 +1437,11 @@ extension String {
                     tableName: "Microsurvey",
                     value: "Very dissatisfied",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
+                public static let LikertScaleOption6 = MZLocalizedString(
+                    key: "Microsurvey.Survey.Options.LikertScaleOption6.v129",
+                    tableName: "Microsurvey",
+                    value: "I don’t use it",
+                    comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about.")
             }
 
             public struct ConfirmationPage {
@@ -1554,6 +1877,11 @@ extension String {
                     tableName: nil,
                     value: "Recently Saved",
                     comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Recently Saved section on the Firefox homepage on or off")
+                public static let Bookmarks = MZLocalizedString(
+                    key: "Settings.Home.Option.Bookmarks.v128",
+                    tableName: "CustomizeFirefoxHome",
+                    value: "Bookmarks",
+                    comment: "In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Bookmarks section on the Firefox homepage on or off")
                 public static let Shortcuts = MZLocalizedString(
                     key: "Settings.Home.Option.Shortcuts",
                     tableName: nil,
@@ -2183,6 +2511,16 @@ extension String {
         tableName: nil,
         value: "Show All",
         comment: "More button text for Recently Saved items at the home page.")
+    public static let BookmarksSectionTitle = MZLocalizedString(
+        key: "ActivityStream.Bookmarks.Title.v128",
+        tableName: "ActivityStream",
+        value: "Bookmarks",
+        comment: "String used in the section title of the Bookmarks section on Home Screen.")
+    public static let BookmarksSavedShowAllText = MZLocalizedString(
+        key: "Bookmarks.Actions.More.v128",
+        tableName: "ActivityStream",
+        value: "Show All",
+        comment: "Show all button text for Bookmarks items on the home page, which opens the Bookmarks panel when tapped.")
 }
 
 // MARK: - Home Panel Context Menu
@@ -2967,10 +3305,10 @@ extension String {
         value: "Offer to Open Copied Links",
         comment: "Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
     public static let SettingsOfferClipboardBarStatus = MZLocalizedString(
-        key: "Settings.OfferClipboardBar.StatusV2",
+        key: "Settings.OfferClipboardBar.Status.v128",
         tableName: nil,
-        value: "When opening Firefox",
-        comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
+        value: "When opening %@",
+        comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name.")
 }
 
 // MARK: - Link Previews
@@ -3393,6 +3731,21 @@ extension String {
         tableName: nil,
         value: "OK",
         comment: "OK button to dismiss the error prompt.")
+    public static let ScanQRCodeConfirmOpenURLMessage = MZLocalizedString(
+        key: "ScanQRCode.ConfirmOpenURL.Message.v129",
+        tableName: "ScanQRCode",
+        value: "Allow %@ to open?",
+        comment: "Text of the prompt to ask user permission to open a URL from a scanned QR code. Placeholder is app name.")
+    public static let ScanQRCodeURLPromptAllowButton = MZLocalizedString(
+        key: "ScanQRCode.ConfirmOpenURL.AllowButton.v129",
+        tableName: "ScanQRCode",
+        value: "Allow",
+        comment: "Allow button to open URL from scanned QR Code")
+    public static let ScanQRCodeURLPromptDenyButton = MZLocalizedString(
+        key: "ScanQRCode.ConfirmOpenURL.DenyButton.v129",
+        tableName: "ScanQRCode",
+        value: "Deny",
+        comment: "Deny button to cancel opening URL from scanned QR Code")
 
     public struct QRCode {
         public static let ToolbarButtonA11yLabel = MZLocalizedString(
@@ -3497,6 +3850,16 @@ extension String {
             tableName: nil,
             value: "Downloads",
             comment: "Label for the button, displayed in the menu, takes you to Downloads screen when pressed.")
+        public static let AppMenuDownloadPDF = MZLocalizedString(
+            key: "Menu.DownloadPDF.Label.v129",
+            tableName: "Menu",
+            value: "Download PDF",
+            comment: "Label for the button, displayed in the menu, downloads a pdf when pressed.")
+        public static let AppMenuDownloadPDFConfirmMessage = MZLocalizedString(
+            key: "Menu.DownloadPDF.Confirm.v129",
+            tableName: "Menu",
+            value: "Successfully Downloaded PDF",
+            comment: "Toast displayed to user after downlaod pdf was pressed.")
         public static let AppMenuPasswords = MZLocalizedString(
             key: "Menu.Passwords.Label",
             tableName: nil,
@@ -3527,6 +3890,11 @@ extension String {
             tableName: nil,
             value: "New Tab",
             comment: "Label for the new tab button in the menu page. Pressing this button opens a new tab.")
+        public static let NewPrivateTab = MZLocalizedString(
+            key: "Menu.NewPrivateTab.Label",
+            tableName: nil,
+            value: "New Private Tab",
+            comment: "Label for the new private tab button in the menu page. Pressing this button opens a new private tab.")
         public static let Help = MZLocalizedString(
             key: "Menu.Help.v99",
             tableName: nil,
@@ -3698,6 +4066,157 @@ extension String {
         tableName: nil,
         value: "Open this link in external app?",
         comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
+}
+
+// MARK: Enhanced Tracking Protection/Unified Trust Panel
+extension String {
+    public struct Menu {
+        public struct EnhancedTrackingProtection {
+            public static let onTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.On.Title.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "%@ is on guard",
+                comment: "Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name")
+
+            public static let onHeader = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.On.Header.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "You’re protected. If we spot something, we’ll let you know.",
+                comment: "Header for the enhanced tracking protection screen when the user has selected to be protected.")
+
+            public static let offTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Off.Title.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "You turned off protections",
+                comment: "Title for the enhanced tracking protection screen when the user has opted out of the feature.")
+
+            public static let offHeader = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Off.Header.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "%@ is off-duty. We suggest turning protections back on.",
+                comment: "Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name")
+
+            public static let onNotSecureTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Be careful on this site",
+                comment: "Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
+
+            public static let onNotSecureHeader = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.On.Header.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Your connection is not secure.",
+                comment: "Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
+
+            public static let connectionVerifiedByLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Verifier.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Verified by %@",
+                comment: "Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details.")
+
+            public static let trackersBlockedLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Trackers blocked: %@",
+                comment: "Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked")
+
+            public static let noTrackersLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "No trackers found",
+                comment: "Text to let users know that no trackers were found on the current website.")
+
+            public static let crossSiteTrackersBlockedLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129",
+                tableName: "EnhancedTrackingProtection",
+                value: "Cross-site tracking cookies: %@",
+                comment: "Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected")
+
+            public static let socialMediaTrackersBlockedLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129",
+                tableName: "EnhancedTrackingProtection",
+                value: "Social media trackers: %@",
+                comment: "Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
+
+            public static let fingerprinterBlockedLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129",
+                tableName: "EnhancedTrackingProtection",
+                value: "Fingerprinters: %@",
+                comment: "Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected")
+
+            public static let connectionSecureLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Secure connection",
+                comment: "Text to let users know that the current website is secure.")
+
+            public static let connectionUnsecureLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Connection not secure",
+                comment: "Text to let users know that the current website is not secure.")
+
+            public static let switchTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Switch.Title.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Enhanced Tracking Protection",
+                comment: "Title for the switch to enable/disable enhanced tracking protection inside the menu.")
+
+            public static let switchOnText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "If something looks broken on this site, try turning it off.",
+                comment: "A switch to disable enhanced tracking protection inside the menu.")
+
+            public static let switchOffText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129",
+                tableName: "EnhancedTrackingProtection",
+                value: "Protections are OFF. We suggest turning them back on.",
+                comment: "A switch to disable enhanced tracking protection inside the menu.")
+
+            public static let clearDataButtonTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Clear cookies and site data",
+                comment: "The title for the clear cookies and site data button inside the enhanced tracking protection screen.")
+
+            public static let clearDataAlertTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Clear cookies and site data",
+                comment: "The title for the clear cookies and site data alert inside the enhanced tracking protection screen.")
+
+            public static let clearDataAlertText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.ClearData.AlertText.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Removing cookies and site data for %@ might log you out of websites and clear shopping carts.",
+                comment: "The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website")
+
+            public static let clearDataAlertButton = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Clear",
+                comment: "The text for the clear cookies and site data alert button inside the enhanced tracking protection screen.")
+
+            public static let clearDataAlertCancelButton = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Cancel",
+                comment: "The text for the clear cookies and site data alert button inside the enhanced tracking protection screen.")
+
+            public static let clearDataToastMessage = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Cookies and site data removed",
+                comment: "The text for the clear cookies and site data toast that appears when the user selects to clear the cookies")
+
+            public static let privacySettingsTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Privacy settings",
+                comment: "The title for the privacy settings button inside the enhanced tracking protection screen.")
+        }
+    }
 }
 
 // MARK: - ContentBlocker/TrackingProtection string
@@ -5246,16 +5765,16 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search or enter address",
             comment: "Accessibility label for the address field in the address toolbar.")
-        public static let LocationClearButtonA11yLabel = MZLocalizedString(
-            key: "AddressToolbar.Location.Clear.Button.v128",
-            tableName: "AddressToolbar",
-            value: "Clear text",
-            comment: "Accessibility label for the clear button in the address field of the address toolbar.")
         public static let SearchEngineA11yLabel = MZLocalizedString(
             key: "AddressToolbar.SearchEngine.A11y.Label.v128",
             tableName: "AddressToolbar",
             value: "Search Engine: %@",
             comment: "Accessibility label for the search engine icon in the address field of the address toolbar. The placeholder is getting replaced with the name of the search engine (e.g. Google).")
+        public static let PrivacyAndSecuritySettingsA11yLabel = MZLocalizedString(
+            key: "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128",
+            tableName: "AddressToolbar",
+            value: "Privacy & Security Settings",
+            comment: "Accessibility label for the lock icon button in the address field of the address toolbar, responsible with Privacy & Security Settings.")
     }
 }
 
@@ -5916,6 +6435,11 @@ extension String {
             tableName: "PasswordAutofill",
             value: "Use saved password?",
             comment: "This label is used in the password list screen header as a question, prompting the user if they want to use a saved password for logging in.")
+        public static let LoginListCellNoUsername = MZLocalizedString(
+            key: "PasswordAutofill.LoginListCellNoUsername.v129",
+            tableName: "PasswordAutofill",
+            value: "(no username)",
+            comment: "This label is used in a cell found in the list of autofill login options in place of an actual username to denote that no username was saved for this login")
         public static let ManagePasswordsButton = MZLocalizedString(
             key: "PasswordAutofill.ManagePasswordsButton.v124",
             tableName: "PasswordAutofill",
@@ -6052,6 +6576,27 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Close Survey",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
+        }
+
+        struct v128 {
+            public static let SettingsOfferClipboardBarStatus = MZLocalizedString(
+                key: "Settings.OfferClipboardBar.StatusV2",
+                tableName: nil,
+                value: "When opening Firefox",
+                comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
+        }
+
+        struct v129 {
+            public static let HeaderLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.HeaderLabel.v127",
+                tableName: "Microsurvey",
+                value: "Complete this survey",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen.")
+            public static let switchOffText = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128",
+                tableName: "EnhancedTrackingProtection",
+                value: "Protections are OFF. We suggest turning it back on.",
+                comment: "A switch to disable enhanced tracking protection inside the menu.")
         }
     }
 }

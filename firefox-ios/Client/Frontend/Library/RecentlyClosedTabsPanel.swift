@@ -8,6 +8,8 @@ import Storage
 import SiteImageView
 import Common
 
+import enum MozillaAppServices.VisitType
+
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
     static let IconBorderWidth: CGFloat = 0.5
@@ -75,7 +77,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer1
+        view.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
     }
 }
 
@@ -120,7 +122,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: displayURL.absoluteString))
-        twoLineCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        twoLineCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return twoLineCell
     }
 
@@ -157,7 +159,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         return self.recentlyClosedTabs.count
     }
 
-    // MARK: - Libray Toolbar actions
+    // MARK: - Library Toolbar actions
     func handleBackButton() {
         // no implementation needed
     }

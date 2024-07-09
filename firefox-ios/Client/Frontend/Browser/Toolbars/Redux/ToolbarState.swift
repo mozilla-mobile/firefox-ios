@@ -7,121 +7,98 @@ import Redux
 import ToolbarKit
 
 struct ToolbarState: ScreenState, Equatable {
-    struct AddressState: Equatable {
-        var navigationActions: [ActionState]
-        var pageActions: [ActionState]
-        var browserActions: [ActionState]
-        var displayTopBorder: Bool
-        var displayBottomBorder: Bool
-    }
-
-    struct NavigationState: Equatable {
-        var actions: [ActionState]
-        var displayBorder: Bool
-    }
-
-    struct ActionState: Equatable {
-        enum ActionType {
-            case back
-            case forward
-            case home
-            case search
-            case tabs
-            case menu
-            case qrCode
-            case share
-            case reload
-            case readerMode
-            case dataClearance
-        }
-
-        var actionType: ActionType
-        var iconName: String
-        var numberOfTabs: Int?
-        var isEnabled: Bool
-        var a11yLabel: String
-        var a11yId: String
-    }
-
     var windowUUID: WindowUUID
     var toolbarPosition: AddressToolbarPosition
-    var addressToolbar: AddressState
-    var navigationToolbar: NavigationState
+    var isPrivateMode: Bool
+    var addressToolbar: AddressBarState
+    var navigationToolbar: NavigationBarState
 
-    init(_ appState: BrowserViewControllerState) {
-        self.init(
-            windowUUID: appState.windowUUID,
-            toolbarPosition: appState.toolbarState.toolbarPosition,
-            addressToolbar: appState.toolbarState.addressToolbar,
-            navigationToolbar: appState.toolbarState.navigationToolbar
-        )
+    init(appState: AppState, uuid: WindowUUID) {
+        guard let toolbarState = store.state.screenState(
+            ToolbarState.self,
+            for: .toolbar,
+            window: uuid)
+        else {
+            self.init(windowUUID: uuid)
+            return
+        }
+
+        self.init(windowUUID: toolbarState.windowUUID,
+                  toolbarPosition: toolbarState.toolbarPosition,
+                  isPrivateMode: toolbarState.isPrivateMode,
+                  addressToolbar: toolbarState.addressToolbar,
+                  navigationToolbar: toolbarState.navigationToolbar)
     }
 
     init(windowUUID: WindowUUID) {
-        let addressToolbar = AddressState(navigationActions: [],
-                                          pageActions: [],
-                                          browserActions: [],
-                                          displayTopBorder: false,
-                                          displayBottomBorder: false)
         self.init(
             windowUUID: windowUUID,
             toolbarPosition: .top,
-            addressToolbar: addressToolbar,
-            navigationToolbar: NavigationState(actions: [], displayBorder: false)
+            isPrivateMode: false,
+            addressToolbar: AddressBarState(windowUUID: windowUUID),
+            navigationToolbar: NavigationBarState(windowUUID: windowUUID)
         )
     }
 
     init(
         windowUUID: WindowUUID,
         toolbarPosition: AddressToolbarPosition,
-        addressToolbar: AddressState,
-        navigationToolbar: NavigationState
+        isPrivateMode: Bool,
+        addressToolbar: AddressBarState,
+        navigationToolbar: NavigationBarState
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
+        self.isPrivateMode = isPrivateMode
         self.addressToolbar = addressToolbar
         self.navigationToolbar = navigationToolbar
     }
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-              let action = action as? ToolbarAction
-        else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case ToolbarActionType.didLoadToolbars:
-            guard let navToolbarModel = action.navigationToolbarModel,
-                    let addressToolbarModel = action.addressToolbarModel
-            else { return state }
+        case ToolbarActionType.didLoadToolbars,
+            ToolbarActionType.numberOfTabsChanged,
+            ToolbarActionType.urlDidChange,
+            ToolbarActionType.backButtonStateChanged,
+            ToolbarActionType.forwardButtonStateChanged,
+            ToolbarActionType.scrollOffsetChanged,
+            ToolbarActionType.showMenuWarningBadge:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction))
 
-            var state = state
-            state.addressToolbar.navigationActions = addressToolbarModel.navigationActions
-            state.addressToolbar.pageActions = addressToolbarModel.pageActions
-            state.addressToolbar.browserActions = addressToolbarModel.browserActions
-            state.addressToolbar.displayTopBorder = addressToolbarModel.displayTopBorder
-            state.addressToolbar.displayBottomBorder = addressToolbarModel.displayBottomBorder
+        case GeneralBrowserActionType.updateSelectedTab:
+            guard let action = action as? GeneralBrowserAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: state.toolbarPosition,
+                isPrivateMode: action.isPrivateBrowsing ?? state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 
-            state.navigationToolbar.actions = navToolbarModel.actions
-            state.navigationToolbar.displayBorder = navToolbarModel.displayBorder
-            return state
-
-        case ToolbarActionType.numberOfTabsChanged:
-            guard let numberOfTabs = action.numberOfTabs else { return state }
-            var state = state
-
-            if let index = state.navigationToolbar.actions.firstIndex(where: { $0.actionType == .tabs }) {
-                state.navigationToolbar.actions[index].numberOfTabs = numberOfTabs
-            }
-
-            if let index = state.addressToolbar.browserActions.firstIndex(where: { $0.actionType == .tabs }) {
-                state.addressToolbar.browserActions[index].numberOfTabs = numberOfTabs
-            }
-
-            return state
+        case ToolbarActionType.toolbarPositionChanged:
+            guard let position = (action as? ToolbarAction)?.toolbarPosition else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: position,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
 
         default:
-            return state
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: state.addressToolbar,
+                navigationToolbar: state.navigationToolbar)
         }
     }
 }

@@ -2,20 +2,33 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-body {
-  margin: 0;
-  padding: 16px;
-  box-sizing: border-box;
-  font-family: sans-serif;
+:root {
+  --background-surface: #f9f9fb;
+  --background-primary: #ffffff;
+  --border-primary: #e0e0e6;
+  --text-primary: #15141a;
+  --text-secondary: #5b5b66;
+}
 
-  font-family: -apple-system, "SF Pro", sans-serif;
-  background-color: #26252c;
+body.dark {
+  --background-surface: #26252c;
+  --background-primary: #3a3944;
+  --border-primary: #5b5b66;
+  --text-primary: #fbfbfe;
+  --text-secondary: #cfcfd8;
+}
+
+body {
+  box-sizing: border-box;
+  font: -apple-system-body;
+  background-color: var(--background-surface);
   margin: 0;
   padding: 0;
 }
 
 form {
   display: grid;
+
   input,
   textarea,
   select {
@@ -29,33 +42,28 @@ form {
     -webkit-appearance: none;
     outline: none;
     background-color: transparent;
-    color: #f8f8fb;
-
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 22px;
+    color: var(--text-primary);
+    font: -apple-system-body;
   }
 
-  input,
-  select {
-    height: 22px;
+  textarea {
+    overflow: hidden;
+    resize: none;
   }
 
   label {
-    background-color: #3a3943;
-    border-bottom: 0.5px solid #e0e0e6;
+    background-color: var(--background-primary);
+    border-bottom: 0.5px solid var(--border-primary);
     display: flex;
     flex-direction: column;
+    min-height: 68px;
     padding: 11px 16px;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight interaction */
 
     span {
-      font-size: 15px;
-      color: #c1c1ca;
-      margin-bottom: 4px;
-      margin-top: 12px;
-      font-weight: 400;
-      line-height: 20px;
+      font: -apple-system-subheadline;
+      color: var(--text-secondary);
     }
   }
 }

@@ -7,20 +7,51 @@ import Redux
 import ToolbarKit
 import UIKit
 
-class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable, StoreSubscriber {
-    typealias SubscriberStateType = BrowserViewControllerState
+protocol AddressToolbarContainerDelegate: AnyObject {
+    func searchSuggestions(searchTerm: String)
+    func openBrowser(searchTerm: String)
+    func openSuggestions(searchTerm: String)
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+}
 
-    var windowUUID: WindowUUID? {
+final class AddressToolbarContainer: UIView,
+                                     ThemeApplicable,
+                                     TopBottomInterchangeable,
+                                     AlphaDimmable,
+                                     StoreSubscriber,
+                                     AddressToolbarDelegate,
+                                     MenuHelperURLBarInterface {
+    typealias SubscriberStateType = ToolbarState
+
+    private var windowUUID: WindowUUID?
+    private var profile: Profile?
+    private var model: AddressToolbarContainerModel?
+    private var delegate: AddressToolbarContainerDelegate?
+
+    private var toolbar: BrowserAddressToolbar {
+        let isCompact = traitCollection.horizontalSizeClass == .compact
+        return isCompact ? compactToolbar : regularToolbar
+    }
+
+    private var isTransitioning = false {
         didSet {
-            subscribeToRedux()
+            if isTransitioning {
+                // Cancel any pending/in-progress animations related to the progress bar
+                self.progressBar.setProgress(1, animated: false)
+                self.progressBar.alpha = 0.0
+            }
         }
     }
-    private var toolbarState: ToolbarState?
-    private var model: AddressToolbarContainerModel?
 
     var parent: UIStackView?
-    private lazy var compactToolbar: CompactBrowserAddressToolbar =  .build { _ in }
+    private lazy var compactToolbar: CompactBrowserAddressToolbar = .build()
     private lazy var regularToolbar: RegularBrowserAddressToolbar = .build()
+    private lazy var progressBar: GradientProgressBar = .build { bar in
+        bar.clipsToBounds = false
+    }
+
+    private var progressBarTopConstraint: NSLayoutConstraint?
+    private var progresBarBottomConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -31,23 +62,33 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ model: AddressToolbarContainerModel,
-                   toolbarDelegate: AddressToolbarDelegate) {
-        compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: toolbarDelegate)
-        regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: toolbarDelegate)
+    func configure(windowUUID: WindowUUID, profile: Profile, delegate: AddressToolbarContainerDelegate) {
+        self.windowUUID = windowUUID
+        self.profile = profile
+        self.delegate = delegate
+        subscribeToRedux()
+    }
+
+    func updateProgressBar(progress: Double) {
+        DispatchQueue.main.async { [unowned self] in
+            progressBar.alpha = 1
+            progressBar.isHidden = false
+            progressBar.setProgress(Float(progress), animated: !isTransitioning)
+        }
+    }
+
+    func hideProgressBar() {
+        progressBar.isHidden = true
+        progressBar.setProgress(0, animated: false)
     }
 
     override func becomeFirstResponder() -> Bool {
         super.becomeFirstResponder()
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        let toolbar = isCompact ? compactToolbar : regularToolbar
         return toolbar.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        let toolbar = isCompact ? compactToolbar : regularToolbar
         return toolbar.resignFirstResponder()
     }
 
@@ -60,34 +101,59 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard let uuid = windowUUID else { return }
+        guard let windowUUID else { return }
+
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .toolbar)
+        store.dispatch(action)
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
+                return ToolbarState(appState: appState, uuid: windowUUID)
             })
         })
     }
 
     func unsubscribeFromRedux() {
+        guard let windowUUID else {
+            store.unsubscribe(self)
+            return
+        }
+
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .toolbar)
+        store.dispatch(action)
         store.unsubscribe(self)
     }
 
-    func newState(state: BrowserViewControllerState) {
-        toolbarState = state.toolbarState
-        updateModel(toolbarState: state.toolbarState)
+    func newState(state: ToolbarState) {
+        updateModel(toolbarState: state)
+    }
+
+    func updateAlphaForSubviews(_ alpha: CGFloat) {
+        // when the user scrolls the webpage the address toolbar gets hidden by changing its alpha
+        compactToolbar.alpha = alpha
+        regularToolbar.alpha = alpha
     }
 
     private func updateModel(toolbarState: ToolbarState) {
-        guard let windowUUID else { return }
-        let model = AddressToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
-        self.model = model
+        guard let windowUUID, let profile else { return }
+        let model = AddressToolbarContainerModel(state: toolbarState,
+                                                 profile: profile,
+                                                 windowUUID: windowUUID)
+        if self.model != model {
+            self.model = model
 
-        compactToolbar.configure(state: model.addressToolbarState)
-        regularToolbar.configure(state: model.addressToolbarState)
+        	updateProgressBarPosition(toolbarState.toolbarPosition)
+            compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+            regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+        }
     }
 
     private func setupLayout() {
+        addSubview(progressBar)
         adjustLayout()
     }
 
@@ -95,22 +161,72 @@ class AddressToolbarContainer: UIView, ThemeApplicable, TopBottomInterchangeable
         compactToolbar.removeFromSuperview()
         regularToolbar.removeFromSuperview()
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        let toolbarToAdd = isCompact ? compactToolbar : regularToolbar
-
-        addSubview(toolbarToAdd)
+        addSubview(toolbar)
 
         NSLayoutConstraint.activate([
-            toolbarToAdd.topAnchor.constraint(equalTo: topAnchor),
-            toolbarToAdd.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toolbarToAdd.bottomAnchor.constraint(equalTo: bottomAnchor),
-            toolbarToAdd.trailingAnchor.constraint(equalTo: trailingAnchor),
+            progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            toolbar.topAnchor.constraint(equalTo: topAnchor),
+            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
+    }
+
+    private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
+        progressBarTopConstraint?.isActive = false
+        progresBarBottomConstraint?.isActive = false
+
+        switch position {
+        case .top:
+            progressBarTopConstraint = progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+            progressBarTopConstraint?.isActive = true
+        case .bottom:
+            progresBarBottomConstraint = progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor)
+            progresBarBottomConstraint?.isActive = true
+        }
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+        progressBar.setGradientColors(
+            startColor: theme.colors.borderAccent,
+            middleColor: theme.colors.iconAccentPink,
+            endColor: theme.colors.iconAccentYellow
+        )
+    }
+
+    // MARK: - AddressToolbarDelegate
+    func searchSuggestions(searchTerm: String) {
+        delegate?.searchSuggestions(searchTerm: searchTerm)
+    }
+
+    func openBrowser(searchTerm: String) {
+        delegate?.openBrowser(searchTerm: searchTerm)
+    }
+
+    func openSuggestions(searchTerm: String) {
+        delegate?.openSuggestions(searchTerm: searchTerm)
+    }
+
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    // MARK: - MenuHelperURLBarInterface
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelperURLBarModel.selectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    func menuHelperPasteAndGo() {
+        guard let pasteboardContents = UIPasteboard.general.string else { return }
+        delegate?.openBrowser(searchTerm: pasteboardContents)
     }
 }

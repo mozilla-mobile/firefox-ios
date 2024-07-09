@@ -49,7 +49,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .subheadline, size: 15)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
     }
 

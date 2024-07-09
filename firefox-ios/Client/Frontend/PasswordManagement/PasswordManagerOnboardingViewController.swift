@@ -25,7 +25,10 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }
 
     private lazy var learnMoreButton: LinkButton = .build { button in
-        button.setTitle(.LoginsOnboardingLearnMoreButtonTitle, for: .normal)
+        let buttonViewModel = LinkButtonViewModel(
+            title: .LoginsOnboardingLearnMoreButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.Settings.Passwords.onboardingLearnMore)
+        button.configure(viewModel: buttonViewModel)
         button.addTarget(self, action: #selector(self.learnMoreButtonTapped), for: .touchUpInside)
     }
 
@@ -127,7 +130,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     override func applyTheme() {
         super.applyTheme()
 
-        let currentTheme = themeManager.currentTheme(for: windowUUID)
+        let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         learnMoreButton.applyTheme(theme: currentTheme)
         continueButton.applyTheme(theme: currentTheme)
     }

@@ -6,6 +6,8 @@ import Foundation
 import Storage
 import WebKit
 
+import struct MozillaAppServices.CreditCard
+
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
     /// - Parameter settings: The settings route we're trying to get to
@@ -74,7 +76,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Displays an autofill interface for saved logins, allowing the user to select from stored login credentials 
     /// to autofill login forms on the specified web page.
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String)
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType)
 
     /// Shows an AddressAutofill view for selecting addresses in order to autofill forms.
     func showAddressAutofill(frame: WKFrameInfo?)

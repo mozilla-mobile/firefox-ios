@@ -25,7 +25,6 @@ struct LabelButtonHeaderViewModel {
 // Firefox home view controller header view
 class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     struct UX {
-        static let titleLabelTextSize: CGFloat = 20
         static let inBetweenSpace: CGFloat = 12
         static let bottomSpace: CGFloat = 10
         static let bottomButtonSpace: CGFloat = 6
@@ -43,8 +42,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                size: UX.titleLabelTextSize)
+        label.font = FXFontStyles.Bold.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
     }
@@ -124,7 +122,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
         moreButton.isHidden = viewModel.isButtonHidden
         if !viewModel.isButtonHidden {
-            let moreButtonViewModel = ActionButtonViewModel(title: .RecentlySavedShowAllText,
+            let moreButtonViewModel = ActionButtonViewModel(title: .BookmarksSavedShowAllText,
                                                             a11yIdentifier: viewModel.buttonA11yIdentifier,
                                                             touchUpAction: viewModel.buttonAction)
             moreButton.configure(viewModel: moreButtonViewModel)

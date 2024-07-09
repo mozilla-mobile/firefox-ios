@@ -26,6 +26,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showZoomPage(tab: Tab)
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
+    func showFilePicker(fileURL: URL)
 }
 
 extension ToolBarActionMenuDelegate {
@@ -44,6 +45,7 @@ enum MenuButtonToastAction {
     case pinPage
     case removePinPage
     case closeTab
+    case downloadPDF
 }
 
 /// MainMenuActionHelper handles the main menu (hamburger menu) in the toolbar.
@@ -269,6 +271,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let sendToDeviceAction = getSendToDevice()
             append(to: &section, action: sendToDeviceAction)
 
+            if let tab = self.selectedTab,
+                let url = tab.canonicalURL?.displayURL,
+                url.lastPathComponent.suffix(4) == ".pdf" {
+                let downloadPDFAction = getDownloadPDFAction()
+                append(to: &section, action: downloadPDFAction)
+            }
+
             let shareAction = getShareAction()
             append(to: &section, action: shareAction)
         }
@@ -300,7 +309,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
-        return SingleActionViewModel(title: .AppMenu.NewTab,
+        return SingleActionViewModel(title: tab.isPrivate ? .AppMenu.NewPrivateTab : .AppMenu.NewTab,
                                      iconString: StandardImageIdentifiers.Large.plus) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
             self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
@@ -398,7 +407,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                   let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
-            let themeColors = self.themeManager.currentTheme(for: uuid).colors
+            let themeColors = self.themeManager.getCurrentTheme(for: uuid).colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
                                                    iconColor: themeColors.iconPrimary)
@@ -475,11 +484,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeDisabled)
             }
 
-            let windowManager: WindowManager = AppContainer.shared.resolve()
-            let allWindowUUIDS = windowManager.allWindowUUIDs(includingReserved: false)
-            allWindowUUIDS.forEach { uuid in
-                self.themeManager.reloadTheme(for: uuid)
-            }
+            self.themeManager.applyThemeUpdatesToWindows()
         }.items
         items.append(nightMode)
 
@@ -604,6 +609,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     }
                 }
             }
+        }.items
+    }
+
+    private func getDownloadPDFAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .AppMenu.AppMenuDownloadPDF,
+                                     iconString: StandardImageIdentifiers.Large.folder) { _ in
+            guard let tab = self.selectedTab, let temporaryDocument = tab.temporaryDocument else { return }
+                temporaryDocument.getURL { fileURL in
+                    DispatchQueue.main.async {
+                        guard let fileURL = fileURL else {return}
+                        self.delegate?.showFilePicker(fileURL: fileURL)
+                    }
+                }
         }.items
     }
 
@@ -801,7 +819,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
-    // MARK: - Conveniance
+    // MARK: - Convenience
 
     private func append(to items: inout [PhotonRowActions], action: PhotonRowActions?) {
         if let action = action {

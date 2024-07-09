@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import MozillaAppServices
 import UIKit
 
 /// An enum describing the featureID of all features found in Nimbus.
@@ -27,6 +26,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case isToolbarCFREnabled
     case jumpBackIn
     case loginAutofill
+    case menuRefactor
     case microsurvey
     case nightMode
     case preferSwitchToOpenTabOverDuplicate
@@ -77,6 +77,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
                 .loginAutofill,
+                .menuRefactor,
                 .microsurvey,
                 .nightMode,
                 .preferSwitchToOpenTabOverDuplicate,

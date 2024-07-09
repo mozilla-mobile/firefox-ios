@@ -10,7 +10,7 @@ import Common
 final class MicrosurveyViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
@@ -21,7 +21,7 @@ final class MicrosurveyViewControllerTests: XCTestCase {
     }
 
     func testMicrosurveyViewController_simpleCreation_hasNoLeaks() {
-        let microsurveyViewController = MicrosurveyViewController(model: MicrosurveyModel(), windowUUID: windowUUID)
+        let microsurveyViewController = MicrosurveyViewController(model: MicrosurveyMock.model, windowUUID: windowUUID)
         trackForMemoryLeaks(microsurveyViewController)
     }
 }

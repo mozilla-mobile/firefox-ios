@@ -4,8 +4,15 @@
 
 import Foundation
 import Shared
-@_exported import MozillaAppServices
 import Common
+
+import class MozillaAppServices.Store
+import enum MozillaAppServices.AutofillApiError
+import func MozillaAppServices.encryptString
+import struct MozillaAppServices.Address
+import struct MozillaAppServices.CreditCard
+import struct MozillaAppServices.UpdatableAddressFields
+import struct MozillaAppServices.UpdatableCreditCardFields
 
 /// Typealias for AutofillStore.
 typealias AutofillStore = Store
@@ -298,32 +305,30 @@ public class RustAutofill {
         }
     }
 
-    /// Adds an address to the database.
+    enum AddressAutofillError: Error {
+        case addAddressFailure
+    }
+
+    /// Adds an address asynchronously.
     ///
     /// - Parameters:
-    ///   - address: UpdatableAddressFields representing the address to be added.
-    ///   - completion: A closure called upon completion with the added address or an error.
-    public func addAddress(address: UpdatableAddressFields, completion: @escaping (Address?, Error?) -> Void) {
-        performDatabaseOperation { error in
-            guard error == nil else {
-                completion(nil, error)
+    ///   - address: The address fields to add.
+    ///   - completion: A closure that is called when the operation is complete.
+    ///   It takes a `Result` object as its parameter, which contains either the added address or an error.
+    public func addAddress(address: UpdatableAddressFields, completion: @escaping (Result<Address, Error>) -> Void) {
+        performDatabaseOperation { [weak self] error in
+            if let error {
+                completion(.failure(error))
                 return
             }
             do {
-                // Use optional binding to safely unwrap the optional result of addAddress.
-                if let id = try self.storage?.addAddress(a: address) {
-                    // Successfully added the address, call the completion handler with the result.
-                    completion(id, nil)
+                if let address = try self?.storage?.addAddress(a: address) {
+                    completion(.success(address))
                 } else {
-                    // Handle the case where addAddress returns nil, possibly due to an internal error.
-                    let internalError = NSError(domain: "YourDomain", code: 1, userInfo: [
-                        NSLocalizedDescriptionKey: "Internal error: Failed to add address."
-                    ])
-                    completion(nil, internalError)
+                    completion(.failure(AddressAutofillError.addAddressFailure))
                 }
-            } catch let err as NSError {
-                // Handle any other errors that might occur during the database operation.
-                completion(nil, err)
+            } catch {
+                completion(.failure(error))
             }
         }
     }
@@ -354,6 +359,51 @@ public class RustAutofill {
             } catch let err as NSError {
                 // Handle any other errors that might occur during the database operation.
                 completion(nil, err)
+            }
+        }
+    }
+
+    /// Updates the address asynchronously.
+    ///
+    /// - Parameters:
+    ///   - id: The identifier of the address to update.
+    ///   - address: The updated address fields.
+    ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
+    public func updateAddress(
+        id: String,
+        address: UpdatableAddressFields,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        performDatabaseOperation { error in
+            guard error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            do {
+                try self.storage?.updateAddress(guid: id, a: address)
+                completion(.success(()))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+    }
+
+    /// Deletes an address from the storage.
+    ///
+    /// - Parameters:
+    ///   - id: The unique identifier of the address to be deleted.
+    ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
+    public func deleteAddress(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        performDatabaseOperation { error in
+            guard error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            do {
+                try self.storage?.deleteAddress(guid: id)
+                completion(.success(()))
+            } catch let error {
+                completion(.failure(error))
             }
         }
     }

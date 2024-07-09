@@ -120,8 +120,7 @@ class AutofillTelemetryBase {
       let element = fieldDetail.element;
       let state = profile[fieldDetail.fieldName] ? "filled" : "not_filled";
       if (
-        section.handler.getFilledStateByElement(element) ==
-          FIELD_STATES.NORMAL &&
+        element.autofillState == FIELD_STATES.NORMAL &&
         (HTMLSelectElement.isInstance(element) ||
           (HTMLInputElement.isInstance(element) && element.value.length))
       ) {

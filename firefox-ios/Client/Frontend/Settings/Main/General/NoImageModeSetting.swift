@@ -8,9 +8,7 @@ class NoImageModeSetting: BoolSetting {
     init(settings: SettingsTableViewController) {
         let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
         let didChange = { (isEnabled: Bool) in
-            NoImageModeHelper.toggle(isEnabled: isEnabled,
-                                     profile: settings.profile,
-                                     tabManager: settings.tabManager)
+            NoImageModeHelper.toggle(isEnabled: isEnabled, profile: settings.profile)
         }
 
         super.init(

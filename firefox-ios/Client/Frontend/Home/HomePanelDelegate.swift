@@ -5,13 +5,15 @@
 import Foundation
 import Storage
 
+import enum MozillaAppServices.VisitType
+
 protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType, isGoogleTopSite: Bool)
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayPanelType?)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction)
 }
 
 extension HomePanelDelegate {

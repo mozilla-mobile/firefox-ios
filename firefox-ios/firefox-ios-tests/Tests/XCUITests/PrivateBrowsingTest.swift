@@ -220,6 +220,11 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Tap on "Close All Tabs"
         app.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton].tap()
+        if #unavailable(iOS 16) {
+            // Wait for the screen to refresh first.
+            mozWaitForElementToExist(
+                app.staticTexts["Firefox won’t remember any of your history or cookies, but new bookmarks will be saved."])
+        }
         // The private tabs are closed
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"])
@@ -235,6 +240,26 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(TabTray)
         numTab = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
+    }
+
+    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307003
+    func testHamburgerMenuNewPrivateTab() {
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        navigator.openURL(urlExample)
+        waitUntilPageLoad()
+        navigator.goto(BrowserTabMenu)
+        // Validate menu option New Private Tab
+        let newPrivateTab = app.tables.otherElements["New Private Tab"]
+        mozWaitForElementToExist(newPrivateTab)
+        scrollToElement(newPrivateTab)
+        // Tap on "New private tab" option
+        newPrivateTab.tap()
+        // Tap on "New private tab" option
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.goto(TabTray)
+        let numTab = app.otherElements["Tabs Tray"].cells.count
+        XCTAssertEqual(2, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
 }
 
@@ -256,17 +281,6 @@ fileprivate extension BaseTestCase {
             1,
             "The number of tabs is not correct"
         )
-    }
-
-    func enableClosePrivateBrowsingOptionWhenLeaving() {
-        navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
-
-        while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
-            settingsTableView.swipeUp()
-        }
-        let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
-        closePrivateTabsSwitch.tap()
     }
 }
 

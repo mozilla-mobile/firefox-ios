@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let radioButtonSize = CGSize(width: 24, height: 24)
         static let spacing: CGFloat = 12
@@ -15,13 +15,16 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
             bottom: -10,
             trailing: -16
         )
+        static let separatorWidth = 0.5
 
         struct Images {
-            // TODO: FXIOS-9028 Fix radio button for accessibility
-            static let selected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkFilled
-            static let notSelected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty
+            static let selected = ImageIdentifiers.radioButtonSelected
+            static let notSelected = ImageIdentifiers.radioButtonNotSelected
         }
     }
+
+    private var topSeparatorView: UIView = .build()
+    private var a11yOptionsOrderValue: String?
 
     private lazy var horizontalStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -32,7 +35,7 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private lazy var radioButton: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: UX.Images.notSelected)
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.radioButton
+        imageView.isAccessibilityElement = false
     }
 
     private lazy var optionLabel: UILabel = .build { label in
@@ -40,6 +43,11 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.isAccessibilityElement = false
+    }
+
+    var title: String? {
+        optionLabel.text
     }
 
     var checked = false {
@@ -47,13 +55,28 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
             let checkedButton = UIImage(named: UX.Images.selected)
             let uncheckedButton = UIImage(named: UX.Images.notSelected)
             self.radioButton.image = checked ? checkedButton : uncheckedButton
+            accessibilityValue = optionA11yValue
         }
+    }
+
+    var optionA11yValue: String {
+        let selectedLabel: String = .Microsurvey.Survey.SelectedRadioButtonAccessibilityLabel
+        let unselectedLabel: String = .Microsurvey.Survey.UnselectedRadioButtonAccessibilityLabel
+
+        var a11yValue = checked ? selectedLabel : unselectedLabel
+        if let a11yOptionsOrderValue {
+            a11yValue.append(", \(a11yOptionsOrderValue)")
+        }
+        return a11yValue
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
-        self.selectionStyle = .none
+        selectionStyle = .none
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.radioButton
+        accessibilityTraits.insert(.button)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -64,15 +87,21 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         horizontalStackView.addArrangedSubview(radioButton)
         horizontalStackView.addArrangedSubview(optionLabel)
         horizontalStackView.accessibilityElements = [radioButton, optionLabel]
+        contentView.addSubview(topSeparatorView)
         contentView.addSubview(horizontalStackView)
 
         NSLayoutConstraint.activate(
             [
+                topSeparatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                topSeparatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                topSeparatorView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                topSeparatorView.heightAnchor.constraint(equalToConstant: UX.separatorWidth),
+
                 radioButton.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width),
                 radioButton.heightAnchor.constraint(equalToConstant: UX.radioButtonSize.height),
 
                 horizontalStackView.topAnchor.constraint(
-                    equalTo: contentView.topAnchor,
+                    equalTo: topSeparatorView.bottomAnchor,
                     constant: UX.padding.top
                 ),
                 horizontalStackView.leadingAnchor.constraint(
@@ -93,12 +122,23 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func configure(_ text: String) {
         optionLabel.text = text
+        accessibilityLabel = optionLabel.text
+    }
+
+    func setA11yValue(for index: Int, outOf totalCount: Int) {
+        a11yOptionsOrderValue = String(
+            format: .Microsurvey.Survey.OptionsOrderAccessibilityLabel,
+            NSNumber(value: index + 1 as Int),
+            NSNumber(value: totalCount as Int)
+        )
+        accessibilityValue = optionA11yValue
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         optionLabel.textColor = colors.textPrimary
-        backgroundColor = theme.colors.layer5
+        backgroundColor = theme.colors.layer2
+        topSeparatorView.backgroundColor = theme.colors.borderPrimary
     }
 }

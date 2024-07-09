@@ -80,8 +80,8 @@ class DragAndDropTests: BaseTestCase {
             )
 
             let thirdWebsitePosition = app.collectionViews.cells.element(boundBy: 2).label
-            // Disabling validation on iPad. Dragging and droping action for the first and last tab is not working.
-            // This is just automation related, manually the action performs succesfully.
+            // Disabling validation on iPad. Dragging and dropping action for the first and last tab is not working.
+            // This is just automation related, manually the action performs successfully.
             if !iPad() {
                 checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsiteUnselected.tabName, secondTab: homeTabName)
                 XCTAssertEqual(thirdWebsitePosition, thirdWebsite.tabName, "last tab after is not correct")
@@ -195,7 +195,7 @@ private extension BaseTestCase {
         mozWaitForElementToExist(dropOnElement)
         dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
         mozWaitForElementToExist(dragElement)
-        // Repeat the action in case the first drag and drop attempt was not successfull
+        // Repeat the action in case the first drag and drop attempt was not successful
         while dragElement.isLeftOf(rightElement: dropOnElement) && nrOfAttempts < 4 {
             dragElement.press(forDuration: 1.5, thenDragTo: dropOnElement)
             nrOfAttempts = nrOfAttempts + 1

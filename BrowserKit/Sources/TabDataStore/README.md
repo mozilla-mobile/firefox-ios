@@ -22,4 +22,4 @@ Wrapper over FileManager that provides the option to get the directory where tab
 
 # Migration
 
-During the migration we create a WindowData object and adapt the LegacySavedTab from the previous store system to the array of TabData of TabDataStore. We are using screenshootUUID from LegacySavedTab as the UUID for TabData struct.
+During the migration we create a WindowData object and adapt the LegacySavedTab from the previous store system to the array of TabData of TabDataStore. We are using screenshotUUID from LegacySavedTab as the UUID for TabData struct.

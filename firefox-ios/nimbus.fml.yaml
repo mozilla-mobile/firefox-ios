@@ -21,7 +21,9 @@ include:
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
+  - nimbus-features/gleanServerKnobs.yaml
   - nimbus-features/homescreenFeature.yaml
+  - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
   - nimbus-features/nightModeFeature.yaml

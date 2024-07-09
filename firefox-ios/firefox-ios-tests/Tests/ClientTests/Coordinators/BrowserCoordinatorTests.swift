@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import XCTest
-import WebKit
 import ComponentLibrary
+import MozillaAppServices
+import WebKit
+import XCTest
+
 @testable import Client
 
 final class BrowserCoordinatorTests: XCTestCase {
@@ -240,7 +242,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        let field = FocusFieldType.password
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
@@ -989,7 +992,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     func testShowMicrosurvey_addsMicrosurveyCoordinator() {
         let subject = createSubject()
 
-        subject.showMicrosurvey(model: MicrosurveyModel())
+        subject.showMicrosurvey(model: MicrosurveyMock.model)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MicrosurveyCoordinator)

@@ -28,11 +28,9 @@ class SearchHistoryUtils {
     static func pushSearchToStack(with searchedText: String) {
         // Check whether the lastSearch is the current search. If not, remove subsequent searches
         if let lastSearch = currentStack.last, !lastSearch.isCurrentSearch {
-            for index in 0..<currentStack.count {
-                if currentStack[index].isCurrentSearch {
+            for index in 0..<currentStack.count where currentStack[index].isCurrentSearch {
                     currentStack.removeSubrange(index+1..<currentStack.count)
                     break
-                }
             }
         }
 
@@ -44,10 +42,8 @@ class SearchHistoryUtils {
     }
 
     static func pullSearchFromStack() -> String? {
-        for search in currentStack {
-            if search.isCurrentSearch {
-                return search.text
-            }
+        for search in currentStack where search.isCurrentSearch {
+            return search.text
         }
 
         return nil

@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 class PasswordDetailViewController: SensitiveViewController, Themeable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
@@ -113,7 +115,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {

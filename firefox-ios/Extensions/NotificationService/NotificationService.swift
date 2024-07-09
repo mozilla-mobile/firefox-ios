@@ -9,6 +9,8 @@ import Storage
 import Sync
 import UserNotifications
 
+import class MozillaAppServices.Viaduct
+
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
     var profile: BrowserProfile?

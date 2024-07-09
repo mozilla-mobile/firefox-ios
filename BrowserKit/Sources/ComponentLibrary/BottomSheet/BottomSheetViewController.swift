@@ -83,7 +83,7 @@ public class BottomSheetViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: View lifecyle
+    // MARK: View lifecycle
     override public func viewDidLoad() {
         super.viewDidLoad()
         sheetView.alpha = 1
@@ -137,7 +137,7 @@ public class BottomSheetViewController: UIViewController,
 
     public func applyTheme() {
         guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
-        contentView.backgroundColor = themeManager.currentTheme(for: uuid).colors.layer1
+        contentView.backgroundColor = themeManager.getCurrentTheme(for: uuid).colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {

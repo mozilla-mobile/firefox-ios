@@ -26,9 +26,6 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         static let standardSpacing: CGFloat = 16
         static let topCardSafeSpace: CGFloat = 16
         static let bottomCardSafeSpace: CGFloat = 32
-        // Max font size
-        static let bannerTitleFontSize: CGFloat = 16
-        static let descriptionTextFontSize: CGFloat = 15
     }
 
     // MARK: - Properties
@@ -44,8 +41,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private lazy var bannerTitle: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: UX.bannerTitleFontSize)
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
     }
@@ -53,8 +49,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     private lazy var descriptionText: UILabel = .build { label in
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: UX.descriptionTextFontSize)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
     }

@@ -7,6 +7,8 @@ import Shared
 import Storage
 import Common
 
+import struct MozillaAppServices.LoginEntry
+
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 

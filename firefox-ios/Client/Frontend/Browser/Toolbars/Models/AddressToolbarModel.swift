@@ -4,12 +4,26 @@
 
 import Foundation
 import ToolbarKit
+import Redux
+import Common
 
 struct AddressToolbarModel {
-    let navigationActions: [ToolbarState.ActionState]
-    let pageActions: [ToolbarState.ActionState]
-    let browserActions: [ToolbarState.ActionState]
+    let navigationActions: [ToolbarActionState]?
+    let pageActions: [ToolbarActionState]?
+    let browserActions: [ToolbarActionState]?
 
-    let displayTopBorder: Bool
-    let displayBottomBorder: Bool
+    let borderPosition: AddressToolbarBorderPosition?
+    let url: URL?
+
+    init(navigationActions: [ToolbarActionState]? = nil,
+         pageActions: [ToolbarActionState]? = nil,
+         browserActions: [ToolbarActionState]? = nil,
+         borderPosition: AddressToolbarBorderPosition? = nil,
+         url: URL? = nil) {
+        self.navigationActions = navigationActions
+        self.pageActions = pageActions
+        self.browserActions = browserActions
+        self.borderPosition = borderPosition
+        self.url = url
+    }
 }

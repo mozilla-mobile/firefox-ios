@@ -41,18 +41,18 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var stackView: UIStackView = .build { stackView in
-        stackView.spacing = 8
+        stackView.spacing = 2
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 16)
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .natural
     }
 
     lazy var descriptionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: 14)
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.textAlignment = .natural
     }
 

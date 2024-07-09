@@ -7,6 +7,9 @@ import Common
 import Storage
 import Shared
 
+import class MozillaAppServices.BookmarkFolderData
+import enum MozillaAppServices.BookmarkRoots
+
 class BookmarksPanelViewModel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
@@ -84,7 +87,7 @@ class BookmarksPanelViewModel {
     // MARK: - Private
 
     /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder,
-    /// we need to account for this when saving bookmark index in A-S. This is done by substracting
+    /// we need to account for this when saving bookmark index in A-S. This is done by subtracting
     /// the Local Desktop Folder number of rows it takes to the actual index.
     func getNewIndex(from index: Int) -> Int {
         guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID else {

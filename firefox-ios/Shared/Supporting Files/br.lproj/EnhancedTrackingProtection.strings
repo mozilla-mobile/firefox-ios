@@ -1,0 +1,15 @@
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Nullañ";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Skarzhañ";
+
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Kennask diarvar";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "N’eo ket diarvar ar c’hennask";
+
+/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Gwiriet gant %@";
+

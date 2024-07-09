@@ -274,10 +274,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func preserveTabs() { fatalError("should never be called") }
 
-    func shouldClearPrivateTabs() -> Bool {
-        return profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
-    }
-
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
         DispatchQueue.main.async { [unowned self] in
             // select normal tab if there are no private tabs, we need to do this
@@ -325,18 +321,17 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         for tab in tabs where tab !== selectedTab {
             tab.clearAndResetTabHistory()
         }
-
-        removeTab(selectedTab)
-
         let tabToSelect: Tab
         if url.isFxHomeUrl {
-            tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest, isPrivate: selectedTab.isPrivate)
+            tabToSelect = addTab(PrivilegedRequest(url: url) as URLRequest,
+                                 afterTab: selectedTab,
+                                 isPrivate: selectedTab.isPrivate)
         } else {
             let request = URLRequest(url: url)
-            tabToSelect = addTab(request, isPrivate: selectedTab.isPrivate)
+            tabToSelect = addTab(request, afterTab: selectedTab, isPrivate: selectedTab.isPrivate)
         }
-
         selectTab(tabToSelect)
+        removeTab(selectedTab)
     }
 
     // MARK: - Add tabs

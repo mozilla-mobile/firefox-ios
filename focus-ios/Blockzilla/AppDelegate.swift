@@ -166,6 +166,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         onboardingEventsHandler.send(.applicationDidLaunch)
+
+        ContentBlockerHelper.shared.updateContentRuleListIfNeeded()
+
         return true
     }
 

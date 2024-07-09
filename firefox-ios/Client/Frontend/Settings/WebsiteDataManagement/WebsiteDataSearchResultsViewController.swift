@@ -42,11 +42,24 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
                                                                       height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        footer.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
         KeyboardHelper.defaultHelper.addDelegate(self)
+    }
+
+    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        guard let section = Section(rawValue: indexPath.section), section == .clearButton else {
+            return super.dequeueCellFor(indexPath: indexPath)
+        }
+
+        if let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+            for: indexPath) as? ThemedCenteredTableViewCell {
+            return cell
+        }
+        return ThemedTableViewCell()
     }
 
     func reloadData() {
@@ -69,8 +82,10 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
-        let section = Section(rawValue: indexPath.section)!
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        guard let section = Section(rawValue: indexPath.section) else {
+            return ThemedTableViewCell()
+        }
         switch section {
         case .sites:
             if let record = filteredSiteRecords[safe: indexPath.row] {
@@ -81,14 +96,17 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
                     tableView.deselectRow(at: indexPath, animated: false)
                 }
             }
+            return cell
         case .clearButton:
-            cell.textLabel?.text = viewModel.clearButtonTitle
-            cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = themeManager.currentTheme(for: windowUUID).colors.textWarning
-            cell.accessibilityTraits = UIAccessibilityTraits.button
-            cell.accessibilityIdentifier = "ClearAllWebsiteData"
+            guard let cell = cell as? ThemedCenteredTableViewCell else { return ThemedCenteredTableViewCell() }
+
+            cell.setTitle(to: viewModel.clearButtonTitle)
+            cell.setAccessibilities(
+                traits: .button,
+                identifier: AccessibilityIdentifiers.Settings.ClearData.clearAllWebsiteData)
+            cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            return cell
         }
-        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -103,6 +121,7 @@ class WebsiteDataSearchResultsViewController: ThemedTableViewController {
             generator.impactOccurred()
             let alert = viewModel.createAlertToRemove()
             present(alert, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 

@@ -8,6 +8,8 @@ import TabDataStore
 import Shared
 import Storage
 
+import enum MozillaAppServices.BookmarkRoots
+
 class TabManagerMiddleware {
     private let profile: Profile
     private let logger: Logger
@@ -38,9 +40,6 @@ class TabManagerMiddleware {
 
         case TabPeekActionType.addToBookmarks:
             addToBookmarks(with: tabUUID, uuid: action.windowUUID)
-
-        case TabPeekActionType.sendToDevice:
-            sendToDevice(tabID: tabUUID, uuid: action.windowUUID)
 
         case TabPeekActionType.copyURL:
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
@@ -576,19 +575,6 @@ class TabManagerMiddleware {
                                      value: .tabTray)
     }
 
-    private func sendToDevice(tabID: TabUUID, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tabToShare = tabManager.getTabForUUID(uuid: tabID),
-              let url = tabToShare.url
-        else { return }
-
-        let action = TabPanelViewAction(panelType: .tabs,
-                                        shareSheetURL: url,
-                                        windowUUID: uuid,
-                                        actionType: TabPanelViewActionType.showShareSheet)
-        store.dispatch(action)
-    }
-
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         UIPasteboard.general.url = tabManager.selectedTab?.canonicalURL
@@ -600,10 +586,6 @@ class TabManagerMiddleware {
 
     private func tabPeekCloseTab(with tabID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         closeTabFromTabPanel(with: tabID, uuid: uuid, isPrivate: isPrivate)
-        let toastAction = TabPanelMiddlewareAction(toastType: .closedSingleTab,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
     }
 
     private func changePanel(_ panel: TabTrayPanelType, uuid: WindowUUID) {

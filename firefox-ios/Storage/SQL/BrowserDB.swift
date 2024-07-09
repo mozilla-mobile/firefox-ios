@@ -113,7 +113,7 @@ open class BrowserDB {
 }
 
 /// The sqlite-backed implementation of the history protocol.
-/// Currenlty only supports pinned sites and favicons
+/// Currently only supports pinned sites and favicons
 open class BrowserDBSQLite {
     let database: BrowserDB
     let prefs: Prefs

@@ -20,8 +20,8 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
         }
 
         struct Images {
-            static let selected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkFilled
-            static let notSelected = ImageIdentifiers.Onboarding.MultipleChoiceButtonImages.checkmarkEmpty
+            static let selected = ImageIdentifiers.radioButtonSelected
+            static let notSelected = ImageIdentifiers.radioButtonNotSelected
         }
     }
 
@@ -174,9 +174,9 @@ class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - Theme
     func applyTheme() {
         backgroundColor = .clear
-        titleLabel.textColor = themeManager.currentTheme(for: windowUUID).colors.textPrimary
+        titleLabel.textColor = themeManager.getCurrentTheme(for: windowUUID).colors.textPrimary
         imageView.layer.borderColor = if viewModel.isSelected {
-            themeManager.currentTheme(for: windowUUID).colors.actionPrimary.cgColor
+            themeManager.getCurrentTheme(for: windowUUID).colors.actionPrimary.cgColor
         } else {
             UIColor.clear.cgColor
         }

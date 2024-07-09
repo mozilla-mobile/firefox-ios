@@ -6,6 +6,9 @@ import Foundation
 import Common
 import Shared
 
+import enum MozillaAppServices.BookmarkNodeType
+import enum MozillaAppServices.BookmarkRoots
+
 let _TableBookmarks = "bookmarks"                                      // Removed in v12. Kept for migration.
 let TableBookmarksMirror = "bookmarksMirror"                           // Added in v9.
 let TableBookmarksMirrorStructure = "bookmarksMirrorStructure"         // Added in v10.

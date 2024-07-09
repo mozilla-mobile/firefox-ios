@@ -1,0 +1,59 @@
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Cancel·la";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Esborra";
+
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "En eliminar les galetes i les dades del lloc %@, pot ser que se us tanquin les sessions o que se us buidin els carros de la compra dels llocs web.";
+
+/* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Esborra les galetes i dades dels llocs";
+
+/* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Esborra les galetes i dades dels llocs";
+
+/* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "S'han eliminat les galetes i dades dels llocs";
+
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Connexió segura";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "La connexió no és segura";
+
+/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
+   Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Elements de seguiment blocats: %@";
+
+/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Verificat per %@";
+
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "El %@ està fora de servei. Us recomanem reactivar les proteccions.";
+
+/* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
+"Menu.EnhancedTrackingProtection.Off.Title.v128" = "Heu desactivat les proteccions";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.
+   Header for the enhanced tracking protection screen when the user has selected to be protected. */
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "Esteu protegit. Si detectem alguna cosa, us ho farem saber.";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Aneu amb compte en aquest lloc";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "El %@ us protegeix";
+
+/* The title for the privacy settings button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "Paràmetres de privadesa";
+
+/* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protecció contra el seguiment millorada";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "La protecció està desactivada. Us recomanem reactivar-la.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Si us sembla que aquest lloc no funciona bé, proveu de desactivar-la.";
+

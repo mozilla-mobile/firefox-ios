@@ -7,13 +7,13 @@ import Foundation
 import WebKit
 
 public enum FindInPageFunction: String {
-    /// Find all the occurences of this text in the page
+    /// Find all the occurrences of this text in the page
     case find
 
-    /// Find the next occurence of this text in the page
+    /// Find the next occurrence of this text in the page
     case findNext
 
-    /// Find the previous occurence of this text in the page
+    /// Find the previous occurrence of this text in the page
     case findPrevious
 }
 

@@ -7,6 +7,12 @@ import UIKit
 import Storage
 import Shared
 
+import class MozillaAppServices.BookmarkFolderData
+import class MozillaAppServices.BookmarkItemData
+import class MozillaAppServices.BookmarkNodeData
+import enum MozillaAppServices.BookmarkNodeType
+import enum MozillaAppServices.BookmarkRoots
+
 private let BookmarkDetailFieldCellIdentifier = "BookmarkDetailFieldCellIdentifier"
 private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdentifier"
 
@@ -216,7 +222,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func applyTheme() {

@@ -7,6 +7,7 @@ import Common
 import WebKit
 import Shared
 import UIKit
+import Photos
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -132,13 +133,13 @@ extension BrowserViewController: WKUIDelegate {
         contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
         completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
     ) {
+        guard let url = elementInfo.linkURL else { return }
+
         completionHandler(
             UIContextMenuConfiguration(
                 identifier: nil,
                 previewProvider: {
-                    guard let url = elementInfo.linkURL,
-                          self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true
-                    else { return nil }
+                    guard self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
 
                     let previewViewController = UIViewController()
                     previewViewController.view.isUserInteractionEnabled = false
@@ -158,8 +159,7 @@ extension BrowserViewController: WKUIDelegate {
                     return previewViewController
                 },
                 actionProvider: { [self] (suggested) -> UIMenu? in
-                    guard let url = elementInfo.linkURL,
-                          let currentTab = self.tabManager.selectedTab,
+                    guard let currentTab = tabManager.selectedTab,
                           let contextHelper = currentTab.getContentScript(
                             name: ContextMenuHelper.name()
                           ) as? ContextMenuHelper,
@@ -298,23 +298,25 @@ extension BrowserViewController: WKUIDelegate {
                         .successValue ?? false
                     actions.append(isBookmarkedSite ? removeAction : addBookmarkAction)
 
-                    actions.append(UIAction(
-                        title: .ContextMenuDownloadLink,
-                        image: UIImage.templateImageNamed(
-                            StandardImageIdentifiers.Large.download
-                        ),
-                        identifier: UIAction.Identifier("linkContextMenu.download")
-                    ) { _ in
-                        // This checks if download is a blob, if yes, begin blob download process
-                        if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                            // if not a blob, set pendingDownloadWebView and load the request in
-                            // the webview, which will trigger the WKWebView navigationResponse
-                            // delegate function and eventually downloadHelper.open()
-                            self.pendingDownloadWebView = currentTab.webView
-                            let request = URLRequest(url: url)
-                            currentTab.webView?.load(request)
-                        }
-                    })
+                    if url.scheme != "javascript" {
+                        actions.append(UIAction(
+                            title: .ContextMenuDownloadLink,
+                            image: UIImage.templateImageNamed(
+                                StandardImageIdentifiers.Large.download
+                            ),
+                            identifier: UIAction.Identifier("linkContextMenu.download")
+                        ) { _ in
+                            // This checks if download is a blob, if yes, begin blob download process
+                            if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                                // if not a blob, set pendingDownloadWebView and load the request in
+                                // the webview, which will trigger the WKWebView navigationResponse
+                                // delegate function and eventually downloadHelper.open()
+                                self.pendingDownloadWebView = currentTab.webView
+                                let request = URLRequest(url: url)
+                                currentTab.webView?.load(request)
+                            }
+                        })
+                    }
 
                     actions.append(UIAction(
                         title: .ContextMenuCopyLink,
@@ -350,8 +352,15 @@ extension BrowserViewController: WKUIDelegate {
                             identifier: UIAction.Identifier("linkContextMenu.saveImage")
                         ) { _ in
                             getImageData(url) { data in
-                                guard let image = UIImage(data: data) else { return }
-                                self.writeToPhotoAlbum(image: image)
+                                if url.pathExtension.lowercased() == "gif" {
+                                    PHPhotoLibrary.shared().performChanges {
+                                        let creationRequest = PHAssetCreationRequest.forAsset()
+                                        creationRequest.addResource(with: .photo, data: data, options: nil)
+                                    }
+                                } else {
+                                    guard let image = UIImage(data: data) else { return }
+                                    self.writeToPhotoAlbum(image: image)
+                                }
                             }
                         })
 
@@ -457,11 +466,9 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
-            return
-        }
+        if tabManager.selectedTab?.webView !== webView { return }
 
-        updateFindInPageVisibility(visible: false)
+        updateFindInPageVisibility(isVisible: false)
 
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
@@ -505,7 +512,9 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if InternalURL.isValid(url: url) {
-            if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
+            if navigationAction.navigationType != .backForward,
+               navigationAction.isInternalUnprivileged,
+               !url.isReaderModeURL {
                 logger.log("Denying unprivileged request: \(navigationAction.request)",
                            level: .warning,
                            category: .webview)

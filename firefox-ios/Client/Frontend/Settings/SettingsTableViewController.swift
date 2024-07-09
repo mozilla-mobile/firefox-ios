@@ -74,24 +74,32 @@ class Setting: NSObject {
         cell.detailTextLabel?.assign(attributed: status, theme: theme)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
-        cell.textLabel?.assign(attributed: title, theme: theme)
-        cell.textLabel?.textAlignment = textAlignment
-        cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.lineBreakMode = .byTruncatingTail
+        if let cell = cell as? ThemedCenteredTableViewCell {
+            cell.applyTheme(theme: theme)
+            if let title = title?.string {
+                cell.setTitle(to: title)
+                cell.accessibilityLabel = title
+            }
+        } else {
+            cell.textLabel?.assign(attributed: title, theme: theme)
+            cell.textLabel?.textAlignment = textAlignment
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.lineBreakMode = .byTruncatingTail
+            if let title = title?.string {
+                if let detailText = cell.detailTextLabel?.text {
+                    cell.accessibilityLabel = "\(title), \(detailText)"
+                } else if let status = status?.string {
+                    cell.accessibilityLabel = "\(title), \(status)"
+                } else {
+                    cell.accessibilityLabel = title
+                }
+            }
+        }
         cell.accessoryType = accessoryType
         cell.accessoryView = accessoryView
         cell.selectionStyle = enabled ? .default : .none
         cell.accessibilityIdentifier = accessibilityIdentifier
         cell.imageView?.image = _image
-        if let title = title?.string {
-            if let detailText = cell.detailTextLabel?.text {
-                cell.accessibilityLabel = "\(title), \(detailText)"
-            } else if let status = status?.string {
-                cell.accessibilityLabel = "\(title), \(status)"
-            } else {
-                cell.accessibilityLabel = title
-            }
-        }
         cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
         cell.layoutMargins = .zero
@@ -916,7 +924,7 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func applyTheme() {
@@ -982,7 +990,7 @@ class SettingsTableViewController: ThemedTableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             let cell = dequeueCellFor(indexPath: indexPath, setting: setting)
-            setting.onConfigureCell(cell, theme: themeManager.currentTheme(for: windowUUID))
+            setting.onConfigureCell(cell, theme: themeManager.getCurrentTheme(for: windowUUID))
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
@@ -995,13 +1003,21 @@ class SettingsTableViewController: ThemedTableViewController {
     ) {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], let themedCell = cell as? ThemedTableViewCell {
-            setting.onConfigureCell(themedCell, theme: themeManager.currentTheme(for: windowUUID))
-            themedCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            setting.onConfigureCell(themedCell, theme: themeManager.getCurrentTheme(for: windowUUID))
+            themedCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
     private func dequeueCellFor(indexPath: IndexPath, setting: Setting) -> ThemedTableViewCell {
-        if setting.style == .subtitle {
+        if setting as? DisconnectSetting != nil {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedCenteredTableViewCell else {
+                return ThemedCenteredTableViewCell()
+            }
+            return cell
+        } else if setting.style == .subtitle {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
                 for: indexPath
@@ -1040,7 +1056,7 @@ class SettingsTableViewController: ThemedTableViewController {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 
@@ -1054,7 +1070,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return footerView
     }
 

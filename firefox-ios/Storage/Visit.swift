@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 
+import enum MozillaAppServices.VisitType
+
 /**
  * SiteVisit is a sop to the existing API, which expects to be able to go
  * backwards from a visit to a site, and preserve the ID of the database row.

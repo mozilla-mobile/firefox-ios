@@ -8,6 +8,8 @@ import Common
 import Shared
 import Redux
 
+import enum MozillaAppServices.VisitType
+
 protocol RemoteTabsPanelDelegate: AnyObject {
     func presentFirefoxAccountSignIn()
     func presentFxAccountSettings()
@@ -98,7 +100,7 @@ class RemoteTabsPanel: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer4
         tableViewController.tableView.backgroundColor =  theme.colors.layer3
         tableViewController.tableView.separatorColor = theme.colors.borderPrimary

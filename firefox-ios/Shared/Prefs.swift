@@ -47,6 +47,7 @@ public struct PrefsKeys {
         public static let firstWeekAppOpenTimestamps = "firstWeekAppOpenTimestamps"
         public static let firstWeekSearchesTimestamps = "firstWeekSearchesTimestamps"
         public static let didUpdateConversionValue = "didUpdateConversionValue"
+        public static let InternalURLUUID = "InternalURLUUID"
     }
 
     public struct AppVersion {
@@ -90,7 +91,7 @@ public struct PrefsKeys {
 
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
-        public static let RecentlySavedSection = "RecentlySavedSectionUserPrefsKey"
+        public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
         public static let SponsoredShortcuts = "SponsoredShortcutsUserPrefsKey"
         public static let StartAtHome = "StartAtHomeUserPrefsKey"
         public static let TopSiteSection = "TopSitesUserPrefsKey"
@@ -160,9 +161,6 @@ public struct PrefsKeys {
 
     // The last recorded CFR timestamp
     public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
-
-    // Representing whether or not the last user session was private
-    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
 
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"

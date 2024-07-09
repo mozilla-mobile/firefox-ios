@@ -6,45 +6,74 @@ import SwiftUI
 import Common
 import Shared
 import Storage
-
-// TODO: PHASE-2 FXIOS-7653
-// AddressListViewModelDelegate: A protocol to notify delegates about address updates.
-// protocol AddressListViewModelDelegate: AnyObject {
-//     func didUpdateAddresses(_ addresses: [Address])
-// }
-
-// TODO: Refactor the Address extension for global usage (FXIOS-8337)
-extension Address {
-    var addressCityStateZipcode: String {
-        return "\(addressLevel2), \(addressLevel1) \(postalCode)"
-    }
-}
+import struct MozillaAppServices.UpdatableAddressFields
+import struct MozillaAppServices.Address
 
 // AddressListViewModel: A view model for managing addresses.
-class AddressListViewModel: ObservableObject, FeatureFlaggable {
+final class AddressListViewModel: ObservableObject, FeatureFlaggable {
+    enum Destination: Swift.Identifiable, Equatable {
+        case add(Address)
+        case edit(Address)
+
+        var id: String {
+            switch self {
+            case .add(let value):
+                return value.guid
+            case .edit(let value):
+                return value.guid
+            }
+        }
+    }
+
     // MARK: - Properties
 
     @Published var addresses: [Address] = []
     @Published var showSection = false
-    @Published var selectedAddress: Address?
+    @Published var destination: Destination?
+    @Published var isEditMode = false
+
+    let windowUUID: WindowUUID
 
     private let logger: Logger
 
     var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
+    var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
+    var toggleEditModeAction: ((Bool) -> Void)?
+    var presentToast: ((AddressModifiedStatus) -> Void)?
 
     let addressProvider: AddressProvider
+    let themeManager: ThemeManager
+    let profile: Profile
+
+    var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
+    var isDarkTheme: Bool {
+        themeManager.getCurrentTheme(for: windowUUID).type == .dark
+    }
+    var hasSyncableAccount: Bool {
+        profile.hasSyncableAccount()
+    }
+
+    let editAddressWebViewManager: WebViewPreloadManaging
 
     // MARK: - Initializer
 
     /// Initializes the AddressListViewModel.
     init(
         logger: Logger = DefaultLogger.shared,
-        addressProvider: AddressProvider
+        windowUUID: WindowUUID,
+        addressProvider: AddressProvider,
+        editAddressWebViewManager: WebViewPreloadManaging = EditAddressWebViewManager(),
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        profile: Profile = AppContainer.shared.resolve()
     ) {
         self.logger = logger
+        self.windowUUID = windowUUID
         self.addressProvider = addressProvider
+        self.editAddressWebViewManager = editAddressWebViewManager
+        self.themeManager = themeManager
+        self.profile = profile
     }
 
     // MARK: - Fetch Addresses
@@ -59,10 +88,12 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
                     self.addresses = addresses
                     self.showSection = !addresses.isEmpty
                 } else if let error = error {
-                    self.logger.log("Error fetching addresses",
-                                    level: .warning,
-                                    category: .autofill,
-                                    description: "Error fetching addresses: \(error.localizedDescription)")
+                    self.logger.log(
+                        "Error fetching addresses",
+                        level: .warning,
+                        category: .autofill,
+                        description: "Error fetching addresses: \(error.localizedDescription)"
+                    )
                 }
             }
         }
@@ -92,12 +123,109 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         addressSelectionCallback?(fromAddress(address))
     }
 
-    func onAddressTap(_ address: Address) {
-        selectedAddress = address
+    func addressTapped(_ address: Address) {
+        destination = .edit(address)
     }
 
-    func onCancelButtonTap() {
-        selectedAddress = nil
+    func cancelAddButtonTap() {
+        destination = nil
+    }
+
+    func editButtonTap() {
+        toggleEditMode()
+    }
+
+    func saveEditButtonTap() {
+        toggleEditMode()
+        saveAction? { [weak self] updatedAddress in
+            guard let self else { return }
+            guard case .edit(let currentAddress) = self.destination else { return }
+            self.addressProvider.updateAddress(id: currentAddress.guid, address: updatedAddress) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.presentToast?(.updated)
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
+    }
+
+    func closeEditButtonTap() {
+        destination = nil
+    }
+
+    func cancelEditButtonTap() {
+        toggleEditMode()
+    }
+
+    func saveAddressButtonTap() {
+        saveAction? { [weak self] address in
+            guard let self else { return }
+            self.addressProvider.addAddress(address: address) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.presentToast?(.saved)
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
+    }
+
+    func addAddressButtonTap() {
+        destination = .add(Address(
+            guid: "",
+            name: "",
+            organization: "",
+            streetAddress: "",
+            addressLevel3: "",
+            addressLevel2: "",
+            addressLevel1: "",
+            postalCode: "",
+            country: currentRegionCode(),
+            tel: "",
+            email: "",
+            timeCreated: 0,
+            timeLastUsed: nil,
+            timeLastModified: 0,
+            timesUsed: 0
+        ))
+    }
+
+    func removeConfimationButtonTap() {
+        if case .edit(let address) = destination {
+            addressProvider.deleteAddress(id: address.id) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.presentToast?(.removed)
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.toggleEditMode()
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
+    }
+
+    private func toggleEditMode() {
+        isEditMode.toggle()
+        toggleEditModeAction?(isEditMode)
     }
 
     // MARK: - Inject JSON Data
@@ -105,21 +233,30 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     struct JSONDataError: Error {}
 
     func getInjectJSONDataInit() throws -> String {
-        guard let address = selectedAddress else {
+        guard let destination = self.destination else {
             throw JSONDataError()
         }
 
         do {
+            let address: Address =
+            switch destination {
+            case .add(let address):
+                address
+            case .edit(let address):
+                address
+            }
+
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
-
-            let javascript = "init(\(addressString), \(l10sString));"
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme));"
             return javascript
         } catch {
-            logger.log("Failed to encode data",
-                       level: .warning,
-                       category: .autofill,
-                       description: "Failed to encode data with error: \(error.localizedDescription)")
+            logger.log(
+                "Failed to encode data",
+                level: .warning,
+                category: .autofill,
+                description: "Failed to encode data with error: \(error.localizedDescription)"
+            )
             throw error
         }
     }

@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Common
+import Foundation
 import ToolbarKit
+import UIKit
 
 class RootViewControllerModel {
     // By default the state is set to reload. We save the state to avoid setting the toolbar
@@ -70,7 +71,7 @@ class RootViewControllerModel {
     }
 
     // MARK: - Address toolbar
-    func addressToolbarContainerModel(url: String?) -> AddressToolbarContainerModel {
+    func addressToolbarContainerModel(url: URL?) -> AddressToolbarContainerModel {
         let pageActions = [ToolbarElement(
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
@@ -88,16 +89,17 @@ class RootViewControllerModel {
             })]
 
         let locationViewState = LocationViewState(
-            clearButtonA11yId: "clearButton",
-            clearButtonA11yLabel: "Clean",
             searchEngineImageViewA11yId: "searchEngine",
             searchEngineImageViewA11yLabel: "Search engine icon",
+            lockIconButtonA11yId: "lockButton",
+            lockIconButtonA11yLabel: "Tracking Protection",
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTextField",
             urlTextFieldA11yLabel: "Address Bar",
-            searchEngineImageName: "bingSearchEngine",
+            searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Medium.lock,
-            url: url
+            url: url,
+            searchTerm: nil
         )
 
         // FXIOS-8947: Use scroll position

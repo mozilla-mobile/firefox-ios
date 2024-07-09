@@ -20,7 +20,7 @@
 ## Running Tests
 
 
-Depending on the specific tests you want to run you can provide different command line flags to run those tests. The test suite will automatically run tests that coorespond with the experiment. So if you are testing an experiment that uses the `messaging` feature, the correct tests will be run.
+Depending on the specific tests you want to run you can provide different command line flags to run those tests. The test suite will automatically run tests that correspond with the experiment. So if you are testing an experiment that uses the `messaging` feature, the correct tests will be run.
 
 
 `--experiment test-experiment`: must be provided with the experiment slug as the provided value.

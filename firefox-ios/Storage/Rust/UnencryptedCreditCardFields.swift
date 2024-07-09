@@ -4,6 +4,8 @@
 
 import Foundation
 
+import struct MozillaAppServices.CreditCard
+
 // Note: This was created in lieu of a view model
 public struct UnencryptedCreditCardFields {
     public var ccName: String = ""

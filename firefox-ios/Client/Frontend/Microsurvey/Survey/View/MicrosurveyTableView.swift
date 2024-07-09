@@ -4,7 +4,7 @@
 
 import Foundation
 
-class MicrosurveyTableView: UITableView {
+final class MicrosurveyTableView: UITableView {
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         isScrollEnabled = false
@@ -15,6 +15,7 @@ class MicrosurveyTableView: UITableView {
         )
         register(cellType: MicrosurveyTableViewCell.self)
         rowHeight = UITableView.automaticDimension
+        separatorStyle = .none
     }
 
     required init?(coder: NSCoder) {

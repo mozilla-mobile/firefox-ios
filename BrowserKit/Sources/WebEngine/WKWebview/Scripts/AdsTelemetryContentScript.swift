@@ -51,7 +51,7 @@ public struct EngineSearchProviderModel {
     }
 }
 
-/// Delegate protocol for AdsTelemetryContentSccript. Provides callbacks to delegates for ad tracking detection
+/// Delegate protocol for AdsTelemetryContentScript. Provides callbacks to delegates for ad tracking detection
 /// and allows the delegate to provide the search engine definitions and regexes. (See: `EngineSearchProviderModel`)
 protocol AdsTelemetryScriptDelegate: AnyObject {
     func trackAdsFoundOnPage(providerName: String, urls: [String])

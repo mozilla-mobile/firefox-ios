@@ -18,7 +18,7 @@ history:
       - https://github.com/mozilla-mobile/firefox-ios/pull/11634
     notification_emails:
       - sync-core@mozilla.com
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
     expires: never
 
 logins_store_key_regeneration:

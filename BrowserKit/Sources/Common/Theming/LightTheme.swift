@@ -20,7 +20,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layer5: UIColor = FXColors.White
     var layer5Hover: UIColor = FXColors.LightGrey20
     var layerScrim: UIColor = FXColors.DarkGrey30.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet60, FXColors.Violet70])
     var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
                                                  FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.3)
@@ -68,8 +68,8 @@ private struct LightColourPalette: ThemeColourPalette {
     var actionWarning: UIColor = FXColors.Yellow60.withAlphaComponent(0.4)
     var actionError: UIColor = FXColors.Red30
     var actionInfo: UIColor = FXColors.Blue50
-    var actionTabActive: UIColor = FXColors.Purple60
-    var actionTabInactive: UIColor = FXColors.Ink50
+    var actionTabActive: UIColor = FXColors.White
+    var actionTabInactive: UIColor = FXColors.LightGrey20
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.DarkGrey90

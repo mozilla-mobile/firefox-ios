@@ -104,9 +104,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let dataClearanceAnimation = DataClearanceAnimation()
         dataClearanceAnimation.startAnimation(
             with: view,
-            for: shouldShowTopTabsForTraitCollection(
-                traitCollection
-            )
+            for: ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         )
 
         completion(timingToMatchGradientOverlay)
@@ -122,12 +120,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
-        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
-        // operating in an overlay mode (`urlBar.inOverlayMode`).
-        dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
-        tabManager.selectedTab?.goBack()
+        didTapOnBack()
     }
 
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -135,12 +128,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // This code snippet addresses an issue related to navigation between pages in the same tab FXIOS-7309.
-        // Specifically, it checks if the URL bar is not currently focused (`!focusUrlBar`) and if it is
-        // operating in an overlay mode (`urlBar.inOverlayMode`).
-        dismissUrlBar()
-        updateZoomPageBarVisibility(visible: false)
-        tabManager.selectedTab?.goForward()
+        didTapOnForward()
     }
 
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -166,47 +154,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
-
-        // Logs homePageMenu or siteMenu depending if HomePage is open or not
-        let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
-        let eventObject: TelemetryWrapper.EventObject = isHomePage ? .homePageMenu : .siteMenu
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: eventObject)
-        let menuHelper = MainMenuActionHelper(profile: profile,
-                                              tabManager: tabManager,
-                                              buttonView: button,
-                                              toastContainer: contentContainer)
-        menuHelper.delegate = self
-        menuHelper.sendToDeviceDelegate = self
-        menuHelper.navigationHandler = navigationHandler
-
-        updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
-                trait: self.traitCollection,
-                isBottomSearchBar: self.isBottomSearchBar
-            )
-            let viewModel = PhotonActionSheetViewModel(
-                actions: actions,
-                modalStyle: .popover,
-                isMainMenu: true,
-                isMainMenuInverted: shouldInverse
-            )
-            self.presentSheetWith(viewModel: viewModel, on: self, from: button)
-        }
+        didTapOnMenu(button: button)
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         updateZoomPageBarVisibility(visible: false)
-        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-        let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
-        showTabTray(focusedSegment: segmentToFocus)
+        focusOnTabSegment()
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .press,
@@ -283,20 +236,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard self.presentedViewController == nil else { return }
-        var actions: [[PhotonRowActions]] = []
-        actions.append(getTabToolbarLongPressActionsForModeSwitching())
-        actions.append(getMoreTabToolbarLongPressActions())
-
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        let viewModel = PhotonActionSheetViewModel(
-            actions: actions,
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: .overCurrentContext
-        )
-        presentSheetWith(viewModel: viewModel, on: self, from: button)
+        presentActionSheet(from: button)
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -305,7 +248,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 }
 
 // MARK: - ToolbarActionMenuDelegate
-extension BrowserViewController: ToolBarActionMenuDelegate {
+extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDelegate {
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }
@@ -359,7 +302,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     }
 
     func showFindInPage() {
-        updateFindInPageVisibility(visible: true)
+        updateFindInPageVisibility(isVisible: true)
     }
 
     func showCustomizeHomePage() {
@@ -382,5 +325,18 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         presentSignInViewController(fxaParameters.launchParameters,
                                     flowType: fxaParameters.flowType,
                                     referringPage: fxaParameters.referringPage)
+    }
+
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        if !urls.isEmpty {
+            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+        }
+    }
+
+    func showFilePicker(fileURL: URL) {
+        let documentPicker = UIDocumentPickerViewController(forExporting: [fileURL], asCopy: true)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .formSheet
+        showViewController(viewController: documentPicker)
     }
 }

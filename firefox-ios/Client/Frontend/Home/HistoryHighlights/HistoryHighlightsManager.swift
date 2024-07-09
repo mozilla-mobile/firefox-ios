@@ -5,7 +5,9 @@
 import Foundation
 import Shared
 import Storage
-import MozillaAppServices
+
+import struct MozillaAppServices.HistoryHighlight
+import struct MozillaAppServices.HistoryHighlightWeights
 
 private let defaultHighlightCount = 9
 private let searchLimit = 1000

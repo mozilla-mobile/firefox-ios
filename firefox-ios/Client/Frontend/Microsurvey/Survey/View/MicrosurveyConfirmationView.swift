@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MicrosurveyConfirmationView: UIView, ThemeApplicable {
+final class MicrosurveyConfirmationView: UIView, ThemeApplicable {
     private struct UX {
         static let stackSpacing: CGFloat = 28
         static let padding = NSDirectionalEdgeInsets(
@@ -31,6 +31,7 @@ class MicrosurveyConfirmationView: UIView, ThemeApplicable {
         label.text = .Microsurvey.Survey.ConfirmationPage.ConfirmationLabel
         label.font = FXFontStyles.Regular.title3.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
     }
 
     override init(frame: CGRect) {

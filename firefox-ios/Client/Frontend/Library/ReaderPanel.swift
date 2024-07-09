@@ -7,6 +7,8 @@ import Storage
 import Shared
 import Common
 
+import enum MozillaAppServices.VisitType
+
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
@@ -259,7 +261,7 @@ class ReadingListPanel: UITableViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     @objc
