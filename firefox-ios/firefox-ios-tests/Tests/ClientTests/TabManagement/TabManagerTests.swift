@@ -25,7 +25,6 @@ class TabManagerTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
-    
         // For this test suite, use a consistent window UUID for all test cases
         let windowManager: WindowManager = AppContainer.shared.resolve()
         let uuid = windowManager.activeWindow
