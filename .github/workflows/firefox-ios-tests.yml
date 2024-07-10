@@ -15,7 +15,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-14-xlarge
+        runs-on: macos-14
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -54,7 +54,7 @@ jobs:
                 
     run-fullfunctionaltests:
         name: Run full functional tests
-        runs-on: macos-14-xlarge
+        runs-on: macos-14
         needs: compile
         strategy:
             fail-fast: false
