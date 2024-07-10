@@ -16,7 +16,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-14-xlarge
+        runs-on: macos-14
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -50,7 +50,7 @@ jobs:
                 retention-days: 2          
     run-tests:
         name: Run tests
-        runs-on: macos-14-xlarge
+        runs-on: macos-14
         needs: compile
         strategy:
             fail-fast: false
