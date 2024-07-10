@@ -371,7 +371,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction
         let url = urlChangeAction != nil ? urlChangeAction?.url : toolbarState.addressToolbar.url
 
-        guard let url else {
+        guard url != nil else {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
         }
