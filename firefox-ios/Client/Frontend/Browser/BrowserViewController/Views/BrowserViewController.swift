@@ -1697,9 +1697,13 @@ class BrowserViewController: UIViewController,
             // Ensure that the tab title *actually* changed to prevent repeated calls
             // to navigateInTab(tab:).
             guard let title = tab.title else { break }
-            if !title.isEmpty && title != tab.lastTitle {
-                tab.lastTitle = title
-                navigateInTab(tab: tab, webViewStatus: .title)
+            if !title.isEmpty {
+                if title != tab.lastTitle {
+                    tab.lastTitle = title
+                    navigateInTab(tab: tab, webViewStatus: .title)
+                } else {
+                    navigateIfReaderModeActive(currentTab: tab)
+                }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
@@ -1869,6 +1873,17 @@ class BrowserViewController: UIViewController,
                 object: .tabToolbar,
                 value: .tabView
             )
+        }
+    }
+
+    // FXIOS-8672: "Reader mode cannot be accessed under certain steps"
+    // If current tab tile and last title are same then check if ReaderModeState is active.
+    // If so, make reader mode available.
+    private func navigateIfReaderModeActive(currentTab: Tab) {
+        if let readerMode = currentTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            if readerMode.state == .active {
+                navigateInTab(tab: currentTab, webViewStatus: .title)
+            }
         }
     }
 
