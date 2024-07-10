@@ -64,6 +64,7 @@
         "LibraryTestsIpad",
         "LibraryTestsIphone",
         "LoginTest",
+        "MicrosurveyTests",
         "NavigationTest",
         "NewTabSettingsTest\/testChangeNewTabSettingsLabel()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowBlankPage()",
