@@ -41,6 +41,7 @@ class ToolbarAction: Action {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
+    case addressToolbarActionsDidChange
     case urlDidChange
     case backButtonStateChanged
     case forwardButtonStateChanged
@@ -89,4 +90,6 @@ class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case urlDidChange
+    case didStartEditingUrl
+    case cancelEdit
 }

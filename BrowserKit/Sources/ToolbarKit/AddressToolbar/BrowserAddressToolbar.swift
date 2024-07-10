@@ -19,7 +19,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let dividerWidth: CGFloat = 4
         static let borderHeight: CGFloat = 1
         static let actionSpacing: CGFloat = 0
-        static let buttonSize = CGSize(width: 40, height: 40)
+        static let buttonSize = CGSize(width: 44, height: 44)
         static let locationHeight: CGFloat = 44
     }
 
@@ -48,6 +48,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private var dividerWidthConstraint: NSLayoutConstraint?
     private var toolbarTopBorderHeightConstraint: NSLayoutConstraint?
     private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
+    private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
+    private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -58,9 +60,13 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: AddressToolbarState, toolbarDelegate: any AddressToolbarDelegate) {
+    public func configure(state: AddressToolbarState,
+                          toolbarDelegate: any AddressToolbarDelegate,
+                          leadingSpace: CGFloat?,
+                          trailingSpace: CGFloat?) {
         configure(state: state)
         self.toolbarDelegate = toolbarDelegate
+        updateSpacing(leading: leadingSpace, trailing: trailingSpace)
     }
 
     public func configure(state: AddressToolbarState) {
@@ -115,6 +121,16 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarTopBorderHeightConstraint?.isActive = true
         toolbarBottomBorderHeightConstraint?.isActive = true
 
+        leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
+            equalTo: toolbarContainerView.leadingAnchor,
+            constant: UX.horizontalEdgeSpace)
+        leadingNavigationActionStackConstraint?.isActive = true
+
+        trailingBrowserActionStackConstraint = browserActionStack.trailingAnchor.constraint(
+            equalTo: toolbarContainerView.trailingAnchor,
+            constant: -UX.horizontalEdgeSpace)
+        trailingBrowserActionStackConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
@@ -131,8 +147,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             toolbarBottomBorderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toolbarBottomBorderView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            navigationActionStack.leadingAnchor.constraint(equalTo: toolbarContainerView.leadingAnchor,
-                                                           constant: UX.horizontalEdgeSpace),
             navigationActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             navigationActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
 
@@ -154,8 +168,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             pageActionStack.bottomAnchor.constraint(equalTo: locationContainer.bottomAnchor),
 
             browserActionStack.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
-            browserActionStack.trailingAnchor.constraint(equalTo: toolbarContainerView.trailingAnchor,
-                                                         constant: -UX.horizontalEdgeSpace),
             browserActionStack.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
         ])
 
@@ -173,6 +185,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         updateActionStack(stackView: pageActionStack, toolbarElements: state.pageActions)
 
         updateActionSpacing()
+    }
+
+    private func updateSpacing(leading: CGFloat?, trailing: CGFloat?) {
+        leadingNavigationActionStackConstraint?.constant = leading ?? UX.horizontalEdgeSpace
+        trailingBrowserActionStackConstraint?.constant = trailing ?? -UX.horizontalEdgeSpace
     }
 
     private func setZeroWidthConstraint(_ stackView: UIStackView) {
@@ -207,7 +224,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
         // Navigation action spacing
         let hasNavigationActions = !navigationActionStack.arrangedSubviews.isEmpty
-        leadingLocationContainerConstraint?.constant = hasNavigationActions ? -UX.horizontalSpace : 0
+        let isRegular = traitCollection.horizontalSizeClass == .regular
+        leadingLocationContainerConstraint?.constant = hasNavigationActions && isRegular ? -UX.horizontalSpace : 0
 
         // Page action spacing
         let hasPageActions = !pageActionStack.arrangedSubviews.isEmpty

@@ -18,6 +18,7 @@ struct ToolbarActionState: Equatable {
         case trackingProtection
         case readerMode
         case dataClearance
+        case cancelEdit
     }
 
     var actionType: ActionType

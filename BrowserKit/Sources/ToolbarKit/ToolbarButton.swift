@@ -12,8 +12,8 @@ public enum ToolbarButtonGesture {
 
 class ToolbarButton: UIButton, ThemeApplicable {
     private struct UX {
-        static let verticalInset: CGFloat = 8
-        static let horizontalInset: CGFloat = 8
+        static let verticalInset: CGFloat = 10
+        static let horizontalInset: CGFloat = 10
         static let badgeImageViewBorderWidth: CGFloat = 1
         static let badgeImageViewCornerRadius: CGFloat = 10
         static let badgeIconSize = CGSize(width: 20, height: 20)
