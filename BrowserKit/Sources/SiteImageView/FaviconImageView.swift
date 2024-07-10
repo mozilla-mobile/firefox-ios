@@ -43,6 +43,10 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     // MARK: - Public
 
+    public func hasInFlightFaviconRequest() -> Bool {
+        return currentInFlightURLString != nil
+    }
+
     /// Initiates the retrival of the favion image and sets it to the view
     /// - Parameter viewModel: the configuration of the favicon
     public func setFavicon(_ viewModel: FaviconImageViewModel) {
