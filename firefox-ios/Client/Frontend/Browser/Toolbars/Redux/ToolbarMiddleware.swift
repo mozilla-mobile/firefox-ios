@@ -122,6 +122,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.cancelEdit:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
 
+        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
+            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
+
         default:
             break
         }
@@ -200,6 +203,16 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         case .cancelEdit:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
+
+        case .reload:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.reloadWebsite)
+            store.dispatch(action)
+
+        case .stopLoading:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.stopLoadingWebsite)
+            store.dispatch(action)
 
         default:
             break
@@ -355,29 +368,21 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: action.windowUUID)
         else { return actions }
 
-        var url = toolbarState.addressToolbar.url
-        if let action = action as? ToolbarMiddlewareUrlChangeAction {
-            url = action.url
-        }
+        let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction
+        let url = urlChangeAction != nil ? urlChangeAction?.url : toolbarState.addressToolbar.url
 
         guard let url else {
             // On homepage we only show the QR code button
-            actions.append(qrCodeScanAction)
-            return actions
+            return [qrCodeScanAction]
         }
 
-        var isLoading = false
+        let isLoadingChangeAction = action.actionType as? ToolbarMiddlewareActionType == .websiteLoadingStateDidChange
+        let isLoading = isLoadingChangeAction ? action.isLoading : toolbarState.addressToolbar.isLoading
 
-        // share, reload if url exists + potentially reader mode & fakespot
-        switch action.actionType {
-        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
-            if action.isLoading == true {
-                actions.append(stopLoadingAction)
-            } else if action.isLoading == false {
-                actions.append(reloadAction)
-            }
-        default:
-            return actions
+        if isLoading == true {
+            actions.append(stopLoadingAction)
+        } else if isLoading == false {
+            actions.append(reloadAction)
         }
 
         return actions
@@ -421,9 +426,11 @@ class ToolbarMiddleware: FeatureFlaggable {
         else { return nil }
 
         let navigationActions = addressToolbarNavigationActions(action: action, state: state)
+        let pageActions = addressToolbarPageActions(action: action, state: state)
+
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
-            pageActions: toolbarState.addressToolbar.pageActions,
+            pageActions: pageActions,
             browserActions: toolbarState.addressToolbar.browserActions,
             borderPosition: toolbarState.addressToolbar.borderPosition,
             url: url ?? toolbarState.addressToolbar.url,

@@ -15,6 +15,7 @@ struct ToolbarActionState: Equatable {
         case qrCode
         case share
         case reload
+        case stopLoading
         case trackingProtection
         case readerMode
         case dataClearance

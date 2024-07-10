@@ -14,6 +14,7 @@ struct AddressBarState: StateType, Equatable {
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var isEditing: Bool
+    var isLoading: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
@@ -22,7 +23,8 @@ struct AddressBarState: StateType, Equatable {
                   browserActions: [],
                   borderPosition: nil,
                   url: nil,
-                  isEditing: false)
+                  isEditing: false,
+                  isLoading: false)
     }
 
     init(windowUUID: WindowUUID,
@@ -31,7 +33,8 @@ struct AddressBarState: StateType, Equatable {
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
-         isEditing: Bool = false) {
+         isEditing: Bool = false,
+         isLoading: Bool = false) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -39,6 +42,7 @@ struct AddressBarState: StateType, Equatable {
         self.borderPosition = borderPosition
         self.url = url
         self.isEditing = isEditing
+        self.isLoading = isLoading
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -81,7 +85,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
-                pageActions: state.pageActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
