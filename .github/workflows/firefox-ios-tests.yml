@@ -68,7 +68,6 @@ jobs:
               run: |
                 gem install xcpretty -v 0.3.0
                 pip install blockkit==1.9.1
-                npm install -g junit-report-merger@7.0.0
             - name: Run tests
               id: run-tests
               run: |
