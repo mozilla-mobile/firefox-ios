@@ -69,3 +69,50 @@ jobs:
                 gem install xcpretty -v 0.3.0
                 pip install blockkit==1.9.1
                 npm install -g junit-report-merger@7.0.0
+            - name: Run tests
+              id: run-tests
+              run: |
+                xcodebuild \
+                  test-without-building \
+                  -scheme ${{ env.xcodebuild_scheme }} \
+                  -target ${{ env.xcodebuild_target }} \
+                  -derivedDataPath ~/DerivedData \
+                  -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+                  -testPlan FullFunctionalTestPlan \
+                  -resultBundlePath ${{ env.test_results_directory }}/results \
+                  | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
+              working-directory:  ${{ env.browser }}
+              continue-on-error: true
+            - name: Print test report
+              id: test-report
+              run: |
+                python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
+                cat github.md >> $GITHUB_STEP_SUMMARY
+                python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
+              working-directory:  ${{ env.browser }}
+            - name: Upload log file
+              id: upload-log
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-FullFunctionalTestPlan-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+                path: ${{ env.browser }}/xcodebuild.log
+                retention-days: 90
+            - name: Report to Slack
+              id: slack
+              uses: slackapi/slack-github-action@v1.26.0
+              with:
+                payload-file-path: ${{ env.browser }}/slack.json
+              env:
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+                ios_simulator: ${{ matrix.ios_simulator }}
+                pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+                xcodebuild_test_plan: FullFunctionalTestPlan
+                ref_name: ${{ github.ref_name }}
+                repository: ${{ github.repository }}
+                run_id: ${{ github.run_id }}
+                server_url: ${{ github.server_url }}
+                sha: ${{ github.sha }}
+            - name: Return fail status if a test fails
+              run: |
+                exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
