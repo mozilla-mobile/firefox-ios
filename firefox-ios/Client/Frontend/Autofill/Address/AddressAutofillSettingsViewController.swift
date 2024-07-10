@@ -89,13 +89,13 @@ class AddressAutofillSettingsViewController: SensitiveViewController, Themeable 
         viewModel.addressListViewModel.presentToast = { [weak self] status in
             guard let self else { return }
             switch status {
-            case .error(let action):
+            case let .error(errorType):
                 ActionToast(
-                    text: status.message,
+                    text: errorType.message,
                     bottomContainer: view,
                     theme: themeManager.getCurrentTheme(for: windowUUID),
-                    buttonTitle: status.actionTitle,
-                    buttonAction: action
+                    buttonTitle: errorType.actionTitle,
+                    buttonAction: errorType.action
                 ).show()
             default:
                 SimpleToast().showAlertWithText(

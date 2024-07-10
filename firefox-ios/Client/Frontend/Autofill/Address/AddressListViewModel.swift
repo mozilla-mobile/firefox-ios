@@ -9,7 +9,6 @@ import Storage
 import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
-// AddressListViewModel: A view model for managing addresses.
 final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
@@ -152,12 +151,29 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                     self.presentToast?(.updated)
                 case .failure:
                     self.presentToast?(
-                        .error(action: { [weak self] in
-                            self?.updateLocal(
-                                id: id,
-                                updatedAddress: updatedAddress
-                            )
-                        })
+                        .error(
+                            .update(action: { [weak self] in
+                                self?.destination = .edit(
+                                    Address(
+                                        guid: id,
+                                        name: updatedAddress.name,
+                                        organization: updatedAddress.organization,
+                                        streetAddress: updatedAddress.streetAddress,
+                                        addressLevel3: updatedAddress.addressLevel3,
+                                        addressLevel2: updatedAddress.addressLevel2,
+                                        addressLevel1: updatedAddress.addressLevel1,
+                                        postalCode: updatedAddress.postalCode,
+                                        country: updatedAddress.country,
+                                        tel: updatedAddress.tel,
+                                        email: updatedAddress.email,
+                                        timeCreated: 0,
+                                        timeLastUsed: nil,
+                                        timeLastModified: 0,
+                                        timesUsed: 0
+                                    )
+                                )
+                            })
+                        )
                     )
                 }
                 self.destination = nil
@@ -188,7 +204,31 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 case .success:
                     self.presentToast?(.saved)
                 case .failure:
-                    self.presentToast?(.error(action: { [weak self] in self?.saveLocal(address: address) }))
+                    self.presentToast?(
+                        .error(
+                            .save(action: { [weak self] in
+                                self?.destination = .add(
+                                    Address(
+                                        guid: "",
+                                        name: address.name,
+                                        organization: address.organization,
+                                        streetAddress: address.streetAddress,
+                                        addressLevel3: address.addressLevel3,
+                                        addressLevel2: address.addressLevel2,
+                                        addressLevel1: address.addressLevel1,
+                                        postalCode: address.postalCode,
+                                        country: address.country,
+                                        tel: address.tel,
+                                        email: address.email,
+                                        timeCreated: 0,
+                                        timeLastUsed: nil,
+                                        timeLastModified: 0,
+                                        timesUsed: 0
+                                    )
+                                )
+                            })
+                        )
+                    )
                 }
                 self.destination = nil
                 self.fetchAddresses()
@@ -218,19 +258,29 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     func removeConfimationButtonTap() {
         if case .edit(let address) = destination {
-            addressProvider.deleteAddress(id: address.id) { [weak self] result in
-                guard let self else { return }
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self.presentToast?(.removed)
-                    case .failure:
-                        break
-                    }
-                    self.toggleEditMode()
-                    self.destination = nil
-                    self.fetchAddresses()
+            removeLocal(address: address)
+        }
+    }
+
+    private func removeLocal(address: Address) {
+        addressProvider.deleteAddress(id: address.id) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.presentToast?(.removed)
+                case .failure:
+                    self.presentToast?(
+                        .error(
+                            .remove(action: { [weak self] in
+                                self?.destination = .edit(address)
+                            })
+                        )
+                    )
                 }
+                self.toggleEditMode()
+                self.destination = nil
+                self.fetchAddresses()
             }
         }
     }
