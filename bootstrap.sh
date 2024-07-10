@@ -41,5 +41,11 @@ fi
 NIMBUS_FML_FILE=./firefox-ios/nimbus.fml.yaml
 curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/mozilla/application-services/main/components/nimbus/ios/scripts/bootstrap.sh | bash -s -- --directory ./firefox-ios/bin $NIMBUS_FML_FILE
 
+# Move hooks from .githooks to .git/hooks
+cp -r .githooks/* .git/hooks/
+
+# Make the hooks are executable
+chmod +x .git/hooks/*
+
 # Run and update content blocker
 ./content_blocker_update.sh
