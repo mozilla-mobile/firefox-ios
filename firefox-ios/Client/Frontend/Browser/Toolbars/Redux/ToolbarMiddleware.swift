@@ -27,6 +27,57 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
+    lazy var stopLoadingAction = ToolbarActionState(
+        actionType: .stopLoading,
+        iconName: StandardImageIdentifiers.Large.cross,
+        isEnabled: true,
+        a11yLabel: .TabToolbarStopAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
+
+    lazy var reloadAction = ToolbarActionState(
+        actionType: .reload,
+        iconName: StandardImageIdentifiers.Large.arrowClockwise,
+        isEnabled: true,
+        a11yLabel: .TabLocationReloadAccessibilityLabel,
+        a11yHint: .TabLocationReloadAccessibilityHint,
+        a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
+
+    lazy var qrCodeScanAction = ToolbarActionState(
+        actionType: .qrCode,
+        iconName: StandardImageIdentifiers.Large.qrCode,
+        isEnabled: true,
+        a11yLabel: .QRCode.ToolbarButtonA11yLabel,
+        a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode)
+
+    lazy var cancelEditAction = ToolbarActionState(
+        actionType: .cancelEdit,
+        iconName: StandardImageIdentifiers.Large.chevronLeft,
+        isEnabled: true,
+        a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
+        a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
+
+    lazy var menuAction = ToolbarActionState(
+        actionType: .menu,
+        iconName: StandardImageIdentifiers.Large.appMenu,
+        isEnabled: true,
+        a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
+
+    lazy var tabsAction = ToolbarActionState(
+        actionType: .tabs,
+        iconName: StandardImageIdentifiers.Large.tab,
+        numberOfTabs: 1,
+        isEnabled: true,
+        a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
+
+    lazy var homeAction = ToolbarActionState(
+        actionType: .home,
+        iconName: StandardImageIdentifiers.Large.home,
+        isEnabled: true,
+        a11yLabel: .TabToolbarHomeAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
+
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
 
@@ -100,28 +151,14 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func loadAddressToolbarPageElements() -> [ToolbarActionState] {
         var pageActions = [ToolbarActionState]()
-        pageActions.append(ToolbarActionState(
-            actionType: .qrCode,
-            iconName: StandardImageIdentifiers.Large.qrCode,
-            isEnabled: true,
-            a11yLabel: .QRCode.ToolbarButtonA11yLabel,
-            a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode))
+        pageActions.append(qrCodeScanAction)
         return pageActions
     }
 
     private func loadAddressToolbarBrowserElements() -> [ToolbarActionState] {
         var elements = [ToolbarActionState]()
-        elements.append(ToolbarActionState(actionType: .tabs,
-                                           iconName: StandardImageIdentifiers.Large.tab,
-                                           numberOfTabs: 1,
-                                           isEnabled: true,
-                                           a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
-        elements.append(ToolbarActionState(actionType: .menu,
-                                           iconName: StandardImageIdentifiers.Large.appMenu,
-                                           isEnabled: true,
-                                           a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+        elements.append(tabsAction)
+        elements.append(menuAction)
         return elements
     }
 
@@ -133,32 +170,11 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func loadNavigationToolbarElements() -> [ToolbarActionState] {
         var elements = [ToolbarActionState]()
-        elements.append(ToolbarActionState(actionType: .back,
-                                           iconName: StandardImageIdentifiers.Large.back,
-                                           isEnabled: false,
-                                           a11yLabel: .TabToolbarBackAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.backButton))
-        elements.append(ToolbarActionState(actionType: .forward,
-                                           iconName: StandardImageIdentifiers.Large.forward,
-                                           isEnabled: false,
-                                           a11yLabel: .TabToolbarForwardAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
-        elements.append(ToolbarActionState(actionType: .home,
-                                           iconName: StandardImageIdentifiers.Large.home,
-                                           isEnabled: true,
-                                           a11yLabel: .TabToolbarHomeAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.homeButton))
-        elements.append(ToolbarActionState(actionType: .tabs,
-                                           iconName: StandardImageIdentifiers.Large.tab,
-                                           numberOfTabs: 1,
-                                           isEnabled: true,
-                                           a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.tabsButton))
-        elements.append(ToolbarActionState(actionType: .menu,
-                                           iconName: StandardImageIdentifiers.Large.appMenu,
-                                           isEnabled: true,
-                                           a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
-                                           a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton))
+        elements.append(backAction(enabled: false))
+        elements.append(forwardAction(enabled: false))
+        elements.append(homeAction)
+        elements.append(tabsAction)
+        elements.append(menuAction)
         return elements
     }
 
@@ -325,14 +341,10 @@ class ToolbarMiddleware: FeatureFlaggable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        switch action.actionType as? ToolbarMiddlewareActionType {
-        case .didStartEditingUrl:
+        switch action.actionType {
+        case ToolbarMiddlewareActionType.didStartEditingUrl:
             // back carrot when in edit mode
-            actions.append(ToolbarActionState(actionType: .cancelEdit,
-                                              iconName: StandardImageIdentifiers.Large.chevronLeft,
-                                              isEnabled: true,
-                                              a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
-                                              a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton))
+            actions.append(cancelEditAction)
             return actions
 
         default:
@@ -353,17 +365,48 @@ class ToolbarMiddleware: FeatureFlaggable {
             // back/forward when url exists and nav toolbar is not shown
             let isBackButtonEnabled = action.canGoBack
             let isForwardButtonEnabled = action.canGoForward
-            actions.append(ToolbarActionState(actionType: .back,
-                                              iconName: StandardImageIdentifiers.Large.back,
-                                              isEnabled: isBackButtonEnabled,
-                                              a11yLabel: .TabToolbarBackAccessibilityLabel,
-                                              a11yId: AccessibilityIdentifiers.Toolbar.backButton))
-            actions.append(ToolbarActionState(actionType: .forward,
-                                              iconName: StandardImageIdentifiers.Large.forward,
-                                              isEnabled: isForwardButtonEnabled,
-                                              a11yLabel: .TabToolbarForwardAccessibilityLabel,
-                                              a11yId: AccessibilityIdentifiers.Toolbar.forwardButton))
+            actions.append(backAction(enabled: isBackButtonEnabled))
+            actions.append(forwardAction(enabled: isForwardButtonEnabled))
         }
+        return actions
+    }
+
+    private func addressToolbarPageActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID)
+        else { return actions }
+
+        var url = toolbarState.addressToolbar.url
+        if let action = action as? ToolbarMiddlewareUrlChangeAction {
+            url = action.url
+        }
+
+        guard let url else {
+            // On homepage we only show the QR code button
+            actions.append(qrCodeScanAction)
+            return actions
+        }
+
+        var isLoading = false
+
+        // share, reload if url exists + potentially reader mode & fakespot
+        switch action.actionType {
+        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
+            if action.isLoading == true {
+                actions.append(stopLoadingAction)
+            } else if action.isLoading == false {
+                actions.append(reloadAction)
+            }
+        default:
+            return actions
+        }
+
         return actions
     }
 
@@ -413,5 +456,23 @@ class ToolbarMiddleware: FeatureFlaggable {
             url: url ?? toolbarState.addressToolbar.url,
             isEditing: isEditing)
         return addressToolbarModel
+    }
+
+    private func backAction(enabled: Bool) {
+        return ToolbarActionState(
+            actionType: .back,
+            iconName: StandardImageIdentifiers.Large.back,
+            isEnabled: enabled,
+            a11yLabel: .TabToolbarBackAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.backButton)
+    }
+
+    private func forwardAction(enabled: Bool) {
+        return ToolbarActionState(
+            actionType: .forward,
+            iconName: StandardImageIdentifiers.Large.forward,
+            isEnabled: enabled,
+            a11yLabel: .TabToolbarForwardAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 }
