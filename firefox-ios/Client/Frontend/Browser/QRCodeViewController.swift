@@ -21,7 +21,7 @@ enum QRCodeScanPermissions {
     case allowURLsWithoutPrompt
 }
 
-fileprivate enum QRCodeViewControllerState {
+private enum QRCodeViewControllerState {
     case scanning
     case promptingUser
 }
