@@ -385,8 +385,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction,
                                                        state: AppState,
                                                        isEditing: Bool) {
-        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
-              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
+        guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
                                                                                 state: state,
                                                                                 isEditing: isEditing)
         else { return }
