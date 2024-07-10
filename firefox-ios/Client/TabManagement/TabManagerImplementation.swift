@@ -322,49 +322,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         saveCurrentTabSessionData()
 
         willSelectTab(url)
-        Task(priority: .high) {
-            var sessionData: Data?
-            if !tab.isFxHomeTab {
-                sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
-            }
-            await selectTabWithSession(tab: tab,
-                                       previous: previous,
-                                       sessionData: sessionData)
 
-            // Default to false if the feature flag is not enabled
-            var isPrivate = false
-            if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
-                isPrivate = tab.isPrivate
-            }
-
-            let action = PrivateModeAction(isPrivate: isPrivate,
-                                           windowUUID: windowUUID,
-                                           actionType: PrivateModeActionType.setPrivateModeTo)
-            store.dispatch(action)
-
-            didSelectTab(url)
-            updateMenuItemsForSelectedTab()
-        }
-    }
-
-    private func willSelectTab(_ url: URL?) {
-        tabsTelemetry.startTabSwitchMeasurement()
-        guard let url else { return }
-        AppEventQueue.started(.selectTab(url, windowUUID))
-    }
-
-    private func didSelectTab(_ url: URL?) {
-        tabsTelemetry.stopTabSwitchMeasurement()
-        AppEventQueue.completed(.selectTab(url, windowUUID))
-        let action = GeneralBrowserAction(selectedTabURL: url,
-                                          isPrivateBrowsing: selectedTab?.isPrivate ?? false,
-                                          windowUUID: windowUUID,
-                                          actionType: GeneralBrowserActionType.updateSelectedTab)
-        store.dispatch(action)
-    }
-
-    @MainActor
-    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
         let previous = previous ?? selectedTab
 
         previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
@@ -374,6 +332,46 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         preserveTabs()
 
+        Task(priority: .high) {
+            var sessionData: Data?
+            if !tab.isFxHomeTab {
+                sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+            }
+            await selectTabWithSession(tab: tab,
+                                       previous: previous,
+                                       sessionData: sessionData)
+        }
+
+        // Default to false if the feature flag is not enabled
+        var isPrivate = false
+        if featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly) {
+            isPrivate = tab.isPrivate
+        }
+
+        let action = PrivateModeAction(isPrivate: isPrivate,
+                                       windowUUID: windowUUID,
+                                       actionType: PrivateModeActionType.setPrivateModeTo)
+        store.dispatch(action)
+
+        didSelectTab(url)
+        updateMenuItemsForSelectedTab()
+    }
+
+    private func willSelectTab(_ url: URL?) {
+        tabsTelemetry.startTabSwitchMeasurement()
+    }
+
+    private func didSelectTab(_ url: URL?) {
+        tabsTelemetry.stopTabSwitchMeasurement()
+        let action = GeneralBrowserAction(selectedTabURL: url,
+                                          isPrivateBrowsing: selectedTab?.isPrivate ?? false,
+                                          windowUUID: windowUUID,
+                                          actionType: GeneralBrowserActionType.updateSelectedTab)
+        store.dispatch(action)
+    }
+
+    @MainActor
+    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
 
