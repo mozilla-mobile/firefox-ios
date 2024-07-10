@@ -390,16 +390,17 @@ class TabManagerMiddleware {
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
                 } else {
-                    let dismissAction = TabTrayAction(windowUUID: uuid,
-                                                      actionType: TabTrayActionType.dismissTabTray)
-                    store.dispatch(dismissAction)
-
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
                 }
             }
+        }
+        if tabsState.isPrivateMode == false {
+            let dismissAction = TabTrayAction(windowUUID: uuid,
+                                              actionType: TabTrayActionType.dismissTabTray)
+            store.dispatch(dismissAction)
         }
     }
 

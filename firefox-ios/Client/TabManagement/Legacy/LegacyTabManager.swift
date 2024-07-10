@@ -572,7 +572,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
 
         // TODO: FXIOS-9084 This is not ideal, follow up in this ticket to make tab selection reasonably synchronous
-        try? await Task.sleep(nanoseconds: NSEC_PER_SEC/10)
+       // try? await Task.sleep(nanoseconds: NSEC_PER_SEC/10)
 
         TelemetryWrapper.recordEvent(
             category: .action,
