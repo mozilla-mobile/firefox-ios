@@ -632,8 +632,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     func removeTabs(_ tabs: [Tab]) {
         for tab in tabs {
-            // TODO Is flushToDisk true safe here? Needed for tab refactor disabled (legacy), single tab removal saving state
-            self.removeTab(tab, flushToDisk: true)
+            self.removeTab(tab, flushToDisk: false)
         }
         storeChanges()
     }
