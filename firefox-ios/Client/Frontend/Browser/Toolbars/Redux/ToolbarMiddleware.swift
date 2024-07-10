@@ -161,16 +161,6 @@ class ToolbarMiddleware: FeatureFlaggable {
         return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
     }
 
-    private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
-                                          isPrivate: Bool = false,
-                                          scrollY: CGFloat = 0) -> AddressToolbarBorderPosition? {
-        return manager.getAddressBorderPosition(for: toolbarPosition, isPrivate: isPrivate, scrollY: scrollY)
-    }
-
-    private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
-        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
-    }
-
     private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.buttonType {
         case .home:
@@ -441,6 +431,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         return addressToolbarModel
     }
 
+    // MARK: - Helper
+
     private func backAction(enabled: Bool) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .back,
@@ -457,5 +449,15 @@ class ToolbarMiddleware: FeatureFlaggable {
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
+    }
+
+    private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
+                                          isPrivate: Bool = false,
+                                          scrollY: CGFloat = 0) -> AddressToolbarBorderPosition? {
+        return manager.getAddressBorderPosition(for: toolbarPosition, isPrivate: isPrivate, scrollY: scrollY)
+    }
+
+    private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
+        return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 }
