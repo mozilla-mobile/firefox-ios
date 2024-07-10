@@ -114,30 +114,6 @@ class TrackingProtectionViewModel {
         }
     }
 
-    func getDetailsViewModel() -> TrackingProtectionDetailsViewModel {
-        return TrackingProtectionDetailsViewModel(topLevelDomain: websiteTitle,
-                                                  certificates: certificates,
-                                                  URL: url.absoluteDisplayString,
-                                                  getLockIcon: getConnectionStatusImage(themeType:),
-                                                  connectionStatusMessage: connectionStatusString,
-                                                  connectionSecure: connectionSecure)
-    }
-
-    func getBlockedTrackersViewModel() -> BlockedTrackersViewModel {
-        return BlockedTrackersViewModel(topLevelDomain: websiteTitle,
-                                        URL: url.absoluteDisplayString,
-                                        contentBlockerStats: contentBlockerStats)
-    }
-
-    func getCertificatesViewModel() -> CertificatesViewModel {
-        return CertificatesViewModel(topLevelDomain: websiteTitle,
-                                     title: displayTitle,
-                                     URL: url.absoluteDisplayString,
-                                     certificates: certificates,
-                                     selectedCertificateIndex: 0,
-                                     getLockIcon: getConnectionStatusImage(themeType:))
-    }
-
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
         ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) { [weak self] in
