@@ -54,15 +54,18 @@ class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
+    let isLoading: Bool?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
+         isLoading: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
+        self.isLoading = isLoading
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -92,4 +95,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case urlDidChange
     case didStartEditingUrl
     case cancelEdit
+    case websiteLoadingStateDidChange
 }

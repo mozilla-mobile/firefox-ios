@@ -43,6 +43,8 @@ enum GeneralBrowserActionType: ActionType {
     case showTrackingProtectionDetails
     case showTabsLongPressActions
     case showMenu
+    case stopLoadingWebsite
+    case reloadWebsite
 }
 
 class GeneralBrowserMiddlewareAction: Action {
@@ -62,6 +64,6 @@ class GeneralBrowserMiddlewareAction: Action {
 
 enum GeneralBrowserMiddlewareActionType: ActionType {
     case browserDidLoad
-    case didScroll
     case toolbarPositionChanged
+    case websiteDidScroll
 }

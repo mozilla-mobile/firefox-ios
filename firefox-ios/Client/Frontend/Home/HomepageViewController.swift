@@ -388,7 +388,7 @@ class HomepageViewController:
             lastContentOffsetY = scrollView.contentOffset.y
             let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
                                                         windowUUID: windowUUID,
-                                                        actionType: GeneralBrowserMiddlewareActionType.didScroll)
+                                                        actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
             store.dispatch(action)
         }
     }
