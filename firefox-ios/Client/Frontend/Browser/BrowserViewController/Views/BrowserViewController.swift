@@ -1666,6 +1666,15 @@ class BrowserViewController: UIViewController,
             setupMiddleButtonStatus(isLoading: loading)
             setupLoadingSpinnerFor(webView, isLoading: loading)
 
+            if isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(
+                    isLoading: loading,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.websiteLoadingStateDidChange
+                )
+                store.dispatch(action)
+            }
+
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
@@ -1845,7 +1854,15 @@ class BrowserViewController: UIViewController,
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         case .menu:
-        	didTapOnMenu(button: state.buttonTapped)
+            didTapOnMenu(button: state.buttonTapped)
+        case .tabTray:
+            focusOnTabSegment()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .tabToolbar,
+                value: .tabView
+            )
         }
     }
 
@@ -1860,14 +1877,11 @@ class BrowserViewController: UIViewController,
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .tabTray:
-            focusOnTabSegment()
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .press,
-                object: .tabToolbar,
-                value: .tabView
-            )
+        case .reload:
+            tabManager.selectedTab?.reload()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
+        case .stopLoading:
+            tabManager.selectedTab?.stop()
         }
     }
 

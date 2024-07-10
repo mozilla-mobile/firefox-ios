@@ -41,6 +41,7 @@ class ToolbarAction: Action {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
+    case addressToolbarActionsDidChange
     case urlDidChange
     case backButtonStateChanged
     case forwardButtonStateChanged
@@ -53,15 +54,18 @@ class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
+    let isLoading: Bool?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
+         isLoading: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
+        self.isLoading = isLoading
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -89,4 +93,7 @@ class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case urlDidChange
+    case didStartEditingUrl
+    case cancelEdit
+    case websiteLoadingStateDidChange
 }

@@ -6,5 +6,8 @@ import Foundation
 
 /// Protocol representing an address toolbar.
 public protocol AddressToolbar {
-    func configure(state: AddressToolbarState, toolbarDelegate: AddressToolbarDelegate)
+    func configure(state: AddressToolbarState,
+                   toolbarDelegate: AddressToolbarDelegate,
+                   leadingSpace: CGFloat?,
+                   trailingSpace: CGFloat?)
 }
