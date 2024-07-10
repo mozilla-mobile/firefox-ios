@@ -23,6 +23,9 @@ public struct ToolbarElement: Equatable {
     /// Accessibility label of the toolbar element
     let a11yLabel: String
 
+    /// Accessibility hint of the toolbar element
+    let a11yHint: String?
+
     /// Accessibility identifier of the toolbar element
     let a11yId: String
 
@@ -40,6 +43,7 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 shouldDisplayAsHighlighted: Bool = false,
                 a11yLabel: String,
+                a11yHint: String?,
                 a11yId: String,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: (() -> Void)? = nil) {
@@ -51,6 +55,7 @@ public struct ToolbarElement: Equatable {
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
+        self.a11yHint = a11yHint
         self.a11yId = a11yId
     }
 
@@ -61,6 +66,7 @@ public struct ToolbarElement: Equatable {
         lhs.isEnabled == rhs.isEnabled &&
         lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
         lhs.a11yLabel == rhs.a11yLabel &&
+        lhs.a11yHint == rhs.a11yHint &&
         lhs.a11yId == rhs.a11yId
     }
 }

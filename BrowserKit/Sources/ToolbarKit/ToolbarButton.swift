@@ -58,6 +58,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         isEnabled = element.isEnabled
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
+        accessibilityHint = element.a11yHint
         addAction(action, for: .touchUpInside)
 
         showsLargeContentViewer = true

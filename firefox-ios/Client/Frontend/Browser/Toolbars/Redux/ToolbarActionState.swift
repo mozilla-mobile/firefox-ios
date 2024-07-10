@@ -27,6 +27,7 @@ struct ToolbarActionState: Equatable {
     var numberOfTabs: Int?
     var isEnabled: Bool
     var a11yLabel: String
+    var a11yHint: String?
     var a11yId: String
 
     var canPerformLongPressAction: Bool {
