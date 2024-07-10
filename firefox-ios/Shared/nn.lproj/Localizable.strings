@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Historikk";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Ny Privat fane";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Ny fane";
 
@@ -851,7 +854,7 @@
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Sosiale nettverk plasserer sporarar på andre nettstadar for å byggje ein meir fullstendig og målretta profil av deg. Blokkering av desse sporarane reduserer kor mykje sosiale media-selskap kan sjå kva du gjer på nettet.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Fingerprinters";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Nettlesaravtrykk";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Kva er nytt";

@@ -61,10 +61,12 @@ struct ToolbarState: ScreenState, Equatable {
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars,
             ToolbarActionType.numberOfTabsChanged,
-            ToolbarActionType.urlDidChange,
+            ToolbarActionType.addressToolbarActionsDidChange,
             ToolbarActionType.backButtonStateChanged,
             ToolbarActionType.forwardButtonStateChanged,
-            ToolbarActionType.scrollOffsetChanged:
+            ToolbarActionType.scrollOffsetChanged,
+            ToolbarActionType.urlDidChange,
+            ToolbarActionType.showMenuWarningBadge:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,

@@ -45,6 +45,7 @@ class MicrosurveySurfaceManager: MicrosurveyManager {
         let utmContent = message.utmContent
 
         return MicrosurveyModel(
+            id: message.id,
             promptTitle: promptTitle,
             promptButtonLabel: promptButtonLabel,
             surveyQuestion: surveyQuestion,

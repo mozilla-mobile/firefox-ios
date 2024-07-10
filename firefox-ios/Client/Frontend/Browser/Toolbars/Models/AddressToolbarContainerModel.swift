@@ -75,8 +75,11 @@ class AddressToolbarContainerModel: Equatable {
         return actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                badgeImageName: action.badgeImageName,
+                numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,
+                a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,

@@ -12,8 +12,8 @@ public enum ToolbarButtonGesture {
 
 class ToolbarButton: UIButton, ThemeApplicable {
     private struct UX {
-        static let verticalInset: CGFloat = 8
-        static let horizontalInset: CGFloat = 8
+        static let verticalInset: CGFloat = 10
+        static let horizontalInset: CGFloat = 10
         static let badgeImageViewBorderWidth: CGFloat = 1
         static let badgeImageViewCornerRadius: CGFloat = 10
         static let badgeIconSize = CGSize(width: 20, height: 20)
@@ -58,6 +58,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         isEnabled = element.isEnabled
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
+        accessibilityHint = element.a11yHint
         addAction(action, for: .touchUpInside)
 
         showsLargeContentViewer = true

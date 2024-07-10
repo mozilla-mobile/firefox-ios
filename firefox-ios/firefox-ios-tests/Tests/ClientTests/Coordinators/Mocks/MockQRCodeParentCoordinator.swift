@@ -16,4 +16,8 @@ class MockQRCodeViewControllerDelegate: QRCodeViewControllerDelegate {
     func didScanQRCodeWithText(_ text: String) {
         didScanQRCodeWithTextCalled += 1
     }
+
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
+        return .default
+    }
 }

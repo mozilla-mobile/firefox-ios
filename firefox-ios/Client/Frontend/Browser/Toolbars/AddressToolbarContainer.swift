@@ -11,14 +11,26 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
 }
 
 final class AddressToolbarContainer: UIView,
-                               ThemeApplicable,
-                               TopBottomInterchangeable,
-                               AlphaDimmable,
-                               StoreSubscriber,
-                               AddressToolbarDelegate {
+                                     ThemeApplicable,
+                                     TopBottomInterchangeable,
+                                     AlphaDimmable,
+                                     StoreSubscriber,
+                                     AddressToolbarDelegate,
+                                     MenuHelperURLBarInterface {
+    private enum UX {
+        static let compactLeadingEdgeEditing: CGFloat = 8
+        static let compactLeadingEdgeDisplay: CGFloat = 16
+        static let compactTrailingEdge: CGFloat = 16
+
+        static let regularHorizontalEdgeEditing: CGFloat = 16
+        static let regularHorizontalEdgeWebsite: CGFloat = 16
+        static let regularHorizontalEdgeHomepage: CGFloat = 24
+    }
+
     typealias SubscriberStateType = ToolbarState
 
     private var windowUUID: WindowUUID?
@@ -49,7 +61,46 @@ final class AddressToolbarContainer: UIView,
     }
 
     private var progressBarTopConstraint: NSLayoutConstraint?
-    private var progresBarBottomConstraint: NSLayoutConstraint?
+    private var progressBarBottomConstraint: NSLayoutConstraint?
+
+    private var leadingToolbarSpace: CGFloat? {
+        guard let toolbarState = store.state.screenState(ToolbarState.self,
+                                                         for: .toolbar,
+                                                         window: windowUUID)
+        else { return nil }
+
+        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isHomepage = toolbarState.addressToolbar.url == nil
+        let isEditing = toolbarState.addressToolbar.isEditing
+
+        switch true {
+        case isCompact && isEditing: return UX.compactLeadingEdgeEditing
+        case isCompact: return UX.compactLeadingEdgeDisplay
+        case !isCompact && isEditing: return UX.regularHorizontalEdgeEditing
+        case !isCompact && isHomepage: return UX.regularHorizontalEdgeHomepage
+        case !isCompact: return UX.regularHorizontalEdgeWebsite
+        default: return nil
+        }
+    }
+
+    private var trailingToolbarSpace: CGFloat? {
+        guard let toolbarState = store.state.screenState(ToolbarState.self,
+                                                         for: .toolbar,
+                                                         window: windowUUID)
+        else { return nil }
+
+        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isHomepage = toolbarState.addressToolbar.url == nil
+        let isEditing = toolbarState.addressToolbar.isEditing
+
+        switch true {
+        case isCompact: return -UX.compactTrailingEdge
+        case !isCompact && isEditing: return -UX.regularHorizontalEdgeEditing
+        case !isCompact && isHomepage: return -UX.regularHorizontalEdgeHomepage
+        case !isCompact: return -UX.regularHorizontalEdgeWebsite
+        default: return nil
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -145,8 +196,16 @@ final class AddressToolbarContainer: UIView,
             self.model = model
 
         	updateProgressBarPosition(toolbarState.toolbarPosition)
-            compactToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
-            regularToolbar.configure(state: model.addressToolbarState, toolbarDelegate: self)
+            compactToolbar.configure(state: model.addressToolbarState,
+                                     toolbarDelegate: self,
+                                     leadingSpace: leadingToolbarSpace,
+                                     trailingSpace: trailingToolbarSpace)
+            regularToolbar.configure(state: model.addressToolbarState,
+                                     toolbarDelegate: self,
+                                     leadingSpace: leadingToolbarSpace,
+                                     trailingSpace: trailingToolbarSpace)
+
+            _ = toolbarState.addressToolbar.isEditing ? becomeFirstResponder() : resignFirstResponder()
         }
     }
 
@@ -174,15 +233,15 @@ final class AddressToolbarContainer: UIView,
 
     private func updateProgressBarPosition(_ position: AddressToolbarPosition) {
         progressBarTopConstraint?.isActive = false
-        progresBarBottomConstraint?.isActive = false
+        progressBarBottomConstraint?.isActive = false
 
         switch position {
         case .top:
             progressBarTopConstraint = progressBar.topAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
             progressBarTopConstraint?.isActive = true
         case .bottom:
-            progresBarBottomConstraint = progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor)
-            progresBarBottomConstraint?.isActive = true
+            progressBarBottomConstraint = progressBar.bottomAnchor.constraint(lessThanOrEqualTo: topAnchor)
+            progressBarBottomConstraint?.isActive = true
         }
     }
 
@@ -208,5 +267,29 @@ final class AddressToolbarContainer: UIView,
 
     func openSuggestions(searchTerm: String) {
         delegate?.openSuggestions(searchTerm: searchTerm)
+
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+        store.dispatch(action)
+    }
+
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    // MARK: - MenuHelperURLBarInterface
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelperURLBarModel.selectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    func menuHelperPasteAndGo() {
+        guard let pasteboardContents = UIPasteboard.general.string else { return }
+        delegate?.openBrowser(searchTerm: pasteboardContents)
     }
 }

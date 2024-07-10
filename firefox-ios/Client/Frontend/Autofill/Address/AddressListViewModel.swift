@@ -10,7 +10,7 @@ import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
 // AddressListViewModel: A view model for managing addresses.
-class AddressListViewModel: ObservableObject, FeatureFlaggable {
+final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
         case edit(Address)
@@ -41,14 +41,21 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
     var toggleEditModeAction: ((Bool) -> Void)?
+    var presentToast: ((AddressModifiedStatus) -> Void)?
 
     let addressProvider: AddressProvider
+    let themeManager: ThemeManager
+    let profile: Profile
 
     var currentRegionCode: () -> String = { Locale.current.regionCode ?? "" }
-    var isDarkTheme: (WindowUUID) -> Bool = { windowUUID in
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
-        return themeManager.getCurrentTheme(for: windowUUID).type == .dark
+    var isDarkTheme: Bool {
+        themeManager.getCurrentTheme(for: windowUUID).type == .dark
     }
+    var hasSyncableAccount: Bool {
+        profile.hasSyncableAccount()
+    }
+
+    let editAddressWebViewManager: WebViewPreloadManaging
 
     // MARK: - Initializer
 
@@ -56,11 +63,17 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
     init(
         logger: Logger = DefaultLogger.shared,
         windowUUID: WindowUUID,
-        addressProvider: AddressProvider
+        addressProvider: AddressProvider,
+        editAddressWebViewManager: WebViewPreloadManaging = EditAddressWebViewManager(),
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        profile: Profile = AppContainer.shared.resolve()
     ) {
         self.logger = logger
         self.windowUUID = windowUUID
         self.addressProvider = addressProvider
+        self.editAddressWebViewManager = editAddressWebViewManager
+        self.themeManager = themeManager
+        self.profile = profile
     }
 
     // MARK: - Fetch Addresses
@@ -75,10 +88,12 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
                     self.addresses = addresses
                     self.showSection = !addresses.isEmpty
                 } else if let error = error {
-                    self.logger.log("Error fetching addresses",
-                                    level: .warning,
-                                    category: .autofill,
-                                    description: "Error fetching addresses: \(error.localizedDescription)")
+                    self.logger.log(
+                        "Error fetching addresses",
+                        level: .warning,
+                        category: .autofill,
+                        description: "Error fetching addresses: \(error.localizedDescription)"
+                    )
                 }
             }
         }
@@ -129,7 +144,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.updated)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
@@ -156,7 +171,7 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
-                        break
+                        self.presentToast?(.saved)
                     case .failure:
                         // TODO: FXIOS-9269 Create and add error toast for address saving failure
                         break
@@ -188,6 +203,26 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
         ))
     }
 
+    func removeConfimationButtonTap() {
+        if case .edit(let address) = destination {
+            addressProvider.deleteAddress(id: address.id) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        self.presentToast?(.removed)
+                    case .failure:
+                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
+                        break
+                    }
+                    self.toggleEditMode()
+                    self.destination = nil
+                    self.fetchAddresses()
+                }
+            }
+        }
+    }
+
     private func toggleEditMode() {
         isEditMode.toggle()
         toggleEditModeAction?(isEditMode)
@@ -213,14 +248,15 @@ class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
-            let isDarkTheme = isDarkTheme(windowUUID)
             let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme));"
             return javascript
         } catch {
-            logger.log("Failed to encode data",
-                       level: .warning,
-                       category: .autofill,
-                       description: "Failed to encode data with error: \(error.localizedDescription)")
+            logger.log(
+                "Failed to encode data",
+                level: .warning,
+                category: .autofill,
+                description: "Failed to encode data with error: \(error.localizedDescription)"
+            )
             throw error
         }
     }

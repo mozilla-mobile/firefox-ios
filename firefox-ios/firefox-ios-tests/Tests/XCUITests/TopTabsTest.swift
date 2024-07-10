@@ -142,30 +142,29 @@ class TopTabsTest: BaseTestCase {
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
-        // Disabling next steps due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
         // Close all tabs, undo it and check that the number of tabs is correct
-//        navigator.performAction(Action.AcceptRemovingAllTabs)
-//
-//        mozWaitForElementToExist(app.otherElements.buttons.staticTexts["Undo"])
-//        app.otherElements.buttons.staticTexts["Undo"].tap()
-//
-//        mozWaitForElementToExist(
-//            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
-//            timeout: 5
-//        )
-//        navigator.nowAt(BrowserTab)
-//        if !iPad() {
-//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
-//        }
-//
-//        if iPad() {
-//            navigator.goto(TabTray)
-//        } else {
-//            navigator.performAction(Action.CloseURLBarOpen)
-//        }
-//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-//
-//        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        mozWaitForElementToExist(app.otherElements.buttons.staticTexts["Undo"])
+        app.otherElements.buttons.staticTexts["Undo"].tap()
+
+        mozWaitForElementToExist(
+            app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+            timeout: 5
+        )
+        navigator.nowAt(BrowserTab)
+        if !iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
+        }
+
+        if iPad() {
+            navigator.goto(TabTray)
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+
+        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354473
@@ -200,9 +199,6 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
-        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
-        // New behaviour on v14, there is no Undo in Private mode
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354579
@@ -220,15 +216,14 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
-        // Disabling next steps due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
         // Close all tabs and check that the number of tabs is correct
-//        navigator.performAction(Action.AcceptRemovingAllTabs)
-//        if !iPad() {
-//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-//        }
-//        navigator.nowAt(NewTabScreen)
-//        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-//        mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        if !iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        }
+        navigator.nowAt(NewTabScreen)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
+        mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354580
@@ -396,12 +391,7 @@ class TopTabsTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306868
     func testTabTrayCloseMultipleTabs() {
         navigator.nowAt(NewTabScreen)
-        if !iPad() {
-            validateToastWhenClosingMultipleTabs(fromIndex: 6, toIndex: 2)
-        } else {
-            validateToastWhenClosingMultipleTabs(fromIndex: 4, toIndex: 0)
-        }
-        app.collectionViews.buttons["crossLarge"].tap()
+        validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].tap()
         waitUntilPageLoad()
@@ -420,8 +410,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
         // Repeat for private browsing mode
         navigator.performAction(Action.TogglePrivateMode)
-        validateToastWhenClosingMultipleTabs(fromIndex: 4, toIndex: 0)
-        app.collectionViews.buttons["crossLarge"].tap()
+        validateToastWhenClosingMultipleTabs()
         // Choose to undo the action
         app.buttons["Undo"].tap()
         // Only the latest tab closed is restored
@@ -433,7 +422,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.cells.staticTexts[urlLabelExample])
     }
 
-    private func validateToastWhenClosingMultipleTabs(fromIndex: Int, toIndex: Int) {
+    private func validateToastWhenClosingMultipleTabs() {
         // Have multiple tabs opened in the tab tray
         navigator.openURL(urlExample)
         waitUntilPageLoad()
@@ -447,12 +436,15 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TabTray)
         // Close multiple tabs by pressing X button
-        for index in stride(from: fromIndex, to: toIndex, by: -1) {
-            app.collectionViews.buttons.element(boundBy: index).tap()
+        for _ in 0...3 {
+            app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossLarge"].tap()
             // A toast notification is displayed with the message "Tab Closed" and the Undo option
             mozWaitForElementToExist(app.buttons["Undo"])
             mozWaitForElementToExist(app.staticTexts["Tab Closed"])
         }
+        app.collectionViews.buttons["crossLarge"].tap()
+        mozWaitForElementToExist(app.buttons["Undo"])
+        mozWaitForElementToExist(app.staticTexts["Tab Closed"])
     }
 
     private func addTabsAndUndoCloseTabAction(nrOfTabs: Int) {

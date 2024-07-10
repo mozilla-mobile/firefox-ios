@@ -348,6 +348,7 @@ public struct AccessibilityIdentifiers {
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
+        static let learnMoreButton = "learnMoreButton"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -682,6 +683,7 @@ public struct AccessibilityIdentifiers {
         static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
         static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
         static let zoomPageZoomLevelLabel = "ZoomPage.zoomLevelLabel"
+        static let doneButton = "find.doneButton"
     }
 
     struct FindInPage {

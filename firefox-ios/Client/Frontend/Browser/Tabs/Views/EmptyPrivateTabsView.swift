@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Foundation
 import Shared
+import ComponentLibrary
 
 protocol EmptyPrivateTabsViewDelegate: AnyObject {
     func didTapLearnMore(urlRequest: URLRequest)
@@ -46,10 +47,9 @@ class EmptyPrivateTabsView: UIView {
         label.text = .TabTrayPrivateBrowsingDescription
     }
 
-    let learnMoreButton: UIButton = .build { button in
-        button.setTitle( .PrivateBrowsingLearnMore, for: [])
+    private lazy var learnMoreButton: LinkButton = .build { button in
         button.titleLabel?.adjustsFontForContentSizeCategory = true
-        button.titleLabel?.font = FXFontStyles.Regular.subheadline.scaledFont()
+        button.addTarget(self, action: #selector(self.didTapLearnMore), for: .touchUpInside)
     }
 
     private let iconImageView: UIImageView = .build { imageView in
@@ -68,10 +68,16 @@ class EmptyPrivateTabsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private func configureLearnMoreButton() {
+        let viewModel = LinkButtonViewModel(title: .PrivateBrowsingLearnMore,
+                                            a11yIdentifier: AccessibilityIdentifiers.TabTray.learnMoreButton,
+                                            font: FXFontStyles.Regular.subheadline.scaledFont(),
+                                            contentHorizontalAlignment: .center)
+        learnMoreButton.configure(viewModel: viewModel)
+    }
+
     private func setupLayout() {
-        learnMoreButton.addTarget(self,
-                                  action: #selector(didTapLearnMore),
-                                  for: .touchUpInside)
+        configureLearnMoreButton()
         containerView.addSubviews(iconImageView, titleLabel, descriptionLabel, learnMoreButton)
         scrollView.addSubview(containerView)
         addSubview(scrollView)
@@ -121,7 +127,7 @@ class EmptyPrivateTabsView: UIView {
     func applyTheme(_ theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
-        learnMoreButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
+        learnMoreButton.applyTheme(theme: theme)
         iconImageView.tintColor = theme.colors.iconDisabled
     }
 

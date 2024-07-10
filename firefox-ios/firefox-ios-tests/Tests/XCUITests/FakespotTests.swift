@@ -405,6 +405,9 @@ class FakespotTests: BaseTestCase {
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
         app.swipeDown()
+        if app.buttons["DONE"].exists {
+            app.buttons["DONE"].tap()
+        }
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
         if !app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].exists {
@@ -449,7 +452,7 @@ class FakespotTests: BaseTestCase {
         if !app.keyboards.element.isHittable {
             searchAmazon.tap()
         }
-        searchAmazon.typeText("Shoe")
+        searchAmazon.typeText("can opener")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
         while website.links.elementContainingText("Sorry! Something went wrong on our end.").exists {

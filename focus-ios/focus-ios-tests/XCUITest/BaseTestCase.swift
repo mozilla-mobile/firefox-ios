@@ -4,6 +4,8 @@
 
 import XCTest
 
+let TIMEOUT: TimeInterval = 15
+
 class BaseTestCase: XCTestCase {
     let app = XCUIApplication()
 
@@ -81,6 +83,18 @@ class BaseTestCase: XCTestCase {
                 self.record(issue)
             }
         }
+
+    func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while !element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
 
     func search(searchWord: String, waitForLoadToFinish: Bool = true) {
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]

@@ -27,6 +27,7 @@ final class MicrosurveyViewController: UIViewController,
     private let windowUUID: WindowUUID
     private let model: MicrosurveyModel
     private var microsurveyState: MicrosurveyState
+    private var selectedOption: String?
 
     // MARK: UI Elements
     private struct UX {
@@ -180,6 +181,9 @@ final class MicrosurveyViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        store.dispatch(
+            MicrosurveyAction(surveyId: model.id, windowUUID: windowUUID, actionType: MicrosurveyActionType.surveyDidAppear)
+        )
         UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
@@ -309,7 +313,12 @@ final class MicrosurveyViewController: UIViewController,
 
     private func sendTelemetry() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.submitSurvey)
+            MicrosurveyAction(
+                surveyId: model.id,
+                userSelection: selectedOption,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.submitSurvey
+            )
         )
     }
 
@@ -327,19 +336,34 @@ final class MicrosurveyViewController: UIViewController,
             ]
         )
         confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        store.dispatch(
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.confirmationViewed
+            )
+        )
     }
 
     @objc
     private func didTapClose() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.closeSurvey)
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.closeSurvey
+            )
         )
     }
 
     @objc
     private func didTapPrivacyPolicy() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.tapPrivacyNotice)
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.tapPrivacyNotice
+            )
         )
     }
 
@@ -378,6 +402,7 @@ final class MicrosurveyViewController: UIViewController,
         let selectedCell = tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell
         if selectedCell?.checked == false {
             (tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell)?.checked.toggle()
+            selectedOption = selectedCell?.title
         }
     }
 

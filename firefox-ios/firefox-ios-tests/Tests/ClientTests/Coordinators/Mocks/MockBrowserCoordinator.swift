@@ -49,7 +49,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showCreditCardAutofillCalled += 1
     }
 
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         showLoginAutofillCalled += 1
     }
 
