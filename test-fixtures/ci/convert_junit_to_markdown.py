@@ -8,6 +8,7 @@ import getopt, sys
 import xml.etree.ElementTree as ET
 import json
 from blockkit import Context, Divider, Header, Message, Section
+import re
 
 # Modified from junit_to_markdown
 # https://github.com/stevengoossensB/junit_to_markdown/tree/main
@@ -91,14 +92,14 @@ def count_tests(test_suites, is_smoke=True):
 
 def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios'):
     # Count number of pass/fail tests for reporting
-    tests_info = count_tests(test_suites)
+    tests_info = count_tests(test_suites, is_smoke=is_smoke)
     
     # Fetch failed tests and put them in Slack format
     failed_tests_info = []
     for test_suite in test_suites:
         if int(test_suite.get('failures')):
             done = []
-            markdown = '*{name}*'.format(name=test_suite.get('name', '').replace('XCUITest.' ,''))
+            markdown = '*{name}*'.format(name=re.sub('XCUITests?.', '', test_suite.get('name', '')))
             test_cases = test_suite.get('test_cases', [])
             for test_case in test_cases:
                 if not test_case.get('status') == ':white_check_mark:' and not test_case.get('name', '') in done: 
@@ -163,12 +164,12 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
 
 def convert_to_github_markdown(test_suites, is_smoke = True):
     # Count number of pass/fail tests for reporting
-    tests_info = count_tests(test_suites)
+    tests_info = count_tests(test_suites, is_smoke=is_smoke)
 
     markdown = ''
     for test_suite in test_suites:
         if int(test_suite['failures']):
-            markdown += '## {name}\n\n'.format(name = test_suite.get('name', '').replace('XCUITest.' ,''))
+            markdown += '## {name}\n\n'.format(name=re.sub('XCUITests?.', '', test_suite.get('name', '')))
             markdown += convert_test_cases_to_github_markdown(test_suite.get('test_cases', []), is_smoke = True)
     
     if markdown == '':
@@ -223,13 +224,13 @@ def convert_test_cases_to_github_markdown(test_cases, is_smoke = True):
 
 def convert_file_github(input_file, output_file, is_smoke = True):
     test_cases = parse_junit_xml(input_file)
-    markdown = convert_to_github_markdown(test_cases, is_smoke = True)
+    markdown = convert_to_github_markdown(test_cases, is_smoke = is_smoke)
     with open(output_file, 'w') as md_file:
         md_file.write(markdown)
 
 def convert_file_slack(input_file, output_file, is_smoke = True, browser='firefox-ios'):
     test_cases = parse_junit_xml(input_file)
-    markdown = convert_to_slack_markdown(test_cases, is_smoke = True, browser=browser)
+    markdown = convert_to_slack_markdown(test_cases, is_smoke = is_smoke, browser=browser)
     with open(output_file, 'w') as md_file:
         md_file.write(markdown)
 
@@ -238,7 +239,7 @@ if __name__ == '__main__':
     
     failures_only = False
     github_markdown = True
-    is_smoke = True
+    is_smoke = False
     browser = 'firefox-ios'
     
     for opt, arg in opts:
@@ -248,6 +249,8 @@ if __name__ == '__main__':
             is_smoke = False
         if opt == '--focus-ios':
             browser = "focus-ios"
+        if opt == '--smoke':
+            is_smoke = True
     
     if github_markdown:
         convert_file_github(args[0], args[1], is_smoke=is_smoke)
