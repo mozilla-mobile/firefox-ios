@@ -253,9 +253,9 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.addressAutofillEdit.value()
+        let config = nimbus.features.addressAutofillFeature.value()
 
-        return config.status
+        return config.addressAutofillEdit
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
