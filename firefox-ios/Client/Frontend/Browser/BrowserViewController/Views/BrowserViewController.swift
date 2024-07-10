@@ -1846,6 +1846,14 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         case .menu:
         	didTapOnMenu(button: state.buttonTapped)
+        case .tabTray:
+            focusOnTabSegment()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .tabToolbar,
+                value: .tabView
+            )
         }
     }
 
@@ -1860,14 +1868,6 @@ class BrowserViewController: UIViewController,
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .tabTray:
-            focusOnTabSegment()
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .press,
-                object: .tabToolbar,
-                value: .tabView
-            )
         }
     }
 

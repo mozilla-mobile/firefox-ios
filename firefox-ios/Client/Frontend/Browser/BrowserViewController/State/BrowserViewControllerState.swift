@@ -12,7 +12,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case home
         case back
         case forward
-        case tabTray
     }
 
     enum DisplayType {
@@ -21,6 +20,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case trackingProtectionDetails
         case tabsLongPressActions
         case menu
+        case tabTray
     }
 
     let windowUUID: WindowUUID
@@ -286,7 +286,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: state.toast,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                navigateTo: .tabTray,
+                displayView: .tabTray,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state
