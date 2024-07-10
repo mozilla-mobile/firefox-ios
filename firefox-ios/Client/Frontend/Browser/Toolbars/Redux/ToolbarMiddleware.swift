@@ -143,39 +143,22 @@ class ToolbarMiddleware: FeatureFlaggable {
         let borderPosition = getAddressBorderPosition(toolbarPosition: toolbarPosition)
 
         return AddressToolbarModel(navigationActions: [ToolbarActionState](),
-                                   pageActions: loadAddressToolbarPageElements(),
-                                   browserActions: loadAddressToolbarBrowserElements(),
+                                   pageActions: [qrCodeScanAction],
+                                   browserActions: [tabsAction, menuAction],
                                    borderPosition: borderPosition,
                                    url: nil)
     }
 
-    private func loadAddressToolbarPageElements() -> [ToolbarActionState] {
-        var pageActions = [ToolbarActionState]()
-        pageActions.append(qrCodeScanAction)
-        return pageActions
-    }
-
-    private func loadAddressToolbarBrowserElements() -> [ToolbarActionState] {
-        var elements = [ToolbarActionState]()
-        elements.append(tabsAction)
-        elements.append(menuAction)
-        return elements
-    }
-
     private func loadInitialNavigationToolbarState(toolbarPosition: AddressToolbarPosition) -> NavigationToolbarModel {
-        let actions = loadNavigationToolbarElements()
+        let actions = [
+            backAction(enabled: false),
+            forwardAction(enabled: false),
+            homeAction,
+            tabsAction,
+            menuAction
+        ]
         let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarPosition)
         return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
-    }
-
-    private func loadNavigationToolbarElements() -> [ToolbarActionState] {
-        var elements = [ToolbarActionState]()
-        elements.append(backAction(enabled: false))
-        elements.append(forwardAction(enabled: false))
-        elements.append(homeAction)
-        elements.append(tabsAction)
-        elements.append(menuAction)
-        return elements
     }
 
     private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
@@ -458,7 +441,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         return addressToolbarModel
     }
 
-    private func backAction(enabled: Bool) {
+    private func backAction(enabled: Bool) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .back,
             iconName: StandardImageIdentifiers.Large.back,
@@ -467,7 +450,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
 
-    private func forwardAction(enabled: Bool) {
+    private func forwardAction(enabled: Bool) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .forward,
             iconName: StandardImageIdentifiers.Large.forward,
