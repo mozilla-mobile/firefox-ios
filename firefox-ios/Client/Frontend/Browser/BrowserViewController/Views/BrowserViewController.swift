@@ -1695,7 +1695,8 @@ class BrowserViewController: UIViewController,
             }
         case .title:
             // Ensure that the tab title *actually* changed to prevent repeated calls
-            // to navigateInTab(tab:).
+            // to navigateInTab(tab:) except when ReaderModeState is active
+            // so that evaluateJavascriptInDefaultContentWorld() is called.
             guard let title = tab.title else { break }
             if !title.isEmpty {
                 if title != tab.lastTitle {
@@ -1876,9 +1877,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    // FXIOS-8672: "Reader mode cannot be accessed under certain steps"
-    // If current tab tile and last title are same then check if ReaderModeState is active.
-    // If so, make reader mode available.
     private func navigateIfReaderModeActive(currentTab: Tab) {
         if let readerMode = currentTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             if readerMode.state == .active {
