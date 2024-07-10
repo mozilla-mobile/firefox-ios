@@ -1854,7 +1854,7 @@ class BrowserViewController: UIViewController,
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         case .menu:
-        	didTapOnMenu(button: state.buttonTapped)
+            didTapOnMenu(button: state.buttonTapped)
         case .tabTray:
             focusOnTabSegment()
             TelemetryWrapper.recordEvent(
