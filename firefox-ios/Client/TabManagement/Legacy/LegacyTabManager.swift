@@ -847,6 +847,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func undoCloseTab() {
         guard let backupCloseTab = self.backupCloseTab else { return }
 
+        let previouslySelectedTab = selectedTab
         if let index = backupCloseTab.restorePosition {
             tabs.insert(backupCloseTab.tab, at: index)
         } else {
@@ -855,6 +856,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         if backupCloseTab.isSelected {
             self.selectTab(backupCloseTab.tab)
+        } else if let tabToSelect = previouslySelectedTab {
+            self.selectTab(tabToSelect)
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
