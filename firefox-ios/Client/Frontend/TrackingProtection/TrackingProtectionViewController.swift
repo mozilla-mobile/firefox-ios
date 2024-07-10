@@ -51,22 +51,6 @@ struct TPMenuUX {
     }
 }
 
-class TPSectionView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setupView() {
-        translatesAutoresizingMaskIntoConstraints = false
-        layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-    }
-}
-
 protocol TrackingProtectionMenuDelegate: AnyObject {
     func settingsOpenPage(settings: Route.SettingsSection)
     func didFinish()
@@ -90,9 +74,9 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     private var trackersArrowHeightConstraint: NSLayoutConstraint?
     private var connectionArrowHeightConstraint: NSLayoutConstraint?
 
-    private lazy var scrollView: UIScrollView = .build { scrollView in
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-    }
+//    private lazy var scrollView: UIScrollView = .build { scrollView in
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//    }
     private let baseView: UIView = .build { view in }
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
@@ -321,7 +305,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         listenForThemeChange(view)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
-        scrollView.delegate = self
+//        scrollView.delegate = self
     }
 
     override func viewIsAppearing(_ animated: Bool) {
@@ -342,6 +326,12 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         super.viewWillAppear(animated)
         updateViewDetails()
         applyTheme()
+        getCertificates(for: viewModel.url) { certificates in
+//            print(certificates)
+            if let certs = certificates {
+                self.viewModel.certificates = certs
+            }
+        }
     }
 
     private func setupView() {
@@ -358,9 +348,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         setupViewActions()
 
         NSLayoutConstraint.activate(constraints)
-        scrollView.setNeedsLayout()
-        contentStackView.setNeedsLayout()
-        contentStackView.setNeedsDisplay()
+//        view.bringSubviewToFront(toggleSwitch)
+//        scrollView.setNeedsLayout()
         setupAccessibilityIdentifiers()
     }
 
@@ -427,20 +416,20 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: Content View
     private func setupContentView() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(baseView)
+//        view.addSubview(scrollView)
+        view.addSubview(baseView)
 
-        scrollView.isUserInteractionEnabled = true
+//        scrollView.isUserInteractionEnabled = true
 
         let contentViewContraints = [
-            scrollView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            baseView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+//            scrollView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor),
+//            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+//            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            baseView.topAnchor.constraint(equalTo: view.topAnchor),
+            baseView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            baseView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            baseView.widthAnchor.constraint(equalTo: view.widthAnchor),
         ]
 
         constraints.append(contentsOf: contentViewContraints)
@@ -471,11 +460,11 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             // Content
             connectionDetailsContentView.leadingAnchor.constraint(
                 equalTo: connectionDetailsHeaderView.leadingAnchor,
-                constant: 0// TPMenuUX.UX.connectionDetailsHeaderMargins
+                constant: TPMenuUX.UX.connectionDetailsHeaderMargins
             ),
             connectionDetailsContentView.trailingAnchor.constraint(
                 equalTo: connectionDetailsHeaderView.trailingAnchor,
-                constant: 0// -TPMenuUX.UX.connectionDetailsHeaderMargins
+                constant: -TPMenuUX.UX.connectionDetailsHeaderMargins
             ),
             connectionDetailsContentView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.topAnchor,
                                                               constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
@@ -519,7 +508,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 //        contentStackView.addArrangedSubview(trackersView)
         baseView.addSubview(trackersView)
         // Bring subviews to front if necessary
-        scrollView.bringSubviewToFront(trackersButton)
+//        scrollView.bringSubviewToFront(trackersButton)
         view.bringSubviewToFront(trackersView)
 //        scrollView.bringSubviewToFront(toggleSwitch)
 
@@ -652,8 +641,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         toggleLabelsContainer.addArrangedSubview(toggleStatusLabel)
 //        toggleLabelsContainer.backgroundColor = .green
         toggleView.addSubviews(toggleLabelsContainer, toggleSwitch)
-        toggleContainer.addSubviews(toggleView)
-        baseView.addSubviews(toggleContainer)
+        toggleContainer.addSubview(toggleView)
+        baseView.addSubview(toggleContainer)
 //        view.addSubview(toggleContainer)
 //        contentStackView.addArrangedSubview(toggleContainer)
 
@@ -700,6 +689,23 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         ]
 
         constraints.append(contentsOf: toggleConstraints)
+
+        // Debugging statements
+        print("toggleSwitch.isUserInteractionEnabled: \(toggleSwitch.isUserInteractionEnabled)")
+        print("toggleView.isUserInteractionEnabled: \(toggleView.isUserInteractionEnabled)")
+        print("toggleContainer.isUserInteractionEnabled: \(toggleContainer.isUserInteractionEnabled)")
+
+        print("toggleSwitch.isHidden: \(toggleSwitch.isHidden)")
+        print("toggleView.isHidden: \(toggleView.isHidden)")
+        print("toggleContainer.isHidden: \(toggleContainer.isHidden)")
+
+        if let gestures = view.gestureRecognizers {
+            for gesture in gestures {
+                print("Gesture Recognizer: \(gesture)")
+            }
+        }
+        toggleSwitch.actions(forTarget: self, forControlEvent: .valueChanged)
+        view.bringSubviewToFront(toggleSwitch)
     }
 
     // MARK: Clear Cookies Button Setup
@@ -767,8 +773,9 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
         siteDomainLabel.text = viewModel.websiteTitle
         siteDisplayTitleLabel.text = viewModel.displayTitle
-        trackersLabel.text = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
-                                    viewModel.trackersBlocked)
+        let totalTrackerBlocked = String(viewModel.contentBlockerStats?.total ?? 0)
+        let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, totalTrackerBlocked)
+        trackersLabel.text = trackersText
         shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
             .withRenderingMode(.alwaysTemplate)
         connectionStatusLabel.text = viewModel.connectionStatusString
@@ -811,11 +818,6 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     func adjustView() {
-        contentStackView.removeAllArrangedViews()
-        let blueView = UIView()
-        blueView.backgroundColor = .blue
-        blueView.translatesAutoresizingMaskIntoConstraints = false
-        contentStackView.addArrangedSubview(blueView)
     }
 
     // MARK: Accessibility
@@ -871,10 +873,15 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     @objc
     func blockedTrackersTapped() {
-        let blockedTrackersVC = BlockedTrackersViewController(with: viewModel.getBlockedTrackersViewModel(),
-                                                              windowUUID: windowUUID)
-        blockedTrackersVC.modalPresentationStyle = .pageSheet
-        self.present(blockedTrackersVC, animated: true)
+//        let blockedTrackersVC = BlockedTrackersViewController(with: viewModel.getBlockedTrackersViewModel(),
+//                                                              windowUUID: windowUUID)
+//        blockedTrackersVC.modalPresentationStyle = .pageSheet
+//        self.present(blockedTrackersVC, animated: true)
+
+        let certificatesViewController = CertificatesViewController(with: viewModel.getCertificatesViewModel(),
+                                                                    windowUUID: windowUUID)
+        certificatesViewController.modalPresentationStyle = .pageSheet
+        self.present(certificatesViewController, animated: true)
     }
 
     @objc

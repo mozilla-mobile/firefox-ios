@@ -36,6 +36,10 @@ struct TPPageStats {
     ) -> TPPageStats {
         return TPPageStats(domains: domains, blocklistName: blocklistName, host: host)
     }
+
+    func getTrackersBlockedForCategory(_ category: BlocklistCategory) -> Int {
+        return domains[category]?.count ?? 0
+    }
 }
 
 class TPStatsBlocklistChecker {

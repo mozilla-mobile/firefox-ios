@@ -6,6 +6,11 @@ import Common
 import Shared
 import Storage
 
+import Security
+import CryptoKit
+import X509
+import SwiftASN1
+
 class TrackingProtectionViewModel {
     // MARK: - Variables
     var onOpenSettingsTapped: (() -> Void)?
@@ -14,13 +19,12 @@ class TrackingProtectionViewModel {
 
     // MARK: - Constants
     let contentBlockerStatus: BlockerStatus
+    let contentBlockerStats: TPPageStats?
+    var certificates = [Certificate]()
     let url: URL
     let displayTitle: String
     let connectionSecure: Bool
     let globalETPIsEnabled: Bool
-    var trackersBlocked: String {
-        return "5" // for testing
-    }
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -89,15 +93,17 @@ class TrackingProtectionViewModel {
          displayTitle: String,
          connectionSecure: Bool,
          globalETPIsEnabled: Bool,
-         contentBlockerStatus: BlockerStatus) {
+         contentBlockerStatus: BlockerStatus,
+         contentBlockerStats: TPPageStats?) {
         self.url = url
         self.displayTitle = displayTitle
         self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
         self.contentBlockerStatus = contentBlockerStatus
+        self.contentBlockerStats = contentBlockerStats
     }
 
-    // MARK: - Functions
+    // MARK: - Helpers
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         if connectionSecure {
@@ -121,9 +127,19 @@ class TrackingProtectionViewModel {
         return BlockedTrackersViewModel(topLevelDomain: websiteTitle,
                                         title: displayTitle,
                                         URL: url.absoluteDisplayString,
+                                        contentBlockerStats: contentBlockerStats,
                                         getLockIcon: getConnectionStatusImage(themeType:),
                                         connectionStatusMessage: connectionStatusString,
                                         connectionSecure: connectionSecure)
+    }
+
+    func getCertificatesViewModel() -> CertificatesViewModel {
+        return CertificatesViewModel(topLevelDomain: websiteTitle,
+                                     title: displayTitle,
+                                     URL: url.absoluteDisplayString,
+                                     certificates: certificates,
+                                     selectedCertificateIndex: 0,
+                                     getLockIcon: getConnectionStatusImage(themeType:))
     }
 
     func toggleSiteSafelistStatus() {

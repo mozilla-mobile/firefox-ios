@@ -12,6 +12,7 @@ struct BlockedTrackersViewModel {
     let title: String
     let URL: String
 
+    let contentBlockerStats: TPPageStats?
     let getLockIcon: (ThemeType) -> UIImage
     let connectionStatusMessage: String
     let connectionSecure: Bool
@@ -77,7 +78,10 @@ class BlockedTrackersViewController: UIViewController, Themeable {
         image.clipsToBounds = true
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
+        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.TrackingProtection.crossSiteTrackers)
+            .withRenderingMode(.alwaysTemplate)
     }
+
     private let crossSiteTrackersLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
@@ -96,6 +100,8 @@ class BlockedTrackersViewController: UIViewController, Themeable {
         image.clipsToBounds = true
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
+        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.TrackingProtection.socialMediaTrackers)
+            .withRenderingMode(.alwaysTemplate)
     }
     private let socialMediaTrackersLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
@@ -119,6 +125,8 @@ class BlockedTrackersViewController: UIViewController, Themeable {
         image.clipsToBounds = true
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 5
+        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.TrackingProtection.fingerprintersTrackers)
+            .withRenderingMode(.alwaysTemplate)
     }
     private let fingerprintersLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
@@ -437,10 +445,24 @@ class BlockedTrackersViewController: UIViewController, Themeable {
 
     private func updateViewDetails() {
         siteTitleLabel.text = viewModel.topLevelDomain
-        crossSiteTrackersLabel.text = "Cross-site tracking cookies: 345"// viewModel.connectionStatusMessage
-        fingerprintersLabel.text = "Fingerprinters: 345"
-        socialMediaTrackersLabel.text = "Social media trackers: 543"
-        totalTrackersBlockedLabel.text = "Trackers Blocked: 2123"
+        let totalTrackerBlocked = String(viewModel.contentBlockerStats?.total ?? 0)
+        let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, totalTrackerBlocked)
+        totalTrackersBlockedLabel.text = trackersText
+
+        let crossSiteString = String(viewModel.contentBlockerStats?.getTrackersBlockedForCategory(.advertising) ?? 0)
+        let fingerprintersString = String(viewModel.contentBlockerStats?.getTrackersBlockedForCategory(.fingerprinting) ?? 0)
+        let socialMediaString = String(viewModel.contentBlockerStats?.getTrackersBlockedForCategory(.social) ?? 0)
+
+        let crossSiteText = String(format: .Menu.EnhancedTrackingProtection.crossSiteTrackersBlockedLabel,
+                                   crossSiteString)
+        let fingerprintersText = String(format: .Menu.EnhancedTrackingProtection.fingerprinterBlockedLabel,
+                                        fingerprintersString)
+        let socialMediaText = String(format: .Menu.EnhancedTrackingProtection.socialMediaTrackersBlockedLabel,
+                                     socialMediaString)
+
+        crossSiteTrackersLabel.text = crossSiteText
+        fingerprintersLabel.text = fingerprintersText
+        socialMediaTrackersLabel.text = socialMediaText
         // String(format: .Menu.EnhancedTrackingProtection.connectionVerifiedByLabel, viewModel.topLevelDomain)
         // to be updated with the certificate verifier
     }
@@ -467,7 +489,7 @@ extension BlockedTrackersViewController {
         siteTitleLabel.textColor = theme.colors.textPrimary
         crossSiteTrackersLabel.textColor = theme.colors.textPrimary
         crossSiteTrackersView.backgroundColor = theme.colors.layer2
-        crossSiteTrackersImage.image = viewModel.getLockIcon(theme.type)
+//        crossSiteTrackersImage.image = UIImage(named: ImageIdentifiers.TrackingProtection.crossSiteTrackers)
         crossSitesTrackersDividerView.backgroundColor = theme.colors.borderPrimary
         horizontalLine.backgroundColor = theme.colors.borderPrimary
         if viewModel.connectionSecure {
@@ -482,12 +504,15 @@ extension BlockedTrackersViewController {
 
         socialMediaTrackersLabel.textColor = theme.colors.textPrimary
         socialMediaTrackersView.backgroundColor = theme.colors.layer2
-        socialMediaTrackersImage.image = viewModel.getLockIcon(theme.type)
+//        socialMediaTrackersImage.image = UIImage(named: ImageIdentifiers.TrackingProtection.socialMediaTrackers)
         socialMediaTrackersDividerView.backgroundColor = theme.colors.borderPrimary
 
         fingerprintersLabel.textColor = theme.colors.textPrimary
         fingerprintersView.backgroundColor = theme.colors.layer2
-        fingerprintersImage.image = viewModel.getLockIcon(theme.type)
+//        fingerprintersImage.image = UIImage(named: /*ImageIdentifiers.TrackingProtection.fingerprintersTrackers*/)
+        fingerprintersImage.tintColor = theme.colors.iconPrimary
+        socialMediaTrackersImage.tintColor = theme.colors.iconPrimary
+        crossSiteTrackersImage.tintColor = theme.colors.iconPrimary
 
         setNeedsStatusBarAppearanceUpdate()
     }

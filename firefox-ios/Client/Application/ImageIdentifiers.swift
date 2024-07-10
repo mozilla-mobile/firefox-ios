@@ -66,5 +66,9 @@ public struct ImageIdentifiers {
         public static let protectionAlert = "protectionAlert"
         public static let protectionOn = "protectionOn"
         public static let protectionOff = "protectionOff"
+
+        public static let socialMediaTrackers = "socialMediaTrackersImage"
+        public static let fingerprintersTrackers = "fingerprintersTrackersImage"
+        public static let crossSiteTrackers = "crossSiteTrackersImage"
     }
 }

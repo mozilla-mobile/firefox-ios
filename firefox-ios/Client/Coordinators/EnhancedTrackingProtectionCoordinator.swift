@@ -31,6 +31,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")
         let displayTitle = tab?.displayTitle ?? ""
+        let contentBlockerStats = tab?.contentBlocker?.stats
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let connectionSecure = tab?.webView?.hasOnlySecureContent ?? true
 
@@ -39,7 +40,8 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
             displayTitle: displayTitle,
             connectionSecure: connectionSecure,
             globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-            contentBlockerStatus: contentBlockerStatus
+            contentBlockerStatus: contentBlockerStatus,
+            contentBlockerStats: contentBlockerStats
         )
 
         self.enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,

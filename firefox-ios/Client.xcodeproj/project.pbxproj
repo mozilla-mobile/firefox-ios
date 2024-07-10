@@ -1008,6 +1008,8 @@
 		AB27AFBD2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB27AFBC2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift */; };
 		AB2AC6632BCFD0A200022AAB /* X509 in Frameworks */ = {isa = PBXBuildFile; productRef = AB2AC6622BCFD0A200022AAB /* X509 */; };
 		AB2AC6662BD15E6300022AAB /* CertificatesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */; };
+		AB2E93FF2C3C645700287524 /* TrackingProtectionVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2E93FE2C3C645700287524 /* TrackingProtectionVC2.swift */; };
+		AB2E94012C3CA6DE00287524 /* CertificatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB2E94002C3CA6DE00287524 /* CertificatesViewController.swift */; };
 		AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */; };
 		AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */; };
 		AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */; };
@@ -6805,6 +6807,8 @@
 		AB27AFBC2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionDetailsViewController.swift; sourceTree = "<group>"; };
 		AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesHandler.swift; sourceTree = "<group>"; };
 		AB2B45078A7F1E09F65ACEC5 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Shared.strings; sourceTree = "<group>"; };
+		AB2E93FE2C3C645700287524 /* TrackingProtectionVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionVC2.swift; sourceTree = "<group>"; };
+		AB2E94002C3CA6DE00287524 /* CertificatesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesViewController.swift; sourceTree = "<group>"; };
 		AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupTelemetry.swift; sourceTree = "<group>"; };
 		AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewController.swift; sourceTree = "<group>"; };
 		AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetHeaderView.swift; sourceTree = "<group>"; };
@@ -10673,8 +10677,10 @@
 			children = (
 				AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */,
 				AB61DE422BEBA05D00DE194E /* TrackingProtectionViewController.swift */,
+				AB2E93FE2C3C645700287524 /* TrackingProtectionVC2.swift */,
 				AB27AFBC2C35BB91007BC31C /* TrackingProtectionDetailsViewController.swift */,
 				AB4DD6A32C36144A00767EBF /* BlockedTrackersViewController.swift */,
+				AB2E94002C3CA6DE00287524 /* CertificatesViewController.swift */,
 				AB61DE462BF3609200DE194E /* TrackingProtectionViewModel.swift */,
 				AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */,
 			);
@@ -14430,6 +14436,7 @@
 				C8DC90C32A066B4A0008832B /* MarkupToken.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */,
 				E174963C2992B6A60096900A /* HostingTableViewSectionHeader.swift in Sources */,
+				AB2E93FF2C3C645700287524 /* TrackingProtectionVC2.swift in Sources */,
 				5A2918CD2B522381002B197E /* ToastType.swift in Sources */,
 				8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* LegacyGridTabViewController.swift in Sources */,
@@ -14769,6 +14776,7 @@
 				21AFCFEE2AE80B700027E9CE /* TabsCoordinator.swift in Sources */,
 				8A1CBB952BE017D3008BE4D4 /* MicrosurveyPromptAction.swift in Sources */,
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,
+				AB2E94012C3CA6DE00287524 /* CertificatesViewController.swift in Sources */,
 				8A3EF80D2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift in Sources */,
 				E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
