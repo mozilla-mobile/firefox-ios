@@ -45,7 +45,7 @@ class ToolbarMiddleware: FeatureFlaggable {
                                        actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
 
-        case GeneralBrowserMiddlewareActionType.didScroll:
+        case GeneralBrowserMiddlewareActionType.websiteDidScroll:
             updateBorderPosition(action: action, state: state)
 
         case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:

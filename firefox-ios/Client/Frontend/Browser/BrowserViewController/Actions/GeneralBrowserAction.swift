@@ -62,6 +62,6 @@ class GeneralBrowserMiddlewareAction: Action {
 
 enum GeneralBrowserMiddlewareActionType: ActionType {
     case browserDidLoad
-    case didScroll
     case toolbarPositionChanged
+    case websiteDidScroll
 }
