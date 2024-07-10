@@ -113,7 +113,6 @@ struct AddressListView: View {
             }
         }
         .onAppear {
-            viewModel.fetchAddresses()
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             viewModel.editAddressWebViewManager.preloadWebView()
         }

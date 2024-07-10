@@ -13,6 +13,7 @@ struct AddressBarState: StateType, Equatable {
     var browserActions: [ToolbarActionState]
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
+    var isEditing: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
@@ -20,7 +21,8 @@ struct AddressBarState: StateType, Equatable {
                   pageActions: [],
                   browserActions: [],
                   borderPosition: nil,
-                  url: nil)
+                  url: nil,
+                  isEditing: false)
     }
 
     init(windowUUID: WindowUUID,
@@ -28,13 +30,15 @@ struct AddressBarState: StateType, Equatable {
          pageActions: [ToolbarActionState],
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
-         url: URL?) {
+         url: URL?,
+         isEditing: Bool = false) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
         self.browserActions = browserActions
         self.borderPosition = borderPosition
         self.url = url
+        self.isEditing = isEditing
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -71,15 +75,31 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url
             )
 
+        case ToolbarActionType.addressToolbarActionsDidChange:
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing
+            )
+
         case ToolbarActionType.urlDidChange:
-            var addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+            var addressToolbarModel = toolbarAction.addressToolbarModel
+
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: addressToolbarModel?.navigationActions ?? state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: (action as? ToolbarAction)?.url
+                url: toolbarAction.url,
+                isEditing: addressToolbarModel?.isEditing ?? state.isEditing
             )
 
         case ToolbarActionType.backButtonStateChanged:
@@ -107,6 +127,23 @@ struct AddressBarState: StateType, Equatable {
 
             if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
                 actions[index].isEnabled = isEnabled
+            }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: actions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url
+            )
+
+        case ToolbarActionType.showMenuWarningBadge:
+            let badgeImageName = (action as? ToolbarAction)?.badgeImageName
+            var actions = state.navigationActions
+
+            if let index = actions.firstIndex(where: { $0.actionType == .menu }) {
+                actions[index].badgeImageName = badgeImageName
             }
 
             return AddressBarState(

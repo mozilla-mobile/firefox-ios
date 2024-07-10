@@ -8,6 +8,7 @@ import Foundation
 final class MicrosurveyMock {
     static var model: MicrosurveyModel {
         return MicrosurveyModel(
+            id: "survey-id",
             promptTitle: "prompt title",
             promptButtonLabel: "prompt button label",
             surveyQuestion: "is this a survey question?",

@@ -29,17 +29,19 @@ class URLValidationTest: BaseTestCase {
     private func loadAndValidateURL(URL: String) {
         loadWebPage(URL)
         waitForWebPageLoad()
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists, "The website was not loaded properly")
+        mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
         if !iPad() {
-            XCTAssertTrue(app.buttons["Menu"].exists)
+            mozWaitForElementToExist(app.buttons["Menu"])
         }
-        XCTAssertEqual(app.textFields["URLBar.urlText"].value as? String, "www.mozilla.org")
+        mozWaitForElementToExist(app.textFields["URLBar.urlText"])
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "www.mozilla.org")
     }
 
     private func loadAndValidateHttpURLs(URL: String) {
         loadWebPage(URL)
         waitForWebPageLoad()
-        XCTAssertTrue(app.otherElements.staticTexts["Example Domain"].exists, "The website was not loaded properly")
-        XCTAssertEqual(app.textFields["URLBar.urlText"].value as? String, "example.com")
+        mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
+        mozWaitForElementToExist(app.textFields["URLBar.urlText"])
+        waitForValueContains(app.textFields["URLBar.urlText"], value: "example.com")
     }
 }

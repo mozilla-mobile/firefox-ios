@@ -75,6 +75,7 @@ class AddressToolbarContainerModel: Equatable {
         return actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
+                badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 a11yLabel: action.a11yLabel,

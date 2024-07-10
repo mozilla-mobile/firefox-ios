@@ -103,7 +103,6 @@ class ActivityStreamTest: BaseTestCase {
         }
         waitUntilPageLoad()
 
-        // Workaround to avoid https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.collectionViews.buttons["crossLarge"])

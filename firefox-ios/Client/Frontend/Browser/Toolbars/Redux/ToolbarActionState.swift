@@ -18,10 +18,12 @@ struct ToolbarActionState: Equatable {
         case trackingProtection
         case readerMode
         case dataClearance
+        case cancelEdit
     }
 
     var actionType: ActionType
     var iconName: String
+    var badgeImageName: String?
     var numberOfTabs: Int?
     var isEnabled: Bool
     var a11yLabel: String

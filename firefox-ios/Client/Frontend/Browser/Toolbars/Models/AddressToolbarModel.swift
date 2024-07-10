@@ -14,16 +14,19 @@ struct AddressToolbarModel {
 
     let borderPosition: AddressToolbarBorderPosition?
     let url: URL?
+    let isEditing: Bool?
 
     init(navigationActions: [ToolbarActionState]? = nil,
          pageActions: [ToolbarActionState]? = nil,
          browserActions: [ToolbarActionState]? = nil,
          borderPosition: AddressToolbarBorderPosition? = nil,
-         url: URL? = nil) {
+         url: URL? = nil,
+         isEditing: Bool? = nil) {
         self.navigationActions = navigationActions
         self.pageActions = pageActions
         self.browserActions = browserActions
         self.borderPosition = borderPosition
         self.url = url
+        self.isEditing = isEditing
     }
 }

@@ -78,11 +78,8 @@ class DomainAutocompleteTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
-        // Workaround to avoid https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
-        // navigator.goto(CloseTabMenu)
-        // navigator.performAction(Action.AcceptRemovingAllTabs)
-        mozWaitForElementToExist(app.collectionViews.buttons["crossLarge"])
-        app.collectionViews.buttons["crossLarge"].tap()
+        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(HomePanelsScreen)
 
         navigator.goto(URLBarOpen)

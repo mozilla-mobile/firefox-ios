@@ -14,6 +14,7 @@ class ToolbarAction: Action {
     let url: URL?
     let isButtonEnabled: Bool?
     let isPrivate: Bool?
+    let badgeImageName: String?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
@@ -22,6 +23,7 @@ class ToolbarAction: Action {
          url: URL? = nil,
          isButtonEnabled: Bool? = nil,
          isPrivate: Bool? = nil,
+         badgeImageName: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -31,6 +33,7 @@ class ToolbarAction: Action {
         self.url = url
         self.isButtonEnabled = isButtonEnabled
         self.isPrivate = isPrivate
+        self.badgeImageName = badgeImageName
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -38,11 +41,13 @@ class ToolbarAction: Action {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
+    case addressToolbarActionsDidChange
     case urlDidChange
     case backButtonStateChanged
     case forwardButtonStateChanged
     case scrollOffsetChanged
     case toolbarPositionChanged
+    case showMenuWarningBadge
 }
 
 class ToolbarMiddlewareAction: Action {
@@ -85,4 +90,6 @@ class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case urlDidChange
+    case didStartEditingUrl
+    case cancelEdit
 }
