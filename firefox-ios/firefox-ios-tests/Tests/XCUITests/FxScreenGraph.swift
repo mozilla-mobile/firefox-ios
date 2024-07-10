@@ -1041,7 +1041,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(PageZoom) { screenState in
-        screenState.tap(app.buttons["FindInPage.closeButton"], to: BrowserTab)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.ZoomPageBar.doneButton], to: BrowserTab)
     }
 
     map.addScreenState(RequestDesktopSite) { _ in }
