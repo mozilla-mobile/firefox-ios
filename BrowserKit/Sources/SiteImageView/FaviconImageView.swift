@@ -16,7 +16,6 @@ public class FaviconImageView: UIImageView, SiteImageView {
     var uniqueID: UUID?
     var imageFetcher: SiteImageHandler
     var currentURLString: String?
-    var currentInFlightURLString: String?
     private var completionHandler: (() -> Void)?
 
     // MARK: - Init
@@ -42,10 +41,6 @@ public class FaviconImageView: UIImageView, SiteImageView {
     }
 
     // MARK: - Public
-
-    public func hasInFlightFaviconRequest() -> Bool {
-        return currentInFlightURLString != nil
-    }
 
     /// Initiates the retrival of the favion image and sets it to the view
     /// - Parameter viewModel: the configuration of the favicon
