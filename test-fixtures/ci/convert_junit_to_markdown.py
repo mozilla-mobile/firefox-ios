@@ -170,7 +170,7 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
     for test_suite in test_suites:
         if int(test_suite['failures']):
             markdown += '## {name}\n\n'.format(name=re.sub('XCUITests?.', '', test_suite.get('name', '')))
-            markdown += convert_test_cases_to_github_markdown(test_suite.get('test_cases', []), is_smoke = True)
+            markdown += convert_test_cases_to_github_markdown(test_suite.get('test_cases', []), is_smoke = is_smoke)
     
     if markdown == '':
         markdown += '## :tada: No test failures :tada:'
