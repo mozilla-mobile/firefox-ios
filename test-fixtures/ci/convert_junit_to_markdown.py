@@ -7,6 +7,7 @@
 import getopt, sys
 import xml.etree.ElementTree as ET
 import json
+import re
 from blockkit import Context, Divider, Header, Message, Section
 import re
 
