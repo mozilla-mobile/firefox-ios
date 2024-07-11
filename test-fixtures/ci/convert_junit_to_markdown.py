@@ -8,6 +8,7 @@ import getopt, sys
 import xml.etree.ElementTree as ET
 import json
 from blockkit import Context, Divider, Header, Message, Section
+import re
 
 # Modified from junit_to_markdown
 # https://github.com/stevengoossensB/junit_to_markdown/tree/main
@@ -98,7 +99,7 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
     for test_suite in test_suites:
         if int(test_suite.get('failures')):
             done = []
-            markdown = '*{name}*'.format(name=test_suite.get('name', '').replace('XCUITest.' ,''))
+            markdown = '*{name}*'.format(name=re.sub('XCUITests?.', '', test_suite.get('name', '')))
             test_cases = test_suite.get('test_cases', [])
             for test_case in test_cases:
                 if not test_case.get('status') == ':white_check_mark:' and not test_case.get('name', '') in done: 
@@ -168,7 +169,7 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
     markdown = ''
     for test_suite in test_suites:
         if int(test_suite['failures']):
-            markdown += '## {name}\n\n'.format(name = test_suite.get('name', '').replace('XCUITest.' ,''))
+            markdown += '## {name}\n\n'.format(name=re.sub('XCUITests?.', '', test_suite.get('name', '')))
             markdown += convert_test_cases_to_github_markdown(test_suite.get('test_cases', []), is_smoke = True)
     
     if markdown == '':
