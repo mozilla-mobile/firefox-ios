@@ -29,12 +29,6 @@ extension SiteImageView {
     }
 
     func updateImage(site: SiteImageModel) {
-        self.layer.borderWidth = 5
-        self.layer.borderColor = UIColor.green.cgColor
-        print("DBG: SiteImageView.updateImage()")
-
-        let siteString = site.siteURLString
-
         Task {
             let imageModel = await imageFetcher.getImage(site: site)
 
