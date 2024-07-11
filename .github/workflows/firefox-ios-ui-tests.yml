@@ -145,6 +145,10 @@ jobs:
       - name: Determine pass/fail status
         id: passfail
         run: |
+          echo "Smoketest1 status: "${{ steps.run-smoketest1.outcome }}
+          echo "Smoketest2 status: "${{ steps.run-smoketest2.outcome }}
+          echo "Smoketest3 status: "${{ steps.run-smoketest3.outcome }}
+          echo "Smoketest4 status: "${{ steps.run-smoketest4.outcome }}
           if [[ ${{ steps.run-smoketest1.outcome }} != 'success' 
                 || ${{ steps.run-smoketest2.outcome }} != 'success'  
                 || ${{ steps.run-smoketest3.outcome }} != 'success' 
