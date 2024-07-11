@@ -189,6 +189,13 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
         }
 
+        if launchArguments.contains(LaunchArguments.ResetMicrosurveyExpirationCount) {
+            // String is pulled from our "evergreen" messages configurations 
+            // that are displayed via the Nimbus Messaging system.
+            let microsurveyID = "homepage-microsurvey-message"
+            UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\(microsurveyID)")
+        }
+
         self.profile = profile
         return profile
     }

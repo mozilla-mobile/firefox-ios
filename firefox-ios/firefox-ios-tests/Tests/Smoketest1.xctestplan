@@ -144,6 +144,7 @@
         "LibraryTestsIpad",
         "LibraryTestsIphone",
         "LoginTest",
+        "MicrosurveyTests",
         "NavigationTest",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",

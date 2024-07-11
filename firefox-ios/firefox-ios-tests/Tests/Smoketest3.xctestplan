@@ -92,6 +92,7 @@
         "JumpBackInTests\/testLongTapOnJumpBackInLink()",
         "LibraryTestsIpad",
         "LoginTest",
+        "MicrosurveyTests",
         "NavigationTest\/testBookmarkLink()",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",

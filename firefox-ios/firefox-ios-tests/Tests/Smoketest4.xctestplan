@@ -81,6 +81,7 @@
         "LoginTest\/testLoginsListFromBrowserTabMenu()",
         "LoginTest\/testSavedLoginSelectUnselect()",
         "LoginTest\/testSearchLogin()",
+        "MicrosurveyTests",
         "NavigationTest\/testBookmarkLink()",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",
