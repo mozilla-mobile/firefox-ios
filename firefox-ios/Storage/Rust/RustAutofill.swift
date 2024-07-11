@@ -400,7 +400,7 @@ public class RustAutofill {
                 return
             }
             do {
-                try self.storage?.deleteAddress(guid: id)
+                _ = try self.storage?.deleteAddress(guid: id)
                 completion(.success(()))
             } catch let error {
                 completion(.failure(error))
