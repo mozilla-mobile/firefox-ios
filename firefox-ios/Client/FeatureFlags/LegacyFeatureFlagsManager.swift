@@ -52,8 +52,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
                                  checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
-
-        let nimbusSetting = feature.isNimbusEnabled(using: nimbusFlags)
+        let nimbusSetting = getNimbusOrDebugSetting(with: feature)
         let userSetting = feature.isUserEnabled(using: nimbusFlags)
 
         switch channelsToCheck {
@@ -64,6 +63,15 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         case .userOnly:
             return userSetting
         }
+    }
+
+    /// Allows us to override nimbus feature flags for a specific build using the debug menu
+    private func getNimbusOrDebugSetting(with feature: NimbusFlaggableFeature) -> Bool {
+        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        return feature.isDebugEnabled(using: nimbusFlags)
+        #else
+        return feature.isNimbusEnabled(using: nimbusFlags)
+        #endif
     }
 
     /// Retrieves a custom state for any type of feature that has more than just a

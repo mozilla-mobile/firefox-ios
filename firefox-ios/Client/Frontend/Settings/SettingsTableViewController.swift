@@ -354,6 +354,10 @@ class BoolSetting: Setting, FeatureFlaggable {
         return defaultValue
     }
 
+    func getPrefs() -> Prefs? {
+        return prefs
+    }
+
     // These methods allow a subclass to control how the pref is saved
     func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
