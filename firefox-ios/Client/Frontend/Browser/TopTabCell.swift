@@ -93,11 +93,9 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         let hideCloseButton = frame.width < UX.closeButtonThreshold && !selected
         closeButton.isHidden = hideCloseButton
 
-        if !favicon.hasInFlightFaviconRequest() {
-            favicon.manuallySetImage(
-                UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
-            favicon.backgroundColor = .clear
-        }
+        favicon.manuallySetImage(
+            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
+        favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: siteURL,
