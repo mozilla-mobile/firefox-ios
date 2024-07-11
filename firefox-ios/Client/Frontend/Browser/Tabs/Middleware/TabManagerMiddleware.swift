@@ -397,7 +397,8 @@ class TabManagerMiddleware {
                 }
             }
         }
-        if tabsState.isPrivateMode == false {
+
+        if !tabsState.isPrivateMode {
             let dismissAction = TabTrayAction(windowUUID: uuid,
                                               actionType: TabTrayActionType.dismissTabTray)
             store.dispatch(dismissAction)
