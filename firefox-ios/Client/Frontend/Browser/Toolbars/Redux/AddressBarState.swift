@@ -99,7 +99,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: addressToolbarModel?.navigationActions ?? state.navigationActions,
-                pageActions: state.pageActions,
+                pageActions: addressToolbarModel?.pageActions ?? state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: toolbarAction.url,

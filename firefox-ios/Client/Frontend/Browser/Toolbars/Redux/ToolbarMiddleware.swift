@@ -78,6 +78,13 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
+    lazy var shareAction = ToolbarActionState(
+        actionType: .share,
+        iconName: StandardImageIdentifiers.Large.shareApple,
+        isEnabled: true,
+        a11yLabel: .TabLocationShareAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
+
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
 
@@ -212,6 +219,12 @@ class ToolbarMiddleware: FeatureFlaggable {
         case .stopLoading:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.stopLoadingWebsite)
+            store.dispatch(action)
+
+        case .share:
+            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
+                                              windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showShare)
             store.dispatch(action)
 
         default:
@@ -375,6 +388,8 @@ class ToolbarMiddleware: FeatureFlaggable {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
         }
+
+        actions.append(shareAction)
 
         let isLoadingChangeAction = action.actionType as? ToolbarMiddlewareActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : toolbarState.addressToolbar.isLoading

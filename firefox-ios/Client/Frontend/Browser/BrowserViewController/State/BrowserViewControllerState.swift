@@ -23,6 +23,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case tabsLongPressActions
         case menu
         case tabTray
+        case share
     }
 
     let windowUUID: WindowUUID
@@ -309,6 +310,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .stopLoading,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showShare:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .share,
+                buttonTapped: action.buttonTapped,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state

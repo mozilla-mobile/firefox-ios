@@ -1863,6 +1863,9 @@ class BrowserViewController: UIViewController,
                 object: .tabToolbar,
                 value: .tabView
             )
+        case .share:
+            guard let button = state.buttonTapped else { return }
+            didTapOnShare(from: button)
         }
     }
 
@@ -1950,6 +1953,22 @@ class BrowserViewController: UIViewController,
                 isMainMenuInverted: shouldInverse
             )
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
+        }
+    }
+
+    func didTapOnShare(from view: UIView) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarLocation,
+                                     value: .awesomebarShareTap,
+                                     extras: nil)
+
+        if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
+            navigationHandler?.showShareExtension(
+                url: tabUrl,
+                sourceView: view,
+                toastContainer: contentContainer,
+                popoverArrowDirection: isBottomSearchBar ? .down : .up)
         }
     }
 
