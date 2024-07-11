@@ -81,7 +81,10 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                 name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
-                path: ~/DerivedData/Build/Products
+            - name: Decompress derived data
+              id: decompress-dd
+              run: |
+                tar xzf derived-data.tar.gz -C /
             - name: Run tests
               id: run-tests
               run: |
