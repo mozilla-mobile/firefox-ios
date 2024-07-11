@@ -223,13 +223,13 @@ def convert_test_cases_to_github_markdown(test_cases, is_smoke = True):
 
 def convert_file_github(input_file, output_file, is_smoke = True):
     test_cases = parse_junit_xml(input_file)
-    markdown = convert_to_github_markdown(test_cases, is_smoke = True)
+    markdown = convert_to_github_markdown(test_cases, is_smoke = is_smoke)
     with open(output_file, 'w') as md_file:
         md_file.write(markdown)
 
 def convert_file_slack(input_file, output_file, is_smoke = True, browser='firefox-ios'):
     test_cases = parse_junit_xml(input_file)
-    markdown = convert_to_slack_markdown(test_cases, is_smoke = True, browser=browser)
+    markdown = convert_to_slack_markdown(test_cases, is_smoke = is_smoke, browser=browser)
     with open(output_file, 'w') as md_file:
         md_file.write(markdown)
 
