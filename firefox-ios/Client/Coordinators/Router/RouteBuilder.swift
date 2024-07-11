@@ -27,7 +27,7 @@ final class RouteBuilder {
             // use the last browsing mode the user was in.
             let isPrivate = Bool(urlScanner.value(query: "private") ?? "") ?? false
             var options: Set<Route.SearchOptions> = isPrivate ? [Route.SearchOptions.switchToPrivacyMode] :
-            [Route.SearchOptions.switchToNormalMode]
+            [Route.SearchOptions.useCurrentBrowsingMode]
 
             recordTelemetry(input: host, isPrivate: isPrivate)
 
