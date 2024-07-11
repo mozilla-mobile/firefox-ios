@@ -68,6 +68,20 @@ jobs:
               run: |
                 gem install xcpretty -v 0.3.0
                 pip install blockkit==1.9.1
+            - name: Setup Xcode
+              id: xcode
+              run: |
+                sudo rm -rf /Applications/Xcode.app
+                sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+                xcodebuild -version
+                ./checkout.sh
+                ./bootstrap.sh --force
+            - name: Get derived data
+              id: download-derived-data
+              uses: actions/download-artifact@v4
+              with:
+                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+                path: ~/DerivedData/Build/Products
             - name: Run tests
               id: run-tests
               run: |
