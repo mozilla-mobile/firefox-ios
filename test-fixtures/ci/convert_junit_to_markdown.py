@@ -9,7 +9,6 @@ import xml.etree.ElementTree as ET
 import json
 import re
 from blockkit import Context, Divider, Header, Message, Section
-import re
 
 # Modified from junit_to_markdown
 # https://github.com/stevengoossensB/junit_to_markdown/tree/main
@@ -89,6 +88,10 @@ def count_tests(test_suites, is_smoke=True):
                         tests['failures'] += 1
 
     tests['total_tests'] = tests['passed'] + tests['failures'] + tests['warnings']
+    
+    if not is_smoke:
+        tests['warnings'] = 'N/A'
+
     return tests
 
 def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios'):
@@ -114,7 +117,9 @@ def convert_to_slack_markdown(test_suites, is_smoke = True, browser='firefox-ios
             failed_tests_info.append(Section(text=markdown))
     
     # No test failures
-    if len(failed_tests_info) == 0:
+    if tests_info['total_tests'] == 0:
+        failed_tests_info = [ Section(text=':boom: No tests executed :boom:') ]
+    elif len(failed_tests_info) == 0:
         failed_tests_info = [ Section(text=':tada: No test failures :tada:') ]
 
     # Put together the Slack message
@@ -173,7 +178,9 @@ def convert_to_github_markdown(test_suites, is_smoke = True):
             markdown += '## {name}\n\n'.format(name=re.sub('XCUITests?.', '', test_suite.get('name', '')))
             markdown += convert_test_cases_to_github_markdown(test_suite.get('test_cases', []), is_smoke = is_smoke)
     
-    if markdown == '':
+    if tests_info['total_tests'] == 0:
+        markdown += '## :boom: No tests executed :boom:'
+    elif markdown == '':
         markdown += '## :tada: No test failures :tada:'
     else:
         tests_info_markdown = ''
