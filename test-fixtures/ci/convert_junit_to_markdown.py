@@ -7,8 +7,8 @@
 import getopt, sys
 import xml.etree.ElementTree as ET
 import json
-from blockkit import Context, Divider, Header, Message, Section
 import re
+from blockkit import Context, Divider, Header, Message, Section
 
 # Modified from junit_to_markdown
 # https://github.com/stevengoossensB/junit_to_markdown/tree/main
