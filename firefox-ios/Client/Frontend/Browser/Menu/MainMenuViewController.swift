@@ -38,6 +38,7 @@ class MainMenuViewController: UIViewController,
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let animationDuration: TimeInterval = 0.2
     }
+
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -46,7 +47,6 @@ class MainMenuViewController: UIViewController,
     private let windowUUID: WindowUUID
 
     var currentWindowUUID: UUID? { return windowUUID }
-
 
     private lazy var scrollView: UIScrollView = .build()
 
@@ -63,7 +63,7 @@ class MainMenuViewController: UIViewController,
     private lazy var headerView: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = "I AM A MENU"//.Shopping.SheetHeaderTitle
+        label.text = ""
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.headline.scaledFont()
@@ -98,7 +98,6 @@ class MainMenuViewController: UIViewController,
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        fakespotState = FakespotState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 //        listenToStateChange()
     }
@@ -119,28 +118,7 @@ class MainMenuViewController: UIViewController,
 
         setupView()
         listenForThemeChange(view)
-//        viewModel.fetchProductIfOptedIn()
         subscribeToRedux()
-//        shouldRecordAdsExposureEvents()
-    }
-
-    // MARK: - Redux
-
-    func subscribeToRedux() {
-        let uuid = windowUUID
-        store.subscribe(self, transform: {
-            $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
-            })
-        })
-    }
-
-    func unsubscribeFromRedux() {
-        store.unsubscribe(self)
-    }
-
-    func newState(state: BrowserViewControllerState) {
-        fakespotState = state.fakespotState
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -158,7 +136,6 @@ class MainMenuViewController: UIViewController,
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
         setShadowPath()
-//        handleAdVisibilityChanges()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -166,10 +143,7 @@ class MainMenuViewController: UIViewController,
         notificationCenter.post(name: .FakespotViewControllerDidAppear, withObject: windowUUID)
         updateModalA11y()
 
-        guard !fakespotState.currentTabUUID.isEmpty,
-              fakespotState.sendSurfaceDisplayedTelemetryEvent
-        else { return }
-//        viewModel.recordBottomSheetDisplayed(presentationController)
+        //        viewModel.recordBottomSheetDisplayed(presentationController)
         let action = FakespotAction(windowUUID: windowUUID,
                                     actionType: FakespotActionType.surfaceDisplayedEventSend)
         store.dispatch(action)
@@ -185,43 +159,139 @@ class MainMenuViewController: UIViewController,
         viewModel.isSwiping = true
     }
 
-    func update(viewModel: MainMenuViewModel, triggerFetch: Bool = true) {
-        // Only update the model if the shopping product changed to avoid unnecessary API calls
-//        guard self.viewModel.shoppingProduct != viewModel.shoppingProduct else {
-//            handleAdVisibilityChanges()
-//            return
-//        }
+    // MARK: - View setup
+    private func setupView() {
+        //        titleStackView.addArrangedSubview(titleLabel)
+        //        headerView.addSubviews(titleStackView)
+        //        view.addSubviews(scrollView, headerView) // shadowView
+        //
+        //        scrollView.addSubview(contentStackView)
+        //        updateContent()
 
-        self.viewModel = viewModel
-//        shouldRecordAdsExposureEvents()
-
-        // Sets adView to nil when switching tabs on iPad to prevent retaining references from a previous tab,
-        // ensuring accurate ad impression tracking.
-        adView = nil
-//        listenToStateChange()
-
-//        guard triggerFetch else { return }
-//        viewModel.fetchProductIfOptedIn()
+        //        NSLayoutConstraint.activate([
+        //            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
+        //                                                  constant: UX.scrollContentTopPadding),
+        //            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
+        //                                                      constant: UX.scrollContentHorizontalPadding),
+        //            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
+        //                                                     constant: -UX.scrollContentBottomPadding),
+        //            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
+        //                                                       constant: -UX.scrollContentHorizontalPadding),
+        //            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
+        //                                                    constant: -UX.scrollContentHorizontalPadding * 2),
+        //
+        //            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: UX.scrollViewTopSpacing),
+        //            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        //            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+        //            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+        //
+        //            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerTopSpacing),
+        //            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+        //                                                constant: UX.headerHorizontalSpacing),
+        //            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+        //                                                 constant: -UX.headerHorizontalSpacing),
+        //
+        ////            shadowView.topAnchor.constraint(equalTo: view.topAnchor),
+        ////            shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        ////            shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ////            shadowView.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+        //
+        //            titleStackView.topAnchor.constraint(equalTo: headerView.topAnchor),
+        //            titleStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+        //            titleStackView.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+        //                                                     constant: -UX.titleCloseSpacing),
+        //            titleStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
+        //
+        //            closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+        //            closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
+        //            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
+        //            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
+        //            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
+        //        ])
     }
 
-//    private func shouldRecordAdsExposureEvents() {
-//        viewModel.shouldRecordAdsExposureEvents = { [weak self] in
-//            guard let self, let productId = viewModel.shoppingProduct.product?.id else { return false }
-//            let tabUUID = self.fakespotState.currentTabUUID
-//
-//            return (self.fakespotState.telemetryState[tabUUID]?.adEvents[productId]?.sendAdExposureEvent ?? true)
-//        }
-//    }
+    private func adjustLayout() {
+        //        closeButton.isHidden = true
 
-//    private func handleAdVisibilityChanges() {
-//        guard let adView,
-//              !fakespotState.currentTabUUID.isEmpty,
-//              let productId = viewModel.shoppingProduct.product?.id,
-//              fakespotState.telemetryState[fakespotState.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent ?? true
-//        else { return }
-//        viewModel.handleVisibilityChanges(for: adView, in: scrollView)
-//    }
+        //        guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
 
+        //        var availableTitleStackWidth = headerView.frame.width
+        //        if availableTitleStackWidth == 0 {
+        //            // calculate the width if auto-layout doesn't have it yet
+        //            availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
+        //        }
+        //        availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
+        //        let titleTextWidth = FakespotUtils.widthOfString(titleLabelText, usingFont: titleLabel.font)
+        //
+        //        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        //        let betaLabelWidth = FakespotUtils.widthOfString(betaLabelText, usingFont: betaLabel.font)
+        //        let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
+        //        let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
+        //
+        //        // swiftlint:disable line_length
+        //        betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
+        //        // swiftlint:enable line_length
+        //
+        //        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
+        //            titleStackView.axis = .vertical
+        //            titleStackView.alignment = .leading
+        //        } else {
+        //            titleStackView.axis = .horizontal
+        //            titleStackView.alignment = .center
+        //        }
+        //
+        //        titleStackView.setNeedsLayout()
+        //        titleStackView.layoutIfNeeded()
+    }
+
+    private func updateContent() {
+        contentStackView.removeAllArrangedViews()
+        applyTheme()
+    }
+
+    private func adjustShadowBasedOnIntersection() {
+        let shadowViewFrameInSuperview = shadowView.convert(
+            shadowView.bounds,
+            to: view
+        )
+        let contentStackViewFrameInSuperview = contentStackView.convert(
+            contentStackView.bounds,
+            to: view
+        )
+
+        if shadowViewFrameInSuperview.intersects(contentStackViewFrameInSuperview) {
+            guard !viewModel.isViewIntersected else { return }
+            viewModel.isViewIntersected.toggle()
+            UIView.animate(withDuration: UX.animationDuration) {
+                self.shadowView.layer.shadowOpacity = UX.shadowOpacity
+            }
+        } else {
+            guard viewModel.isViewIntersected else { return }
+            viewModel.isViewIntersected.toggle()
+            UIView.animate(withDuration: UX.animationDuration) {
+                self.shadowView.layer.shadowOpacity = 0
+            }
+        }
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            $0.select({ appState in
+                return BrowserViewControllerState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.unsubscribe(self)
+    }
+
+    func newState(state: BrowserViewControllerState) {
+    }
+
+    // MARK: - UX related
     private func setShadowPath() {
         // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
         let shadowPathRect = CGRect(
@@ -254,327 +324,13 @@ class MainMenuViewController: UIViewController,
 //        }
     }
 
+    // MARK: - Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DynamicFontChanged:
             adjustLayout()
         default: break
         }
-    }
-
-    private func setupView() {
-//        titleStackView.addArrangedSubview(titleLabel)
-//        headerView.addSubviews(titleStackView)
-//        view.addSubviews(scrollView, headerView) // shadowView
-//
-//        scrollView.addSubview(contentStackView)
-//        updateContent()
-
-//        NSLayoutConstraint.activate([
-//            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
-//                                                  constant: UX.scrollContentTopPadding),
-//            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
-//                                                      constant: UX.scrollContentHorizontalPadding),
-//            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
-//                                                     constant: -UX.scrollContentBottomPadding),
-//            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
-//                                                       constant: -UX.scrollContentHorizontalPadding),
-//            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
-//                                                    constant: -UX.scrollContentHorizontalPadding * 2),
-//
-//            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: UX.scrollViewTopSpacing),
-//            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-//
-//            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerTopSpacing),
-//            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-//                                                constant: UX.headerHorizontalSpacing),
-//            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-//                                                 constant: -UX.headerHorizontalSpacing),
-//
-////            shadowView.topAnchor.constraint(equalTo: view.topAnchor),
-////            shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-////            shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-////            shadowView.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-//
-//            titleStackView.topAnchor.constraint(equalTo: headerView.topAnchor),
-//            titleStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-//            titleStackView.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
-//                                                     constant: -UX.titleCloseSpacing),
-//            titleStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-//
-//            closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
-//            closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
-//            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
-//            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-//            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-//        ])
-    }
-
-    private func adjustLayout() {
-//        closeButton.isHidden = FakespotUtils().shouldDisplayInSidebar()
-
-//        guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
-
-//        var availableTitleStackWidth = headerView.frame.width
-//        if availableTitleStackWidth == 0 {
-//            // calculate the width if auto-layout doesn't have it yet
-//            availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
-//        }
-//        availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
-//        let titleTextWidth = FakespotUtils.widthOfString(titleLabelText, usingFont: titleLabel.font)
-//
-//        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-//        let betaLabelWidth = FakespotUtils.widthOfString(betaLabelText, usingFont: betaLabel.font)
-//        let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
-//        let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
-//
-//        // swiftlint:disable line_length
-//        betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
-//        // swiftlint:enable line_length
-//
-//        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
-//            titleStackView.axis = .vertical
-//            titleStackView.alignment = .leading
-//        } else {
-//            titleStackView.axis = .horizontal
-//            titleStackView.alignment = .center
-//        }
-//
-//        titleStackView.setNeedsLayout()
-//        titleStackView.layoutIfNeeded()
-    }
-
-    private func updateContent() {
-        contentStackView.removeAllArrangedViews()
-
-//        viewModel.viewElements.forEach { element in
-//            guard let view = createContentView(viewElement: element) else { return }
-//            contentStackView.addArrangedSubview(view)
-//
-//            if let loadingView = view as? FakespotLoadingView {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                    loadingView.animate()
-//                }
-//            }
-//        }
-        applyTheme()
-    }
-
-    private func adjustShadowBasedOnIntersection() {
-        let shadowViewFrameInSuperview = shadowView.convert(
-            shadowView.bounds,
-            to: view
-        )
-        let contentStackViewFrameInSuperview = contentStackView.convert(
-            contentStackView.bounds,
-            to: view
-        )
-
-        if shadowViewFrameInSuperview.intersects(contentStackViewFrameInSuperview) {
-            guard !viewModel.isViewIntersected else { return }
-            viewModel.isViewIntersected.toggle()
-            UIView.animate(withDuration: UX.animationDuration) {
-                self.shadowView.layer.shadowOpacity = UX.shadowOpacity
-            }
-        } else {
-            guard viewModel.isViewIntersected else { return }
-            viewModel.isViewIntersected.toggle()
-            UIView.animate(withDuration: UX.animationDuration) {
-                self.shadowView.layer.shadowOpacity = 0
-            }
-        }
-    }
-
-//    private func createContentView(viewElement: FakespotViewModel.ViewElement) -> UIView? {
-//        let windowUUID = windowUUID
-//        switch viewElement {
-//        case .loadingView:
-//            let view: FakespotLoadingView = .build()
-//            return view
-//        case .onboarding:
-//            let view: FakespotOptInCardView = .build()
-//            viewModel.optInCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
-//                if dismissPermanently {
-//                    self?.triggerDismiss()
-//                } else {
-//                    let appearanceAction = FakespotAction(isOpen: false,
-//                                                          windowUUID: windowUUID,
-//                                                          actionType: FakespotActionType.setAppearanceTo)
-//                    store.dispatch(appearanceAction)
-//                }
-//
-//                guard let self = self, let action else { return }
-//                viewModel.recordDismissTelemetry(by: action)
-//            }
-//            viewModel.optInCardViewModel.onOptIn = { [weak self] in
-//                guard let self = self else { return }
-//                self.viewModel.fetchProductIfOptedIn()
-//            }
-//            view.configure(viewModel.optInCardViewModel)
-//            return view
-//
-//        case .reliabilityCard:
-//            guard let cardViewModel = viewModel.reliabilityCardViewModel else { return nil }
-//            let view: FakespotReliabilityCardView = .build()
-//            view.configure(cardViewModel)
-//            return view
-//
-//        case .adjustRatingCard:
-//            guard let cardViewModel = viewModel.adjustRatingViewModel else { return nil }
-//            let view: FakespotAdjustRatingView = .build()
-//            view.configure(cardViewModel)
-//            return view
-//
-//        case .highlightsCard:
-//            guard var cardViewModel = viewModel.highlightsCardViewModel else { return nil }
-//            cardViewModel.expandState = fakespotState.isHighlightsSectionExpanded ? .expanded : .collapsed
-//            cardViewModel.onExpandStateChanged = { state in
-//                let action = FakespotAction(isExpanded: state == .expanded,
-//                                            windowUUID: windowUUID,
-//                                            actionType: FakespotActionType.highlightsDidChange)
-//                store.dispatch(action)
-//            }
-//            let view: FakespotHighlightsCardView = .build()
-//            view.configure(cardViewModel)
-//            return view
-//
-//        case .qualityDeterminationCard:
-//            let reviewQualityCardView: FakespotReviewQualityCardView = .build()
-//            viewModel.reviewQualityCardViewModel.expandState = fakespotState.isReviewQualityExpanded ? .expanded : .collapsed
-//            viewModel.reviewQualityCardViewModel.dismissViewController = {
-//                let action = FakespotAction(isOpen: false,
-//                                            windowUUID: windowUUID,
-//                                            actionType: FakespotActionType.setAppearanceTo)
-//                store.dispatch(action)
-//            }
-//            viewModel.reviewQualityCardViewModel.onExpandStateChanged = { state in
-//                let action = FakespotAction(isExpanded: state == .expanded,
-//                                            windowUUID: windowUUID,
-//                                            actionType: FakespotActionType.reviewQualityDidChange)
-//                store.dispatch(action)
-//            }
-//            reviewQualityCardView.configure(viewModel.reviewQualityCardViewModel)
-//
-//            return reviewQualityCardView
-//
-//        case .settingsCard:
-//            let view: FakespotSettingsCardView = .build()
-//            viewModel.settingsCardViewModel.expandState = fakespotState.isSettingsExpanded ? .expanded : .collapsed
-//            viewModel.settingsCardViewModel.dismissViewController = { [weak self] dismissPermanently, action in
-//                guard let self = self, let action else { return }
-//                if dismissPermanently {
-//                    self.triggerDismiss()
-//                } else {
-//                    let surfanceDisplayedAction = FakespotAction(isExpanded: false,
-//                                                                 windowUUID: windowUUID,
-//                                                                 actionType: FakespotActionType.surfaceDisplayedEventSend)
-//                    store.dispatch(surfanceDisplayedAction)
-//                }
-//                viewModel.recordDismissTelemetry(by: action)
-//            }
-//            viewModel.settingsCardViewModel.toggleAdsEnabled = { [weak self] in
-//                self?.viewModel.toggleAdsEnabled()
-//            }
-//            viewModel.settingsCardViewModel.onExpandStateChanged = { state in
-//                let action = FakespotAction(isExpanded: state == .expanded,
-//                                            windowUUID: windowUUID,
-//                                            actionType: FakespotActionType.settingsStateDidChange)
-//                store.dispatch(action)
-//            }
-//            view.configure(viewModel.settingsCardViewModel)
-//
-//            return view
-//
-//        case .noAnalysisCard:
-//            let view: FakespotNoAnalysisCardView = .build()
-//            viewModel.noAnalysisCardViewModel.onTapStartAnalysis = { [weak self] in
-//                self?.onNeedsAnalysisTap()
-//            }
-//            view.configure(viewModel.noAnalysisCardViewModel)
-//            return view
-//
-//        case .productAdCard(let adData):
-//            guard viewModel.areAdsEnabled else { return nil }
-//            let view: FakespotAdView = .build()
-//            var viewModel = FakespotAdViewModel(productAdsData: adData)
-//            viewModel.onTapProductLink = { [weak self] in
-//                self?.viewModel.addTab(url: adData.url)
-//                self?.viewModel.recordSurfaceAdsClickedTelemetry()
-//                self?.viewModel.reportAdEvent(eventName: .trustedDealsLinkClicked, aidvs: [adData.aid])
-//                let action = FakespotAction(isOpen: false,
-//                                            windowUUID: windowUUID,
-//                                            actionType: FakespotActionType.setAppearanceTo)
-//                store.dispatch(action)
-//            }
-//            view.configure(viewModel)
-//            adView = view
-//            return view
-//
-//        case .messageCard(let messageType):
-//            switch messageType {
-//            case .genericError:
-//                let view: FakespotMessageCardView = .build()
-//                view.configure(viewModel.genericErrorViewModel)
-//                return view
-//
-//            case .noConnectionError:
-//                let view: FakespotMessageCardView = .build()
-//                view.configure(viewModel.noConnectionViewModel)
-//                return view
-//
-//            case .productNotSupported:
-//                let view: FakespotMessageCardView = .build()
-//                view.configure(viewModel.notSupportedProductViewModel)
-//                return view
-//
-//            case .notEnoughReviews:
-//                let view: FakespotMessageCardView = .build()
-//                view.configure(viewModel.notEnoughReviewsViewModel)
-//                return view
-//
-//            case .needsAnalysis:
-//                let view: FakespotMessageCardView = .build()
-//                viewModel.needsAnalysisViewModel.primaryAction = { [weak view, weak self] in
-//                    guard let self else { return }
-//                    view?.configure(self.viewModel.analysisProgressViewModel)
-//                    self.onNeedsAnalysisTap()
-//                    self.viewModel.recordTelemetry(for: .messageCard(.needsAnalysis))
-//                }
-//                view.configure(viewModel.needsAnalysisViewModel)
-//                TelemetryWrapper.recordEvent(
-//                    category: .action,
-//                    method: .view,
-//                    object: .shoppingSurfaceStaleAnalysisShown
-//                )
-//                return view
-//
-//            case .analysisInProgress:
-//                let view: FakespotMessageCardView = .build()
-//                view.configure(viewModel.analysisProgressViewModel)
-//                return view
-//
-//            case .reportProductInStock:
-//                let view: FakespotMessageCardView = .build()
-//                viewModel.reportProductInStockViewModel.primaryAction = { [weak view, weak self] in
-//                    guard let self else { return }
-//                    view?.configure(self.viewModel.reportingProductFeedbackViewModel)
-//                    self.viewModel.reportProductBackInStock()
-//                }
-//                view.configure(viewModel.reportProductInStockViewModel)
-//                return view
-//
-//            case .infoComingSoonCard:
-//                let view: FakespotMessageCardView = .build()
-//                view.configure(viewModel.infoComingSoonCardViewModel)
-//                return view
-//            }
-//        }
-//    }
-
-    private func onNeedsAnalysisTap() {
-//        viewModel.triggerProductAnalysis()
     }
 
     @objc
@@ -651,6 +407,5 @@ class MainMenuViewController: UIViewController,
     // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         adjustShadowBasedOnIntersection()
-//        handleAdVisibilityChanges()
     }
 }

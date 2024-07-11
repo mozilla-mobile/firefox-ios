@@ -15,10 +15,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     private var profile: Profile
     private let tabManager: TabManager
 
-    private var isOptedIn: Bool {
-        return profile.prefs.boolForKey(PrefsKeys.Shopping2023OptIn) ?? false
-    }
-
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager) {
@@ -42,10 +38,10 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     private func createMainMenuViewController() -> MainMenuViewController {
-        let fakespotViewController = MainMenuViewController(
+        let mainMenuViewController = MainMenuViewController(
             windowUUID: tabManager.windowUUID,
-            viewModel: MainMenuViewModel(tabManager: tabManager)
+            viewModel: MainMenuViewModel(windowUUID: tabManager.windowUUID)
         )
-        return fakespotViewController
+        return mainMenuViewController
     }
 }
