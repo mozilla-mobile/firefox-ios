@@ -1,4 +1,4 @@
-name: "Focus Tests"
+name: "Focus UI Tests"
 
 on:
   schedule:
