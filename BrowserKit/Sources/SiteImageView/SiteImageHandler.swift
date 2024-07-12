@@ -15,6 +15,13 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
 
+    private let serialQueue = DispatchQueue(label: "com.mozilla.DefaultSiteImageHandler")
+    private var _currentInFlightRequest: String?
+    private var currentInFlightRequest: String? {
+        get { return serialQueue.sync { _currentInFlightRequest } }
+        set { serialQueue.sync { _currentInFlightRequest = newValue } }
+    }
+
     public static func factory() -> DefaultSiteImageHandler {
         return DefaultSiteImageHandler()
     }
@@ -102,14 +109,25 @@ public class DefaultSiteImageHandler: SiteImageHandler {
 
     private func getFaviconImage(imageModel: SiteImageModel) async -> UIImage {
         do {
+            while let currentSiteRequest = currentInFlightRequest,
+               imageModel.siteURLString == currentSiteRequest {
+                // We are already processing a favicon request for this site
+                // Sleep this task until the previous request is completed
+                try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
+            }
+
+            currentInFlightRequest = imageModel.siteURLString
             var faviconURLImageModel = imageModel
             if faviconURLImageModel.faviconURL == nil {
                 // Try to fetch the favicon URL
                 faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
             }
-            return await imageHandler.fetchFavicon(site: faviconURLImageModel)
+            let icon = await imageHandler.fetchFavicon(site: faviconURLImageModel)
+            currentInFlightRequest = nil
+            return icon
         } catch {
             // If no favicon URL, generate favicon without it
+            currentInFlightRequest = nil
             return await imageHandler.fetchFavicon(site: imageModel)
         }
     }
