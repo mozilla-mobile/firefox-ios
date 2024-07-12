@@ -23,7 +23,7 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 pattern = 'osx-xcode-'
 patterns = [pattern]
 BITRISE_YML = 'bitrise.yml'
-
+WORKFLOW = 'NewXcodeVersions'
 
 resp = requests.get(BITRISE_STACK_INFO)
 resp.raise_for_status()
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
         y = obj_yaml.load(infile)
 
-        current_semver = y['meta']['bitrise.io']['stack']
+        current_semver = y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack']
         
         # remove pattern prefix from current_semver to compare with largest
         current_semver = current_semver.split(pattern)[1]
@@ -82,7 +82,7 @@ if __name__ == '__main__':
             print('New Xcode version available: {0} ... updating bitrise.yml!'.format(largest_semver))
             # add prefix pattern back to be recognizable by bitrise
             # as a valid stack value
-            y['meta']['bitrise.io']['stack'] = '{0}{1}'.format(pattern, largest_semver)
+            y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] = '{0}{1}'.format(pattern, largest_semver)
             with open(tmp_file, 'w+') as tmpfile:
                 obj_yaml.dump(y, tmpfile)
                 copyfile(tmp_file, BITRISE_YML)
