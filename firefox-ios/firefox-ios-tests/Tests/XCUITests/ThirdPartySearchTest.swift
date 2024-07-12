@@ -141,7 +141,17 @@ class ThirdPartySearchTest: BaseTestCase {
         UIPasteboard.general.string = searchUrl
         customengineurlTextView.tap()
         customengineurlTextView.press(forDuration: 2.0)
-        app.staticTexts["Paste"].tap()
+        let pasteOption = app.menuItems["Paste"]
+        if pasteOption.exists {
+            pasteOption.tap()
+        } else {
+            var nrOfTaps = 3
+            while !pasteOption.exists && nrOfTaps > 0 {
+                customengineurlTextView.press(forDuration: 2.0)
+                nrOfTaps -= 1
+            }
+            pasteOption.tap()
+        }
 
         mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
