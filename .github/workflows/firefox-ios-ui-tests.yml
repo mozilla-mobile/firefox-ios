@@ -1,7 +1,9 @@
 name: "Firefox UI Tests"
     
 on:
-    workflow_dispatch:
+    workflow_dispatch: {}
+    schedule:
+      - cron: "0 2 * * *"
 
 env:
     browser: firefox-ios
@@ -51,7 +53,155 @@ jobs:
                 name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
                 path: ./derived-data.tar.gz
                 retention-days: 2
-                
+
+    run-smoketests:
+      name: Run smoke tests
+      runs-on: macos-14
+      needs: compile
+      strategy:
+        fail-fast: false
+        matrix:
+          ios_simulator: ['iPhone 15 Plus']
+      steps:
+      - name: Check out source code
+        uses: actions/checkout@v4.1.7
+      - name: Install packages
+        id: packages
+        run: |
+          gem install xcpretty -v 0.3.0
+          pip install blockkit==1.9.1
+          npm install -g junit-report-merger@7.0.0       
+      - name: Setup Xcode
+        id: xcode
+        run: |
+          sudo rm -rf /Applications/Xcode.app
+          sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+          xcodebuild -version
+          ./checkout.sh
+          ./bootstrap.sh --force
+      - name: Get derived data
+        id: download-derived-data
+        uses: actions/download-artifact@v4
+        with:
+          name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+      - name: Decompress derived data
+        id: decompress-dd
+        run: |
+          tar xzf derived-data.tar.gz -C /
+      - name: Run Smoketest1
+        id: run-smoketest1
+        run: |
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+            -testPlan Smoketest1 \
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketest1 \
+            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest1.xml && exit ${PIPESTATUS[0]}
+        working-directory:  ${{ env.browser }}
+        continue-on-error: true
+      - name: Run Smoketest2
+        id: run-smoketest2
+        run: |
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+            -testPlan Smoketest2 \
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketest2 \
+            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest2.xml && exit ${PIPESTATUS[0]}
+        working-directory:  ${{ env.browser }}
+        continue-on-error: true
+      - name: Run Smoketest3
+        id: run-smoketest3
+        run: |
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+            -testPlan Smoketest3 \
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketest3 \
+            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest3.xml && exit ${PIPESTATUS[0]}
+        working-directory:  ${{ env.browser }}
+        continue-on-error: true
+      - name: Run Smoketest4
+        id: run-smoketest4
+        run: |
+          xcodebuild \
+            test-without-building \
+            -scheme ${{ env.xcodebuild_scheme }} \
+            -target ${{ env.xcodebuild_target }} \
+            -derivedDataPath ~/DerivedData \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+            -testPlan Smoketest4 \
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketest4 \
+            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest4.xml && exit ${PIPESTATUS[0]}
+        working-directory:  ${{ env.browser }}
+        continue-on-error: true
+      - name: Determine pass/fail status
+        id: passfail
+        run: |
+          echo "Smoketest1 status: "${{ steps.run-smoketest1.outcome }}
+          echo "Smoketest2 status: "${{ steps.run-smoketest2.outcome }}
+          echo "Smoketest3 status: "${{ steps.run-smoketest3.outcome }}
+          echo "Smoketest4 status: "${{ steps.run-smoketest4.outcome }}
+          if [[ ${{ steps.run-smoketest1.outcome }} != 'success' 
+                || ${{ steps.run-smoketest2.outcome }} != 'success'  
+                || ${{ steps.run-smoketest3.outcome }} != 'success' 
+                || ${{ steps.run-smoketest4.outcome }} != 'success' ]]; then
+            exit 1
+          else
+            exit 0
+          fi
+        continue-on-error: true
+      - name: Print test report
+        id: test-report
+        run: |
+          jrm combined.xml junit-*.xml
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./combined.xml ./github.md
+          cat github.md >> $GITHUB_STEP_SUMMARY
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./combined.xml ./slack.json
+        working-directory:  ${{ env.browser }}
+      - name: Upload junit files
+        id: upload-junit
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ env.browser }}-smoketests-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
+          path: ${{ env.browser }}/junit-*.xml
+          retention-days: 90
+      - name: Upload log file
+        id: upload-log
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ env.browser }}-smoketests-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+          path: ${{ env.browser }}/xcodebuild.log
+          retention-days: 90
+      - name: Report to Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: ${{ env.browser }}/slack.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          ios_simulator: ${{ matrix.ios_simulator }}
+          pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: Smoketests
+          ref_name: ${{ github.ref_name }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          server_url: ${{ github.server_url }}
+          sha: ${{ github.sha }}
+      - name: Return fail status if a test fails
+        run: |
+          exit ${{ steps.passfail.outcome == 'success' && '0' || '1' }}   
+
     run-fullfunctionaltests:
         name: Run full functional tests
         runs-on: macos-14
@@ -68,6 +218,15 @@ jobs:
               run: |
                 gem install xcpretty -v 0.3.0
                 pip install blockkit==1.9.1
+            - name: Get derived data
+              id: download-derived-data
+              uses: actions/download-artifact@v4
+              with:
+                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+            - name: Decompress derived data
+              id: decompress-dd
+              run: |
+                tar xzf derived-data.tar.gz -C /
             - name: Run tests
               id: run-tests
               run: |
@@ -89,11 +248,18 @@ jobs:
                 cat github.md >> $GITHUB_STEP_SUMMARY
                 python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
               working-directory:  ${{ env.browser }}
+            - name: Upload junit files
+              id: upload-junit
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-fullfunctional-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
+                path: ${{ env.browser }}/junit-*.xml
+                retention-days: 90
             - name: Upload log file
               id: upload-log
               uses: actions/upload-artifact@v4.3.3
               with:
-                name: ${{ env.browser }}-FullFunctionalTestPlan-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+                name: ${{ env.browser }}-fullfunctional-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
                 path: ${{ env.browser }}/xcodebuild.log
                 retention-days: 90
             - name: Report to Slack
