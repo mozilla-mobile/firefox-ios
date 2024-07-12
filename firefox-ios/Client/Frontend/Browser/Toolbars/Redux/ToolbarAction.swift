@@ -72,13 +72,13 @@ class ToolbarMiddlewareAction: Action {
 
 final class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
     let url: URL?
-    let lockIconImageName: String?
+    let lockIconImageName: String
     let isShowingNavigationToolbar: Bool
     let canGoForward: Bool
     let canGoBack: Bool
 
     init(url: URL? = nil,
-         lockIconImageName: String? = nil,
+         lockIconImageName: String,
          isShowingNavigationToolbar: Bool,
          canGoForward: Bool,
          canGoBack: Bool,
