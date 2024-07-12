@@ -14,6 +14,7 @@ struct AddressToolbarModel {
 
     let borderPosition: AddressToolbarBorderPosition?
     let url: URL?
+    let lockIconImageName: String?
     let isEditing: Bool?
 
     init(navigationActions: [ToolbarActionState]? = nil,
@@ -21,12 +22,14 @@ struct AddressToolbarModel {
          browserActions: [ToolbarActionState]? = nil,
          borderPosition: AddressToolbarBorderPosition? = nil,
          url: URL? = nil,
+         lockIconImageName: String? = nil,
          isEditing: Bool? = nil) {
         self.navigationActions = navigationActions
         self.pageActions = pageActions
         self.browserActions = browserActions
         self.borderPosition = borderPosition
         self.url = url
+        self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
     }
 }

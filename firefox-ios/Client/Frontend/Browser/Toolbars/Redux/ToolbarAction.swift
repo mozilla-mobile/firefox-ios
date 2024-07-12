@@ -70,19 +70,22 @@ class ToolbarMiddlewareAction: Action {
     }
 }
 
-class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
+final class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
     let url: URL?
+    let lockIconImageName: String
     let isShowingNavigationToolbar: Bool
     let canGoForward: Bool
     let canGoBack: Bool
 
     init(url: URL? = nil,
+         lockIconImageName: String,
          isShowingNavigationToolbar: Bool,
          canGoForward: Bool,
          canGoBack: Bool,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.url = url
+        self.lockIconImageName = lockIconImageName
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.canGoForward = canGoForward
         self.canGoBack = canGoBack

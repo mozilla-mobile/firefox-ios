@@ -13,6 +13,7 @@ struct AddressBarState: StateType, Equatable {
     var browserActions: [ToolbarActionState]
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
+    var lockIconImageName: String
     var isEditing: Bool
     var isLoading: Bool
 
@@ -23,6 +24,7 @@ struct AddressBarState: StateType, Equatable {
                   browserActions: [],
                   borderPosition: nil,
                   url: nil,
+                  lockIconImageName: "",
                   isEditing: false,
                   isLoading: false)
     }
@@ -33,6 +35,7 @@ struct AddressBarState: StateType, Equatable {
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
+         lockIconImageName: String,
          isEditing: Bool = false,
          isLoading: Bool = false) {
         self.windowUUID = windowUUID
@@ -41,6 +44,7 @@ struct AddressBarState: StateType, Equatable {
         self.browserActions = browserActions
         self.borderPosition = borderPosition
         self.url = url
+        self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
         self.isLoading = isLoading
     }
@@ -58,7 +62,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: model.pageActions ?? state.pageActions,
                 browserActions: model.browserActions ?? state.browserActions,
                 borderPosition: model.borderPosition ?? state.borderPosition,
-                url: model.url
+                url: model.url,
+                lockIconImageName: model.lockIconImageName ?? state.lockIconImageName
             )
 
         case ToolbarActionType.numberOfTabsChanged:
@@ -76,7 +81,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: state.pageActions,
                 browserActions: actions,
                 borderPosition: state.borderPosition,
-                url: state.url
+                url: state.url,
+                lockIconImageName: state.lockIconImageName
             )
 
         case ToolbarActionType.addressToolbarActionsDidChange:
@@ -89,6 +95,7 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
+                lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing
             )
 
@@ -103,6 +110,7 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: toolbarAction.url,
+                lockIconImageName: addressToolbarModel?.lockIconImageName ?? state.lockIconImageName,
                 isEditing: addressToolbarModel?.isEditing ?? state.isEditing
             )
 
@@ -121,7 +129,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: state.url
+                url: state.url,
+                lockIconImageName: state.lockIconImageName
             )
 
         case ToolbarActionType.forwardButtonStateChanged:
@@ -139,7 +148,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: state.url
+                url: state.url,
+                lockIconImageName: state.lockIconImageName
             )
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -156,7 +166,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: state.url
+                url: state.url,
+                lockIconImageName: state.lockIconImageName
             )
 
         case ToolbarActionType.scrollOffsetChanged,
@@ -169,7 +180,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: borderPosition,
-                url: state.url
+                url: state.url,
+                lockIconImageName: state.lockIconImageName
             )
 
         default:
@@ -179,7 +191,8 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: state.url
+                url: state.url,
+                lockIconImageName: state.lockIconImageName
             )
         }
     }

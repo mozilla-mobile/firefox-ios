@@ -393,6 +393,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
                                                                                 state: state,
                                                                                 url: action.url,
+                                                                                lockIconImageName: action.lockIconImageName,
                                                                                 isEditing: false)
         else { return }
 
@@ -421,6 +422,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         action: ToolbarMiddlewareAction,
         state: AppState,
         url: URL? = nil,
+        lockIconImageName: String? = nil,
         isEditing: Bool? = nil) -> AddressToolbarModel? {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
@@ -434,6 +436,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             browserActions: toolbarState.addressToolbar.browserActions,
             borderPosition: toolbarState.addressToolbar.borderPosition,
             url: url ?? toolbarState.addressToolbar.url,
+            lockIconImageName: lockIconImageName,
             isEditing: isEditing)
         return addressToolbarModel
     }

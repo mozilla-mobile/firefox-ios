@@ -1758,8 +1758,15 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
+            guard let hasSecureContent = tab.webView?.hasOnlySecureContent else { return }
+
+            let lockIconImageName = hasSecureContent ?
+            StandardImageIdentifiers.Large.lockFill :
+            StandardImageIdentifiers.Large.lockSlashFill
+
             let action = ToolbarMiddlewareUrlChangeAction(
                 url: tab.url?.displayURL,
+                lockIconImageName: lockIconImageName,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoForward: tab.canGoForward,
                 canGoBack: tab.canGoBack,
