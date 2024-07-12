@@ -1,7 +1,9 @@
 name: "Firefox UI Tests"
     
 on:
-    workflow_dispatch:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 2 * * *"
 
 env:
     browser: firefox-ios
