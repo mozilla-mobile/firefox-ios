@@ -9,7 +9,6 @@ import Shared
 class MainMenuViewModel {
     let windowUUID: WindowUUID
     var isSwiping = false
-    var isViewIntersected = false
 
     private let prefs: Prefs
 

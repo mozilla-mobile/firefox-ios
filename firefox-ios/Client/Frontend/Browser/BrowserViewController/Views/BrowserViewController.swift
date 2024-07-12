@@ -1935,12 +1935,16 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnMenu(button: UIButton?) {
-        guard let button else { return }
 
-        if true { //featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             navigationHandler?.showMainMenu()
-            return
+        } else {
+            showPhotonMainMenu(from: button)
         }
+    }
+
+    private func showPhotonMainMenu(from button: UIButton?) {
+        guard let button else { return }
 
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(

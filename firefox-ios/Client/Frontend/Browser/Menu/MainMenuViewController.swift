@@ -18,23 +18,9 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
-        static let headerTopSpacing: CGFloat = 22
-        static let headerHorizontalSpacing: CGFloat = 18
-        static let titleCloseSpacing: CGFloat = 16
         static let titleStackSpacing: CGFloat = 8
-        static let betaBorderWidth: CGFloat = 2
-        static let betaBorderWidthA11ySize: CGFloat = 4
-        static let betaCornerRadius: CGFloat = 8
-        static let betaHorizontalSpace: CGFloat = 6
-        static let betaVerticalSpace: CGFloat = 4
         static let closeButtonWidthHeight: CGFloat = 30
-        static let scrollViewTopSpacing: CGFloat = 12
-        static let scrollContentTopPadding: CGFloat = 16
-        static let scrollContentBottomPadding: CGFloat = 40
-        static let scrollContentHorizontalPadding: CGFloat = 16
         static let scrollContentStackSpacing: CGFloat = 16
-        static let shadowRadius: CGFloat = 14
-        static let shadowOpacity: Float = 1
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let animationDuration: TimeInterval = 0.2
     }
@@ -53,29 +39,6 @@ class MainMenuViewController: UIViewController,
     private lazy var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.scrollContentStackSpacing
-    }
-
-    private lazy var shadowView: UIView = .build { view in
-        view.layer.shadowOffset = UX.shadowOffset
-        view.layer.shadowRadius = UX.shadowRadius
-    }
-
-    private lazy var headerView: UIView = .build()
-
-    private lazy var titleLabel: UILabel = .build { label in
-        label.text = ""
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.headline.scaledFont()
-        label.accessibilityIdentifier = AccessibilityIdentifiers.Shopping.sheetHeaderTitle
-        label.accessibilityTraits.insert(.header)
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
-    }
-
-    private var titleStackView: UIStackView = .build { stackView in
-        stackView.axis = .horizontal
-        stackView.spacing = UX.titleStackSpacing
-        stackView.alignment = .center
     }
 
     private lazy var closeButton: CloseButton = .build { view in
@@ -99,7 +62,6 @@ class MainMenuViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
-//        listenToStateChange()
     }
 
     required init?(coder: NSCoder) {
@@ -127,15 +89,9 @@ class MainMenuViewController: UIViewController,
         applyTheme()
     }
 
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        adjustLayout()
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         viewModel.isSwiping = false
-        setShadowPath()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -143,7 +99,6 @@ class MainMenuViewController: UIViewController,
         notificationCenter.post(name: .FakespotViewControllerDidAppear, withObject: windowUUID)
         updateModalA11y()
 
-        //        viewModel.recordBottomSheetDisplayed(presentationController)
         let action = FakespotAction(windowUUID: windowUUID,
                                     actionType: FakespotActionType.surfaceDisplayedEventSend)
         store.dispatch(action)
@@ -160,118 +115,11 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - View setup
-    private func setupView() {
-        //        titleStackView.addArrangedSubview(titleLabel)
-        //        headerView.addSubviews(titleStackView)
-        //        view.addSubviews(scrollView, headerView) // shadowView
-        //
-        //        scrollView.addSubview(contentStackView)
-        //        updateContent()
-
-        //        NSLayoutConstraint.activate([
-        //            contentStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor,
-        //                                                  constant: UX.scrollContentTopPadding),
-        //            contentStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor,
-        //                                                      constant: UX.scrollContentHorizontalPadding),
-        //            contentStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor,
-        //                                                     constant: -UX.scrollContentBottomPadding),
-        //            contentStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor,
-        //                                                       constant: -UX.scrollContentHorizontalPadding),
-        //            contentStackView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor,
-        //                                                    constant: -UX.scrollContentHorizontalPadding * 2),
-        //
-        //            scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: UX.scrollViewTopSpacing),
-        //            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        //            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-        //            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-        //
-        //            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerTopSpacing),
-        //            headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-        //                                                constant: UX.headerHorizontalSpacing),
-        //            headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-        //                                                 constant: -UX.headerHorizontalSpacing),
-        //
-        ////            shadowView.topAnchor.constraint(equalTo: view.topAnchor),
-        ////            shadowView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        ////            shadowView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ////            shadowView.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-        //
-        //            titleStackView.topAnchor.constraint(equalTo: headerView.topAnchor),
-        //            titleStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-        //            titleStackView.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
-        //                                                     constant: -UX.titleCloseSpacing),
-        //            titleStackView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-        //
-        //            closeButton.topAnchor.constraint(equalTo: headerView.topAnchor),
-        //            closeButton.trailingAnchor.constraint(equalTo: headerView.safeAreaLayoutGuide.trailingAnchor),
-        //            closeButton.bottomAnchor.constraint(lessThanOrEqualTo: headerView.bottomAnchor),
-        //            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-        //            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonWidthHeight),
-        //        ])
-    }
-
-    private func adjustLayout() {
-        //        closeButton.isHidden = true
-
-        //        guard let titleLabelText = titleLabel.text, let betaLabelText = betaLabel.text else { return }
-
-        //        var availableTitleStackWidth = headerView.frame.width
-        //        if availableTitleStackWidth == 0 {
-        //            // calculate the width if auto-layout doesn't have it yet
-        //            availableTitleStackWidth = view.frame.width - UX.headerHorizontalSpacing * 2
-        //        }
-        //        availableTitleStackWidth -= UX.closeButtonWidthHeight + UX.titleCloseSpacing // remove close button and spacing
-        //        let titleTextWidth = FakespotUtils.widthOfString(titleLabelText, usingFont: titleLabel.font)
-        //
-        //        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        //        let betaLabelWidth = FakespotUtils.widthOfString(betaLabelText, usingFont: betaLabel.font)
-        //        let betaViewWidth = betaLabelWidth + UX.betaHorizontalSpace * 2
-        //        let maxTitleWidth = availableTitleStackWidth - betaViewWidth - UX.titleStackSpacing
-        //
-        //        // swiftlint:disable line_length
-        //        betaView.layer.borderWidth = contentSizeCategory.isAccessibilityCategory ? UX.betaBorderWidthA11ySize : UX.betaBorderWidth
-        //        // swiftlint:enable line_length
-        //
-        //        if contentSizeCategory.isAccessibilityCategory || titleTextWidth > maxTitleWidth {
-        //            titleStackView.axis = .vertical
-        //            titleStackView.alignment = .leading
-        //        } else {
-        //            titleStackView.axis = .horizontal
-        //            titleStackView.alignment = .center
-        //        }
-        //
-        //        titleStackView.setNeedsLayout()
-        //        titleStackView.layoutIfNeeded()
-    }
+    private func setupView() { }
 
     private func updateContent() {
         contentStackView.removeAllArrangedViews()
         applyTheme()
-    }
-
-    private func adjustShadowBasedOnIntersection() {
-        let shadowViewFrameInSuperview = shadowView.convert(
-            shadowView.bounds,
-            to: view
-        )
-        let contentStackViewFrameInSuperview = contentStackView.convert(
-            contentStackView.bounds,
-            to: view
-        )
-
-        if shadowViewFrameInSuperview.intersects(contentStackViewFrameInSuperview) {
-            guard !viewModel.isViewIntersected else { return }
-            viewModel.isViewIntersected.toggle()
-            UIView.animate(withDuration: UX.animationDuration) {
-                self.shadowView.layer.shadowOpacity = UX.shadowOpacity
-            }
-        } else {
-            guard viewModel.isViewIntersected else { return }
-            viewModel.isViewIntersected.toggle()
-            UIView.animate(withDuration: UX.animationDuration) {
-                self.shadowView.layer.shadowOpacity = 0
-            }
-        }
     }
 
     // MARK: - Redux
@@ -292,51 +140,17 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UX related
-    private func setShadowPath() {
-        // Calculate the rect for the shadowPath, ensuring it is at the bottom of the view
-        let shadowPathRect = CGRect(
-            x: 0,
-            y: shadowView.bounds.maxY - shadowView.layer.shadowRadius,
-            width: shadowView.bounds.width,
-            height: shadowView.layer.shadowRadius
-        )
-        shadowView.layer.shadowPath = UIBezierPath(rect: shadowPathRect).cgPath
-    }
-
-//    private func listenToStateChange() {
-//        viewModel.onStateChange = { [weak self] in
-//            ensureMainThread {
-//                self?.updateContent()
-//            }
-//        }
-//    }
-
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        shadowView.layer.shadowColor = theme.colors.shadowDefault.cgColor
-        shadowView.backgroundColor = theme.colors.layer1
         view.backgroundColor = theme.colors.layer1
-        titleLabel.textColor = theme.colors.textPrimary
-
-//        contentStackView.arrangedSubviews.forEach { view in
-//            guard let view = view as? ThemeApplicable else { return }
-//            view.applyTheme(theme: theme)
-//        }
     }
 
     // MARK: - Notifications
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DynamicFontChanged:
-            adjustLayout()
-        default: break
-        }
-    }
+    func handleNotifications(_ notification: Notification) { }
 
     @objc
     private func closeTapped() {
         triggerDismiss()
-//        viewModel.recordDismissTelemetry(by: .closeButton)
     }
 
     private func triggerDismiss() {
@@ -347,7 +161,6 @@ class MainMenuViewController: UIViewController,
 
     deinit {
         unsubscribeFromRedux()
-//        viewModel.onViewControllerDeinit()
     }
 
     private func updateModalA11y() {
@@ -374,27 +187,6 @@ class MainMenuViewController: UIViewController,
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         triggerDismiss()
-
-        let currentDetent = viewModel.getCurrentDetent(for: presentationController)
-
-        if viewModel.isSwiping || currentDetent == .large {
-//            viewModel.recordDismissTelemetry(by: .swipingTheSurfaceHandle)
-        } else {
-//            viewModel.recordDismissTelemetry(by: .clickOutside)
-        }
-    }
-
-    // MARK: View Transitions
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustLayout()
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.adjustLayout()
-        }, completion: nil)
     }
 
     // MARK: - UISheetPresentationControllerDelegate
@@ -402,10 +194,5 @@ class MainMenuViewController: UIViewController,
         _ sheetPresentationController: UISheetPresentationController
     ) {
         updateModalA11y()
-    }
-
-    // MARK: - UIScrollViewDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        adjustShadowBasedOnIntersection()
     }
 }
