@@ -9,7 +9,6 @@ import Storage
 import struct MozillaAppServices.UpdatableAddressFields
 import struct MozillaAppServices.Address
 
-// AddressListViewModel: A view model for managing addresses.
 final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     enum Destination: Swift.Identifiable, Equatable {
         case add(Address)
@@ -140,18 +139,45 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         saveAction? { [weak self] updatedAddress in
             guard let self else { return }
             guard case .edit(let currentAddress) = self.destination else { return }
-            self.addressProvider.updateAddress(id: currentAddress.guid, address: updatedAddress) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self.presentToast?(.updated)
-                    case .failure:
-                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
-                        break
-                    }
-                    self.destination = nil
-                    self.fetchAddresses()
+            self.updateLocal(id: currentAddress.guid, updatedAddress: updatedAddress)
+        }
+    }
+
+    private func updateLocal(id: String, updatedAddress: UpdatableAddressFields) {
+        self.addressProvider.updateAddress(id: id, address: updatedAddress) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.presentToast?(.updated)
+                case .failure:
+                    self.presentToast?(
+                        .error(
+                            .update(action: { [weak self] in
+                                self?.destination = .edit(
+                                    Address(
+                                        guid: id,
+                                        name: updatedAddress.name,
+                                        organization: updatedAddress.organization,
+                                        streetAddress: updatedAddress.streetAddress,
+                                        addressLevel3: updatedAddress.addressLevel3,
+                                        addressLevel2: updatedAddress.addressLevel2,
+                                        addressLevel1: updatedAddress.addressLevel1,
+                                        postalCode: updatedAddress.postalCode,
+                                        country: updatedAddress.country,
+                                        tel: updatedAddress.tel,
+                                        email: updatedAddress.email,
+                                        timeCreated: 0,
+                                        timeLastUsed: nil,
+                                        timeLastModified: 0,
+                                        timesUsed: 0
+                                    )
+                                )
+                            })
+                        )
+                    )
                 }
+                self.destination = nil
+                self.fetchAddresses()
             }
         }
     }
@@ -167,18 +193,45 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     func saveAddressButtonTap() {
         saveAction? { [weak self] address in
             guard let self else { return }
-            self.addressProvider.addAddress(address: address) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self.presentToast?(.saved)
-                    case .failure:
-                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
-                        break
-                    }
-                    self.destination = nil
-                    self.fetchAddresses()
+            self.saveLocal(address: address)
+        }
+    }
+
+    private func saveLocal(address: UpdatableAddressFields) {
+        self.addressProvider.addAddress(address: address) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.presentToast?(.saved)
+                case .failure:
+                    self.presentToast?(
+                        .error(
+                            .save(action: { [weak self] in
+                                self?.destination = .add(
+                                    Address(
+                                        guid: "",
+                                        name: address.name,
+                                        organization: address.organization,
+                                        streetAddress: address.streetAddress,
+                                        addressLevel3: address.addressLevel3,
+                                        addressLevel2: address.addressLevel2,
+                                        addressLevel1: address.addressLevel1,
+                                        postalCode: address.postalCode,
+                                        country: address.country,
+                                        tel: address.tel,
+                                        email: address.email,
+                                        timeCreated: 0,
+                                        timeLastUsed: nil,
+                                        timeLastModified: 0,
+                                        timesUsed: 0
+                                    )
+                                )
+                            })
+                        )
+                    )
                 }
+                self.destination = nil
+                self.fetchAddresses()
             }
         }
     }
@@ -205,20 +258,29 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     func removeConfimationButtonTap() {
         if case .edit(let address) = destination {
-            addressProvider.deleteAddress(id: address.id) { [weak self] result in
-                guard let self else { return }
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success:
-                        self.presentToast?(.removed)
-                    case .failure:
-                        // TODO: FXIOS-9269 Create and add error toast for address saving failure
-                        break
-                    }
-                    self.toggleEditMode()
-                    self.destination = nil
-                    self.fetchAddresses()
+            removeLocal(address: address)
+        }
+    }
+
+    private func removeLocal(address: Address) {
+        addressProvider.deleteAddress(id: address.id) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.presentToast?(.removed)
+                case .failure:
+                    self.presentToast?(
+                        .error(
+                            .remove(action: { [weak self] in
+                                self?.destination = .edit(address)
+                            })
+                        )
+                    )
                 }
+                self.toggleEditMode()
+                self.destination = nil
+                self.fetchAddresses()
             }
         }
     }
