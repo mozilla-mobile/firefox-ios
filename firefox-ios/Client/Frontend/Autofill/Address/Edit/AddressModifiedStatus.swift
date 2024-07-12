@@ -12,8 +12,7 @@ enum AddressModifiedStatus {
 
         var message: String {
             switch self {
-            case .save: return .Addresses.Settings.Edit.AddressSaveError
-            case .update: return .Addresses.Settings.Edit.AddressSaveError
+            case .save, .update: return .Addresses.Settings.Edit.AddressSaveError
             case .remove: return .Addresses.Settings.Edit.AddressRemoveError
             }
         }
