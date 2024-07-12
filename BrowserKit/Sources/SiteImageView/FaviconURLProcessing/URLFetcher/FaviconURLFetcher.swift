@@ -67,7 +67,6 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
         if let host = siteURL.host {
             if let rootDirectoryURL = URL(string: (siteURL.scheme ?? "https") + "://" + host) {
                 let faviconURL = rootDirectoryURL.appendingPathComponent("favicon.ico")
-                print("DBG: url2 \(faviconURL.absoluteString)")
                 return faviconURL
             }
         }
