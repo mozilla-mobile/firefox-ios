@@ -62,13 +62,9 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
         }
 
         // Fallback to the favicon at the root of the domain
-        // This is a fall back because it's generally low res
-
-        if let host = siteURL.host {
-            if let rootDirectoryURL = URL(string: (siteURL.scheme ?? "https") + "://" + host) {
-                let faviconURL = rootDirectoryURL.appendingPathComponent("favicon.ico")
-                return faviconURL
-            }
+        // This is a fallback because it's generally low res
+        if let faviconURL = siteURL.faviconUrl() {
+            return faviconURL
         }
 
         throw SiteImageError.noFaviconFound
