@@ -165,7 +165,7 @@ jobs:
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./combined.xml ./github.md
           cat github.md >> $GITHUB_STEP_SUMMARY
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./combined.xml ./slack.json
-          working-directory:  ${{ env.browser }}
+        working-directory:  ${{ env.browser }}
       - name: Upload junit files
         id: upload-junit
         uses: actions/upload-artifact@v4.3.3
