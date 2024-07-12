@@ -22,7 +22,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                            pageActions: [],
                                            browserActions: [],
                                            borderPosition: nil,
-                                           url: nil)
+                                           url: nil,
+                                           lockIconImageName: "")
         let navigationState = NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
         let state = ToolbarState(windowUUID: windowUUID,
                                  toolbarPosition: .top,
