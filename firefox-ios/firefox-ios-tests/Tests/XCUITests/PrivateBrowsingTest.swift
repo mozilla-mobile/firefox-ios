@@ -200,8 +200,9 @@ class PrivateBrowsingTest: BaseTestCase {
     func testAllPrivateTabsRestore() {
         // Several tabs opened in private tabs tray. Tap on the trashcan 
         navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         for _ in 1...4 {
-            navigator.createNewTab(isPrivate: true)
+            navigator.createNewTab()
             if app.keyboards.element.isVisible() && !iPad() {
                 mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
                 navigator.performAction(Action.CloseURLBarOpen)

@@ -15,6 +15,7 @@ struct AddressBarState: StateType, Equatable {
     var url: URL?
     var lockIconImageName: String
     var isEditing: Bool
+    var isLoading: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
@@ -24,7 +25,8 @@ struct AddressBarState: StateType, Equatable {
                   borderPosition: nil,
                   url: nil,
                   lockIconImageName: "",
-                  isEditing: false)
+                  isEditing: false,
+                  isLoading: false)
     }
 
     init(windowUUID: WindowUUID,
@@ -34,7 +36,8 @@ struct AddressBarState: StateType, Equatable {
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          lockIconImageName: String,
-         isEditing: Bool = false) {
+         isEditing: Bool = false,
+         isLoading: Bool = false) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -43,6 +46,7 @@ struct AddressBarState: StateType, Equatable {
         self.url = url
         self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
+        self.isLoading = isLoading
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -87,7 +91,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
-                pageActions: state.pageActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,

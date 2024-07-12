@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Get the current branch
+get_current_branch() {
+  current_branch=$(git symbolic-ref --short HEAD)
+  echo "$current_branch"
+}
+
+# Save the current branch
+current_branch=$(get_current_branch)
+echo "Current branch: $current_branch"
+
+# Check if the current branch is the restricted branch 'main'
+if [ "$current_branch" = "main" ]; then
+  echo "Direct pushes to the 'main' branch are not allowed."
+  exit 1
+fi
+
+exit 0

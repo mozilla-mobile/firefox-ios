@@ -57,6 +57,7 @@ let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 let CreditCardsSettings = "AutofillCreditCard"
 let PageZoom = "PageZoom"
+let NotificationsSettings = "NotificationsSetting"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -70,6 +71,7 @@ let allSettingsScreens = [
     DisplaySettings,
     ClearPrivateDataSettings,
     TrackingProtectionSettings,
+    NotificationsSettings
 ]
 
 let HistoryPanelContextMenu = "HistoryPanelContextMenu"
@@ -608,6 +610,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: TrackingProtectionSettings
         )
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ShowIntroduction.title], to: ShowTourInSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Notifications.title], to: NotificationsSettings)
         screenState.gesture(forAction: Action.ToggleNoImageMode) { userState in
             app.otherElements.tables.cells.switches[AccessibilityIdentifiers.Settings.BlockImages.title].tap()
         }
@@ -1041,7 +1044,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(PageZoom) { screenState in
-        screenState.tap(app.buttons["FindInPage.closeButton"], to: BrowserTab)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.ZoomPageBar.doneButton], to: BrowserTab)
     }
 
     map.addScreenState(RequestDesktopSite) { _ in }
@@ -1075,6 +1078,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CreditCardsSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(NotificationsSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -1229,13 +1236,9 @@ extension MMNavigator where T == FxUserState {
     }
 
     // Add a new Tab from the New Tab option in Browser Tab Menu
-    func createNewTab(isPrivate: Bool = false) {
+    func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        // Workaround for issue https://github.com/mozilla-mobile/firefox-ios/issues/18743
-        if isPrivate {
-            self.performAction(Action.TogglePrivateMode)
-        }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         self.nowAt(NewTabScreen)

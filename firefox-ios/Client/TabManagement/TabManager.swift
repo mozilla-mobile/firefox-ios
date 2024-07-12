@@ -36,7 +36,7 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTabs(_ tabs: [Tab])
     func undoCloseTab()
@@ -148,7 +148,7 @@ extension TabManager {
                                 didClearTabs: didClearTabs)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true) {
-        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
+        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab, isPrivate: isPrivate)
     }
 }

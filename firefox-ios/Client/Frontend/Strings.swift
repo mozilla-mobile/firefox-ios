@@ -294,6 +294,12 @@ extension String {
                     value: "Address Saved",
                     comment: "Toast message confirming that an address has been successfully saved."
                 )
+                public static let AddressRemoveError = MZLocalizedString(
+                    key: "Addresses.Toast.AddressSaveError.v130",
+                    tableName: "EditAddress",
+                    value: "Address Couldn’t Be Removed",
+                    comment: "Toast message indicating an error occurred while trying to remove an address."
+                )
                 public static let AddressSaveError = MZLocalizedString(
                     key: "Addresses.Toast.AddressSaveError.v129",
                     tableName: "EditAddress",

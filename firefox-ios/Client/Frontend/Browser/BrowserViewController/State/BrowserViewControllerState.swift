@@ -12,7 +12,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case home
         case back
         case forward
-        case tabTray
+        case reload
+        case stopLoading
     }
 
     enum DisplayType {
@@ -21,6 +22,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case trackingProtectionDetails
         case tabsLongPressActions
         case menu
+        case tabTray
     }
 
     let windowUUID: WindowUUID
@@ -286,7 +288,27 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: state.toast,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                navigateTo: .tabTray,
+                displayView: .tabTray,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.reloadWebsite:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                navigateTo: .reload,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.stopLoadingWebsite:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                navigateTo: .stopLoading,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state

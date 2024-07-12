@@ -1666,6 +1666,15 @@ class BrowserViewController: UIViewController,
             setupMiddleButtonStatus(isLoading: loading)
             setupLoadingSpinnerFor(webView, isLoading: loading)
 
+            if isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(
+                    isLoading: loading,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.websiteLoadingStateDidChange
+                )
+                store.dispatch(action)
+            }
+
         case .URL:
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             if tab.url?.absoluteString == "about:blank" && webView.url == nil {
@@ -1690,11 +1699,16 @@ class BrowserViewController: UIViewController,
             }
         case .title:
             // Ensure that the tab title *actually* changed to prevent repeated calls
-            // to navigateInTab(tab:).
+            // to navigateInTab(tab:) except when ReaderModeState is active
+            // so that evaluateJavascriptInDefaultContentWorld() is called.
             guard let title = tab.title else { break }
-            if !title.isEmpty && title != tab.lastTitle {
-                tab.lastTitle = title
-                navigateInTab(tab: tab, webViewStatus: .title)
+            if !title.isEmpty {
+                if title != tab.lastTitle {
+                    tab.lastTitle = title
+                    navigateInTab(tab: tab, webViewStatus: .title)
+                } else {
+                    navigateIfReaderModeActive(currentTab: tab)
+                }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
@@ -1852,7 +1866,15 @@ class BrowserViewController: UIViewController,
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         case .menu:
-        	didTapOnMenu(button: state.buttonTapped)
+            didTapOnMenu(button: state.buttonTapped)
+        case .tabTray:
+            focusOnTabSegment()
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .press,
+                object: .tabToolbar,
+                value: .tabView
+            )
         }
     }
 
@@ -1867,14 +1889,19 @@ class BrowserViewController: UIViewController,
             didTapOnBack()
         case .forward:
             didTapOnForward()
-        case .tabTray:
-            focusOnTabSegment()
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .press,
-                object: .tabToolbar,
-                value: .tabView
-            )
+        case .reload:
+            tabManager.selectedTab?.reload()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
+        case .stopLoading:
+            tabManager.selectedTab?.stop()
+        }
+    }
+
+    private func navigateIfReaderModeActive(currentTab: Tab) {
+        if let readerMode = currentTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            if readerMode.state == .active {
+                navigateInTab(tab: currentTab, webViewStatus: .title)
+            }
         }
     }
 
