@@ -34,8 +34,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var showOverlay: Bool
     var reloadWebView: Bool
     var browserViewType: BrowserViewType
-    var navigateTo: NavigationType?
-    var displayView: DisplayType?
+    var navigateTo: NavigationType? // use default value when re-creating
+    var displayView: DisplayType? // use default value when re-creating
     var buttonTapped: UIButton?
     var microsurveyState: MicrosurveyPromptState
 
@@ -171,7 +171,14 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
-            return state
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                windowUUID: state.windowUUID,
+                reloadWebView: state.reloadWebView,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         }
     }
 
