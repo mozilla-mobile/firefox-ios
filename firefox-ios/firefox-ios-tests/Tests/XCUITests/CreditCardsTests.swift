@@ -472,7 +472,6 @@ class CreditCardsTests: BaseTestCase {
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 2)
         swipeUp(nrOfSwipes: 1)
-        dismissSurveyPrompt()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Credit cards details changed
