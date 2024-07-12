@@ -107,12 +107,12 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.backButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
+            guard let canGoBack = (action as? ToolbarAction)?.canGoBack else { return state }
 
             var actions = state.navigationActions
 
             if let index = actions.firstIndex(where: { $0.actionType == .back }) {
-                actions[index].isEnabled = isEnabled
+                actions[index].isEnabled = canGoBack
             }
 
             return AddressBarState(
@@ -125,12 +125,12 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.forwardButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
+            guard let canGoForward = (action as? ToolbarAction)?.canGoForward else { return state }
 
             var actions = state.navigationActions
 
             if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
-                actions[index].isEnabled = isEnabled
+                actions[index].isEnabled = canGoForward
             }
 
             return AddressBarState(

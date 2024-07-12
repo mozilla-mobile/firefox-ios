@@ -12,18 +12,22 @@ class ToolbarAction: Action {
     let toolbarPosition: AddressToolbarPosition?
     let numberOfTabs: Int?
     let url: URL?
-    let isButtonEnabled: Bool?
     let isPrivate: Bool?
     let badgeImageName: String?
+    let isShowingNavigationToolbar: Bool?
+    let canGoBack: Bool?
+    let canGoForward: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
          toolbarPosition: AddressToolbarPosition? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
-         isButtonEnabled: Bool? = nil,
          isPrivate: Bool? = nil,
          badgeImageName: String? = nil,
+         isShowingNavigationToolbar: Bool? = nil,
+         canGoBack: Bool? = nil,
+         canGoForward: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -31,9 +35,11 @@ class ToolbarAction: Action {
         self.toolbarPosition = toolbarPosition
         self.numberOfTabs = numberOfTabs
         self.url = url
-        self.isButtonEnabled = isButtonEnabled
         self.isPrivate = isPrivate
         self.badgeImageName = badgeImageName
+        self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.canGoBack = canGoBack
+        self.canGoForward = canGoForward
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -73,19 +79,19 @@ class ToolbarMiddlewareAction: Action {
 class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
     let url: URL?
     let isShowingNavigationToolbar: Bool
-    let canGoForward: Bool
     let canGoBack: Bool
+    let canGoForward: Bool
 
     init(url: URL? = nil,
          isShowingNavigationToolbar: Bool,
-         canGoForward: Bool,
          canGoBack: Bool,
+         canGoForward: Bool,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.url = url
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
-        self.canGoForward = canGoForward
         self.canGoBack = canGoBack
+        self.canGoForward = canGoForward
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

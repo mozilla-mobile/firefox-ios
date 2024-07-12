@@ -1756,8 +1756,8 @@ class BrowserViewController: UIViewController,
             let action = ToolbarMiddlewareUrlChangeAction(
                 url: tab.url?.displayURL,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
-                canGoForward: tab.canGoForward,
                 canGoBack: tab.canGoBack,
+                canGoForward: tab.canGoForward,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
             store.dispatch(action)
@@ -1830,11 +1830,12 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
-        let action = ToolbarAction(isButtonEnabled: isEnabled, windowUUID: windowUUID, actionType: actionType)
-
         switch actionType {
-        case .backButtonStateChanged,
-             .forwardButtonStateChanged:
+        case .backButtonStateChanged:
+            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            store.dispatch(action)
+        case .forwardButtonStateChanged:
+            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }
