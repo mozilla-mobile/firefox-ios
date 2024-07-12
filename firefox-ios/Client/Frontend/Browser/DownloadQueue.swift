@@ -119,7 +119,8 @@ class HTTPDownload: Download {
         }
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
-        if let contentEncodingHeader = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Encoding"] as? String,
+        if let contentEncodingHeader = (preflightResponse as? HTTPURLResponse)?
+                                       .allHeaderFields["Content-Encoding"] as? String,
            !contentEncodingHeader.isEmpty {
             // If this header is present, some encoding has been applied to the payload (likely gzip compression), so the
             // above `preflightResponse.expectedContentLength` reflects the size of the encoded content, not the actual file
