@@ -1,18 +1,44 @@
 #!/bin/sh
 
-# Get the current branch
+# current branch
 get_current_branch() {
   current_branch=$(git symbolic-ref --short HEAD)
   echo "$current_branch"
 }
 
-# Save the current branch
+# remote being pushed to
+get_push_remote() {
+  push_remote=$(git for-each-ref --format='%(upstream:remotename)' "$(git symbolic-ref -q HEAD)")
+  echo "$push_remote"
+}
+
+# URL of the remote being pushed to
+get_remote_url() {
+  remote_name=$1
+  remote_url=$(git remote get-url "$remote_name")
+  echo "$remote_url"
+}
+
+# current branch
 current_branch=$(get_current_branch)
 echo "Current branch: $current_branch"
 
-# Check if the current branch is the restricted branch 'main'
-if [ "$current_branch" = "main" ]; then
-  echo "Direct pushes to the 'main' branch are not allowed."
+# remote being pushed to
+push_remote=$(get_push_remote)
+echo "Push remote: $push_remote"
+
+# default to origin
+if [ -z "$push_remote" ]; then
+  push_remote="origin"
+fi
+
+push_remote_url=$(get_remote_url "$push_remote")
+echo "Push remote URL: $push_remote_url"
+
+# Check if the current branch is the restricted branch 'main' and remote URL matches the restricted URL
+restricted_url="https://github.com/mozilla-mobile/firefox-ios.git"
+if [ "$current_branch" = "main" ] && [ "$push_remote_url" = "$restricted_url" ]; then
+  echo "Direct pushes to the 'main' branch on this remote are not allowed."
   exit 1
 fi
 
