@@ -21,6 +21,11 @@ enum QRCodeScanPermissions {
     case allowURLsWithoutPrompt
 }
 
+private enum QRCodeViewControllerState {
+    case scanning
+    case promptingUser
+}
+
 class QRCodeViewController: UIViewController {
     private struct UX {
         static let navigationBarBackgroundColor = UIColor.black
@@ -33,6 +38,8 @@ class QRCodeViewController: UIViewController {
 
     weak var qrCodeDelegate: QRCodeViewControllerDelegate?
     weak var dismissHandler: QRCodeDismissHandler?
+
+    private var state: QRCodeViewControllerState = .scanning
 
     private lazy var captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
@@ -168,6 +175,27 @@ class QRCodeViewController: UIViewController {
             self.dismissController()
         }))
         present(alert, animated: true)
+    }
+
+    private func presentConfirmationAlert(urlDisplayString: String,
+                                          onCancel: @escaping (UIAlertAction) -> Void,
+                                          onConfirm: @escaping (UIAlertAction) -> Void) {
+        let confirmationAlert = UIAlertController(
+            title: String(format: .ScanQRCodeConfirmOpenURLMessage, AppName.shortName.rawValue),
+            message: urlDisplayString,
+            preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: .ScanQRCodeURLPromptDenyButton,
+                                         style: .cancel,
+                                         handler: onCancel)
+        let openURLAction = UIAlertAction(title: .ScanQRCodeURLPromptAllowButton,
+                                          style: .default,
+                                          handler: onConfirm)
+
+        confirmationAlert.addAction(cancelAction)
+        confirmationAlert.addAction(openURLAction)
+
+        self.present(confirmationAlert, animated: true)
     }
 
     private func applyShapeLayer() {
@@ -327,6 +355,8 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {
+        guard state == .scanning else { return }
+
         func cleanUpAndRemoveQRCodeScanner() {
             stopScanLineAnimation()
             dismissController()
@@ -359,30 +389,12 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
 
                     if shouldPrompt {
                         // Prompt users before opening scanned URL. Show shortened host (if possible) as the preview.
+                        state = .promptingUser
                         let websiteHost: String?
                         if #available(iOS 16.0, *) { websiteHost = url.host() } else { websiteHost = url.host }
-                        let presentedURL = websiteHost ?? text
-
-                        let confirmationAlert = UIAlertController(
-                            title: String(format: .ScanQRCodeConfirmOpenURLMessage, AppName.shortName.rawValue),
-                            message: presentedURL,
-                            preferredStyle: .alert)
-
-                        let cancelAction = UIAlertAction(title: .ScanQRCodeURLPromptDenyButton,
-                                                         style: .cancel,
-                                                         handler: { _ in
-                            cleanUpAndRemoveQRCodeScanner()
-                        })
-                        let openURLAction = UIAlertAction(title: .ScanQRCodeURLPromptAllowButton,
-                                                          style: .default,
-                                                          handler: { _ in
-                            openScannedQRCodeURL(url)
-                        })
-
-                        confirmationAlert.addAction(cancelAction)
-                        confirmationAlert.addAction(openURLAction)
-
-                        self.present(confirmationAlert, animated: true)
+                        presentConfirmationAlert(urlDisplayString: websiteHost ?? text,
+                                                 onCancel: { _ in cleanUpAndRemoveQRCodeScanner() },
+                                                 onConfirm: { _ in openScannedQRCodeURL(url) })
                         return
                     } else {
                         openScannedQRCodeURL(url)
