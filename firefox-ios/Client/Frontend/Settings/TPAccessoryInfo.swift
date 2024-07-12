@@ -38,13 +38,10 @@ class TPAccessoryInfo: ThemedTableViewController {
         )
         stack.axis = .vertical
 
-        let header = UILabel()
-        header.text = .TPAccessoryInfoBlocksTitle
-        header.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: 13,
-            weight: .semibold
-        )
+        lazy var header: UILabel = .build { label in
+            label.text = .TPAccessoryInfoBlocksTitle
+            label.font = FXFontStyles.Bold.footnote.scaledFont()
+        }
 
         let theme = currentTheme()
         header.textColor = theme.colors.textSecondary

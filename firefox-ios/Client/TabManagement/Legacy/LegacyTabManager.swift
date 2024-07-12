@@ -359,14 +359,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                       isPrivate: isPrivate)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool) {
         if urls.isEmpty {
             return
         }
 
         var tab: Tab!
         for url in urls {
-            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
+            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie, isPrivate: isPrivate)
         }
 
         if shouldSelectTab {

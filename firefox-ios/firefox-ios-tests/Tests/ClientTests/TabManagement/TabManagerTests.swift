@@ -24,7 +24,7 @@ class TabManagerTests: XCTestCase {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         // For this test suite, use a consistent window UUID for all test cases
         let windowManager: WindowManager = AppContainer.shared.resolve()
         let uuid = windowManager.activeWindow
@@ -184,6 +184,26 @@ class TabManagerTests: XCTestCase {
 
         // Expect 2 of 3 tabs are inactive (except 1st)
         XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
+    }
+
+    func test_addTabsForURLs() {
+        let subject = createSubject()
+
+        subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: false)
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
+        XCTAssertEqual(subject.tabs.first?.isPrivate, false)
+    }
+
+    func test_addTabsForURLs_forPrivateMode() {
+        let subject = createSubject()
+
+        subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: false, isPrivate: true)
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
+        XCTAssertEqual(subject.tabs.first?.isPrivate, true)
     }
 
     // MARK: - Helper methods

@@ -1699,11 +1699,16 @@ class BrowserViewController: UIViewController,
             }
         case .title:
             // Ensure that the tab title *actually* changed to prevent repeated calls
-            // to navigateInTab(tab:).
+            // to navigateInTab(tab:) except when ReaderModeState is active
+            // so that evaluateJavascriptInDefaultContentWorld() is called.
             guard let title = tab.title else { break }
-            if !title.isEmpty && title != tab.lastTitle {
-                tab.lastTitle = title
-                navigateInTab(tab: tab, webViewStatus: .title)
+            if !title.isEmpty {
+                if title != tab.lastTitle {
+                    tab.lastTitle = title
+                    navigateInTab(tab: tab, webViewStatus: .title)
+                } else {
+                    navigateIfReaderModeActive(currentTab: tab)
+                }
             }
             TelemetryWrapper.recordEvent(category: .action, method: .navigate, object: .tab)
         case .canGoBack:
@@ -1886,6 +1891,14 @@ class BrowserViewController: UIViewController,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
         case .stopLoading:
             tabManager.selectedTab?.stop()
+        }
+    }
+
+    private func navigateIfReaderModeActive(currentTab: Tab) {
+        if let readerMode = currentTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            if readerMode.state == .active {
+                navigateInTab(tab: currentTab, webViewStatus: .title)
+            }
         }
     }
 

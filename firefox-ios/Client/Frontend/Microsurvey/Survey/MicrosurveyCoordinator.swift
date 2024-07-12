@@ -42,13 +42,13 @@ final class MicrosurveyCoordinator: BaseCoordinator, FeatureFlaggable, Microsurv
     }
 
     func showPrivacy(with content: String?) {
-        // TODO: FXIOS-8976 - Add to Support Utils
         guard let url = SupportUtils.URLForPrivacyNotice(
             source: UTMParams.source,
             campaign: UTMParams.campaign,
             content: content
         ) else { return }
-        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+        let currentTab = tabManager.selectedTab?.isPrivate ?? false
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true, isPrivate: currentTab)
         router.dismiss(animated: true, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }

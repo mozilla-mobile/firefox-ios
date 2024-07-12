@@ -61,6 +61,20 @@ class BaseTestCase: XCTestCase {
         app.activate()
     }
 
+    func removeApp() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
+        if icon.exists {
+            icon.press(forDuration: 1.5)
+            mozWaitForElementToExist(springboard.buttons["Remove App"])
+            springboard.buttons["Remove App"].tap()
+            mozWaitForElementToExist(springboard.alerts.buttons["Delete App"])
+            springboard.alerts.buttons["Delete App"].tap()
+            mozWaitForElementToExist(springboard.alerts.buttons["Delete"])
+            springboard.alerts.buttons["Delete"].tap()
+        }
+    }
+
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
         userState = navigator.userState

@@ -28,7 +28,6 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         static let accessoryImageViewSize: CGFloat = 24
         static let accessoryButtonStackViewSpacing: CGFloat = 2
         static let cornerRadius: CGFloat = 4
-        static let fontSize: CGFloat = 16
         static let padding: CGFloat = 4
     }
 
@@ -73,11 +72,7 @@ class AutofillAccessoryViewButtonItem: UIBarButtonItem {
         }
 
         self.useAccessoryTextLabel = .build { label in
-            label.font = DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .title3,
-                size: UX.fontSize,
-                weight: .medium
-            )
+            label.font = FXFontStyles.Bold.callout.scaledFont()
             label.text = labelText
             label.numberOfLines = 0
             label.accessibilityTraits = .button
