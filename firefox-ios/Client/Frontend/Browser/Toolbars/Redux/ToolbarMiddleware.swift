@@ -359,7 +359,8 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func addressToolbarPageActions(
         action: ToolbarMiddlewareAction,
-        state: AppState
+        state: AppState,
+        isEditing: Bool
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
@@ -371,7 +372,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction
         let url = urlChangeAction != nil ? urlChangeAction?.url : toolbarState.addressToolbar.url
 
-        guard url != nil else {
+        guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
         }
@@ -430,11 +431,12 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
 
+        let editing = isEditing ?? toolbarState.addressToolbar.isEditing
         let navigationActions = addressToolbarNavigationActions(
             action: action,
             state: state,
-            isEditing: isEditing ?? toolbarState.addressToolbar.isEditing)
-        let pageActions = addressToolbarPageActions(action: action, state: state)
+            isEditing: editing)
+            let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
 
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
