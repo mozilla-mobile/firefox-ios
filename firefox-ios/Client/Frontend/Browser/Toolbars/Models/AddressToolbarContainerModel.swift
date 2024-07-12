@@ -14,21 +14,22 @@ class AddressToolbarContainerModel: Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineImage: UIImage?
     let searchEngines: SearchEngines
+    let lockIconImageName: String
     let url: URL?
 
     let windowUUID: UUID
 
     var addressToolbarState: AddressToolbarState {
         let locationViewState = LocationViewState(
-            searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
+            searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
-            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
+            lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
             lockIconButtonA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: searchEngineImage,
-            lockIconImageName: StandardImageIdentifiers.Medium.lock,
+            lockIconImageName: lockIconImageName,
             url: url,
             searchTerm: searchTermFromURL(url, searchEngines: searchEngines),
             onTapLockIcon: {
@@ -57,6 +58,7 @@ class AddressToolbarContainerModel: Equatable {
         self.windowUUID = windowUUID
         self.searchEngineImage = profile.searchEngines.defaultEngine?.image
         self.searchEngines = profile.searchEngines
+        self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.url = state.addressToolbar.url
     }
 
@@ -105,6 +107,7 @@ class AddressToolbarContainerModel: Equatable {
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.url == rhs.url &&
+        lhs.lockIconImageName == rhs.lockIconImageName &&
         lhs.windowUUID == rhs.windowUUID
     }
 }
