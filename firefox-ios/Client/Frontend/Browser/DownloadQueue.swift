@@ -24,6 +24,8 @@ class Download: NSObject {
 
     fileprivate(set) var totalBytesExpected: Int64?
     fileprivate(set) var bytesDownloaded: Int64
+    // Whether the server has indicated it will send encoded data (via response `Content-Encoding` header)
+    fileprivate(set) var hasContentEncoding: Bool?
 
     init(originWindow: WindowUUID) {
         self.filename = "unknown"
@@ -117,6 +119,15 @@ class HTTPDownload: Download {
         }
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
+        if let contentEncodingHeader = (preflightResponse as? HTTPURLResponse)?.allHeaderFields["Content-Encoding"] as? String,
+           !contentEncodingHeader.isEmpty {
+            // If this header is present, some encoding has been applied to the payload (likely gzip compression), so the
+            // above `preflightResponse.expectedContentLength` reflects the size of the encoded content, not the actual file
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+            self.hasContentEncoding = true
+        } else {
+            self.hasContentEncoding = false
+        }
 
         self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: self.request)
@@ -146,6 +157,30 @@ class HTTPDownload: Download {
             self.task = session?.downloadTask(withResumeData: resumeData)
             self.task?.resume()
         }
+    }
+
+    // Makes a HEAD request to check the unencoded content size of the file, which reflects the NSURLSession delivery bytes
+    // size given via the `URLSessionDownloadDelegate` methods (because decoding is automatic).
+    // Note: `NSURLSession` automatically inserts the following header into requests, which can result in encoded
+    // (compressed) data from a server: `Accept-Encoding: gzip;q=1.0, compress;q=0.5`
+    func getUncompressedSize() async -> Int64? {
+        if let url = self.request.url {
+            var headRequest = URLRequest(url: url)
+            headRequest.httpMethod = "HEAD"
+            // Override URLSession's default Accept-Encoding headers (`gzip;q=1.0, compress;q=0.5`)
+            // to instead accept no transformation of the file at all.
+            headRequest.setValue("identity", forHTTPHeaderField: "Accept-Encoding")
+
+            do {
+                let (_, headResponse) = try await URLSession.shared.data(for: headRequest)
+                return headResponse.expectedContentLength != -1 ? headResponse.expectedContentLength : nil
+            } catch {
+                // Verifying the expected download size via a HEAD request is optional, so we can ignore or log the error
+                // TODO Do we care to log this error?
+            }
+        }
+
+        return nil
     }
 }
 
@@ -281,6 +316,20 @@ class DownloadQueue {
             downloadProgress[uuid] = progress
         } else {
             downloadProgress[uuid] = nil
+        }
+
+        if let hasContentEncoding = download.hasContentEncoding,
+           hasContentEncoding,
+           let download = download as? HTTPDownload {
+            // We need to do a quick HEAD request to the server to check the uncompressed file size. Otherwise, the download
+            // progress will appear to exceed the `totalBytesExpected`. [FXIOS-9039]
+            // This is because NSURLSession automatically decodes gzip/compress encoded content and reports the decoded
+            // bytes to the delegate methods.
+            Task {
+                if let size = await download.getUncompressedSize(), size != download.totalBytesExpected {
+                    downloadProgress[uuid]?.totalExpected = size
+                }
+            }
         }
 
         download.resume()
