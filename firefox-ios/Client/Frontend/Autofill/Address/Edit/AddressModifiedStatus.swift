@@ -5,15 +5,41 @@
 import Foundation
 
 enum AddressModifiedStatus {
+    enum ErrorType {
+        case save(action: () -> Void)
+        case update(action: () -> Void)
+        case remove(action: () -> Void)
+
+        var message: String {
+            switch self {
+            case .save, .update: return .Addresses.Settings.Edit.AddressSaveError
+            case .remove: return .Addresses.Settings.Edit.AddressRemoveError
+            }
+        }
+
+        var actionTitle: String {
+            return .Addresses.Settings.Edit.AddressSaveRetrySuggestion
+        }
+
+        var action: () -> Void {
+            switch self {
+            case .save(let action), .update(let action), .remove(let action):
+                return action
+            }
+        }
+    }
+
     case saved
     case updated
     case removed
+    case error(ErrorType)
 
     var message: String {
         switch self {
         case .saved: return .Addresses.Settings.Edit.AddressSavedConfirmation
         case .updated: return .Addresses.Settings.Edit.AddressUpdatedConfirmation
         case .removed: return .Addresses.Settings.Edit.AddressRemovedConfirmation
+        case .error(let type): return type.message
         }
     }
 }
