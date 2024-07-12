@@ -255,6 +255,7 @@ class TabTrayViewController: UIViewController,
     // MARK: - Redux
 
     func subscribeToRedux() {
+        let initialSelectedPanel = tabTrayState.selectedPanel
         let screenAction = ScreenAction(windowUUID: windowUUID,
                                         actionType: ScreenActionType.showScreen,
                                         screen: .tabsTray)
@@ -265,9 +266,10 @@ class TabTrayViewController: UIViewController,
                 return TabTrayState(appState: appState, uuid: uuid)
             })
         })
-
-        let action = TabTrayAction(windowUUID: windowUUID,
-                                   actionType: TabTrayActionType.tabTrayDidLoad)
+        let action = TabTrayAction(
+            panelType: initialSelectedPanel,
+            windowUUID: windowUUID,
+            actionType: TabTrayActionType.tabTrayDidLoad)
         store.dispatch(action)
     }
 
