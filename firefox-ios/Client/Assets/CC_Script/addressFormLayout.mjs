@@ -16,6 +16,7 @@ const fieldTemplates = {
       name: item.fieldId,
       required: item.required,
       value: item.value ?? "",
+      ...(item.pattern && { pattern: item.pattern }),
     };
   },
   input(item) {

@@ -8,6 +8,7 @@
   --border-primary: #e0e0e6;
   --text-primary: #15141a;
   --text-secondary: #5b5b66;
+  --text-error: #c50042;
 }
 
 body.dark {
@@ -64,6 +65,21 @@ form {
     span {
       font: -apple-system-subheadline;
       color: var(--text-secondary);
+    }
+
+    div.error {
+      font: -apple-system-subheadline;
+      color: var(--text-error);
+      margin-top: 4px;
+      order: 3; /* Place error message below input */
+
+      display: flex;
+      align-items: center;
+      background-image: url("./warning-icon.svg");
+      background-repeat: no-repeat;
+      background-size: 24px 24px;
+      background-position: left center;
+      padding-left: 32px; /* 24px + 8px margin between text and icon */
     }
   }
 }
