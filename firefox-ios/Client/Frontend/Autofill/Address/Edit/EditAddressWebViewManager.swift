@@ -10,11 +10,17 @@ protocol WebViewPreloadManaging {
     func teardownWebView()
 }
 
-class EditAddressWebViewManager: WebViewPreloadManaging {
+class EditAddressWebViewManager: NSObject, WebViewPreloadManaging, WKScriptMessageHandler {
     private(set) var webView: WKWebView?
 
-    init() {
+    override init() {
+        super.init()
+
         let webConfiguration = WKWebViewConfiguration()
+        let contentController = WKUserContentController()
+        contentController.add(self, name: "saveEnabled")
+        webConfiguration.userContentController = contentController
+
         self.webView = WKWebView(frame: .zero, configuration: webConfiguration)
         self.webView?.translatesAutoresizingMaskIntoConstraints = false
 
@@ -44,4 +50,16 @@ class EditAddressWebViewManager: WebViewPreloadManaging {
         webView?.removeFromSuperview()
         webView = nil
     }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard message.name == "saveEnabled",
+              let body = message.body as? [String: Any],
+              let saveEnabled = body["enabled"] as? Bool else { return }
+
+        NotificationCenter.default.post(name: .addressSettingsSaving, object: nil, userInfo: ["enabled": saveEnabled])
+    }
+}
+
+extension Notification.Name {
+    static let addressSettingsSaving = Notification.Name("addressSettingsSaving")
 }

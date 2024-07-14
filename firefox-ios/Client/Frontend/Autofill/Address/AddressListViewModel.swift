@@ -22,6 +22,13 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
                 return value.guid
             }
         }
+
+        var address: Address {
+            switch self {
+            case .add(let value), .edit(let value):
+                return value
+            }
+        }
     }
 
     // MARK: - Properties
@@ -30,6 +37,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     @Published var showSection = false
     @Published var destination: Destination?
     @Published var isEditMode = false
+    @Published var isSaveEnabled = false
 
     let windowUUID: WindowUUID
 
@@ -300,17 +308,12 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
         }
 
         do {
-            let address: Address =
-            switch destination {
-            case .add(let address):
-                address
-            case .edit(let address):
-                address
-            }
-
+            let address: Address = destination.address
             let addressString = try jsonString(from: address)
             let l10sString = try jsonString(from: EditAddressLocalization.editAddressLocalizationIDs)
-            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme));"
+            let isNewRecord = { if case .add = destination { return true } else { return false } }()
+
+            let javascript = "init(\(addressString), \(l10sString), \(isDarkTheme), \(isNewRecord));"
             return javascript
         } catch {
             logger.log(

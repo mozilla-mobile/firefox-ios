@@ -78,6 +78,7 @@ struct AddressListView: View {
                             trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
                                 viewModel.saveAddressButtonTap()
                             }
+                            .disabled(!viewModel.isSaveEnabled)
                         )
 
                 case .edit:
@@ -101,6 +102,7 @@ struct AddressListView: View {
                                     Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
                                         viewModel.saveEditButtonTap()
                                     }
+                                    .disabled(!viewModel.isSaveEnabled)
                                 } else {
                                     Button(String.Addresses.Settings.Edit.EditNavBarButtonLabel) {
                                         viewModel.editButtonTap()
@@ -122,6 +124,11 @@ struct AddressListView: View {
         }
         .onDisappear {
             viewModel.editAddressWebViewManager.teardownWebView()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .addressSettingsSaving)) { notification in
+            if let enabled = notification.userInfo?["enabled"] as? Bool {
+                viewModel.isSaveEnabled = enabled
+            }
         }
     }
 
