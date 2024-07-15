@@ -140,6 +140,8 @@ class MainMenuViewController: UIViewController,
         unsubscribeFromRedux()
     }
 
+    // In iOS 15 modals with a large detent read content underneath the modal
+    // in voice over. To prevent this we manually turn this off.
     private func updateModalA11y() {
         var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(
             for: sheetPresentationController
@@ -155,8 +157,6 @@ class MainMenuViewController: UIViewController,
             }
         }
 
-        // in iOS 15 modals with a large detent read content underneath the modal in voice over
-        // to prevent this we manually turn this off
         view.accessibilityViewIsModal = currentDetent == .large ? true : false
     }
 
