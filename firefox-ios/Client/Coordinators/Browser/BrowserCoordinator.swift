@@ -31,8 +31,6 @@ class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
 
-    override var isDismissable: Bool { false }
-
     private var profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
@@ -42,6 +40,8 @@ class BrowserCoordinator: BaseCoordinator,
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+
+    override var isDismissable: Bool { false }
 
     init(router: Router,
          screenshotService: ScreenshotService,
