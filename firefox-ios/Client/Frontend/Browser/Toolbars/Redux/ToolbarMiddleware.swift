@@ -85,6 +85,13 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabLocationShareAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
 
+    lazy var searchAction = ToolbarActionState(
+        actionType: .search,
+        iconName: StandardImageIdentifiers.Large.search,
+        isEnabled: true,
+        a11yLabel: .TabToolbarSearchAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
+
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
 
