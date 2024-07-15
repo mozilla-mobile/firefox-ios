@@ -92,6 +92,7 @@ jobs:
                     -testPlan ${{ matrix.xcodebuild_test_plan }} \
                     -resultBundlePath ${{ env.test_results_directory }}/results \
                     -only-testing:XCUITest/CopyPasteTest \
+                    -test-iterations 20 \
                     | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
               continue-on-error: true
