@@ -26,7 +26,7 @@
 "CreditCard.EditCard.ExpiredDateTitle.v112" = "有效期 %@";
 
 /* Title label for user to input their name printed on their credit card in the text box below. */
-"CreditCard.EditCard.NameOnCardTitle.v112" = "持卡人姓名";
+"CreditCard.EditCard.NameOnCardTitle.v112" = "卡面姓名";
 
 /* Button title which, when tapped, will allow the user to save valid credit card details. */
 "CreditCard.EditCard.NavButtonSaveTitle.v112" = "保存";
