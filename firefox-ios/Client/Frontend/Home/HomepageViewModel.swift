@@ -94,7 +94,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     weak var delegate: HomepageViewModelDelegate?
     private var wallpaperManager: WallpaperManager
     private var logger: Logger
-    private let viewWillAppearEventThrottler = Throttler(seconds: 0.1)
+    private let viewWillAppearEventThrottler = Throttler(seconds: 0.5)
 
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
