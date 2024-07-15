@@ -34,11 +34,6 @@ echo "Restricted remote: $restricted_remote"
 # Special Case: remote being pushed to from the first argument of the pre-push hook
 push_remote_my=$1
 
-if [ "$current_tracked_branch" = "main" ] && [ "$current_tracked_remote" = "$restricted_remote" ]; then
-  echo "Direct pushes to the 'main' branch on this remote are not allowed."
-  exit 1
-fi
-
 if [ "$current_tracked_branch" = "main" ]; then
   # if the tracked remote is the restricted remote
   if [ "$current_tracked_remote" = "$restricted_remote" ]; then
