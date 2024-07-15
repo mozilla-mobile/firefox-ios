@@ -31,6 +31,8 @@ class BrowserCoordinator: BaseCoordinator,
     var homepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
 
+    override var isDismissable: Bool { false }
+
     private var profile: Profile
     private let tabManager: TabManager
     private let themeManager: ThemeManager
