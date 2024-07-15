@@ -134,7 +134,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Adding a delay in case of slow network
         sleep(4)
 
-        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"], timeoutValue: 5)
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"], timeout: 5)
 
         // Ensure search suggestions are shown
         checkSuggestions()

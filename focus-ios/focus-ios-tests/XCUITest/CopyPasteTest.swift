@@ -50,6 +50,7 @@ class CopyPasteTest: BaseTestCase {
         // Check clipboard suggestion is shown
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
         waitForExistence(app.buttons["Search for mozilla"])
+        waitForHittable(app.buttons["Search for mozilla"])
         app.typeText("\n")
 
         // Check the correct site is reached
