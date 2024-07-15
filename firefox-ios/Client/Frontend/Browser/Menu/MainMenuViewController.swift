@@ -18,11 +18,8 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = BrowserViewControllerState
 
     private struct UX {
-        static let titleStackSpacing: CGFloat = 8
         static let closeButtonWidthHeight: CGFloat = 30
         static let scrollContentStackSpacing: CGFloat = 16
-        static let shadowOffset = CGSize(width: 0, height: 2)
-        static let animationDuration: TimeInterval = 0.2
     }
 
     var notificationCenter: NotificationProtocol
@@ -91,27 +88,15 @@ class MainMenuViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        viewModel.isSwiping = false
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        notificationCenter.post(name: .FakespotViewControllerDidAppear, withObject: windowUUID)
         updateModalA11y()
-
-        let action = FakespotAction(windowUUID: windowUUID,
-                                    actionType: FakespotActionType.surfaceDisplayedEventSend)
-        store.dispatch(action)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        notificationCenter.post(name: .FakespotViewControllerDidDismiss, withObject: windowUUID)
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        viewModel.isSwiping = true
     }
 
     // MARK: - View setup
@@ -149,15 +134,7 @@ class MainMenuViewController: UIViewController,
     func handleNotifications(_ notification: Notification) { }
 
     @objc
-    private func closeTapped() {
-        triggerDismiss()
-    }
-
-    private func triggerDismiss() {
-        let action = FakespotAction(windowUUID: windowUUID,
-                                    actionType: FakespotActionType.dismiss)
-        store.dispatch(action)
-    }
+    private func closeTapped() { }
 
     deinit {
         unsubscribeFromRedux()
@@ -185,9 +162,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
 
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        triggerDismiss()
-    }
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) { }
 
     // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(

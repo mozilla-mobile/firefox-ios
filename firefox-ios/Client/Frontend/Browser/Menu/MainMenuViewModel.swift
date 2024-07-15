@@ -8,14 +8,10 @@ import Shared
 
 class MainMenuViewModel {
     let windowUUID: WindowUUID
-    var isSwiping = false
-
-    private let prefs: Prefs
 
     init(profile: Profile = AppContainer.shared.resolve(),
          windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
-        self.prefs = profile.prefs
     }
 
     func getCurrentDetent(

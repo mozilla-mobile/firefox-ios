@@ -1935,7 +1935,6 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnMenu(button: UIButton?) {
-
         if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             navigationHandler?.showMainMenu()
         } else {

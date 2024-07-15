@@ -522,11 +522,8 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
-    /// ROUX
     private func makeMenuCoordinator() -> MainMenuCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is FakespotCoordinator }) else {
-            return nil // flow is already handled
-        }
+        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
         let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
         coordinator.parentCoordinator = self
