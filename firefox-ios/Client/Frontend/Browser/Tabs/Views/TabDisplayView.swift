@@ -106,8 +106,8 @@ class TabDisplayView: UIView,
 
         collectionView.reloadData()
 
-        if let index = state.scrollToIndex {
-            scrollToTab(index)
+        if let scroll = state.scroll {
+            scrollToTab(scroll.toIndex, shouldAnimate: scroll.withAnimation)
         }
 
         if state.didTapAddTab {
@@ -122,13 +122,13 @@ class TabDisplayView: UIView,
         }
     }
 
-    private func scrollToTab(_ index: Int) {
+    private func scrollToTab(_ index: Int, shouldAnimate animated: Bool) {
         let section = shouldHideInactiveTabs ? 0 : 1
         let indexPath = IndexPath(row: index,
                                   section: section)
             collectionView.scrollToItem(at: indexPath,
                                         at: .centeredVertically,
-                                        animated: false)
+                                        animated: animated)
     }
 
     private func setupLayout() {

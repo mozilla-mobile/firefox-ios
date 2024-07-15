@@ -7,13 +7,18 @@ import Redux
 import Common
 
 struct TabsPanelState: ScreenState, Equatable {
+    struct Scroll: Equatable {
+        let toIndex: Int
+        let withAnimation: Bool
+    }
+
     var isPrivateMode: Bool
     var tabs: [TabModel]
     var inactiveTabs: [InactiveTabsModel]
     var isInactiveTabsExpanded: Bool
     var toastType: ToastType?
     var windowUUID: WindowUUID
-    var scrollToIndex: Int?
+    var scroll: Scroll?
     var didTapAddTab: Bool
     var urlRequest: URLRequest?
 
@@ -36,7 +41,7 @@ struct TabsPanelState: ScreenState, Equatable {
                   inactiveTabs: panelState.inactiveTabs,
                   isInactiveTabsExpanded: panelState.isInactiveTabsExpanded,
                   toastType: panelState.toastType,
-                  scrollToIndex: panelState.scrollToIndex,
+                  scroll: panelState.scroll,
                   didTapAddTab: panelState.didTapAddTab,
                   urlRequest: panelState.urlRequest)
     }
@@ -59,7 +64,7 @@ struct TabsPanelState: ScreenState, Equatable {
          inactiveTabs: [InactiveTabsModel],
          isInactiveTabsExpanded: Bool,
          toastType: ToastType? = nil,
-         scrollToIndex: Int? = nil,
+         scroll: Scroll? = nil,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil) {
         self.isPrivateMode = isPrivateMode
@@ -68,7 +73,7 @@ struct TabsPanelState: ScreenState, Equatable {
         self.isInactiveTabsExpanded = isInactiveTabsExpanded
         self.toastType = toastType
         self.windowUUID = windowUUID
-        self.scrollToIndex = scrollToIndex
+        self.scroll = scroll
         self.didTapAddTab = didTapAddTab
         self.urlRequest = urlRequest
     }
@@ -92,26 +97,32 @@ struct TabsPanelState: ScreenState, Equatable {
         case TabPanelMiddlewareActionType.didLoadTabPanel,
             TabPanelMiddlewareActionType.didChangeTabPanel:
             guard let tabsModel = action.tabDisplayModel else { return state }
-            let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected })
+            var scroll: TabsPanelState.Scroll?
+            if let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected }) {
+                scroll = TabsPanelState.Scroll(toIndex: selectedTabIndex, withAnimation: false)
+            }
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,
                                   tabs: tabsModel.tabs,
                                   inactiveTabs: tabsModel.inactiveTabs,
                                   isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded,
-                                  scrollToIndex: selectedTabIndex)
+                                  scroll: scroll)
 
         case TabPanelMiddlewareActionType.refreshTabs:
             guard let tabModel = action.tabDisplayModel else { return state }
-            var selectedTabIndex: Int?
-            if tabModel.shouldScrollToTab {
-                selectedTabIndex = tabModel.tabs.firstIndex(where: { $0.isSelected })
+            var scroll: TabsPanelState.Scroll?
+            if case .scrollToSelectedTab(let shouldAnimate) = tabModel.scrollBehavior,
+                let selectedTabIndex = tabModel.tabs.firstIndex(where: { $0.isSelected }) {
+                scroll = Scroll(toIndex: selectedTabIndex, withAnimation: shouldAnimate)
+            } else if case .scrollToTabAtIndex(let index, let shouldAnimate) = tabModel.scrollBehavior {
+                scroll = Scroll(toIndex: index, withAnimation: shouldAnimate)
             }
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: tabModel.tabs,
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-                                  scrollToIndex: selectedTabIndex)
+                                  scroll: scroll)
 
         case TabPanelMiddlewareActionType.refreshInactiveTabs:
             guard let inactiveTabs = action.inactiveTabModels else { return state }
