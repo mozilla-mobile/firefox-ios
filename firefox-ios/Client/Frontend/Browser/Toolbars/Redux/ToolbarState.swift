@@ -12,6 +12,7 @@ struct ToolbarState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
+    var numberOfTabs: Int
 
     let isShowingNavigationToolbar: Bool
     let canGoBack: Bool
@@ -34,7 +35,8 @@ struct ToolbarState: ScreenState, Equatable {
                   navigationToolbar: toolbarState.navigationToolbar,
                   isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
                   canGoBack: toolbarState.canGoBack,
-                  canGoForward: toolbarState.canGoForward)
+                  canGoForward: toolbarState.canGoForward,
+                  numberOfTabs: toolbarState.numberOfTabs)
     }
 
     init(windowUUID: WindowUUID) {
@@ -46,7 +48,8 @@ struct ToolbarState: ScreenState, Equatable {
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
             isShowingNavigationToolbar: true,
             canGoBack: false,
-            canGoForward: false
+            canGoForward: false,
+            numberOfTabs: 1
         )
     }
 
@@ -58,7 +61,8 @@ struct ToolbarState: ScreenState, Equatable {
         navigationToolbar: NavigationBarState,
         isShowingNavigationToolbar: Bool,
         canGoBack: Bool,
-        canGoForward: Bool
+        canGoForward: Bool,
+        numberOfTabs: Int
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
@@ -68,6 +72,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
+        self.numberOfTabs = numberOfTabs
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -76,7 +81,6 @@ struct ToolbarState: ScreenState, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars,
-            ToolbarActionType.numberOfTabsChanged,
             ToolbarActionType.addressToolbarActionsDidChange,
             ToolbarActionType.backButtonStateChanged,
             ToolbarActionType.forwardButtonStateChanged,
@@ -92,7 +96,21 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
                 canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
-                canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
+                canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
+
+        case ToolbarActionType.numberOfTabsChanged:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward,
+                numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
 
         case GeneralBrowserActionType.updateSelectedTab:
             guard let action = action as? GeneralBrowserAction else { return state }
@@ -104,7 +122,8 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward)
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
 
         case ToolbarActionType.toolbarPositionChanged:
             guard let position = (action as? ToolbarAction)?.toolbarPosition else { return state }
@@ -116,7 +135,8 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward)
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
 
         default:
             return ToolbarState(
@@ -127,7 +147,8 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: state.navigationToolbar,
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward)
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
         }
     }
 }
