@@ -57,7 +57,7 @@ jobs:
             fail-fast: false
             matrix:
                 xcodebuild_test_plan: ['SmokeTest']
-                ios_simulator: [ 'iPhone 15']
+                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
