@@ -19,14 +19,13 @@ class PageShortcutsTest: BaseTestCase {
         app.eraseButton.tap()
 
         // Verify the shortcut is created
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
+        waitForExistence(app.otherElements.staticTexts["Mozilla"])
 
         // Remove created shortcut
         app.otherElements["outerView"].press(forDuration: 2)
         waitForExistence(app.collectionViews.cells.buttons["Remove from Shortcuts"])
         app.collectionViews.cells.buttons["Remove from Shortcuts"].tap()
         waitForNoExistence(app.otherElements.staticTexts["Mozilla"])
-        XCTAssertFalse(app.otherElements.staticTexts["Mozilla"].exists)
     }
 
     // Smoketest
@@ -38,7 +37,7 @@ class PageShortcutsTest: BaseTestCase {
         app.eraseButton.tap()
 
         // Verify the shortcut is created
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
+        waitForExistence(app.otherElements.staticTexts["Mozilla"])
 
         // Rename shortcut
         app.otherElements["outerView"].press(forDuration: 2)
@@ -49,7 +48,6 @@ class PageShortcutsTest: BaseTestCase {
         app.alerts.buttons["Save"].tap()
 
         waitForExistence(app.otherElements.staticTexts["Cheese"])
-        XCTAssertTrue(app.otherElements.staticTexts["Cheese"].exists)
     }
 
     // Smoketest

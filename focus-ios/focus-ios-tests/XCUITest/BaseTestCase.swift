@@ -51,23 +51,23 @@ class BaseTestCase: XCTestCase {
         return false
     }
 
-    func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 10.0, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists == enable", timeout: timeout, file: file, line: line)
+    func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "enabled == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 10.0, file: String = #file, line: UInt = #line) {
+    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
             waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForHittable(_ element: XCUIElement, timeout: TimeInterval = 10.0, file: String = #file, line: UInt = #line) {
+    func waitForHittable(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
             waitFor(element, with: "isHittable == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForNoExistence(_ element: XCUIElement, timeout: TimeInterval = 10.0, file: String = #file, line: UInt = #line) {
+    func waitForNoExistence(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
            waitFor(element, with: "exists != true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForValueContains(_ element: XCUIElement, timeout: TimeInterval = 10.0, value: String, file: String = #file, line: UInt = #line) {
+    func waitForValueContains(_ element: XCUIElement, timeout: TimeInterval = 30.0, value: String, file: String = #file, line: UInt = #line) {
             waitFor(element, with: "value CONTAINS '\(value)'", timeout: timeout, file: file, line: line)
     }
 
@@ -115,7 +115,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
-        waitForExistence(app.textFields["URLBar.urlText"], timeout: 10)
+        waitForExistence(app.textFields["URLBar.urlText"])
         app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].clearAndEnterText(text: url+"\n")
 

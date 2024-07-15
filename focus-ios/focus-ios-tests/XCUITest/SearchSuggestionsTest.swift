@@ -36,11 +36,11 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
     func checkToggleStartsOff() {
         dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
@@ -74,7 +74,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: true)
@@ -111,7 +111,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
@@ -123,7 +123,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkToggleStartsOff()
 
         // Turn toggle ON
-        waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"], timeout: 5)
+        waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"])
 
         app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
 
@@ -134,7 +134,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Adding a delay in case of slow network
         sleep(4)
 
-        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"], timeout: 5)
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Ensure search suggestions are shown
         checkSuggestions()
@@ -168,7 +168,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()

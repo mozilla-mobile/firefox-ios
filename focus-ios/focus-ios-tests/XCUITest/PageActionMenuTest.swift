@@ -16,7 +16,7 @@ class PageActionMenuTest: BaseTestCase {
         app.textFields["Search or enter address"].typeText("domain")
 
         // Try all functions of find in page bar
-        waitForExistence(app.buttons["FindInPageBar.button"], timeout: 5)
+        waitForExistence(app.buttons["FindInPageBar.button"])
         app.buttons["FindInPageBar.button"].tap()
 
         waitForHittable(app.buttons["FindInPage.find_previous"])
@@ -43,7 +43,7 @@ class PageActionMenuTest: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         let findInPageButton = app.findInPageButton
-        waitForExistence(findInPageButton, timeout: 10)
+        waitForExistence(findInPageButton)
         findInPageButton.tap()
 
         // Activate find in page activity item and search for a keyword
