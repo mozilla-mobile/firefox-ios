@@ -82,21 +82,12 @@ class MainMenuViewController: UIViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         applyTheme()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateModalA11y()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
     }
 
     // MARK: - View setup
@@ -161,7 +152,6 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
-
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) { }
 
     // MARK: - UISheetPresentationControllerDelegate
