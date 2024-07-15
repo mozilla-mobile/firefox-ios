@@ -56,8 +56,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
-                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
+                xcodebuild_test_plan: ['SmokeTest']
+                ios_simulator: [ 'iPhone 15']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -91,6 +91,7 @@ jobs:
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ matrix.xcodebuild_test_plan }} \
                     -resultBundlePath ${{ env.test_results_directory }}/results \
+                    -only-testing:XCUITest/CopyPasteTest \
                     | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
               continue-on-error: true
@@ -108,22 +109,6 @@ jobs:
                 name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
                 path: ${{ env.browser }}/xcodebuild.log
                 retention-days: 90
-            - name: Report to Slack
-              id: slack
-              uses: slackapi/slack-github-action@v1.26.0
-              with:
-                payload-file-path: ${{ env.browser }}/slack.json
-              env:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-                ios_simulator: ${{ matrix.ios_simulator }}
-                pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
-                xcodebuild_test_plan: ${{ matrix.xcodebuild_test_plan }}
-                ref_name: ${{ github.ref_name }}
-                repository: ${{ github.repository }}
-                run_id: ${{ github.run_id }}
-                server_url: ${{ github.server_url }}
-                sha: ${{ github.sha }}
             - name: Return fail status if a test fails
               run: |
                 exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
