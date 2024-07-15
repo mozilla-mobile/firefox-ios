@@ -1,0 +1,68 @@
+name: Fetch Remote Settings
+
+# Remote settings are updated every Tuesday and Thursday
+
+on:
+  schedule:
+    - cron: '0 0 * * 2' # Every Tuesday at midnight
+    - cron: '0 0 * * 4' # Every Thursday at midnight
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+env:
+    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+jobs:
+  fetch-remote-settings:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.7]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get the current GitHub Action name
+        run: |
+          github_action_name="Fetch Remote Settings"
+          echo "github_action_name=$github_action_name" >> $GITHUB_ENV
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Fetch remote settings and update files
+        run: python ./firefox-ios/Client/Assets/RemoteSettingsData/Update_Remote_Settings.py
+
+      - name: Commit and push changes
+        run: |
+          git diff
+          git diff --quiet || (git add . && git commit -m "Update remote settings with latest rules" && git push)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Refactor - auto update remote settings"
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: GitHub <noreply@github.com>
+          title: "Refactor - auto update remote settings"
+          branch: "auto-update-remote-settings"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set job log URL
+        if: always()
+        run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
+
+      - name: Send Slack notification if GitHub Action fails
+        if: '!cancelled()'
+        id: slack
+        uses: slackapi/slack

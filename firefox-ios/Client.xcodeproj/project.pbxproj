@@ -937,6 +937,7 @@
 		8AF3B15A2AF99B86009BB262 /* HistoryPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3B1592AF99B86009BB262 /* HistoryPanelTests.swift */; };
 		8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3B15B2AF99C77009BB262 /* ReadingListPanelTests.swift */; };
 		8AF3B15E2AF99D2F009BB262 /* DownloadsPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3B15D2AF99D2F009BB262 /* DownloadsPanelTests.swift */; };
+		8AF4E76F2C45AB9B00BAD91C /* RemotePasswordRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E76E2C45AB9B00BAD91C /* RemotePasswordRules.json */; };
 		8AF6D4DF2A856A9000B0474B /* MockContileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */; };
 		8AF6D4E12A856B4500B0474B /* ContileNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF6D4E02A856B4500B0474B /* ContileNetworking.swift */; };
 		8AF99B4D29EF076800108DEC /* WebviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4C29EF076800108DEC /* WebviewViewController.swift */; };
@@ -6900,6 +6901,9 @@
 		8AF3B1592AF99B86009BB262 /* HistoryPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelTests.swift; sourceTree = "<group>"; };
 		8AF3B15B2AF99C77009BB262 /* ReadingListPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListPanelTests.swift; sourceTree = "<group>"; };
 		8AF3B15D2AF99D2F009BB262 /* DownloadsPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPanelTests.swift; sourceTree = "<group>"; };
+		8AF4E76B2C41D7C200BAD91C /* Update_Remote_Settings.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = Update_Remote_Settings.py; sourceTree = "<group>"; };
+		8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = RemoteSettingsFetchConfig.json; sourceTree = "<group>"; };
+		8AF4E76E2C45AB9B00BAD91C /* RemotePasswordRules.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = RemotePasswordRules.json; path = ../../../../../../../../Downloads/RemotePasswordRules.json; sourceTree = "<group>"; };
 		8AF6D4DE2A856A9000B0474B /* MockContileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockContileNetworking.swift; sourceTree = "<group>"; };
 		8AF6D4E02A856B4500B0474B /* ContileNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileNetworking.swift; sourceTree = "<group>"; };
 		8AF99B4C29EF076800108DEC /* WebviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebviewViewController.swift; sourceTree = "<group>"; };
@@ -11040,6 +11044,16 @@
 			path = Scene;
 			sourceTree = "<group>";
 		};
+		8AF4E76A2C41D60A00BAD91C /* RemoteSettingsData */ = {
+			isa = PBXGroup;
+			children = (
+				8AF4E76B2C41D7C200BAD91C /* Update_Remote_Settings.py */,
+				8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */,
+				8AF4E76E2C45AB9B00BAD91C /* RemotePasswordRules.json */,
+			);
+			path = RemoteSettingsData;
+			sourceTree = "<group>";
+		};
 		8AF99B5029EF1BB600108DEC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
@@ -13117,6 +13131,7 @@
 				D0FCF8051FE4772D004A7995 /* MainFrameAtDocumentStart.js */,
 				0BA1E02F1B051A07007675AF /* NetError.css */,
 				0BA1E00D1B03FB0B007675AF /* NetError.html */,
+				8AF4E76A2C41D60A00BAD91C /* RemoteSettingsData */,
 				D30684F01C84F12A002D8D82 /* SearchPlugins */,
 				39A35AEC1C0662A3006B9E87 /* SpotlightHelper.js */,
 				D37524861C6E8B5A00A5F6C2 /* topdomains.txt */,
@@ -14224,6 +14239,7 @@
 				D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */,
 				8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
+				8AF4E76F2C45AB9B00BAD91C /* RemotePasswordRules.json in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */,
