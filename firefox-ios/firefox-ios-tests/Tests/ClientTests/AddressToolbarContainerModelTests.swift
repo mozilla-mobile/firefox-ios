@@ -29,7 +29,10 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                  toolbarPosition: .top,
                                  isPrivateMode: false,
                                  addressToolbar: addressState,
-                                 navigationToolbar: navigationState)
+                                 navigationToolbar: navigationState,
+                                 isShowingNavigationToolbar: true,
+                                 canGoBack: true,
+                                 canGoForward: true)
         viewModel = AddressToolbarContainerModel(state: state,
                                                  profile: mockProfile,
                                                  windowUUID: windowUUID)

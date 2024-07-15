@@ -105,19 +105,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarLocation,
-                                     value: .awesomebarShareTap,
-                                     extras: nil)
-
-        if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
-            navigationHandler?.showShareExtension(
-                url: tabUrl,
-                sourceView: shareView,
-                toastContainer: contentContainer,
-                popoverArrowDirection: isBottomSearchBar ? .down : .up)
-        }
+        didTapOnShare(from: shareView)
     }
 
     internal func dismissFakespotIfNeeded(animated: Bool = true) {
