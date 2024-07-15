@@ -56,7 +56,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                xcodebuild_test_plan: ['SmokeTest']
+                xcodebuild_test_plan: ['FullFunctionalTests']
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
