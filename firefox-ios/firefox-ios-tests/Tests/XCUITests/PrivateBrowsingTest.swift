@@ -283,6 +283,17 @@ fileprivate extension BaseTestCase {
             "The number of tabs is not correct"
         )
     }
+    
+    func enableClosePrivateBrowsingOptionWhenLeaving() {
+        navigator.goto(SettingsScreen)
+        let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
+        
+        while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
+            settingsTableView.swipeUp()
+        }
+        let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
+        closePrivateTabsSwitch.tap()
+    }
 }
 
 class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
