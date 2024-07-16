@@ -469,6 +469,11 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
 
+        let isNewTabEnabled = ToolbarFlagManager.isOneTapNewTabEnabled
+        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
+        let middleActionHome = searchAction
+        let middleAction = url == nil ? middleActionHome : middleActionDefault
+
         var canGoBack = toolbarState.canGoBack
         var canGoForward = toolbarState.canGoForward
 
@@ -479,9 +484,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
 
         let actions = [
-            url == nil ? searchAction : homeAction,
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
+            middleAction,
             tabsAction(numberOfTabs: toolbarState.numberOfTabs),
             menuAction
         ]
