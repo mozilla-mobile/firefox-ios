@@ -212,7 +212,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                ios_simulator: ['iPhone 15 Plus', 'iPad Pro 13-inch (M4)']
+                ios_simulator: ['iPhone 15 Plus', 'iPad Pro (11-inch) (4th generation)']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
