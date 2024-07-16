@@ -91,6 +91,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showBackForwardList()
 
     func showMicrosurvey(model: MicrosurveyModel)
+
+    /// Shows the app menu
+    func showMainMenu()
 }
 
 extension BrowserNavigationHandler {

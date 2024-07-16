@@ -8,7 +8,7 @@
 "ContextualHints.Shopping.OptedInAction.v120" = "Obre el verificador de ressenyes";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
-"ContextualHints.Shopping.OptedInBody.v120" = "Són fiables aquestes ressenyes? Comproveu-ho ara per a veure una puntuació ajustada.";
+"ContextualHints.Shopping.OptedInBody.v120" = "Són fiables aquestes ressenyes? Vegeu-ne una valoració ajustada.";
 
 /* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
 "Shopping.AdCard.Footer.v121" = "Anunci de %@";
@@ -149,13 +149,13 @@
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Ara no";
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
-"Shopping.OptInCard.SecondParagraph.Description.v120" = "Gràcies al %1$@ de %2$@, us ajudem a evitar ressenyes esbiaixades i no autèntiques. El nostre model d'IA sempre millora per a protegir-vos mentre compreu.";
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Gràcies a %1$@ de %2$@, us ajudem a evitar ressenyes esbiaixades i no autèntiques. El nostre model d'IA sempre millora per a protegir-vos mentre compreu.";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Condicions d'ús";
 
 /* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
-"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Condicions d'ús del %@";
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Condicions d'ús de %@";
 
 /* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "Qualificació %@";
@@ -173,7 +173,7 @@
 "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Ressenyes poc fiables";
 
 /* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "La *puntuació ajustada* només es basa en les ressenyes que creiem fiables.";
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "La *valoració ajustada* només es basa en les ressenyes que creiem fiables.";
 
 /* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Redueix la targeta «Com es determina la qualitat de la ressenya»";
@@ -182,7 +182,7 @@
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Amplia la targeta «Com es determina la qualitat de la ressenya»";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.ReviewQualityCard.Headline.Label.v120" = "Usem tecnologia d'IA del %1$@ de %2$@ per a comprovar la fiabilitat de les ressenyes de productes. Això només us ajudarà a avaluar la qualitat de la ressenya, no la qualitat del producte.";
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Usem tecnologia d'IA de %1$@ de %2$@ per a comprovar la fiabilitat de les ressenyes de productes. Això només us ajudarà a avaluar la qualitat de la ressenya, no la qualitat del producte.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "Els *destacats* provenen de ressenyes de %1@ dels darrers 80 dies que creiem que són fiables.";
@@ -194,7 +194,7 @@
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Com es determina la qualitat de la ressenya";
 
 /* The title of the learn more button from How we determine review quality card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the Fakespot app name. */
-"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Més informació sobre com el %@ determina la qualitat de les ressenyes";
+"Shopping.ReviewQualityCard.LearnMoreButton.Title.v120" = "Més informació sobre com %@ determina la qualitat de les ressenyes";
 
 /* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Creiem que hi ha un barreja de ressenyes fiables i poc fiables";
