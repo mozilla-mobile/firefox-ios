@@ -240,6 +240,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .search:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
         default:
