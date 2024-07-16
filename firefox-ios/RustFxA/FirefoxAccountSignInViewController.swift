@@ -97,7 +97,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 
     private lazy var scanButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
-            title: ".FxASignin_QRScanSignin fdasfsa fsaf sdaf safd asf asfsa",
+            title: .FxASignin_QRScanSignin,
             a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton,
             imageTitlePadding: UX.buttonHorizontalInset
         )
