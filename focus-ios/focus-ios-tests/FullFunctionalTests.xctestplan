@@ -28,6 +28,7 @@
         "BrowsingTest\/testActivityMenuRequestDesktopItem()",
         "CopyPasteTest\/testClipboard()",
         "CopyPasteTest\/testPastenGo()",
+        "DragAndDropTest",
         "FindInPageTest\/testActivityMenuFindInPageAction()",
         "OnboardingTest",
         "PastenGoTest\/testPastenGo()",
