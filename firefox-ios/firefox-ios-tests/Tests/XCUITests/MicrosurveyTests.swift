@@ -52,15 +52,22 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     private func generateTriggerForMicrosurvey() {
-        let homepageToggleButton = app
-            .collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView]
-            .buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton]
-        homepageToggleButton.tap()
-        let privateHomepageToggleButton = app
-            .scrollViews
-            .otherElements
-            .buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton]
-        privateHomepageToggleButton.tap()
-        mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
+        let homepageToggleButtonIphone =
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton]
+        let homepageToggleButtonIpad = app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton]
+        if !iPad() {
+            homepageToggleButtonIphone.tap()
+            mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.PrivateMode.Homepage.link])
+        } else {
+            homepageToggleButtonIpad.tap()
+            mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
+        }
+        if !iPad() {
+            homepageToggleButtonIphone.tap()
+            mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
+        } else {
+            homepageToggleButtonIpad.tap()
+            mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
+        }
     }
 }
