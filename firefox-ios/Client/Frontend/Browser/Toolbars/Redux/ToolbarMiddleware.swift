@@ -240,7 +240,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .search:
-            print("WT ### ")
+            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
         default:
             break
