@@ -29,7 +29,8 @@ struct NavigationBarState: StateType, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case ToolbarActionType.didLoadToolbars:
+        case ToolbarActionType.didLoadToolbars,
+            ToolbarActionType.urlDidChange:
             guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(

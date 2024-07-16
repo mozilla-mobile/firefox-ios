@@ -469,10 +469,19 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
 
+        var canGoBack = toolbarState.canGoBack
+        var canGoForward = toolbarState.canGoForward
+
+        if action.actionType as? ToolbarMiddlewareActionType == .urlDidChange,
+           let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction {
+            canGoBack = urlChangeAction.canGoBack
+            canGoForward = urlChangeAction.canGoForward
+        }
+
         let actions = [
-            backAction(enabled: toolbarState.canGoBack),
-            forwardAction(enabled: toolbarState.canGoForward),
             url == nil ? searchAction : homeAction,
+            backAction(enabled: canGoBack),
+            forwardAction(enabled: canGoForward),
             tabsAction(numberOfTabs: toolbarState.numberOfTabs),
             menuAction
         ]
