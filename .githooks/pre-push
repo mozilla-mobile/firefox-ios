@@ -35,12 +35,6 @@ echo "Restricted remote: $restricted_remote"
 push_remote_my=$1
 
 if [ "$current_tracked_branch" = "main" ]; then
-  # if the tracked remote is the restricted remote
-  if [ "$current_tracked_remote" = "$restricted_remote" ]; then
-    echo "Direct pushes to the 'main' branch on the tracked remote are not allowed."
-    exit 1
-  fi
-
   # if the push remote is the restricted remote
   if [ "$push_remote_my" = "$restricted_remote" ]; then
     echo "Direct pushes to the 'main' branch on the specified remote are not allowed."
