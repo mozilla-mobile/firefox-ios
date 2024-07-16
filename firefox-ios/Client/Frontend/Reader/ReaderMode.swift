@@ -109,7 +109,16 @@ enum ReaderModeFontSize: Int {
     }
 
     static var defaultSize: ReaderModeFontSize {
-        switch UIApplication.shared.preferredContentSizeCategory {
+        var contentSizeCategory: UIContentSizeCategory?
+        if Thread.isMainThread {
+            contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        } else {
+            DispatchQueue.main.sync {
+                contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+            }
+        }
+
+        switch contentSizeCategory {
         case .extraSmall:
             return .size1
         case .small:
