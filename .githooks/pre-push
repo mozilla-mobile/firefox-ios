@@ -24,15 +24,15 @@ upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
 current_tracked_remote=$(echo "$upstream" | cut -d'/' -f1)
 current_tracked_branch=$(echo "$upstream" | cut -d'/' -f2)
 
-echo "current tracked remote: $current_tracked_remote"
-echo "current tracked branch: $current_tracked_branch"
+echo "Current tracked remote: $current_tracked_remote"
+echo "Current tracked branch: $current_tracked_branch"
 
 restricted_remote=$(find_remote_name_by_url)
-
 echo "Restricted remote: $restricted_remote"
 
 # Special Case: remote being pushed to from the first argument of the pre-push hook
 push_remote_my=$1
+echo "Push remote: $restricted_remote"
 
 if [ "$current_tracked_branch" = "main" ]; then
   # if the push remote is the restricted remote
