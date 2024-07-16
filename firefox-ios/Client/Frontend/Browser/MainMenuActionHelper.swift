@@ -309,8 +309,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getNewTabAction() -> PhotonRowActions? {
         guard let tab = selectedTab else { return nil }
-        return SingleActionViewModel(title: tab.isPrivate ? .OldStrings.v130.AppMenu.NewPrivateTab : .OldStrings.v130.AppMenu.NewTab,
-                                     iconString: StandardImageIdentifiers.Large.plus) { _ in
+        return SingleActionViewModel(
+            title: tab.isPrivate ? .OldStrings.v130.AppMenu.NewPrivateTab : .OldStrings.v130.AppMenu.NewTab,
+            iconString: StandardImageIdentifiers.Large.plus
+        ) { _ in
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) != .homePage
             self.delegate?.openNewTabFromMenu(focusLocationField: shouldFocusLocationField, isPrivate: tab.isPrivate)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
@@ -393,7 +395,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
-                self.delegate?.showToast(message: .OldStrings.v130.AppMenu.AppMenuCopyURLConfirmMessage, toastAction: .copyUrl)
+                self.delegate?.showToast(
+                    message: .OldStrings.v130.AppMenu.AppMenuCopyURLConfirmMessage,
+                    toastAction: .copyUrl
+                )
             }
         }.items
     }
@@ -470,9 +475,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
-        let nightModeTitle: String = nightModeEnabled ? .OldStrings.v130.AppMenu.AppMenuTurnOffNightMode : .OldStrings.v130.AppMenu.AppMenuTurnOnNightMode
+        typealias MenuStrings = String.OldStrings.v130.AppMenu
         let nightMode = SingleActionViewModel(
-            title: nightModeTitle,
+            title: nightModeEnabled ? MenuStrings.AppMenuTurnOffNightMode : MenuStrings.AppMenuTurnOnNightMode,
             iconString: StandardImageIdentifiers.Large.nightMode,
             isEnabled: nightModeEnabled
         ) { _ in
@@ -680,7 +685,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 object: .readingListItem,
                 value: .pageActionMenu
             )
-            self.delegate?.showToast(message: .OldStrings.v130.AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList)
+            self.delegate?.showToast(
+                message: .OldStrings.v130.AppMenu.AddToReadingListConfirmMessage,
+                toastAction: .addToReadingList
+            )
         }
     }
 
@@ -781,7 +789,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             let site = Site(url: url.absoluteString, title: title)
             self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
-                self.delegate?.showToast(message: .OldStrings.v130.AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage)
+                self.delegate?.showToast(
+                    message: .OldStrings.v130.AppMenu.AddPinToShortcutsConfirmMessage,
+                    toastAction: .pinPage
+                )
             }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .pinToTopSites)

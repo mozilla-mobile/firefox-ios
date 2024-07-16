@@ -1353,7 +1353,11 @@ extension String {
 extension String {
     public struct MainMenu {
         public struct Account {
-
+            public static let AppMenuReportSiteIssueTitleString = MZLocalizedString(
+                key: "Account.ReportSiteIssueAction.Title",
+                tableName: "MainMenu",
+                value: "Report Site Issue",
+                comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.")
         }
 
         public struct TabsSection {
@@ -1674,9 +1678,7 @@ extension String {
                 comment: "Label for preview action on Tab Tray Tab to send the current link to another device")
         }
     }
-
 }
-
 
 // MARK: - Micro survey
 extension String {
@@ -6538,7 +6540,7 @@ extension String {
 extension String {
     /// For more detailed information on how to use this struct, please see
     /// https://github.com/mozilla-mobile/firefox-ios/wiki/How-to-add-and-modify-Strings#oldstrings-struct
-    struct OldStrings {
+    public struct OldStrings {
         struct v122 {
             public static let InfoCardProgressAnalysisTitle = MZLocalizedString(
                 key: "Shopping.InfoCard.ProgressAnalysis.Title.v120",
@@ -6652,7 +6654,7 @@ extension String {
                 comment: "A switch to disable enhanced tracking protection inside the menu.")
         }
 
-        struct v130 {
+        public struct v130 {
             public static let SelectedRadioButtonAccessibilityLabel = MZLocalizedString(
                 key: "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v129",
                 tableName: "Microsurvey",

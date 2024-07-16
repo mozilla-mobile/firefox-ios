@@ -1545,9 +1545,17 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            self.showToast(message: .OldStrings.v130.AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            self.showToast(
+                message: .OldStrings.v130.AppMenu.AddBookmarkConfirmMessage,
+                toastAction: .bookmarkPage
+            )
         case .remove:
-            self.showToast(bookmarkURL, title, message: .OldStrings.v130.AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(
+                bookmarkURL,
+                title,
+                message: .OldStrings.v130.AppMenu.RemoveBookmarkConfirmMessage,
+                toastAction: .removeBookmark
+            )
         }
     }
 
