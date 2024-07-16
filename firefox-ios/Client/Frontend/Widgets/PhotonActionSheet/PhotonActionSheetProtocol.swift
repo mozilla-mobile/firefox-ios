@@ -46,11 +46,15 @@ extension PhotonActionSheetProtocol {
         viewController.present(sheet, animated: true, completion: nil)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView, alertContainer: UIView) -> [PhotonRowActions] {
+    func getLongPressLocationBarActions(with view: UIView, alertContainer: UIView) -> [PhotonRowActions] {
         let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle,
                                                   iconString: StandardImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
-                urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
+                if let urlBar = view as? URLBarView {
+                    urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
+                } else if let toolbar = view as? AddressToolbarContainer {
+                    toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
+                }
             }
         }
         pasteGoAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAndGoAction
@@ -58,14 +62,25 @@ extension PhotonActionSheetProtocol {
         let pasteAction = SingleActionViewModel(title: .PasteTitle,
                                                 iconString: StandardImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
-                urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                if let urlBar = view as? URLBarView {
+                    urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                } else if view is AddressToolbarContainer {
+                    guard let uuid = view.currentWindowUUID else { return }
+
+                    let action = ToolbarAction(
+                        url: URL(string: pasteboardContents),
+                        windowUUID: uuid,
+                        actionType: ToolbarActionType.urlDidChange
+                    )
+                    store.dispatch(action)
+                }
             }
         }
         pasteAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAction
 
         let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle,
                                                       iconString: StandardImageIdentifiers.Large.link) { _ in
-            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
+            if let url = tabManager.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,

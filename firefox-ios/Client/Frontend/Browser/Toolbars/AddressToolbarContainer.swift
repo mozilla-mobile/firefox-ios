@@ -12,6 +12,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    func addressToolbarContainerDidLongPressURLTextField()
 }
 
 final class AddressToolbarContainer: UIView,
@@ -36,7 +37,7 @@ final class AddressToolbarContainer: UIView,
     private var windowUUID: WindowUUID?
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
-    private var delegate: AddressToolbarContainerDelegate?
+    weak var delegate: AddressToolbarContainerDelegate?
 
     private var toolbar: BrowserAddressToolbar {
         let isCompact = traitCollection.horizontalSizeClass == .compact
@@ -277,6 +278,10 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    func addressToolbarDidLongPressURLTextField() {
+        delegate?.addressToolbarContainerDidLongPressURLTextField()
     }
 
     // MARK: - MenuHelperURLBarInterface

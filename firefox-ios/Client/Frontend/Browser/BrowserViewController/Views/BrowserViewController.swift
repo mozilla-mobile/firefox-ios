@@ -2772,6 +2772,14 @@ class BrowserViewController: UIViewController,
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }
     }
+
+    func addressToolbarContainerDidLongPressURLTextField() {
+        let urlActions = getLongPressLocationBarActions(with: addressToolbarContainer, alertContainer: contentContainer)
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        presentActionSheet(from: addressToolbarContainer, with: urlActions)
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {

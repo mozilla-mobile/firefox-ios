@@ -287,6 +287,10 @@ extension BrowserViewController: URLBarDelegate {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
+        presentActionSheet(from: urlBar, with: urlActions)
+    }
+
+    func presentActionSheet(from view: UIView, with urlActions: [PhotonRowActions]) {
         let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
         let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
         let viewModel = PhotonActionSheetViewModel(
@@ -294,7 +298,7 @@ extension BrowserViewController: URLBarDelegate {
             closeButtonTitle: .CloseButtonTitle,
             modalStyle: style
         )
-        self.presentSheetWith(viewModel: viewModel, on: self, from: urlBar)
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {

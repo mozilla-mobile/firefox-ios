@@ -81,6 +81,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
+        addLongPressGestureRecognizer()
 
         urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
         notifyTextChanged = { [self] in
@@ -271,6 +272,12 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         onTapLockIcon = state.onTapLockIcon
     }
 
+    // MARK: - Gesture Recognizers
+    private func addLongPressGestureRecognizer() {
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
+        urlTextField.addGestureRecognizer(longPressRecognizer)
+    }
+
     // MARK: - Selectors
     @objc
     func textDidChange(_ textField: UITextField) {
@@ -280,6 +287,13 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?()
+    }
+
+    @objc
+    private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .began {
+            delegate?.locationViewDidLongPressURLTextField()
+        }
     }
 
     // MARK: - UITextFieldDelegate
@@ -296,6 +310,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        formatAndTruncateURLTextField()
         if isURLTextFieldEmpty {
             updateGradient()
         } else {

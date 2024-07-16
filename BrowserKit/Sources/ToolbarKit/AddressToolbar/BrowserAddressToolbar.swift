@@ -265,6 +265,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
 
+    func locationViewDidLongPressURLTextField() {
+        toolbarDelegate?.addressToolbarDidLongPressURLTextField()
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
