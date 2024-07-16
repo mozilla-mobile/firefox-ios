@@ -5760,6 +5760,14 @@ extension String {
 }
 
 extension String {
+    public struct Toolbars {
+        public static let NewTabButton = MZLocalizedString(
+            key: "Toolbar.NewTab.Button.v130",
+            tableName: "Toolbar",
+            value: "New Tab",
+            comment: "Accessibility label for the new tab button that can be displayed in the navigation toolbar, address toolbar or tab strip.")
+    }
+
     public struct AddressToolbar {
         public static let LocationPlaceholder = MZLocalizedString(
             key: "AddressToolbar.Location.Placeholder.v128",
