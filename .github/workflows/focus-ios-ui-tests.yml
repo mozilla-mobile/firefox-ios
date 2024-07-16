@@ -69,6 +69,7 @@ jobs:
                 curl https://www.google.com
                 curl https://www.example.com
                 curl https://www.mozilla.org/en-US/
+                curl https://developer.mozilla.org/en-US/
                 curl https://www.facebook.com
                 curl https://news.ycombinator.com
 
