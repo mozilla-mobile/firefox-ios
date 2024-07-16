@@ -10,14 +10,14 @@ class TrackingProtectionTest: BaseTestCase {
         // Go to in-app settings
         // Check the new options in TP Settings menu
         dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
-        waitForExistence(app.tables.cells["settingsViewController.trackingCell"], timeout: 10)
+        waitForExistence(app.tables.cells["settingsViewController.trackingCell"])
         app.tables.cells["settingsViewController.trackingCell"].tap()
 
         waitForExistence(app.navigationBars["Tracking Protection"])
@@ -98,7 +98,7 @@ class TrackingProtectionTest: BaseTestCase {
         }
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.buttons["Settings"], timeout: 5)
+        waitForExistence(app.collectionViews.buttons["Settings"])
         app.collectionViews.buttons["Settings"].tap()
         waitForExistence(app.cells["settingsViewController.trackingCell"])
         app.cells["settingsViewController.trackingCell"].tap()
