@@ -989,6 +989,31 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
     }
 
+    // MARK: - Menu
+    func testShowMainMenu_addsMainMenuCoordinator() {
+        let subject = createSubject()
+
+        subject.showMainMenu()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is MainMenuViewController)
+    }
+
+    func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showMainMenu()
+        let menuCoordinator = subject.childCoordinators[0] as! MainMenuCoordinator
+        menuCoordinator.dismissModal(animated: false)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    // MARK: - Microsurvey
     func testShowMicrosurvey_addsMicrosurveyCoordinator() {
         let subject = createSubject()
 
