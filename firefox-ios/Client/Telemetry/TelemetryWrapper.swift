@@ -1681,33 +1681,33 @@ extension TelemetryWrapper {
             }
         // MARK: App menu
         case (.action, .tap, .homePageMenu, _, _):
-            GleanMetrics.AppMenu.homepageMenu.add()
+            GleanMetrics.OldStrings.v130.AppMenu.homepageMenu.add()
         case (.action, .tap, .siteMenu, _, _):
-            GleanMetrics.AppMenu.siteMenu.add()
+            GleanMetrics.OldStrings.v130.AppMenu.siteMenu.add()
         case (.action, .tap, .logins, _, _):
-            GleanMetrics.AppMenu.logins.add()
+            GleanMetrics.OldStrings.v130.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):
-            GleanMetrics.AppMenu.signIntoSync.add()
+            GleanMetrics.OldStrings.v130.AppMenu.signIntoSync.add()
         case (.action, .tap, .home, _, _):
-            GleanMetrics.AppMenu.home.add()
+            GleanMetrics.OldStrings.v130.AppMenu.home.add()
         case (.action, .tap, .blockImagesEnabled, _, _):
-            GleanMetrics.AppMenu.blockImagesEnabled.add()
+            GleanMetrics.OldStrings.v130.AppMenu.blockImagesEnabled.add()
         case (.action, .tap, .blockImagesDisabled, _, _):
-            GleanMetrics.AppMenu.blockImagesDisabled.add()
+            GleanMetrics.OldStrings.v130.AppMenu.blockImagesDisabled.add()
         case (.action, .tap, .nightModeEnabled, _, _):
-            GleanMetrics.AppMenu.nightModeEnabled.add()
+            GleanMetrics.OldStrings.v130.AppMenu.nightModeEnabled.add()
         case (.action, .tap, .nightModeDisabled, _, _):
-            GleanMetrics.AppMenu.nightModeDisabled.add()
+            GleanMetrics.OldStrings.v130.AppMenu.nightModeDisabled.add()
         case (.action, .open, .whatsNew, _, _):
-            GleanMetrics.AppMenu.whatsNew.add()
+            GleanMetrics.OldStrings.v130.AppMenu.whatsNew.add()
         case (.action, .tap, .help, _, _):
-            GleanMetrics.AppMenu.help.add()
+            GleanMetrics.OldStrings.v130.AppMenu.help.add()
         case (.action, .tap, .customizeHomePage, _, _):
-            GleanMetrics.AppMenu.customizeHomepage.add()
+            GleanMetrics.OldStrings.v130.AppMenu.customizeHomepage.add()
         case (.action, .open, .settings, _, _):
-            GleanMetrics.AppMenu.settings.add()
+            GleanMetrics.OldStrings.v130.AppMenu.settings.add()
         case(.action, .open, .logins, _, _):
-            GleanMetrics.AppMenu.passwords.record()
+            GleanMetrics.OldStrings.v130.AppMenu.passwords.record()
 
         // MARK: Page Menu
         case (.action, .tap, .sharePageWith, _, _):

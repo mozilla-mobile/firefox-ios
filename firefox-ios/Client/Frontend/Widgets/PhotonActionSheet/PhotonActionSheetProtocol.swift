@@ -83,7 +83,7 @@ extension PhotonActionSheetProtocol {
             let currentURL = tabManager.selectedTab?.currentURL()
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+                SimpleToast().showAlertWithText(.OldStrings.v130.AppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,
                                                 theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
             }
@@ -105,9 +105,9 @@ extension PhotonActionSheetProtocol {
         let toggleActionTitle: String
         // swiftlint:disable line_length
         if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .OldStrings.v130.AppMenu.AppMenuViewDesktopSiteTitleString : .OldStrings.v130.AppMenu.AppMenuViewMobileSiteTitleString
         } else {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .OldStrings.v130.AppMenu.AppMenuViewMobileSiteTitleString : .OldStrings.v130.AppMenu.AppMenuViewDesktopSiteTitleString
         }
         // swiftlint:enable line_length
         let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle,
