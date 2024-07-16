@@ -637,15 +637,24 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
+        var currentSelectedTab: BackupCloseTab?
+
+        // Backup the selected tab in separate variable as the `removeTab` method called below for each tab will
+        // automatically update tab selection as if there was a single tab removal.
         if let tab = selectedTab, tab.isPrivate == isPrivateMode {
-            backupCloseTab = BackupCloseTab(tab: tab,
-                                            restorePosition: tabs.firstIndex(of: tab),
-                                            isSelected: selectedTab?.tabUUID == tab.tabUUID)
+            currentSelectedTab = BackupCloseTab(tab: tab,
+                                                restorePosition: tabs.firstIndex(of: tab),
+                                                isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         backupCloseTabs = tabs
+        
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID)
+            await self.removeTab(tab.tabUUID) // updates selected tab...
         }
+
+        // Save the tab state that existed prior to removals (preserves original selected tab)
+        backupCloseTab = currentSelectedTab
+
         storeChanges()
     }
 
