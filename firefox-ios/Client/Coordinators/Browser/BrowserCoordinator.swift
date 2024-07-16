@@ -41,6 +41,8 @@ class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
+    override var isDismissable: Bool { false }
+
     init(router: Router,
          screenshotService: ScreenshotService,
          tabManager: TabManager,
