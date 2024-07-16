@@ -70,6 +70,13 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
+    lazy var newTabAction = ToolbarActionState(
+        actionType: .newTab,
+        iconName: StandardImageIdentifiers.Large.plus,
+        isEnabled: true,
+        a11yLabel: .Toolbars.NewTabButton,
+        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
+
     lazy var shareAction = ToolbarActionState(
         actionType: .share,
         iconName: StandardImageIdentifiers.Large.shareApple,
