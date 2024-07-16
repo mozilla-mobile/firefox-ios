@@ -10,4 +10,9 @@ struct ToolbarFlagManager {
         return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.toolbarRefactor,
                                                                  checking: .buildOnly)
     }
+
+    static var isOneTapNewTabEnabled: Bool {
+        return LegacyFeatureFlagsManager.shared.isFeatureEnabled(.toolbarOneTapNewTab,
+                                                                 checking: .buildOnly)
+    }
 }
