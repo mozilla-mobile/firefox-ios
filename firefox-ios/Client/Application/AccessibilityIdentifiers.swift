@@ -16,6 +16,7 @@ public struct AccessibilityIdentifiers {
     /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
     /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {
+        static let urlBarBorder = "TabToolbar.urlBarBorder"
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
         static let trackingProtection = "TabLocationView.trackingProtectionButton"
