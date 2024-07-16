@@ -97,7 +97,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
 
     private lazy var scanButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
-            title: .FxASignin_QRScanSignin,
+            title: ".FxASignin_QRScanSignin fdasfsa fsaf sdaf safd asf asfsa",
             a11yIdentifier: AccessibilityIdentifiers.Settings.FirefoxAccount.qrButton,
             imageTitlePadding: UX.buttonHorizontalInset
         )
@@ -226,6 +226,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                                   constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
     }
 
     func applyTheme() {
@@ -238,7 +240,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         scanButton.applyTheme(theme: theme)
         emailButton.applyTheme(theme: theme)
 
-        scanButton.configuration?.image = signinSyncQRImage?.withRenderingMode(.alwaysTemplate)
+        scanButton.setImage(signinSyncQRImage?.withRenderingMode(.alwaysTemplate), for: .normal)
     }
 
     // MARK: Button Tap Functions
