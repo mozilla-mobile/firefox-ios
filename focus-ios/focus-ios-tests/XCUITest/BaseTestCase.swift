@@ -118,9 +118,8 @@ class BaseTestCase: XCTestCase {
         waitForExistence(app.textFields["URLBar.urlText"])
         app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].clearAndEnterText(text: url)
-        sleep(1)
+        waitForValueContains(app.textFields["URLBar.urlText"], value: url)
         app.textFields["URLBar.urlText"].typeText("\n")
-        waitForExistence(app.progressIndicators.element(boundBy: 0))
 
 //        if waitForLoadToFinish {
 //            let finishLoadingTimeout: TimeInterval = 30
@@ -149,6 +148,7 @@ class BaseTestCase: XCTestCase {
     func waitForWebPageLoad () {
         let app = XCUIApplication()
         let finishLoadingTimeout: TimeInterval = 60
+        let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
         expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
