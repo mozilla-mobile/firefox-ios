@@ -56,7 +56,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                xcodebuild_test_plan: ['FullFunctionalTests']
+                xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
@@ -91,7 +91,6 @@ jobs:
                     -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
                     -testPlan ${{ matrix.xcodebuild_test_plan }} \
                     -resultBundlePath ${{ env.test_results_directory }}/results \
-                    -test-iterations 10 \
                     | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
               continue-on-error: true
