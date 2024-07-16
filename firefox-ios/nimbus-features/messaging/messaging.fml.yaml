@@ -103,11 +103,10 @@ objects:
       action:
         # We would like this to be of ActionName type, but it accepts https:// URLs
         # so changing this would be a breaking change.
-        type: ActionName
+        type: Option<ActionName>
         description: >
           The name of a deeplink URL to be opened if the button is clicked.
-        # This should never be defaulted.
-        default: OPEN_URL
+        default: null
       action-params:
         type: Map<String, String>
         description: Query parameters appended to the deeplink action URL
