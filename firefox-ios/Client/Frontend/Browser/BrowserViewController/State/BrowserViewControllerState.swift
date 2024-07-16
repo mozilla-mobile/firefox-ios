@@ -14,6 +14,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case forward
         case reload
         case stopLoading
+        case newTab
     }
 
     enum DisplayType {
@@ -216,6 +217,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .home,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.addNewTab:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                navigateTo: .newTab,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showQRcodeReader:
             return BrowserViewControllerState(

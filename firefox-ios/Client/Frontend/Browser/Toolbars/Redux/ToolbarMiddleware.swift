@@ -183,6 +183,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
+        case .newTab:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addNewTab)
+            store.dispatch(action)
         case .qrCode:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)

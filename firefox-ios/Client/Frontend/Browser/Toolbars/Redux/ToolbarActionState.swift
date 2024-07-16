@@ -9,6 +9,7 @@ struct ToolbarActionState: Equatable {
         case back
         case forward
         case home
+        case newTab
         case search
         case tabs
         case menu

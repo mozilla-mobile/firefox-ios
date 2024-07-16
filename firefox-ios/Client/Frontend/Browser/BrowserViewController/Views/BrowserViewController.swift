@@ -1898,6 +1898,8 @@ class BrowserViewController: UIViewController,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
         case .stopLoading:
             tabManager.selectedTab?.stop()
+        case .newTab:
+            topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }
     }
 
