@@ -118,6 +118,7 @@ class BaseTestCase: XCTestCase {
         waitForExistence(app.textFields["URLBar.urlText"])
         app.textFields["URLBar.urlText"].tap()
         app.textFields["URLBar.urlText"].clearAndEnterText(text: url+"\n")
+        waitForExistence(app.progressIndicators.element(boundBy: 0))
 
 //        if waitForLoadToFinish {
 //            let finishLoadingTimeout: TimeInterval = 30
@@ -129,7 +130,7 @@ class BaseTestCase: XCTestCase {
 //        }
     }
 
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 10.0) {
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 30) {
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)

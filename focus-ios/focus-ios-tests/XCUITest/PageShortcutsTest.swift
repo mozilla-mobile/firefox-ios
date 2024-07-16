@@ -67,7 +67,7 @@ class PageShortcutsTest: BaseTestCase {
         waitForWebPageLoad()
 
         // Tap on shortcuts settings menu option
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 15)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         if iPad() {
             waitForExistence(app.collectionViews.cells.element(boundBy: 0))
