@@ -649,7 +649,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         backupCloseTabs = tabs
 
         for tab in currentModeTabs {
-            await self.removeTab(tab.tabUUID) // updates selected tab...
+            await self.removeTab(tab.tabUUID)
         }
 
         // Save the tab state that existed prior to removals (preserves original selected tab)
