@@ -54,7 +54,7 @@ class TabToolbarHelperTests: XCTestCase {
 
     func testTelemetryForSiteMenu() {
         mockToolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(mockToolbar, button: mockToolbar.appMenuButton)
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.OldStrings.v130.AppMenu.siteMenu)
     }
 
     func test_tabToolBarHelper_basicCreation_doesntLeak() {

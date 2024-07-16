@@ -60,7 +60,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         actionType: .menu,
         iconName: StandardImageIdentifiers.Large.appMenu,
         isEnabled: true,
-        a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+        a11yLabel: .OldStrings.v130.AppMenu.Toolbar.MenuButtonAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
 
     lazy var tabsAction = ToolbarActionState(

@@ -51,7 +51,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
             }
             if self.hasRemoteClients {
                 actions.append(UIPreviewAction(
-                    title: .AppMenu.TouchActions.SendToDeviceTitle,
+                    title: .OldStrings.v130.AppMenu.TouchActions.SendToDeviceTitle,
                     style: .default
                 ) { [weak self] previewAction, viewController in
                     guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
@@ -99,7 +99,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
             }
             if self.hasRemoteClients {
                 actions.append(UIAction(
-                    title: .AppMenu.TouchActions.SendToDeviceTitle,
+                    title: .OldStrings.v130.AppMenu.TouchActions.SendToDeviceTitle,
                     image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
                     identifier: nil
                 ) { [weak self] _ in

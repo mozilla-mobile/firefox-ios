@@ -56,13 +56,13 @@ enum LibraryPanelType: Int, CaseIterable {
     var title: String {
         switch self {
         case .bookmarks:
-            return .AppMenu.AppMenuBookmarksTitleString
+            return .OldStrings.v130.AppMenu.AppMenuBookmarksTitleString
         case .history:
-            return .AppMenu.AppMenuHistoryTitleString
+            return .OldStrings.v130.AppMenu.AppMenuHistoryTitleString
         case .downloads:
-            return .AppMenu.AppMenuDownloadsTitleString
+            return .OldStrings.v130.AppMenu.AppMenuDownloadsTitleString
         case .readingList:
-            return .AppMenu.AppMenuReadingListTitleString
+            return .OldStrings.v130.AppMenu.AppMenuReadingListTitleString
         }
     }
 

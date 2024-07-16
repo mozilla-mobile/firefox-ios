@@ -53,7 +53,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
-                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+                                a11yLabel: .OldStrings.v130.AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIpad: UIBarButtonItem = {
@@ -67,7 +67,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
-                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+                                a11yLabel: .OldStrings.v130.AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIphone: UIBarButtonItem = {

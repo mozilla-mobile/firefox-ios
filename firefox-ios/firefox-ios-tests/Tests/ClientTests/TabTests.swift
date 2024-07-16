@@ -36,7 +36,7 @@ class TabTests: XCTestCase {
         let url = URL(string: "internal://local/about/home")!
         let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
         tab.url = url
-        let expectedDisplayTitle = String.AppMenu.AppMenuOpenHomePageTitleString
+        let expectedDisplayTitle = String.OldStrings.v130.AppMenu.AppMenuOpenHomePageTitleString
         XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
     }
 

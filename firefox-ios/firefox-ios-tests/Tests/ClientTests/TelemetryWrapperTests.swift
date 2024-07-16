@@ -1123,7 +1123,7 @@ class TelemetryWrapperTests: XCTestCase {
     func test_signIntoSync_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
 
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.signIntoSync)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.OldStrings.v130.AppMenu.signIntoSync)
     }
 
     func test_settingsMenuSync_GleanIsCalled() {
@@ -1133,7 +1133,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_appMenuLoginsAndPasswordsTapped_GleanIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .logins)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.AppMenu.passwords)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.OldStrings.v130.AppMenu.passwords)
     }
 
     // MARK: Logins and Passwords

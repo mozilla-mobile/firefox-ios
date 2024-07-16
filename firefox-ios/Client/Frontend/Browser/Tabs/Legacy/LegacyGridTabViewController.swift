@@ -628,7 +628,7 @@ extension LegacyGridTabViewController: LegacyTabPeekDelegate {
     }
 
     func tabPeekDidCopyUrl() {
-        SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+        SimpleToast().showAlertWithText(.OldStrings.v130.AppMenu.AppMenuCopyURLConfirmMessage,
                                         bottomContainer: view,
                                         theme: currentTheme(),
                                         bottomConstraintPadding: -toolbarHeight)
@@ -701,7 +701,7 @@ extension LegacyGridTabViewController {
         guard !tabDisplayManager.isDragging else { return }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
+        controller.addAction(UIAlertAction(title: .OldStrings.v130.AppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
                                            handler: { _ in self.closeTabsTrayBackground() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
