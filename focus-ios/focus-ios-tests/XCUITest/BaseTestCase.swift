@@ -145,7 +145,7 @@ class BaseTestCase: XCTestCase {
 
     func waitForWebPageLoad () {
         let app = XCUIApplication()
-        let finishLoadingTimeout: TimeInterval = 120
+        let finishLoadingTimeout: TimeInterval = 60
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
         expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)
