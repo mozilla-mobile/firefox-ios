@@ -54,17 +54,23 @@ public actor DefaultTabDataStore: TabDataStore {
             guard let fileURL = windowURLPath(for: uuid, isBackup: false),
                   fileManager.fileExists(atPath: fileURL),
                   let windowData = parseWindowDataFile(fromURL: fileURL) else {
-                logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .fatal, category: .tabs)
+                logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .warning, category: .tabs)
                 throw TabDataError.failedToFetchData
             }
+            logger.log("Successfully fetched window/tab data", level: .debug, category: .tabs)
             return windowData
         } catch {
-            logger.log("Error fetching window data: UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
+            logger.log("Error fetching window/tab data for UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
             guard let backupURL = windowURLPath(for: uuid, isBackup: true),
                   fileManager.fileExists(atPath: backupURL),
                   let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+                // Check if the user has other windows, maybe the UUID has changed unexpectedly? [FXIOS-9517]
+                let fileCount = getNumberOfWindowsFiles()
+                let error = "Failed to open backup window/tab data for UUID = \(uuid), window files: \(fileCount ?? -1)"
+                logger.log(error, level: .fatal, category: .tabs)
                 return nil
             }
+            logger.log("Returned backup window/tab data: UUID = \(uuid)", level: .debug, category: .tabs)
             return backupWindowData
         }
     }
@@ -184,5 +190,13 @@ public actor DefaultTabDataStore: TabDataStore {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
         let baseFilePath = filePrefix + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
+    }
+    
+    // Expressly for debugging log during incident described in ticket FXIOS-9517. Can be removed later.
+    private func getNumberOfWindowsFiles() -> Int? {
+        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
+            return nil
+        }
+        return fileManager.contentsOfDirectory(at: directoryURL).count
     }
 }
