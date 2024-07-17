@@ -10,10 +10,11 @@ protocol SiteImageView: UIView {
     var uniqueID: UUID? { get set }
     var imageFetcher: SiteImageHandler { get set }
 
+    /// The URL string representing the currently-displayed image on the view.
+    /// This is `nil` if an image has been set manually.
+    var currentURLString: String? { get set }
     func updateImage(site: SiteImageModel)
     func setImage(imageModel: SiteImageModel)
-    // Avoid multiple image loading in parallel. Only start a new request if the URL string has changed
-    var currentURLString: String? { get set }
     func canMakeRequest(with siteURLString: String?) -> Bool
 }
 
