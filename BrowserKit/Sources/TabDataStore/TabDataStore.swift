@@ -49,26 +49,26 @@ public actor DefaultTabDataStore: TabDataStore {
     // MARK: Fetching Window Data
 
     public func fetchWindowData(uuid: UUID) async -> WindowData? {
-        logger.log("Attempting to fetch window/tab data", level: .debug, category: .tabs)
+        logger.log("Attempting to fetch window data", level: .debug, category: .tabs)
         do {
             guard let fileURL = windowURLPath(for: uuid, isBackup: false),
                   fileManager.fileExists(atPath: fileURL),
                   let windowData = parseWindowDataFile(fromURL: fileURL) else {
-                logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .warning, category: .tabs)
+                logger.log("Failed to open window data for UUID: \(uuid)", level: .warning, category: .tabs)
                 throw TabDataError.failedToFetchData
             }
-            logger.log("Successfully fetched window/tab data", level: .debug, category: .tabs)
+            logger.log("Successfully fetched window data", level: .debug, category: .tabs)
             return windowData
         } catch {
-            logger.log("Error fetching window/tab data for UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
+            logger.log("Error fetching window data for UUID: \(uuid) Error: \(error)", level: .warning, category: .tabs)
             guard let backupURL = windowURLPath(for: uuid, isBackup: true),
                   fileManager.fileExists(atPath: backupURL),
                   let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
-                let error = "Failed to open backup window/tab data for UUID = \(uuid)"
+                let error = "Failed to open backup window data for UUID: \(uuid)"
                 logger.log(error, level: .fatal, category: .tabs)
                 return nil
             }
-            logger.log("Returned backup window/tab data: UUID = \(uuid)", level: .debug, category: .tabs)
+            logger.log("Returned backup window data for UUID: \(uuid)", level: .debug, category: .tabs)
             return backupWindowData
         }
     }
