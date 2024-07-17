@@ -51,23 +51,65 @@ public actor DefaultTabDataStore: TabDataStore {
     public func fetchWindowData(uuid: UUID) async -> WindowData? {
         logger.log("Attempting to fetch window data", level: .debug, category: .tabs)
         do {
-            guard let fileURL = windowURLPath(for: uuid, isBackup: false),
-                  fileManager.fileExists(atPath: fileURL),
-                  let windowData = parseWindowDataFile(fromURL: fileURL) else {
-                logger.log("Failed to open window data for UUID: \(uuid)", level: .fatal, category: .tabs)
+            guard let fileURL = windowURLPath(for: uuid, isBackup: false) else {
+                logger.log(
+                    "Failed to open window data for UUID: \(uuid), nil fileURL",
+                    level: .fatal,
+                    category: .tabs
+                )
                 throw TabDataError.failedToFetchData
             }
+
+            guard fileManager.fileExists(atPath: fileURL) else {
+                logger.log(
+                    "Failed to open window data for UUID: \(uuid), file doesn't exist",
+                    level: .fatal,
+                    category: .tabs
+                )
+                throw TabDataError.failedToFetchData
+            }
+
+            guard let windowData = parseWindowDataFile(fromURL: fileURL) else {
+                logger.log(
+                    "Failed to open window data for UUID: \(uuid), file parsing failed",
+                    level: .fatal,
+                    category: .tabs
+                )
+                throw TabDataError.failedToFetchData
+            }
+
             logger.log("Successfully fetched window data", level: .debug, category: .tabs)
             return windowData
         } catch {
             logger.log("Error fetching window data for UUID: \(uuid) Error: \(error)", level: .warning, category: .tabs)
-            guard let backupURL = windowURLPath(for: uuid, isBackup: true),
-                  fileManager.fileExists(atPath: backupURL),
-                  let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
-                let error = "Failed to open backup window data for UUID: \(uuid)"
-                logger.log(error, level: .fatal, category: .tabs)
+
+            guard let backupURL = windowURLPath(for: uuid, isBackup: true) else {
+                logger.log(
+                    "Failed to open backup window data for UUID: \(uuid), nil fileURL",
+                    level: .fatal,
+                    category: .tabs
+                )
                 return nil
             }
+
+            guard fileManager.fileExists(atPath: backupURL) else {
+                logger.log(
+                    "Failed to open backup window data for UUID: \(uuid), file doesn't exist",
+                    level: .fatal,
+                    category: .tabs
+                )
+                return nil
+            }
+
+            guard let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+                logger.log(
+                    "Failed to open backup window data for UUID: \(uuid), file parsing failed",
+                    level: .fatal,
+                    category: .tabs
+                )
+                return nil
+            }
+
             logger.log("Returned backup window data for UUID: \(uuid)", level: .debug, category: .tabs)
             return backupWindowData
         }
