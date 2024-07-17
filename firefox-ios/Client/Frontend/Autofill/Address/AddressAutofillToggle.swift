@@ -75,7 +75,6 @@ struct AddressAutofillToggle: View {
                     .font(.body)
                     .foregroundColor(textColor)
 
-                // Description for the Toggle
                 Text(String.Addresses.Settings.SwitchDescription)
                     .font(.footnote)
                     .foregroundColor(descriptionTextColor)
