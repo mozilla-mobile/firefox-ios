@@ -64,9 +64,7 @@ public actor DefaultTabDataStore: TabDataStore {
             guard let backupURL = windowURLPath(for: uuid, isBackup: true),
                   fileManager.fileExists(atPath: backupURL),
                   let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
-                // Check if the user has other windows, maybe the UUID has changed unexpectedly? [FXIOS-9517]
-                let fileCount = getNumberOfWindowsFiles()
-                let error = "Failed to open backup window/tab data for UUID = \(uuid), window files: \(fileCount ?? -1)"
+                let error = "Failed to open backup window/tab data for UUID = \(uuid)"
                 logger.log(error, level: .fatal, category: .tabs)
                 return nil
             }
