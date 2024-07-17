@@ -439,7 +439,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .AppMenu.Help,
                                      iconString: StandardImageIdentifiers.Large.helpCircle) { _ in
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
-                self.delegate?.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, completion: nil)
+                self.delegate?.openURLInNewTab(
+                    url,
+                    isPrivate: self.tabManager.selectedTab?.isPrivate ?? false,
+                    completion: nil
+                )
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .help)
         }.items
@@ -554,7 +558,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                                isEnabled: showBadgeForWhatsNew) { _ in
             if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
-                self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, completion: nil)
+                self.delegate?.openURLInNewTab(
+                    whatsNewURL,
+                    isPrivate: self.tabManager.selectedTab?.isPrivate ?? false,
+                    completion: nil
+                )
             }
         }.items
         return whatsNewAction

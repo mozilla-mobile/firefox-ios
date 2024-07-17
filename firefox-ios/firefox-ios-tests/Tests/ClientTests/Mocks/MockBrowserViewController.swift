@@ -75,8 +75,7 @@ class MockBrowserViewController: BrowserViewController {
         focusLocationField: Bool,
         isPrivate: Bool,
         searchFor searchText: String?,
-        completion: (() -> Void)? = nil)
-    {
+        completion: (() -> Void)? = nil) {
         openBlankNewTabCalled = true
         openBlankNewTabFocusLocationField = focusLocationField
         openBlankNewTabIsPrivate = isPrivate
