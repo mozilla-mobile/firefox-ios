@@ -67,6 +67,8 @@ class WebsiteDataManagementViewController: UIViewController,
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: ThemedTableViewCell.cellIdentifier)
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "showMoreCell")
         tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
@@ -194,9 +196,18 @@ class WebsiteDataManagementViewController: UIViewController,
             return ThemedTableViewCell()
         }
         switch section {
-        case .sites, .showMore:
+        case .sites:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedTableViewCell
+            else {
+                return ThemedTableViewCell()
+            }
+            return cell
+        case .showMore:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "showMoreCell",
                 for: indexPath
             ) as? ThemedTableViewCell
             else {
