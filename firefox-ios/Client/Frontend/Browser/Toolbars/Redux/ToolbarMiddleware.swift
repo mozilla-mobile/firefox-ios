@@ -329,6 +329,23 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     // MARK: Address Toolbar Actions
 
+    private func addressToolbarBrowserActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID)
+        else { return actions }
+
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+
+        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs), menuAction])
+        return actions
+    }
+
     private func addressToolbarNavigationActions(
         action: ToolbarMiddlewareAction,
         state: AppState,
@@ -478,12 +495,13 @@ class ToolbarMiddleware: FeatureFlaggable {
             action: action,
             state: state,
             isEditing: editing)
-            let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
+        let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
+        let browserActions = addressToolbarBrowserActions(action: action, state: state)
 
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
             pageActions: pageActions,
-            browserActions: toolbarState.addressToolbar.browserActions,
+            browserActions: browserActions,
             borderPosition: toolbarState.addressToolbar.borderPosition,
             url: url ?? toolbarState.addressToolbar.url,
             lockIconImageName: lockIconImageName,

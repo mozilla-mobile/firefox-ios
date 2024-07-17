@@ -86,7 +86,7 @@ struct AddressBarState: StateType, Equatable {
                 windowUUID: state.windowUUID,
                 navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
                 pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: state.browserActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 lockIconImageName: state.lockIconImageName,
