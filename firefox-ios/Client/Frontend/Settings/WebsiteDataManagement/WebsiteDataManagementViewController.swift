@@ -16,6 +16,7 @@ class WebsiteDataManagementViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private static let showMoreCellReuseIdentifier = "showMoreCell"
 
     private enum Section: Int {
         case sites = 0
@@ -69,7 +70,7 @@ class WebsiteDataManagementViewController: UIViewController,
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: ThemedTableViewCell.cellIdentifier)
-        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "showMoreCell")
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier)
         tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
@@ -207,7 +208,7 @@ class WebsiteDataManagementViewController: UIViewController,
             return cell
         case .showMore:
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "showMoreCell",
+                withIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier,
                 for: indexPath
             ) as? ThemedTableViewCell
             else {
