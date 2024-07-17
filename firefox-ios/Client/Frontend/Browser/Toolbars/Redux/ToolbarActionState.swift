@@ -17,6 +17,7 @@ struct ToolbarActionState: Equatable {
         case reload
         case stopLoading
         case trackingProtection
+        case locationView
         case readerMode
         case dataClearance
         case cancelEdit

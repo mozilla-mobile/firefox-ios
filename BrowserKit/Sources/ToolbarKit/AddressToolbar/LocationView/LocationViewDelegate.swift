@@ -28,8 +28,4 @@ protocol LocationViewDelegate: AnyObject {
     /// - Returns: An optional array of `UIAccessibilityCustomAction` objects.
     /// Return `nil` if no custom actions are provided.
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]?
-
-    /// Called when the user performs a long press on the URL text field within the location view.
-    ///
-    func locationViewDidLongPressURLTextField()
 }

@@ -230,6 +230,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: windowUUID,
                                               actionType: GeneralBrowserActionType.showTabsLongPressActions)
             store.dispatch(action)
+        case .locationView:
+            let action = GeneralBrowserAction(windowUUID: windowUUID,
+                                              actionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
+            store.dispatch(action)
         default:
             break
         }

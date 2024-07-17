@@ -1862,6 +1862,8 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showBackForwardList()
         case .tabsLongPressActions:
             presentActionSheet(from: view)
+        case .locationViewLongPressAction:
+            presentLongPressActionSheetForLocationView()
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
@@ -1903,6 +1905,14 @@ class BrowserViewController: UIViewController,
                 navigateInTab(tab: currentTab, webViewStatus: .title)
             }
         }
+    }
+
+    private func presentLongPressActionSheetForLocationView() {
+        let urlActions = getLongPressLocationBarActions(with: addressToolbarContainer, alertContainer: contentContainer)
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        presentActionSheet(from: addressToolbarContainer, with: urlActions)
     }
 
     func didTapOnHome() {
@@ -2771,14 +2781,6 @@ class BrowserViewController: UIViewController,
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }
-    }
-
-    func addressToolbarContainerDidLongPressURLTextField() {
-        let urlActions = getLongPressLocationBarActions(with: addressToolbarContainer, alertContainer: contentContainer)
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        presentActionSheet(from: addressToolbarContainer, with: urlActions)
     }
 }
 

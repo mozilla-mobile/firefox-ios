@@ -19,6 +19,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: (() -> Void)?
+    private var onLongPress: (() -> Void)?
     private var delegate: LocationViewDelegate?
 
     private var isURLTextFieldEmpty: Bool {
@@ -116,6 +117,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         updateIconContainer()
         self.delegate = delegate
         searchTerm = state.searchTerm
+        onLongPress = state.onLongPress
     }
 
     // MARK: - Layout
@@ -292,7 +294,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     @objc
     private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
-            delegate?.locationViewDidLongPressURLTextField()
+            onLongPress?()
         }
     }
 
