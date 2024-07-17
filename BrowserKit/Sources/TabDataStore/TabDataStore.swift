@@ -189,12 +189,4 @@ public actor DefaultTabDataStore: TabDataStore {
         let baseFilePath = filePrefix + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
     }
-    
-    // Expressly for debugging log during incident described in ticket FXIOS-9517. Can be removed later.
-    private func getNumberOfWindowsFiles() -> Int? {
-        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
-            return nil
-        }
-        return fileManager.contentsOfDirectory(at: directoryURL).count
-    }
 }
