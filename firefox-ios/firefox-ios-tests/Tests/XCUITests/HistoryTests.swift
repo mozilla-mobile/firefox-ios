@@ -62,8 +62,8 @@ class HistoryTests: BaseTestCase {
         // Go to History List from Top Sites and check it is empty
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
-        XCTAssertTrue(app.tables.cells[HistoryPanelA11y.recentlyClosedCell].staticTexts["Recently Closed"].exists)
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+        mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell].staticTexts["Recently Closed"])
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307301
@@ -73,7 +73,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
         mozWaitForElementToExist(app.otherElements.staticTexts["Firefox Sync"])
-        XCTAssertTrue(app.otherElements.buttons["Sync and Save Data"].exists, "Sign in button does not appear")
+        mozWaitForElementToExist(app.otherElements.buttons["Sync and Save Data"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307487
@@ -82,9 +82,9 @@ class HistoryTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             // Browse to have an item in history list
             navigator.goto(LibraryPanel_History)
-            mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell], timeout: TIMEOUT)
-            XCTAssertTrue(app.tables.cells.staticTexts[oldHistoryEntries[0]].exists)
-            XCTAssertFalse(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+            mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
+            mozWaitForElementToExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
+            mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
 
             // Clear all private data via the settings
             navigator.goto(HomePanelsScreen)
@@ -97,8 +97,8 @@ class HistoryTests: BaseTestCase {
             navigator.goto(LibraryPanel_History)
             mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
             mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
-            XCTAssertFalse(app.tables.cells.staticTexts[oldHistoryEntries[0]].exists)
-            XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+            mozWaitForElementToNotExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
+            mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
         }
     }
 
@@ -107,15 +107,15 @@ class HistoryTests: BaseTestCase {
     func testClearPrivateData() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
         navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         // Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
         app.tables.cells["ClearPrivateData"].tap()
-        mozWaitForElementToExist(app.tables.cells["ClearPrivateData"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables.cells["ClearPrivateData"])
         app.alerts.buttons["OK"].tap()
 
         // Wait for OK pop-up to disappear after confirming
-        mozWaitForElementToNotExist(app.alerts.buttons["OK"], timeout: TIMEOUT)
+        mozWaitForElementToNotExist(app.alerts.buttons["OK"])
 
         // Try to tap on the disabled Clear Private Data button
         app.tables.cells["ClearPrivateData"].tap()
@@ -136,8 +136,8 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307463
@@ -149,16 +149,16 @@ class HistoryTests: BaseTestCase {
         // On regular mode, the closed tab is listed in "Recently Closed" list
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
 
         // On private mode, the closed tab on regular mode is listed in "Recently Closed" list as well
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307475
@@ -177,8 +177,8 @@ class HistoryTests: BaseTestCase {
         closeKeyboard()
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
-        XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307479
@@ -196,8 +196,8 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307482
@@ -210,7 +210,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
 
         // Clear all private data via the settings
         navigator.goto(HomePanelsScreen)
@@ -222,8 +222,8 @@ class HistoryTests: BaseTestCase {
         // The closed tab is *not* listed in "Recently Closed Tabs List"
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
-        XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307483
@@ -236,11 +236,11 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.plus].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].exists)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.plus])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307484
@@ -253,7 +253,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
         XCTAssertEqual(userState.numTabs, 1)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -267,7 +267,7 @@ class HistoryTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
-        XCTAssertTrue(app.staticTexts[bookOfMozilla["title"]!].exists)
+        mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         // userState.numTabs does not work on iOS 15
         if #available(iOS 16, *) {
             XCTAssertEqual(userState.numTabs, 2)
@@ -284,7 +284,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
         mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].tap()
@@ -304,7 +304,7 @@ class HistoryTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.staticTexts["Private Browsing"])
         }
-        XCTAssertTrue(app.staticTexts[bookOfMozilla["title"]!].exists)
+        mozWaitForElementToExist(app.staticTexts[bookOfMozilla["title"]!])
         XCTAssertEqual(userState.numTabs, 1)
     }
 
@@ -334,7 +334,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
 
         // On regular mode, the "Recently Closed Tabs List" is empty, too
@@ -345,7 +345,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToNotExist(app.tables["Recently Closed Tabs List"])
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
 
@@ -357,19 +357,19 @@ class HistoryTests: BaseTestCase {
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
         urlBarBackButton.press(forDuration: 1)
-        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
         app.tables.staticTexts["The Book of Mozilla"].tap()
-        XCTAssertFalse(app.tables.staticTexts["The Book of Mozilla"].exists)
+        mozWaitForElementToNotExist(app.tables.staticTexts["The Book of Mozilla"])
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
         urlBarBackButton.press(forDuration: 1)
-        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
         app.tables.staticTexts["The Book of Mozilla"].tap()
         urlBarBackButton.tap()
         XCTAssertFalse(urlBarBackButton.isEnabled)
         urlBarForwardButton.press(forDuration: 1)
-        XCTAssertTrue(app.tables.staticTexts["The Book of Mozilla"].exists)
+        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
         app.tables.staticTexts["The Book of Mozilla"].tap()
         mozWaitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
     }
@@ -393,7 +393,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView], timeout: TIMEOUT)
-        XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts["Example Domain"])
     }
 
     private func openBookOfMozilla() {
@@ -436,10 +436,10 @@ class HistoryTests: BaseTestCase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Today")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            mozWaitForElementToExist(app.tables.cells.staticTexts[entry])
         }
-        XCTAssertFalse(app.staticTexts["Today"].exists)
-        XCTAssertTrue(app.staticTexts["Older"].exists)
+        mozWaitForElementToNotExist(app.staticTexts["Today"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
 
         // Begin Test for Today and Yesterday
         // Visit a page to create a recent history entry.
@@ -451,8 +451,8 @@ class HistoryTests: BaseTestCase {
         for entry in oldHistoryEntries {
             XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
         }
-        XCTAssertFalse(app.staticTexts["Today"].exists)
-        XCTAssertTrue(app.staticTexts["Older"].exists)
+        mozWaitForElementToNotExist(app.staticTexts["Today"])
+        mozWaitForElementToExist(app.staticTexts["Older"])
 
         // Begin Test for Everything
         // Visit a page to create a recent history entry.
@@ -462,11 +462,9 @@ class HistoryTests: BaseTestCase {
         tapOnClearRecentHistoryOption(optionSelected: "Everything")
         for entry in oldHistoryEntries {
             mozWaitForElementToNotExist(app.tables.cells.staticTexts[entry])
-
-        XCTAssertFalse(app.tables.cells.staticTexts[entry].exists, "History not removed")
         }
-        XCTAssertFalse(app.staticTexts["Today"].exists)
-        XCTAssertFalse(app.staticTexts["Older"].exists)
+        mozWaitForElementToNotExist(app.staticTexts["Today"])
+        mozWaitForElementToNotExist(app.staticTexts["Older"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306890
@@ -482,6 +480,6 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Delete"], timeout: TIMEOUT)
         app.buttons["Delete"].tap()
         mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 }

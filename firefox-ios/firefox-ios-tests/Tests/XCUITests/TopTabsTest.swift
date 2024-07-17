@@ -36,7 +36,7 @@ class TopTabsTest: BaseTestCase {
 
         // The tab tray shows the correct tabs
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 15)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
         } else {
             navigator.goto(TabTray)
@@ -126,13 +126,13 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: 10)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton])
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
 
         if iPad() {
@@ -180,13 +180,13 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
 
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: 10)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton])
             app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 5)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         }
 
         navigator.goto(URLBarOpen)
@@ -198,7 +198,7 @@ class TopTabsTest: BaseTestCase {
         }
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        mozWaitForElementToExist(app.staticTexts["Private Browsing"], timeout: 10)
+        mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2354579
@@ -281,8 +281,7 @@ class TopTabsTest: BaseTestCase {
             mozWaitForElementToExist(app.buttons["Show Tabs"], timeout: 10)
             app.buttons["Show Tabs"].press(forDuration: 1)
             mozWaitForElementToExist(app.cells.otherElements[StandardImageIdentifiers.Large.plus])
-            XCTAssertTrue(app.cells.otherElements[StandardImageIdentifiers.Large.plus].exists)
-            XCTAssertTrue(app.cells.otherElements[StandardImageIdentifiers.Large.cross].exists)
+            mozWaitForElementToExist(app.cells.otherElements[StandardImageIdentifiers.Large.cross])
 
             // Open New Tab
             app.cells.otherElements[StandardImageIdentifiers.Large.plus].tap()

@@ -16,7 +16,7 @@ class ReadingListTests: BaseTestCase {
         app.buttons["Reader View"].tap()
         // The settings of reader view are shown as well as the content of the web site
         mozWaitForElementToExist(app.buttons["Display Settings"], timeout: TIMEOUT)
-        XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
+        mozWaitForElementToExist(app.webViews.staticTexts["The Book of Mozilla"])
     }
 
     private func checkReadingListNumberOfItems(items: Int) {
@@ -44,7 +44,6 @@ class ReadingListTests: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
     }
 
@@ -71,7 +70,6 @@ class ReadingListTests: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
         app.buttons["Done"].tap()
         updateScreenGraph()
@@ -125,7 +123,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["ReadingTable"])
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        XCTAssertTrue(savedToReadingList.exists)
+        mozWaitForElementToExist(savedToReadingList)
 
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
@@ -148,7 +146,7 @@ class ReadingListTests: BaseTestCase {
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.buttons["Remove"])
         app.buttons["Remove"].tap()
-        XCTAssertFalse(savedToReadingList.exists)
+        mozWaitForElementToNotExist(savedToReadingList)
 
         // Reader list view should be empty
         checkReadingListNumberOfItems(items: 0)
@@ -212,7 +210,6 @@ class ReadingListTests: BaseTestCase {
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
-        XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306893

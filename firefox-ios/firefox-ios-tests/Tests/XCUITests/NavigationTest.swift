@@ -24,7 +24,7 @@ class NavigationTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
-        XCTAssert(app.textFields["url"].exists)
+        mozWaitForElementToExist(app.textFields["url"])
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!
 
         // Check the url placeholder text and that the back and forward buttons are disabled
@@ -152,12 +152,12 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testLongPressLinkOptions() {
         openContextMenuForArticleLink()
-        XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Bookmark Link"].exists, "The option is not shown")
+        mozWaitForElementToExist(app.buttons["Open in New Tab"])
+        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
+        mozWaitForElementToExist(app.buttons["Copy Link"])
+        mozWaitForElementToExist(app.buttons["Download Link"])
+        mozWaitForElementToExist(app.buttons["Share Link"])
+        mozWaitForElementToExist(app.buttons["Bookmark Link"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441496
@@ -279,7 +279,7 @@ class NavigationTest: BaseTestCase {
         // There should be one item downloaded. It's name and size should be shown
         let downloadedList = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(downloadedList, 1, "The number of items in the downloads table is not correct")
-        XCTAssertTrue(app.tables.cells.staticTexts["example-domains.html"].exists)
+        mozWaitForElementToExist(app.tables.cells.staticTexts["example-domains.html"])
 
         // Tap on the just downloaded link to check that the web page is loaded
         app.tables.cells.staticTexts["example-domains.html"].tap()
@@ -374,7 +374,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.links["Visit site anyway"])
         app.links["Visit site anyway"].tap()
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT)
-        XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
+        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307022
@@ -403,24 +403,24 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.tables["Context Menu"])
 
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.history].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.download].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.readingList].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.login].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.sync].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.edit].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.settings].exists)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.history])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.download])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.readingList])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.login])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.edit])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
         let urlBar = app.textFields["url"]
-        mozWaitForElementToExist(urlBar, timeout: TIMEOUT)
+        mozWaitForElementToExist(urlBar)
         urlBar.tap()
 
         let addressBar = app.textFields["address"]
@@ -447,7 +447,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"])
         let numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 2, "Total number of opened tabs should be 2")
-        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain.").exists)
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain."))
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441773
@@ -460,7 +460,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         var numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of regulat opened tabs should be 1")
-        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain.").exists)
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain."))
         if iPad() {
             app.buttons["Private"].tap()
         } else {
@@ -468,7 +468,7 @@ class NavigationTest: BaseTestCase {
         }
         numTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numTabs, 1, "Total number of private opened tabs should be 1")
-        XCTAssertTrue(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"].exists)
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441774
@@ -480,13 +480,13 @@ class NavigationTest: BaseTestCase {
         // The link has been added to the Bookmarks panel in Library
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[website_2["link"]!].exists)
+        mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[website_2["link"]!])
     }
 
     private func openContextMenuForArticleLink() {
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
+        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
     }
  }

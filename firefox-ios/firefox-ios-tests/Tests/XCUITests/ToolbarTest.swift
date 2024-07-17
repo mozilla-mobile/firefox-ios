@@ -31,7 +31,7 @@ class ToolbarTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         let urlPlaceholder = "Search or enter address"
-        XCTAssert(app.textFields["url"].exists)
+        mozWaitForElementToExist(app.textFields["url"])
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!
 
         // Check the url placeholder text and that the back and forward buttons are disabled
@@ -105,7 +105,7 @@ class ToolbarTests: BaseTestCase {
             navigator.openURL(website1["url"]!, waitForLoading: true)
             // Adding the waiter right after navigating to the webpage in order to make the test more stable
             waitUntilPageLoad()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
             let PageOptionsMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             let statusbarElement: XCUIElement = XCUIApplication(
                 bundleIdentifier: "com.apple.springboard"
@@ -121,7 +121,7 @@ class ToolbarTests: BaseTestCase {
                 .matching(identifier: "navigation")
                 .element(boundBy: 0)
                 .staticTexts["Mozilla"]
-            mozWaitForElementToExist(topElement, timeout: 10)
+            mozWaitForElementToExist(topElement)
             XCTAssertTrue(topElement.isHittable)
         }
    }

@@ -84,10 +84,9 @@ class SettingsTests: BaseTestCase {
 
         // Check that the list is shown
         mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
-        XCTAssertTrue(app.tables["OpenWithPage.Setting.Options"].exists)
 
         // Check that the list is shown with all elements disabled
-        XCTAssertTrue(app.tables.staticTexts["OPEN MAIL LINKS WITH"].exists)
+        mozWaitForElementToExist(app.tables.staticTexts["OPEN MAIL LINKS WITH"])
         XCTAssertFalse(app.tables.cells.staticTexts["Mail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Outlook"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["ProtonMail"].isSelected)

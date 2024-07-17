@@ -62,7 +62,7 @@ class LoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields[searchPasswords].exists)
+        mozWaitForElementToExist(app.searchFields[searchPasswords])
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         app.buttons["Settings"].tap()
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -71,9 +71,9 @@ class LoginTest: BaseTestCase {
         navigator.goto(LoginsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields[searchPasswords].exists)
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        mozWaitForElementToExist(app.searchFields[searchPasswords])
+        mozWaitForElementToExist(app.staticTexts[domain])
+        mozWaitForElementToExist(app.staticTexts[domainLogin])
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
@@ -94,7 +94,7 @@ class LoginTest: BaseTestCase {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertTrue(app.staticTexts[domain].exists)
+        mozWaitForElementToExist(app.staticTexts[domain])
         // XCTAssertTrue(app.staticTexts[domainLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
 
@@ -111,7 +111,7 @@ class LoginTest: BaseTestCase {
             saveLogin(givenUrl: testSecondLoginPage)
             openLoginsSettings()
             mozWaitForElementToExist(app.tables["Login List"])
-            XCTAssertTrue(app.staticTexts[domain].exists)
+            mozWaitForElementToExist(app.staticTexts[domain])
             // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
             // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
             if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
@@ -130,8 +130,8 @@ class LoginTest: BaseTestCase {
         app.buttons["SaveLoginPrompt.dontSaveButton"].tap()
         // There should not be any login saved
         openLoginsSettings()
-        XCTAssertFalse(app.staticTexts[domain].exists)
-        XCTAssertFalse(app.staticTexts[domainLogin].exists)
+        mozWaitForElementToNotExist(app.staticTexts[domain])
+        mozWaitForElementToNotExist(app.staticTexts[domainLogin])
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
@@ -140,20 +140,18 @@ class LoginTest: BaseTestCase {
         saveLogin(givenUrl: testLoginPage)
         navigator.goto(SettingsScreen)
         openLoginsSettings()
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        mozWaitForElementToExist(app.staticTexts[domain])
+        mozWaitForElementToExist(app.staticTexts[domainLogin])
         XCTAssertTrue(app.buttons["Edit"].isHittable)
         app.buttons["Edit"].tap()
 
-        XCTAssertTrue(app.buttons["Select All"].exists)
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        mozWaitForElementToExist(app.buttons["Select All"])
+        mozWaitForElementToExist(app.staticTexts[domain])
+        mozWaitForElementToExist(app.staticTexts[domainLogin])
 
         app.staticTexts[domain].tap()
         mozWaitForElementToExist(app.buttons["Deselect All"])
-
-        XCTAssertTrue(app.buttons["Deselect All"].exists)
-        XCTAssertTrue(app.buttons["Delete"].exists)
+        mozWaitForElementToExist(app.buttons["Delete"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306963
@@ -167,8 +165,8 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.alerts["Remove Password?"])
         app.alerts.buttons["Remove"].tap()
         mozWaitForElementToExist(app.tables["Login List"])
-        XCTAssertFalse(app.staticTexts[domain].exists)
-        XCTAssertFalse(app.staticTexts[domainLogin].exists)
+        mozWaitForElementToNotExist(app.staticTexts[domain])
+        mozWaitForElementToNotExist(app.staticTexts[domainLogin])
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
@@ -183,10 +181,10 @@ class LoginTest: BaseTestCase {
         app.staticTexts[domain].tap()
         // The login details are available
         waitForExistence(app.tables["Login Detail List"])
-        XCTAssertTrue(app.tables.cells[loginsListURLLabel].exists)
-        XCTAssertTrue(app.tables.cells[loginsListUsernameLabel].exists)
-        XCTAssertTrue(app.tables.cells[loginsListPasswordLabel].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
+        mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])
+        mozWaitForElementToExist(app.tables.cells[loginsListUsernameLabel])
+        mozWaitForElementToExist(app.tables.cells[loginsListPasswordLabel])
+        mozWaitForElementToExist(app.tables.cells.staticTexts["Delete"])
         // Change the username
         app.buttons["Edit"].tap()
         mozWaitForElementToExist(app.tables["Login Detail List"])
@@ -200,10 +198,10 @@ class LoginTest: BaseTestCase {
         app.buttons["Done"].tap()
         // The username is correctly changed
         mozWaitForElementToExist(app.tables["Login Detail List"])
-        XCTAssertTrue(app.tables.cells[loginsListURLLabel].exists)
-        XCTAssertFalse(app.tables.cells[loginsListUsernameLabel].exists)
-        XCTAssertTrue(app.tables.cells[loginsListUsernameLabelEdited].exists)
-        XCTAssertTrue(app.tables.cells[loginsListPasswordLabel].exists)
+        mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])
+        mozWaitForElementToNotExist(app.tables.cells[loginsListUsernameLabel])
+        mozWaitForElementToExist(app.tables.cells[loginsListUsernameLabelEdited])
+        mozWaitForElementToExist(app.tables.cells[loginsListPasswordLabel])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306964
@@ -286,8 +284,8 @@ class LoginTest: BaseTestCase {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
         // The login is correctly created.
-        XCTAssertTrue(app.tables["Login List"].staticTexts["https://testweb"].exists)
-        XCTAssertTrue(app.tables["Login List"].staticTexts["foo"].exists)
+        mozWaitForElementToExist(app.tables["Login List"].staticTexts["https://testweb"])
+        mozWaitForElementToExist(app.tables["Login List"].staticTexts["foo"])
         // Repeat previous step, adding the same login
         createLoginManually()
         // The login cannot be duplicated
@@ -297,8 +295,8 @@ class LoginTest: BaseTestCase {
 
     private func createLoginManually() {
         app.buttons["Add"].tap()
-        mozWaitForElementToExist(app.tables["Add Credential"], timeout: 15)
-        XCTAssertTrue(app.tables["Add Credential"].cells.staticTexts.containingText("Web").element.exists)
+        mozWaitForElementToExist(app.tables["Add Credential"])
+        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts.containingText("Web").element)
         mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Username"])
         mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Password"])
 

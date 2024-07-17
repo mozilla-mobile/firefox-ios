@@ -23,24 +23,22 @@ class OnboardingTests: BaseTestCase {
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
-        XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        mozWaitForElementToExist(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"])
+        mozWaitForElementToExist(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"])
 
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
-        XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
 
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()

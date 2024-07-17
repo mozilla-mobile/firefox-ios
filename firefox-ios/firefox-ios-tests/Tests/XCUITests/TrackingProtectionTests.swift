@@ -109,7 +109,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Open TP Settings menu
         app.buttons["Protection Settings"].tap()
-        mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
+        mozWaitForElementToExist(app.navigationBars["Tracking Protection"])
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
         XCTAssertEqual(switchSettingsValue as! String, "1")
         app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
@@ -118,8 +118,8 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
-        XCTAssertFalse(app.switches.element.exists)
+        mozWaitForElementToExist(app.staticTexts["Connection is not secure"])
+        mozWaitForElementToNotExist(app.switches.element)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2318742
@@ -128,12 +128,12 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
-        XCTAssertTrue(app.navigationBars["Client.TPAccessoryInfo"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Social Trackers"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Cross-Site Trackers"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Fingerprinters"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Cryptominers"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Tracking content"].exists)
+        mozWaitForElementToExist(app.navigationBars["Client.TPAccessoryInfo"])
+        mozWaitForElementToExist(app.cells.staticTexts["Social Trackers"])
+        mozWaitForElementToExist(app.cells.staticTexts["Cross-Site Trackers"])
+        mozWaitForElementToExist(app.cells.staticTexts["Fingerprinters"])
+        mozWaitForElementToExist(app.cells.staticTexts["Cryptominers"])
+        mozWaitForElementToExist(app.cells.staticTexts["Tracking content"])
 
         // Go back to TP settings
         app.buttons["Tracking Protection"].tap()
@@ -159,11 +159,8 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
-        XCTAssertTrue(app.staticTexts["mozilla.org"].exists)
-        XCTAssertTrue(
-            app.staticTexts["Connection is secure"].exists,
-            "Missing Connection is secure info"
-        )
+        mozWaitForElementToExist(app.staticTexts["mozilla.org"])
+        mozWaitForElementToExist(app.staticTexts["Connection is secure"])
         XCTAssertEqual(
             app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
             "Secure connection"
@@ -178,7 +175,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled
         mozWaitForElementToExist(app.staticTexts["This Connection is Untrusted"], timeout: TIMEOUT_LONG)
-        XCTAssertTrue(app.staticTexts.elementContainingText("Firefox has not connected to this website.").exists)
+        mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }
 }

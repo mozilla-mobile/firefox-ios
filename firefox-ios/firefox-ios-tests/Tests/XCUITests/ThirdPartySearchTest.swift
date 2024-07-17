@@ -75,7 +75,6 @@ class ThirdPartySearchTest: BaseTestCase {
         app.textFields.firstMatch.press(forDuration: 1)
         app.staticTexts["Paste"].tap()
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-        XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
         mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
@@ -99,7 +98,6 @@ class ThirdPartySearchTest: BaseTestCase {
             app.staticTexts["Paste"].tap()
 
             mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-            XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
         }
     }
 
@@ -136,7 +134,7 @@ class ThirdPartySearchTest: BaseTestCase {
             .textViews["customEngineUrl"]
             .staticTexts["URL (Replace Query with %s)"]
 
-        XCTAssertTrue(customengineurlTextView.exists)
+        mozWaitForElementToExist(customengineurlTextView)
 
         UIPasteboard.general.string = searchUrl
         customengineurlTextView.tap()

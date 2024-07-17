@@ -75,16 +75,15 @@ class ToolbarMenuTests: BaseTestCase {
     }
 
     private func validateMenuOptions() {
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.history].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.download].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.readingList].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.login].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.sync].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.edit].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.settings].exists)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.download])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.readingList])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.login])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.edit])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
     }
 }
