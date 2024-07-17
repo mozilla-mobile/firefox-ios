@@ -87,7 +87,6 @@ struct AddressAutofillToggle: View {
 
             Spacer()
 
-            // Toggle switch
             Toggle(isOn: $model.isEnabled) {
                 EmptyView()
             }
