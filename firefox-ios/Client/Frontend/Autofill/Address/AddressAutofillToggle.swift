@@ -51,7 +51,6 @@ struct AddressAutofillToggle: View {
                     model.isEnabled = !model.isEnabled
                 }
 
-            // Divider line to separate content
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
