@@ -103,13 +103,6 @@ class WebsiteDataManagementViewController: UIViewController,
         viewModel.onViewModelChanged = { [weak self] in
             guard let self = self else { return }
             self.loadingView.isHidden = self.viewModel.state != .loading
-
-            // Show either 10, 8 or 6 records initially depending on the screen size.
-            if self.viewModel.state != .displayAll {
-                let height = max(self.view.frame.width, self.view.frame.height)
-                let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            }
-
             self.searchResultsViewController.reloadData()
             self.tableView.reloadData()
         }
