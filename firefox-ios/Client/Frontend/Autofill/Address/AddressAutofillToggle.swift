@@ -71,7 +71,6 @@ struct AddressAutofillToggle: View {
         return HStack {
             // Left-aligned stack for title and description
             VStack(alignment: .leading) {
-                // Title for the Toggle
                 Text(String.Addresses.Settings.SwitchTitle)
                     .font(.body)
                     .foregroundColor(textColor)
