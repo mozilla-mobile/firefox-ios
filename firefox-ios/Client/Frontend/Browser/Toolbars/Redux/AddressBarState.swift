@@ -67,19 +67,13 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.numberOfTabsChanged:
-            guard let numberOfTabs = (action as? ToolbarAction)?.numberOfTabs else { return state }
-
-            var actions = state.browserActions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .tabs }) {
-                actions[index].numberOfTabs = numberOfTabs
-            }
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: actions,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 lockIconImageName: state.lockIconImageName

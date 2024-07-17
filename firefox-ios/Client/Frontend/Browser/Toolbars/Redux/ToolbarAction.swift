@@ -61,17 +61,20 @@ class ToolbarMiddlewareAction: Action {
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let isLoading: Bool?
+    let numberOfTabs: Int?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          isLoading: Bool? = nil,
+         numberOfTabs: Int? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         self.isLoading = isLoading
+        self.numberOfTabs = numberOfTabs
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -101,6 +104,7 @@ final class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
 
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
+    case numberOfTabsChanged
     case urlDidChange
     case didStartEditingUrl
     case cancelEdit

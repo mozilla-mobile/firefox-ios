@@ -3434,9 +3434,9 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             if isToolbarRefactorEnabled {
-                let action = ToolbarAction(numberOfTabs: count,
-                                           windowUUID: windowUUID,
-                                           actionType: ToolbarActionType.numberOfTabsChanged)
+                let action = ToolbarMiddlewareAction(numberOfTabs: count,
+                                                     windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
                 store.dispatch(action)
             } else {
                 toolbar.updateTabCount(count, animated: animated)

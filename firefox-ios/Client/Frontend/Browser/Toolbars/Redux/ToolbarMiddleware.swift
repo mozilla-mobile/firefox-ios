@@ -138,6 +138,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
 
+        case ToolbarMiddlewareActionType.numberOfTabsChanged:
+            updateNumberOfTabs(action: action, state: state)
+
         default:
             break
         }
@@ -428,6 +431,24 @@ class ToolbarMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
+    private func updateNumberOfTabs(action: ToolbarMiddlewareAction,
+                                    state: AppState) {
+        guard let numberOfTabs = action.numberOfTabs,
+              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
+                                                                                state: state,
+                                                                                isEditing: false),
+              let navToolbarModel = generateNavigationToolbarNavigationActions(action: action,
+                                                                               state: state)
+        else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          numberOfTabs: numberOfTabs,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.numberOfTabsChanged)
+        store.dispatch(toolbarAction)
+    }
+
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction,
                                                        state: AppState,
                                                        isEditing: Bool) {
@@ -489,6 +510,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         var canGoBack = toolbarState.canGoBack
         var canGoForward = toolbarState.canGoForward
 
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+
         if action.actionType as? ToolbarMiddlewareActionType == .urlDidChange,
            let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction {
             canGoBack = urlChangeAction.canGoBack
@@ -499,7 +522,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
-            tabsAction(numberOfTabs: toolbarState.numberOfTabs),
+            tabsAction(numberOfTabs: numberOfTabs),
             menuAction
         ]
 
