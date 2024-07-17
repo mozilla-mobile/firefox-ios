@@ -50,31 +50,42 @@ public actor DefaultTabDataStore: TabDataStore {
 
     public func fetchWindowData(uuid: UUID) async -> WindowData? {
         logger.log("Attempting to fetch window data", level: .debug, category: .tabs)
-        do {
-            guard let fileURL = windowURLPath(for: uuid, isBackup: false) else {
+
+        // Adding more logging for FXIOS-9517
+        var shouldLogFileFailure = false // Whether pulling from the main file failed
+        var shouldLogBackupFailure = false // Whether pulling from the backup file failed
+        var fileInfoMessage = "" // Specifics of main file failure
+        var backupInfoMessage = "" // Specifics of backup file failure
+        defer {
+            if shouldLogFileFailure {
+                let errorMessage: String
+                errorMessage = shouldLogBackupFailure
+                                ? "Failed to open window data (including backup data) for UUID: \(uuid)"
+                                : "Failed to open window data (but backup recovery worked) for UUID: \(uuid)"
                 logger.log(
-                    "Failed to open window data for UUID: \(uuid), nil fileURL",
+                    "\(errorMessage) File Info: [\(fileInfoMessage)] Backup File Info: [\(backupInfoMessage)]",
                     level: .fatal,
                     category: .tabs
                 )
+            }
+        }
+
+        do {
+            guard let fileURL = windowURLPath(for: uuid, isBackup: false) else {
+                fileInfoMessage += "fileURL nil"
+                shouldLogFileFailure = true
                 throw TabDataError.failedToFetchData
             }
 
             guard fileManager.fileExists(atPath: fileURL) else {
-                logger.log(
-                    "Failed to open window data for UUID: \(uuid), file doesn't exist",
-                    level: .fatal,
-                    category: .tabs
-                )
+                fileInfoMessage += "file doesn't exist"
+                shouldLogFileFailure = true
                 throw TabDataError.failedToFetchData
             }
 
             guard let windowData = parseWindowDataFile(fromURL: fileURL) else {
-                logger.log(
-                    "Failed to open window data for UUID: \(uuid), file parsing failed",
-                    level: .fatal,
-                    category: .tabs
-                )
+                fileInfoMessage += "file parsing failed"
+                shouldLogFileFailure = true
                 throw TabDataError.failedToFetchData
             }
 
@@ -84,29 +95,20 @@ public actor DefaultTabDataStore: TabDataStore {
             logger.log("Error fetching window data for UUID: \(uuid) Error: \(error)", level: .warning, category: .tabs)
 
             guard let backupURL = windowURLPath(for: uuid, isBackup: true) else {
-                logger.log(
-                    "Failed to open backup window data for UUID: \(uuid), nil fileURL",
-                    level: .fatal,
-                    category: .tabs
-                )
+                backupInfoMessage += "backup fileURL nil"
+                shouldLogBackupFailure = true
                 return nil
             }
 
             guard fileManager.fileExists(atPath: backupURL) else {
-                logger.log(
-                    "Failed to open backup window data for UUID: \(uuid), file doesn't exist",
-                    level: .fatal,
-                    category: .tabs
-                )
+                backupInfoMessage += "backup file doesn't exist"
+                shouldLogBackupFailure = true
                 return nil
             }
 
             guard let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
-                logger.log(
-                    "Failed to open backup window data for UUID: \(uuid), file parsing failed",
-                    level: .fatal,
-                    category: .tabs
-                )
+                backupInfoMessage += "backup file parsing failed"
+                shouldLogBackupFailure = true
                 return nil
             }
 
