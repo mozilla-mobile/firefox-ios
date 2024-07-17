@@ -57,7 +57,6 @@ struct AddressAutofillToggle: View {
         }
         .background(backgroundColor)
         .onAppear {
-            // Apply theme when the view appears
             applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
