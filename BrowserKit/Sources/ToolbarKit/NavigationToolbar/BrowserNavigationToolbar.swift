@@ -79,6 +79,12 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
         toolbarBorderView.backgroundColor = theme.colors.borderPrimary
+
+        actionStack.arrangedSubviews.forEach { element in
+            guard let button = element as? ToolbarButton else { return }
+            button.applyTheme(theme: theme)
+        }
+
         self.theme = theme
     }
 }

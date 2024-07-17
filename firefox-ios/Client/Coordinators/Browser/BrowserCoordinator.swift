@@ -41,6 +41,8 @@ class BrowserCoordinator: BaseCoordinator,
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
 
+    override var isDismissable: Bool { false }
+
     init(router: Router,
          screenshotService: ScreenshotService,
          tabManager: TabManager,
@@ -522,6 +524,15 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
+    private func makeMenuCoordinator() -> MainMenuCoordinator? {
+        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
+
+        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
+        coordinator.parentCoordinator = self
+        add(child: coordinator)
+        return coordinator
+    }
+
     func showShareExtension(
         url: URL,
         sourceView: UIView,
@@ -714,6 +725,12 @@ class BrowserCoordinator: BaseCoordinator,
                          completion: (() -> Void)? = nil) {
         browserViewController.willNavigateAway()
         router.present(viewController)
+    }
+
+    // MARK: - Main Menu
+    func showMainMenu() {
+        guard let coordinator = makeMenuCoordinator() else { return }
+        coordinator.startModal()
     }
 
     // MARK: - ParentCoordinatorDelegate

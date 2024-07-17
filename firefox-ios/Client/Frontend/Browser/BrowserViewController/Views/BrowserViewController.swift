@@ -1768,8 +1768,8 @@ class BrowserViewController: UIViewController,
                 url: tab.url?.displayURL,
                 lockIconImageName: lockIconImageName,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
-                canGoForward: tab.canGoForward,
                 canGoBack: tab.canGoBack,
+                canGoForward: tab.canGoForward,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
             store.dispatch(action)
@@ -1842,11 +1842,12 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
-        let action = ToolbarAction(isButtonEnabled: isEnabled, windowUUID: windowUUID, actionType: actionType)
-
         switch actionType {
-        case .backButtonStateChanged,
-             .forwardButtonStateChanged:
+        case .backButtonStateChanged:
+            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            store.dispatch(action)
+        case .forwardButtonStateChanged:
+            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }
@@ -1875,6 +1876,9 @@ class BrowserViewController: UIViewController,
                 object: .tabToolbar,
                 value: .tabView
             )
+        case .share:
+            guard let button = state.buttonTapped else { return }
+            didTapOnShare(from: button)
         }
     }
 
@@ -1935,6 +1939,14 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnMenu(button: UIButton?) {
+        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
+            navigationHandler?.showMainMenu()
+        } else {
+            showPhotonMainMenu(from: button)
+        }
+    }
+
+    private func showPhotonMainMenu(from button: UIButton?) {
         guard let button else { return }
 
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
@@ -1970,6 +1982,22 @@ class BrowserViewController: UIViewController,
                 isMainMenuInverted: shouldInverse
             )
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
+        }
+    }
+
+    func didTapOnShare(from view: UIView) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarLocation,
+                                     value: .awesomebarShareTap,
+                                     extras: nil)
+
+        if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
+            navigationHandler?.showShareExtension(
+                url: tabUrl,
+                sourceView: view,
+                toastContainer: contentContainer,
+                popoverArrowDirection: isBottomSearchBar ? .down : .up)
         }
     }
 

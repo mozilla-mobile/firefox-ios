@@ -13,6 +13,10 @@ struct ToolbarState: ScreenState, Equatable {
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
 
+    let isShowingNavigationToolbar: Bool
+    let canGoBack: Bool
+    let canGoForward: Bool
+
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = store.state.screenState(
             ToolbarState.self,
@@ -27,7 +31,10 @@ struct ToolbarState: ScreenState, Equatable {
                   toolbarPosition: toolbarState.toolbarPosition,
                   isPrivateMode: toolbarState.isPrivateMode,
                   addressToolbar: toolbarState.addressToolbar,
-                  navigationToolbar: toolbarState.navigationToolbar)
+                  navigationToolbar: toolbarState.navigationToolbar,
+                  isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
+                  canGoBack: toolbarState.canGoBack,
+                  canGoForward: toolbarState.canGoForward)
     }
 
     init(windowUUID: WindowUUID) {
@@ -36,7 +43,10 @@ struct ToolbarState: ScreenState, Equatable {
             toolbarPosition: .top,
             isPrivateMode: false,
             addressToolbar: AddressBarState(windowUUID: windowUUID),
-            navigationToolbar: NavigationBarState(windowUUID: windowUUID)
+            navigationToolbar: NavigationBarState(windowUUID: windowUUID),
+            isShowingNavigationToolbar: true,
+            canGoBack: false,
+            canGoForward: false
         )
     }
 
@@ -45,13 +55,19 @@ struct ToolbarState: ScreenState, Equatable {
         toolbarPosition: AddressToolbarPosition,
         isPrivateMode: Bool,
         addressToolbar: AddressBarState,
-        navigationToolbar: NavigationBarState
+        navigationToolbar: NavigationBarState,
+        isShowingNavigationToolbar: Bool,
+        canGoBack: Bool,
+        canGoForward: Bool
     ) {
         self.windowUUID = windowUUID
         self.toolbarPosition = toolbarPosition
         self.isPrivateMode = isPrivateMode
         self.addressToolbar = addressToolbar
         self.navigationToolbar = navigationToolbar
+        self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.canGoBack = canGoBack
+        self.canGoForward = canGoForward
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -73,7 +89,10 @@ struct ToolbarState: ScreenState, Equatable {
                 toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction))
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
+                canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
+                canGoForward: toolbarAction.canGoForward ?? state.canGoForward)
 
         case GeneralBrowserActionType.updateSelectedTab:
             guard let action = action as? GeneralBrowserAction else { return state }
@@ -82,7 +101,10 @@ struct ToolbarState: ScreenState, Equatable {
                 toolbarPosition: state.toolbarPosition,
                 isPrivateMode: action.isPrivateBrowsing ?? state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward)
 
         case ToolbarActionType.toolbarPositionChanged:
             guard let position = (action as? ToolbarAction)?.toolbarPosition else { return state }
@@ -91,7 +113,10 @@ struct ToolbarState: ScreenState, Equatable {
                 toolbarPosition: position,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action))
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward)
 
         default:
             return ToolbarState(
@@ -99,7 +124,10 @@ struct ToolbarState: ScreenState, Equatable {
                 toolbarPosition: state.toolbarPosition,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: state.addressToolbar,
-                navigationToolbar: state.navigationToolbar)
+                navigationToolbar: state.navigationToolbar,
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward)
         }
     }
 }
