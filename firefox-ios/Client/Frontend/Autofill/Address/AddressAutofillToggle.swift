@@ -42,7 +42,7 @@ struct AddressAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
 
-            mainContent()
+            main
                 .accessibilityElement()
                 .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
                 .accessibilityValue("\(model.isEnabled ? 1 : 0)")
@@ -65,7 +65,7 @@ struct AddressAutofillToggle: View {
         }
     }
 
-    private func mainContent() -> some View {
+    private var main: some View {
         return HStack {
             VStack(alignment: .leading) {
                 Text(String.Addresses.Settings.SwitchTitle)
