@@ -1353,36 +1353,70 @@ extension String {
 extension String {
     public struct MainMenu {
         public struct Account {
-            public static let AppMenuReportSiteIssueTitleString = MZLocalizedString(
-                key: "Account.ReportSiteIssueAction.Title",
+            public static let SignedOutTitle = MZLocalizedString(
+                key: "MainMenu.Account.SignedOut.Title",
                 tableName: "MainMenu",
-                value: "Report Site Issue",
-                comment: "Label for the button, displayed in the menu, used to report a compatibility issue with the current page.")
+                value: "Sign In",
+                comment: "On the main menu, at the top, when the user is signed out. The title for the sign in action")
+            public static let SignedOutDescription = MZLocalizedString(
+                key: "MainMenu.Account.SignedOut.Description",
+                tableName: "MainMenu",
+                value: "Sync passwords, tabs, and more",
+                comment: "On the main menu, at the top, when the user is signed out. The description for the sign in action")
         }
 
         public struct TabsSection {
-
+            public static let NewTab = MZLocalizedString(
+                key: "MainMenu.TabsSection.NewTab",
+                tableName: "MainMenu",
+                value: "New Tab",
+                comment: "On the main menu, the title for the action that will create a new, non-private, tab.")
+            public static let NewPrivateTab = MZLocalizedString(
+                key: "MainMenu.TabsSection.NewPrivateTab",
+                tableName: "MainMenu",
+                value: "New Private Tab",
+                comment: "On the main menu, the title for the action that will create a new private tab.")
         }
 
-        public struct ToolSection {
-
+        public struct ToolsSection {
+            public static let SwitchToDesktopSite = MZLocalizedString(
+                key: "MainMenu.ToolsSection.SwitchToDesktopSite",
+                tableName: "MainMenu",
+                value: "Switch to Desktop Site",
+                comment: "On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available.")
+            public static let SwitchToMobileSite = MZLocalizedString(
+                key: "MainMenu.ToolsSection.SwitchToMobileSite",
+                tableName: "MainMenu",
+                value: "Switch to Mobile Site",
+                comment: "On the main menu, the title for the action that will switch a site from the desktop version to the mobile version.")
+            public static let FindInPage = MZLocalizedString(
+                key: "MainMenu.ToolsSection.FindInPage",
+                tableName: "MainMenu",
+                value: "Find in Page...",
+                comment: "On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
+            public static let Tools = MZLocalizedString(
+                key: "MainMenu.ToolsSection.ToolsSubmenuTitle",
+                tableName: "MainMenu",
+                value: "Tools",
+                comment: "On the main menu, the title for the action that will take the user to the Tools submenu in the menu.")
+            public static let Save = MZLocalizedString(
+                key: "MainMenu.ToolsSection.SaveSubmenuTitle",
+                tableName: "MainMenu",
+                value: "Save",
+                comment: "On the main menu, the title for the action that will take the user to the Save submenu in the menu.")
         }
 
         public struct LibraryPanelSection {
-
         }
 
         public struct SettingsSection {
-
         }
 
         public struct Submenus {
             public struct Tools {
-
             }
 
             public struct Save {
-
             }
         }
 
