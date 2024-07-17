@@ -353,10 +353,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                                        actionType: PrivateModeActionType.setPrivateModeTo)
         store.dispatch(action)
 
-            didSelectTab(url)
-            updateMenuItemsForSelectedTab()
-            completion?()
-        }
+        didSelectTab(url)
+        updateMenuItemsForSelectedTab()
+        completion?()
     }
 
     private func willSelectTab(_ url: URL?) {
