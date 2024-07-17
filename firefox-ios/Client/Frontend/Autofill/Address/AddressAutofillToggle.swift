@@ -37,7 +37,6 @@ struct AddressAutofillToggle: View {
 
     var body: some View {
         VStack {
-            // Divider line to separate content (hidden by default)
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
