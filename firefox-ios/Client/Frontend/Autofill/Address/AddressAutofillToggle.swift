@@ -67,7 +67,6 @@ struct AddressAutofillToggle: View {
     }
 
     private func mainContent() -> some View {
-        // Horizontal stack containing title, description, and toggle
         return HStack {
             VStack(alignment: .leading) {
                 Text(String.Addresses.Settings.SwitchTitle)
