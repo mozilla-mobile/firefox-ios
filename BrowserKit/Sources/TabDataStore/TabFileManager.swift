@@ -144,7 +144,7 @@ public struct DefaultTabFileManager: TabFileManager {
             return windowData
         } catch {
             logger.log("Error decoding window data: \(error)",
-                       level: .debug,
+                       level: .warning,
                        category: .tabs)
             throw error
         }
