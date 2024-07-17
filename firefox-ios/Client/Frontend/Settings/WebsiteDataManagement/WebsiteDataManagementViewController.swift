@@ -70,7 +70,10 @@ class WebsiteDataManagementViewController: UIViewController,
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: ThemedTableViewCell.cellIdentifier)
-        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier)
+        tableView.register(
+            ThemedTableViewCell.self,
+            forCellReuseIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier
+        )
         tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
