@@ -1863,7 +1863,7 @@ class BrowserViewController: UIViewController,
         case .tabsLongPressActions:
             presentActionSheet(from: view)
         case .locationViewLongPressAction:
-            presentLongPressActionSheetForLocationView()
+            presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
@@ -1907,12 +1907,19 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func presentLongPressActionSheetForLocationView() {
-        let urlActions = getLongPressLocationBarActions(with: addressToolbarContainer, alertContainer: contentContainer)
+    func presentLocationViewActionSheet(from view: UIView) {
+        let actions = getLongPressLocationBarActions(with: view, alertContainer: contentContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        presentActionSheet(from: addressToolbarContainer, with: urlActions)
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [actions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func didTapOnHome() {
