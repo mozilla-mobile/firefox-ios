@@ -21,6 +21,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case backForwardList
         case trackingProtectionDetails
         case tabsLongPressActions
+        case locationViewLongPressAction
         case menu
         case reloadLongPressAction
         case tabTray
@@ -279,6 +280,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .reloadLongPressAction,
                 buttonTapped: action.buttonTapped,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showLocationViewLongPressActionSheet:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .locationViewLongPressAction,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.navigateBack:
             return BrowserViewControllerState(

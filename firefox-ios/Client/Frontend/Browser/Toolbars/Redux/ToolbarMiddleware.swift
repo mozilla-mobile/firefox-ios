@@ -244,6 +244,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabsLongPressActions)
             store.dispatch(action)
+        case .locationView:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
+            store.dispatch(action)
         case .reload:
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,

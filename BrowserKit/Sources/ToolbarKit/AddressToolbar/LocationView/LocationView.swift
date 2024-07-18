@@ -19,6 +19,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: (() -> Void)?
+    private var onLongPress: (() -> Void)?
     private var delegate: LocationViewDelegate?
 
     private var isURLTextFieldEmpty: Bool {
@@ -81,6 +82,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         super.init(frame: .zero)
         setupLayout()
         setupGradientLayer()
+        addLongPressGestureRecognizer()
 
         urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
         notifyTextChanged = { [self] in
@@ -115,6 +117,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         updateIconContainer()
         self.delegate = delegate
         searchTerm = state.searchTerm
+        onLongPress = state.onLongPress
     }
 
     // MARK: - Layout
@@ -271,6 +274,12 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         onTapLockIcon = state.onTapLockIcon
     }
 
+    // MARK: - Gesture Recognizers
+    private func addLongPressGestureRecognizer() {
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
+        urlTextField.addGestureRecognizer(longPressRecognizer)
+    }
+
     // MARK: - Selectors
     @objc
     func textDidChange(_ textField: UITextField) {
@@ -280,6 +289,13 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?()
+    }
+
+    @objc
+    private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .began {
+            onLongPress?()
+        }
     }
 
     // MARK: - UITextFieldDelegate
@@ -296,6 +312,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        formatAndTruncateURLTextField()
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
