@@ -70,10 +70,7 @@ jobs:
         run: |
           gem install xcpretty -v 0.3.0
           pip install blockkit==1.9.1
-          npm install -g junit-report-merger@7.0.0
-          # Reduce network flakiness
-          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
-          sudo sysctl -w net.link.generic.system.hwcksum_rx=0   
+          npm install -g junit-report-merger@7.0.0 
       - name: Setup Xcode
         id: xcode
         run: |
@@ -221,9 +218,6 @@ jobs:
               run: |
                 gem install xcpretty -v 0.3.0
                 pip install blockkit==1.9.1
-                # Reduce network flakiness
-                sudo sysctl -w net.link.generic.system.hwcksum_tx=0
-                sudo sysctl -w net.link.generic.system.hwcksum_rx=0
             - name: Get derived data
               id: download-derived-data
               uses: actions/download-artifact@v4
