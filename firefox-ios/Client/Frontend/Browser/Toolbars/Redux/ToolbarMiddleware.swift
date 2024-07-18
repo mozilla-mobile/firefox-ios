@@ -369,7 +369,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         let isStartEditingUrlAction = action.actionType as? ToolbarMiddlewareActionType == .didStartEditingUrl
         let isUrlDidChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
 
-        let url = action.url ?? toolbarState.addressToolbar.url
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
         let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
@@ -403,7 +404,8 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: action.windowUUID)
         else { return actions }
 
-        let url = action.url ?? toolbarState.addressToolbar.url
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
         guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
@@ -504,7 +506,6 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func generateAddressToolbarActions(
         action: ToolbarMiddlewareAction,
         state: AppState,
-        url: URL? = nil,
         lockIconImageName: String? = nil,
         isEditing: Bool? = nil)
     -> AddressToolbarModel? {
@@ -518,13 +519,15 @@ class ToolbarMiddleware: FeatureFlaggable {
             isEditing: editing)
         let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
         let browserActions = addressToolbarBrowserActions(action: action, state: state)
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
             pageActions: pageActions,
             browserActions: browserActions,
             borderPosition: toolbarState.addressToolbar.borderPosition,
-            url: url ?? toolbarState.addressToolbar.url,
+            url: url,
             lockIconImageName: lockIconImageName,
             isEditing: isEditing)
         return addressToolbarModel
@@ -535,11 +538,13 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func generateNavigationToolbarActions(
         action: ToolbarMiddlewareAction,
         state: AppState,
-        url: URL? = nil,
         isEditing: Bool? = nil)
     -> NavigationToolbarModel? {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
+
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
         let isNewTabEnabled = ToolbarFlagManager.isOneTapNewTabEnabled
         let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
@@ -549,7 +554,6 @@ class ToolbarMiddleware: FeatureFlaggable {
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
-
 
         let actions = [
             backAction(enabled: canGoBack),
