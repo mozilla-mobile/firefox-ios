@@ -25,7 +25,7 @@ protocol ImageHandler {
     ///     2. Tries to fetch from the hero image fetcher (from the web).
     ///     3. If all fails it throws an error
     ///
-    /// Any time the hero image  is fetched, it will be cache for future usage.
+    /// Any time the hero image is fetched, it will be cached for future use.
     /// - Parameters:
     ///   - siteURL: The site URL to fetch the hero image from
     ///   - domain: The domain this hero image will be associated with

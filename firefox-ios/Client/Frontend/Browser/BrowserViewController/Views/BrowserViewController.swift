@@ -1875,11 +1875,16 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showBackForwardList()
         case .tabsLongPressActions:
             presentActionSheet(from: view)
+        case .locationViewLongPressAction:
+            presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
+        case .reloadLongPressAction:
+            guard let button = state.buttonTapped else { return }
+            presentRefreshLongPressAction(from: button)
         case .tabTray:
             focusOnTabSegment()
             TelemetryWrapper.recordEvent(
@@ -1921,6 +1926,39 @@ class BrowserViewController: UIViewController,
                 navigateInTab(tab: currentTab, webViewStatus: .title)
             }
         }
+    }
+
+    func presentLocationViewActionSheet(from view: UIView) {
+        let actions = getLongPressLocationBarActions(with: view, alertContainer: contentContainer)
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [actions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
+    }
+
+    func presentRefreshLongPressAction(from button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else { return }
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [urlActions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
+
+        presentSheetWith(viewModel: viewModel, on: self, from: button)
     }
 
     func didTapOnHome() {

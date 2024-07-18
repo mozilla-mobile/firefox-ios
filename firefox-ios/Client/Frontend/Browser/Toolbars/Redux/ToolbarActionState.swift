@@ -18,6 +18,7 @@ struct ToolbarActionState: Equatable {
         case reload
         case stopLoading
         case trackingProtection
+        case locationView
         case readerMode
         case dataClearance
         case cancelEdit
@@ -35,6 +36,7 @@ struct ToolbarActionState: Equatable {
     var canPerformLongPressAction: Bool {
         return actionType == .back ||
                actionType == .forward ||
-               actionType == .tabs
+               actionType == .tabs ||
+               actionType == .reload
     }
 }

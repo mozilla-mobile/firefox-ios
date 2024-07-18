@@ -20,6 +20,7 @@ public struct LocationViewState {
     public let url: URL?
     public let searchTerm: String?
     public var onTapLockIcon: (() -> Void)?
+    public var onLongPress: (() -> Void)?
 
     public init(
         searchEngineImageViewA11yId: String,
@@ -33,7 +34,8 @@ public struct LocationViewState {
         lockIconImageName: String,
         url: URL?,
         searchTerm: String?,
-        onTapLockIcon: (() -> Void)? = nil
+        onTapLockIcon: (() -> Void)? = nil,
+        onLongPress: (() -> Void)? = nil
     ) {
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
         self.searchEngineImageViewA11yLabel = searchEngineImageViewA11yLabel
@@ -47,5 +49,6 @@ public struct LocationViewState {
         self.url = url
         self.searchTerm = searchTerm
         self.onTapLockIcon = onTapLockIcon
+        self.onLongPress = onLongPress
     }
 }

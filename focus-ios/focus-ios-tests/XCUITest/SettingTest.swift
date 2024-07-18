@@ -14,17 +14,17 @@ class SettingTest: BaseTestCase {
         dismissURLBarFocused()
 
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"], timeout: 5)
+        waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         // Check About page
         app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
-        waitForExistence(aboutCell, timeout: 10)
+        waitForExistence(aboutCell)
         aboutCell.tap()
 
         let tablesQuery = app.tables
@@ -43,13 +43,13 @@ class SettingTest: BaseTestCase {
 
         // Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
-        waitForExistence(app.tables.switches["Safari"], timeout: 5)
+        waitForExistence(app.tables.switches["Safari"])
 
         XCTAssertEqual(safariSwitch.value as! String, "0")
         safariSwitch.tap()
 
         // Check the information page
-        waitForExistence(app.staticTexts["Open device settings"], timeout: 5)
+        waitForExistence(app.staticTexts["Open device settings"])
         XCTAssert(app.staticTexts["Open device settings"].exists)
         XCTAssert(app.staticTexts["Select Safari, then select Extensions"].exists)
         if app.label == "Firefox Focus" {
@@ -79,7 +79,7 @@ class SettingTest: BaseTestCase {
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockSocial"].value as! String, "1")
         let otherContentSwitch = app.tables.switches["BlockerToggle.BlockOther"]
-        waitForExistence(app.tables.switches["BlockerToggle.BlockOther"], timeout: 5)
+        waitForExistence(app.tables.switches["BlockerToggle.BlockOther"])
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
 
         otherContentSwitch.tap()
@@ -108,7 +108,7 @@ class SettingTest: BaseTestCase {
             swipes = swipes - 1
         }
         reviewCell.tap()
-        waitForExistence(safariApp, timeout: 10)
+        waitForExistence(safariApp)
         XCTAssert(safariApp.state == .runningForeground)
 
         safariApp.terminate()
@@ -116,9 +116,9 @@ class SettingTest: BaseTestCase {
 
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
+        waitForExistence(springboard.icons["XCUITest-Runner"])
         app.activate()
-        waitForExistence(app.navigationBars["Settings"], timeout: 10)
+        waitForExistence(app.navigationBars["Settings"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2574974
@@ -160,7 +160,7 @@ class SettingTest: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
@@ -188,7 +188,7 @@ class SettingTest: BaseTestCase {
         app.buttons["Settings"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
@@ -246,16 +246,16 @@ class SettingTest: BaseTestCase {
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
-        waitForExistence(app.tables.cells["settingsViewController.themeCell"], timeout: 10)
+        waitForExistence(app.tables.cells["settingsViewController.themeCell"])
         app.tables.cells["settingsViewController.themeCell"].swipeUp()
 
         // Check that Safari toggle is off, swipe to get to Safari Integration menu
-        waitForExistence(app.otherElements["SIRI SHORTCUTS"], timeout: 10)
+        waitForExistence(app.otherElements["SIRI SHORTCUTS"])
         app.otherElements["SIRI SHORTCUTS"].swipeUp()
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "0")
 
         iOS_Settings.activate()
-        waitForExistence(iOS_Settings.cells["Safari"], timeout: 10)
+        waitForExistence(iOS_Settings.cells["Safari"])
         iOS_Settings.cells["Safari"].tap()
         iOS_Settings.cells["AutoFill"].swipeUp()
         if #available(iOS 15.0, *) {
@@ -404,7 +404,7 @@ class SettingTest: BaseTestCase {
             app.buttons["URLBar.cancelButton"].tap()
         }
         app.buttons["Settings"].tap()
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()
