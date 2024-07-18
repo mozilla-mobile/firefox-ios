@@ -23,7 +23,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case tabsLongPressActions
         case locationViewLongPressAction
         case menu
+        case reloadLongPressAction
         case tabTray
+        case share
     }
 
     let windowUUID: WindowUUID
@@ -34,8 +36,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var showOverlay: Bool
     var reloadWebView: Bool
     var browserViewType: BrowserViewType
-    var navigateTo: NavigationType?
-    var displayView: DisplayType?
+    var navigateTo: NavigationType? // use default value when re-creating
+    var displayView: DisplayType? // use default value when re-creating
     var buttonTapped: UIButton?
     var microsurveyState: MicrosurveyPromptState
 
@@ -171,7 +173,14 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
-            return state
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                windowUUID: state.windowUUID,
+                reloadWebView: state.reloadWebView,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         }
     }
 
@@ -261,6 +270,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .tabsLongPressActions,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showReloadLongPressAction:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .reloadLongPressAction,
+                buttonTapped: action.buttonTapped,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showLocationViewLongPressActionSheet:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -320,6 +340,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .stopLoading,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showShare:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                toast: state.toast,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .share,
+                buttonTapped: action.buttonTapped,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state

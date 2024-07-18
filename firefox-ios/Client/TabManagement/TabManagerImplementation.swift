@@ -268,7 +268,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         let windowCount = windowManager.windows.count
         let totalTabCount =
         (windowCount > 1 ? windowManager.allWindowTabManagers().map({ $0.normalTabs.count }).reduce(0, +) : 0)
-        logInfo = (windowCount == 1) ? "(1 window)" : "(of \(totalTabCount) total tabs across \(windowCount) windows)"
+        logInfo = (windowCount == 1) ? "(1 window [\(windowUUID)])" : "(of \(totalTabCount) total tabs across \(windowCount) windows)"
         logger.log("Tab manager is preserving \(tabData.count) tabs \(logInfo)", level: .debug, category: .tabs)
 
         return tabData
@@ -279,14 +279,14 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         let windowManager: WindowManager = AppContainer.shared.resolve()
         windowManager.performMultiWindowAction(.storeTabs)
         preserveTabs()
-        saveCurrentTabSessionData()
+        saveSessionData(forTab: selectedTab)
     }
 
-    private func saveCurrentTabSessionData() {
-        guard let selectedTab = self.selectedTab,
-              !selectedTab.isPrivate,
-              let tabSession = selectedTab.webView?.interactionState as? Data,
-              let tabID = UUID(uuidString: selectedTab.tabUUID)
+    override func saveSessionData(forTab tab: Tab?) {
+        guard let tab = tab,
+              !tab.isPrivate,
+              let tabSession = tab.webView?.interactionState as? Data,
+              let tabID = UUID(uuidString: tab.tabUUID)
         else { return }
 
         Task {
@@ -298,7 +298,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         // Only preserve tabs after the restore has finished
         guard tabRestoreHasFinished else { return }
 
-        saveCurrentTabSessionData()
+        saveSessionData(forTab: selectedTab)
         preserveTabs(forced: true)
     }
 
@@ -319,7 +319,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         }
 
         // Before moving to a new tab save the current tab session data in order to preserve things like scroll position
-        saveCurrentTabSessionData()
+        saveSessionData(forTab: selectedTab)
 
         willSelectTab(url)
 

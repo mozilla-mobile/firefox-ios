@@ -97,8 +97,9 @@ class AddressToolbarContainerModel: Equatable {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.canPerformLongPressAction ? {
+                }, onLongPress: action.canPerformLongPressAction ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         buttonTapped: button,
                                                          gestureType: .longPress,
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)

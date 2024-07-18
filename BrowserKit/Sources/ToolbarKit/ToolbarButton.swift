@@ -27,7 +27,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private var badgeImageView: UIImageView?
     private var shouldDisplayAsHighlighted = false
 
-    private var onLongPress: (() -> Void)?
+    private var onLongPress: ((UIButton) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -137,7 +137,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         if gestureRecognizer.state == .began {
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
-            onLongPress?()
+            onLongPress?(self)
         }
     }
 

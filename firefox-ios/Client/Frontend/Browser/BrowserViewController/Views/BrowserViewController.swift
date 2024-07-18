@@ -1768,8 +1768,8 @@ class BrowserViewController: UIViewController,
                 url: tab.url?.displayURL,
                 lockIconImageName: lockIconImageName,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
-                canGoForward: tab.canGoForward,
                 canGoBack: tab.canGoBack,
+                canGoForward: tab.canGoForward,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.urlDidChange)
             store.dispatch(action)
@@ -1842,11 +1842,12 @@ class BrowserViewController: UIViewController,
     }
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
-        let action = ToolbarAction(isButtonEnabled: isEnabled, windowUUID: windowUUID, actionType: actionType)
-
         switch actionType {
-        case .backButtonStateChanged,
-             .forwardButtonStateChanged:
+        case .backButtonStateChanged:
+            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            store.dispatch(action)
+        case .forwardButtonStateChanged:
+            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }
@@ -1869,6 +1870,9 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
+        case .reloadLongPressAction:
+            guard let button = state.buttonTapped else { return }
+            presentRefreshLongPressAction(from: button)
         case .tabTray:
             focusOnTabSegment()
             TelemetryWrapper.recordEvent(
@@ -1877,6 +1881,9 @@ class BrowserViewController: UIViewController,
                 object: .tabToolbar,
                 value: .tabView
             )
+        case .share:
+            guard let button = state.buttonTapped else { return }
+            didTapOnShare(from: button)
         }
     }
 
@@ -1922,6 +1929,24 @@ class BrowserViewController: UIViewController,
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
+    func presentRefreshLongPressAction(from button: UIButton) {
+        guard let tab = tabManager.selectedTab else { return }
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else { return }
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(
+            actions: [urlActions],
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
+
+        presentSheetWith(viewModel: viewModel, on: self, from: button)
+    }
+
     func didTapOnHome() {
         let shouldUpdateWithRedux = isToolbarRefactorEnabled && browserViewControllerState?.navigateTo == .home
         guard shouldUpdateWithRedux || !isToolbarRefactorEnabled else { return }
@@ -1952,6 +1977,14 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnMenu(button: UIButton?) {
+        if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
+            navigationHandler?.showMainMenu()
+        } else {
+            showPhotonMainMenu(from: button)
+        }
+    }
+
+    private func showPhotonMainMenu(from button: UIButton?) {
         guard let button else { return }
 
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
@@ -1987,6 +2020,22 @@ class BrowserViewController: UIViewController,
                 isMainMenuInverted: shouldInverse
             )
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
+        }
+    }
+
+    func didTapOnShare(from view: UIView) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarLocation,
+                                     value: .awesomebarShareTap,
+                                     extras: nil)
+
+        if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
+            navigationHandler?.showShareExtension(
+                url: tabUrl,
+                sourceView: view,
+                toastContainer: contentContainer,
+                popoverArrowDirection: isBottomSearchBar ? .down : .up)
         }
     }
 
@@ -3462,7 +3511,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     /// Used to get the context menu save image in the context menu, shown from long press on webview links
-    fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
+    func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
             configuration: URLSessionConfiguration.default).dataTask(with: url

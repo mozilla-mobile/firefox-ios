@@ -50,6 +50,7 @@ class CopyPasteTest: BaseTestCase {
         // Check clipboard suggestion is shown
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
         waitForExistence(app.buttons["Search for mozilla"])
+        waitForHittable(app.buttons["Search for mozilla"])
         app.typeText("\n")
 
         // Check the correct site is reached
@@ -95,7 +96,7 @@ class CopyPasteTest: BaseTestCase {
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         waitForExistence(searchOrEnterAddressTextField, timeout: 30)
         searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 10)
+        waitForExistence(app.menuItems["Paste"])
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
         // Note: I can't click through "XCUITest-Runner would like to paste from Firefox Focus"

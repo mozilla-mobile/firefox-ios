@@ -30,6 +30,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var dismissFakespotSidebarCalled = 0
     var updateFakespotSidebarCalled = 0
     var showMicrosurveyCalled = 0
+    var showMainMenuCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -98,6 +99,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showFakespotFlowAsModal(productURL: URL) {
         showFakespotFlowAsModalCalled += 1
+    }
+
+    func showMainMenu() {
+        showMainMenuCalled += 1
     }
 
     func showFakespotFlowAsSidebar(productURL: URL,

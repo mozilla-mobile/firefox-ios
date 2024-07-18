@@ -105,19 +105,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarLocation,
-                                     value: .awesomebarShareTap,
-                                     extras: nil)
-
-        if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
-            navigationHandler?.showShareExtension(
-                url: tabUrl,
-                sourceView: shareView,
-                toastContainer: contentContainer,
-                popoverArrowDirection: isBottomSearchBar ? .down : .up)
-        }
+        didTapOnShare(from: shareView)
     }
 
     internal func dismissFakespotIfNeeded(animated: Bool = true) {
@@ -245,20 +233,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
-        guard let tab = tabManager.selectedTab else { return }
-        let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else { return }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(
-            actions: [urlActions],
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: style
-        )
-        presentSheetWith(viewModel: viewModel, on: self, from: button)
+        presentRefreshLongPressAction(from: button)
     }
 
     func locationActionsForURLBar() -> [AccessibleAction] {

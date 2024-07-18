@@ -26,6 +26,7 @@ class BrowsingTest: BaseTestCase {
             shareButton = app.cells["Share Page With..."]
         }
         waitForExistence(shareButton)
+        waitForHittable(shareButton)
         shareButton.tap()
 
         // Launch external app
@@ -35,10 +36,10 @@ class BrowsingTest: BaseTestCase {
         } else {
             RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
         }
-        waitForExistence(RemindersApp, timeout: 5)
+        waitForExistence(RemindersApp)
+        waitForHittable(RemindersApp)
         RemindersApp.tap()
-        waitForExistence(app.buttons["Add"], timeout: 10)
-        XCTAssertTrue(app.buttons["Add"].exists)
+        waitForExistence(app.buttons["Add"])
     }
 
     // Smoketest
@@ -79,8 +80,6 @@ class BrowsingTest: BaseTestCase {
     // Smoketest
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2587661
     func testActivityMenuRequestDesktopItem() {
-        let urlBarTextField = app.textFields["URLBar.urlText"]
-
         // Wait for existence rather than hittable because the textfield is technically disabled
         loadWebPage("facebook.com")
 
@@ -129,14 +128,13 @@ class BrowsingTest: BaseTestCase {
             let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
             waitForExistence(collapsedTruncatedurltextTextView)
 
-            XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
+            waitForHittable(collapsedTruncatedurltextTextView)
             XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
 
             // After swiping down, the collapsed URL should not be displayed
             app.swipeDown()
             app.swipeDown()
             waitForNoExistence(collapsedTruncatedurltextTextView)
-            XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
         }
     }
 }

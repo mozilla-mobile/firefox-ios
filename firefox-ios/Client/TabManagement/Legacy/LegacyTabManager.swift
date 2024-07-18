@@ -297,6 +297,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func storeChanges() { fatalError("should never be called") }
+    func saveSessionData(forTab tab: Tab?) { fatalError("should never be called") }
 
     private func addTabForRestoration(isPrivate: Bool) -> Tab {
         return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
@@ -590,6 +591,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                        category: .tabs,
                        description: "Tab count: \(count)")
             return
+        }
+
+        // Save the tab's session state before closing it and losing the webView
+        if flushToDisk {
+            saveSessionData(forTab: tab)
         }
 
         backupCloseTab = BackupCloseTab(tab: tab,

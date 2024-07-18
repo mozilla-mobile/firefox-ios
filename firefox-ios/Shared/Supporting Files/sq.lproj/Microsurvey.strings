@@ -31,6 +31,9 @@
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
 "Microsurvey.Survey.HeaderLabel.v127" = "Plotësoni këtë pyetësor";
 
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
+"Microsurvey.Survey.HeaderLabel.v129" = "Ju lutemi, plotësoni pyetësorin";
+
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name. */
 "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "Stemë e %@";
 
@@ -48,6 +51,9 @@
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
 "Microsurvey.Survey.Options.LikertScaleOption5.v127" = "Shumë i pakënaqur";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
+"Microsurvey.Survey.Options.LikertScaleOption6.v129" = "S’e përdor";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order the survey option in the list of options. First placeholder is the number the option is in the list and the second placeholder is the total number of options such as 1 out of 6. */
 "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%1$@ nga %2$@";

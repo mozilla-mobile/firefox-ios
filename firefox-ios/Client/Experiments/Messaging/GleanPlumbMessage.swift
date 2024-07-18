@@ -41,7 +41,7 @@ struct GleanPlumbMessage {
     /// The action URL as resolved by the Nimbus Messaging component.
     ///
     /// Embedding apps should not read from this directly.
-    let action: String
+    let action: String?
 
     /// The conditions that need to be satisfied for a message to be considered eligible to present.
     ///

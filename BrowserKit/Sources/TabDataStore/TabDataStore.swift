@@ -49,22 +49,70 @@ public actor DefaultTabDataStore: TabDataStore {
     // MARK: Fetching Window Data
 
     public func fetchWindowData(uuid: UUID) async -> WindowData? {
-        logger.log("Attempting to fetch window/tab data", level: .debug, category: .tabs)
+        logger.log("Attempting to fetch window data", level: .debug, category: .tabs)
+
+        // Adding more logging for FXIOS-9517
+        var shouldLogFileFailure = false // Whether pulling from the main file failed
+        var shouldLogBackupFailure = false // Whether pulling from the backup file failed
+        var fileInfoMessage = "" // Specifics of main file failure
+        var backupInfoMessage = "" // Specifics of backup file failure
+        defer {
+            if shouldLogFileFailure {
+                let errorMessage: String
+                errorMessage = shouldLogBackupFailure
+                                ? "Failed to open window data (including backup data) for UUID: \(uuid)"
+                                : "Failed to open window data (but backup recovery worked) for UUID: \(uuid)"
+                logger.log(
+                    "\(errorMessage) File Info: [\(fileInfoMessage)] Backup File Info: [\(backupInfoMessage)]",
+                    level: .fatal,
+                    category: .tabs
+                )
+            }
+        }
+
         do {
-            guard let fileURL = windowURLPath(for: uuid, isBackup: false),
-                  fileManager.fileExists(atPath: fileURL),
-                  let windowData = parseWindowDataFile(fromURL: fileURL) else {
-                logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .fatal, category: .tabs)
+            guard let fileURL = windowURLPath(for: uuid, isBackup: false) else {
+                fileInfoMessage += "fileURL nil"
+                shouldLogFileFailure = true
                 throw TabDataError.failedToFetchData
             }
+
+            guard fileManager.fileExists(atPath: fileURL) else {
+                fileInfoMessage += "file doesn't exist"
+                shouldLogFileFailure = true
+                throw TabDataError.failedToFetchData
+            }
+
+            guard let windowData = parseWindowDataFile(fromURL: fileURL) else {
+                fileInfoMessage += "file parsing failed"
+                shouldLogFileFailure = true
+                throw TabDataError.failedToFetchData
+            }
+
+            logger.log("Successfully fetched window data", level: .debug, category: .tabs)
             return windowData
         } catch {
-            logger.log("Error fetching window data: UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
-            guard let backupURL = windowURLPath(for: uuid, isBackup: true),
-                  fileManager.fileExists(atPath: backupURL),
-                  let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+            logger.log("Error fetching window data for UUID: \(uuid) Error: \(error)", level: .warning, category: .tabs)
+
+            guard let backupURL = windowURLPath(for: uuid, isBackup: true) else {
+                backupInfoMessage += "backup fileURL nil"
+                shouldLogBackupFailure = true
                 return nil
             }
+
+            guard fileManager.fileExists(atPath: backupURL) else {
+                backupInfoMessage += "backup file doesn't exist"
+                shouldLogBackupFailure = true
+                return nil
+            }
+
+            guard let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+                backupInfoMessage += "backup file parsing failed"
+                shouldLogBackupFailure = true
+                return nil
+            }
+
+            logger.log("Returned backup window data for UUID: \(uuid)", level: .debug, category: .tabs)
             return backupWindowData
         }
     }
