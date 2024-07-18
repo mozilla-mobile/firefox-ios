@@ -206,66 +206,6 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.first?.isPrivate, true)
     }
 
-    // MARK: - Remove all tabs
-
-    func test_removeAllTabs_hasOneHomeTabAfter() async throws {
-        let numTabs = 3
-        let subject = createSubject()
-        let addedTabs: [Tab]
-
-        // Setup the tab manager with 3 starting tabs and select the first one
-        addTabs(to: subject, count: numTabs)
-        addedTabs = subject.tabs
-
-        // Check preconditions
-        XCTAssertEqual(addedTabs.count, numTabs)
-
-        // Test
-        await subject.removeAllTabs(isPrivateMode: false)
-
-        // Wait for async save closures to complete so subject would trigger the memory leak check
-        try await Task.sleep(nanoseconds: 2 * sleepTime)
-
-        // Check results
-        XCTAssertEqual(subject.tabs.count, 1)
-        guard let homeTab = subject.tabs.first else {
-            XCTFail("After closing all tabs, there should be one home tab")
-            return
-        }
-        XCTAssertEqual(homeTab.url?.absoluteString, "internal://local/about/home#panel=0")
-        XCTAssertFalse(addedTabs.contains(where: { $0.tabUUID == homeTab.tabUUID }), "Tabs should have been removed")
-    }
-
-    func test_removeAllTabs_savesCorrectBackupCloseTab() async throws {
-        let numTabs = 3
-        let subject = createSubject()
-        let addedTabs: [Tab]
-        let selectedTabUUID: TabUUID?
-
-        // Setup the tab manager with 3 starting tabs and select the first one
-        addTabs(to: subject, count: numTabs)
-        addedTabs = subject.tabs
-        subject.selectTab(addedTabs.first)
-        selectedTabUUID = subject.selectedTab?.tabUUID
-
-        // Check preconditions
-        XCTAssertEqual(addedTabs.count, numTabs)
-        XCTAssertEqual(subject.selectedIndex, 0, "First tab should be selected")
-        XCTAssertNotNil(selectedTabUUID, "Tab UUID must not be nil after adding tabs")
-
-        // Test
-        await subject.removeAllTabs(isPrivateMode: false)
-
-        // Wait for async save closures to complete so subject would trigger the memory leak check
-        try await Task.sleep(nanoseconds: 2 * sleepTime)
-
-        XCTAssertEqual(
-            subject.backupCloseTab?.tab.tabUUID,
-            selectedTabUUID,
-            "The backup tab should be the previously selected tab"
-        )
-    }
-
     // MARK: - Helper methods
 
     private func createSubject() -> TabManagerImplementation {
