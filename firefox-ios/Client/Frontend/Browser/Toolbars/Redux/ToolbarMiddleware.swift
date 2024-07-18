@@ -138,9 +138,8 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func resolveToolbarMiddlewareButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let buttonType = action.buttonType, let gestureType = action.gestureType else { return }
+       guard let gestureType = action.gestureType else { return }
 
-        let uuid = action.windowUUID
         switch gestureType {
         case .tap:
             handleToolbarButtonTapActions(action: action, state: state)
