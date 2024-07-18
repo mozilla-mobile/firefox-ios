@@ -3442,12 +3442,14 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            if isToolbarRefactorEnabled {
+            if isToolbarRefactorEnabled,
+               let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+               toolbarState.numberOfTabs != count {
                 let action = ToolbarMiddlewareAction(numberOfTabs: count,
                                                      windowUUID: windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
                 store.dispatch(action)
-            } else {
+            } else if !isToolbarRefactorEnabled {
                 toolbar.updateTabCount(count, animated: animated)
                 urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
             }
