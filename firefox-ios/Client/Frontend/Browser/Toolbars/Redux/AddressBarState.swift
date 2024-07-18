@@ -94,18 +94,17 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.urlDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-            var addressToolbarModel = toolbarAction.addressToolbarModel
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel?.navigationActions ?? state.navigationActions,
-                pageActions: addressToolbarModel?.pageActions ?? state.pageActions,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: toolbarAction.url,
-                lockIconImageName: addressToolbarModel?.lockIconImageName ?? state.lockIconImageName,
-                isEditing: addressToolbarModel?.isEditing ?? state.isEditing
+                url: addressToolbarModel.url,
+                lockIconImageName: addressToolbarModel.lockIconImageName ?? state.lockIconImageName,
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing
             )
 
         case ToolbarActionType.backForwardButtonStatesChanged:
