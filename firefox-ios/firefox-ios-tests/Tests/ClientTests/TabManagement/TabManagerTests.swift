@@ -222,7 +222,7 @@ class TabManagerTests: XCTestCase {
 
         // Test
         await subject.removeAllTabs(isPrivateMode: false)
-        
+
         // Wait for async save closures to complete so subject would trigger the memory leak check
         try await Task.sleep(nanoseconds: 2 * sleepTime)
 
