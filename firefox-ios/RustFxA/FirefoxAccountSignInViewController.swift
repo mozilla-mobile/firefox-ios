@@ -240,7 +240,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         scanButton.applyTheme(theme: theme)
         emailButton.applyTheme(theme: theme)
 
-        scanButton.setImage(signinSyncQRImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        scanButton.configuration?.image = signinSyncQRImage?.withRenderingMode(.alwaysTemplate)
     }
 
     // MARK: Button Tap Functions
