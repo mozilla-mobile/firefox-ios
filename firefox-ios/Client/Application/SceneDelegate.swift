@@ -35,6 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
+        logger.log("SceneDelegate: will connect to session", level: .info, category: .lifecycle)
 
         // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
         if let url = connectionOptions.urlContexts.first?.url {
@@ -51,6 +52,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
+        let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
+        logger.log("SceneDelegate: scene did disconnect. UUID: \(logUUID)", level: .info, category: .lifecycle)
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
@@ -73,6 +76,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// or other activities that need to begin.
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
+        let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
+        logger.log("SceneDelegate: scene did become active. UUID: \(logUUID)", level: .info, category: .lifecycle)
 
         // Resume previously stopped downloads for, and on, THIS scene only.
         if let uuid = sceneCoordinator?.windowUUID {
@@ -87,6 +92,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to reduce the scene's memory usage, clear claims to resources & dependencies / services.
     /// UIKit takes a snapshot of the scene for the app switcher after this method returns.
     func sceneDidEnterBackground(_ scene: UIScene) {
+        let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
+        logger.log("SceneDelegate: scene did enter background. UUID: \(logUUID)", level: .info, category: .lifecycle)
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.pauseAll(for: uuid)
         }
