@@ -432,7 +432,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton])
         // Tapping 'x' will dismiss the prompt
         app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].tap()
-        mozWaitForElementToNotExist(app.staticTexts["Securely save this card?"])
+        mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 3)
         navigator.goto(CreditCardsSettings)
