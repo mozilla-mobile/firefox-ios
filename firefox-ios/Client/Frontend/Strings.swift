@@ -5765,7 +5765,7 @@ extension String {
             key: "Toolbar.NewTab.Button.v130",
             tableName: "Toolbar",
             value: "New Tab",
-            comment: "Accessibility label for the new tab button that can be displayed in the navigation toolbar, address toolbar or tab strip.")
+            comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
     }
 
     public struct AddressToolbar {
