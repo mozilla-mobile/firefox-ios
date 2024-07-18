@@ -2069,17 +2069,27 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
-    func handle(query: String) {
-        openBlankNewTab(focusLocationField: false)
-        if !isToolbarRefactorEnabled {
-            urlBar(urlBar, didSubmitText: query)
+    func handle(query: String, options: Set<Route.SearchOptions>? = nil) {
+        let useCurrentBrowsingMode = options?.contains(.useCurrentBrowsingMode) ?? false
+        let isPrivate = useCurrentBrowsingMode ? tabManager.selectedTab?.isPrivate ?? false : false
+        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate) { [weak self] in
+            guard let self else { return }
+            if !isToolbarRefactorEnabled {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    urlBar(urlBar, didSubmitText: query)
+                }
+            }
         }
     }
 
-    func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
+    func handle(url: URL?, options: Set<Route.SearchOptions>? = nil) {
+        let isPrivate = ((options?.contains(.useCurrentBrowsingMode) == true && tabManager.selectedTab?.isPrivate ?? false)
+                         || options?.contains(.switchToPrivacyMode) == true)
+
         if let url = url {
             if options?.contains(.switchToNormalMode) == true {
-                switchToPrivacyMode(isPrivate: false)
+                switchToPrivacyMode(isPrivate: isPrivate)
             }
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
@@ -2141,7 +2151,7 @@ class BrowserViewController: UIViewController,
     }
 
     @discardableResult
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) -> Tab {
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false, completion: (() -> Void)? = nil) -> Tab {
         let request: URLRequest?
         if let url = url {
             request = URLRequest(url: url)
@@ -2151,7 +2161,7 @@ class BrowserViewController: UIViewController,
         }
 
         let tab = tabManager.addTab(request, isPrivate: isPrivate)
-        tabManager.selectTab(tab)
+        tabManager.selectTab(tab, completion: completion)
         switchToPrivacyMode(isPrivate: isPrivate)
         return tab
     }
@@ -2178,7 +2188,8 @@ class BrowserViewController: UIViewController,
     func openBlankNewTab(
         focusLocationField: Bool,
         isPrivate: Bool = false,
-        searchFor searchText: String? = nil
+        searchFor searchText: String? = nil,
+        completion: (() -> Void)? = nil
     ) {
         popToBVC()
         guard !isShowingJSPromptAlert() else {
@@ -2186,7 +2197,7 @@ class BrowserViewController: UIViewController,
             return
         }
 
-        let freshTab = openURLInNewTab(nil, isPrivate: isPrivate)
+        let freshTab = openURLInNewTab(nil, isPrivate: isPrivate, completion: completion)
         freshTab.metadataManager?.updateTimerAndObserving(state: .newTab, isPrivate: freshTab.isPrivate)
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
@@ -2488,7 +2499,7 @@ class BrowserViewController: UIViewController,
                     break
                 }
 
-                // Handle action when saved cards button is tapped
+                // HandleHandle action when saved cards button is tapped
                 handleSavedCardsButtonTap(tabWebView: tabWebView,
                                           webView: webView,
                                           frame: frame)

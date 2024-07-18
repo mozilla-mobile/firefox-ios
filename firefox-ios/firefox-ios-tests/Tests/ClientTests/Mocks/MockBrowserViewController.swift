@@ -24,6 +24,7 @@ class MockBrowserViewController: BrowserViewController {
 
     var handleQueryCalled = false
     var handleQuery: String?
+    var handleSearchOptions: Set<Route.SearchOptions>?
     var showLibraryCalled = false
     var showLibraryPanel: LibraryPanelType?
 
@@ -70,7 +71,11 @@ class MockBrowserViewController: BrowserViewController {
         switchToTabForURLOrOpenCount += 1
     }
 
-    override func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool, searchFor searchText: String?) {
+    override func openBlankNewTab(
+        focusLocationField: Bool,
+        isPrivate: Bool,
+        searchFor searchText: String?,
+        completion: (() -> Void)? = nil) {
         openBlankNewTabCalled = true
         openBlankNewTabFocusLocationField = focusLocationField
         openBlankNewTabIsPrivate = isPrivate
@@ -78,9 +83,10 @@ class MockBrowserViewController: BrowserViewController {
         openBlankNewTabCount += 1
     }
 
-    override func handle(query: String) {
+    override func handle(query: String, options: Set<Route.SearchOptions>? = nil) {
         handleQueryCalled = true
         handleQuery = query
+        handleSearchOptions = options
         handleQueryCount += 1
     }
 
@@ -90,7 +96,7 @@ class MockBrowserViewController: BrowserViewController {
         showLibraryCount += 1
     }
 
-    override func openURLInNewTab(_ url: URL?, isPrivate: Bool) -> Tab {
+    override func openURLInNewTab(_ url: URL?, isPrivate: Bool, completion: (() -> Void)? = nil) -> Tab {
         openURLInNewTabCalled = true
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate

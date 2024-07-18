@@ -83,7 +83,7 @@ class WallpaperSettingsViewModel {
             let tab = strongSelf.tabManager.addTab(URLRequest(url: learnMoreUrl),
                                                    afterTab: strongSelf.tabManager.selectedTab,
                                                    isPrivate: false)
-            strongSelf.tabManager.selectTab(tab, previous: nil)
+            strongSelf.tabManager.selectTab(tab, previous: nil, completion: nil)
         }
 
         return WallpaperSettingsHeaderViewModel(
@@ -152,7 +152,7 @@ class WallpaperSettingsViewModel {
     func selectHomepageTab() {
         let homepageTab = getHomepageTab(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
 
-        tabManager.selectTab(homepageTab, previous: nil)
+        tabManager.selectTab(homepageTab, previous: nil, completion: nil)
     }
 
     /// Get mostRecentHomePage used if none is available we add and select a new homepage Tab
