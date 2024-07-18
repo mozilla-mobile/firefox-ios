@@ -50,6 +50,6 @@ class DisplaySettingTests: BaseTestCase {
         let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValueAfter as! String, "1")
         mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
-        mozWaitForElementNotToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
+        mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
     }
 }
