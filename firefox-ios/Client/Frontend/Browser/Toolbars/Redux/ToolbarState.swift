@@ -12,12 +12,12 @@ struct ToolbarState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var addressToolbar: AddressBarState
     var navigationToolbar: NavigationBarState
-    var numberOfTabs: Int
-
     let isShowingNavigationToolbar: Bool
     let isShowingTopTabs: Bool
+    let menuWarningBadge: String?
     let canGoBack: Bool
     let canGoForward: Bool
+    var numberOfTabs: Int
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let toolbarState = store.state.screenState(
@@ -35,7 +35,8 @@ struct ToolbarState: ScreenState, Equatable {
                   addressToolbar: toolbarState.addressToolbar,
                   navigationToolbar: toolbarState.navigationToolbar,
                   isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                  isShowingTopTabs: toolbarState.isShowingTopTabs,
+                  isShowingTopTabs: toolbarState.isShowingTopTabs, 
+                  menuWarningBadge: toolbarState.menuWarningBadge,
                   canGoBack: toolbarState.canGoBack,
                   canGoForward: toolbarState.canGoForward,
                   numberOfTabs: toolbarState.numberOfTabs)
@@ -50,6 +51,7 @@ struct ToolbarState: ScreenState, Equatable {
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
             isShowingNavigationToolbar: true,
             isShowingTopTabs: false,
+            menuWarningBadge: nil,
             canGoBack: false,
             canGoForward: false,
             numberOfTabs: 1
@@ -64,6 +66,7 @@ struct ToolbarState: ScreenState, Equatable {
         navigationToolbar: NavigationBarState,
         isShowingNavigationToolbar: Bool,
         isShowingTopTabs: Bool,
+        menuWarningBadge: String?,
         canGoBack: Bool,
         canGoForward: Bool,
         numberOfTabs: Int
@@ -75,6 +78,7 @@ struct ToolbarState: ScreenState, Equatable {
         self.navigationToolbar = navigationToolbar
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
+        self.menuWarningBadge = menuWarningBadge
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.numberOfTabs = numberOfTabs
@@ -89,8 +93,7 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.addressToolbarActionsDidChange,
             ToolbarActionType.backForwardButtonStatesChanged,
             ToolbarActionType.scrollOffsetChanged,
-            ToolbarActionType.urlDidChange,
-            ToolbarActionType.showMenuWarningBadge:
+            ToolbarActionType.urlDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,
@@ -100,6 +103,22 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
                 isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
+                menuWarningBadge: state.menuWarningBadge,
+                canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
+                canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
+
+        case ToolbarActionType.showMenuWarningBadge:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
+                isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
+                menuWarningBadge: toolbarAction.badgeImageName,
                 canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
                 canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -114,6 +133,7 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
+                menuWarningBadge: state.menuWarningBadge,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
@@ -128,6 +148,7 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
+                menuWarningBadge: state.menuWarningBadge,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -142,6 +163,7 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
+                menuWarningBadge: state.menuWarningBadge,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -155,6 +177,7 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: state.navigationToolbar,
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
+                menuWarningBadge: state.menuWarningBadge,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)

@@ -70,6 +70,7 @@ class ToolbarMiddlewareAction: Action {
     let url: URL?
     let canGoBack: Bool?
     let canGoForward: Bool?
+    let badgeImageName: String?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
@@ -82,6 +83,7 @@ class ToolbarMiddlewareAction: Action {
          url: URL? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
+         badgeImageName: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
@@ -95,6 +97,7 @@ class ToolbarMiddlewareAction: Action {
         self.url = url
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
+        self.badgeImageName = badgeImageName
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -109,4 +112,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case traitCollectionDidChange
     case backButtonStateChanged
     case forwardButtonStateChanged
+    case showMenuWarningBadge
 }
