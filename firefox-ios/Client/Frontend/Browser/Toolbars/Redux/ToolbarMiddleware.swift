@@ -126,7 +126,6 @@ class ToolbarMiddleware: FeatureFlaggable {
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.urlDidChange:
-            guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return }
             updateUrlAndActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.didStartEditingUrl:
@@ -140,6 +139,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             updateAddressToolbarNavigationActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.numberOfTabsChanged:
+            updateNumberOfTabs(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.backButtonStateChanged,
+            ToolbarMiddlewareActionType.forwardButtonStateChanged:
             updateNumberOfTabs(action: action, state: state)
 
         default:
@@ -366,18 +369,10 @@ class ToolbarMiddleware: FeatureFlaggable {
         let isStartEditingUrlAction = action.actionType as? ToolbarMiddlewareActionType == .didStartEditingUrl
         let isUrlDidChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
 
-        var url = toolbarState.addressToolbar.url
-        var isShowingNavToolbar = toolbarState.isShowingNavigationToolbar
-        var canGoBack = toolbarState.canGoBack
-        var canGoForward = toolbarState.canGoForward
-
-        if action.actionType as? ToolbarMiddlewareActionType == .urlDidChange,
-           let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction {
-            url = urlChangeAction.url
-            isShowingNavToolbar = urlChangeAction.isShowingNavigationToolbar
-            canGoBack = urlChangeAction.canGoBack
-            canGoForward = urlChangeAction.canGoForward
-        }
+        let url = action.url ?? toolbarState.addressToolbar.url
+        let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
 
         if isEditing {
             // back carrot when in edit mode
@@ -408,8 +403,7 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: action.windowUUID)
         else { return actions }
 
-        let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction
-        let url = urlChangeAction != nil ? urlChangeAction?.url : toolbarState.addressToolbar.url
+        let url = action.url ?? toolbarState.addressToolbar.url
 
         guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
@@ -430,8 +424,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         return actions
     }
 
-    private func updateUrlAndActions(action: ToolbarMiddlewareUrlChangeAction,
-                                     state: AppState) {
+    private func updateUrlAndActions(action: ToolbarMiddlewareAction, state: AppState) {
         guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
                                                                                 state: state,
                                                                                 url: action.url,
@@ -468,6 +461,29 @@ class ToolbarMiddleware: FeatureFlaggable {
                                           numberOfTabs: numberOfTabs,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.numberOfTabsChanged)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateBackForwardToolbarActions(action: ToolbarMiddlewareAction,
+                                                 state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID),
+              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
+                                                                                state: state),
+              let navToolbarModel = generateNavigationToolbarNavigationActions(action: action,
+                                                                               state: state)
+        else { return }
+
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          canGoBack: canGoBack,
+                                          canGoForward: canGoForward,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.backForwardButtonStatesChanged)
         store.dispatch(toolbarAction)
     }
 
@@ -532,16 +548,10 @@ class ToolbarMiddleware: FeatureFlaggable {
         let middleActionHome = searchAction
         let middleAction = url == nil ? middleActionHome : middleActionDefault
 
-        var canGoBack = toolbarState.canGoBack
-        var canGoForward = toolbarState.canGoForward
-
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
-        if action.actionType as? ToolbarMiddlewareActionType == .urlDidChange,
-           let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction {
-            canGoBack = urlChangeAction.canGoBack
-            canGoForward = urlChangeAction.canGoForward
-        }
 
         let actions = [
             backAction(enabled: canGoBack),

@@ -48,33 +48,12 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.backButtonStateChanged:
-            guard let canGoBack = (action as? ToolbarAction)?.canGoBack else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .back }) {
-                actions[index].isEnabled = canGoBack
-            }
+        case ToolbarActionType.backForwardButtonStatesChanged:
+            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: actions,
-                displayBorder: state.displayBorder
-            )
-
-        case ToolbarActionType.forwardButtonStateChanged:
-            guard let canGoForward = (action as? ToolbarAction)?.canGoForward else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
-                actions[index].isEnabled = canGoForward
-            }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: actions,
+                actions: model.actions ?? state.actions,
                 displayBorder: state.displayBorder
             )
 

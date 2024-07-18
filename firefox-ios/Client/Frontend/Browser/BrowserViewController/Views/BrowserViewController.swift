@@ -1771,10 +1771,10 @@ class BrowserViewController: UIViewController,
             StandardImageIdentifiers.Large.lockFill :
             StandardImageIdentifiers.Large.lockSlashFill
 
-            let action = ToolbarMiddlewareUrlChangeAction(
-                url: tab.url?.displayURL,
-                lockIconImageName: lockIconImageName,
+            let action = ToolbarMiddlewareAction(
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
+                lockIconImageName: lockIconImageName,
+                url: tab.url?.displayURL,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 windowUUID: windowUUID,
@@ -1848,13 +1848,15 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
+    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?,
+                                                  _ windowUUID: UUID,
+                                                  _ actionType: ToolbarMiddlewareActionType) {
         switch actionType {
         case .backButtonStateChanged:
-            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarMiddlewareAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         case .forwardButtonStateChanged:
-            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarMiddlewareAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }

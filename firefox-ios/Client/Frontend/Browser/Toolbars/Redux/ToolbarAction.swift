@@ -52,8 +52,7 @@ enum ToolbarActionType: ActionType {
     case numberOfTabsChanged
     case addressToolbarActionsDidChange
     case urlDidChange
-    case backButtonStateChanged
-    case forwardButtonStateChanged
+    case backForwardButtonStatesChanged
     case scrollOffsetChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
@@ -65,14 +64,24 @@ class ToolbarMiddlewareAction: Action {
     let gestureType: ToolbarButtonGesture?
     let isLoading: Bool?
     let isShowingTopTabs: Bool?
+    let isShowingNavigationToolbar: Bool?
+    let lockIconImageName: String?
     let numberOfTabs: Int?
+    let url: URL?
+    let canGoBack: Bool?
+    let canGoForward: Bool?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          isLoading: Bool? = nil,
          isShowingTopTabs: Bool? = nil,
+         isShowingNavigationToolbar: Bool? = nil,
+         lockIconImageName: String? = nil,
          numberOfTabs: Int? = nil,
+         url: URL? = nil,
+         canGoBack: Bool? = nil,
+         canGoForward: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
@@ -80,28 +89,10 @@ class ToolbarMiddlewareAction: Action {
         self.gestureType = gestureType
         self.isLoading = isLoading
         self.isShowingTopTabs = isShowingTopTabs
-        self.numberOfTabs = numberOfTabs
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
-
-final class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
-    let url: URL?
-    let lockIconImageName: String
-    let isShowingNavigationToolbar: Bool
-    let canGoBack: Bool
-    let canGoForward: Bool
-
-    init(url: URL? = nil,
-         lockIconImageName: String,
-         isShowingNavigationToolbar: Bool,
-         canGoBack: Bool,
-         canGoForward: Bool,
-         windowUUID: WindowUUID,
-         actionType: ActionType) {
-        self.url = url
-        self.lockIconImageName = lockIconImageName
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.lockIconImageName = lockIconImageName
+        self.numberOfTabs = numberOfTabs
+        self.url = url
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         super.init(windowUUID: windowUUID, actionType: actionType)
@@ -116,4 +107,6 @@ enum ToolbarMiddlewareActionType: ActionType {
     case cancelEdit
     case websiteLoadingStateDidChange
     case traitCollectionDidChange
+    case backButtonStateChanged
+    case forwardButtonStateChanged
 }

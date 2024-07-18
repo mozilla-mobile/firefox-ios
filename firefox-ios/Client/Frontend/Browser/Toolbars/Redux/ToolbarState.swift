@@ -87,8 +87,7 @@ struct ToolbarState: ScreenState, Equatable {
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars,
             ToolbarActionType.addressToolbarActionsDidChange,
-            ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged,
+            ToolbarActionType.backForwardButtonStatesChanged,
             ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.urlDidChange,
             ToolbarActionType.showMenuWarningBadge:
@@ -109,7 +108,7 @@ struct ToolbarState: ScreenState, Equatable {
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,
-                toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
+                toolbarPosition: state.toolbarPosition,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
