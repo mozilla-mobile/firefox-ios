@@ -145,7 +145,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         case .tap:
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
-            handleToolbarButtonLongPressActions(action: action, windowUUID: uuid)
+            handleToolbarButtonLongPressActions(action: action)
         }
     }
 
@@ -234,20 +234,19 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction,
-                                                     windowUUID: WindowUUID) {
+    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction) {
         switch action.buttonType {
         case .back, .forward:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showBackForwardList)
             store.dispatch(action)
         case .tabs:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabsLongPressActions)
             store.dispatch(action)
         case .reload:
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
-                                              windowUUID: windowUUID,
+                                              windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReloadLongPressAction)
             store.dispatch(action)
         default:
