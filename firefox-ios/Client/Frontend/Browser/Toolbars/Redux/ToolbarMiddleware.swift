@@ -425,14 +425,12 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func updateUrlAndActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
-                                                                                state: state,
-                                                                                url: action.url,
-                                                                                lockIconImageName: action.lockIconImageName,
-                                                                                isEditing: false),
-              let navToolbarModel = generateNavigationToolbarNavigationActions(action: action,
-                                                                               state: state,
-                                                                               url: action.url)
+        guard let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      lockIconImageName: action.lockIconImageName,
+                                                                      isEditing: false),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
@@ -449,11 +447,11 @@ class ToolbarMiddleware: FeatureFlaggable {
     private func updateNumberOfTabs(action: ToolbarMiddlewareAction,
                                     state: AppState) {
         guard let numberOfTabs = action.numberOfTabs,
-              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
-                                                                                state: state,
-                                                                                isEditing: false),
-              let navToolbarModel = generateNavigationToolbarNavigationActions(action: action,
-                                                                               state: state)
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      isEditing: false),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
@@ -469,10 +467,10 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard let toolbarState = state.screenState(ToolbarState.self,
                                                    for: .toolbar,
                                                    window: action.windowUUID),
-              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
-                                                                                state: state),
-              let navToolbarModel = generateNavigationToolbarNavigationActions(action: action,
-                                                                               state: state)
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
         else { return }
 
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
@@ -491,9 +489,9 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                        state: AppState,
                                                        isEditing: Bool? = nil) {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
-              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
-                                                                                state: state,
-                                                                                isEditing: isEditing)
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      isEditing: isEditing)
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
@@ -503,7 +501,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
-    private func generateAddressToolbarNavigationActions(
+    private func generateAddressToolbarActions(
         action: ToolbarMiddlewareAction,
         state: AppState,
         url: URL? = nil,
@@ -534,7 +532,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     // MARK: - Navigation Toolbar
 
-    private func generateNavigationToolbarNavigationActions(
+    private func generateNavigationToolbarActions(
         action: ToolbarMiddlewareAction,
         state: AppState,
         url: URL? = nil,
