@@ -24,7 +24,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
         // such as its TabManager instance, which also has the window UUID property as a convenience.
-        self.windowUUID = windowManager.reserveNextAvailableWindowUUID()
+        let uuid = windowManager.reserveNextAvailableWindowUUID()
+        self.windowUUID = uuid
         self.window = sceneSetupHelper.configureWindowFor(scene,
                                                           windowUUID: windowUUID,
                                                           screenshotServiceDelegate: screenshotService)
@@ -36,6 +37,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         let router = DefaultRouter(navigationController: navigationController)
         super.init(router: router)
 
+        logger.log("SceneCoordinator init completed (UUID: \(uuid))", level: .debug, category: .lifecycle)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
