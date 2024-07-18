@@ -222,6 +222,9 @@ class TabManagerTests: XCTestCase {
 
         // Test
         await subject.removeAllTabs(isPrivateMode: false)
+        
+        // Wait for async save closures to complete so subject would trigger the memory leak check
+        try await Task.sleep(nanoseconds: 2 * sleepTime)
 
         // Check results
         XCTAssertEqual(subject.tabs.count, 1)
@@ -231,9 +234,6 @@ class TabManagerTests: XCTestCase {
         }
         XCTAssertEqual(homeTab.url?.absoluteString, "internal://local/about/home#panel=0")
         XCTAssertFalse(addedTabs.contains(where: { $0.tabUUID == homeTab.tabUUID }), "Tabs should have been removed")
-
-        // Wait for async save closures to complete so subject would trigger the memory leak check
-        try await Task.sleep(nanoseconds: sleepTime)
     }
 
     func test_removeAllTabs_savesCorrectBackupCloseTab() async throws {
@@ -256,14 +256,14 @@ class TabManagerTests: XCTestCase {
         // Test
         await subject.removeAllTabs(isPrivateMode: false)
 
+        // Wait for async save closures to complete so subject would trigger the memory leak check
+        try await Task.sleep(nanoseconds: 2 * sleepTime)
+
         XCTAssertEqual(
             subject.backupCloseTab?.tab.tabUUID,
             selectedTabUUID,
             "The backup tab should be the previously selected tab"
         )
-
-        // Wait for async save closures to complete so subject would trigger the memory leak check
-        try await Task.sleep(nanoseconds: sleepTime)
     }
 
     // MARK: - Helper methods
