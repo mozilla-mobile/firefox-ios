@@ -184,11 +184,22 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         // Fetch available window data on disk, and remove any already-opened windows
         // or UUIDs that are already reserved and in the process of opening.
         let openWindowUUIDs = windows.keys
-        let filteredUUIDs = tabDataStore.fetchWindowDataUUIDs().filter {
+        let onDiskUUIDs = tabDataStore.fetchWindowDataUUIDs()
+        let filteredUUIDs = onDiskUUIDs.filter {
             !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
         }
 
+        let onDiskUUIDLog = onDiskUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
+        let reserveLog = reservedUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
+        let openLog = openWindowUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
+        logger.log("WindowManager: reserve next UUID. Disk: \(onDiskUUIDLog). Reserved: \(reserveLog). Open: \(openLog)",
+                   level: .debug,
+                   category: .window)
+
         let result = nextWindowUUIDToOpen(filteredUUIDs)
+        logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
+                   level: .debug,
+                   category: .window)
         let resultUUID = result.uuid
         if result.isNew {
             // Be sure to add any brand-new windows to our ordering preferences
