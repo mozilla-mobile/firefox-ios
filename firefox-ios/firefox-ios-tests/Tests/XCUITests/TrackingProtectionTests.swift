@@ -133,7 +133,7 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts["Cross-Site Trackers"])
         mozWaitForElementToExist(app.cells.staticTexts["Fingerprinters"])
         mozWaitForElementToExist(app.cells.staticTexts["Cryptominers"])
-        mozWaitForElementToExist(app.cells.staticTexts["Tracking content"])
+        mozWaitForElementToNotExist(app.cells.staticTexts["Tracking content"])
 
         // Go back to TP settings
         app.buttons["Tracking Protection"].tap()
