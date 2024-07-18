@@ -38,6 +38,13 @@ class AddressToolbarContainerModel: Equatable {
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
                 store.dispatch(action)
+            },
+            onLongPress: {
+                let action = ToolbarMiddlewareAction(buttonType: .locationView,
+                                                     gestureType: .longPress,
+                                                     windowUUID: self.windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didTapButton)
+                store.dispatch(action)
             })
         return AddressToolbarState(
             locationViewState: locationViewState,

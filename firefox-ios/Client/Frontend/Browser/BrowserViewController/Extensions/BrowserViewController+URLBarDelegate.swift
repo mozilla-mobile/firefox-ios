@@ -258,18 +258,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let urlActions = self.getLongPressLocationBarActions(with: urlBar, alertContainer: contentContainer)
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
-        let viewModel = PhotonActionSheetViewModel(
-            actions: [urlActions],
-            closeButtonTitle: .CloseButtonTitle,
-            modalStyle: style
-        )
-        self.presentSheetWith(viewModel: viewModel, on: self, from: urlBar)
+        presentLocationViewActionSheet(from: urlBar)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
