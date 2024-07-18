@@ -431,7 +431,7 @@ class TabManagerMiddleware {
                                                          actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
             store.dispatch(refreshAction)
 
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: tabsState.inactiveTabs.count),
+            let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: tabsState.inactiveTabs.count),
                                                        windowUUID: uuid,
                                                        actionType: TabPanelMiddlewareActionType.showToast)
             store.dispatch(toastAction)
