@@ -20,7 +20,7 @@ final class MicrosurveyTests: BaseTestCase {
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
     }
 
-    func testURLBorderHidden_whenMicrosurveyPromptShownAndAppearsWhenClosed() throws {
+    func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
         guard !iPad() else {
             throw XCTSkip("Toolbar option not available for iPad")
         }
