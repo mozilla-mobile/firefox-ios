@@ -132,11 +132,12 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didStartEditingUrl:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
-        case ToolbarMiddlewareActionType.cancelEdit:
+        case ToolbarMiddlewareActionType.cancelEdit,
+            ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
 
-        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
-            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
+        case ToolbarMiddlewareActionType.traitCollectionDidChange:
+            updateAddressToolbarNavigationActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.numberOfTabsChanged:
             updateNumberOfTabs(action: action, state: state)
@@ -340,6 +341,10 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: action.windowUUID)
         else { return actions }
 
+        if !(action.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
+            actions.append(newTabAction)
+        }
+
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
         actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs), menuAction])
@@ -468,13 +473,15 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction,
                                                        state: AppState,
-                                                       isEditing: Bool) {
-        guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
+                                                       isEditing: Bool? = nil) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
+              let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
                                                                                 state: state,
                                                                                 isEditing: isEditing)
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.addressToolbarActionsDidChange)
         store.dispatch(toolbarAction)

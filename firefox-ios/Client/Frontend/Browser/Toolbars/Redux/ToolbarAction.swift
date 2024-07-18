@@ -15,6 +15,7 @@ class ToolbarAction: Action {
     let isPrivate: Bool?
     let badgeImageName: String?
     let isShowingNavigationToolbar: Bool?
+    let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
 
@@ -26,6 +27,7 @@ class ToolbarAction: Action {
          isPrivate: Bool? = nil,
          badgeImageName: String? = nil,
          isShowingNavigationToolbar: Bool? = nil,
+         isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          windowUUID: WindowUUID,
@@ -38,6 +40,7 @@ class ToolbarAction: Action {
         self.isPrivate = isPrivate
         self.badgeImageName = badgeImageName
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         super.init(windowUUID: windowUUID, actionType: actionType)
@@ -61,12 +64,14 @@ class ToolbarMiddlewareAction: Action {
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let isLoading: Bool?
+    let isShowingTopTabs: Bool?
     let numberOfTabs: Int?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          isLoading: Bool? = nil,
+         isShowingTopTabs: Bool? = nil,
          numberOfTabs: Int? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -74,6 +79,7 @@ class ToolbarMiddlewareAction: Action {
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         self.isLoading = isLoading
+        self.isShowingTopTabs = isShowingTopTabs
         self.numberOfTabs = numberOfTabs
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
@@ -109,4 +115,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didStartEditingUrl
     case cancelEdit
     case websiteLoadingStateDidChange
+    case traitCollectionDidChange
 }

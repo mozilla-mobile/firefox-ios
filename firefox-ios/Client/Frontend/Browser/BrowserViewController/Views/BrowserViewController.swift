@@ -386,6 +386,13 @@ class BrowserViewController: UIViewController,
             } else {
                 navigationToolbarContainer.isHidden = true
             }
+
+            let action = ToolbarMiddlewareAction(
+                isShowingTopTabs: showTopTabs,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
+            )
+            store.dispatch(action)
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
