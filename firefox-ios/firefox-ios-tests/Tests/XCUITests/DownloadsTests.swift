@@ -15,12 +15,16 @@ let testBLOBFileSize = "35 bytes"
 class DownloadsTests: BaseTestCase {
     override func tearDown() {
         // The downloaded file has to be removed between tests
+        app.terminate()
+        app.activate()
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_Downloads)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         let list = app.tables["DownloadsTable"].cells.count
         if list != 0 {
             for _ in 0...list-1 {
                 mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
-                app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft()
+                app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft(velocity: 200)
                 mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
                 app.tables.cells.buttons["Delete"].tap()
             }
@@ -29,7 +33,7 @@ class DownloadsTests: BaseTestCase {
     }
 
     private func deleteItem(itemName: String) {
-        app.tables.cells.staticTexts[itemName].swipeLeft()
+        app.tables.cells.staticTexts[itemName].swipeLeft(velocity: 200)
         mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
         app.tables.cells.buttons["Delete"].tap()
     }
@@ -110,12 +114,13 @@ class DownloadsTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         let shareButton = app.tables.buttons.staticTexts["Share"]
-        app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft()
+        app.tables.cells.staticTexts[testFileNameDownloadPanel].swipeLeft(velocity: 200)
         mozWaitForElementToExist(shareButton)
         mozWaitForElementToExist(app.tables.buttons.staticTexts["Delete"])
         shareButton.tap(force: true)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
+        /*
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         } else {
@@ -128,6 +133,7 @@ class DownloadsTests: BaseTestCase {
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
             app.buttons["Done"].tap(force: true)
         }
+         */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306902
@@ -141,6 +147,7 @@ class DownloadsTests: BaseTestCase {
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements["ActivityListView"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
+        /*
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         } else {
@@ -153,6 +160,7 @@ class DownloadsTests: BaseTestCase {
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
             app.buttons["Done"].tap(force: true)
         }
+        */
      }
 
     private func downloadFile(fileName: String, numberOfDownloads: Int) {

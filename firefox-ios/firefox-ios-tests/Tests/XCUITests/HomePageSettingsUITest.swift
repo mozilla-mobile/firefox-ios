@@ -262,6 +262,8 @@ class HomePageSettingsUITests: BaseTestCase {
         bookmarkPages()
         addContentToReaderView()
         navigator.performAction(Action.GoToHomePage)
+        // Recently Saved is no longer an option on the home page.
+        /*
         mozWaitForElementToExist(app.staticTexts["Recently Saved"])
         navigator.performAction(Action.ToggleRecentlySaved)
         // On iPad we have the homepage button always present,
@@ -295,6 +297,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.CloseReadingListPanel)
         navigator.goto(NewTabScreen)
         checkBookmarksUpdated()
+        */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923
