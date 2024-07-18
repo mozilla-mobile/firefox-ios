@@ -20,6 +20,23 @@ final class MicrosurveyTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
     }
 
+    func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
+        guard !iPad() else {
+            throw XCTSkip("Toolbar option not available for iPad")
+        }
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(ToolbarSettings)
+        navigator.performAction(Action.SelectToolbarBottom)
+        navigator.goto(HomePanelsScreen)
+        generateTriggerForMicrosurvey()
+        XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.urlBarBorder].exists)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
+        XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+        app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
+        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+    }
+
     func testCloseButtonDismissesMicrosurveyPrompt() {
         generateTriggerForMicrosurvey()
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()

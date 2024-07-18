@@ -145,7 +145,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         case .tap:
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
-            handleToolbarButtonLongPressActions(actionType: buttonType, windowUUID: uuid)
+            handleToolbarButtonLongPressActions(action: action)
         }
     }
 
@@ -234,16 +234,24 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func handleToolbarButtonLongPressActions(actionType: ToolbarActionState.ActionType,
-                                                     windowUUID: WindowUUID) {
-        switch actionType {
+    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction) {
+        switch action.buttonType {
         case .back, .forward:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showBackForwardList)
             store.dispatch(action)
         case .tabs:
-            let action = GeneralBrowserAction(windowUUID: windowUUID,
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabsLongPressActions)
+            store.dispatch(action)
+        case .locationView:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showLocationViewLongPressActionSheet)
+            store.dispatch(action)
+        case .reload:
+            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
+                                              windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showReloadLongPressAction)
             store.dispatch(action)
         default:
             break
@@ -323,9 +331,6 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    for: .toolbar,
                                                    window: action.windowUUID)
         else { return actions }
-
-        let isStartEditingUrlAction = action.actionType as? ToolbarMiddlewareActionType == .didStartEditingUrl
-        let isUrlDidChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
 
         var url = toolbarState.addressToolbar.url
         var isShowingNavToolbar = toolbarState.isShowingNavigationToolbar
