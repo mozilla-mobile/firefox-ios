@@ -387,12 +387,15 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = true
             }
 
-            let action = ToolbarMiddlewareAction(
-                isShowingTopTabs: showTopTabs,
-                windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
-            )
-            store.dispatch(action)
+            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+               toolbarState.isShowingTopTabs != showTopTabs {
+                let action = ToolbarMiddlewareAction(
+                    isShowingTopTabs: showTopTabs,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
+                )
+                store.dispatch(action)
+            }
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
