@@ -55,7 +55,7 @@ class ActivityStreamTest: BaseTestCase {
         // Check their names so that test is added to Smoketest
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Twitter"])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Amazon"])
-        mozWaitForElementToExist(app.collectionViews.cells.staticTexts["wikipedia"])
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Wikipedia"])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["YouTube"])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Facebook"])
     }
@@ -182,7 +182,7 @@ class ActivityStreamTest: BaseTestCase {
         app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"].tap()
 
         // The website is open
-        mozWaitForElementToExist(TopSiteCellgroup)
+        mozWaitForElementToNotExist(TopSiteCellgroup)
         mozWaitForElementToExist(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value: "wikipedia.org")
     }
