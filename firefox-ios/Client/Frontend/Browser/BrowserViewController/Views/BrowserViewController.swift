@@ -1391,6 +1391,7 @@ class BrowserViewController: UIViewController,
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
         }
+        setupMicrosurvey()
     }
 
     func showLibrary(panel: LibraryPanelType) {
