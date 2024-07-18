@@ -35,7 +35,7 @@ struct ToolbarState: ScreenState, Equatable {
                   addressToolbar: toolbarState.addressToolbar,
                   navigationToolbar: toolbarState.navigationToolbar,
                   isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
-                  isShowingTopTabs: toolbarState.isShowingTopTabs, 
+                  isShowingTopTabs: toolbarState.isShowingTopTabs,
                   menuWarningBadge: toolbarState.menuWarningBadge,
                   canGoBack: toolbarState.canGoBack,
                   canGoForward: toolbarState.canGoForward,
