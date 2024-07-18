@@ -35,14 +35,13 @@ class DisplaySettingTests: BaseTestCase {
 
         // Select the Automatic mode
         navigator.performAction(Action.SelectAutomatically)
-
         mozWaitForElementToExist(app.tables.otherElements["THRESHOLD"])
         mozWaitForElementToNotExist(app.cells.staticTexts["Light"])
         mozWaitForElementToNotExist(app.cells.staticTexts["Dark"])
 
         // Now select the Manual mode
         navigator.performAction(Action.SelectManually)
-        mozWaitForElementToExist(app.tables.otherElements["THRESHOLD"])
+        mozWaitForElementToNotExist(app.tables.otherElements["THRESHOLD"])
         mozWaitForElementToExist(app.cells.staticTexts["Light"])
         mozWaitForElementToExist(app.cells.staticTexts["Dark"])
 
@@ -50,7 +49,7 @@ class DisplaySettingTests: BaseTestCase {
         navigator.performAction(Action.SystemThemeSwitch)
         let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValueAfter as! String, "1")
-        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
-        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
+        mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
+        mozWaitForElementNotToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
     }
 }
