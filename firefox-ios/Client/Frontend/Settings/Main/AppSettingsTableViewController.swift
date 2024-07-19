@@ -364,7 +364,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
         hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
         #endif
-        
+
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
 
