@@ -2,10 +2,10 @@
 "ContextualHints.Shopping.NotOptedIn.v120" = "Finden Sie heraus, ob Sie den Bewertungen dieses Produkts vertrauen können – bevor Sie es kaufen.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action. */
-"ContextualHints.Shopping.NotOptedInAction.v120" = "Rezensionsprüfer ausprobieren";
+"ContextualHints.Shopping.NotOptedInAction.v120" = "Review Checker ausprobieren";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action. */
-"ContextualHints.Shopping.OptedInAction.v120" = "Rezensionsprüfer öffnen";
+"ContextualHints.Shopping.OptedInAction.v120" = "Review Checker öffnen";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button. */
 "ContextualHints.Shopping.OptedInBody.v120" = "Sind diese Bewertungen vertrauenswürdig? Überprüfen Sie es jetzt, um eine angepasste Bewertung zu sehen.";
@@ -125,10 +125,10 @@
 "Shopping.OptInCard.Disclaimer.Text.v123" = "Indem Sie „Ja, ausprobieren“ auswählen, stimmen Sie den folgenden Bedingungen zu:";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
-"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Sehen Sie sich vor dem Kauf an, wie zuverlässig Produktbewertungen auf %1$@ sind. Der Rezensionsprüfer, eine experimentelle Funktion von %2$@, ist direkt in den Browser integriert.";
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Sehen Sie sich vor dem Kauf an, wie zuverlässig Produktbewertungen auf %1$@ sind. Der Review Checker, eine experimentelle Funktion von %2$@, ist direkt in den Browser integriert.";
 
 /* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
-"Shopping.OptInCard.FirstParagraph.Description.v120" = "Sehen Sie sich vor dem Kauf an, wie zuverlässig Produktbewertungen auf %1$@ sind. Der Rezensionsprüfer, eine experimentelle Funktion von %2$@, ist direkt in den Browser integriert. Es funktioniert auch auf %3$@ und %4$@.";
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Sehen Sie sich vor dem Kauf an, wie zuverlässig Produktbewertungen auf %1$@ sind. Der Review Checker, eine experimentelle Funktion von %2$@, ist direkt in den Browser integriert. Es funktioniert auch auf %3$@ und %4$@.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Lesen Sie unseren vertrauenswürdigen Leitfaden zur Produktbewertung";
@@ -221,7 +221,7 @@
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, Umschalt-Schaltfläche, %2$@.";
 
 /* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.SettingsCard.Footer.Action.v120" = "Rezensionsprüfer wird bereitgestellt von %1$@ von %2$@";
+"Shopping.SettingsCard.Footer.Action.v120" = "Review Checker wird bereitgestellt von %1$@ von %2$@";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "Einstellungen";
@@ -236,16 +236,16 @@
 "Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "Ein";
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
-"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Rezensionsprüfer abschalten";
+"Shopping.SettingsCard.TurnOffButton.Title.v120" = "Review Checker abschalten";
 
 /* Beta label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Beta.Title.v120" = "BETA";
 
 /* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
-"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Rezensionsprüfer schließen";
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Review Checker schließen";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
-"Shopping.Sheet.Title.v120" = "Rezensionsprüfer";
+"Shopping.Sheet.Title.v120" = "Review Checker";
 
 /* Text for body of error card displayed to the user when the device is disconnected from the network. */
 "Shopping.WarningCard.CheckNoConnection.Description.v120" = "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie dann, die Seite neu zu laden.";
