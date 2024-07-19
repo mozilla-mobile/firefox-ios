@@ -51,7 +51,7 @@ struct CreditCardInputView: View {
     private var main: some View {
         return ZStack {
             backgroundColor.ignoresSafeArea()
-            formContent()
+            form
                 .navigationBarTitle(viewModel.state.title,
                                     displayMode: .inline)
                 .toolbar {
@@ -70,7 +70,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    private func formContent() -> some View {
+    private var form: some View {
         return VStack(spacing: 0) {
             Divider()
                 .frame(height: 0.7)
