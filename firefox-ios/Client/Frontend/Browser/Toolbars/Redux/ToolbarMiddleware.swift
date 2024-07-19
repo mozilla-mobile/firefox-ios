@@ -80,7 +80,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     lazy var shareAction = ToolbarActionState(
         actionType: .share,
-        iconName: StandardImageIdentifiers.Large.shareApple,
+        iconName: StandardImageIdentifiers.Large.share,
         isEnabled: true,
         a11yLabel: .TabLocationShareAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.shareButton)

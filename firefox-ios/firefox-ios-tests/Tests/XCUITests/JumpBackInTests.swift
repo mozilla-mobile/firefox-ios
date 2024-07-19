@@ -166,6 +166,6 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.shareApple])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share])
     }
 }

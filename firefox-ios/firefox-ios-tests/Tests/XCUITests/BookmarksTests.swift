@@ -374,7 +374,7 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.shareApple])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307054
