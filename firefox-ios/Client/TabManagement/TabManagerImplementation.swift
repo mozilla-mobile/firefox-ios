@@ -17,6 +17,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     private let tabMigration: TabMigrationUtility
     private var tabsTelemetry = TabsTelemetry()
     private let windowManager: WindowManager
+    private let windowIsNew: Bool
     var notificationCenter: NotificationProtocol
     var inactiveTabsManager: InactiveTabsManagerProtocol
 
@@ -29,7 +30,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     init(profile: Profile,
          imageStore: DiskImageStore = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared,
-         uuid: WindowUUID,
+         uuid: ReservedWindowUUID,
          tabDataStore: TabDataStore? = nil,
          tabSessionStore: TabSessionStore = DefaultTabSessionStore(),
          tabMigration: TabMigrationUtility? = nil,
@@ -44,7 +45,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         self.notificationCenter = notificationCenter
         self.inactiveTabsManager = inactiveTabsManager
         self.windowManager = windowManager
-        super.init(profile: profile, uuid: uuid)
+        self.windowIsNew = uuid.isNew
+        super.init(profile: profile, uuid: uuid.uuid)
 
         setupNotifications(forObserver: self,
                            observing: [UIApplication.willResignActiveNotification,
@@ -105,7 +107,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     private func restoreOnly() {
         tabs = [Tab]()
         Task {
-            await buildTabRestore(window: await self.tabDataStore.fetchWindowData(uuid: windowUUID))
+            // Only attempt a tab data store fetch if we know we should have tabs on disk (ignore new windows)
+            let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
+            await buildTabRestore(window: windowData)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
             logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
@@ -126,6 +130,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
               tabs.isEmpty
         else {
             // Always make sure there is a single normal tab
+            // MR here is where the first empty tab for a new window is generated
             await generateEmptyTab()
             logger.log("There was no tabs restored, creating a normal tab",
                        level: .debug,
