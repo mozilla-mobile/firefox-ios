@@ -27,7 +27,7 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
         app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
         navigator.nowAt(BrowserTab)
-        mozWaitForElementToExist(app.buttons["Undo"], timeout: 3)
+        mozWaitForElementToExist(app.buttons["Undo"])
         app.buttons["Undo"].tap()
     }
 
@@ -165,7 +165,7 @@ class BookmarksTests: BaseTestCase {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
         app.tables["Bookmarks List"].cells.element(boundBy: 1).tap()
-        mozWaitForElementToExist(app.textFields["url"], timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306914

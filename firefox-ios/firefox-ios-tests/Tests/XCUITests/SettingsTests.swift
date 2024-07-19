@@ -41,7 +41,7 @@ class SettingsTests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenSiriFromSettings)
-        mozWaitForElementToExist(app.cells["SiriSettings"], timeout: 5)
+        mozWaitForElementToExist(app.cells["SiriSettings"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2334756
@@ -136,7 +136,7 @@ class SettingsTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306808
     // Smoketest
     func testSettingsOptionSubtitles() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)

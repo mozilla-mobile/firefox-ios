@@ -47,7 +47,7 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testDefaultSites() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: 60)
+            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
         mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
         // There should be 5 top sites by default
@@ -93,7 +93,7 @@ class ActivityStreamTest: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
+        waitForExistence(TopSiteCellgroup)
         if iPad() {
             app.textFields.element(boundBy: 0).tap()
             app.typeText("mozilla.org\n")
@@ -190,14 +190,14 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(TopSiteCellgroup, timeout: 60)
+            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT_LONG)
         }
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
         waitForExistence(app.collectionViews["FxCollectionView"].cells
-            .staticTexts[defaultTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+            .staticTexts[defaultTopSite["bookmarkLabel"]!])
         app.collectionViews["FxCollectionView"].cells.staticTexts[defaultTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Open in a Private Tab")
 
@@ -234,7 +234,7 @@ class ActivityStreamTest: BaseTestCase {
         // can't scroll only to that area. Needs investigation
         if iPad() {
             XCUIDevice.shared.orientation = .landscapeLeft
-            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
+            waitForExistence(TopSiteCellgroup)
             app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
             mozWaitForElementToExist(app.tables["Context Menu"])
             mozWaitForElementToExist(app.otherElements["Action Sheet"])

@@ -203,7 +203,7 @@ class PrivateBrowsingTest: BaseTestCase {
         for _ in 1...4 {
             navigator.createNewTab()
             if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+                mozWaitForElementToExist(app.buttons["urlBar-cancel"])
                 navigator.performAction(Action.CloseURLBarOpen)
             }
         }
@@ -304,7 +304,7 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields["url"], timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"])
         mozWaitForValueContains(app.textFields["url"], value: "iana")
         mozWaitForElementToExist(app.links["RFC 2606"])
         mozWaitForElementToExist(app.buttons["Show Tabs"])

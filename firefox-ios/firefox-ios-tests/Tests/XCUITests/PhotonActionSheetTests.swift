@@ -76,7 +76,7 @@ class PhotonActionSheetTests: BaseTestCase {
 
         if #unavailable(iOS 16) {
             mozWaitForElementToExist(app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"])
-            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.buttons["Copy"])
         } else {
             mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["Example Domain"])
             mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
@@ -88,7 +88,7 @@ class PhotonActionSheetTests: BaseTestCase {
         if #unavailable(iOS 17) {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
-        mozWaitForElementToExist(fennecElement, timeout: 5)
+        mozWaitForElementToExist(fennecElement)
         fennecElement.tap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
     }
@@ -110,8 +110,7 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
         app.staticTexts["Send to Device"].tap()
         mozWaitForElementToExist(
-            app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton],
-            timeout: 10
+            app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton]
         )
 
         mozWaitForElementToExist(app.staticTexts["You are not signed in to your account."])

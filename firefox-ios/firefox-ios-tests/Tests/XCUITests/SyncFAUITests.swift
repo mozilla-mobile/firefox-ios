@@ -87,10 +87,10 @@ class SyncUITests: BaseTestCase {
     func testCreateAnAccountLink() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        mozWaitForElementToExist(app.webViews.firstMatch, timeout: 20)
+        mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(
             app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: 40
+            timeout: TIMEOUT_LONG
         )
         userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -107,7 +107,7 @@ class SyncUITests: BaseTestCase {
         navigator.goto(FxASigninScreen)
         mozWaitForElementToExist(
             app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: 20
+            timeout: TIMEOUT_LONG
         )
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"

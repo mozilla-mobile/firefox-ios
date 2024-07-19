@@ -42,7 +42,7 @@ class ToolbarTests: BaseTestCase {
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
+        mozWaitForElementToExist(app.webViews.links["Mozilla"])
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
@@ -79,7 +79,7 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         waitForTabsButton()
-        mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
+        mozWaitForElementToExist(app.webViews.links["Mozilla"])
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
 

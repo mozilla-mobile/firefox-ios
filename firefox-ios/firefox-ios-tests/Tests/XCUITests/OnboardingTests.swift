@@ -43,7 +43,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)

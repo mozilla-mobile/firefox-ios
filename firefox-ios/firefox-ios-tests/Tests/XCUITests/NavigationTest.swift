@@ -291,17 +291,17 @@ class NavigationTest: BaseTestCase {
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.cells["Copy"])
         } else {
-            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.buttons["Copy"])
         }
         if !iPad() {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
         }
         if #unavailable(iOS 17) {
-            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"])
         } else {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"])
         }
     }
 
@@ -311,17 +311,17 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
-            mozWaitForElementToExist(app.cells["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.cells["Copy"])
         } else {
-            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.buttons["Copy"])
         }
         if !iPad() {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
         }
         if #unavailable(iOS 17) {
-            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"])
         } else {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.scrollViews.staticTexts["Reminders"])
         }
     }
 
@@ -368,12 +368,12 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.buttons["Advanced"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Advanced"])
         app.buttons["Advanced"].tap()
 
         mozWaitForElementToExist(app.links["Visit site anyway"])
         app.links["Visit site anyway"].tap()
-        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"])
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"])
     }
 
@@ -392,13 +392,13 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
-        mozWaitForElementToExist(app.links["link-created-by-parent"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.links["link-created-by-parent"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307020
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -479,7 +479,7 @@ class NavigationTest: BaseTestCase {
         app.buttons["Bookmark Link"].tap()
         // The link has been added to the Bookmarks panel in Library
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"], timeout: 5)
+        mozWaitForElementToExist(app.tables["Bookmarks List"])
         mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[website_2["link"]!])
     }
 

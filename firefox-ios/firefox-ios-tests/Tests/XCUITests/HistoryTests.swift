@@ -392,7 +392,7 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToExist(app.tables.cells.staticTexts["Example Domain"])
     }
 
@@ -421,7 +421,7 @@ class HistoryTests: BaseTestCase {
     }
 
     private func closeKeyboard() {
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
     }
@@ -472,12 +472,12 @@ class HistoryTests: BaseTestCase {
     func testDeleteHistoryEntryBySwiping() {
         navigateToPage()
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
+        waitForExistence(app.cells.staticTexts["http://example.com/"])
         navigateToPage()
         navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
         app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-        mozWaitForElementToExist(app.buttons["Delete"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Delete"])
         app.buttons["Delete"].tap()
         mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])

@@ -28,15 +28,15 @@ class LoginTest: BaseTestCase {
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["submit"], timeout: 10)
+        mozWaitForElementToExist(app.buttons["submit"])
         app.buttons["submit"].tap()
-        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 10)
+        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"])
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
 
     private func openLoginsSettings() {
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.cells["SignInToSync"], timeout: 5)
+        mozWaitForElementToExist(app.cells["SignInToSync"])
         app.cells["SignInToSync"].swipeUp()
         navigator.goto(LoginsSettings)
 
@@ -45,9 +45,9 @@ class LoginTest: BaseTestCase {
     }
 
     private func openLoginsSettingsFromBrowserTab() {
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
+        waitForExistence(app.buttons["TabToolbar.menuButton"])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.login], timeout: 5)
+        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.login])
         navigator.goto(LoginsSettings)
 
         unlockLoginsView()
@@ -232,7 +232,7 @@ class LoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         // Provided text fields are completely empty
-        mozWaitForElementToExist(app.webViews.staticTexts["Username:"], timeout: 15)
+        mozWaitForElementToExist(app.webViews.staticTexts["Username:"])
 
         // Fill in the username text box
         app.webViews.textFields.element(boundBy: 0).tap()
@@ -243,7 +243,7 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
-        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"], timeout: 5)
+        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"])
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
         // Clear Data and go to test page, fields should be filled in
@@ -254,7 +254,7 @@ class LoginTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.textFields.element(boundBy: 0), timeout: 3)
+        mozWaitForElementToExist(app.webViews.textFields.element(boundBy: 0))
         // let emailValue = app.webViews.textFields.element(boundBy: 0).value!
         // XCTAssertEqual(emailValue as! String, mailLogin)
         // let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
@@ -267,7 +267,7 @@ class LoginTest: BaseTestCase {
         closeURLBar()
         navigator.goto(LoginsSettings)
         unlockLoginsView()
-        mozWaitForElementToExist(app.tables["Login List"], timeout: 15)
+        mozWaitForElementToExist(app.tables["Login List"])
         mozWaitForElementToExist(app.navigationBars["Passwords"])
         mozWaitForElementToExist(app.staticTexts["No passwords found"])
         mozWaitForElementToExist(app.buttons["Add"])

@@ -168,8 +168,7 @@ class HomePageSettingsUITests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
         mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            timeout: TIMEOUT
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -223,7 +222,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 5)
+            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
             navigator.performAction(Action.CloseURLBarOpen)
         }
         mozWaitForElementToExist(
@@ -241,8 +240,7 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(
                 app.otherElements
                     .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
-                    .staticTexts[urlExampleLabel],
-                timeout: 3)
+                    .staticTexts[urlExampleLabel])
         } else {
             mozWaitForElementToExist(app.otherElements.cells[urlExampleLabel])
         }
@@ -360,12 +358,11 @@ class HomePageSettingsUITests: BaseTestCase {
     // Smoketest
     func testCustomizeHomepage() {
         if !iPad() {
-            mozWaitForElementToExist(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.collectionViews["FxCollectionView"])
             app.collectionViews["FxCollectionView"].swipeUp()
             app.collectionViews["FxCollectionView"].swipeUp()
             mozWaitForElementToExist(
-                app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage],
-                timeout: TIMEOUT
+                app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage]
             )
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()

@@ -35,8 +35,7 @@ class TrackingProtectionTests: BaseTestCase {
         // The lock icon should still be there
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            timeout: 5
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
 
         // Switch to Private Browsing
@@ -47,14 +46,13 @@ class TrackingProtectionTests: BaseTestCase {
         // Make sure TP is also there in PBM
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            timeout: TIMEOUT
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings], timeout: 5)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
         app.tables.otherElements[StandardImageIdentifiers.Large.settings].tap()
         navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(app.tables.cells["NewTab"], timeout: 5)
+        mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
@@ -94,7 +92,7 @@ class TrackingProtectionTests: BaseTestCase {
         }
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
+        mozWaitForElementToExist(app.staticTexts["Connection is not secure"])
         var switchValue = app.switches.firstMatch.value!
         // Need to make sure first the setting was not turned off previously
         if switchValue as! String == "0" {
