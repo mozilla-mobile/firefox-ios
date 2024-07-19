@@ -130,7 +130,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
               tabs.isEmpty
         else {
             // Always make sure there is a single normal tab
-            // MR here is where the first empty tab for a new window is generated
+            // Note: this is where the first tab in a newly-created browser window will be added
             await generateEmptyTab()
             logger.log("There was no tabs restored, creating a normal tab",
                        level: .debug,
