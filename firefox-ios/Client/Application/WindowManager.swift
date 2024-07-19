@@ -8,15 +8,6 @@ import Shared
 import TabDataStore
 import WidgetKit
 
-/// Describes a UUID available for use in a window on either iPhone or iPad.
-struct ReservedWindowUUID {
-    /// The UUID of the window.
-    let uuid: WindowUUID
-
-    /// True if the UUID is for a newly-created window (with no tabs on disk)
-    let isNew: Bool
-}
-
 /// Defines various actions in the app which are performed for all open iPad
 /// windows. These can be routed through the WindowManager 
 enum MultiWindowAction {

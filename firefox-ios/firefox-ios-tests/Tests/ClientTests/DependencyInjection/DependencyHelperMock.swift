@@ -30,7 +30,7 @@ class DependencyHelperMock {
         let windowManager: WindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
         let tabManager: TabManager =
         injectedTabManager ?? TabManagerImplementation(profile: profile,
-                                                       uuid: windowUUID,
+                                                       uuid: ReservedWindowUUID(uuid: windowUUID, isNew: false),
                                                        windowManager: windowManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
