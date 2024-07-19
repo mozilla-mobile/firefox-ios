@@ -1287,6 +1287,14 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Microsurvey
+    private var isToolbarPositionBottom: Bool {
+        let toolbarState = store.state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID)
+        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
+        return isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
+    }
+
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
 
@@ -1301,13 +1309,7 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
-        let toolbarState = store.state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID)
-        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
-        let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
-
-        if isBottomSearch {
+        if isToolbarPositionBottom {
             overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
@@ -1319,7 +1321,23 @@ class BrowserViewController: UIViewController,
 
         microsurvey.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
+        updateBarBordersForMicrosurvey()
         updateViewConstraints()
+    }
+
+    // Update border to hide when microsurvey is shown so that
+    // it appears to belong the app and harder to spoof
+    private func updateBarBordersForMicrosurvey() {
+        // TODO: FXIOS-9503 Update for Toolbar Redesign
+        guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
+        let hasMicrosurvery = microsurvey != nil
+
+        if let urlBar, isToolbarPositionBottom {
+            urlBar.isMicrosurveyShown = hasMicrosurvery
+            urlBar.updateTopBorderDisplay()
+        }
+        toolbar.isMicrosurveyShown = hasMicrosurvery
+        toolbar.setNeedsDisplay()
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
@@ -1330,19 +1348,14 @@ class BrowserViewController: UIViewController,
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
-        let toolbarState = store.state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID)
-        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
-        let isBottomSearch = isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
-
-        if isBottomSearch {
+        if isToolbarPositionBottom {
             overKeyboardContainer.removeArrangedView(microsurvey)
         } else {
             bottomContainer.removeArrangedView(microsurvey)
         }
 
         self.microsurvey = nil
+        updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
     // MARK: - Update content
@@ -1388,6 +1401,7 @@ class BrowserViewController: UIViewController,
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
         }
+        setupMicrosurvey()
     }
 
     func showLibrary(panel: LibraryPanelType) {

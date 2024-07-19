@@ -39,7 +39,7 @@ open class ResizableButton: UIButton {
         let heightContentInset = configuration.contentInsets.top + configuration.contentInsets.bottom
 
         var availableWidth = frame.width - widthContentInset
-        if let imageWidth = image(for: [])?.size.width {
+        if let imageWidth = image(for: [])?.size.width ?? configuration.image?.size.width {
             availableWidth = availableWidth - imageWidth - imagePadding
         }
 
