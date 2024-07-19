@@ -731,8 +731,17 @@ extension BrowserViewController: WKNavigationDelegate {
         guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
-            if !isToolbarRefactorEnabled, let tab = tabManager[webView], tab === tabManager.selectedTab {
-                urlBar.currentURL = tab.url?.displayURL
+            if let tab = tabManager[webView], tab === tabManager.selectedTab {
+                if isToolbarRefactorEnabled {
+                    let action = ToolbarAction(
+                        url: tab.url?.displayURL,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.urlDidChange
+                    )
+                    store.dispatch(action)
+                } else {
+                    urlBar.currentURL = tab.url?.displayURL
+                }
             }
             return
         }
