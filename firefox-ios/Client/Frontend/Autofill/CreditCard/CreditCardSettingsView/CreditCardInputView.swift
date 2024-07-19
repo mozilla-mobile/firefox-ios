@@ -79,7 +79,7 @@ struct CreditCardInputView: View {
             name
                 .background(textFieldBackgroundColor)
 
-            numberContent()
+            number
                 .background(textFieldBackgroundColor)
 
             expirationContent()
@@ -113,7 +113,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    private func numberContent() -> some View {
+    private var number: some View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .number,
