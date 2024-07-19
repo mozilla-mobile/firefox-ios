@@ -567,7 +567,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
-        let isNewTabEnabled = ToolbarFlagManager.isOneTapNewTabEnabled
+        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
         let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
         let middleActionHome = searchAction
         let middleAction = url == nil ? middleActionHome : middleActionDefault

@@ -29,7 +29,8 @@ class BrowserViewController: UIViewController,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
                              BrowserFrameInfoProvider,
-                             AddressToolbarContainerDelegate {
+                             AddressToolbarContainerDelegate,
+                             FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -118,7 +119,9 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
-    lazy var isToolbarRefactorEnabled: Bool = ToolbarFlagManager.isRefactorEnabled
+    var isToolbarRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+    }
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
