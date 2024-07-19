@@ -38,7 +38,7 @@ def update_settings_file(tmp_file_path, target_file_path, name):
 
 def main():
     if not os.path.exists(GITHUB_ACTIONS_TMP_PATH):
-        os.mkdir(GITHUB_ACTIONS_TMP_PATH)
+        os.makedirs(GITHUB_ACTIONS_TMP_PATH, exist_ok=True)
     
     with open(CONFIG_FILE, 'r') as config_file:
         config = json.load(config_file)
