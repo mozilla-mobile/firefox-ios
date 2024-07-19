@@ -59,6 +59,9 @@ class FxAWebViewController: UIViewController {
         webView.accessibilityLabel = .FxAWebContentAccessibilityLabel
         webView.scrollView.bounces = false  // Don't allow overscrolling.
         webView.customUserAgent = FxAWebViewModel.mobileUserAgent
+        if #available(iOS 16.4, *) {
+            webView.isInspectable = true
+        }
 
         self.logger = logger
 
@@ -126,10 +129,17 @@ class FxAWebViewController: UIViewController {
             return
         }
 
-        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: backgroundTaskName) { [weak self] in
-            self?.webView.stopLoading()
-            self?.endPairingConnectionBackgroundTask()
-        }
+        // Run the background task in a queue that has high priority, otherwise
+        // we risk priority inversion and the background task ending early.
+        let backgroundQueue = DispatchQueue.global(qos: .userInteractive)
+        backgroundQueue.async { [weak self] in
+            DispatchQueue.main.async {
+                self?.backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: self?.backgroundTaskName) { [weak self] in
+                    self?.webView.stopLoading()
+                    self?.endPairingConnectionBackgroundTask()
+                }
+            }
+        }        
 
         webView.load(request)
     }
