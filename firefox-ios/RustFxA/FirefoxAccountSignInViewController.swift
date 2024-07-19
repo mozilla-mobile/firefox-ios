@@ -226,6 +226,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                                   constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
     }
 
     func applyTheme() {
