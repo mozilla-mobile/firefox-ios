@@ -76,7 +76,7 @@ struct CreditCardInputView: View {
                 .frame(height: 0.7)
                 .foregroundColor(borderColor)
 
-            nameContent()
+            name
                 .background(textFieldBackgroundColor)
 
             numberContent()
@@ -98,7 +98,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    private func nameContent() -> some View {
+    private var name: some View {
         return Group {
             CreditCardInputField(windowUUID: windowUUID,
                                  inputType: .name,
