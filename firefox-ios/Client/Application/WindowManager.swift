@@ -223,11 +223,11 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
             }
 
             result = nextWindowUUIDToOpen(filteredUUIDs)
-            logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
-                       level: .debug,
-                       category: .window)
         }
 
+        logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
+                   level: .debug,
+                   category: .window)
         let resultUUID = result.uuid
         if result.isNew {
             // Be sure to add any brand-new windows to our ordering preferences
