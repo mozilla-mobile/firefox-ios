@@ -26,7 +26,7 @@ struct CreditCardInputView: View {
 
     var body: some View {
         NavigationView {
-            mainContent()
+            main
                 .blur(radius: isBlurred ? 10 : 0)
                 .onAppear {
                     applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
@@ -48,7 +48,7 @@ struct CreditCardInputView: View {
         }
     }
 
-    private func mainContent() -> some View {
+    private var main: some View {
         return ZStack {
             backgroundColor.ignoresSafeArea()
             formContent()
