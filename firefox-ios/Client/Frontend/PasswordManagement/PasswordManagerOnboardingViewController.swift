@@ -33,11 +33,17 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }
 
     private lazy var continueButton: PrimaryRoundedButton = .build { button in
-        button.layer.cornerRadius = UX.buttonCornerRadius
-        button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Settings.Passwords.onboardingContinue
-        button.configuration?.titleAlignment = .center
+        let buttonViewModel = PrimaryRoundedButtonViewModel(
+            title: .LoginsOnboardingContinueButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.Settings.Passwords.onboardingContinue)
+        button.configure(viewModel: buttonViewModel)
         button.addTarget(self, action: #selector(self.proceedButtonTapped), for: .touchUpInside)
+    }
+    private lazy var contentView: UIView = .build { view in
+        view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    private lazy var scrollView: UIScrollView = .build { scrollView in
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     weak var coordinator: PasswordManagerFlowDelegate?
@@ -56,50 +62,27 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+            super.viewDidLoad()
 
-        self.title = .Settings.Passwords.Title
+            self.title = .Settings.Passwords.Title
 
-        self.view.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
+            self.view.addSubviews(scrollView)
 
-        NSLayoutConstraint.activate(
-            [
-                onboardingMessageLabel.leadingAnchor.constraint(
-                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                    constant: UX.standardSpacing
-                ),
-                onboardingMessageLabel.trailingAnchor.constraint(
-                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                    constant: -UX.standardSpacing
-                ),
-                onboardingMessageLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                onboardingMessageLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-
-                learnMoreButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                learnMoreButton.topAnchor.constraint(
-                    equalTo: onboardingMessageLabel.safeAreaLayoutGuide.bottomAnchor,
-                    constant: UX.standardSpacing
-                ),
-
-                continueButton.bottomAnchor.constraint(
-                    equalTo: self.view.layoutMarginsGuide.bottomAnchor,
-                    constant: -UX.standardSpacing
-                ),
-                continueButton.heightAnchor.constraint(equalToConstant: UX.continueButtonHeight),
-                continueButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                continueButton.leadingAnchor.constraint(
-                    equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,
-                    constant: UX.buttonHorizontalPadding,
-                    priority: .defaultHigh
-                ),
-                continueButton.trailingAnchor.constraint(
-                    equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,
-                    constant: -UX.buttonHorizontalPadding,
-                    priority: .defaultHigh
-                ),
-                continueButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.continueButtonMaxWidth)
-            ]
-        )
+            NSLayoutConstraint.activate([
+                scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+                scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+                scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            ])
+            scrollView.addSubview(contentView)
+            NSLayoutConstraint.activate([
+                contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+                contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+                contentView.bottomAnchor.constraint(greaterThanOrEqualTo: scrollView.bottomAnchor),
+                contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
+            ])
+            contentView.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
+            configureContentViewChildConstraints()
     }
 
     @objc
@@ -112,6 +95,58 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     @objc
     func proceedButtonTapped(_ sender: UIButton) {
         continueFromOnboarding()
+    }
+
+    private func configureContentViewChildConstraints() {
+        NSLayoutConstraint.activate(
+            [
+                onboardingMessageLabel.leadingAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.leadingAnchor,
+                    constant: UX.standardSpacing
+                ),
+                onboardingMessageLabel.trailingAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -UX.standardSpacing
+                ),
+                onboardingMessageLabel.centerXAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.centerXAnchor
+                ),
+                onboardingMessageLabel.topAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.topAnchor,
+                    constant: UX.standardSpacing
+                ),
+                learnMoreButton.centerXAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.centerXAnchor
+                ),
+                learnMoreButton.topAnchor.constraint(
+                    equalTo: onboardingMessageLabel.bottomAnchor,
+                    constant: UX.standardSpacing
+                ),
+                continueButton.leadingAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.leadingAnchor,
+                    constant: UX.buttonHorizontalPadding,
+                    priority: .defaultHigh
+                ),
+                continueButton.trailingAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -UX.buttonHorizontalPadding,
+                    priority: .defaultHigh
+                ),
+                continueButton.centerXAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.centerXAnchor
+                ),
+                continueButton.widthAnchor.constraint(
+                    lessThanOrEqualToConstant: UX.continueButtonMaxWidth
+                ),
+                continueButton.topAnchor.constraint(
+                    greaterThanOrEqualTo: learnMoreButton.bottomAnchor,
+                    constant: UX.standardSpacing
+                ),
+                continueButton.bottomAnchor.constraint(
+                    equalTo: contentView.safeAreaLayoutGuide.bottomAnchor,
+                    constant: -UX.standardSpacing
+                ),
+            ])
     }
 
     private func continueFromOnboarding() {
