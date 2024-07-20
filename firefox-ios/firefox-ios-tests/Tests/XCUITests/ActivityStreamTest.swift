@@ -169,6 +169,7 @@ class ActivityStreamTest: BaseTestCase {
         // Long tap on Wikipedia top site
         waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"])
         app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
+        mozWaitForElementToExist(app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"])
         app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
         mozWaitForElementToExist(TopSiteCellgroup)

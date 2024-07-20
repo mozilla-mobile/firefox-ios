@@ -99,7 +99,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
             -testPlan Smoketest1 \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketest1 \
-            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest1.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-smoketest1.log | xcpretty -r junit --output ./junit-smoketest1.xml && exit ${PIPESTATUS[0]}
         working-directory:  ${{ env.browser }}
         continue-on-error: true
       - name: Run Smoketest2
@@ -113,7 +113,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
             -testPlan Smoketest2 \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketest2 \
-            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest2.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-smoketest2.log | xcpretty -r junit --output ./junit-smoketest2.xml && exit ${PIPESTATUS[0]}
         working-directory:  ${{ env.browser }}
         continue-on-error: true
       - name: Run Smoketest3
@@ -127,7 +127,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
             -testPlan Smoketest3 \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketest3 \
-            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest3.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-smoketest3.log | xcpretty -r junit --output ./junit-smoketest3.xml && exit ${PIPESTATUS[0]}
         working-directory:  ${{ env.browser }}
         continue-on-error: true
       - name: Run Smoketest4
@@ -141,7 +141,7 @@ jobs:
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
             -testPlan Smoketest4 \
             -resultBundlePath ${{ env.test_results_directory }}/results-smoketest4 \
-            | tee xcodebuild.log | xcpretty -r junit --output ./junit-smoketest4.xml && exit ${PIPESTATUS[0]}
+            | tee xcodebuild-smoketest4.log | xcpretty -r junit --output ./junit-smoketest4.xml && exit ${PIPESTATUS[0]}
         working-directory:  ${{ env.browser }}
         continue-on-error: true
       - name: Determine pass/fail status
@@ -180,7 +180,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{ env.browser }}-smoketests-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
-          path: ${{ env.browser }}/xcodebuild.log
+          path: ${{ env.browser }}/xcodebuild-smoketest*.log
           retention-days: 90
       - name: Report to Slack
         id: slack

@@ -85,13 +85,13 @@ class OnboardingTests: BaseTestCase {
             app.textFields["url"],
             value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
         )
-        XCTAssertTrue(app.staticTexts["Release Notes"].exists)
+        mozWaitForElementToExist(app.staticTexts["Release Notes"])
         if iPad() {
-            XCTAssertTrue(
-                app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"].exists
+            mozWaitForElementToExist(
+                app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"]
             )
         }
-        XCTAssertTrue(app.staticTexts["Firefox for iOS Release"].exists)
-        XCTAssertTrue(app.staticTexts["Get the most recent version"].exists)
+        mozWaitForElementToExist(app.staticTexts["Firefox for iOS Release"])
+        mozWaitForElementToExist(app.staticTexts["Get the most recent version"])
     }
 }

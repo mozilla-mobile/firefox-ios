@@ -38,6 +38,7 @@ class DataManagementTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        mozWaitForElementToExist(app.cells["ShowMoreWebsiteData"])
         app.cells["ShowMoreWebsiteData"].tap()
         mozWaitForElementToExist(app.staticTexts["example.com"])
         // There should be 4 entries. One is the website visited and 3 for extrainfo from the page.
