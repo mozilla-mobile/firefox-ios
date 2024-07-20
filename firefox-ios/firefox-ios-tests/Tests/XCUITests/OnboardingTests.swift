@@ -80,7 +80,7 @@ class OnboardingTests: BaseTestCase {
         let mySubstring = textUrl[range]
         let releaseVersion = String(mySubstring)
 
-        XCTAssertTrue(app.staticTexts[releaseVersion].exists)
+        mozWaitForElementToExist(app.staticTexts[releaseVersion])
         mozWaitForValueContains(
             app.textFields["url"],
             value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"

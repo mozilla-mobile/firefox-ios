@@ -111,9 +111,12 @@ class ToolbarTests: BaseTestCase {
                 bundleIdentifier: "com.apple.springboard"
             ).statusBars.element(boundBy: 1)
             app.swipeUp()
+            mozWaitForElementToExist(PageOptionsMenu)
             XCTAssertFalse(PageOptionsMenu.isHittable)
             statusbarElement.tap(force: true)
+            mozWaitForElementToExist(PageOptionsMenu)
             XCTAssertTrue(PageOptionsMenu.isHittable)
+            mozWaitForElementToExist(statusbarElement)
             statusbarElement.tap(force: true)
             let topElement = app.webViews
                 .otherElements["Internet for people, not profit — Mozilla"]
