@@ -126,12 +126,10 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didStartEditingUrl:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
-        case ToolbarMiddlewareActionType.cancelEdit:
+        case ToolbarMiddlewareActionType.cancelEdit,
+            ToolbarMiddlewareActionType.websiteLoadingStateDidChange,
+            ToolbarMiddlewareActionType.searchEngineDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
-
-        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange:
-            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
-
         default:
             break
         }
