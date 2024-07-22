@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import Client
 
 class AppSettingsTableViewControllerTests: XCTestCase {
@@ -17,7 +18,8 @@ class AppSettingsTableViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         self.profile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        self.tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        self.tabManager = TabManagerImplementation(profile: profile,
+                                                   uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         self.appAuthenticator = MockAppAuthenticator()
         self.delegate = MockSettingsFlowDelegate()
         self.applicationHelper = MockApplicationHelper()

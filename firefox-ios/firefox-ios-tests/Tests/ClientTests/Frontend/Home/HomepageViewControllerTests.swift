@@ -24,7 +24,8 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
-        let tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
@@ -36,4 +37,41 @@ class HomepageViewControllerTests: XCTestCase {
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }
+<<<<<<< HEAD
+=======
+
+    func testHomepage_viewWillAppear_sendsBehavioralTargetingEvent() {
+        Experiments.events.clearEvents()
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
+        let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
+        let overlayManager = MockOverlayModeManager()
+        overlayManager.setURLBar(urlBarView: urlBar)
+
+        let subject = HomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: tabManager,
+            overlayManager: overlayManager
+        )
+        XCTAssertFalse(
+            try Experiments.createJexlHelper()!.evalJexl(
+                expression: "'homepage_viewed'|eventSum('Days', 1, 0) > 0"
+            )
+        )
+        subject.viewWillAppear(false)
+        let expectation = self.expectation(description: "Record event called")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+            guard let hasValue = try? Experiments.createJexlHelper()!.evalJexl(
+                expression: "'homepage_viewed'|eventSum('Days', 1, 0) > 0"
+            ) else {
+                XCTFail("should not be nil")
+                return
+            }
+            XCTAssertTrue(hasValue)
+        }
+        waitForExpectations(timeout: 1)
+    }
+>>>>>>> efc6a48ea (Bugfix FXIOS-9529 Fix Sentry errors for newly-created iPad windows (#21115))
 }
