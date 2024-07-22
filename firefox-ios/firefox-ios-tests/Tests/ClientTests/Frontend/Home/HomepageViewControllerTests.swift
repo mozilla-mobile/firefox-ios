@@ -37,8 +37,6 @@ class HomepageViewControllerTests: XCTestCase {
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }
-<<<<<<< HEAD
-=======
 
     func testHomepage_viewWillAppear_sendsBehavioralTargetingEvent() {
         Experiments.events.clearEvents()
@@ -73,5 +71,4 @@ class HomepageViewControllerTests: XCTestCase {
         }
         waitForExpectations(timeout: 1)
     }
->>>>>>> efc6a48ea (Bugfix FXIOS-9529 Fix Sentry errors for newly-created iPad windows (#21115))
 }
