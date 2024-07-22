@@ -59,17 +59,25 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
         gridTab.tabDisplayManager.performCloseAction(for: tabToRemove)
         // Wait for notification of .TabClosed when tab is removed
         let expectation = expectation(description: "notificationReceived")
-        NotificationCenter.default.addObserver(
+        let observer = NotificationCenter.default.addObserver(
             forName: .UpdateLabelOnTabClosed,
             object: nil,
             queue: nil
         ) { notification in
             expectation.fulfill()
 
-            XCTAssertEqual(self.tabTray.viewModel.normalTabsCount, "1")
-            XCTAssertEqual(self.tabTray.countLabel.text, "1")
+            XCTAssertEqual(self.tabTray?.viewModel.normalTabsCount, "1")
+            XCTAssertEqual(self.tabTray?.countLabel.text, "1")
         }
 
-        waitForExpectations(timeout: 3.0)
+        waitForExpectations(timeout: 3.0) { error in
+            guard error == nil else {
+                XCTFail("Failed awaiting expectation with error \(error ?? "nil")")
+                return
+            }
+
+            // Clear observer for multiple test runs to avoid multi-filling the expectation
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 }
