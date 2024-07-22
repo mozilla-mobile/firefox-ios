@@ -38,6 +38,15 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case toolbarRefactor
     case trackingProtectionRefactor
     case zoomFeature
+
+    var debugKey: String? {
+        switch self {
+        case .microsurvey:
+            return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
+        default:
+            return nil
+        }
+    }
 }
 
 /// This enum is a constraint for any feature flag options that have more than
@@ -65,11 +74,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
-
-        // Cases where users manipulate a setting via debug menu.
-        case .microsurvey:
-            return featureID.rawValue + FlagKeys.DebugPrefixKey
-
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .accountSettingsRedux,
@@ -81,6 +85,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotProductAds,
                 .isToolbarCFREnabled,
                 .loginAutofill,
+                .microsurvey,
                 .menuRefactor,
                 .nightMode,
                 .preferSwitchToOpenTabOverDuplicate,
@@ -130,8 +135,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// If no preference exists, then the underlying Nimbus default is used. If a specific
     /// setting is used, then we should check for the debug key used.
     public func isDebugEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
-        guard let optionsKey = featureKey,
-              optionsKey.contains(PrefsKeys.FeatureFlags.DebugPrefixKey),
+        guard let optionsKey = featureID.debugKey,
               let option = profile.prefs.boolForKey(optionsKey)
         else { return isNimbusEnabled(using: nimbusLayer) }
 
@@ -162,6 +166,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
     /// feature cannot be turned on/off.
     public func setUserPreference(to state: Bool) {
         guard let key = featureKey else { return }
+
+        profile.prefs.setBool(state, forKey: key)
+    }
+
+    public func setDebugPreference(to state: Bool) {
+        guard let key = featureID.debugKey else { return }
 
         profile.prefs.setBool(state, forKey: key)
     }

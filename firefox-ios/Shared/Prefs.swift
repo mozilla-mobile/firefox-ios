@@ -71,7 +71,7 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
-        public static let DebugPrefixKey = "DebugKey"
+        public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"

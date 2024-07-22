@@ -19,11 +19,9 @@ class FeatureFlagsBoolSetting: BoolSetting {
 
     override func writeBool(_ control: UISwitch) {
         if let featureFlagName = getFeatureFlagName() {
-            featureFlags.set(feature: featureFlagName, to: control.isOn)
+            featureFlags.set(feature: featureFlagName, to: control.isOn, isDebug: true)
         } else {
-            guard let key = prefKey, let prefs else {
-                return
-            }
+            guard let key = prefKey, let prefs else { return }
             prefs.setBool(control.isOn, forKey: key)
         }
     }
