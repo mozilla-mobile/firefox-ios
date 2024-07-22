@@ -76,7 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .preLaunchDependenciesComplete,
             .postLaunchDependenciesComplete,
             .accountManagerInitialized,
-            .browserIsReady
+            .browserIsReady,
+            .windowUUIDEstablished
         ])
 
         // Then setup dependency container as it's needed for everything else
