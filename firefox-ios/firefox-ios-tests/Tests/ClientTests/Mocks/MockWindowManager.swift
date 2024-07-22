@@ -47,7 +47,7 @@ final class MockWindowManager: WindowManager {
         wrappedManager.windowWillClose(uuid: uuid)
     }
 
-    func reserveNextAvailableWindowUUID() -> WindowUUID {
+    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID {
         wrappedManager.reserveNextAvailableWindowUUID()
     }
 

@@ -28,7 +28,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressPrivateMode()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFlaggable {
     private struct UX {
         static let trailingEdgeSpace: CGFloat = 10
     }
@@ -185,7 +185,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
-        view.backgroundColor = ToolbarFlagManager.isRefactorEnabled ? colors.layer1 : colors.layer3
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        view.backgroundColor = isToolbarRefactorEnabled ? colors.layer1 : colors.layer3
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
         newTab.tintColor = colors.iconPrimary
@@ -256,7 +257,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
 
-        if !ToolbarFlagManager.isRefactorEnabled {
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        if !isToolbarRefactorEnabled {
             view.addSubview(tabsButton)
         }
 
@@ -286,7 +288,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
         ])
 
-        if ToolbarFlagManager.isRefactorEnabled {
+        if isToolbarRefactorEnabled {
             newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                              constant: -UX.trailingEdgeSpace).isActive = true
         } else {

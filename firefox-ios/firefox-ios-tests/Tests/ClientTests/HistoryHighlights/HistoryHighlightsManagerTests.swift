@@ -5,6 +5,7 @@
 import MozillaAppServices
 import Shared
 import XCTest
+import Common
 
 @testable import Client
 @testable import Storage
@@ -24,7 +25,8 @@ class HistoryHighlightsTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         DependencyHelperMock().bootstrapDependencies()
         profile.reopen()
-        let tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         entryProvider = HistoryHighlightsTestEntryProvider(with: profile, and: tabManager)
     }
 

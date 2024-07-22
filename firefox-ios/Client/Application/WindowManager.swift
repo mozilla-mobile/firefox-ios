@@ -60,7 +60,7 @@ protocol WindowManager {
     /// windows are being restored concurrently, we never supply the same UUID
     /// to more than one window.
     /// - Returns: a UUID for the next window to be opened.
-    func reserveNextAvailableWindowUUID() -> WindowUUID
+    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID
 
     /// Signals the WindowManager that a window event has occurred. Window events
     /// are communicated to any interested Coordinators for _all_ windows, but
@@ -91,7 +91,13 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     private(set) var windows: [WindowUUID: AppWindowInfo] = [:]
+
+    // A list of UUIDs that have already been reserved for windows which are being actively configured.
+    // Because so much of our early launch configuration occurs async, it's possible to request more than
+    // one window UUID before previous windows have completed, this tracks reserved UUIDs still in the
+    // process of initial configuration.
     private var reservedUUIDs: [WindowUUID] = []
+
     var activeWindow: WindowUUID {
         get { return uuidForActiveWindow() }
         set { _activeWindowUUID = newValue }
@@ -132,9 +138,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID) {
         updateWindow(windowInfo, for: uuid)
-        if let reservedUUIDIdx = reservedUUIDs.firstIndex(where: { $0 == uuid }) {
-            reservedUUIDs.remove(at: reservedUUIDIdx)
-        }
+        clearReservedUUID(uuid)
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
@@ -158,6 +162,8 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     func windowWillClose(uuid: WindowUUID) {
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
         updateWindow(nil, for: uuid)
+        // Fix edge case in which a scene's UUID might still be reserved when the scene is disconnected
+        clearReservedUUID(uuid)
 
         // Closed windows are popped off and moved behind any already-open windows in the list
         var prefs = windowOrderingPriority
@@ -168,9 +174,11 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         windowOrderingPriority = prefs
     }
 
-    func reserveNextAvailableWindowUUID() -> WindowUUID {
+    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
-        guard !AppConstants.isRunningUITests else { return WindowUUID.DefaultUITestingUUID }
+        guard !AppConstants.isRunningUITests else {
+            return ReservedWindowUUID(uuid: WindowUUID.DefaultUITestingUUID, isNew: false)
+        }
 
         // • If no saved windows (tab data), we generate a new UUID.
         // • If user has saved windows (tab data), we return the first available UUID
@@ -185,9 +193,6 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         // or UUIDs that are already reserved and in the process of opening.
         let openWindowUUIDs = windows.keys
         let onDiskUUIDs = tabDataStore.fetchWindowDataUUIDs()
-        let filteredUUIDs = onDiskUUIDs.filter {
-            !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
-        }
 
         let onDiskUUIDLog = onDiskUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
         let reserveLog = reservedUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
@@ -196,7 +201,31 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
                    level: .debug,
                    category: .window)
 
-        let result = nextWindowUUIDToOpen(filteredUUIDs)
+        // On iPhone devices, we expect there only to ever be a single window. If there
+        // are >1 windows we've encountered some type of unexpected state.
+        let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
+
+        let result: ReservedWindowUUID
+        // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
+        if !isIpad && !AppConstants.isRunningUnitTest {
+            // if onDiskUUIDs.count > 1 { ... }
+            // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
+
+            // At this point we should always have either a single UUID on disk or
+            // no UUIDs because this is a brand new app install
+            if onDiskUUIDs.isEmpty {
+                result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
+            } else {
+                result = ReservedWindowUUID(uuid: onDiskUUIDs.first!, isNew: false)
+            }
+        } else {
+            let filteredUUIDs = onDiskUUIDs.filter {
+                !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
+            }
+
+            result = nextWindowUUIDToOpen(filteredUUIDs)
+        }
+
         logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
                    level: .debug,
                    category: .window)
@@ -210,7 +239,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
         // Reserve the UUID until the Client finishes the window configuration process
         reservedUUIDs.append(resultUUID)
-        return resultUUID
+        return result
     }
 
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
@@ -256,7 +285,12 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
     // MARK: - Internal Utilities
 
-    func saveSimpleTabs() {
+    private func clearReservedUUID(_ uuid: WindowUUID) {
+        guard let reservedUUIDIdx = reservedUUIDs.firstIndex(where: { $0 == uuid }) else { return }
+        reservedUUIDs.remove(at: reservedUUIDIdx)
+    }
+
+    private func saveSimpleTabs() {
         let providers = allWindowTabManagers() as? [WindowSimpleTabsProvider] ?? []
         widgetSimpleTabsCoordinator.saveSimpleTabs(for: providers)
     }
@@ -268,17 +302,17 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     /// already open or reserved (this is important - these UUIDs should be pre-
     /// filtered).
     /// - Returns: the UUID for the next window that will be opened on iPad.
-    private func nextWindowUUIDToOpen(_ onDiskUUIDs: [WindowUUID]) -> (uuid: WindowUUID, isNew: Bool) {
-        func nextUUIDUsingFallbackSorting() -> (uuid: WindowUUID, isNew: Bool) {
+    private func nextWindowUUIDToOpen(_ onDiskUUIDs: [WindowUUID]) -> ReservedWindowUUID {
+        func nextUUIDUsingFallbackSorting() -> ReservedWindowUUID {
             let sortedUUIDs = onDiskUUIDs.sorted(by: { return $0.uuidString > $1.uuidString })
             if let resultUUID = sortedUUIDs.first {
-                return (uuid: resultUUID, isNew: false)
+                return ReservedWindowUUID(uuid: resultUUID, isNew: false)
             }
-            return (uuid: WindowUUID(), isNew: true)
+            return ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
         }
 
         guard !onDiskUUIDs.isEmpty else {
-            return (uuid: WindowUUID(), isNew: true)
+            return ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
         }
 
         // Get the ordering preference
@@ -292,7 +326,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         // Iterate and return the first UUID that is available within our on-disk UUIDs
         // (which excludes windows already open or reserved).
         for uuid in priorityPreference where onDiskUUIDs.contains(uuid) {
-            return (uuid: uuid, isNew: false)
+            return ReservedWindowUUID(uuid: uuid, isNew: false)
         }
 
         return nextUUIDUsingFallbackSorting()

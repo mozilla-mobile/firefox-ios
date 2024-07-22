@@ -11,11 +11,7 @@ class RemoveAddressButton: UIButton, ThemeApplicable {
 
     init() {
         super.init(frame: .zero)
-        self.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: 17,
-            weight: .regular
-        )
+        self.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
 
         addSubview(topSeparator)
         addSubview(bottomSeparator)
