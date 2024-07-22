@@ -30,6 +30,8 @@ class MockDebugSettingsDelegate: DebugSettingsDelegate {
 
     func pressedOpenFiftyTabs() {}
 
+    func pressedDebugFeatureFlags() {}
+
     func askedToShow(alert: AlertController) {
         askedToShowAlertCalled += 1
     }
