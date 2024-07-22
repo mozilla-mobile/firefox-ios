@@ -89,7 +89,6 @@ jobs:
           curl http://www.iana.org/domains/example > /dev/null
           curl https://www.twitter.com > /dev/null
           curl https://www.youtube.com > /dev/null
-          curl https://www.bestbuy.com > /dev/null
           curl https://www.instagram.com > /dev/null
           curl https://www.euronews.com > /dev/null
           curl https://www.fakespot.com > /dev/null
@@ -268,7 +267,6 @@ jobs:
                 curl http://www.iana.org/domains/example > /dev/null
                 curl https://www.twitter.com > /dev/null
                 curl https://www.youtube.com > /dev/null
-                curl https://www.bestbuy.com > /dev/null
                 curl https://www.instagram.com > /dev/null
                 curl https://www.euronews.com > /dev/null
                 curl https://www.fakespot.com > /dev/null
