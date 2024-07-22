@@ -848,6 +848,8 @@ class BrowserViewController: UIViewController,
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
+            // Tab restoration is triggered here for new installs, cold launches, or any BVC appearance.
+            // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
             tabManager.restoreTabs()
         }
 
