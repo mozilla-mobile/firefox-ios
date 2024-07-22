@@ -132,9 +132,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
     func newBrowserWindowConfigured(_ windowInfo: AppWindowInfo, uuid: WindowUUID) {
         updateWindow(windowInfo, for: uuid)
-        if let reservedUUIDIdx = reservedUUIDs.firstIndex(where: { $0 == uuid }) {
-            reservedUUIDs.remove(at: reservedUUIDIdx)
-        }
+        clearReservedUUID(uuid)
     }
 
     func tabManager(for windowUUID: WindowUUID) -> TabManager {
@@ -158,6 +156,8 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     func windowWillClose(uuid: WindowUUID) {
         postWindowEvent(event: .windowWillClose, windowUUID: uuid)
         updateWindow(nil, for: uuid)
+        // Fix edge case in which a scene's UUID might still be reserved when the scene is disconnected
+        clearReservedUUID(uuid)
 
         // Closed windows are popped off and moved behind any already-open windows in the list
         var prefs = windowOrderingPriority
@@ -256,7 +256,12 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
     // MARK: - Internal Utilities
 
-    func saveSimpleTabs() {
+    private func clearReservedUUID(_ uuid: WindowUUID) {
+        guard let reservedUUIDIdx = reservedUUIDs.firstIndex(where: { $0 == uuid }) else { return }
+        reservedUUIDs.remove(at: reservedUUIDIdx)
+    }
+
+    private func saveSimpleTabs() {
         let providers = allWindowTabManagers() as? [WindowSimpleTabsProvider] ?? []
         widgetSimpleTabsCoordinator.saveSimpleTabs(for: providers)
     }
