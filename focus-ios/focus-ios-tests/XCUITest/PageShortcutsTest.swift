@@ -59,7 +59,7 @@ class PageShortcutsTest: BaseTestCase {
 
         app.urlTextField.typeText("foo")
         waitForNoExistence(app.otherElements.staticTexts["E"])
-        waitForExistence(app.otherElements.staticTexts["Example"])
+        waitForNoExistence(app.otherElements.staticTexts["Example"])
     }
 
     private func addShortcut(website: String) {
