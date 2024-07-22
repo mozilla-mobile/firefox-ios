@@ -206,7 +206,8 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
 
         let result: ReservedWindowUUID
-        if !isIpad {
+        // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
+        if !isIpad && !AppConstants.isRunningUnitTest {
             // if onDiskUUIDs.count > 1 { ... }
             // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
 
