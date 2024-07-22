@@ -27,6 +27,8 @@ class MockTabDataStore: TabDataStore {
     }
 
     func clearAllWindowsData() async {}
+
+    func mergeWindowsData() async {}
 }
 
 // Utilities for mocking available tab window UUIDs in unit tests.

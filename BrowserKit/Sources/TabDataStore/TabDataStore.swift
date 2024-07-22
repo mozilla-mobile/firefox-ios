@@ -251,7 +251,7 @@ public actor DefaultTabDataStore: TabDataStore {
               let primaryWindow = await fetchWindowData(uuid: primaryID)
         else { return }
 
-        var newTabData = primaryWindow.tabData
+        var newTabData = [TabData]()
 
         for uuid in windowIDs {
             if let nextWindow = await fetchWindowData(uuid: uuid) {

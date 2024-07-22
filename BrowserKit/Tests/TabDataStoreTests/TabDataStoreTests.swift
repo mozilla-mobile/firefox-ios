@@ -213,6 +213,34 @@ final class TabDataStoreTests: XCTestCase {
         XCTAssertEqual(mockFileManager.removeAllFilesAtCalledCount, 2)
     }
 
+    func testMergeWindowsIntegration() async throws {
+        BrowserKitInformation.shared.configure(buildChannel: .developer,
+                                               nightlyAppVersion: "0",
+                                               sharedContainerIdentifier: "id")
+
+        let subject = DefaultTabDataStore(fileManager: DefaultTabFileManager(),
+                                          throttleTime: 100)
+        await subject.clearAllWindowsData()
+
+        let window1 = createMockWindow(uuid: defaultTestTabWindowUUID)
+        await subject.saveWindowData(window: window1, forced: true)
+
+        let window2 = createMockWindow(uuid: UUID(uuidString: "ABFF60DA-D1E7-407B-AA3B-130D48B31012")!)
+        await subject.saveWindowData(window: window2, forced: true)
+
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        var fileCount = subject.fetchWindowDataUUIDs()
+        XCTAssertEqual(fileCount.count, 2)
+
+        await subject.mergeWindowsData()
+        let newWindow = await subject.fetchWindowData(uuid: UUID(uuidString: "ABFF60DA-D1E7-407B-AA3B-130D48B31012")!)
+        fileCount = subject.fetchWindowDataUUIDs()
+
+        XCTAssertEqual(fileCount.count, 1)
+        XCTAssertEqual(newWindow?.tabData.count, 200)
+    }
+
     // MARK: - Helpers
 
     func createSubject(throttleTime: UInt64 = 100) -> TabDataStore {
