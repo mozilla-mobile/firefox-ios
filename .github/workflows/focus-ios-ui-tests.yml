@@ -70,12 +70,12 @@ jobs:
             - name: Ping all URLs
               id: urls
               run: |
-                curl https://www.example.com
-                curl https://www.google.com
-                curl https://www.mozilla.org
-                curl https://blockads.fivefilters.org/
-                curl https://www.facebook.com
-                curl https://news.ycombinator.com
+                curl https://www.example.com > /dev/null
+                curl https://www.google.com > /dev/null
+                curl https://www.mozilla.org > /dev/null
+                curl https://blockads.fivefilters.org/ > /dev/null
+                curl https://www.facebook.com > /dev/null
+                curl https://news.ycombinator.com > /dev/null
             - name: Setup Xcode
               id: xcode
               run: |
