@@ -60,7 +60,7 @@ protocol WindowManager {
     /// windows are being restored concurrently, we never supply the same UUID
     /// to more than one window.
     /// - Returns: a UUID for the next window to be opened.
-    func reserveNextAvailableWindowUUID() -> WindowUUID
+    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID
 
     /// Signals the WindowManager that a window event has occurred. Window events
     /// are communicated to any interested Coordinators for _all_ windows, but
@@ -168,9 +168,11 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         windowOrderingPriority = prefs
     }
 
-    func reserveNextAvailableWindowUUID() -> WindowUUID {
+    func reserveNextAvailableWindowUUID() -> ReservedWindowUUID {
         // Continue to provide the expected hardcoded UUID for UI tests.
-        guard !AppConstants.isRunningUITests else { return WindowUUID.DefaultUITestingUUID }
+        guard !AppConstants.isRunningUITests else {
+            return ReservedWindowUUID(uuid: WindowUUID.DefaultUITestingUUID, isNew: false)
+        }
 
         // • If no saved windows (tab data), we generate a new UUID.
         // • If user has saved windows (tab data), we return the first available UUID
@@ -210,7 +212,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
         // Reserve the UUID until the Client finishes the window configuration process
         reservedUUIDs.append(resultUUID)
-        return resultUUID
+        return result
     }
 
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {
@@ -268,17 +270,17 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     /// already open or reserved (this is important - these UUIDs should be pre-
     /// filtered).
     /// - Returns: the UUID for the next window that will be opened on iPad.
-    private func nextWindowUUIDToOpen(_ onDiskUUIDs: [WindowUUID]) -> (uuid: WindowUUID, isNew: Bool) {
-        func nextUUIDUsingFallbackSorting() -> (uuid: WindowUUID, isNew: Bool) {
+    private func nextWindowUUIDToOpen(_ onDiskUUIDs: [WindowUUID]) -> ReservedWindowUUID {
+        func nextUUIDUsingFallbackSorting() -> ReservedWindowUUID {
             let sortedUUIDs = onDiskUUIDs.sorted(by: { return $0.uuidString > $1.uuidString })
             if let resultUUID = sortedUUIDs.first {
-                return (uuid: resultUUID, isNew: false)
+                return ReservedWindowUUID(uuid: resultUUID, isNew: false)
             }
-            return (uuid: WindowUUID(), isNew: true)
+            return ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
         }
 
         guard !onDiskUUIDs.isEmpty else {
-            return (uuid: WindowUUID(), isNew: true)
+            return ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
         }
 
         // Get the ordering preference
@@ -292,7 +294,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         // Iterate and return the first UUID that is available within our on-disk UUIDs
         // (which excludes windows already open or reserved).
         for uuid in priorityPreference where onDiskUUIDs.contains(uuid) {
-            return (uuid: uuid, isNew: false)
+            return ReservedWindowUUID(uuid: uuid, isNew: false)
         }
 
         return nextUUIDUsingFallbackSorting()
