@@ -75,27 +75,26 @@ jobs:
       - name: Ping URLs
         id: urls
         run: |
-          curl https://www.firefox.com
-          curl https://www.pocket.com
-          curl https://wikipedia.org
-          curl https://www.walmart.com
-          curl https://jigsaw.w3.org/HTTP/Basic/
-          curl https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf
-          curl https://www.ebay.com
-          curl https://www.amazon.com
-          curl https://www.forbes.com
-          curl https://theguardian.com
-          curl https://www.reddit.com
-          curl http://www.iana.org/domains/example
-          curl https://www.twitter.com
-          curl https://www.youtube.com
-          curl https://www.bestbuy.com
-          curl https://www.instagram.com
-          curl https://www.euronews.com
-          curl https://www.fakespot.com
-          curl https://www.badssl.com
-          curl https://expired.badssl.com
-          curl https://accounts.google.com
+          curl https://www.firefox.com > /dev/null
+          curl https://www.pocket.com > /dev/null
+          curl https://wikipedia.org > /dev/null
+          curl https://www.walmart.com > /dev/null
+          curl https://jigsaw.w3.org/HTTP/Basic/ > /dev/null
+          curl https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf > /dev/null
+          curl https://www.ebay.com > /dev/null
+          curl https://www.amazon.com > /dev/null
+          curl https://www.forbes.com > /dev/null
+          curl https://theguardian.com > /dev/null
+          curl https://www.reddit.com > /dev/null
+          curl http://www.iana.org/domains/example > /dev/null
+          curl https://www.twitter.com > /dev/null
+          curl https://www.youtube.com > /dev/null
+          curl https://www.bestbuy.com > /dev/null
+          curl https://www.instagram.com > /dev/null
+          curl https://www.euronews.com > /dev/null
+          curl https://www.fakespot.com > /dev/null
+          curl https://www.badssl.com > /dev/null
+          curl https://accounts.google.com > /dev/null
       - name: Setup Xcode
         id: xcode
         run: |
@@ -252,6 +251,29 @@ jobs:
               id: decompress-dd
               run: |
                 tar xzf derived-data.tar.gz -C /
+            - name: Ping URLs
+              id: urls
+              run: |
+                curl https://www.firefox.com > /dev/null
+                curl https://www.pocket.com > /dev/null
+                curl https://wikipedia.org > /dev/null
+                curl https://www.walmart.com > /dev/null
+                curl https://jigsaw.w3.org/HTTP/Basic/ > /dev/null
+                curl https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf > /dev/null
+                curl https://www.ebay.com > /dev/null
+                curl https://www.amazon.com > /dev/null
+                curl https://www.forbes.com > /dev/null
+                curl https://theguardian.com > /dev/null
+                curl https://www.reddit.com > /dev/null
+                curl http://www.iana.org/domains/example > /dev/null
+                curl https://www.twitter.com > /dev/null
+                curl https://www.youtube.com > /dev/null
+                curl https://www.bestbuy.com > /dev/null
+                curl https://www.instagram.com > /dev/null
+                curl https://www.euronews.com > /dev/null
+                curl https://www.fakespot.com > /dev/null
+                curl https://www.badssl.com > /dev/null
+                curl https://accounts.google.com > /dev/null
             - name: Run tests
               id: run-tests
               run: |
