@@ -390,15 +390,7 @@ class BrowserViewController: UIViewController,
                 navigationToolbarContainer.isHidden = true
             }
 
-            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-               toolbarState.isShowingTopTabs != showTopTabs {
-                let action = ToolbarMiddlewareAction(
-                    isShowingTopTabs: showTopTabs,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
-                )
-                store.dispatch(action)
-            }
+            updateToolbarStateTraitCollectionIfNecessary(newCollection)
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
@@ -2092,6 +2084,25 @@ class BrowserViewController: UIViewController,
         showTabTray(focusedSegment: segmentToFocus)
     }
 
+    /// When the trait collection changes the top taps display might have to change
+    /// This requires an update of the toolbars.
+    private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
+        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+
+        // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
+        // to avoid having the toolbar re-displayed
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              toolbarState.isShowingTopTabs != showTopTabs
+        else { return }
+
+        let action = ToolbarMiddlewareAction(
+            isShowingTopTabs: showTopTabs,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
+        )
+        store.dispatch(action)
+    }
+
     // MARK: Opening New Tabs
 
     /// ⚠️ !! WARNING !! ⚠️
@@ -3500,13 +3511,8 @@ extension BrowserViewController: TabManagerDelegate {
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            if isToolbarRefactorEnabled,
-               let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-               toolbarState.numberOfTabs != count {
-                let action = ToolbarMiddlewareAction(numberOfTabs: count,
-                                                     windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
-                store.dispatch(action)
+            if isToolbarRefactorEnabled {
+               updateToolbarTabCount(count)
             } else if !isToolbarRefactorEnabled {
                 toolbar.updateTabCount(count, animated: animated)
                 urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
@@ -3517,6 +3523,20 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
+    }
+
+    private func updateToolbarTabCount(_ count: Int) {
+        // Only dispatch action when the number of tabs is different from what is saved in the state
+        // to avoid having the toolbar re-displayed
+        guard isToolbarRefactorEnabled,
+              let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              toolbarState.numberOfTabs != count
+        else { return }
+
+        let action = ToolbarMiddlewareAction(numberOfTabs: count,
+                                             windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
+        store.dispatch(action)
     }
 }
 
