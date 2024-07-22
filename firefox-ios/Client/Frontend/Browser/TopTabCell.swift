@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import SiteImageView
 
-class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, ReusableCell {
+class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, ReusableCell, FeatureFlaggable {
     struct UX {
         // MARK: - Favicon and Title Constants
         static let faviconSize: CGFloat = 20
@@ -122,7 +122,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         titleText.textColor = colors.textPrimary
         closeButton.tintColor = colors.textPrimary
 
-        let backgroundColor = ToolbarFlagManager.isRefactorEnabled ? colors.actionTabActive : colors.layer2
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        let backgroundColor = isToolbarRefactorEnabled ? colors.actionTabActive : colors.layer2
         selectedBackground.backgroundColor = backgroundColor
         selectedBackground.layer.shadowColor = colors.shadowDefault.cgColor
         selectedBackground.isHidden = false
@@ -134,10 +135,11 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         titleText.textColor = colors.textPrimary
         closeButton.tintColor = colors.textPrimary
 
-        let backgroundColor = ToolbarFlagManager.isRefactorEnabled ? colors.actionTabInactive : .clear
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        let backgroundColor = isToolbarRefactorEnabled ? colors.actionTabInactive : .clear
         selectedBackground.backgroundColor = backgroundColor
         selectedBackground.layer.shadowColor = UIColor.clear.cgColor
-        selectedBackground.isHidden = ToolbarFlagManager.isRefactorEnabled ? false : true
+        selectedBackground.isHidden = isToolbarRefactorEnabled ? false : true
     }
 
     func applyTheme(theme: Theme) {

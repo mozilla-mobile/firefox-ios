@@ -1502,6 +1502,7 @@
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
 		E16258EF2A83BE0800522742 /* FakespotLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */; };
+		E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16941B32C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift */; };
 		E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */; };
 		E16AD22C2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */; };
 		E16C76812ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16C76802ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift */; };
@@ -1512,7 +1513,6 @@
 		E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496392992B42C0096900A /* CreditCardSectionHeader.swift */; };
 		E174963C2992B6A60096900A /* HostingTableViewSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */; };
 		E17496402994302D0096900A /* PreferredFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E174963F2994302D0096900A /* PreferredFont.swift */; };
-		E17798962BD6B33300F6F0EB /* ToolbarFlagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17798952BD6B33300F6F0EB /* ToolbarFlagManager.swift */; };
 		E17798982BD6B44B00F6F0EB /* AddressToolbarContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17798972BD6B44B00F6F0EB /* AddressToolbarContainer.swift */; };
 		E177989A2BD7D44200F6F0EB /* ToolbarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17798992BD7D44200F6F0EB /* ToolbarState.swift */; };
 		E177989C2BD7D48500F6F0EB /* ToolbarAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E177989B2BD7D48500F6F0EB /* ToolbarAction.swift */; };
@@ -8023,6 +8023,7 @@
 		E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetTitleHeaderView.swift; sourceTree = "<group>"; };
 		E16258EE2A83BE0800522742 /* FakespotLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotLoadingView.swift; sourceTree = "<group>"; };
 		E1634E1AB9F05311CD6C8C6C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E16941B32C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerStateTests.swift; sourceTree = "<group>"; };
 		E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLMailTests.swift; sourceTree = "<group>"; };
 		E16AD22B2A8A7AE800F0AA58 /* FakespotHighlightsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightsCardView.swift; sourceTree = "<group>"; };
 		E16C76802ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightsCardViewModelTests.swift; sourceTree = "<group>"; };
@@ -8033,7 +8034,6 @@
 		E17496392992B42C0096900A /* CreditCardSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSectionHeader.swift; sourceTree = "<group>"; };
 		E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingTableViewSectionHeader.swift; sourceTree = "<group>"; };
 		E174963F2994302D0096900A /* PreferredFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredFont.swift; sourceTree = "<group>"; };
-		E17798952BD6B33300F6F0EB /* ToolbarFlagManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarFlagManager.swift; sourceTree = "<group>"; };
 		E17798972BD6B44B00F6F0EB /* AddressToolbarContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainer.swift; sourceTree = "<group>"; };
 		E17798992BD7D44200F6F0EB /* ToolbarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarState.swift; sourceTree = "<group>"; };
 		E177989B2BD7D48500F6F0EB /* ToolbarAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarAction.swift; sourceTree = "<group>"; };
@@ -11867,6 +11867,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		E16941B22C4E498600FF5F4E /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
+			);
+			path = Toolbar;
+			sourceTree = "<group>";
+		};
 		E17496362991A2480096900A /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -11882,7 +11890,6 @@
 				E1DE2F812BE394C80054BCDC /* Redux */,
 				E17798972BD6B44B00F6F0EB /* AddressToolbarContainer.swift */,
 				E18CE8D92BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift */,
-				E17798952BD6B33300F6F0EB /* ToolbarFlagManager.swift */,
 				E14792A22C2C5C660058211C /* ToolbarHelper.swift */,
 			);
 			path = Toolbars;
@@ -12495,11 +12502,10 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				8A8482ED2BE15FEF00F9007B /* Microsurvey */,
-				8AC225632B6D3F9600CDA7FD /* Telemetry */,
 				8A171A6029F82AD90085770E /* Application */,
-				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
+				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
+				E16941B32C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift */,
 				BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */,
 				8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
@@ -12508,21 +12514,24 @@
 				C889D7CD2858C4B500121E1D /* ContextMenuHelperTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
 				43B658D729CE249D00C9EF08 /* CreditCard */,
-				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
 				D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */,
+				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
 				5A70EF17295E2DF400790249 /* DependencyInjection */,
 				8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */,
 				6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */,
 				6A3E5D89283831D0001E706E /* DownloadQueueTests.swift */,
+				E1E425312B5A2E9700899550 /* DownloadTests.swift */,
 				1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */,
 				8A96C4B728F9DD0600B75884 /* Extensions */,
 				DF1E6AA92A964358000D4854 /* Fakespot */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
+				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
 				E1AEC16D286E0CF500062E29 /* Frontend */,
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
+				0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */,
 				E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */,
 				8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */,
 				8ACA8F722919870B00D3075D /* Helpers */,
@@ -12534,6 +12543,7 @@
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
 				C8DC90CA2A067BF10008832B /* MarkupParseUtilityTests */,
 				C83DE54529DF3579006E1B69 /* Messaging */,
+				8A8482ED2BE15FEF00F9007B /* Microsurvey */,
 				C889D7D22858C85200121E1D /* Mocks */,
 				C8B41E0B29F034D500FE218A /* Nimbus */,
 				E1312FCF29D23775008DDA85 /* NotificationSurface */,
@@ -12548,6 +12558,7 @@
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
+				8A5189C62C1B5F6C00CDB668 /* Search */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
@@ -12562,11 +12573,13 @@
 				D815A3A724A53F3200AAB221 /* TabToolbarHelperTests.swift */,
 				21D8EA942ABE0511003FF16E /* TabTray */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
+				8AC225632B6D3F9600CDA7FD /* Telemetry */,
 				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
+				E16941B22C4E498600FF5F4E /* Toolbar */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
 				ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
@@ -12576,11 +12589,6 @@
 				1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
-				8A5189C62C1B5F6C00CDB668 /* Search */,
-				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
-				E1E425312B5A2E9700899550 /* DownloadTests.swift */,
-				0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */,
-				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -14452,7 +14460,6 @@
 				CA8226F324C11DB7008A6F38 /* PasswordManagerTableViewCell.swift in Sources */,
 				8A0A1BA02B2200FD00E8706F /* PrivateHomepageViewController.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
-				E17798962BD6B33300F6F0EB /* ToolbarFlagManager.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
@@ -15285,6 +15292,7 @@
 				03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				219935F12B07DFA200E5966F /* TabDisplayPanelTests.swift in Sources */,
+				E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */,
 				E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */,
 				DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */,
 				8ABCFEA62B45CB4C00C2988A /* PrivateBrowsingTelemetryTests.swift in Sources */,

@@ -67,19 +67,13 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.numberOfTabsChanged:
-            guard let numberOfTabs = (action as? ToolbarAction)?.numberOfTabs else { return state }
-
-            var actions = state.browserActions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .tabs }) {
-                actions[index].numberOfTabs = numberOfTabs
-            }
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: actions,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 lockIconImageName: state.lockIconImageName
@@ -92,7 +86,7 @@ struct AddressBarState: StateType, Equatable {
                 windowUUID: state.windowUUID,
                 navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
                 pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: state.browserActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 lockIconImageName: state.lockIconImageName,
@@ -100,6 +94,20 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.urlDidChange:
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: addressToolbarModel.url,
+                lockIconImageName: addressToolbarModel.lockIconImageName ?? state.lockIconImageName,
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing
+            )
+
+        case ToolbarActionType.backForwardButtonStatesChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             var addressToolbarModel = toolbarAction.addressToolbarModel
 
@@ -109,62 +117,18 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: addressToolbarModel?.pageActions ?? state.pageActions,
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: toolbarAction.url,
-                lockIconImageName: addressToolbarModel?.lockIconImageName ?? state.lockIconImageName,
-                isEditing: addressToolbarModel?.isEditing ?? state.isEditing
-            )
-
-        case ToolbarActionType.backButtonStateChanged:
-            guard let canGoBack = (action as? ToolbarAction)?.canGoBack else { return state }
-
-            var actions = state.navigationActions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .back }) {
-                actions[index].isEnabled = canGoBack
-            }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: actions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                lockIconImageName: state.lockIconImageName
-            )
-
-        case ToolbarActionType.forwardButtonStateChanged:
-            guard let canGoForward = (action as? ToolbarAction)?.canGoForward else { return state }
-
-            var actions = state.navigationActions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
-                actions[index].isEnabled = canGoForward
-            }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: actions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
                 url: state.url,
                 lockIconImageName: state.lockIconImageName
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            let badgeImageName = (action as? ToolbarAction)?.badgeImageName
-            var actions = state.navigationActions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .menu }) {
-                actions[index].badgeImageName = badgeImageName
-            }
+            let browserActions = (action as? ToolbarAction)?.addressToolbarModel?.browserActions
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: actions,
+                navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
-                browserActions: state.browserActions,
+                browserActions: browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 lockIconImageName: state.lockIconImageName

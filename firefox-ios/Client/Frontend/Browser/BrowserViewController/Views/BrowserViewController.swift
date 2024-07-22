@@ -29,7 +29,8 @@ class BrowserViewController: UIViewController,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
                              BrowserFrameInfoProvider,
-                             AddressToolbarContainerDelegate {
+                             AddressToolbarContainerDelegate,
+                             FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -118,7 +119,9 @@ class BrowserViewController: UIViewController,
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
-    lazy var isToolbarRefactorEnabled: Bool = ToolbarFlagManager.isRefactorEnabled
+    var isToolbarRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+    }
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -362,10 +365,10 @@ class BrowserViewController: UIViewController,
 
         if isToolbarRefactorEnabled {
             let badgeImageName = showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil
-            let action = ToolbarAction(
+            let action = ToolbarMiddlewareAction(
                 badgeImageName: badgeImageName,
                 windowUUID: windowUUID,
-                actionType: ToolbarActionType.showMenuWarningBadge
+                actionType: ToolbarMiddlewareActionType.showMenuWarningBadge
             )
             store.dispatch(action)
         } else {
@@ -386,6 +389,8 @@ class BrowserViewController: UIViewController,
             } else {
                 navigationToolbarContainer.isHidden = true
             }
+
+            updateToolbarStateTraitCollectionIfNecessary(newCollection)
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
@@ -1778,10 +1783,10 @@ class BrowserViewController: UIViewController,
             StandardImageIdentifiers.Large.lockFill :
             StandardImageIdentifiers.Large.lockSlashFill
 
-            let action = ToolbarMiddlewareUrlChangeAction(
-                url: tab.url?.displayURL,
-                lockIconImageName: lockIconImageName,
+            let action = ToolbarMiddlewareAction(
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
+                lockIconImageName: lockIconImageName,
+                url: tab.url?.displayURL,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 windowUUID: windowUUID,
@@ -1855,13 +1860,15 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?, _ windowUUID: UUID, _ actionType: ToolbarActionType) {
+    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?,
+                                                  _ windowUUID: UUID,
+                                                  _ actionType: ToolbarMiddlewareActionType) {
         switch actionType {
         case .backButtonStateChanged:
-            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarMiddlewareAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         case .forwardButtonStateChanged:
-            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarMiddlewareAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }
@@ -1917,6 +1924,8 @@ class BrowserViewController: UIViewController,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
         case .stopLoading:
             tabManager.selectedTab?.stop()
+        case .newTab:
+            topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
         }
     }
 
@@ -2073,6 +2082,25 @@ class BrowserViewController: UIViewController,
         let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
         let segmentToFocus = isPrivateTab ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
         showTabTray(focusedSegment: segmentToFocus)
+    }
+
+    /// When the trait collection changes the top taps display might have to change
+    /// This requires an update of the toolbars.
+    private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
+        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+
+        // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
+        // to avoid having the toolbar re-displayed
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              toolbarState.isShowingTopTabs != showTopTabs
+        else { return }
+
+        let action = ToolbarMiddlewareAction(
+            isShowingTopTabs: showTopTabs,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
+        )
+        store.dispatch(action)
     }
 
     // MARK: Opening New Tabs
@@ -3484,11 +3512,8 @@ extension BrowserViewController: TabManagerDelegate {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             if isToolbarRefactorEnabled {
-                let action = ToolbarAction(numberOfTabs: count,
-                                           windowUUID: windowUUID,
-                                           actionType: ToolbarActionType.numberOfTabsChanged)
-                store.dispatch(action)
-            } else {
+               updateToolbarTabCount(count)
+            } else if !isToolbarRefactorEnabled {
                 toolbar.updateTabCount(count, animated: animated)
                 urlBar.updateTabCount(count, animated: !urlBar.inOverlayMode)
             }
@@ -3498,6 +3523,20 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerUpdateCount() {
         updateTabCountUsingTabManager(self.tabManager)
+    }
+
+    private func updateToolbarTabCount(_ count: Int) {
+        // Only dispatch action when the number of tabs is different from what is saved in the state
+        // to avoid having the toolbar re-displayed
+        guard isToolbarRefactorEnabled,
+              let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              toolbarState.numberOfTabs != count
+        else { return }
+
+        let action = ToolbarMiddlewareAction(numberOfTabs: count,
+                                             windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
+        store.dispatch(action)
     }
 }
 
