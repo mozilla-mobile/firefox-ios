@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import UIKit
 
 public protocol TabDataStore {
     /// Fetches the previously saved window data matching the provided UUID,
@@ -24,6 +25,11 @@ public protocol TabDataStore {
     /// preferable when only the UUIDs are needed.
     /// - Returns: a list of UUIDs for any saved WindowData.
     func fetchWindowDataUUIDs() -> [UUID]
+
+    /// If multiple files exist merge them
+    /// To be used in a recovery scenario after a potential tab loss event
+    /// IPHONE ONLY, will return early if run on any other device
+    func mergeWindowsData() async
 }
 
 public actor DefaultTabDataStore: TabDataStore {
@@ -232,5 +238,34 @@ public actor DefaultTabDataStore: TabDataStore {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
         let baseFilePath = filePrefix + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
+    }
+
+    // MARK: - Merge files
+
+    public func mergeWindowsData() async {
+        let windowIDs = fetchWindowDataUUIDs()
+
+        guard await UIDevice.current.userInterfaceIdiom != .pad,
+              windowIDs.count > 1,
+              let primaryID = windowIDs.first,
+              let primaryWindow = await fetchWindowData(uuid: primaryID)
+        else { return }
+
+        var newTabData = primaryWindow.tabData
+
+        for uuid in windowIDs {
+            if let nextWindow = await fetchWindowData(uuid: uuid) {
+                newTabData.append(contentsOf: nextWindow.tabData)
+            }
+        }
+
+        let newWindow = WindowData(
+            id: primaryID,
+            activeTabId: primaryWindow.activeTabId,
+            tabData: newTabData)
+
+        await clearAllWindowsData()
+
+        await saveWindowData(window: newWindow, forced: true)
     }
 }
