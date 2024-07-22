@@ -191,7 +191,7 @@ class TabManagerTests: XCTestCase {
     private func createSubject() -> TabManagerImplementation {
         let subject = TabManagerImplementation(profile: mockProfile,
                                                imageStore: mockDiskImageStore,
-                                               uuid: tabWindowUUID,
+                                               uuid: ReservedWindowUUID(uuid: tabWindowUUID, isNew: false),
                                                tabDataStore: mockTabStore,
                                                tabSessionStore: mockSessionStore)
         trackForMemoryLeaks(subject)

@@ -10,6 +10,20 @@ import Foundation
 /// can be run side-by-side on iPad (once multi-window is enabled). [FXIOS-7349]
 public typealias WindowUUID = UUID
 
+/// Describes a UUID available for use in a window on either iPhone or iPad.
+public struct ReservedWindowUUID {
+    /// The UUID of the window.
+    public let uuid: WindowUUID
+
+    /// True if the UUID is for a newly-created window (with no tabs on disk)
+    public let isNew: Bool
+
+    public init(uuid: WindowUUID, isNew: Bool) {
+        self.uuid = uuid
+        self.isNew = isNew
+    }
+}
+
 public extension WindowUUID {
     /// Sentinel UUID value for use when a window is unavailable or unknown.
     ///
