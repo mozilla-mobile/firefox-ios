@@ -174,19 +174,17 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.menuItems["Copy"])
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
-        if !iPad() {
-            while !app.menuItems["Find in Page"].exists {
-                if #available(iOS 16, *) {
-                    app.buttons["Forward"].firstMatch.tap()
-                } else {
-                    app.menuItems["show.next.items.menu.button"].tap()
-                }
-                mozWaitForElementToExist(app.menuItems.firstMatch)
-                if #available(iOS 16, *) {
-                    mozWaitForElementToExist(app.buttons["Forward"])
-                } else {
-                    mozWaitForElementToExist(app.menuItems["show.next.items.menu.button"])
-                }
+        while !app.menuItems["Find in Page"].exists {
+            if #available(iOS 16, *) {
+                app.buttons["Forward"].firstMatch.tap()
+            } else {
+                app.menuItems["show.next.items.menu.button"].tap()
+            }
+            mozWaitForElementToExist(app.menuItems.firstMatch)
+            if #available(iOS 16, *) {
+                mozWaitForElementToExist(app.buttons["Forward"])
+            } else {
+                mozWaitForElementToExist(app.menuItems["show.next.items.menu.button"])
             }
         }
         mozWaitForElementToExist(app.menuItems["Find in Page"])
