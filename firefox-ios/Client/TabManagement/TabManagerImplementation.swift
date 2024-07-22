@@ -342,12 +342,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         preserveTabs()
 
-        Task(priority: .high) {
+        Task(priority: .high) { [weak self] in
             var sessionData: Data?
             if !tab.isFxHomeTab {
-                sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+                sessionData = await self?.tabSessionStore.fetchTabSession(tabID: tabUUID)
             }
-            self.selectTabWithSession(tab: tab,
+            self?.selectTabWithSession(tab: tab,
                                       previous: previous,
                                       sessionData: sessionData)
         }
