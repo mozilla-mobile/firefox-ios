@@ -200,7 +200,17 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
     }
 
-    func test_addTabsForURLs() {
+    func test_addTabsForURLs_noSelectedTab() {
+        let subject = createSubject()
+
+        subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: true)
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
+        XCTAssertEqual(subject.tabs.first?.isPrivate, false)
+    }
+
+    func test_addTabsForURLs_selectTab() {
         let subject = createSubject()
 
         subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: false)
@@ -210,10 +220,20 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.first?.isPrivate, false)
     }
 
-    func test_addTabsForURLs_forPrivateMode() {
+    func test_addTabsForURLs_noSelectTab_forPrivateMode() {
         let subject = createSubject()
 
         subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: false, isPrivate: true)
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
+        XCTAssertEqual(subject.tabs.first?.isPrivate, true)
+    }
+
+    func test_addTabsForURLs_selectTab_forPrivateMode() {
+        let subject = createSubject()
+
+        subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: true, isPrivate: true)
 
         XCTAssertEqual(subject.tabs.count, 1)
         XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")

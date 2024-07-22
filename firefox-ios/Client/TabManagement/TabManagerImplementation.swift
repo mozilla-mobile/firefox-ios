@@ -294,8 +294,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
               let tabID = UUID(uuidString: tab.tabUUID)
         else { return }
 
-        Task {
-            await self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
+        Task { [weak self] in
+            await self?.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
         }
     }
 
