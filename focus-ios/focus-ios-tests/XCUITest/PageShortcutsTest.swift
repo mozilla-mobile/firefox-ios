@@ -55,11 +55,11 @@ class PageShortcutsTest: BaseTestCase {
     func testShortcutShownWhileTypingURLBar() {
         addShortcut(website: "example.com")
         app.urlTextField.tap()
-        XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
+        waitForExistence(app.otherElements.staticTexts["Example"])
 
         app.urlTextField.typeText("foo")
         waitForNoExistence(app.otherElements.staticTexts["E"])
-        XCTAssertFalse(app.otherElements.staticTexts["Example"].exists)
+        waitForExistence(app.otherElements.staticTexts["Example"])
     }
 
     private func addShortcut(website: String) {
