@@ -214,6 +214,8 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
                     await tabDataStore.mergeWindowsData()
                     AppEventQueue.signal(event: .windowUUIDEstablished)
                 }
+            } else {
+                AppEventQueue.signal(event: .windowUUIDEstablished)
             }
 
             // At this point we should always have either a single UUID on disk or
@@ -229,6 +231,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
             }
 
             result = nextWindowUUIDToOpen(filteredUUIDs)
+            AppEventQueue.signal(event: .windowUUIDEstablished)
         }
 
         logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
