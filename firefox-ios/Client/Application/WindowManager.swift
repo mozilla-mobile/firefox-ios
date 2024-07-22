@@ -205,7 +205,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         // are >1 windows we've encountered some type of unexpected state.
         let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
 
-        let result: (uuid: WindowUUID, isNew: Bool)
+        let result: ReservedWindowUUID
         if !isIpad {
             // if onDiskUUIDs.count > 1 { ... }
             // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
@@ -213,9 +213,9 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
             // At this point we should always have either a single UUID on disk or
             // no UUIDs because this is a brand new app install
             if onDiskUUIDs.isEmpty {
-                result = (uuid: WindowUUID(), isNew: true)
+                result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
             } else {
-                result = (uuid: onDiskUUIDs.first!, isNew: false)
+                result = ReservedWindowUUID(uuid: onDiskUUIDs.first!, isNew: false)
             }
         } else {
             let filteredUUIDs = onDiskUUIDs.filter {
