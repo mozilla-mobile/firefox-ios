@@ -17,7 +17,7 @@
 "Alerts.RestoreTabs.Button.Yes.v109" = "Gjenopprett faner";
 
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Message.v109" = "Beklagar det. Gjenopprett faner for å fortsetje der du slutta.";
+"Alerts.RestoreTabs.Message.v109" = "Beklagar det. Gjenopprett faner for å halde fram der du slutta.";
 
 /* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
 "Alerts.RestoreTabs.Title.v109.v2" = "%@ krasja. Vil du gjenopprette fanene dine?";

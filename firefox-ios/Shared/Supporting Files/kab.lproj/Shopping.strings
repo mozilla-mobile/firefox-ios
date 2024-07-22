@@ -56,6 +56,9 @@
 "Shopping.HighlightsCard.Title.v120" = "Tamuɣli s wazal-is seg yilɣa imaynuten";
 
 /* Title for info card when Fakespot cannot analyze reviews for a certain product type */
+"Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Description.v120" = "Nesḥasef, ur nezmir ara ad nessefqed taɣara n ucegger i kra n wanawen n yifarisen. Amedya, tikarḍiwin n yisefkan d yisuddam n tvidyutin, aẓawan d wuraren.";
+
+/* Title for info card when Fakespot cannot analyze reviews for a certain product type */
 "Shopping.InfoCard.FakespotDoesNotAnalyzeReviews.Title.v120" = "Ur nezmir ara ad nsenqed tamawin-a";
 
 /* Description text for an information card used in the review checker section. This message is displayed when the reviews for a product are not yet available but are expected to be provided within the next 24 hours. It serves to inform users of the short wait for reviews and encourages them to return soon for the updated information. */
@@ -81,6 +84,9 @@
 
 /* Title for info card when there are not enough reviews for a product */
 "Shopping.InfoCard.NotEnoughReviews.Title.v120" = "Ulac ddeqs n tamiwin akka tura";
+
+/* Description for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This description is used for info card where the user can report if it's back in stock. */
+"Shopping.InfoCard.ProductNotInStock.Description.v121" = "Ma twalaḍ afaris-a yuɣal-d deg taggazt, ini-aɣ-t-id, ad nexdem akken ara nessefqed iceggiren.";
 
 /* Primary action label for the information card displayed by the review checker feature when the product the user is looking at is out of stock. This primary action label is used for info card button where the user can report if it's back in stock. */
 "Shopping.InfoCard.ProductNotInStock.PrimaryAction.v121" = "Mmel tuɣalin n ufaris deg tawsa";
@@ -117,6 +123,12 @@
 
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v123" = "S ufran n “Ih, ɛreḍ-it” ad tqebleḍ iferdisen-a:";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Wali taneflest n yiceggiren ɣef ufaris deg %1$@ send ad taɣeḍ. Amcegger, tamahilt tarmitant seg %2$@, tebna akken iwata deg yiminig.";
+
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. The third and fourth parameters will be the other two websites that are currently supported (Amazon, Best Buy or Walmart) besides the one used for the first parameter. */
+"Shopping.OptInCard.FirstParagraph.Description.v120" = "Wali taneflest n yiceggiren ɣef ufaris deg %1$@ send ad taɣeḍ. Amcegger, tamahilt tarmitant seg %2$@, tebna akken iwata deg yiminig. Tetteddu ɣef %3$@ akked %4$@.";
 
 /* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.HeaderLabel.Title.v120" = "Ɛreḍ amnir-nneɣ yettwamanen i timawin n ufaris";
@@ -160,11 +172,23 @@
 /* Description of the reliability ratings for rating 'D' and 'F' displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQuality.ReliabilityRating.DF.Description.v120" = "Ilɣa yirinaflasen";
 
+/* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "Alɣu n *amwati* yebna kan ɣef yiceggiren i nettwali deg-sen taneflest.";
+
 /* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Fneẓ takarḍa n wamek ara nettguccul alɣu n tɣara";
 
 /* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Snefli takarḍa n wamek ara nettguccul alɣu n tɣara";
+
+/* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Nesseqdac tatiknulujit AI seg %1$@ s %2$@ akken ad nessefqed arkad n yiceggiren n ufaris. Aya ad k-iεawen kan ad tektaleḍ taɣara n uceggir, mačči taɣara n ufaris.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Asebruraq* seg %1@ n yiceggiren deg 80 n wussan-a ineggura i nettwali yella lettkal fell-asen.";
+
+/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.Highlights.Label.v126" = "*Asebruraq* seg %@ n yiceggiren deg 80 n wussan-a ineggura i nettwali yella lettkal fell-asen.";
 
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Amek ara nettguccul alɣu n tɣara";
@@ -174,6 +198,15 @@
 
 /* Mixed reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.MixedReviews.Label.v120" = "Nettwali iwellihen sdukklen iwellihen inaflasen d yiwellihen arinaflasen";
+
+/* Reliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.ReliableReviews.Label.v120" = "Iceggiren igerrzen. Nettwali iceggiren zemren ad d-ilin seg yimsaɣen n tidet i d-yeǧǧan iceggiren imeɣtiyen, ur nebni ɣef tḥila.";
+
+/* Label of the sub headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"Shopping.ReviewQualityCard.SubHeadline.Label.v120" = "Ad nmudd *asekkil n ugemmay* i yiceggiren ɣef yal afaris, seg A ɣer F.";
+
+/* Unreliable reviews label from How we determine review quality card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Iceggiren ur yettwamanen ara. Nettwali iceggiren zemren ad ilin d tikellax neɣ kkan-d seg yimciggar ur nesεi azal.";
 
 /* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
 "Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Fneẓ takarḍa n yiɣewwaren";
