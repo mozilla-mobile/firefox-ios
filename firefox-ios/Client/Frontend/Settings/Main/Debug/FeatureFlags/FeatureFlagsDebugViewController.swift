@@ -32,8 +32,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
         ) { [weak self] _ in
             UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
-            guard let self else { return }
-            self.reloadView()
+            self?.reloadView()
         }
         return SettingSection(title: nil, children: [microsurveySetting])
     }

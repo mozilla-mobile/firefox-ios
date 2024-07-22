@@ -206,7 +206,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
     let prefKey: String?
 
-    private let prefs: Prefs?
+    let prefs: Prefs?
     private let defaultValue: Bool?
     private let settingDidChange: ((Bool) -> Void)?
     private let statusText: NSAttributedString?
@@ -352,10 +352,6 @@ class BoolSetting: Setting, FeatureFlaggable {
 
     func getDefaultValue() -> Bool? {
         return defaultValue
-    }
-
-    func getPrefs() -> Prefs? {
-        return prefs
     }
 
     // These methods allow a subclass to control how the pref is saved

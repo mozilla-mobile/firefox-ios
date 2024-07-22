@@ -12,7 +12,7 @@ class FeatureFlagsBoolSetting: BoolSetting {
                 checking: .buildOnly
             )
         } else {
-            guard let key = prefKey, let defaultValue = getDefaultValue(), let prefs = getPrefs() else { return }
+            guard let key = prefKey, let defaultValue = getDefaultValue(), let prefs else { return }
             control.isOn = prefs.boolForKey(key) ?? defaultValue
         }
     }
@@ -21,7 +21,7 @@ class FeatureFlagsBoolSetting: BoolSetting {
         if let featureFlagName = getFeatureFlagName() {
             featureFlags.set(feature: featureFlagName, to: control.isOn)
         } else {
-            guard let key = prefKey, let prefs = getPrefs() else {
+            guard let key = prefKey, let prefs else {
                 return
             }
             prefs.setBool(control.isOn, forKey: key)
