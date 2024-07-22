@@ -40,7 +40,8 @@ jobs:
                   -scheme ${{ env.xcodebuild_scheme }} \
                   -target ${{ env.xcodebuild_target }} \
                   -derivedDataPath ~/DerivedData \
-                  -destination 'platform=iOS Simulator,name=${{ env.ios_simulator_default }},OS=${{ env.ios_version }}'
+                  -destination 'platform=iOS Simulator,name=${{ env.ios_simulator_default }},OS=${{ env.ios_version }}' \
+                  COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
               working-directory: ${{ env.browser }}
             - name: Compress Derived Data
               id: compress-dd
@@ -71,6 +72,30 @@ jobs:
           gem install xcpretty -v 0.3.0
           pip install blockkit==1.9.1
           npm install -g junit-report-merger@7.0.0
+      - name: Ping URLs
+        id: urls
+        run: |
+          curl https://www.firefox.com
+          curl https://www.pocket.com
+          curl https://wikipedia.org
+          curl https://www.walmart.com
+          curl https://jigsaw.w3.org/HTTP/Basic/
+          curl https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf
+          curl https://www.ebay.com
+          curl https://www.amazon.com
+          curl https://www.forbes.com
+          curl https://theguardian.com
+          curl https://www.reddit.com
+          curl http://www.iana.org/domains/example
+          curl https://www.twitter.com
+          curl https://www.youtube.com
+          curl https://www.bestbuy.com
+          curl https://www.instagram.com
+          curl https://www.euronews.com
+          curl https://www.fakespot.com
+          curl https://www.badssl.com
+          curl https://expired.badssl.com
+          curl https://accounts.google.com
       - name: Setup Xcode
         id: xcode
         run: |
