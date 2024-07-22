@@ -91,7 +91,13 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
     }
 
     private(set) var windows: [WindowUUID: AppWindowInfo] = [:]
+
+    // A list of UUIDs that have already been reserved for windows which are being actively configured.
+    // Because so much of our early launch configuration occurs async, it's possible to request more than
+    // one window UUID before previous windows have completed, this tracks reserved UUIDs still in the
+    // process of initial configuration.
     private var reservedUUIDs: [WindowUUID] = []
+
     var activeWindow: WindowUUID {
         get { return uuidForActiveWindow() }
         set { _activeWindowUUID = newValue }
@@ -187,9 +193,6 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         // or UUIDs that are already reserved and in the process of opening.
         let openWindowUUIDs = windows.keys
         let onDiskUUIDs = tabDataStore.fetchWindowDataUUIDs()
-        let filteredUUIDs = onDiskUUIDs.filter {
-            !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
-        }
 
         let onDiskUUIDLog = onDiskUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
         let reserveLog = reservedUUIDs.map({ $0.uuidString.prefix(8) }).joined(separator: ", ")
@@ -198,7 +201,31 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
                    level: .debug,
                    category: .window)
 
-        let result = nextWindowUUIDToOpen(filteredUUIDs)
+        // On iPhone devices, we expect there only to ever be a single window. If there
+        // are >1 windows we've encountered some type of unexpected state.
+        let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
+
+        let result: ReservedWindowUUID
+        // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
+        if !isIpad && !AppConstants.isRunningUnitTest {
+            // if onDiskUUIDs.count > 1 { ... }
+            // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
+
+            // At this point we should always have either a single UUID on disk or
+            // no UUIDs because this is a brand new app install
+            if onDiskUUIDs.isEmpty {
+                result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
+            } else {
+                result = ReservedWindowUUID(uuid: onDiskUUIDs.first!, isNew: false)
+            }
+        } else {
+            let filteredUUIDs = onDiskUUIDs.filter {
+                !openWindowUUIDs.contains($0) && !reservedUUIDs.contains($0)
+            }
+
+            result = nextWindowUUIDToOpen(filteredUUIDs)
+        }
+
         logger.log("WindowManager: reserve next UUID result = \(result.uuid.uuidString) Is new?: \(result.isNew)",
                    level: .debug,
                    category: .window)
