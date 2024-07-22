@@ -342,9 +342,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             if !tab.isFxHomeTab {
                 sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
             }
-            await selectTabWithSession(tab: tab,
-                                       previous: previous,
-                                       sessionData: sessionData)
+            self.selectTabWithSession(tab: tab,
+                                             previous: previous,
+                                             sessionData: sessionData)
         }
 
         // Default to false if the feature flag is not enabled
@@ -375,27 +375,30 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         store.dispatch(action)
     }
 
-    @MainActor
-    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
-        selectedTab?.createWebview(with: sessionData)
-        selectedTab?.lastExecutedTime = Date.now()
+    func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
+        ensureMainThread { [weak self] in
+            guard let self = self else { return }
 
-        delegates.forEach {
-            $0.get()?.tabManager(
-                self,
-                didSelectedTabChange: tab,
-                previous: previous,
-                isRestoring: !tabRestoreHasFinished
-            )
-        }
+            selectedTab?.createWebview(with: sessionData)
+            selectedTab?.lastExecutedTime = Date.now()
 
-        if let tab = previous {
-            TabEvent.post(.didLoseFocus, for: tab)
+            delegates.forEach {
+                $0.get()?.tabManager(
+                    self,
+                    didSelectedTabChange: tab,
+                    previous: previous,
+                    isRestoring: !self.tabRestoreHasFinished
+                )
+            }
+
+            if let tab = previous {
+                TabEvent.post(.didLoseFocus, for: tab)
+            }
+            if let tab = selectedTab {
+                TabEvent.post(.didGainFocus, for: tab)
+            }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
         }
-        if let tab = selectedTab {
-            TabEvent.post(.didGainFocus, for: tab)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
     }
 
     // MARK: - Screenshots
