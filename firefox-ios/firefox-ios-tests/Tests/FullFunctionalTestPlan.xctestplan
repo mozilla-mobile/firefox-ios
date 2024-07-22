@@ -124,6 +124,7 @@
         "PrivateBrowsingTest\/testiPadDirectAccessPrivateMode()",
         "PrivateBrowsingTest\/testiPadDirectAccessPrivateModeBrowserTab()",
         "PrivateBrowsingTestIpad\/testiPadDirectAccessPrivateMode()",
+        "ReadingListTests",
         "ReadingListTests\/testAddToReaderListOptions()",
         "ReadingListTests\/testAddToReadingList()",
         "ReadingListTests\/testLoadReaderContent()",

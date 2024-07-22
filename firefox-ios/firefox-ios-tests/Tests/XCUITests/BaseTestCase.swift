@@ -16,7 +16,7 @@ func path(forTestPage page: String) -> String {
 
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 20
-let TIMEOUT_LONG: TimeInterval = 60
+let TIMEOUT_LONG: TimeInterval = 45
 
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!

@@ -174,6 +174,7 @@
         "PrivateBrowsingTestIpad",
         "PrivateBrowsingTestIpad\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
         "PrivateBrowsingTestIpad\/testiPadDirectAccessPrivateModeBrowserTab()",
+        "ReadingListTests",
         "ReadingListTests\/testAddToReadingListFromBrowserTabMenu()",
         "ReadingListTests\/testAddToReadingListPrivateMode()",
         "ReadingListTests\/testMarkAsReadAndUnreadFromReadingList()",
