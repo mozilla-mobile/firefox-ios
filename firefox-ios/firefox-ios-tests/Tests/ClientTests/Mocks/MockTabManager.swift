@@ -108,7 +108,7 @@ class MockTabManager: TabManager {
 
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
 
-    func preserveTabs() {}
+    func preserveTabs(completion: (() -> Void)?) {}
 
     func restoreTabs(_ forced: Bool) {}
 

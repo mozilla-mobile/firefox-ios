@@ -92,31 +92,45 @@ class TabManagerTests: XCTestCase {
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {
+        let exp = expectation(description: "Finish saving tabs")
         let subject = createSubject()
-        subject.preserveTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
-        XCTAssertEqual(subject.tabs.count, 0)
+        subject.preserveTabs {
+            exp.fulfill()
+
+            XCTAssertEqual(self.mockTabStore.saveWindowDataCalledCount, 0)
+            XCTAssertEqual(subject.tabs.count, 0)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testPreserveTabsWithOneTab() async throws {
+        let exp = expectation(description: "Finish saving tabs")
         let subject = createSubject()
         subject.tabRestoreHasFinished = true
         addTabs(to: subject, count: 1)
-        subject.preserveTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
-        XCTAssertEqual(subject.tabs.count, 1)
+        subject.preserveTabs {
+            exp.fulfill()
+
+            XCTAssertEqual(self.mockTabStore.saveWindowDataCalledCount, 1)
+            XCTAssertEqual(subject.tabs.count, 1)
+        }
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testPreserveTabsWithManyTabs() async throws {
+        let exp = expectation(description: "Finish saving tabs")
         let subject = createSubject()
         subject.tabRestoreHasFinished = true
         addTabs(to: subject, count: 5)
-        subject.preserveTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
-        XCTAssertEqual(subject.tabs.count, 5)
+        subject.preserveTabs {
+            exp.fulfill()
+
+            XCTAssertEqual(self.mockTabStore.saveWindowDataCalledCount, 1)
+            XCTAssertEqual(subject.tabs.count, 5)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     // MARK: - Select tab
@@ -136,6 +150,7 @@ class TabManagerTests: XCTestCase {
     // MARK: - Save preview screenshot
 
     func testSaveScreenshotWithNoImage() async throws {
+        let exp = expectation(description: "Finish tabDidSetScreenshot")
         let subject = createSubject()
         addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
@@ -143,12 +158,16 @@ class TabManagerTests: XCTestCase {
             return
         }
 
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false) {
+            exp.fulfill()
+            XCTAssertEqual(self.mockDiskImageStore.saveImageForKeyCallCount, 0)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testSaveScreenshotWithImage() async throws {
+        let exp = expectation(description: "Finish tabDidSetScreenshot")
         let subject = createSubject()
         addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
@@ -156,12 +175,16 @@ class TabManagerTests: XCTestCase {
             return
         }
         tab.setScreenshot(UIImage())
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false) {
+            exp.fulfill()
+            XCTAssertEqual(self.mockDiskImageStore.saveImageForKeyCallCount, 1)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testRemoveScreenshotWithImage() async throws {
+        let exp = expectation(description: "Finish removeScreenshot")
         let subject = createSubject()
         addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
@@ -170,9 +193,12 @@ class TabManagerTests: XCTestCase {
         }
 
         tab.setScreenshot(UIImage())
-        subject.removeScreenshot(tab: tab)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
+        subject.removeScreenshot(tab: tab) {
+            exp.fulfill()
+            XCTAssertEqual(self.mockDiskImageStore.deleteImageForKeyCallCount, 1)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testGetInactiveTabs() {

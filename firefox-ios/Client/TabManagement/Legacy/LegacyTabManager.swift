@@ -272,7 +272,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Clear and store
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
-    func preserveTabs() { fatalError("should never be called") }
+    func preserveTabs(completion: (() -> Void)? = nil) { fatalError("should never be called") }
 
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
         DispatchQueue.main.async { [unowned self] in
@@ -784,7 +784,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                         userInfo: windowUUID.userInfo)
     }
 
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool, completion: (() -> Void)? = nil) {}
 
     // MARK: - Private
     @objc

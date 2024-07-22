@@ -217,15 +217,18 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     // MARK: - Save tabs
 
-    override func preserveTabs() {
+    override func preserveTabs(completion: (() -> Void)? = nil) {
         // Only preserve tabs after the restore has finished
-        guard tabRestoreHasFinished else { return }
+        guard tabRestoreHasFinished else {
+            completion?()
+            return
+        }
 
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
-        preserveTabs(forced: false)
+        preserveTabs(forced: false, completion: completion)
     }
 
-    private func preserveTabs(forced: Bool) {
+    private func preserveTabs(forced: Bool, completion: (() -> Void)? = nil) {
         Task {
             // This value should never be nil but we need to still treat it
             // as if it can be nil until the old code is removed
@@ -239,6 +242,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
+
+            completion?()
         }
     }
 
@@ -343,8 +348,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                 sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
             }
             self.selectTabWithSession(tab: tab,
-                                             previous: previous,
-                                             sessionData: sessionData)
+                                      previous: previous,
+                                      sessionData: sessionData)
         }
 
         // Default to false if the feature flag is not enabled
@@ -403,28 +408,33 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     // MARK: - Screenshots
 
-    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool, completion: (() -> Void)? = nil) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
-            removeScreenshot(tab: tab)
+            removeScreenshot(tab: tab, completion: completion)
             return
         }
 
-        storeScreenshot(tab: tab)
+        storeScreenshot(tab: tab, completion: completion)
     }
 
-    func storeScreenshot(tab: Tab) {
-        guard let screenshot = tab.screenshot else { return }
+    func storeScreenshot(tab: Tab, completion: (() -> Void)? = nil) {
+        guard let screenshot = tab.screenshot else {
+            completion?()
+            return
+        }
 
         Task {
             try? await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            completion?()
         }
     }
 
-    func removeScreenshot(tab: Tab) {
+    func removeScreenshot(tab: Tab, completion: (() -> Void)? = nil) {
         Task {
             await imageStore?.deleteImageForKey(tab.tabUUID)
+            completion?()
         }
     }
 

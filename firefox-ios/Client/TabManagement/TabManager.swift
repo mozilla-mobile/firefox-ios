@@ -46,7 +46,7 @@ protocol TabManager: AnyObject {
     func willSwitchTabMode(leavingPBM: Bool)
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool)
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int)
-    func preserveTabs()
+    func preserveTabs(completion: (() -> Void)?)
     func restoreTabs(_ forced: Bool)
     func startAtHomeCheck() -> Bool
     func getTabForUUID(uuid: TabUUID) -> Tab?
