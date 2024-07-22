@@ -11865,6 +11865,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		E16941B22C4E498600FF5F4E /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
+			);
+			path = Toolbar;
+			sourceTree = "<group>";
+		};
 		E17496362991A2480096900A /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -12492,10 +12500,8 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				8A8482ED2BE15FEF00F9007B /* Microsurvey */,
-				8AC225632B6D3F9600CDA7FD /* Telemetry */,
 				8A171A6029F82AD90085770E /* Application */,
-				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
+				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
 				BC003F5D2B59F44500929ECB /* BrowserViewControllerTests.swift */,
 				8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */,
@@ -12505,21 +12511,24 @@
 				C889D7CD2858C4B500121E1D /* ContextMenuHelperTests.swift */,
 				8A93F86329D37314004159D9 /* Coordinators */,
 				43B658D729CE249D00C9EF08 /* CreditCard */,
-				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				431C0D1C25C9D76B00395CE4 /* DefaultBrowserOnboardingTests */,
 				D82ED2631FEB3C420059570B /* DefaultSearchPrefsTests.swift */,
+				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
 				5A70EF17295E2DF400790249 /* DependencyInjection */,
 				8A11C8122731E54800AC7318 /* DictionaryExtensionsTests.swift */,
 				6ADB651A285C03B100947EA4 /* DownloadHelperTests.swift */,
 				6A3E5D89283831D0001E706E /* DownloadQueueTests.swift */,
+				E1E425312B5A2E9700899550 /* DownloadTests.swift */,
 				1D7B789E2AE088930011E9F2 /* EventQueueTests.swift */,
 				8A96C4B728F9DD0600B75884 /* Extensions */,
 				DF1E6AA92A964358000D4854 /* Fakespot */,
 				C807CCCB28367446008E6A5A /* FeatureFlagManagerTests.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
+				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
 				E1AEC16D286E0CF500062E29 /* Frontend */,
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
+				0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */,
 				E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */,
 				8A6E139D2A71C78A00A88FA8 /* GridTabViewControllerTests.swift */,
 				8ACA8F722919870B00D3075D /* Helpers */,
@@ -12531,6 +12540,7 @@
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
 				C8DC90CA2A067BF10008832B /* MarkupParseUtilityTests */,
 				C83DE54529DF3579006E1B69 /* Messaging */,
+				8A8482ED2BE15FEF00F9007B /* Microsurvey */,
 				C889D7D22858C85200121E1D /* Mocks */,
 				C8B41E0B29F034D500FE218A /* Nimbus */,
 				E1312FCF29D23775008DDA85 /* NotificationSurface */,
@@ -12545,6 +12555,7 @@
 				8A11C8102731CFD700AC7318 /* ReaderModeStyleTests.swift */,
 				03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */,
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
+				8A5189C62C1B5F6C00CDB668 /* Search */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
@@ -12559,11 +12570,13 @@
 				D815A3A724A53F3200AAB221 /* TabToolbarHelperTests.swift */,
 				21D8EA942ABE0511003FF16E /* TabTray */,
 				8A6E13972A71BA4E00A88FA8 /* TabWebViewTests.swift */,
+				8AC225632B6D3F9600CDA7FD /* Telemetry */,
 				8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */,
 				8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
+				E16941B22C4E498600FF5F4E /* Toolbar */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
 				ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
@@ -12573,11 +12586,6 @@
 				1D74FF4D2B27962200FF01D0 /* WindowManagerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
-				8A5189C62C1B5F6C00CDB668 /* Search */,
-				814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */,
-				E1E425312B5A2E9700899550 /* DownloadTests.swift */,
-				0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */,
-				C787D8C22C1CB77900940123 /* FirefoxAccountSignInViewControllerTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
