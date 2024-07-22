@@ -111,6 +111,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         mozWaitForElementToExist(app.otherElements["Tabs Tray"])
+        mozWaitForElmentToExist(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts.firstMatch)
         XCTAssertNotNil(
             app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts
                 .element(boundBy: 0).label
