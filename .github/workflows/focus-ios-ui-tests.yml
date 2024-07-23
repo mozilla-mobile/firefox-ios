@@ -67,15 +67,6 @@ jobs:
               run: |
                 gem install xcpretty -v 0.3.0
                 pip install blockkit==1.9.1
-            - name: Ping all URLs
-              id: urls
-              run: |
-                curl https://www.example.com > /dev/null
-                curl https://www.google.com > /dev/null
-                curl https://www.mozilla.org > /dev/null
-                curl https://blockads.fivefilters.org/ > /dev/null
-                curl https://www.facebook.com > /dev/null
-                curl https://news.ycombinator.com > /dev/null
             - name: Setup Xcode
               id: xcode
               run: |
