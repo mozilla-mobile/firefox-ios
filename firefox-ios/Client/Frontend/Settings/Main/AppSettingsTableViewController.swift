@@ -297,7 +297,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             BoolSetting(prefs: profile.prefs,
                         theme: themeManager.getCurrentTheme(for: windowUUID),
                         prefKey: PrefsKeys.Settings.closePrivateTabs,
-                        defaultValue: false,
+                        defaultValue: true,
                         titleText: .AppSettingsClosePrivateTabsTitle,
                         statusText: .AppSettingsClosePrivateTabsDescription)
         ]

@@ -275,7 +275,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func preserveTabs() { fatalError("should never be called") }
 
     func shouldClearPrivateTabs() -> Bool {
-        return profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? false
+        // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
+        return profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
     }
 
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
