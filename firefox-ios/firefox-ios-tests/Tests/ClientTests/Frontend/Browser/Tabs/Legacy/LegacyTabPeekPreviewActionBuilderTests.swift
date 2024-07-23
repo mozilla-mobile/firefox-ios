@@ -51,4 +51,15 @@ final class LegacyTabPeekPreviewActionBuilderTests: XCTestCase {
         let action = builder.build().first ?? UIPreviewAction()
         XCTAssertEqual(action.title, String.TabPeekCloseTab)
     }
+
+    func test_build_afterAddedAllActions_shouldContains4Actions() {
+        builder.addBookmark { _, __ in }
+        builder.addSendToDeviceTitle { _, __ in }
+        builder.addCopyUrl { _, __ in }
+        builder.addCloseTab { _, __ in }
+
+        let actions = builder.build()
+
+        XCTAssertEqual(actions.count, 4)
+    }
 }
