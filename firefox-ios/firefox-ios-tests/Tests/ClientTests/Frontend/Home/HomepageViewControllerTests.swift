@@ -25,7 +25,8 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
-        let tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
@@ -40,7 +41,8 @@ class HomepageViewControllerTests: XCTestCase {
 
     func testHomepage_viewWillAppear_sendsBehavioralTargetingEvent() {
         Experiments.events.clearEvents()
-        let tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         let urlBar = URLBarView(profile: profile, windowUUID: .XCTestDefaultUUID)
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)

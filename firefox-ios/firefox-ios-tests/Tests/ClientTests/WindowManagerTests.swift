@@ -112,7 +112,7 @@ class WindowManagerTests: XCTestCase {
         // generated UUIDs but it is astronomically small (1 out of 2^122).
         let uuid1 = subject.reserveNextAvailableWindowUUID()
         let uuid2 = subject.reserveNextAvailableWindowUUID()
-        XCTAssertNotEqual(uuid1, uuid2)
+        XCTAssertNotEqual(uuid1.uuid, uuid2.uuid)
     }
 
     func testNextAvailableUUIDWhenOnlyOneWindowSaved() {
@@ -123,11 +123,11 @@ class WindowManagerTests: XCTestCase {
         mockTabDataStore.injectMockTabWindowUUID(savedUUID)
 
         // Check that asking for first UUID returns the expected UUID
-        XCTAssertEqual(savedUUID, subject.reserveNextAvailableWindowUUID())
+        XCTAssertEqual(savedUUID, subject.reserveNextAvailableWindowUUID().uuid)
         // Open a window using this UUID
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: savedUUID)
         // Check that asking for another UUID returns a new, random UUID
-        XCTAssertNotEqual(savedUUID, subject.reserveNextAvailableWindowUUID())
+        XCTAssertNotEqual(savedUUID, subject.reserveNextAvailableWindowUUID().uuid)
     }
 
     func testNextAvailableUUIDWhenMultipleWindowsSaved() {
@@ -141,9 +141,9 @@ class WindowManagerTests: XCTestCase {
         mockTabDataStore.injectMockTabWindowUUID(uuid2)
 
         // Ask for UUIDs for two windows, which we open and configure
-        let result1 = subject.reserveNextAvailableWindowUUID()
+        let result1 = subject.reserveNextAvailableWindowUUID().uuid
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: result1)
-        let result2 = subject.reserveNextAvailableWindowUUID()
+        let result2 = subject.reserveNextAvailableWindowUUID().uuid
         subject.newBrowserWindowConfigured(AppWindowInfo(), uuid: result2)
 
         // Check that our UUIDs are the ones we expected
@@ -153,7 +153,7 @@ class WindowManagerTests: XCTestCase {
         XCTAssertEqual(expectedUUIDs.count, 2)
 
         // Check that asking for a 3rd UUID returns a new, random UUID
-        let result3 = subject.reserveNextAvailableWindowUUID()
+        let result3 = subject.reserveNextAvailableWindowUUID().uuid
         XCTAssertFalse(expectedUUIDs.contains(result3))
         XCTAssertNotEqual(result1, result3)
         XCTAssertNotEqual(result2, result3)
@@ -166,9 +166,9 @@ class WindowManagerTests: XCTestCase {
         let tabManager2 = MockTabManager()
 
         // Create two separate windows with associated Tab Managers
-        let uuid1 = subject.reserveNextAvailableWindowUUID()
+        let uuid1 = subject.reserveNextAvailableWindowUUID().uuid
         subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager1), uuid: uuid1)
-        let uuid2 = subject.reserveNextAvailableWindowUUID()
+        let uuid2 = subject.reserveNextAvailableWindowUUID().uuid
         subject.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager2), uuid: uuid2)
 
         // Check that allWindowTabManagers returns both expected instances
@@ -193,11 +193,11 @@ class WindowManagerTests: XCTestCase {
 
         // Request a UUID. We expect it to be the first persisted WindowData
         // UUID, which will also be reserved for use.
-        let requestedUUID1 = subject.reserveNextAvailableWindowUUID()
+        let requestedUUID1 = subject.reserveNextAvailableWindowUUID().uuid
         XCTAssertEqual(requestedUUID1, savedUUID)
 
         // Request a 2nd UUID. We expect it to be a different UUID.
-        let requestedUUID2 = subject.reserveNextAvailableWindowUUID()
+        let requestedUUID2 = subject.reserveNextAvailableWindowUUID().uuid
         XCTAssertNotEqual(requestedUUID2, savedUUID)
     }
 
@@ -221,8 +221,8 @@ class WindowManagerTests: XCTestCase {
 
         // Now attempt to re-open two windows in order. We expect window
         // 1 to open, then window 2
-        let result1 = subject.reserveNextAvailableWindowUUID()
-        let result2 = subject.reserveNextAvailableWindowUUID()
+        let result1 = subject.reserveNextAvailableWindowUUID().uuid
+        let result2 = subject.reserveNextAvailableWindowUUID().uuid
         XCTAssertEqual(result1, uuid1)
         XCTAssertEqual(result2, uuid2)
 
@@ -234,8 +234,8 @@ class WindowManagerTests: XCTestCase {
         subject.windowWillClose(uuid: uuid2)
 
         // Check that the next time we open the windows the order is now reversed
-        let result2_1 = subject.reserveNextAvailableWindowUUID()
-        let result2_2 = subject.reserveNextAvailableWindowUUID()
+        let result2_1 = subject.reserveNextAvailableWindowUUID().uuid
+        let result2_2 = subject.reserveNextAvailableWindowUUID().uuid
         XCTAssertEqual(result2_1, uuid2)
         XCTAssertEqual(result2_2, uuid1)
     }
