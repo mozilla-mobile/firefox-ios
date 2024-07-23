@@ -235,6 +235,37 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         return [newTab, closeTab]
     }
 
+    func getTabToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
+        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
+                                           iconString: StandardImageIdentifiers.Large.plus,
+                                           iconType: .Image) { _ in
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
+            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
+        }.items
+
+        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
+                                                  iconString: StandardImageIdentifiers.Large.plus,
+                                                  iconType: .Image) { _ in
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
+            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
+        }.items
+
+        let closeTab = SingleActionViewModel(title: .Toolbars.tabToolbarLongPressActionsMenu.closeThisTabButton,
+                                             iconString: StandardImageIdentifiers.Large.cross,
+                                             iconType: .Image) { _ in
+            if let tab = self.tabManager.selectedTab {
+                self.tabManager.removeTab(tab)
+                self.updateTabCountUsingTabManager(self.tabManager)
+                self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+            }
+        }.items
+
+        return [[newTab, newPrivateTab], [closeTab]]
+    }
+
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
