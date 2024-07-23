@@ -245,7 +245,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }.items
 
         let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                                  iconString: StandardImageIdentifiers.Large.plus,
+                                                  iconString: StandardImageIdentifiers.Large.privateMode,
                                                   iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
