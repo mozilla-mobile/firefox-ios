@@ -348,8 +348,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                 sessionData = await self?.tabSessionStore.fetchTabSession(tabID: tabUUID)
             }
             self?.selectTabWithSession(tab: tab,
-                                      previous: previous,
-                                      sessionData: sessionData)
+                                       previous: previous,
+                                       sessionData: sessionData)
         }
 
         // Default to false if the feature flag is not enabled

@@ -135,7 +135,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Select tab
 
-    func test_addSelectTab_forPrivateMode() async throws {
+    func test_selectTab_doesNotRetain() {
         let tabCount = 3
         let subject = createSubject()
         addTabs(to: subject, count: tabCount)
