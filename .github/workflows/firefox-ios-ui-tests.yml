@@ -226,103 +226,104 @@ jobs:
           exit ${{ steps.passfail.outcome == 'success' && '0' || '1' }}   
 
     run-fullfunctionaltests:
-        name: Run full functional tests
-        runs-on: macos-14
-        needs: compile
-        strategy:
-            fail-fast: false
-            matrix:
-                ios_simulator: ['iPhone 15 Plus', 'iPad Pro (11-inch) (4th generation)']
-        steps:
-            - name: Check out source code
-              uses: actions/checkout@v4.1.7
-            - name: Install packages
-              id: packages
-              run: |
-                gem install xcpretty -v 0.3.0
-                pip install blockkit==1.9.1
-            - name: Get derived data
-              id: download-derived-data
-              uses: actions/download-artifact@v4
-              with:
-                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
-            - name: Decompress derived data
-              id: decompress-dd
-              run: |
-                tar xzf derived-data.tar.gz -C /
-            - name: Ping URLs
-              id: urls
-              run: |
-                curl https://www.firefox.com > /dev/null
-                curl https://www.pocket.com > /dev/null
-                curl https://wikipedia.org > /dev/null
-                curl https://www.walmart.com > /dev/null
-                curl https://jigsaw.w3.org/HTTP/Basic/ > /dev/null
-                curl https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf > /dev/null
-                curl https://www.ebay.com > /dev/null
-                curl https://www.amazon.com > /dev/null
-                curl https://www.forbes.com > /dev/null
-                curl https://theguardian.com > /dev/null
-                curl https://www.reddit.com > /dev/null
-                curl http://www.iana.org/domains/example > /dev/null
-                curl https://www.twitter.com > /dev/null
-                curl https://www.youtube.com > /dev/null
-                curl https://www.instagram.com > /dev/null
-                curl https://www.euronews.com > /dev/null
-                curl https://www.fakespot.com > /dev/null
-                curl https://www.badssl.com > /dev/null
-                curl https://accounts.google.com > /dev/null
-            - name: Run tests
-              id: run-tests
-              run: |
-                xcodebuild \
-                  test-without-building \
-                  -scheme ${{ env.xcodebuild_scheme }} \
-                  -target ${{ env.xcodebuild_target }} \
-                  -derivedDataPath ~/DerivedData \
-                  -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
-                  -testPlan FullFunctionalTestPlan \
-                  -resultBundlePath ${{ env.test_results_directory }}/results \
-                  | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
-              working-directory:  ${{ env.browser }}
-              continue-on-error: true
-            - name: Print test report
-              id: test-report
-              run: |
-                python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
-                cat github.md >> $GITHUB_STEP_SUMMARY
-                python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
-              working-directory:  ${{ env.browser }}
-            - name: Upload junit files
-              id: upload-junit
-              uses: actions/upload-artifact@v4.3.3
-              with:
-                name: ${{ env.browser }}-fullfunctional-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
-                path: ${{ env.browser }}/junit-*.xml
-                retention-days: 90
-            - name: Upload log file
-              id: upload-log
-              uses: actions/upload-artifact@v4.3.3
-              with:
-                name: ${{ env.browser }}-fullfunctional-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
-                path: ${{ env.browser }}/xcodebuild.log
-                retention-days: 90
-            - name: Report to Slack
-              id: slack
-              uses: slackapi/slack-github-action@v1.26.0
-              with:
-                payload-file-path: ${{ env.browser }}/slack.json
-              env:
-                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-                ios_simulator: ${{ matrix.ios_simulator }}
-                pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
-                xcodebuild_test_plan: FullFunctionalTestPlan
-                ref_name: ${{ github.ref_name }}
-                repository: ${{ github.repository }}
-                run_id: ${{ github.run_id }}
-                server_url: ${{ github.server_url }}
-                sha: ${{ github.sha }}
-            - name: Return fail status if a test fails
-              run: |
-                exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
+      name: Run full functional tests
+      runs-on: macos-14
+      needs: compile
+      timeout-minutes: 1000
+      strategy:
+        fail-fast: false
+        matrix:
+          ios_simulator: ['iPhone 15 Pro Max', 'iPad Pro (11-inch) (4th generation)']
+      steps:
+        - name: Check out source code
+          uses: actions/checkout@v4.1.7
+        - name: Install packages
+          id: packages
+          run: |
+            gem install xcpretty -v 0.3.0
+            pip install blockkit==1.9.1
+        - name: Get derived data
+          id: download-derived-data
+          uses: actions/download-artifact@v4
+          with:
+            name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+        - name: Decompress derived data
+          id: decompress-dd
+          run: |
+            tar xzf derived-data.tar.gz -C /
+        - name: Ping URLs
+          id: urls
+          run: |
+            curl https://www.firefox.com > /dev/null
+            curl https://www.pocket.com > /dev/null
+            curl https://wikipedia.org > /dev/null
+            curl https://www.walmart.com > /dev/null
+            curl https://jigsaw.w3.org/HTTP/Basic/ > /dev/null
+            curl https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf > /dev/null
+            curl https://www.ebay.com > /dev/null
+            curl https://www.amazon.com > /dev/null
+            curl https://www.forbes.com > /dev/null
+            curl https://theguardian.com > /dev/null
+            curl https://www.reddit.com > /dev/null
+            curl http://www.iana.org/domains/example > /dev/null
+            curl https://www.twitter.com > /dev/null
+            curl https://www.youtube.com > /dev/null
+            curl https://www.instagram.com > /dev/null
+            curl https://www.euronews.com > /dev/null
+            curl https://www.fakespot.com > /dev/null
+            curl https://www.badssl.com > /dev/null
+            curl https://accounts.google.com > /dev/null
+        - name: Run tests
+          id: run-tests
+          run: |
+            xcodebuild \
+              test-without-building \
+              -scheme ${{ env.xcodebuild_scheme }} \
+              -target ${{ env.xcodebuild_target }} \
+              -derivedDataPath ~/DerivedData \
+              -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+              -testPlan FullFunctionalTestPlan \
+              -resultBundlePath ${{ env.test_results_directory }}/results \
+              | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
+          working-directory:  ${{ env.browser }}
+          continue-on-error: true
+        - name: Print test report
+          id: test-report
+          run: |
+            python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
+            cat github.md >> $GITHUB_STEP_SUMMARY
+            python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
+          working-directory:  ${{ env.browser }}
+        - name: Upload junit files
+          id: upload-junit
+          uses: actions/upload-artifact@v4.3.3
+          with:
+            name: ${{ env.browser }}-fullfunctional-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
+            path: ${{ env.browser }}/junit-*.xml
+            retention-days: 90
+        - name: Upload log file
+          id: upload-log
+          uses: actions/upload-artifact@v4.3.3
+          with:
+            name: ${{ env.browser }}-fullfunctional-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+            path: ${{ env.browser }}/xcodebuild.log
+            retention-days: 90
+        - name: Report to Slack
+          id: slack
+          uses: slackapi/slack-github-action@v1.26.0
+          with:
+            payload-file-path: ${{ env.browser }}/slack.json
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+            ios_simulator: ${{ matrix.ios_simulator }}
+            pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+            xcodebuild_test_plan: FullFunctionalTestPlan
+            ref_name: ${{ github.ref_name }}
+            repository: ${{ github.repository }}
+            run_id: ${{ github.run_id }}
+            server_url: ${{ github.server_url }}
+            sha: ${{ github.sha }}
+        - name: Return fail status if a test fails
+          run: |
+            exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}
