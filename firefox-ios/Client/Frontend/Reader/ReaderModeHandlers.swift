@@ -42,6 +42,11 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             return GCDWebServerResponse(statusCode: status)
         }
 
+        var readerModeStyle: ReaderModeStyle?
+        ensureMainThread {
+            readerModeStyle = ReaderModeStyle.defaultStyle()
+        }
+
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
         webServer.registerHandlerForMethod(
             "GET",
@@ -52,27 +57,22 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                 if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
+                        guard var readerModeStyle else { return nil }
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
-                        var readerModeStyle = ReaderModeStyle.defaultStyle(for: nil)
                         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
                            let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
                                 readerModeStyle = style
-                        } else {
-                            readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
-                        }
-                        if let html = ReaderModeUtils.generateReaderContent(
-                            readabilityResult,
-                            initialStyle: readerModeStyle
-                        ),
-                            let response = GCDWebServerDataResponse(html: html) {
-                            // Apply a Content Security Policy that disallows everything except images from
-                            // anywhere and fonts and css from our internal server
+                            } else {
+                                readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
+                            }
+
+                            guard let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle),
+                                  let response = GCDWebServerDataResponse(html: html) else { return nil }
                             response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
                                               forAdditionalHeader: "Content-Security-Policy")
                             return response
-                        }
-                    } catch _ {
+                    } catch {
                         // This page has not been converted to reader mode yet. This happens when you for example add an
                         // item via the app extension and the application has not yet had a change to readerize that
                         // page in the background.

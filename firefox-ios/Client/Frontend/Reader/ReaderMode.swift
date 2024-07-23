@@ -109,12 +109,7 @@ enum ReaderModeFontSize: Int {
     }
 
     static var defaultSize: ReaderModeFontSize {
-        var contentSizeCategory: UIContentSizeCategory?
-        ensureMainThread {
-            contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        }
-
-        switch contentSizeCategory {
+        switch UIApplication.shared.preferredContentSizeCategory {
         case .extraSmall:
             return .size1
         case .small:
@@ -195,7 +190,7 @@ struct ReaderModeStyle {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme, window: windowUUID)
     }
 
-    static func defaultStyle(for window: WindowUUID?) -> ReaderModeStyle {
+    static func defaultStyle(for window: WindowUUID? = nil) -> ReaderModeStyle {
         return ReaderModeStyle(
             windowUUID: window,
             theme: .light,
