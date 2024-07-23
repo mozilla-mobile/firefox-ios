@@ -2503,7 +2503,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func addressAutofillNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+        return ["CA", "US"].contains(Locale.current.regionCode ?? "")
     }
 
     private func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
