@@ -54,7 +54,7 @@ jobs:
         name: Run tests
         runs-on: macos-14
         needs: compile
-        concurrency: ${{ matrix.xcodebuild_test_plan }}
+        concurrency: ${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}
         strategy:
             fail-fast: false
             matrix:
