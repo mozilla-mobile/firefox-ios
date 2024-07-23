@@ -37,7 +37,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         button.configure(viewModel: buttonViewModel)
         button.addTarget(self, action: #selector(self.proceedButtonTapped), for: .touchUpInside)
     }
-    
+
     private lazy var contentView: UIView = .build { view in
         view.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -64,7 +64,7 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
         super.viewDidLoad()
 
         self.title = .Settings.Passwords.Title
-        
+
         setupLayout()
     }
 
@@ -79,12 +79,12 @@ class PasswordManagerOnboardingViewController: SettingsViewController {
     func proceedButtonTapped(_ sender: UIButton) {
         continueFromOnboarding()
     }
-    
+
     private func setupLayout() {
         view.addSubviews(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(onboardingMessageLabel, learnMoreButton, continueButton)
-        
+
         NSLayoutConstraint.activate(
             [
                 scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
