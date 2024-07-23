@@ -114,6 +114,9 @@ jobs:
       - name: Run Smoketest1
         id: run-smoketest1
         run: |
+          xcrun simctl shutdown all
+          xcrun simctl erase all
+          xcrun simctl boot '${{ matrix.ios_simulator }}'
           xcodebuild \
             test-without-building \
             -scheme ${{ env.xcodebuild_scheme }} \
@@ -128,6 +131,9 @@ jobs:
       - name: Run Smoketest2
         id: run-smoketest2
         run: |
+          xcrun simctl shutdown all
+          xcrun simctl erase all
+          xcrun simctl boot '${{ matrix.ios_simulator }}'
           xcodebuild \
             test-without-building \
             -scheme ${{ env.xcodebuild_scheme }} \
@@ -142,6 +148,9 @@ jobs:
       - name: Run Smoketest3
         id: run-smoketest3
         run: |
+          xcrun simctl shutdown all
+          xcrun simctl erase all
+          xcrun simctl boot '${{ matrix.ios_simulator }}'
           xcodebuild \
             test-without-building \
             -scheme ${{ env.xcodebuild_scheme }} \
@@ -156,6 +165,9 @@ jobs:
       - name: Run Smoketest4
         id: run-smoketest4
         run: |
+          xcrun simctl shutdown all
+          xcrun simctl erase all
+          xcrun simctl boot '${{ matrix.ios_simulator }}'
           xcodebuild \
             test-without-building \
             -scheme ${{ env.xcodebuild_scheme }} \
