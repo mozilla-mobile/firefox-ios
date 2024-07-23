@@ -23,4 +23,11 @@ final class LegacyTabPeekPreviewActionBuilderTests: XCTestCase {
 
         XCTAssertEqual(result, 0)
     }
+
+    func test_addBookmark_afterAdded_shouldContainsInActions() {
+        builder.addBookmark { _, __ in }
+
+        let action = builder.build().first ?? UIPreviewAction()
+        XCTAssertEqual(action.title, String.TabPeekAddToBookmarks)
+    }
 }
