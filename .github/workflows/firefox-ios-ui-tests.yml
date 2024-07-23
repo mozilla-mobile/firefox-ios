@@ -229,7 +229,6 @@ jobs:
       name: Run full functional tests
       runs-on: macos-14
       needs: compile
-      timeout-minutes: 1000
       strategy:
         fail-fast: false
         matrix:
