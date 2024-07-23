@@ -17,4 +17,10 @@ final class LegacyTabPeekPreviewActionBuilderTests: XCTestCase {
         super.tearDown()
         builder = nil
     }
+
+    func test_count_afterBuilderIsInstantiated_shouldBeZero() {
+        let result = builder.count
+
+        XCTAssertEqual(result, 0)
+    }
 }
