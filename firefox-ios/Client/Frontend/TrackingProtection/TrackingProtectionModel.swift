@@ -11,12 +11,7 @@ import CryptoKit
 import X509
 import SwiftASN1
 
-class TrackingProtectionViewModel {
-    // MARK: - Variables
-    var onOpenSettingsTapped: (() -> Void)?
-    var onToggleSiteSafelistStatus: (() -> Void)?
-    var heroImage: UIImage?
-
+class TrackingProtectionModel {
     // MARK: - Constants
     let contentBlockerStatus: BlockerStatus
     let contentBlockerStats: TPPageStats?
@@ -58,10 +53,10 @@ class TrackingProtectionViewModel {
         return url.baseDomain ?? ""
     }
 
+    let secureStatusString = .Menu.EnhancedTrackingProtection.connectionSecureLabel
+    let unsecureStatusString = .Menu.EnhancedTrackingProtection.connectionUnsecureLabel
     var connectionStatusString: String {
-        return connectionSecure ?
-            .Menu.EnhancedTrackingProtection.connectionSecureLabel :
-            .Menu.EnhancedTrackingProtection.connectionUnsecureLabel
+        return connectionSecure ? secureStatusString : unsecureStatusString
     }
 
     var  connectionDetailsTitle: String {
@@ -69,15 +64,16 @@ class TrackingProtectionViewModel {
         return connectionSecure ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
     }
 
+    let protectionOnHeaderString = .Menu.EnhancedTrackingProtection.onHeader
+    let protectionOffHeaderString = .Menu.EnhancedTrackingProtection.offHeader
     var  connectionDetailsHeader: String {
-        return connectionSecure ?
-            .Menu.EnhancedTrackingProtection.onHeader : .Menu.EnhancedTrackingProtection.offHeader
+        return connectionSecure ? protectionOnHeaderString : protectionOffHeaderString
     }
 
+    let protectionOnImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
+    let protectionOffImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
     var  connectionDetailsImage: UIImage? {
-        return connectionSecure ?
-        UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn) :
-        UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
+        return connectionSecure ? protectionOnImage : protectionOffImage
     }
 
     var isSiteETPEnabled: Bool {
@@ -132,8 +128,9 @@ class TrackingProtectionViewModel {
         let cancelAction = UIAlertAction(title: clearCookiesAlertCancelButton, style: .cancel, handler: nil)
         alert.addAction(cancelAction)
 
-        let confirmAction = UIAlertAction(title: clearCookiesAlertButton, style: .destructive) { _ in
-            self.clearCookiesAndSiteData()
+        let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
+                                          style: .destructive) { [weak self] _ in
+            self?.clearCookiesAndSiteData()
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)

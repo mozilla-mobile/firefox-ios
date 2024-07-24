@@ -9,12 +9,6 @@ import ComponentLibrary
 public struct TrackingProtectionButtonViewModel {
     let title: String
     let a11yIdentifier: String
-
-    init(title: String = "",
-         a11yIdentifier: String = "") {
-        self.title = title
-        self.a11yIdentifier = a11yIdentifier
-    }
 }
 
 class TrackingProtectionButton: ResizableButton, ThemeApplicable {
@@ -32,10 +26,10 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         )
     }
 
-    private var viewModel = TrackingProtectionButtonViewModel()
-    private var backgroundColorNormal: UIColor = .yellow
-    private var foregroundColor: UIColor = .black
-    private var borderColor: UIColor = .black
+    private var viewModel: TrackingProtectionButtonViewModel?
+    private var backgroundColorNormal: UIColor = .clear
+    private var foregroundColor: UIColor = .clear
+    private var borderColor: UIColor = .clear
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,7 +58,7 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.titleTextAttributesTransformer = transformer
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         updatedConfiguration.contentInsets = UX.contentInsets
-        updatedConfiguration.title = viewModel.title
+        updatedConfiguration.title = viewModel?.title
         updatedConfiguration.titleAlignment = .leading
         updatedConfiguration.background.customView?.layer.borderWidth = 1
         updatedConfiguration.background.customView?.layer.borderColor = borderColor.cgColor
@@ -86,8 +80,10 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.background.customView?.layer.borderWidth = 1
         updatedConfiguration.background.customView?.layer.borderColor = borderColor.cgColor
 
-        // Using a nil backgroundColorTransformer will just make the background view
-        // use configuration.background.backgroundColor without any transformation
+//        if there were any pre-existing transformer applied to the background color,
+//        it can alter the background color based on certain states or conditions.
+//        By explicitly setting it to nil, we're ensuring a static background color
+//        that is defined in updatedConfiguration.background.backgroundColor
         updatedConfiguration.background.backgroundColorTransformer = nil
         updatedConfiguration.background.cornerRadius = UX.buttonCornerRadius
 
