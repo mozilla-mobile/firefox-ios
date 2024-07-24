@@ -9,7 +9,7 @@ import Shared
 final class RouteBuilder {
     private var isPrivate = false
     private var prefs: Prefs?
-    
+
     func configure(isPrivate: Bool,
                    prefs: Prefs) {
         self.isPrivate = isPrivate
