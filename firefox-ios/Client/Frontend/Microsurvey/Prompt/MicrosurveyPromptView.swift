@@ -72,6 +72,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var closeButton: CloseButton = .build { button in

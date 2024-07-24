@@ -52,6 +52,15 @@ final class MicrosurveyTests: BaseTestCase {
 
         XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo].exists)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].exists)
+        let tablesQuery = app.scrollViews.otherElements.tables
+        let firstOption = tablesQuery.cells.firstMatch
+        firstOption.tap()
+        XCTAssertEqual(firstOption.label, "Very satisfied")
+        XCTAssertEqual(firstOption.value as? String, "1 out of 6")
+
+        let secondOption = tablesQuery.cells["Neutral"]
+        XCTAssertEqual(secondOption.label, "Neutral")
+        XCTAssertEqual(secondOption.value as? String, "Unselected, 3 out of 6")
     }
 
     func testCloseButtonDismissesSurveyAndPrompt() {
