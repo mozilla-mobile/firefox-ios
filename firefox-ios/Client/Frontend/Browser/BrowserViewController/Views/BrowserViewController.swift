@@ -1899,7 +1899,7 @@ class BrowserViewController: UIViewController,
         case .backForwardList:
             navigationHandler?.showBackForwardList()
         case .tabsLongPressActions:
-            presentActionSheet(from: view)
+            presentTabsLongPressAction(from: view)
         case .locationViewLongPressAction:
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
@@ -2094,7 +2094,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func presentActionSheet(from view: UIView) {
+    func presentTabsLongPressAction(from view: UIView) {
         guard presentedViewController == nil else { return }
 
         var actions: [[PhotonRowActions]] = []

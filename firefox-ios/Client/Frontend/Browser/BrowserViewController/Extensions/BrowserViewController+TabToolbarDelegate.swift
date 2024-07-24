@@ -291,7 +291,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        presentActionSheet(from: button)
+        presentTabsLongPressAction(from: button)
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
