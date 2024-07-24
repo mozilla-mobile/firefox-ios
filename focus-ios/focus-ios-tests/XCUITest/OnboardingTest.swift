@@ -24,7 +24,7 @@ class OnboardingTest: BaseTestCase {
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
 
         waitForExistence(app.staticTexts["Welcome to Firefox Focus!"])
-        XCTAssert(app.images["icon_background"].exists)
+        waitForExistence(app.images["icon_background"])
         XCTAssert(app.buttons["Get Started"].isEnabled)
         XCTAssert(app.buttons["icon_close"].isEnabled)
         pageIndicatorButton.tap()
