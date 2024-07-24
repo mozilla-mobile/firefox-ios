@@ -80,4 +80,15 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
             NotificationCenter.default.removeObserver(observer)
         }
     }
+
+    func testTabTrayRevertToRegular_ForNoPrivateTabSelected() {
+        // If the user selects Private mode but doesn't focus or creates a new tab
+        // we considered that regular is actually active
+        tabTray.viewModel.segmentToFocus = TabTrayPanelType.privateTabs
+        tabTray.viewDidLoad()
+        tabTray.didTapDone()
+
+        let privateState = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
+        XCTAssertFalse(privateState)
+    }
 }

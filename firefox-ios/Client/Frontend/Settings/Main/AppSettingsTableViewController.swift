@@ -20,6 +20,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showExperiments()
     func showFirefoxSuggest()
     func openDebugTestTabs(count: Int)
+    func showDebugFeatureFlags()
     func showPasswordManager(shouldShowOnboarding: Bool)
     func didFinishShowingSettings()
 }
@@ -292,6 +293,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
+        privacySettings += [
+            BoolSetting(prefs: profile.prefs,
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        prefKey: PrefsKeys.Settings.closePrivateTabs,
+                        defaultValue: true,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription)
+        ]
+
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
         privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
@@ -341,7 +351,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getDebugSettings() -> [SettingSection] {
-        let hiddenDebugOptions = [
+        var hiddenDebugOptions = [
             ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),
@@ -357,8 +367,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
         ]
+
+        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
+        #endif
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
@@ -393,6 +407,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedOpenFiftyTabs() {
         parentCoordinator?.openDebugTestTabs(count: 50)
+    }
+
+    func pressedDebugFeatureFlags() {
+        parentCoordinator?.showDebugFeatureFlags()
     }
 
     // MARK: SharedSettingsDelegate

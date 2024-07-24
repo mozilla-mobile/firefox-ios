@@ -209,6 +209,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.Preferences.showClipboardBar.set(false)
         }
 
+        // Close private tabs
+        if let closePrivateTabs = prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) {
+            GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
+        } else {
+            GleanMetrics.Preferences.closePrivateTabs.set(false)
+        }
+
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
             GleanMetrics.TrackingProtection.enabled.set(tpEnabled)

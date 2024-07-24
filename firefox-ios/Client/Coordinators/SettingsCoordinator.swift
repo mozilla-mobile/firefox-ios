@@ -198,6 +198,11 @@ class SettingsCoordinator: BaseCoordinator,
         parentCoordinator?.openDebugTestTabs(count: count)
     }
 
+    func showDebugFeatureFlags() {
+        let featureFlagsViewController = FeatureFlagsDebugViewController(windowUUID: windowUUID)
+        router.push(featureFlagsViewController)
+    }
+
     func showPasswordManager(shouldShowOnboarding: Bool) {
         let passwordCoordinator = PasswordManagerCoordinator(
             router: router,

@@ -69,7 +69,7 @@ class TrackingProtectionTest: BaseTestCase {
 
         // Check ad blocking is enabled
         let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
-        XCTAssertTrue(TrackingProtection.exists)
+        waitForExistence(TrackingProtection)
     }
 
     // Smoke test
