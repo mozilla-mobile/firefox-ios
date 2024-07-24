@@ -152,9 +152,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     /// Creates the webview so needs to live on the main thread
     @MainActor
     private func generateTabs(from windowData: WindowData) async {
+        let filteredTabs = filterPrivateTabs(from: windowData,
+                                             clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
 
-        for tabData in windowData.tabData {
+        for tabData in filteredTabs {
             let newTab = addTab(flushToDisk: false, zombie: true, isPrivate: tabData.isPrivate)
             newTab.url = URL(string: tabData.siteUrl, invalidCharacters: false)
             newTab.lastTitle = tabData.title
@@ -184,7 +186,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             }
         }
 
-        logger.log("There was \(windowData.tabData.count) tabs restored",
+        logger.log("There was \(filteredTabs.count) tabs restored",
                    level: .debug,
                    category: .tabs)
 
@@ -199,6 +201,14 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
             selectTab(tabToSelect)
         }
+    }
+
+    private func filterPrivateTabs(from windowData: WindowData, clearPrivateTabs: Bool) -> [TabData] {
+        var savedTabs = windowData.tabData
+        if clearPrivateTabs {
+            savedTabs = windowData.tabData.filter { !$0.isPrivate }
+        }
+        return savedTabs
     }
 
     /// Creates the webview so needs to live on the main thread
@@ -243,7 +253,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     }
 
     private func generateTabDataForSaving() -> [TabData] {
-        let tabData = normalTabs.map { tab in
+        var tabsToSave = tabs
+        if shouldClearPrivateTabs() {
+            tabsToSave = normalTabs
+        }
+
+        let tabData = tabsToSave.map { tab in
             let oldTabGroupData = tab.metadataManager?.tabGroupData
             let state = TabGroupTimerState(rawValue: oldTabGroupData?.tabHistoryCurrentState ?? "")
             let groupData = TabGroupData(searchTerm: oldTabGroupData?.tabAssociatedSearchTerm,
@@ -287,11 +302,18 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         saveCurrentTabSessionData()
     }
 
+<<<<<<< HEAD
     private func saveCurrentTabSessionData() {
         guard let selectedTab = self.selectedTab,
               !selectedTab.isPrivate,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
+=======
+    override func saveSessionData(forTab tab: Tab?) {
+        guard let tab = tab,
+              let tabSession = tab.webView?.interactionState as? Data,
+              let tabID = UUID(uuidString: tab.tabUUID)
+>>>>>>> 6c9215c9c (Refactor FXIOS-9519 - Private Tab Persistence with "Close Private tabs" option as Opt In (#21240))
         else { return }
 
         Task {
@@ -327,6 +349,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         saveCurrentTabSessionData()
 
         willSelectTab(url)
+<<<<<<< HEAD
+=======
+
+        let previous = previous ?? selectedTab
+
+        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
+        tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
+
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if shouldClearPrivateTabs(), !tab.isPrivate {
+            removeAllPrivateTabs()
+        }
+
+        _selectedIndex = tabs.firstIndex(of: tab) ?? -1
+
+        preserveTabs()
+
+>>>>>>> 6c9215c9c (Refactor FXIOS-9519 - Private Tab Persistence with "Close Private tabs" option as Opt In (#21240))
         Task(priority: .high) {
             var sessionData: Data?
             if !tab.isFxHomeTab {
@@ -350,6 +390,17 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             didSelectTab(url)
             updateMenuItemsForSelectedTab()
         }
+    }
+
+    private func removeAllPrivateTabs() {
+        // reset the selectedTabIndex if we are on a private tab because we will be removing it.
+        if selectedTab?.isPrivate ?? false {
+            _selectedIndex = -1
+        }
+        privateTabs.forEach { $0.close() }
+        tabs = normalTabs
+
+        privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
     private func willSelectTab(_ url: URL?) {
@@ -398,6 +449,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             TabEvent.post(.didGainFocus, for: tab)
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+
+        // Note: we setup last session private case as the session is tied to user's selected
+        // tab but there are times when tab manager isn't available and we need to know
+        // users's last state (Private vs Regular)
+        UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     // MARK: - Screenshots
