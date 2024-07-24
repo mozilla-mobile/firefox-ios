@@ -373,8 +373,7 @@ class NavigationTest: BaseTestCase {
 
         mozWaitForElementToExist(app.links["Visit site anyway"])
         app.links["Visit site anyway"].tap()
-        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"])
-        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"])
+        mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307022

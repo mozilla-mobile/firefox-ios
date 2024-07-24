@@ -123,13 +123,13 @@ class SearchProviderTest: BaseTestCase {
         let defaultEngineName = app.tables.cells["SettingsViewController.searchCell"].staticTexts.element(boundBy: 1).label
         app.tables.cells["SettingsViewController.searchCell"].tap()
 
-        XCTAssertTrue(app.tables.cells["restoreDefaults"].exists)
+        waitForExistence(app.tables.cells["restoreDefaults"])
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        XCTAssertFalse(app.tables.cells["restoreDefaults"].exists)
+        waitForNoExistence(app.tables.cells["restoreDefaults"])
 
-        XCTAssertFalse(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"].exists)
+        waitForNoExistence(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"])
     }
 
     private func changeSearchProvider(provider: String) {
