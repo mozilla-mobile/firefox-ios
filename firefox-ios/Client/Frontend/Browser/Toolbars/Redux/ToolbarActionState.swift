@@ -37,6 +37,7 @@ struct ToolbarActionState: Equatable {
         return actionType == .back ||
                actionType == .forward ||
                actionType == .tabs ||
-               actionType == .reload
+               actionType == .reload ||
+               actionType == .newTab
     }
 }

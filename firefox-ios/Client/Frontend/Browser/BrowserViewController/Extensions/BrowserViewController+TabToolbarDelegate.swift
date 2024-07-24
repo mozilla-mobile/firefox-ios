@@ -266,6 +266,27 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         return [[newTab, newPrivateTab], [closeTab]]
     }
 
+    func getNewTabLongPressActions() -> [[PhotonRowActions]] {
+        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
+                                           iconString: StandardImageIdentifiers.Large.plus,
+                                           iconType: .Image) { _ in
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
+            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
+        }.items
+
+        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
+                                                  iconString: StandardImageIdentifiers.Large.privateMode,
+                                                  iconType: .Image) { _ in
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
+            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
+            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
+        }.items
+
+        return [[newTab, newPrivateTab]]
+    }
+
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()

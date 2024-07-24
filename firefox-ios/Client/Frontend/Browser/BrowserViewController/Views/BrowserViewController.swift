@@ -1921,6 +1921,8 @@ class BrowserViewController: UIViewController,
         case .share:
             guard let button = state.buttonTapped else { return }
             didTapOnShare(from: button)
+        case .newTabLongPressActions:
+            presentNewTabLongPressActionSheet(from: view)
         }
     }
 
@@ -1984,6 +1986,20 @@ class BrowserViewController: UIViewController,
         )
 
         presentSheetWith(viewModel: viewModel, on: self, from: button)
+    }
+
+    func presentNewTabLongPressActionSheet(from view: UIView) {
+        let oneTapNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        guard presentedViewController == nil, oneTapNewTabEnabled else { return }
+
+        let actions = getNewTabLongPressActions()
+
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: .overCurrentContext
+        )
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func didTapOnHome() {

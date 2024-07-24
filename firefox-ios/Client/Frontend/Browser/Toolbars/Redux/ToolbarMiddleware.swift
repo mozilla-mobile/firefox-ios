@@ -270,6 +270,11 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReloadLongPressAction)
             store.dispatch(action)
+        case .newTab:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions
+            )
+            store.dispatch(action)
         default:
             break
         }
