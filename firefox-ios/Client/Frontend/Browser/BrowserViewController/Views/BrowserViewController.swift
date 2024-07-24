@@ -3763,6 +3763,10 @@ extension BrowserViewController: TopTabsDelegate {
                                   newTabSettings: newTabSettings)
     }
 
+    func topTabsDidLongPressNewTab() {
+        presentNewTabLongPressActionSheet(from: view)
+    }
+
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
