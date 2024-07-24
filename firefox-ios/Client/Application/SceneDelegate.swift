@@ -42,7 +42,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             Experiments.shared.initializeTooling(url: url)
         }
 
-        routeBuilder.configure(prefs: profile.prefs)
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
 
         let sceneCoordinator = SceneCoordinator(scene: scene)
         self.sceneCoordinator = sceneCoordinator
@@ -140,7 +145,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func handleOpenURL(_ url: URL) {
-        routeBuilder.configure(prefs: profile.prefs)
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
 
         // Before processing the incoming URL, check if it is a widget that is opening a tab via UUID.
         // If so, we want to be sure that we select the tab in the correct iPad window.
