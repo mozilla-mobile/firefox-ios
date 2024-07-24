@@ -195,6 +195,12 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         topTabDisplayManager.refreshStore()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
+    }
+
     func updateTabCount(_ count: Int, animated: Bool = true) {
         tabsButton.updateTabCount(count, animated: animated)
     }
