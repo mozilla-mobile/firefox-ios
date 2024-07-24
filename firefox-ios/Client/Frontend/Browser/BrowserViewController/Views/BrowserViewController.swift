@@ -1338,7 +1338,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
-        self.microsurvey = MicrosurveyPromptView(state: state, windowUUID: windowUUID)
+        self.microsurvey = MicrosurveyPromptView(
+            state: state,
+            windowUUID: windowUUID,
+            inOverlayMode: overlayManager.inOverlayMode
+        )
         updateMicrosurveyConstraints()
     }
 
