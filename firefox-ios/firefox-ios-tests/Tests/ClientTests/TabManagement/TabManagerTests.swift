@@ -92,36 +92,65 @@ class TabManagerTests: XCTestCase {
     // MARK: - Save tabs
 
     func testPreserveTabsWithNoTabs() async throws {
+        let exp = expectation(description: "Finish saving tabs")
         let subject = createSubject()
-        subject.preserveTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 0)
-        XCTAssertEqual(subject.tabs.count, 0)
+        subject.preserveTabs {
+            exp.fulfill()
+
+            XCTAssertEqual(self.mockTabStore.saveWindowDataCalledCount, 0)
+            XCTAssertEqual(subject.tabs.count, 0)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testPreserveTabsWithOneTab() async throws {
+        let exp = expectation(description: "Finish saving tabs")
         let subject = createSubject()
         subject.tabRestoreHasFinished = true
         addTabs(to: subject, count: 1)
-        subject.preserveTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
-        XCTAssertEqual(subject.tabs.count, 1)
+        subject.preserveTabs {
+            exp.fulfill()
+
+            XCTAssertEqual(self.mockTabStore.saveWindowDataCalledCount, 1)
+            XCTAssertEqual(subject.tabs.count, 1)
+        }
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testPreserveTabsWithManyTabs() async throws {
+        let exp = expectation(description: "Finish saving tabs")
         let subject = createSubject()
         subject.tabRestoreHasFinished = true
         addTabs(to: subject, count: 5)
-        subject.preserveTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockTabStore.saveWindowDataCalledCount, 1)
-        XCTAssertEqual(subject.tabs.count, 5)
+        subject.preserveTabs {
+            exp.fulfill()
+
+            XCTAssertEqual(self.mockTabStore.saveWindowDataCalledCount, 1)
+            XCTAssertEqual(subject.tabs.count, 5)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
+    }
+
+    // MARK: - Select tab
+
+    func test_selectTab_doesNotRetain() {
+        let tabCount = 3
+        let subject = createSubject()
+        addTabs(to: subject, count: tabCount)
+        XCTAssertEqual(subject.selectedIndex, -1) // No tab selected yet
+
+        subject.selectTab(subject.tabs.last)
+
+        XCTAssertEqual(subject.tabs.count, tabCount)
+        XCTAssertEqual(subject.selectedIndex, tabCount - 1)
     }
 
     // MARK: - Save preview screenshot
 
     func testSaveScreenshotWithNoImage() async throws {
+        let exp = expectation(description: "Finish tabDidSetScreenshot")
         let subject = createSubject()
         addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
@@ -129,12 +158,16 @@ class TabManagerTests: XCTestCase {
             return
         }
 
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 0)
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false) {
+            exp.fulfill()
+            XCTAssertEqual(self.mockDiskImageStore.saveImageForKeyCallCount, 0)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testSaveScreenshotWithImage() async throws {
+        let exp = expectation(description: "Finish tabDidSetScreenshot")
         let subject = createSubject()
         addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
@@ -142,12 +175,16 @@ class TabManagerTests: XCTestCase {
             return
         }
         tab.setScreenshot(UIImage())
-        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.saveImageForKeyCallCount, 1)
+        subject.tabDidSetScreenshot(tab, hasHomeScreenshot: false) {
+            exp.fulfill()
+            XCTAssertEqual(self.mockDiskImageStore.saveImageForKeyCallCount, 1)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testRemoveScreenshotWithImage() async throws {
+        let exp = expectation(description: "Finish removeScreenshot")
         let subject = createSubject()
         addTabs(to: subject, count: 5)
         guard let tab = subject.tabs.first else {
@@ -156,9 +193,12 @@ class TabManagerTests: XCTestCase {
         }
 
         tab.setScreenshot(UIImage())
-        subject.removeScreenshot(tab: tab)
-        try await Task.sleep(nanoseconds: sleepTime)
-        XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
+        subject.removeScreenshot(tab: tab) {
+            exp.fulfill()
+            XCTAssertEqual(self.mockDiskImageStore.deleteImageForKeyCallCount, 1)
+        }
+
+        await fulfillment(of: [exp], timeout: 1.0)
     }
 
     func testGetInactiveTabs() {
@@ -186,7 +226,17 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
     }
 
-    func test_addTabsForURLs() {
+    func test_addTabsForURLs_noSelectedTab() {
+        let subject = createSubject()
+
+        subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: true)
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
+        XCTAssertEqual(subject.tabs.first?.isPrivate, false)
+    }
+
+    func test_addTabsForURLs_selectTab() {
         let subject = createSubject()
 
         subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: false)
@@ -196,10 +246,20 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.first?.isPrivate, false)
     }
 
-    func test_addTabsForURLs_forPrivateMode() {
+    func test_addTabsForURLs_noSelectTab_forPrivateMode() {
         let subject = createSubject()
 
         subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: false, isPrivate: true)
+
+        XCTAssertEqual(subject.tabs.count, 1)
+        XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")
+        XCTAssertEqual(subject.tabs.first?.isPrivate, true)
+    }
+
+    func test_addTabsForURLs_selectTab_forPrivateMode() {
+        let subject = createSubject()
+
+        subject.addTabsForURLs([URL(string: "https://www.mozilla.org/privacy/firefox")!], zombie: false, shouldSelectTab: true, isPrivate: true)
 
         XCTAssertEqual(subject.tabs.count, 1)
         XCTAssertEqual(subject.tabs.first?.url?.absoluteString, "https://www.mozilla.org/privacy/firefox")

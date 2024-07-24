@@ -272,7 +272,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Clear and store
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
-    func preserveTabs() { fatalError("should never be called") }
+    func preserveTabs(completion: (() -> Void)? = nil) { fatalError("should never be called") }
 
     func shouldClearPrivateTabs() -> Bool {
         // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
@@ -789,7 +789,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                         userInfo: windowUUID.userInfo)
     }
 
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {}
+    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool, completion: (() -> Void)? = nil) {}
 
     // MARK: - Private
     @objc

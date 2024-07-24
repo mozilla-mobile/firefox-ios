@@ -227,15 +227,18 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     // MARK: - Save tabs
 
-    override func preserveTabs() {
+    override func preserveTabs(completion: (() -> Void)? = nil) {
         // Only preserve tabs after the restore has finished
-        guard tabRestoreHasFinished else { return }
+        guard tabRestoreHasFinished else {
+            completion?()
+            return
+        }
 
         logger.log("Preserve tabs started", level: .debug, category: .tabs)
-        preserveTabs(forced: false)
+        preserveTabs(forced: false, completion: completion)
     }
 
-    private func preserveTabs(forced: Bool) {
+    private func preserveTabs(forced: Bool, completion: (() -> Void)? = nil) {
         Task {
             // This value should never be nil but we need to still treat it
             // as if it can be nil until the old code is removed
@@ -249,6 +252,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             windowManager.performMultiWindowAction(.saveSimpleTabs)
 
             logger.log("Preserve tabs ended", level: .debug, category: .tabs)
+
+            completion?()
         }
     }
 
@@ -308,8 +313,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
               let tabID = UUID(uuidString: tab.tabUUID)
         else { return }
 
-        Task {
-            await self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
+        Task { [weak self] in
+            await self?.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
         }
     }
 
@@ -356,12 +361,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         preserveTabs()
 
-        Task(priority: .high) {
+        Task(priority: .high) { [weak self] in
             var sessionData: Data?
             if !tab.isFxHomeTab {
-                sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+                sessionData = await self?.tabSessionStore.fetchTabSession(tabID: tabUUID)
             }
-            await selectTabWithSession(tab: tab,
+            self?.selectTabWithSession(tab: tab,
                                        previous: previous,
                                        sessionData: sessionData)
         }
@@ -405,59 +410,67 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         store.dispatch(action)
     }
 
-    @MainActor
-    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
-        selectedTab?.createWebview(with: sessionData)
-        selectedTab?.lastExecutedTime = Date.now()
+    func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
+        ensureMainThread { [weak self] in
+            guard let self = self else { return }
 
-        delegates.forEach {
-            $0.get()?.tabManager(
-                self,
-                didSelectedTabChange: tab,
-                previous: previous,
-                isRestoring: !tabRestoreHasFinished
-            )
-        }
+            selectedTab?.createWebview(with: sessionData)
+            selectedTab?.lastExecutedTime = Date.now()
 
-        if let tab = previous {
-            TabEvent.post(.didLoseFocus, for: tab)
-        }
-        if let tab = selectedTab {
-            TabEvent.post(.didGainFocus, for: tab)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+            delegates.forEach {
+                $0.get()?.tabManager(
+                    self,
+                    didSelectedTabChange: tab,
+                    previous: previous,
+                    isRestoring: !self.tabRestoreHasFinished
+                )
+            }
 
-        // Note: we setup last session private case as the session is tied to user's selected
-        // tab but there are times when tab manager isn't available and we need to know
-        // users's last state (Private vs Regular)
-        UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
-                                  forKey: PrefsKeys.LastSessionWasPrivate)
+            if let tab = previous {
+                TabEvent.post(.didLoseFocus, for: tab)
+            }
+            if let tab = selectedTab {
+                TabEvent.post(.didGainFocus, for: tab)
+            }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+
+            // Note: we setup last session private case as the session is tied to user's selected
+            // tab but there are times when tab manager isn't available and we need to know
+            // users's last state (Private vs Regular)
+            UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
+                                      forKey: PrefsKeys.LastSessionWasPrivate)
+        }
     }
 
     // MARK: - Screenshots
 
-    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
+    override func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool, completion: (() -> Void)? = nil) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
             // when a screenshot isn't available for the associated tab url
-            removeScreenshot(tab: tab)
+            removeScreenshot(tab: tab, completion: completion)
             return
         }
 
-        storeScreenshot(tab: tab)
+        storeScreenshot(tab: tab, completion: completion)
     }
 
-    func storeScreenshot(tab: Tab) {
-        guard let screenshot = tab.screenshot else { return }
+    func storeScreenshot(tab: Tab, completion: (() -> Void)? = nil) {
+        guard let screenshot = tab.screenshot else {
+            completion?()
+            return
+        }
 
         Task {
             try? await imageStore?.saveImageForKey(tab.tabUUID, image: screenshot)
+            completion?()
         }
     }
 
-    func removeScreenshot(tab: Tab) {
+    func removeScreenshot(tab: Tab, completion: (() -> Void)? = nil) {
         Task {
             await imageStore?.deleteImageForKey(tab.tabUUID)
+            completion?()
         }
     }
 
