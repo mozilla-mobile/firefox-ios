@@ -291,7 +291,7 @@ fileprivate extension BaseTestCase {
         while settingsTableView.staticTexts["Close Private Tabs"].isHittable == false {
             settingsTableView.swipeUp()
         }
-        let closePrivateTabsSwitch = settingsTableView.switches["settings.closePrivateTabs"]
+        let closePrivateTabsSwitch = settingsTableView.switches["ClosePrivateTabs"]
         closePrivateTabsSwitch.tap()
     }
 }

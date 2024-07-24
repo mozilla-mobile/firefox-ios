@@ -575,7 +575,7 @@ public struct AccessibilityIdentifiers {
         }
 
         struct ClosePrivateTabs {
-            static let title = "settings.closePrivateTabs"
+            static let title = "ClosePrivateTabs"
         }
 
         struct SearchBar {
