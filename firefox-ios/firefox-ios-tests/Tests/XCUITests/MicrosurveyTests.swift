@@ -55,7 +55,9 @@ final class MicrosurveyTests: BaseTestCase {
         let tablesQuery = app.scrollViews.otherElements.tables
         let firstOption = tablesQuery.cells.firstMatch
         firstOption.tap()
+        mozWaitForElementToExist(firstOption)
         XCTAssertEqual(firstOption.label, "Very satisfied")
+        mozWaitForValueToContains(firstOption, "1 out of 6")
         XCTAssertEqual(firstOption.value as? String, "1 out of 6")
 
         let secondOption = tablesQuery.cells["Neutral"]
