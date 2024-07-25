@@ -165,7 +165,6 @@ class WebsiteDataManagementViewController: UIViewController,
             return cell
         case .showMore:
             let cell = dequeueCellFor(indexPath: indexPath)
-            cell.applyTheme(theme: currentTheme())
             let cellType: ThemedTableViewCellType = viewModel.state != .displayAll ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(
                 theme: currentTheme(),
@@ -175,6 +174,7 @@ class WebsiteDataManagementViewController: UIViewController,
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             cell.configure(viewModel: cellViewModel)
+            cell.applyTheme(theme: currentTheme())
             showMoreButton = cell
             return cell
         case .clearButton:
