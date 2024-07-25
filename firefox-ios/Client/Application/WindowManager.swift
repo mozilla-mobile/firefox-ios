@@ -208,9 +208,6 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         let result: ReservedWindowUUID
         // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
         if !isIpad && !AppConstants.isRunningUnitTest {
-            // if onDiskUUIDs.count > 1 { ... }
-            // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
-
             // At this point we should always have either a single UUID on disk or
             // no UUIDs because this is a brand new app install
             if onDiskUUIDs.isEmpty {
