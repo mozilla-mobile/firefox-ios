@@ -24,7 +24,7 @@ public protocol TabDataStore {
     /// preferable when only the UUIDs are needed.
     /// - Returns: a list of UUIDs for any saved WindowData.
     func fetchWindowDataUUIDs() -> [WindowUUID]
-    
+
     /// Erases the on-disk data for tab windows matching the provided UUIDs.
     /// - Parameter forUUIDs: the UUIDs to delete the on-disk tab files for.
     func removeWindowData(forUUIDs: [WindowUUID]) async
