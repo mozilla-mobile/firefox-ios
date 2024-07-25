@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ToolbarActionState: Equatable {
+struct ToolbarActionState: Equatable, FeatureFlaggable {
     enum ActionType {
         case back
         case forward
@@ -36,8 +36,11 @@ struct ToolbarActionState: Equatable {
     var canPerformLongPressAction: Bool {
         return actionType == .back ||
                actionType == .forward ||
-               actionType == .tabs ||
                actionType == .reload ||
-               actionType == .newTab
+               actionType == .newTab ||
+               (actionType == .tabs &&
+                featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) &&
+                UIDevice.current.userInterfaceIdiom != .pad)
+
     }
 }
