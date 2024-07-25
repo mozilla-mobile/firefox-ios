@@ -209,15 +209,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         let result: ReservedWindowUUID
         // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
         if !isIpad && !AppConstants.isRunningUnitTest {
-<<<<<<< HEAD
-            // if onDiskUUIDs.count > 1 { ... }
-            // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
-
-            // At this point we should always have either a single UUID on disk or
-            // no UUIDs because this is a brand new app install
-=======
             // We should always have either a single UUID on disk or no UUIDs because this is a brand new app install
->>>>>>> 3691302f6 (Bugfix FXIOS-9662 Remove extraneous UUID / window tab files, log error on iPhones (#21274))
             if onDiskUUIDs.isEmpty {
                 result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
             } else {
