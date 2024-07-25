@@ -57,14 +57,12 @@ final class MicrosurveyTests: BaseTestCase {
         firstOption.tap()
         mozWaitForElementToExist(firstOption)
         XCTAssertEqual(firstOption.label, "Very satisfied")
-        mozWaitForValueToContains(firstOption, "1 out of 6")
-        XCTAssertEqual(firstOption.value as? String, "1 out of 6")
+        mozWaitForValueContains(firstOption, value: "1 out of 6")
 
         let secondOption = tablesQuery.cells["Neutral"]
         mozWaitForElementToExist(secondOption)
-        XCTAssertEqual(secondOption.label, "Neutral)
-        mozWaitForValueToContains(secondOption, "Unselected, 3 out of 6")
-        XCTAssertEqual(secondOption.value as? String, "Unselected, 3 out of 6")
+        XCTAssertEqual(secondOption.label, "Neutral")
+        mozWaitForValueContains(secondOption, value: "Unselected, 3 out of 6")
     }
 
     func testCloseButtonDismissesSurveyAndPrompt() {
