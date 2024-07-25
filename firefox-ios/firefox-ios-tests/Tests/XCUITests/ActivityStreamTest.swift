@@ -184,7 +184,6 @@ class ActivityStreamTest: BaseTestCase {
 
         // The website is open
         mozWaitForElementToNotExist(TopSiteCellgroup)
-        mozWaitForElementToExist(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value: "wikipedia.org")
     }
 
