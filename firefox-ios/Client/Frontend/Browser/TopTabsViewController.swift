@@ -222,8 +222,10 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     }
 
     @objc
-    func newTabLongPressed() {
-        delegate?.topTabsDidLongPressNewTab(button: newTab)
+    func newTabLongPressed(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            delegate?.topTabsDidLongPressNewTab(button: newTab)
+        }
     }
 
     @objc
