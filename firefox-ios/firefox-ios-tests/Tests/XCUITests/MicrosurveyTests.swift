@@ -61,7 +61,9 @@ final class MicrosurveyTests: BaseTestCase {
         XCTAssertEqual(firstOption.value as? String, "1 out of 6")
 
         let secondOption = tablesQuery.cells["Neutral"]
-        XCTAssertEqual(secondOption.label, "Neutral")
+        mozWaitForElementToExist(secondOption)
+        XCTAssertEqual(secondOption.label, "Neutral)
+        mozWaitForValueToContains(secondOption, "Unselected, 3 out of 6")
         XCTAssertEqual(secondOption.value as? String, "Unselected, 3 out of 6")
     }
 
