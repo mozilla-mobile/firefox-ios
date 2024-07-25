@@ -337,6 +337,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             return
         }
 
+        logger.log("Select tab",
+                   level: .info,
+                   category: .tabs)
+
         // Before moving to a new tab save the current tab session data in order to preserve things like scroll position
         saveCurrentTabSessionData()
 
@@ -409,29 +413,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
-
-        delegates.forEach {
-            $0.get()?.tabManager(
-                self,
-                didSelectedTabChange: tab,
-                previous: previous,
-                isRestoring: !tabRestoreHasFinished
-            )
-        }
-
-        if let tab = previous {
-            TabEvent.post(.didLoseFocus, for: tab)
-        }
-        if let tab = selectedTab {
-            TabEvent.post(.didGainFocus, for: tab)
-        }
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
-
-        // Note: we setup last session private case as the session is tied to user's selected
-        // tab but there are times when tab manager isn't available and we need to know
-        // users's last state (Private vs Regular)
-        UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
-                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     // MARK: - Screenshots

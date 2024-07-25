@@ -1325,6 +1325,10 @@ class BrowserViewController: UIViewController,
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
+        logger.log("Update content on browser view controller with type \(browserViewType)",
+                   level: .info,
+                   category: .coordinator)
+
         switch browserViewType {
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
