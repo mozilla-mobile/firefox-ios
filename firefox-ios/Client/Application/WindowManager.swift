@@ -179,6 +179,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         guard !AppConstants.isRunningUITests else {
             return ReservedWindowUUID(uuid: WindowUUID.DefaultUITestingUUID, isNew: false)
         }
+        assert(Thread.isMainThread, "Window UUID configuration currently expected on main thread only.")
 
         // • If no saved windows (tab data), we generate a new UUID.
         // • If user has saved windows (tab data), we return the first available UUID
@@ -208,15 +209,33 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
         let result: ReservedWindowUUID
         // TODO: [9610] Unit tests should eventually be updated for these changes. Forthcoming.
         if !isIpad && !AppConstants.isRunningUnitTest {
+<<<<<<< HEAD
             // if onDiskUUIDs.count > 1 { ... }
             // TODO: [FXIOS-9544] If >1 tab session files, clean up & merge
 
             // At this point we should always have either a single UUID on disk or
             // no UUIDs because this is a brand new app install
+=======
+            // We should always have either a single UUID on disk or no UUIDs because this is a brand new app install
+>>>>>>> 3691302f6 (Bugfix FXIOS-9662 Remove extraneous UUID / window tab files, log error on iPhones (#21274))
             if onDiskUUIDs.isEmpty {
                 result = ReservedWindowUUID(uuid: WindowUUID(), isNew: true)
             } else {
                 result = ReservedWindowUUID(uuid: onDiskUUIDs.first!, isNew: false)
+
+                let uuidCount = onDiskUUIDs.count
+                if uuidCount > 1 {
+                    // This is unexpected. Potentially related to incident in v128 (see: FXIOS-9516).
+                    // On iPhone, we should never have more than 1 window tab file. Log an error and
+                    // clean up the UUID(s) that we know won't be used. We expect a certain number of
+                    // these fatal errors to be logged for users previously impacted by the above, and
+                    // then it should fall to zero.
+                    logger.log("Detected multiple window tab files on iPhone (UUID count: \(uuidCount))",
+                               level: .fatal,
+                               category: .window)
+                    let uuidsToDelete = Array(onDiskUUIDs.dropFirst())
+                    Task { await tabDataStore.removeWindowData(forUUIDs: uuidsToDelete) }
+                }
             }
         } else {
             let filteredUUIDs = onDiskUUIDs.filter {
