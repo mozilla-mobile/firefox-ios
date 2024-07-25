@@ -76,11 +76,11 @@ class PhotonActionSheetTests: BaseTestCase {
 
         if #unavailable(iOS 16) {
             mozWaitForElementToExist(app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"])
-            mozWaitForElementToExist(app.buttons["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.buttons["Copy"])
         } else {
             mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["Example Domain"])
             mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
-            mozWaitForElementToExist(app.collectionViews.cells["Copy"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         }
         var fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
         // This is not ideal but only way to get the element on iPhone 8
@@ -88,7 +88,7 @@ class PhotonActionSheetTests: BaseTestCase {
         if #unavailable(iOS 17) {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
-        mozWaitForElementToExist(fennecElement, timeout: 5)
+        mozWaitForElementToExist(fennecElement)
         fennecElement.tap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
     }
@@ -97,12 +97,11 @@ class PhotonActionSheetTests: BaseTestCase {
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
-        mozWaitForElementToExist(app.staticTexts["Open in Firefox"], timeout: 10)
-        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
-        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
-        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
-        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
-        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
+        mozWaitForElementToExist(app.staticTexts["Open in Firefox"])
+        mozWaitForElementToExist(app.staticTexts["Load in Background"])
+        mozWaitForElementToExist(app.staticTexts["Bookmark This Page"])
+        mozWaitForElementToExist(app.staticTexts["Add to Reading List"])
+        mozWaitForElementToExist(app.staticTexts["Send to Device"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203
@@ -111,11 +110,10 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
         app.staticTexts["Send to Device"].tap()
         mozWaitForElementToExist(
-            app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton],
-            timeout: 10
+            app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton]
         )
 
-        XCTAssertTrue(app.staticTexts["You are not signed in to your account."].exists)
+        mozWaitForElementToExist(app.staticTexts["You are not signed in to your account."])
         app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 

@@ -35,8 +35,7 @@ class TrackingProtectionTests: BaseTestCase {
         // The lock icon should still be there
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            timeout: 5
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
 
         // Switch to Private Browsing
@@ -47,14 +46,13 @@ class TrackingProtectionTests: BaseTestCase {
         // Make sure TP is also there in PBM
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            timeout: TIMEOUT
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings], timeout: 5)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
         app.tables.otherElements[StandardImageIdentifiers.Large.settings].tap()
         navigator.nowAt(SettingsScreen)
-        mozWaitForElementToExist(app.tables.cells["NewTab"], timeout: 5)
+        mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
@@ -94,7 +92,7 @@ class TrackingProtectionTests: BaseTestCase {
         }
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
+        mozWaitForElementToExist(app.staticTexts["Connection is not secure"])
         var switchValue = app.switches.firstMatch.value!
         // Need to make sure first the setting was not turned off previously
         if switchValue as! String == "0" {
@@ -109,7 +107,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Open TP Settings menu
         app.buttons["Protection Settings"].tap()
-        mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
+        mozWaitForElementToExist(app.navigationBars["Tracking Protection"])
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
         XCTAssertEqual(switchSettingsValue as! String, "1")
         app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
@@ -118,8 +116,8 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
-        XCTAssertFalse(app.switches.element.exists)
+        mozWaitForElementToExist(app.staticTexts["Connection is not secure"])
+        mozWaitForElementToNotExist(app.switches.element)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2318742
@@ -128,12 +126,12 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
-        XCTAssertTrue(app.navigationBars["Client.TPAccessoryInfo"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Social Trackers"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Cross-Site Trackers"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Fingerprinters"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Cryptominers"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Tracking content"].exists)
+        mozWaitForElementToExist(app.navigationBars["Client.TPAccessoryInfo"])
+        mozWaitForElementToExist(app.cells.staticTexts["Social Trackers"])
+        mozWaitForElementToExist(app.cells.staticTexts["Cross-Site Trackers"])
+        mozWaitForElementToExist(app.cells.staticTexts["Fingerprinters"])
+        mozWaitForElementToExist(app.cells.staticTexts["Cryptominers"])
+        mozWaitForElementToNotExist(app.cells.staticTexts["Tracking content"])
 
         // Go back to TP settings
         app.buttons["Tracking Protection"].tap()
@@ -150,7 +148,7 @@ class TrackingProtectionTests: BaseTestCase {
     func testLockIconSecureConnection() {
         navigator.openURL("https://www.Mozilla.org")
         waitUntilPageLoad()
-        // iOS 15 displays a toast for the paste. The toast may cover areas to be 
+        // iOS 15 displays a toast for the paste. The toast may cover areas to be
         // tapped in the next step.
         if #unavailable(iOS 16) {
             sleep(2)
@@ -159,11 +157,8 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
-        XCTAssertTrue(app.staticTexts["mozilla.org"].exists)
-        XCTAssertTrue(
-            app.staticTexts["Connection is secure"].exists,
-            "Missing Connection is secure info"
-        )
+        mozWaitForElementToExist(app.staticTexts["mozilla.org"])
+        mozWaitForElementToExist(app.staticTexts["Connection is secure"])
         XCTAssertEqual(
             app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
             "Secure connection"
@@ -178,7 +173,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled
         mozWaitForElementToExist(app.staticTexts["This Connection is Untrusted"], timeout: TIMEOUT_LONG)
-        XCTAssertTrue(app.staticTexts.elementContainingText("Firefox has not connected to this website.").exists)
+        mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }
 }

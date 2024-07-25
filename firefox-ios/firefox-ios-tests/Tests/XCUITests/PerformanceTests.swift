@@ -87,8 +87,8 @@ class PerformanceTests: BaseTestCase {
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
-        mozWaitForElementToExist(tabsButtonNumber, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
+        mozWaitForElementToExist(tabsButtonNumber)
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -96,9 +96,9 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+            mozWaitForElementToExist(tabsButton)
             tabsButton.tap()
-            mozWaitForElementToExist(doneButton, timeout: TIMEOUT)
+            mozWaitForElementToExist(doneButton)
             doneButton.tap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -111,8 +111,8 @@ class PerformanceTests: BaseTestCase {
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
-        mozWaitForElementToExist(tabsButtonNumber, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
+        mozWaitForElementToExist(tabsButtonNumber)
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -120,9 +120,9 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+            mozWaitForElementToExist(tabsButton)
             tabsButton.tap()
-            mozWaitForElementToExist(doneButton, timeout: TIMEOUT)
+            mozWaitForElementToExist(doneButton)
             doneButton.tap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -132,7 +132,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfHistory1startUp() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
         app.terminate()
 
         measure(metrics: [
@@ -143,7 +143,7 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+                mozWaitForElementToExist(tabsButton)
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -153,14 +153,14 @@ class PerformanceTests: BaseTestCase {
     func testPerfHistory1openMenu() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
 
         navigator.goto(LibraryPanel_History)
 
         // Ensure 'History List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let historyList = app.tables["History List"].firstMatch
-        mozWaitForElementToExist(historyList, timeout: TIMEOUT)
+        mozWaitForElementToExist(historyList)
 
         measure(metrics: [
             XCTMemoryMetric(),
@@ -174,7 +174,7 @@ class PerformanceTests: BaseTestCase {
                     let historyListCells = historyListSnapshot.children.filter { $0.elementType == .cell }
                     let historyItems = historyListCells.dropFirst()
 
-                    // Warning: If the history database used for this test is updated, so will the date of 
+                    // Warning: If the history database used for this test is updated, so will the date of
                     // those history items. This means as those history items age, they will fall into older
                     // buckets, causing new cells to be created representing this new age bucket
                     // (i.e. 'yesterday', 'a week', etc) where the 100 entries will be split across multiple age
@@ -193,7 +193,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfHistory100startUp() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
         app.terminate()
 
         measure(metrics: [
@@ -204,7 +204,7 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+                mozWaitForElementToExist(tabsButton)
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -214,14 +214,14 @@ class PerformanceTests: BaseTestCase {
     func testPerfHistory100openMenu() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
 
         navigator.goto(LibraryPanel_History)
 
         // Ensure 'History List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let historyList = app.tables["History List"].firstMatch
-        mozWaitForElementToExist(historyList, timeout: TIMEOUT)
+        mozWaitForElementToExist(historyList)
 
         measure(metrics: [
             XCTMemoryMetric(),
@@ -254,7 +254,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks1startUp() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
         app.terminate()
 
         measure(metrics: [
@@ -265,7 +265,7 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+                mozWaitForElementToExist(tabsButton)
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -275,14 +275,14 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks1openMenu() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(bookmarksList, timeout: TIMEOUT)
+        mozWaitForElementToExist(bookmarksList)
 
         measure(metrics: [
             XCTMemoryMetric(),
@@ -311,7 +311,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks100startUp() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
         app.terminate()
 
         measure(metrics: [
@@ -322,7 +322,7 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // Activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+                mozWaitForElementToExist(tabsButton)
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -332,14 +332,14 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks100openMenu() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(bookmarksList, timeout: TIMEOUT)
+        mozWaitForElementToExist(bookmarksList)
 
         measure(metrics: [
             XCTMemoryMetric(),
@@ -368,7 +368,7 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks1000startUp() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
         app.terminate()
 
         measure(metrics: [
@@ -379,7 +379,7 @@ class PerformanceTests: BaseTestCase {
             XCTMemoryMetric()]) {
                 // Activity measurement here
                 app.launch()
-                mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+                mozWaitForElementToExist(tabsButton)
                 app.terminate()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
@@ -389,14 +389,14 @@ class PerformanceTests: BaseTestCase {
     func testPerfBookmarks1000openMenu() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
-        mozWaitForElementToExist(tabsButton, timeout: TIMEOUT)
+        mozWaitForElementToExist(tabsButton)
 
         navigator.goto(LibraryPanel_Bookmarks)
 
         // Ensure 'Bookmarks List' exists before taking a snapshot to avoid expensive retries.
         // Return firstMatch to avoid traversing the entire { Window, Window } element tree.
         let bookmarksList = app.tables["Bookmarks List"].firstMatch
-        mozWaitForElementToExist(bookmarksList, timeout: TIMEOUT)
+        mozWaitForElementToExist(bookmarksList)
 
         measure(metrics: [
             XCTMemoryMetric(),

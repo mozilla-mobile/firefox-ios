@@ -15,9 +15,9 @@ final class MicrosurveyTests: BaseTestCase {
 
     func testShowMicrosurveyPromptFromHomepageTrigger() {
         generateTriggerForMicrosurvey()
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
-        XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
+        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
     }
 
     func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
@@ -40,9 +40,9 @@ final class MicrosurveyTests: BaseTestCase {
     func testCloseButtonDismissesMicrosurveyPrompt() {
         generateTriggerForMicrosurvey()
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
-        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
-        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
+        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
+        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
     }
 
     func testShowMicrosurvey() {
@@ -50,8 +50,8 @@ final class MicrosurveyTests: BaseTestCase {
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.tap()
 
-        XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo].exists)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].exists)
+        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
     }
 
     func testCloseButtonDismissesSurveyAndPrompt() {
@@ -61,11 +61,11 @@ final class MicrosurveyTests: BaseTestCase {
 
         app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].tap()
 
-        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo].exists)
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].exists)
-        XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
-        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
-        XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
+        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo])
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
+        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
+        mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
     }
 
     private func generateTriggerForMicrosurvey() {

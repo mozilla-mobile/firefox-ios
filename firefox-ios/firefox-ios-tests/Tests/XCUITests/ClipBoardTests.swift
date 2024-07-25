@@ -34,7 +34,7 @@ class ClipBoardTests: BaseTestCase {
             if let myString = UIPasteboard.general.string {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]
-                if allowBtn.waitForExistence(timeout: 10) {
+                if allowBtn.waitForExistence(timeout: TIMEOUT) {
                     allowBtn.tap()
                 }
 
