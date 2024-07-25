@@ -1994,10 +1994,12 @@ class BrowserViewController: UIViewController,
 
         let actions = getNewTabLongPressActions()
 
+        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
+        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,
             closeButtonTitle: .CloseButtonTitle,
-            modalStyle: .overCurrentContext
+            modalStyle: style
         )
         presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
@@ -3763,8 +3765,8 @@ extension BrowserViewController: TopTabsDelegate {
                                   newTabSettings: newTabSettings)
     }
 
-    func topTabsDidLongPressNewTab() {
-        presentNewTabLongPressActionSheet(from: view)
+    func topTabsDidLongPressNewTab(button: UIButton) {
+        presentNewTabLongPressActionSheet(from: button)
     }
 
     func topTabsDidChangeTab() {

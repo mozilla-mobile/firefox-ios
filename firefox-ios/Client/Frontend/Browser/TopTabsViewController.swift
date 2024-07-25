@@ -24,7 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
-    func topTabsDidLongPressNewTab()
+    func topTabsDidLongPressNewTab(button: UIButton)
     func topTabsDidChangeTab()
     func topTabsDidPressPrivateMode()
 }
@@ -223,7 +223,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
 
     @objc
     func newTabLongPressed() {
-        delegate?.topTabsDidLongPressNewTab()
+        delegate?.topTabsDidLongPressNewTab(button: newTab)
     }
 
     @objc
