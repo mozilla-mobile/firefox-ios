@@ -101,9 +101,8 @@ class BaseTestCase: XCTestCase {
         continueAfterFailure = false
         setUpApp()
         setUpScreenGraph()
-        
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
+
+        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
     }
 
     override func tearDown() {
