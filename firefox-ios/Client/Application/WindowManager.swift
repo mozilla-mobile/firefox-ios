@@ -217,7 +217,7 @@ final class WindowManagerImplementation: WindowManager, WindowTabsSyncCoordinato
 
                 let uuidCount = onDiskUUIDs.count
                 if uuidCount > 1 {
-                    // This is unexpected. Potentially related to incident in v128 (see: FXIOS-9533).
+                    // This is unexpected. Potentially related to incident in v128 (see: FXIOS-9516).
                     // On iPhone, we should never have more than 1 window tab file. Log an error and
                     // clean up the UUID(s) that we know won't be used. We expect a certain number of
                     // these fatal errors to be logged for users previously impacted by the above, and
