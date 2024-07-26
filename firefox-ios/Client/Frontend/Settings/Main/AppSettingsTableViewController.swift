@@ -284,7 +284,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        let autofillAddressStatus = ["CA", "US"].contains(Locale.current.regionCode ?? "")
+        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
         if autofillAddressStatus {
             privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,

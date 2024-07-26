@@ -309,7 +309,7 @@ extension FxAWebViewModel {
     /// signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int, webView: WKWebView) {
         let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
-        let addressAutofillStatus = ["CA", "US"].contains(Locale.current.regionCode ?? "")
+        let addressAutofillStatus = AddressLocaleFeatureValidator.isValidRegion()
 
         let creditCardCapability =  autofillCreditCardStatus ? ", \"creditcards\"" : ""
         let addressAutofillCapability =  addressAutofillStatus ? ", \"addresses\"" : ""

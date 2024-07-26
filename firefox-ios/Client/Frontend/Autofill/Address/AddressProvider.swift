@@ -14,3 +14,14 @@ protocol AddressProvider {
 }
 
 extension RustAutofill: AddressProvider {}
+
+struct AddressLocaleFeatureValidator {
+    static let supportedRegions = ["CA", "US"]
+
+    static func isValidRegion() -> Bool {
+        guard let regionCode = Locale.current.regionCode else {
+            return false
+        }
+        return supportedRegions.contains(regionCode)
+    }
+}
