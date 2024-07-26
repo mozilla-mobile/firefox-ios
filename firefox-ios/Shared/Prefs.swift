@@ -110,6 +110,11 @@ public struct PrefsKeys {
         case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
     }
 
+    // Firefox settings
+    public struct Settings {
+        public static let closePrivateTabs = "ClosePrivateTabs"
+    }
+
     // Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
@@ -161,6 +166,9 @@ public struct PrefsKeys {
 
     // The last recorded CFR timestamp
     public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
+
+    // Representing whether or not the last user session was private
+    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
 
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"

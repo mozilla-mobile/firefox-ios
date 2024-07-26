@@ -573,6 +573,10 @@ public struct AccessibilityIdentifiers {
             static let title = "showLinkPreviews"
         }
 
+        struct ClosePrivateTabs {
+            static let title = "ClosePrivateTabs"
+        }
+
         struct SearchBar {
             static let searchBarSetting = "SearchBarSetting"
             static let topSetting = "TopSearchBar"
