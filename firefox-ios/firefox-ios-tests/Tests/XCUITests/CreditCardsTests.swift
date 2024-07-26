@@ -28,6 +28,7 @@ class CreditCardsTests: BaseTestCase {
     // SmokeTest
     func testAccessingTheCreditCardsSection() {
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Autofill Credit cards section displays
@@ -127,6 +128,7 @@ class CreditCardsTests: BaseTestCase {
     // Smoketest
     func testAutofillCreditCardsToggleOnOoff() {
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -234,6 +236,7 @@ class CreditCardsTests: BaseTestCase {
         // Add multiple credit cards
         let expectedCards = 3
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -491,6 +494,7 @@ class CreditCardsTests: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306970
     func testRedirectionToCreditCardsSection() {
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -646,6 +650,7 @@ class CreditCardsTests: BaseTestCase {
     private func addCreditCardAndReachAutofillWebsite() {
         // Access any website with a credit card form and tap on the credit card number/ credit card name
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -673,6 +678,7 @@ class CreditCardsTests: BaseTestCase {
 
     private func addCardAndReachViewCardPage() {
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])

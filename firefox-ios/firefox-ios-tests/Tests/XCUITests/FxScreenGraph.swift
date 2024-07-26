@@ -313,6 +313,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
+        sleep(1)
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {
@@ -1086,6 +1087,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
+        sleep(1)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.settings],
             to: SettingsScreen

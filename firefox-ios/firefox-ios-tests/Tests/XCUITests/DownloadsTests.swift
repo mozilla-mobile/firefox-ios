@@ -17,6 +17,7 @@ class DownloadsTests: BaseTestCase {
         // The downloaded file has to be removed between tests
         app.terminate()
         app.activate()
+        waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
@@ -177,6 +178,7 @@ class DownloadsTests: BaseTestCase {
             )
             app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.download].tap()
         }
+        waitForTabsButton()
     }
 
     private func downloadBLOBFile() {
