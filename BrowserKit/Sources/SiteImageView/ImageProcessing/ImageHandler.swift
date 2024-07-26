@@ -37,18 +37,15 @@ protocol ImageHandler {
 }
 
 class DefaultImageHandler: ImageHandler {
-    private let bundleImageFetcher: BundleImageFetcher
     private let imageCache: SiteImageCache
     private let faviconFetcher: FaviconFetcher
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
 
-    init(bundleImageFetcher: BundleImageFetcher = DefaultBundleImageFetcher(),
-         imageCache: SiteImageCache = DefaultSiteImageCache(),
+    init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),
          letterImageGenerator: LetterImageGenerator = DefaultLetterImageGenerator(),
          heroImageFetcher: HeroImageFetcher = DefaultHeroImageFetcher()) {
-        self.bundleImageFetcher = bundleImageFetcher
         self.imageCache = imageCache
         self.faviconFetcher = faviconFetcher
         self.letterImageGenerator = letterImageGenerator
@@ -56,11 +53,8 @@ class DefaultImageHandler: ImageHandler {
     }
 
     func fetchFavicon(site: SiteImageModel) async -> UIImage {
-        do {
-            return try bundleImageFetcher.getImageFromBundle(domain: site.domain)
-        } catch {
-            return await fetchFaviconFromCache(site: site)
-        }
+        // TODO any extra work we should try here first?
+        return await fetchFaviconFromCache(site: site)
     }
 
     func fetchHeroImage(site: SiteImageModel) async throws -> UIImage {
