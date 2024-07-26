@@ -29,6 +29,7 @@ struct ToolbarActionState: Equatable {
     var badgeImageName: String?
     var numberOfTabs: Int?
     var isEnabled: Bool
+    var shouldDisplayAsHighlighted = false
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String

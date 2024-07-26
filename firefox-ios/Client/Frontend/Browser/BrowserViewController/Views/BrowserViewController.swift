@@ -1907,6 +1907,8 @@ class BrowserViewController: UIViewController,
         case .share:
             guard let button = state.buttonTapped else { return }
             didTapOnShare(from: button)
+        case .readerMode:
+            toggleReaderMode()
         }
     }
 
@@ -2006,6 +2008,23 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showMainMenu()
         } else {
             showPhotonMainMenu(from: button)
+        }
+    }
+
+    func toggleReaderMode() {
+        guard let tab = tabManager.selectedTab,
+              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
+        else { return }
+
+        switch readerMode.state {
+        case .available:
+            enableReaderMode()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+        case .active:
+            disableReaderMode()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+        case .unavailable:
+            break
         }
     }
 
@@ -3417,7 +3436,14 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            if !isToolbarRefactorEnabled {
+            if isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: readerMode.state,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+                )
+                store.dispatch(action)
+            } else {
                 urlBar.updateReaderModeState(readerMode.state)
             }
             if readerMode.state == .active {
@@ -3426,8 +3452,15 @@ extension BrowserViewController: TabManagerDelegate {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            if !isToolbarRefactorEnabled {
-                urlBar.updateReaderModeState(ReaderModeState.unavailable)
+            if isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: .unavailable,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+                )
+                store.dispatch(action)
+            } else {
+                urlBar.updateReaderModeState(.unavailable)
             }
         }
 

@@ -8,8 +8,17 @@ import Shared
 extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // Update reader mode state if is the selected tab. Otherwise it will update once is active
-        if !isToolbarRefactorEnabled, tabManager.selectedTab === tab, !isToolbarRefactorEnabled {
-            urlBar.updateReaderModeState(state)
+        if tabManager.selectedTab === tab {
+            if isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(
+                    readerModeState: state,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+                )
+                store.dispatch(action)
+            } else {
+                urlBar.updateReaderModeState(state)
+            }
         }
     }
 

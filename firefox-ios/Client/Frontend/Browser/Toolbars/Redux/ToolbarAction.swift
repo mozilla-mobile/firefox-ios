@@ -71,6 +71,7 @@ class ToolbarMiddlewareAction: Action {
     let canGoBack: Bool?
     let canGoForward: Bool?
     let badgeImageName: String?
+    let readerModeState: ReaderModeState?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
@@ -84,6 +85,7 @@ class ToolbarMiddlewareAction: Action {
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          badgeImageName: String? = nil,
+         readerModeState: ReaderModeState? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
@@ -98,6 +100,7 @@ class ToolbarMiddlewareAction: Action {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.badgeImageName = badgeImageName
+        self.readerModeState = readerModeState
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -113,4 +116,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case backButtonStateChanged
     case forwardButtonStateChanged
     case showMenuWarningBadge
+    case readerModeStateChanged
 }

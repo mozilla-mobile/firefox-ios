@@ -181,20 +181,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
-        guard let tab = tabManager.selectedTab,
-              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
-        else { return }
-
-        switch readerMode.state {
-        case .available:
-            enableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
-        case .active:
-            disableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
-        case .unavailable:
-            break
-        }
+        toggleReaderMode()
     }
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
