@@ -302,18 +302,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         saveCurrentTabSessionData()
     }
 
-<<<<<<< HEAD
     private func saveCurrentTabSessionData() {
         guard let selectedTab = self.selectedTab,
-              !selectedTab.isPrivate,
               let tabSession = selectedTab.webView?.interactionState as? Data,
               let tabID = UUID(uuidString: selectedTab.tabUUID)
-=======
-    override func saveSessionData(forTab tab: Tab?) {
-        guard let tab = tab,
-              let tabSession = tab.webView?.interactionState as? Data,
-              let tabID = UUID(uuidString: tab.tabUUID)
->>>>>>> 6c9215c9c (Refactor FXIOS-9519 - Private Tab Persistence with "Close Private tabs" option as Opt In (#21240))
         else { return }
 
         Task {
@@ -349,24 +341,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         saveCurrentTabSessionData()
 
         willSelectTab(url)
-<<<<<<< HEAD
-=======
-
-        let previous = previous ?? selectedTab
-
-        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
-        tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
-
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if shouldClearPrivateTabs(), !tab.isPrivate {
-            removeAllPrivateTabs()
-        }
-
-        _selectedIndex = tabs.firstIndex(of: tab) ?? -1
-
-        preserveTabs()
-
->>>>>>> 6c9215c9c (Refactor FXIOS-9519 - Private Tab Persistence with "Close Private tabs" option as Opt In (#21240))
         Task(priority: .high) {
             var sessionData: Data?
             if !tab.isFxHomeTab {
@@ -425,6 +399,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
         tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
+
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if shouldClearPrivateTabs(), !tab.isPrivate {
+            removeAllPrivateTabs()
+        }
 
         _selectedIndex = tabs.firstIndex(of: tab) ?? -1
 
