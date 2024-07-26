@@ -265,7 +265,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
             engineSectionChildren.append(creditCards)
         }
 
-        if ["CA", "US"].contains(Locale.current.regionCode ?? "") {
+        if AddressLocaleFeatureValidator.isValidRegion() {
             engineSectionChildren.append(addresses)
         }
 
