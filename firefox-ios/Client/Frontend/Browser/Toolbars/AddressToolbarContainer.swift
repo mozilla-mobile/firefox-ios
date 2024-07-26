@@ -20,7 +20,8 @@ final class AddressToolbarContainer: UIView,
                                      AlphaDimmable,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
-                                     MenuHelperURLBarInterface {
+                                     MenuHelperURLBarInterface,
+                                     Autocompletable {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
         static let compactLeadingEdgeDisplay: CGFloat = 16
@@ -291,5 +292,10 @@ final class AddressToolbarContainer: UIView,
     func menuHelperPasteAndGo() {
         guard let pasteboardContents = UIPasteboard.general.string else { return }
         delegate?.openBrowser(searchTerm: pasteboardContents)
+    }
+
+    // MARK: - Autocompletable
+    func setAutocompleteSuggestion(_ suggestion: String?) {
+        toolbar.setAutocompleteSuggestion(suggestion)
     }
 }

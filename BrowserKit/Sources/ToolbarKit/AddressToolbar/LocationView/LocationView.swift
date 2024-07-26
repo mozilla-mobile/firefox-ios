@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
+final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -73,7 +73,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         urlTextField.backgroundColor = .clear
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true
-        urlTextField.delegate = self
+        urlTextField.autocompleteDelegate = self
         urlTextField.accessibilityActionsSource = self
     }
 
@@ -118,6 +118,10 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         self.delegate = delegate
         searchTerm = state.searchTerm
         onLongPress = state.onLongPress
+    }
+
+    func setAutocompleteSuggestion(_ suggestion: String?) {
+        urlTextField.setAutocompleteSuggestion(suggestion)
     }
 
     // MARK: - Layout
@@ -298,8 +302,38 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         }
     }
 
-    // MARK: - UITextFieldDelegate
-    public func textFieldDidBeginEditing(_ textField: UITextField) {
+    // MARK: - LocationTextFieldDelegate
+    func locationTextField(_ textField: LocationTextField, didEnterText text: String) {
+        delegate?.locationViewDidEnterText(text)
+    }
+
+    func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool {
+        guard let text = textField.text else { return true }
+        if !text.trimmingCharacters(in: .whitespaces).isEmpty {
+            delegate?.locationViewDidSubmitText(text)
+            textField.resignFirstResponder()
+            return true
+        } else {
+            return false
+        }
+    }
+
+    func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
+        delegate?.locationViewDidEnterText("")
+        return true
+    }
+
+    func locationTextFieldDidCancel(_ textField: LocationTextField) {
+        delegate?.locationViewDidCancelEditing()
+    }
+
+    func locationPasteAndGo(_ textField: LocationTextField) {
+        if let pasteboardContents = UIPasteboard.general.string {
+            delegate?.locationViewDidSubmitText(pasteboardContents)
+        }
+    }
+
+    func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         updateUIForSearchEngineDisplay()
 
         DispatchQueue.main.async { [self] in
@@ -311,21 +345,13 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         delegate?.locationViewDidBeginEditing(textField.text ?? "")
     }
 
-    public func textFieldDidEndEditing(_ textField: UITextField) {
+    func locationTextFieldDidEndEditing(_ textField: UITextField) {
         formatAndTruncateURLTextField()
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
             updateUIForLockIconDisplay()
         }
-    }
-
-    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let searchText = textField.text?.lowercased(), !searchText.isEmpty else { return false }
-
-        delegate?.locationViewShouldSearchFor(searchText)
-        textField.resignFirstResponder()
-        return true
     }
 
     // MARK: - Accessibility

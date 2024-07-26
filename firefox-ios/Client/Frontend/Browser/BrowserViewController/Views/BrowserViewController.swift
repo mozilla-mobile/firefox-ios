@@ -699,9 +699,7 @@ class BrowserViewController: UIViewController,
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
-        if !isToolbarRefactorEnabled {
-            overlayManager.setURLBar(urlBarView: urlBar)
-        }
+        overlayManager.setURLBar(urlBarView: isToolbarRefactorEnabled ? addressToolbarContainer : urlBar)
 
         // Update theme of already existing views
         let theme = currentTheme()
@@ -2879,7 +2877,18 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - AddressToolbarContainerDelegate
-    func searchSuggestions(searchTerm: String) {}
+    func searchSuggestions(searchTerm: String) {
+        if searchTerm.isEmpty {
+            hideSearchController()
+        } else {
+            configureOverlayView()
+        }
+        searchController?.viewModel.searchQuery = searchTerm
+        searchController?.searchTelemetry?.searchQuery = searchTerm
+        searchController?.searchTelemetry?.clearVisibleResults()
+        searchLoader?.query = searchTerm
+        searchController?.searchTelemetry?.determineInteractionType()
+    }
 
     func openBrowser(searchTerm: String) {
         didSubmitSearchText(searchTerm)

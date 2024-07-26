@@ -287,20 +287,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        if text.isEmpty {
-            hideSearchController()
-        } else {
-            configureOverlayView()
-        }
+        searchSuggestions(searchTerm: text)
         urlBar.locationTextField?.applyUIMode(
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
             theme: self.currentTheme()
         )
-        searchController?.viewModel.searchQuery = text
-        searchController?.searchTelemetry?.searchQuery = text
-        searchController?.searchTelemetry?.clearVisibleResults()
-        searchLoader?.query = text
-        searchController?.searchTelemetry?.determineInteractionType()
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
