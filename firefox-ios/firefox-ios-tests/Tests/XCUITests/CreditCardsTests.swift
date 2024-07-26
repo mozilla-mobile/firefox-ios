@@ -12,6 +12,12 @@ class CreditCardsTests: BaseTestCase {
     var nameOnCard: XCUIElement!
     var cardNr: XCUIElement!
     var expiration: XCUIElement!
+    
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
 
     func initCardFields() {
         nameOnCard = app.otherElements.textFields.element(boundBy: 0)

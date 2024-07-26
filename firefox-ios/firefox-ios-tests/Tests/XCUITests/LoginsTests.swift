@@ -25,6 +25,12 @@ let defaultNumRowsEmptyFilterList = 0
 let searchPasswords = "Search passwords"
 
 class LoginTest: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()

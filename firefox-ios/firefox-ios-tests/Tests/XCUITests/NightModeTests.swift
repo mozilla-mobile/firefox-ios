@@ -6,6 +6,12 @@ import XCTest
 import Common
 
 class NightModeTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     private func checkNightModeOn() {
         mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
     }

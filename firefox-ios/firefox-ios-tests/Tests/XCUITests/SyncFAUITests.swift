@@ -16,6 +16,12 @@ var uid: String!
 var code: String!
 
 class SyncUITests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     //  https://testrail.stage.mozaws.net/index.php?/cases/view/2448597
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel

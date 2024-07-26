@@ -14,6 +14,12 @@ private let SuggestedSite5: String = "foobar burn cd"
 private let SuggestedSite6: String = "foobar bomb baby"
 
 class SearchTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     private func typeOnSearchBar(text: String) {
         mozWaitForElementToExist(app.textFields.firstMatch)
         app.textFields.firstMatch.tap()

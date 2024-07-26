@@ -313,7 +313,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
-        sleep(1)
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {
@@ -935,7 +934,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
-            sleep(1)
             app.textFields["url"].press(forDuration: 1.0)
         }
     }

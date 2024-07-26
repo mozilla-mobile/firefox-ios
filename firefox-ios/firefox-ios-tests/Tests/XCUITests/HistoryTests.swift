@@ -53,6 +53,8 @@ class HistoryTests: BaseTestCase {
                                LaunchArguments.DisableAnimations]
         }
         super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307300

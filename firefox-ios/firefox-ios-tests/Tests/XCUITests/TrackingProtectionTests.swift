@@ -14,6 +14,12 @@ let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
 
 class TrackingProtectionTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307059
     // Smoketest
     func testStandardProtectionLevel() {

@@ -7,6 +7,12 @@ import XCTest
 let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
 let searchFieldPlaceholder = "Search MDN"
 class ThirdPartySearchTest: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         app.buttons["Done"].tap()
     }

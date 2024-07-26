@@ -13,6 +13,12 @@ let PDF_website = [
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
 class BrowsingPDFTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)

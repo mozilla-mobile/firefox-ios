@@ -21,6 +21,12 @@ let website_2 = [
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
 class NavigationTest: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"

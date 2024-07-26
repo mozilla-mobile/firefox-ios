@@ -6,6 +6,12 @@ import Common
 import XCTest
 
 class TabCounterTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2359077
     func testTabIncrement() throws {
         navigator.nowAt(NewTabScreen)

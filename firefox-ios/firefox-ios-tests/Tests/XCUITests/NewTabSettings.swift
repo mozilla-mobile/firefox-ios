@@ -6,6 +6,12 @@ import XCTest
 
 let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {

@@ -20,6 +20,12 @@ class ZoomingTests: BaseTestCase {
                               "www.google.com"
     ]
 
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()

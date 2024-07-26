@@ -9,6 +9,12 @@ let defaultSearchEngine2 = "Bing"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2435664
     func testDefaultSearchEngine() {
         navigator.nowAt(NewTabScreen)

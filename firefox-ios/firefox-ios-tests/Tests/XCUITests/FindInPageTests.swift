@@ -6,6 +6,12 @@ import XCTest
 import Common
 
 class FindInPageTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+    
     private func openFindInPageFromMenu(openSite: String) {
         navigator.openURL(openSite)
         waitUntilPageLoad()
