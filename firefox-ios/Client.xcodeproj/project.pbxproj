@@ -1024,6 +1024,12 @@
 		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB6FEA202AEA5CA200E7B2F2 /* FakespotAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
+		AB936A692C05F2B100600F82 /* TrackingProtectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */; };
+		AB9CBC022C53B64C00102610 /* TrackingProtectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBBFE2C53B64B00102610 /* TrackingProtectionAction.swift */; };
+		AB9CBC032C53B64C00102610 /* TrackingProtectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBBFF2C53B64B00102610 /* TrackingProtectionMiddleware.swift */; };
+		AB9CBC042C53B64C00102610 /* TrackingProtectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBC002C53B64B00102610 /* TrackingProtectionModel.swift */; };
+		AB9CBC052C53B64C00102610 /* TrackingProtectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBC012C53B64B00102610 /* TrackingProtectionState.swift */; };
+		AB9CBC082C53B7CD00102610 /* TrackingProtectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */; };
 		ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */; };
 		ABE4393E2AC432040074FFE1 /* PartnerWebsites.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE4393D2AC432040074FFE1 /* PartnerWebsites.swift */; };
 		ABEF80D12A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABEF80D02A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift */; };
@@ -6932,6 +6938,12 @@
 		AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotAdView.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
 		AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgentTests.swift"; sourceTree = "<group>"; };
+		AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionButton.swift; sourceTree = "<group>"; };
+		AB9CBBFE2C53B64B00102610 /* TrackingProtectionAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionAction.swift; sourceTree = "<group>"; };
+		AB9CBBFF2C53B64B00102610 /* TrackingProtectionMiddleware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionMiddleware.swift; sourceTree = "<group>"; };
+		AB9CBC002C53B64B00102610 /* TrackingProtectionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionModel.swift; sourceTree = "<group>"; };
+		AB9CBC012C53B64B00102610 /* TrackingProtectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionState.swift; sourceTree = "<group>"; };
+		AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingProtectionStateTests.swift; sourceTree = "<group>"; };
 		ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserConversionMetricsTests.swift; sourceTree = "<group>"; };
 		ABE4393D2AC432040074FFE1 /* PartnerWebsites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartnerWebsites.swift; sourceTree = "<group>"; };
 		ABEF80D02A24D2BE003F52C4 /* CreditCardBottomSheetViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewModel.swift; sourceTree = "<group>"; };
@@ -10811,9 +10823,22 @@
 		AB2AC6642BD15E2C00022AAB /* TrackingProtection */ = {
 			isa = PBXGroup;
 			children = (
+				AB9CBBFE2C53B64B00102610 /* TrackingProtectionAction.swift */,
+				AB9CBBFF2C53B64B00102610 /* TrackingProtectionMiddleware.swift */,
+				AB9CBC002C53B64B00102610 /* TrackingProtectionModel.swift */,
+				AB9CBC012C53B64B00102610 /* TrackingProtectionState.swift */,
 				AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */,
+				AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */,
 			);
 			path = TrackingProtection;
+			sourceTree = "<group>";
+		};
+		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
+			isa = PBXGroup;
+			children = (
+				AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */,
+			);
+			path = TrackingProtectionTests;
 			sourceTree = "<group>";
 		};
 		ABEF80CD2A24BEF1003F52C4 /* CreditCardBottomSheet */ = {
@@ -12598,6 +12623,7 @@
 				8A33222027DFE64C008F809E /* TestingHelperClasses */,
 				E16941B22C4E498600FF5F4E /* Toolbar */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
+				AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */,
 				ABB507CD2A136FB2009CAA67 /* UserConversionMetricsTests.swift */,
 				8A1E3BE028CBAC1F003388C4 /* Utils */,
 				C84655ED28873C4800861B4A /* Wallpaper */,
@@ -14681,6 +14707,7 @@
 				B2DFB7E32B619E2B0004CEA5 /* AddressCellView.swift in Sources */,
 				AB6FEA202AEA5CA200E7B2F2 /* FakespotAdView.swift in Sources */,
 				C87A121A28C2451A0097ED51 /* WallpaperMigrationUtility.swift in Sources */,
+				AB9CBC032C53B64C00102610 /* TrackingProtectionMiddleware.swift in Sources */,
 				D87F84AC20B891160091F2DA /* TabDisplayManager.swift in Sources */,
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
@@ -14696,6 +14723,7 @@
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				1D5CBF492B17E3CB0001D033 /* NotificationPayloads.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
+				AB9CBC052C53B64C00102610 /* TrackingProtectionState.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				E19B38B328A42D5E00D8C541 /* WallpaperCollectionViewCell.swift in Sources */,
@@ -14946,6 +14974,7 @@
 				AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */,
+				AB9CBC042C53B64C00102610 /* TrackingProtectionModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				C84655E8288739CB00861B4A /* WallpaperCollectionAvailability.swift in Sources */,
@@ -14986,6 +15015,7 @@
 				8A1E93EA2A3CDC6100DD540A /* BaseCoordinator.swift in Sources */,
 				E1442FD6294782D9003680B0 /* UIView+Extension.swift in Sources */,
 				A5519CF52B5D57560062BECB /* SearchSettingsState.swift in Sources */,
+				AB936A692C05F2B100600F82 /* TrackingProtectionButton.swift in Sources */,
 				74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
@@ -15022,6 +15052,7 @@
 				2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */,
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
 				8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */,
+				AB9CBC022C53B64C00102610 /* TrackingProtectionAction.swift in Sources */,
 				213BF7532AC21D1B00C53A64 /* TabDisplayPanel.swift in Sources */,
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,
 				C88E7A5B2A0553510072E638 /* OnboardingLinkInfoModel.swift in Sources */,
@@ -15474,6 +15505,7 @@
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				8AF3B15C2AF99C77009BB262 /* ReadingListPanelTests.swift in Sources */,
 				8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */,
+				AB9CBC082C53B7CD00102610 /* TrackingProtectionStateTests.swift in Sources */,
 				5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */,
 				C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */,
 				D8BA1790206D47830023AC00 /* DeferredTestUtils.swift in Sources */,
