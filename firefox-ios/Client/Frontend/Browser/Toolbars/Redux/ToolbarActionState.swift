@@ -38,8 +38,6 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
                actionType == .forward ||
                actionType == .reload ||
                actionType == .newTab ||
-               (actionType == .tabs &&
-                featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) &&
-                UIDevice.current.userInterfaceIdiom != .pad)
+               (actionType == .tabs && UIDevice.current.userInterfaceIdiom != .pad)
     }
 }
