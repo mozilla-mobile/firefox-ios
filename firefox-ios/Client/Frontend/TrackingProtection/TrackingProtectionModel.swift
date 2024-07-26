@@ -53,8 +53,8 @@ class TrackingProtectionModel {
         return url.baseDomain ?? ""
     }
 
-    let secureStatusString = .Menu.EnhancedTrackingProtection.connectionSecureLabel
-    let unsecureStatusString = .Menu.EnhancedTrackingProtection.connectionUnsecureLabel
+    let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
+    let unsecureStatusString = String.Menu.EnhancedTrackingProtection.connectionUnsecureLabel
     var connectionStatusString: String {
         return connectionSecure ? secureStatusString : unsecureStatusString
     }
@@ -64,8 +64,8 @@ class TrackingProtectionModel {
         return connectionSecure ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
     }
 
-    let protectionOnHeaderString = .Menu.EnhancedTrackingProtection.onHeader
-    let protectionOffHeaderString = .Menu.EnhancedTrackingProtection.offHeader
+    let protectionOnHeaderString = String.Menu.EnhancedTrackingProtection.onHeader
+    let protectionOffHeaderString = String.Menu.EnhancedTrackingProtection.offHeader
     var  connectionDetailsHeader: String {
         return connectionSecure ? protectionOnHeaderString : protectionOffHeaderString
     }
@@ -113,7 +113,6 @@ class TrackingProtectionModel {
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
         ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) { [weak self] in
-            self?.onToggleSiteSafelistStatus?()
         }
     }
 

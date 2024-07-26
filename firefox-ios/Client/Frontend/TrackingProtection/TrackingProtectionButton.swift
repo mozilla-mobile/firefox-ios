@@ -6,7 +6,7 @@ import UIKit
 import Common
 import ComponentLibrary
 
-public struct TrackingProtectionButtonViewModel {
+public struct TrackingProtectionButtonModel {
     let title: String
     let a11yIdentifier: String
 }
@@ -26,7 +26,7 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         )
     }
 
-    private var viewModel: TrackingProtectionButtonViewModel?
+    private var viewModel: TrackingProtectionButtonModel?
     private var backgroundColorNormal: UIColor = .clear
     private var foregroundColor: UIColor = .clear
     private var borderColor: UIColor = .clear
@@ -66,7 +66,7 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
-    func configure(viewModel: TrackingProtectionButtonViewModel) {
+    func configure(viewModel: TrackingProtectionButtonModel) {
         guard var updatedConfiguration = configuration else {
             return
         }

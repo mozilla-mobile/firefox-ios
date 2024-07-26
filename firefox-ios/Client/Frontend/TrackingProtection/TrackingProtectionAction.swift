@@ -7,11 +7,7 @@ import Redux
 import Shared
 import Common
 
-final class TrackingProtectionAction: Action {
-    override init(windowUUID: WindowUUID, actionType: any ActionType) {
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
+final class TrackingProtectionAction: Action { }
 
 enum TrackingProtectionActionType: ActionType {
     case toggleTrackingProtectionStatus
