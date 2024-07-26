@@ -66,7 +66,7 @@ protocol URLBarViewProtocol {
 }
 
 class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
-                    SearchEngineDelegate, SearchBarLocationProvider {
+                    SearchEngineDelegate, SearchBarLocationProvider, Autocompletable {
     // Additional UIAppearance-configurable properties
     @objc dynamic lazy var locationBorderColor: UIColor = .clear {
         didSet {

@@ -1430,11 +1430,11 @@ class BrowserViewController: UIViewController,
         searchViewModel.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
-        if !isToolbarRefactorEnabled {
-            let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-            searchLoader.addListener(searchViewModel)
-            self.searchLoader = searchLoader
-        }
+        let searchLoader = SearchLoader(
+            profile: profile,
+            autocompleteView: isToolbarRefactorEnabled ? addressToolbarContainer : urlBar)
+        searchLoader.addListener(searchViewModel)
+        self.searchLoader = searchLoader
 
         self.searchController = searchController
         self.searchSessionState = .active
