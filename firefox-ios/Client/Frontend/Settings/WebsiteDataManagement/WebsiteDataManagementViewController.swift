@@ -165,7 +165,6 @@ class WebsiteDataManagementViewController: UIViewController,
             return cell
         case .showMore:
             let cell = dequeueCellFor(indexPath: indexPath)
-            cell.applyTheme(theme: currentTheme())
             let cellType: ThemedTableViewCellType = viewModel.state != .displayAll ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(
                 theme: currentTheme(),
@@ -175,6 +174,7 @@ class WebsiteDataManagementViewController: UIViewController,
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             cell.configure(viewModel: cellViewModel)
+            cell.applyTheme(theme: currentTheme())
             showMoreButton = cell
             return cell
         case .clearButton:
@@ -229,16 +229,16 @@ class WebsiteDataManagementViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section(rawValue: section)!
+        let height = max(self.view.frame.width, self.view.frame.height)
+        let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+
         switch section {
         case .sites:
             let numberOfRecords = viewModel.siteRecords.count
-
             // Show either 10, 8 or 6 records initially depending on the screen size.
-            let height = max(self.view.frame.width, self.view.frame.height)
-            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
             return viewModel.state == .displayAll ? numberOfRecords: min(numberOfRecords, numberOfInitialRecords)
         case .showMore:
-            return viewModel.state != .displayAll ? 1 : 0
+            return (viewModel.state != .displayAll && viewModel.siteRecords.count > numberOfInitialRecords) ? 1 : 0
         case .clearButton:
             return 1
         }
