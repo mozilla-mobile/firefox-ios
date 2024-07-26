@@ -71,7 +71,8 @@ class StatusBarOverlay: UIView,
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        let topTabsColor = ToolbarFlagManager.isRefactorEnabled ? theme.colors.layer1 : theme.colors.layer3
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        let topTabsColor = isToolbarRefactorEnabled ? theme.colors.layer1 : theme.colors.layer3
         savedBackgroundColor = hasTopTabs ? topTabsColor : theme.colors.layer1
         backgroundColor = savedBackgroundColor?.withAlphaComponent(scrollOffset)
     }

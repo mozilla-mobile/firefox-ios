@@ -40,6 +40,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
 
     func openDebugTestTabs(count: Int) {}
 
+    func showDebugFeatureFlags() { }
+
     func showPasswordManager(shouldShowOnboarding: Bool) {
         savedShouldShowOnboarding = shouldShowOnboarding
         showPasswordManagerCalled += 1

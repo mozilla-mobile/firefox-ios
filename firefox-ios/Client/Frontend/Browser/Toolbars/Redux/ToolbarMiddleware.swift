@@ -56,21 +56,6 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
 
-    lazy var menuAction = ToolbarActionState(
-        actionType: .menu,
-        iconName: StandardImageIdentifiers.Large.appMenu,
-        isEnabled: true,
-        a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
-
-    lazy var tabsAction = ToolbarActionState(
-        actionType: .tabs,
-        iconName: StandardImageIdentifiers.Large.tab,
-        numberOfTabs: 1,
-        isEnabled: true,
-        a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
-
     lazy var homeAction = ToolbarActionState(
         actionType: .home,
         iconName: StandardImageIdentifiers.Large.home,
@@ -78,12 +63,26 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
+    lazy var newTabAction = ToolbarActionState(
+        actionType: .newTab,
+        iconName: StandardImageIdentifiers.Large.plus,
+        isEnabled: true,
+        a11yLabel: .Toolbars.NewTabButton,
+        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
+
     lazy var shareAction = ToolbarActionState(
         actionType: .share,
         iconName: StandardImageIdentifiers.Large.shareApple,
         isEnabled: true,
         a11yLabel: .TabLocationShareAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
+
+    lazy var searchAction = ToolbarActionState(
+        actionType: .search,
+        iconName: StandardImageIdentifiers.Large.search,
+        isEnabled: true,
+        a11yLabel: .TabToolbarSearchAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
 
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
@@ -120,7 +119,6 @@ class ToolbarMiddleware: FeatureFlaggable {
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.urlDidChange:
-            guard let action = action as? ToolbarMiddlewareUrlChangeAction else { return }
             updateUrlAndActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.didStartEditingUrl:
@@ -130,6 +128,20 @@ class ToolbarMiddleware: FeatureFlaggable {
             ToolbarMiddlewareActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.searchEngineDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
+
+        case ToolbarMiddlewareActionType.traitCollectionDidChange:
+            updateAddressToolbarNavigationActions(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.numberOfTabsChanged:
+            updateNumberOfTabs(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.backButtonStateChanged,
+            ToolbarMiddlewareActionType.forwardButtonStateChanged:
+            updateNumberOfTabs(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.showMenuWarningBadge:
+            updateMenuWarningBadge(action: action, state: state)
+
         default:
             break
         }
@@ -151,7 +163,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         return AddressToolbarModel(navigationActions: [ToolbarActionState](),
                                    pageActions: [qrCodeScanAction],
-                                   browserActions: [tabsAction, menuAction],
+                                   browserActions: [tabsAction(), menuAction()],
                                    borderPosition: borderPosition,
                                    url: nil)
     }
@@ -160,9 +172,9 @@ class ToolbarMiddleware: FeatureFlaggable {
         let actions = [
             backAction(enabled: false),
             forwardAction(enabled: false),
-            homeAction,
-            tabsAction,
-            menuAction
+            searchAction,
+            tabsAction(),
+            menuAction()
         ]
         let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarPosition)
         return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
@@ -173,6 +185,10 @@ class ToolbarMiddleware: FeatureFlaggable {
         case .home:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
+            store.dispatch(action)
+        case .newTab:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)
         case .qrCode:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
@@ -225,6 +241,10 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showShare)
             store.dispatch(action)
+
+        case .search:
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
+            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
         default:
             break
@@ -315,7 +335,110 @@ class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
+    private func updateUrlAndActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      lockIconImageName: action.lockIconImageName,
+                                                                      isEditing: false),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
+        else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          url: action.url,
+                                          isShowingNavigationToolbar: action.isShowingNavigationToolbar,
+                                          canGoBack: action.canGoBack,
+                                          canGoForward: action.canGoForward,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateNumberOfTabs(action: ToolbarMiddlewareAction,
+                                    state: AppState) {
+        guard let numberOfTabs = action.numberOfTabs,
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      isEditing: false),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
+        else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          numberOfTabs: numberOfTabs,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.numberOfTabsChanged)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateMenuWarningBadge(action: ToolbarMiddlewareAction,
+                                        state: AppState) {
+        guard let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      isEditing: false),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
+        else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          badgeImageName: action.badgeImageName,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.showMenuWarningBadge)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateBackForwardToolbarActions(action: ToolbarMiddlewareAction,
+                                                 state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID),
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
+        else { return }
+
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          canGoBack: canGoBack,
+                                          canGoForward: canGoForward,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.backForwardButtonStatesChanged)
+        store.dispatch(toolbarAction)
+    }
+
     // MARK: Address Toolbar Actions
+
+    private func addressToolbarBrowserActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: action.windowUUID)
+        else { return actions }
+
+        if !(action.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
+            actions.append(newTabAction)
+        }
+
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.menuWarningBadge
+
+        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs),
+                                    menuAction(badgeImageName: menuBadgeImageName)])
+
+        return actions
+    }
 
     private func addressToolbarNavigationActions(
         action: ToolbarMiddlewareAction,
@@ -329,18 +452,11 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: action.windowUUID)
         else { return actions }
 
-        var url = toolbarState.addressToolbar.url
-        var isShowingNavToolbar = toolbarState.isShowingNavigationToolbar
-        var canGoBack = toolbarState.canGoBack
-        var canGoForward = toolbarState.canGoForward
-
-        if action.actionType as? ToolbarMiddlewareActionType == .urlDidChange,
-           let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction {
-            url = urlChangeAction.url
-            isShowingNavToolbar = urlChangeAction.isShowingNavigationToolbar
-            canGoBack = urlChangeAction.canGoBack
-            canGoForward = urlChangeAction.canGoForward
-        }
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+        let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
 
         if isEditing {
             // back carrot when in edit mode
@@ -371,8 +487,8 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                    window: action.windowUUID)
         else { return actions }
 
-        let urlChangeAction = action as? ToolbarMiddlewareUrlChangeAction
-        let url = urlChangeAction != nil ? urlChangeAction?.url : toolbarState.addressToolbar.url
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
         guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
@@ -393,45 +509,28 @@ class ToolbarMiddleware: FeatureFlaggable {
         return actions
     }
 
-    private func updateUrlAndActions(action: ToolbarMiddlewareUrlChangeAction,
-                                     state: AppState) {
-        guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
-                                                                                state: state,
-                                                                                url: action.url,
-                                                                                lockIconImageName: action.lockIconImageName,
-                                                                                isEditing: false)
-        else { return }
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          url: action.url,
-                                          isShowingNavigationToolbar: action.isShowingNavigationToolbar,
-                                          canGoBack: action.canGoBack,
-                                          canGoForward: action.canGoForward,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.urlDidChange)
-        store.dispatch(toolbarAction)
-    }
-
     private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction,
                                                        state: AppState,
-                                                       isEditing: Bool) {
-        guard let addressToolbarModel = generateAddressToolbarNavigationActions(action: action,
-                                                                                state: state,
-                                                                                isEditing: isEditing)
+                                                       isEditing: Bool? = nil) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      isEditing: isEditing)
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.addressToolbarActionsDidChange)
         store.dispatch(toolbarAction)
     }
 
-    private func generateAddressToolbarNavigationActions(
+    private func generateAddressToolbarActions(
         action: ToolbarMiddlewareAction,
         state: AppState,
-        url: URL? = nil,
         lockIconImageName: String? = nil,
-        isEditing: Bool? = nil) -> AddressToolbarModel? {
+        isEditing: Bool? = nil)
+    -> AddressToolbarModel? {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return nil }
 
@@ -440,17 +539,61 @@ class ToolbarMiddleware: FeatureFlaggable {
             action: action,
             state: state,
             isEditing: editing)
-            let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
+        let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
+        let browserActions = addressToolbarBrowserActions(action: action, state: state)
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
             pageActions: pageActions,
-            browserActions: toolbarState.addressToolbar.browserActions,
+            browserActions: browserActions,
             borderPosition: toolbarState.addressToolbar.borderPosition,
-            url: url ?? toolbarState.addressToolbar.url,
+            url: url,
             lockIconImageName: lockIconImageName,
             isEditing: isEditing)
         return addressToolbarModel
+    }
+
+    // MARK: - Navigation Toolbar
+
+    private func generateNavigationToolbarActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState,
+        isEditing: Bool? = nil)
+    -> NavigationToolbarModel? {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return nil }
+
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+
+        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
+        let middleActionHome = searchAction
+        let middleAction = url == nil ? middleActionHome : middleActionDefault
+
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+
+        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.menuWarningBadge
+
+        let actions = [
+            backAction(enabled: canGoBack),
+            forwardAction(enabled: canGoForward),
+            middleAction,
+            tabsAction(numberOfTabs: numberOfTabs),
+            menuAction(badgeImageName: menuBadgeImageName)
+        ]
+
+        let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarState.toolbarPosition)
+
+        let navToolbarModel = NavigationToolbarModel(
+            actions: actions,
+            displayBorder: displayBorder)
+        return navToolbarModel
     }
 
     // MARK: - Helper
@@ -471,6 +614,26 @@ class ToolbarMiddleware: FeatureFlaggable {
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
+    }
+
+    private func tabsAction(numberOfTabs: Int = 1) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .tabs,
+            iconName: StandardImageIdentifiers.Large.tab,
+            numberOfTabs: numberOfTabs,
+            isEnabled: true,
+            a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
+    }
+
+    private func menuAction(badgeImageName: String? = nil) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .menu,
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            badgeImageName: badgeImageName,
+            isEnabled: true,
+            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
     private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,

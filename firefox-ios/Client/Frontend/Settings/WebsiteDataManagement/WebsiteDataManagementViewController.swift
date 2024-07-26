@@ -47,7 +47,6 @@ class WebsiteDataManagementViewController: UIViewController,
 
     var tableView: UITableView!
     var searchController: UISearchController?
-    var showMoreButtonEnabled = true
 
     private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel,
                                                                                           windowUUID: windowUUID)
@@ -110,12 +109,6 @@ class WebsiteDataManagementViewController: UIViewController,
         viewModel.onViewModelChanged = { [weak self] in
             guard let self = self else { return }
             self.loadingView.isHidden = self.viewModel.state != .loading
-
-            // Show either 10, 8 or 6 records initially depending on the screen size.
-            let height = max(self.view.frame.width, self.view.frame.height)
-            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            self.showMoreButtonEnabled = self.viewModel.siteRecords.count > numberOfInitialRecords
-
             self.searchResultsViewController.reloadData()
             self.tableView.reloadData()
         }
@@ -173,7 +166,7 @@ class WebsiteDataManagementViewController: UIViewController,
         case .showMore:
             let cell = dequeueCellFor(indexPath: indexPath)
             cell.applyTheme(theme: currentTheme())
-            let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
+            let cellType: ThemedTableViewCellType = viewModel.state != .displayAll ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(
                 theme: currentTheme(),
                 type: cellType
@@ -243,9 +236,9 @@ class WebsiteDataManagementViewController: UIViewController,
             // Show either 10, 8 or 6 records initially depending on the screen size.
             let height = max(self.view.frame.width, self.view.frame.height)
             let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            return showMoreButtonEnabled ? min(numberOfRecords, numberOfInitialRecords) : numberOfRecords
+            return viewModel.state == .displayAll ? numberOfRecords: min(numberOfRecords, numberOfInitialRecords)
         case .showMore:
-            return showMoreButtonEnabled ? 1 : 0
+            return viewModel.state != .displayAll ? 1 : 0
         case .clearButton:
             return 1
         }
@@ -259,7 +252,7 @@ class WebsiteDataManagementViewController: UIViewController,
             viewModel.selectItem(item)
             break
         case .showMore:
-            showMoreButtonEnabled = false
+            viewModel.showMoreButtonPressed()
             tableView.reloadData()
         case .clearButton:
             let generator = UIImpactFeedbackGenerator(style: .heavy)

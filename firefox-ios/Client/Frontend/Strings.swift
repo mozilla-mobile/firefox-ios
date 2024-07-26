@@ -1376,6 +1376,11 @@ extension String {
         }
 
         public struct Survey {
+            public static let SurveyA11yLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.Sheet.AccessibilityLabel.v130",
+                tableName: "Microsurvey",
+                value: "Survey",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label used to announce that the sheet has appeared.")
             public static let LogoImageA11yLabel = MZLocalizedString(
                 key: "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129",
                 tableName: "Microsurvey",
@@ -1391,11 +1396,6 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Close",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet.")
-            public static let SelectedRadioButtonAccessibilityLabel = MZLocalizedString(
-                key: "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v129",
-                tableName: "Microsurvey",
-                value: "Selected",
-                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
             public static let UnselectedRadioButtonAccessibilityLabel = MZLocalizedString(
                 key: "Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129",
                 tableName: "Microsurvey",
@@ -5760,6 +5760,14 @@ extension String {
 }
 
 extension String {
+    public struct Toolbars {
+        public static let NewTabButton = MZLocalizedString(
+            key: "Toolbar.NewTab.Button.v130",
+            tableName: "Toolbar",
+            value: "New Tab",
+            comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+    }
+
     public struct AddressToolbar {
         public static let LocationPlaceholder = MZLocalizedString(
             key: "AddressToolbar.Location.Placeholder.v128",
@@ -6603,6 +6611,14 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "Protections are OFF. We suggest turning it back on.",
                 comment: "A switch to disable enhanced tracking protection inside the menu.")
+        }
+
+        struct v130 {
+            public static let SelectedRadioButtonAccessibilityLabel = MZLocalizedString(
+                key: "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v129",
+                tableName: "Microsurvey",
+                value: "Selected",
+                comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
         }
     }
 }

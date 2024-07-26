@@ -67,7 +67,7 @@
     "title": "americanexpress",
     "url": "https://www.americanexpress.com",
     "image_url": "americanexpress-com.png",
-    "background_color": "#e0e0e0",
+    "background_color": "#FFF",
     "domain": "americanexpress.com"
   },
   {
@@ -386,7 +386,7 @@
     "title": "facebook",
     "url": "https://www.facebook.com/",
     "image_url": "facebook-com.png",
-    "background_color": "#3b5998",
+    "background_color": "#FFF",
     "domain": "facebook.com"
   },
   {
@@ -1192,7 +1192,7 @@
     "title": "twitter",
     "url": "https://twitter.com/",
     "image_url": "twitter-com.png",
-    "background_color": "#049ff5",
+    "background_color": "#000",
     "domain": "twitter.com"
   },
   {

@@ -168,7 +168,7 @@ class CreditCardsTests: BaseTestCase {
             waitForExistence(app.buttons["Done"])
             app.buttons["Done"].tap()
             app.swipeUp()
-            mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"])
+            mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"], timeout: TIMEOUT)
             mozWaitForElementToExist(cardNumber)
             cardNumber.tapOnApp()
             // The autofill option (Use saved card prompt) is displayed

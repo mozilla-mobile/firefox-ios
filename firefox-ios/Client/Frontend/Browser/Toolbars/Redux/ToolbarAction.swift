@@ -15,6 +15,7 @@ class ToolbarAction: Action {
     let isPrivate: Bool?
     let badgeImageName: String?
     let isShowingNavigationToolbar: Bool?
+    let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
 
@@ -26,6 +27,7 @@ class ToolbarAction: Action {
          isPrivate: Bool? = nil,
          badgeImageName: String? = nil,
          isShowingNavigationToolbar: Bool? = nil,
+         isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          windowUUID: WindowUUID,
@@ -38,6 +40,7 @@ class ToolbarAction: Action {
         self.isPrivate = isPrivate
         self.badgeImageName = badgeImageName
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         super.init(windowUUID: windowUUID, actionType: actionType)
@@ -49,8 +52,7 @@ enum ToolbarActionType: ActionType {
     case numberOfTabsChanged
     case addressToolbarActionsDidChange
     case urlDidChange
-    case backButtonStateChanged
-    case forwardButtonStateChanged
+    case backForwardButtonStatesChanged
     case scrollOffsetChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
@@ -61,49 +63,55 @@ class ToolbarMiddlewareAction: Action {
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
     let isLoading: Bool?
+    let isShowingTopTabs: Bool?
+    let isShowingNavigationToolbar: Bool?
+    let lockIconImageName: String?
+    let numberOfTabs: Int?
+    let url: URL?
+    let canGoBack: Bool?
+    let canGoForward: Bool?
+    let badgeImageName: String?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
          isLoading: Bool? = nil,
+         isShowingTopTabs: Bool? = nil,
+         isShowingNavigationToolbar: Bool? = nil,
+         lockIconImageName: String? = nil,
+         numberOfTabs: Int? = nil,
+         url: URL? = nil,
+         canGoBack: Bool? = nil,
+         canGoForward: Bool? = nil,
+         badgeImageName: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
         self.isLoading = isLoading
-        super.init(windowUUID: windowUUID, actionType: actionType)
-    }
-}
-
-final class ToolbarMiddlewareUrlChangeAction: ToolbarMiddlewareAction {
-    let url: URL?
-    let lockIconImageName: String
-    let isShowingNavigationToolbar: Bool
-    let canGoBack: Bool
-    let canGoForward: Bool
-
-    init(url: URL? = nil,
-         lockIconImageName: String,
-         isShowingNavigationToolbar: Bool,
-         canGoBack: Bool,
-         canGoForward: Bool,
-         windowUUID: WindowUUID,
-         actionType: ActionType) {
-        self.url = url
-        self.lockIconImageName = lockIconImageName
+        self.isShowingTopTabs = isShowingTopTabs
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
+        self.lockIconImageName = lockIconImageName
+        self.numberOfTabs = numberOfTabs
+        self.url = url
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
+        self.badgeImageName = badgeImageName
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
+    case numberOfTabsChanged
     case urlDidChange
     case searchEngineDidChange
     case didStartEditingUrl
     case cancelEdit
     case websiteLoadingStateDidChange
+    case traitCollectionDidChange
+    case backButtonStateChanged
+    case forwardButtonStateChanged
+    case showMenuWarningBadge
 }

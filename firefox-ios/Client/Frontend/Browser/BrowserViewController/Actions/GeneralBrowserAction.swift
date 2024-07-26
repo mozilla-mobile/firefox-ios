@@ -48,6 +48,7 @@ enum GeneralBrowserActionType: ActionType {
     case stopLoadingWebsite
     case reloadWebsite
     case showShare
+    case addNewTab
 }
 
 class GeneralBrowserMiddlewareAction: Action {
