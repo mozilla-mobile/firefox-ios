@@ -38,8 +38,6 @@ open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
 
 public struct SuggestedSiteData {
     var url: String
-    var bgColor: String
-    var imageUrl: String
     var faviconUrl: String
     var trackingId: Int
     var title: String
