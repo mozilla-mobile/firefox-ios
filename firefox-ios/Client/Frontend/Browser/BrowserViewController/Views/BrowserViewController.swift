@@ -1338,7 +1338,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
-        self.microsurvey = MicrosurveyPromptView(state: state, windowUUID: windowUUID)
+        self.microsurvey = MicrosurveyPromptView(
+            state: state,
+            windowUUID: windowUUID,
+            inOverlayMode: overlayManager.inOverlayMode
+        )
         updateMicrosurveyConstraints()
     }
 
@@ -1358,6 +1362,10 @@ class BrowserViewController: UIViewController,
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
+        logger.log("Update content on browser view controller with type \(browserViewType)",
+                   level: .info,
+                   category: .coordinator)
+
         switch browserViewType {
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
@@ -3253,7 +3261,13 @@ extension BrowserViewController: SearchViewControllerDelegate {
     @objc
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            let action = ToolbarMiddlewareAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.searchEngineDidChange
+            )
+            store.dispatch(action)
+        } else {
             urlBar.searchEnginesDidUpdate()
         }
         searchController?.reloadSearchEngines()
