@@ -17,7 +17,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     func register(_ webServer: WebServerProtocol, profile: Profile) {
         // Temporary hacky casting to allow for gradual movement to protocol oriented programming
         guard let webServer = webServer as? WebServer else { return }
-        ReaderModeHandlers.register(webServer, profile: profile)
+        ensureMainThread {
+            ReaderModeHandlers.register(webServer, profile: profile)
+        }
     }
 
     static func register(_ webServer: WebServer, profile: Profile) {
@@ -42,10 +44,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             return GCDWebServerResponse(statusCode: status)
         }
 
-        var readerModeStyle: ReaderModeStyle?
-        ensureMainThread {
-            readerModeStyle = ReaderModeStyle.defaultStyle()
-        }
+        var readerModeStyle = ReaderModeStyle.defaultStyle()
 
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
         webServer.registerHandlerForMethod(
@@ -57,7 +56,6 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                 if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
-                        guard var readerModeStyle else { return nil }
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
                         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
