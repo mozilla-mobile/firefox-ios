@@ -113,7 +113,6 @@ public struct AccessibilityIdentifiers {
         }
     }
 
-
     struct FirefoxHomepage {
         static let collectionView = "FxCollectionView"
 
