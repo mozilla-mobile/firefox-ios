@@ -2899,6 +2899,41 @@ class BrowserViewController: UIViewController,
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }
     }
+
+    func addressToolbarDidEnterOverlayMode(_ view: UIView) {
+        guard let profile = profile as? BrowserProfile else { return }
+
+        if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.screenChanged,
+                argument: UIAccessibility.Notification.screenChanged
+            )
+        } else {
+            if let toast = clipboardBarDisplayHandler?.clipboardToast {
+                toast.removeFromSuperview()
+            }
+
+            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        }
+
+        (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
+    }
+
+    func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        if searchSessionState == .active {
+            // This delegate method may be called even if the user isn't
+            // currently searching, but we only want to update the search
+            // session state if they are.
+            searchSessionState = switch reason {
+            case .finished: .engaged
+            case .cancelled: .abandoned
+            }
+        }
+        destroySearchController()
+        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+
+        (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {

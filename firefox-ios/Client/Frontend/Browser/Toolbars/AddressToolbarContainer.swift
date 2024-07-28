@@ -12,6 +12,8 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    func addressToolbarDidEnterOverlayMode(_ view: UIView)
+    func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
 }
 
 final class AddressToolbarContainer: UIView,
@@ -21,7 +23,8 @@ final class AddressToolbarContainer: UIView,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
                                      MenuHelperURLBarInterface,
-                                     Autocompletable {
+                                     Autocompletable,
+                                     URLBarViewProtocol {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
         static let compactLeadingEdgeDisplay: CGFloat = 16
@@ -102,6 +105,10 @@ final class AddressToolbarContainer: UIView,
         default: return nil
         }
     }
+
+    /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
+    /// and the Cancel button is visible (allowing the user to leave overlay mode).
+    var inOverlayMode = false
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -297,5 +304,25 @@ final class AddressToolbarContainer: UIView,
     // MARK: - Autocompletable
     func setAutocompleteSuggestion(_ suggestion: String?) {
         toolbar.setAutocompleteSuggestion(suggestion)
+    }
+
+    // MARK: - Overlay Mode
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        // Show the overlay mode UI, which includes hiding the locationView and replacing it
+        // with the editable locationTextField.
+        animateToOverlayState(overlayMode: true)
+
+        delegate?.addressToolbarDidEnterOverlayMode(self)
+    }
+
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        _ = toolbar.resignFirstResponder()
+        animateToOverlayState(overlayMode: false, didCancel: cancel)
+        delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
+    }
+
+    private func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
+        layoutIfNeeded()
+        inOverlayMode = overlay
     }
 }
