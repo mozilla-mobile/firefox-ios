@@ -60,27 +60,25 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     }
 
     func start(sourceView: UIView) {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            let trackingProtectionRefactorStatus =
-            featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
-            if trackingProtectionRefactorStatus {
-                if UIDevice.current.userInterfaceIdiom == .phone {
-                    if let sheetPresentationController = enhancedTrackingProtectionMenuVC.sheetPresentationController {
-                        sheetPresentationController.detents = [.medium(), .large()]
-                        sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
-                        sheetPresentationController.preferredCornerRadius = 12
-                    }
-                    router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
-                } else {
-                    enhancedTrackingProtectionMenuVC.asPopover = true
-                    if trackingProtectionRefactorStatus {
-                        enhancedTrackingProtectionMenuVC.preferredContentSize = CGSize(width: 480, height: 517)
-                    }
-                    enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
-                    enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
-                    enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
-                    router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+        let trackingProtectionRefactorStatus =
+        featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+        if trackingProtectionRefactorStatus {
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                if let sheetPresentationController = enhancedTrackingProtectionMenuVC.sheetPresentationController {
+                    sheetPresentationController.detents = [.medium(), .large()]
+                    sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
+                    sheetPresentationController.preferredCornerRadius = 12
                 }
+                router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+            } else {
+                enhancedTrackingProtectionMenuVC.asPopover = true
+                if trackingProtectionRefactorStatus {
+                    enhancedTrackingProtectionMenuVC.preferredContentSize = CGSize(width: 480, height: 517)
+                }
+                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
+                enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
+                enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
+                router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
             }
         } else {
             if UIDevice.current.userInterfaceIdiom == .phone {
