@@ -187,7 +187,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
             }.items
 
-            let closeTab = SingleActionViewModel(title: .Toolbars.tabToolbarLongPressActionsMenu.closeThisTabButton,
+            let closeTab = SingleActionViewModel(title: .Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton,
                                                  iconString: StandardImageIdentifiers.Large.cross,
                                                  iconType: .Image) { _ in
                 if let tab = self.tabManager.selectedTab {
