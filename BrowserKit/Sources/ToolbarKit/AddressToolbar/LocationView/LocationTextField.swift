@@ -180,7 +180,11 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         guard let completionRange = completionRange else { return false }
 
         // Prevents the hard crash when you select all and start a new query
-        guard let count = text?.count, count > 1, count > completionRange.location, count >= completionRange.length else { return false }
+        guard let count = text?.count,
+              count > 1,
+              count < completionRange.location,
+              count <= completionRange.location + completionRange.length
+        else { return false }
 
         text = (text as NSString?)?.replacingCharacters(in: completionRange, with: "")
         return true
