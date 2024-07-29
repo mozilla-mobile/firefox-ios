@@ -64,7 +64,10 @@ class GoogleTopSiteManager {
     func suggestedSiteData() -> PinnedSite? {
         guard let url = self.url else { return nil }
 
-        let pinnedSite = PinnedSite(site: Site(url: url, title: "Google"))
+        let pinnedSite = PinnedSite(
+            site: Site(url: url, title: "Google"),
+            faviconURL: "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png"
+        )
         pinnedSite.guid = Constants.googleGUID
         return pinnedSite
     }
