@@ -380,6 +380,7 @@ extension BrowserViewController: WKNavigationDelegate {
             if !url.isReaderModeURL {
                 if isToolbarRefactorEnabled {
                     let action = ToolbarMiddlewareAction(
+                        lockIconImageName: lockIconImageName(for: tabManager.selectedTab),
                         readerModeState: .unavailable,
                         windowUUID: windowUUID,
                         actionType: ToolbarMiddlewareActionType.readerModeStateChanged

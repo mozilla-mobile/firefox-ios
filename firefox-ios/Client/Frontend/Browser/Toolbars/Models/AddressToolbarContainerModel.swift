@@ -14,7 +14,7 @@ class AddressToolbarContainerModel: Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineImage: UIImage?
     let searchEngines: SearchEngines
-    let lockIconImageName: String
+    let lockIconImageName: String?
     let url: URL?
 
     let windowUUID: UUID

@@ -18,6 +18,7 @@ class ToolbarAction: Action {
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
+    let readerModeState: ReaderModeState?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
@@ -30,6 +31,7 @@ class ToolbarAction: Action {
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
+         readerModeState: ReaderModeState? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -43,6 +45,7 @@ class ToolbarAction: Action {
         self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
+        self.readerModeState = readerModeState
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -56,6 +59,7 @@ enum ToolbarActionType: ActionType {
     case scrollOffsetChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
+    case readerModeStateChanged
 }
 
 class ToolbarMiddlewareAction: Action {

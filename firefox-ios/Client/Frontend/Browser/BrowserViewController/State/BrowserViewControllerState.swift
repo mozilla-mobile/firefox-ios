@@ -373,7 +373,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .readerMode,
-                buttonTapped: action.buttonTapped,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         default:
             return state

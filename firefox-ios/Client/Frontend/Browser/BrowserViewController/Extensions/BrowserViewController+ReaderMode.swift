@@ -4,6 +4,7 @@
 
 import WebEngine
 import Shared
+import Common
 
 extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
@@ -11,6 +12,7 @@ extension BrowserViewController: ReaderModeDelegate {
         if tabManager.selectedTab === tab {
             if isToolbarRefactorEnabled {
                 let action = ToolbarMiddlewareAction(
+                    lockIconImageName: lockIconImageName(for: tab),
                     readerModeState: state,
                     windowUUID: windowUUID,
                     actionType: ToolbarMiddlewareActionType.readerModeStateChanged
@@ -100,7 +102,7 @@ extension BrowserViewController {
     }
 
     func hideReaderModeBar(animated: Bool) {
-        guard let readerModeBar = readerModeBar else { return }
+        guard let readerModeBar else { return }
 
         if isBottomSearchBar {
             overKeyboardContainer.removeArrangedView(readerModeBar)

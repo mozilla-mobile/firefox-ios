@@ -13,7 +13,7 @@ struct AddressBarState: StateType, Equatable {
     var browserActions: [ToolbarActionState]
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
-    var lockIconImageName: String
+    var lockIconImageName: String?
     var isEditing: Bool
     var isLoading: Bool
 
@@ -35,7 +35,7 @@ struct AddressBarState: StateType, Equatable {
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
-         lockIconImageName: String,
+         lockIconImageName: String?,
          isEditing: Bool = false,
          isLoading: Bool = false) {
         self.windowUUID = windowUUID
@@ -103,7 +103,7 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: addressToolbarModel.url,
-                lockIconImageName: addressToolbarModel.lockIconImageName ?? state.lockIconImageName,
+                lockIconImageName: addressToolbarModel.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing
             )
 

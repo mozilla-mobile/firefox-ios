@@ -362,6 +362,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                           isShowingNavigationToolbar: action.isShowingNavigationToolbar,
                                           canGoBack: action.canGoBack,
                                           canGoForward: action.canGoForward,
+                                          readerModeState: action.readerModeState,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.urlDidChange)
         store.dispatch(toolbarAction)
@@ -501,17 +502,15 @@ final class ToolbarMiddleware: FeatureFlaggable {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
         }
+
         let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
-        print("->isReaderModeAction: \(isReaderModeAction)")
-        if isReaderModeAction {
-            if action.readerModeState == .available {
-                actions.append(readerModeAction)
-            } else if action.readerModeState == .active {
-                readerModeAction.shouldDisplayAsHighlighted = true
-                actions.append(readerModeAction)
-            } else {
-                readerModeAction.shouldDisplayAsHighlighted = false
-            }
+        let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.readerModeState
+        readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
+
+        switch readerModeState {
+        case .active, .available:
+            actions.append(readerModeAction)
+        default: break
         }
 
         actions.append(shareAction)
