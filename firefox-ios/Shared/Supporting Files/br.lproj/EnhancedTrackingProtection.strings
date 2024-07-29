@@ -13,3 +13,6 @@
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Gwiriet gant %@";
 
+/* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Gwarez araokaet a-enep d’an heulierien";
+
