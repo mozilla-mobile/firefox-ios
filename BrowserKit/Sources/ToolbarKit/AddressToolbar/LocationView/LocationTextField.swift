@@ -36,6 +36,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
     // The last string used as a replacement in shouldChangeCharactersInRange.
     private var lastReplacement: String?
+    private var hideCursor = false
 
     private let copyShortcutKey = "c"
 
@@ -105,10 +106,12 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
     override func deleteBackward() {
         lastReplacement = nil
+        hideCursor = false
 
         guard completionRange == nil else {
             // If we have an active completion, delete it without deleting any user-typed characters.
             removeCompletion()
+            forceResetCursor()
             return
         }
 
@@ -120,8 +123,8 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         super.touchesBegan(touches, with: event)
     }
 
-    override open func caretRect(for forPosition: UITextPosition) -> CGRect {
-        return (completionRange != nil) ? CGRect.zero : super.caretRect(for: forPosition)
+    override open func caretRect(for position: UITextPosition) -> CGRect {
+        return hideCursor ? CGRect.zero : super.caretRect(for: position)
     }
 
     override open func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
@@ -133,17 +136,27 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         let searchText = text ?? ""
 
         guard let suggestion = suggestion, isEditing && markedTextRange == nil else {
+            hideCursor = false
             return
         }
 
         let normalized = normalizeString(searchText)
         guard suggestion.hasPrefix(normalized) && normalized.count < suggestion.count else {
+            hideCursor = false
             return
         }
 
         let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
         setMarkedText(suggestionText, selectedRange: NSRange())
         completionRange = NSRange(location: searchText.count, length: suggestionText.count)
+
+        // Only call forceResetCursor() if `hideCursor` changes.
+        // Because forceResetCursor() auto accept iOS user's text replacement
+        // (e.g. mu->μ) which makes user unable to type "mu".
+        if !hideCursor {
+            hideCursor = true
+            forceResetCursor()
+        }
     }
 
     // MARK: - ThemeApplicable
@@ -157,11 +170,14 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     // MARK: - Private
     @objc
     private func textDidChange(_ textField: UITextField) {
+        hideCursor = markedTextRange != nil
         removeCompletion()
 
         let isKeyboardReplacingText = lastReplacement != nil
         if isKeyboardReplacingText, markedTextRange == nil {
             notifyTextChanged?()
+        } else {
+            hideCursor = false
         }
     }
 
@@ -171,6 +187,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         let text = (self.text ?? "") // + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
+        hideCursor = false
 
         // Move the cursor to the end of the completion.
         if didRemoveCompletion {
@@ -204,6 +221,14 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
     private func normalizeString(_ string: String) -> String {
         return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
+    }
+
+    // Reset the cursor to the end of the text field.
+    // This forces `caretRect(for position: UITextPosition)` to be called which will decide if we should show the cursor
+    // This exists because `caretRect(for position: UITextPosition)` is not called after we apply an autocompletion.
+    private func forceResetCursor() {
+        selectedTextRange = nil
+        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
     }
 
     // MARK: - UITextFieldDelegate
