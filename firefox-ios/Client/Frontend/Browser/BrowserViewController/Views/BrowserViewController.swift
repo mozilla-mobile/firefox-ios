@@ -529,8 +529,10 @@ class BrowserViewController: UIViewController,
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
-        // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        scrollController.showToolbars(animated: false)
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+            // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+            scrollController.showToolbars(animated: false)
+        }
 
         browserDidBecomeActive()
     }
@@ -1105,7 +1107,11 @@ class BrowserViewController: UIViewController,
             adjustBottomContentStackView(remake)
         }
 
-        adjustBottomSearchBarForKeyboard()
+        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
+            scrollController.hideToolbars(animated: true, isFindInPageMode: true)
+        } else {
+            adjustBottomSearchBarForKeyboard()
+        }
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
@@ -3680,6 +3686,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
             })
 
         finishEditionMode()
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
+                                              doesFindInPageBarExist: findInPageBar != nil)
     }
 
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {

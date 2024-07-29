@@ -27,6 +27,7 @@ enum AppScreen {
     case remoteTabsPanel
     case tabPeek
     case microsurvey
+    case trackingProtection
     case toolbar
 }
 

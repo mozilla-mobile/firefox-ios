@@ -13,6 +13,7 @@ extension BrowserViewController {
         } else {
             useCustomFindInteraction(isVisible: isVisible, tab: tab)
         }
+        tabManager.selectedTab?.isFindInPageMode = isVisible && isBottomSearchBar
     }
 
     @available(iOS 16, *)
