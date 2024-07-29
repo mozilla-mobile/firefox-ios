@@ -53,6 +53,11 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         returnKeyType = .go
         delegate = self
 
+        // Disable dragging urls on iPhones because it conflicts with editing the text
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            textDragInteraction?.isEnabled = false
+        }
+
         notifyTextChanged = debounce(0.1,
                                      action: {
             if self.isEditing {
