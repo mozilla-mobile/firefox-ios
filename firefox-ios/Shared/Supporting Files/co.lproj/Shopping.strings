@@ -248,8 +248,8 @@
 "Shopping.Sheet.Title.v120" = "Verificadore d’avisu";
 
 /* Text for body of error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Verificate a vostra cunnessione di reta è pruvate di ricaricà a pagina.";
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Verificate a vostra cunnessione à a reta è pruvate di ricaricà a pagina.";
 
 /* Title for error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Nisuna cunnessione di reta";
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Nisuna cunnessione à a reta";
 
