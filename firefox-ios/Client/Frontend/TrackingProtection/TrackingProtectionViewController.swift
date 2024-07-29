@@ -663,7 +663,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     // MARK: Clear Cookies Button Setup
     private func setupClearCookiesButton() {
         let clearCookiesViewModel = TrackingProtectionButtonModel(title: viewModel.clearCookiesButtonTitle,
-                                                                      a11yIdentifier: viewModel.clearCookiesButtonA11yId)
+                                                                  a11yIdentifier: viewModel.clearCookiesButtonA11yId)
         clearCookiesButton.configure(viewModel: clearCookiesViewModel)
         baseView.addSubview(clearCookiesButton)
 

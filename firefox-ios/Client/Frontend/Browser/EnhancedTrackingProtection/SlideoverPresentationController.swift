@@ -89,11 +89,11 @@ class SlideOverPresentationController: UIPresentationController, FeatureFlaggabl
 
     @objc
     func dismissController() {
-        let trackingProtectionRefactorStatus = featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+        let trackingProtectionRefactorStatus = featureFlags.isFeatureEnabled(.trackingProtectionRefactor,
+                                                                             checking: .buildOnly)
         if trackingProtectionRefactorStatus {
             enhancedTrackingProtectionMenuDelegate?.didFinish()
-        }
-        else {
+        } else {
             legacyTrackingProtectionMenuDelegate?.didFinish()
         }
     }
