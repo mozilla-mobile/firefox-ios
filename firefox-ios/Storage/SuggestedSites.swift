@@ -9,10 +9,11 @@ open class SuggestedSite: Site {
     override open var tileURL: URL {
         return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
     }
-
+    public let faviconUrl: String
     let trackingId: Int
     init(data: SuggestedSiteData) {
         self.trackingId = data.trackingId
+        self.faviconUrl = data.faviconUrl
         super.init(url: data.url, title: data.title, bookmarked: nil)
         self.guid = "default" + data.title // A guid is required in the case the site might become a pinned site
     }
