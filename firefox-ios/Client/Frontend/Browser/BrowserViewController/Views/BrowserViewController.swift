@@ -1992,8 +1992,7 @@ class BrowserViewController: UIViewController,
     }
 
     func presentNewTabLongPressActionSheet(from view: UIView) {
-        let oneTapNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        guard presentedViewController == nil, oneTapNewTabEnabled else { return }
+        guard presentedViewController == nil else { return }
 
         let actions = getNewTabLongPressActions()
 
