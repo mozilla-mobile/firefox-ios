@@ -12,6 +12,7 @@ class ToolbarAction: Action {
     let toolbarPosition: AddressToolbarPosition?
     let numberOfTabs: Int?
     let url: URL?
+    let searchTerm: String?
     let isPrivate: Bool?
     let badgeImageName: String?
     let isShowingNavigationToolbar: Bool?
@@ -24,6 +25,7 @@ class ToolbarAction: Action {
          toolbarPosition: AddressToolbarPosition? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
+         searchTerm: String? = nil,
          isPrivate: Bool? = nil,
          badgeImageName: String? = nil,
          isShowingNavigationToolbar: Bool? = nil,
@@ -37,6 +39,7 @@ class ToolbarAction: Action {
         self.toolbarPosition = toolbarPosition
         self.numberOfTabs = numberOfTabs
         self.url = url
+        self.searchTerm = searchTerm
         self.isPrivate = isPrivate
         self.badgeImageName = badgeImageName
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
@@ -56,6 +59,7 @@ enum ToolbarActionType: ActionType {
     case scrollOffsetChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
+    case didPasteSearchTerm
 }
 
 class ToolbarMiddlewareAction: Action {

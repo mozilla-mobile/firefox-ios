@@ -13,6 +13,7 @@ struct AddressBarState: StateType, Equatable {
     var browserActions: [ToolbarActionState]
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
+    var searchTerm: String?
     var lockIconImageName: String
     var isEditing: Bool
     var isLoading: Bool
@@ -24,6 +25,7 @@ struct AddressBarState: StateType, Equatable {
                   browserActions: [],
                   borderPosition: nil,
                   url: nil,
+                  searchTerm: nil,
                   lockIconImageName: "",
                   isEditing: false,
                   isLoading: false)
@@ -35,6 +37,7 @@ struct AddressBarState: StateType, Equatable {
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
+         searchTerm: String? = nil,
          lockIconImageName: String,
          isEditing: Bool = false,
          isLoading: Bool = false) {
@@ -44,6 +47,7 @@ struct AddressBarState: StateType, Equatable {
         self.browserActions = browserActions
         self.borderPosition = borderPosition
         self.url = url
+        self.searchTerm = searchTerm
         self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
         self.isLoading = isLoading
@@ -63,7 +67,9 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: model.browserActions ?? state.browserActions,
                 borderPosition: model.borderPosition ?? state.borderPosition,
                 url: model.url,
-                lockIconImageName: model.lockIconImageName ?? state.lockIconImageName
+                searchTerm: state.searchTerm,
+                lockIconImageName: model.lockIconImageName ?? state.lockIconImageName,
+                isEditing: state.isEditing
             )
 
         case ToolbarActionType.numberOfTabsChanged:
@@ -76,7 +82,9 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
-                lockIconImageName: state.lockIconImageName
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing
             )
 
         case ToolbarActionType.addressToolbarActionsDidChange:
@@ -89,6 +97,7 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
+                searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing
             )
@@ -103,6 +112,7 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: addressToolbarModel.url,
+                searchTerm: nil,
                 lockIconImageName: addressToolbarModel.lockIconImageName ?? state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing
             )
@@ -118,7 +128,9 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
-                lockIconImageName: state.lockIconImageName
+                searchTerm: nil,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing
             )
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -131,7 +143,9 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
-                lockIconImageName: state.lockIconImageName
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing
             )
 
         case ToolbarActionType.scrollOffsetChanged,
@@ -145,7 +159,24 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: borderPosition,
                 url: state.url,
-                lockIconImageName: state.lockIconImageName
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing
+            )
+
+        case ToolbarActionType.didPasteSearchTerm:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: toolbarAction.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: true
             )
 
         default:
@@ -156,7 +187,9 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
-                lockIconImageName: state.lockIconImageName
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing
             )
         }
     }

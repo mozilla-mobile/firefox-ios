@@ -214,6 +214,10 @@ final class AddressToolbarContainer: UIView,
                                      trailingSpace: trailingToolbarSpace)
 
             _ = toolbarState.addressToolbar.isEditing ? becomeFirstResponder() : resignFirstResponder()
+
+            if !toolbarState.addressToolbar.isEditing {
+                leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
+            }
         }
     }
 
@@ -308,21 +312,23 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - Overlay Mode
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
-        // Show the overlay mode UI, which includes hiding the locationView and replacing it
-        // with the editable locationTextField.
-        animateToOverlayState(overlayMode: true)
-
+        guard let windowUUID else { return }
+        inOverlayMode = true
         delegate?.addressToolbarDidEnterOverlayMode(self)
+
+        if pasted {
+            let action = ToolbarAction(
+                searchTerm: locationText,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didPasteSearchTerm
+            )
+            store.dispatch(action)
+        }
     }
 
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
         _ = toolbar.resignFirstResponder()
-        animateToOverlayState(overlayMode: false, didCancel: cancel)
+        inOverlayMode = false
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
-    }
-
-    private func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
-        layoutIfNeeded()
-        inOverlayMode = overlay
     }
 }

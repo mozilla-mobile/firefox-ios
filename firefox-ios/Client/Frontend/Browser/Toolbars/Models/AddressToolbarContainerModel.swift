@@ -16,10 +16,14 @@ class AddressToolbarContainerModel: Equatable {
     let searchEngines: SearchEngines
     let lockIconImageName: String
     let url: URL?
+    let searchTerm: String?
+    let isEditing: Bool
 
     let windowUUID: UUID
 
     var addressToolbarState: AddressToolbarState {
+        let term = searchTerm ?? searchTermFromURL(url, searchEngines: searchEngines)
+
         let locationViewState = LocationViewState(
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
@@ -31,7 +35,8 @@ class AddressToolbarContainerModel: Equatable {
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
             url: url,
-            searchTerm: searchTermFromURL(url, searchEngines: searchEngines),
+            searchTerm: term,
+            isEditing: isEditing,
             onTapLockIcon: {
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      gestureType: .tap,
@@ -67,6 +72,8 @@ class AddressToolbarContainerModel: Equatable {
         self.searchEngines = profile.searchEngines
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.url = state.addressToolbar.url
+        self.searchTerm = state.addressToolbar.searchTerm
+        self.isEditing = state.addressToolbar.isEditing
     }
 
     func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
@@ -115,8 +122,10 @@ class AddressToolbarContainerModel: Equatable {
         lhs.browserActions == rhs.browserActions &&
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
-        lhs.url == rhs.url &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
+        lhs.url == rhs.url &&
+        lhs.searchTerm == rhs.searchTerm &&
+        lhs.isEditing == rhs.isEditing &&
         lhs.windowUUID == rhs.windowUUID
     }
 }
