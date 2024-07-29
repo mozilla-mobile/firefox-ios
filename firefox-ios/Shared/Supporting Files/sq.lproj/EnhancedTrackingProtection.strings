@@ -22,6 +22,9 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Lidhje jo e sigurt";
 
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "“Cookies” gjurmimi nga sajte në sajte: %@";
+
 /* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Krijues shenjash gishtash: %@";
 
