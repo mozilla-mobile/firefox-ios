@@ -88,6 +88,9 @@
 /* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
 "Addresses.EditAddress.AutofillAddressTel.v129" = "Telefon";
 
+/* Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component. */
+"Addresses.EditAddress.AutofillAddressTownland.v129" = "Townland";
+
 /* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
 "Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Vas ali okraj";
 
@@ -126,6 +129,9 @@
 
 /* Toast message indicating an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveError.v129" = "Naslova ni bilo mogoče shraniti";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "Naslova ni bilo mogoče odstraniti";
 
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Poskusi znova";
