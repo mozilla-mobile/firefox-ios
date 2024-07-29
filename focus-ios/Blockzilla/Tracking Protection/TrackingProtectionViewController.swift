@@ -193,7 +193,7 @@ class TrackingProtectionViewController: UIViewController {
     ]
 
     // MARK: - Views
-    private var headerHeight: Constraint?
+    private var headerHeight: NSLayoutConstraint?
 
     private lazy var header = TrackingHeaderView()
 
@@ -301,26 +301,36 @@ class TrackingProtectionViewController: UIViewController {
         if case let .browsing(browsingStatus) = state,
            let baseDomain = browsingStatus.url.baseDomain {
             view.addSubview(header)
-            header.snp.makeConstraints { make in
-                self.headerHeight = make.height.equalTo(UIConstants.layout.trackingProtectionHeaderHeight).constraint
-                make.leading.trailing.equalToSuperview()
-                make.top.equalTo(view.safeAreaLayoutGuide).offset(UIConstants.layout.trackingProtectionHeaderTopOffset)
-            }
+
+            header.translatesAutoresizingMaskIntoConstraints = false
+            headerHeight = header.heightAnchor.constraint(equalToConstant: UIConstants.layout.trackingProtectionHeaderHeight)
+            headerHeight?.isActive = true
+
+            NSLayoutConstraint.activate([
+                header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: UIConstants.layout.trackingProtectionHeaderTopOffset)
+            ])
+
             if let publisher = favIconPublisher {
                 header.configure(domain: baseDomain, publisher: publisher)
             }
         }
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            if case .browsing = state {
-                make.top.equalTo(header.snp.bottom)
-            } else {
-                make.top.equalTo(view).inset(self.tableViewTopInset)
-            }
-            make.leading.trailing.equalTo(self.view)
-            make.bottom.equalTo(self.view)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        if case .browsing = state {
+            tableView.topAnchor.constraint(equalTo: header.bottomAnchor).isActive = true
+        } else {
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: tableViewTopInset).isActive = true
         }
+
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func calculatePreferredSize() {
@@ -328,12 +338,12 @@ class TrackingProtectionViewController: UIViewController {
 
         preferredContentSize = CGSize(
             width: tableView.contentSize.width,
-            height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
+            height: tableView.contentSize.height + (headerHeight?.constant ?? .zero)
         )
         if UIDevice.current.userInterfaceIdiom == .pad {
             self.presentingViewController?.presentedViewController?.preferredContentSize = CGSize(
                 width: tableView.contentSize.width,
-                height: tableView.contentSize.height + (headerHeight?.layoutConstraints[0].constant ?? .zero)
+                height: tableView.contentSize.height + (headerHeight?.constant ?? .zero)
             )
         }
     }
