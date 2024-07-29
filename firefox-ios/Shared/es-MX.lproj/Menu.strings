@@ -4,6 +4,9 @@
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "Copiar enlace";
 
+/* Label for the button, displayed in the menu, downloads a pdf when pressed. */
+"Menu.DownloadPDF.Label.v129" = "Descargar PDF";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Encontrar en la página";
 
