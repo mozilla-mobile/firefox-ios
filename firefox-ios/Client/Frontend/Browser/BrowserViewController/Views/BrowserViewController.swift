@@ -122,6 +122,9 @@ class BrowserViewController: UIViewController,
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
+    var isOneTapNewTabRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+    }
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -2099,15 +2102,7 @@ class BrowserViewController: UIViewController,
     func presentTabsLongPressAction(from view: UIView) {
         guard presentedViewController == nil else { return }
 
-        var actions: [[PhotonRowActions]] = []
-        let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) &&
-                                                 featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        if useToolbarRefactorLongPressActions {
-            actions = getTabToolbarRefactorLongPressActions()
-        } else {
-            actions.append(getTabToolbarLongPressActionsForModeSwitching())
-            actions.append(getMoreTabToolbarLongPressActions())
-        }
+        let actions = getTabToolbarLongPressActions()
 
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,

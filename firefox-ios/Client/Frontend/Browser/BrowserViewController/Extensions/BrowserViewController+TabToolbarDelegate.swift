@@ -168,40 +168,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         )
     }
 
-    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonRowActions] {
-        guard let selectedTab = tabManager.selectedTab else { return [] }
-        let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
-        let infinity = "\u{221E}"
-        let tabCount = (count < 100) ? count.description : infinity
-
-        func action() {
-            let result = tabManager.switchPrivacyMode()
-            if result == .createdNewTab, self.newTabSettings == .blankPage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
-            }
-        }
-
-        let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
-                                                        iconString: StandardImageIdentifiers.Large.tab,
-                                                        iconType: .TabsButton,
-                                                        tabCount: tabCount) { _ in
-            action()
-        }.items
-
-        let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
-                                                       iconString: StandardImageIdentifiers.Large.tab,
-                                                       iconType: .TabsButton,
-                                                       tabCount: tabCount) { _ in
-            action()
-        }.items
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
-        }
-        return [privateBrowsingMode]
-    }
-
-    func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
+    func getTabToolbarLongPressActions() -> [[PhotonRowActions]] {
         let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
                                            iconString: StandardImageIdentifiers.Large.plus,
                                            iconType: .Image) { _ in
@@ -210,60 +177,79 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
 
-        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                                  iconString: StandardImageIdentifiers.Large.plus,
-                                                  iconType: .Image) { _ in
-            let shouldFocusLocationField = self.newTabSettings == .blankPage
-            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
-        }.items
+        if isToolbarRefactorEnabled && isOneTapNewTabRefactorEnabled {
+            let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
+                                                      iconString: StandardImageIdentifiers.Large.privateMode,
+                                                      iconType: .Image) { _ in
+                let shouldFocusLocationField = self.newTabSettings == .blankPage
+                self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
+                self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
+            }.items
 
-        let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab,
-                                             iconString: StandardImageIdentifiers.Large.cross,
-                                             iconType: .Image) { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTab(tab)
-                self.updateTabCountUsingTabManager(self.tabManager)
-                self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+            let closeTab = SingleActionViewModel(title: .Toolbars.tabToolbarLongPressActionsMenu.closeThisTabButton,
+                                                 iconString: StandardImageIdentifiers.Large.cross,
+                                                 iconType: .Image) { _ in
+                if let tab = self.tabManager.selectedTab {
+                    self.tabManager.removeTab(tab)
+                    self.updateTabCountUsingTabManager(self.tabManager)
+                    self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+                }
+            }.items
+
+            return [[newTab, newPrivateTab], [closeTab]]
+        } else {
+            guard let selectedTab = tabManager.selectedTab else { return [] }
+            let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
+            let infinity = "\u{221E}"
+            let tabCount = (count < 100) ? count.description : infinity
+
+            let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab,
+                                                 iconString: StandardImageIdentifiers.Large.cross,
+                                                 iconType: .Image) { _ in
+                if let tab = self.tabManager.selectedTab {
+                    self.tabManager.removeTab(tab)
+                    self.updateTabCountUsingTabManager(self.tabManager)
+                    self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
+                }
+            }.items
+
+            func action() {
+                let result = tabManager.switchPrivacyMode()
+                if result == .createdNewTab, self.newTabSettings == .blankPage {
+                    focusLocationTextField(forTab: tabManager.selectedTab)
+                }
             }
-        }.items
 
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
+            if let tab = self.tabManager.selectedTab, tab.isPrivate {
+                let normalBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.NormalBrowsingMode,
+                                                               iconString: StandardImageIdentifiers.Large.tab,
+                                                               iconType: .TabsButton,
+                                                               tabCount: tabCount) { _ in
+                    action()
+                }.items
+
+                let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
+                                                          iconString: StandardImageIdentifiers.Large.plus,
+                                                          iconType: .Image) { _ in
+                    let shouldFocusLocationField = self.newTabSettings == .blankPage
+                    self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
+                    self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
+                    TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
+                }.items
+
+                return [[normalBrowsingMode], [newPrivateTab, closeTab]]
+            } else {
+                let privateBrowsingMode = SingleActionViewModel(title: .KeyboardShortcuts.PrivateBrowsingMode,
+                                                                iconString: StandardImageIdentifiers.Large.tab,
+                                                                iconType: .TabsButton,
+                                                                tabCount: tabCount) { _ in
+                    action()
+                }.items
+
+                return [[privateBrowsingMode], [newTab, closeTab]]
+            }
         }
-        return [newTab, closeTab]
-    }
-
-    func getTabToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
-        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
-                                           iconString: StandardImageIdentifiers.Large.plus,
-                                           iconType: .Image) { _ in
-            let shouldFocusLocationField = self.newTabSettings == .blankPage
-            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
-        }.items
-
-        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                                  iconString: StandardImageIdentifiers.Large.privateMode,
-                                                  iconType: .Image) { _ in
-            let shouldFocusLocationField = self.newTabSettings == .blankPage
-            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
-        }.items
-
-        let closeTab = SingleActionViewModel(title: .Toolbars.tabToolbarLongPressActionsMenu.closeThisTabButton,
-                                             iconString: StandardImageIdentifiers.Large.cross,
-                                             iconType: .Image) { _ in
-            if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTab(tab)
-                self.updateTabCountUsingTabManager(self.tabManager)
-                self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
-            }
-        }.items
-
-        return [[newTab, newPrivateTab], [closeTab]]
     }
 
     func getNewTabLongPressActions() -> [[PhotonRowActions]] {
