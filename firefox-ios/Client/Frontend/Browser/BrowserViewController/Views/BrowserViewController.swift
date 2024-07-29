@@ -529,8 +529,10 @@ class BrowserViewController: UIViewController,
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
-        // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        scrollController.showToolbars(animated: false)
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+            // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+            scrollController.showToolbars(animated: false)
+        }
 
         browserDidBecomeActive()
     }
