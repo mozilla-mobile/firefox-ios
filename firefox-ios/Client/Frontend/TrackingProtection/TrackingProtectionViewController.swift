@@ -10,10 +10,10 @@ import SiteImageView
 
 struct TPMenuUX {
     struct Fonts {
-        static let websiteTitle: UIFont = .systemFont(ofSize: 17, weight: .semibold)
-        static let viewTitleLabels: UIFont = .systemFont(ofSize: 17, weight: .regular)
-        static let detailsLabel: UIFont = .systemFont(ofSize: 12, weight: .regular)
-        static let minorInfoLabel: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        static let websiteTitle: TextStyling = FXFontStyles.Regular.headline
+        static let viewTitleLabels: TextStyling = FXFontStyles.Regular.body
+        static let detailsLabel: TextStyling = FXFontStyles.Regular.caption1
+        static let minorInfoLabel: TextStyling = FXFontStyles.Regular.subheadline
     }
 
     struct UX {
@@ -37,6 +37,9 @@ struct TPMenuUX {
         static let clearDataButtonCornerRadius: CGFloat = 12
         static let clearDataButtonBorderWidth: CGFloat = 1
         static let settingsLinkButtonBottomSpacing: CGFloat = 32
+        static let connectionDetailsStackSpacing = 15.0
+
+        static let modalMenuCornerRadius: CGFloat = 12
         struct Line {
             static let height: CGFloat = 1
         }
@@ -114,11 +117,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         label.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    private var closeButton: UIButton = .build { button in
+    private var closeButton: CloseButton = .build { button in
         button.layer.cornerRadius = 0.5 * TPMenuUX.UX.closeButtonSize
-        button.clipsToBounds = true
-        button.imageView?.contentMode = .scaleAspectFit
-        button.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross), for: .normal)
     }
 
     // MARK: Connection Details View
@@ -142,7 +142,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         stack.distribution = .fillProportionally
         stack.alignment = .leading
         stack.axis = .vertical
-        stack.spacing = 15.0
+        stack.spacing = TPMenuUX.UX.connectionDetailsStackSpacing
     }
 
     private var connectionDetailsTitleLabel: UILabel = .build { label in
@@ -795,10 +795,11 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     @objc
     func connectionDetailsTapped() {
-//        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsViewModel(),
-//                                                                windowUUID: windowUUID)
-//        detailsVC.modalPresentationStyle = .pageSheet
-//        self.present(detailsVC, animated: true)
+        // TODO: FXIOS-9198 #20366 Enhanced Tracking Protection Connection details screen
+        //        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsViewModel(),
+        //                                                                windowUUID: windowUUID)
+        //        detailsVC.modalPresentationStyle = .pageSheet
+        //        self.present(detailsVC, animated: true)
     }
 
     @objc

@@ -18,9 +18,12 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              FeatureFlaggable {
     private let profile: Profile
     private let tabManager: TabManager
-    private let legacyEnhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC
-    private let enhancedTrackingProtectionMenuVC: TrackingProtectionViewController
+    private var legacyEnhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC?
+    private var enhancedTrackingProtectionMenuVC: TrackingProtectionViewController?
     weak var parentCoordinator: EnhancedTrackingProtectionCoordinatorDelegate?
+    private var trackingProtectionRefactorStatus: Bool {
+        featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
+    }
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
@@ -32,42 +35,43 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let contentBlockerStats = tab?.contentBlocker?.stats
         let connectionSecure = tab?.webView?.hasOnlySecureContent ?? true
-        let etpViewModel = TrackingProtectionModel(
-            url: url,
-            displayTitle: displayTitle,
-            connectionSecure: connectionSecure,
-            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-            contentBlockerStatus: contentBlockerStatus,
-            contentBlockerStats: contentBlockerStats
-        )
-
-        self.enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
-                                                                                 windowUUID: tabManager.windowUUID)
-        let oldEtpViewModel = EnhancedTrackingProtectionMenuVM(
-            url: url,
-            displayTitle: displayTitle,
-            connectionSecure: connectionSecure,
-            globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
-            contentBlockerStatus: contentBlockerStatus
-        )
-
-        self.legacyEnhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: oldEtpViewModel,
-                                                                                       windowUUID: tabManager.windowUUID)
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
-        enhancedTrackingProtectionMenuVC.enhancedTrackingProtectionMenuDelegate = self
+        if self.trackingProtectionRefactorStatus {
+            let etpViewModel = TrackingProtectionModel(
+                url: url,
+                displayTitle: displayTitle,
+                connectionSecure: connectionSecure,
+                globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+                contentBlockerStatus: contentBlockerStatus,
+                contentBlockerStats: contentBlockerStats
+            )
+
+            self.enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
+                                                                                     windowUUID: tabManager.windowUUID)
+        } else {
+            let oldEtpViewModel = EnhancedTrackingProtectionMenuVM(
+                url: url,
+                displayTitle: displayTitle,
+                connectionSecure: connectionSecure,
+                globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
+                contentBlockerStatus: contentBlockerStatus
+            )
+
+            self.legacyEnhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: oldEtpViewModel,
+                                                                                           windowUUID: tabManager.windowUUID)
+        }
+        enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
     }
 
     func start(sourceView: UIView) {
-        let trackingProtectionRefactorStatus =
-        featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
-        if trackingProtectionRefactorStatus {
+        if trackingProtectionRefactorStatus, let enhancedTrackingProtectionMenuVC {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 if let sheetPresentationController = enhancedTrackingProtectionMenuVC.sheetPresentationController {
                     sheetPresentationController.detents = [.medium(), .large()]
                     sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
-                    sheetPresentationController.preferredCornerRadius = 12
+                    sheetPresentationController.preferredCornerRadius = TPMenuUX.UX.modalMenuCornerRadius
                 }
                 router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
             } else {
@@ -80,7 +84,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
                 router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
             }
-        } else {
+        } else if let legacyEnhancedTrackingProtectionMenuVC {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 legacyEnhancedTrackingProtectionMenuVC.modalPresentationStyle = .custom
                 legacyEnhancedTrackingProtectionMenuVC.transitioningDelegate = self
