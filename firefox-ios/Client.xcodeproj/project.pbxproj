@@ -1026,6 +1026,7 @@
 		AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */; };
 		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB6FEA202AEA5CA200E7B2F2 /* FakespotAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */; };
+		AB7090862C593F14009F7E4C /* TrackingProtectionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7090852C593F14009F7E4C /* TrackingProtectionDetailsViewController.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
 		AB936A692C05F2B100600F82 /* TrackingProtectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */; };
 		AB9CBC022C53B64C00102610 /* TrackingProtectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9CBBFE2C53B64B00102610 /* TrackingProtectionAction.swift */; };
@@ -7014,6 +7015,7 @@
 		AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetHeaderView.swift; sourceTree = "<group>"; };
 		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
 		AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotAdView.swift; sourceTree = "<group>"; };
+		AB7090852C593F14009F7E4C /* TrackingProtectionDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionDetailsViewController.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
 		AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgentTests.swift"; sourceTree = "<group>"; };
 		AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionButton.swift; sourceTree = "<group>"; };
@@ -10924,6 +10926,7 @@
 				AB9CBC012C53B64B00102610 /* TrackingProtectionState.swift */,
 				AB2AC6652BD15E6300022AAB /* CertificatesHandler.swift */,
 				AB936A682C05F2B100600F82 /* TrackingProtectionButton.swift */,
+				AB7090852C593F14009F7E4C /* TrackingProtectionDetailsViewController.swift */,
 			);
 			path = TrackingProtection;
 			sourceTree = "<group>";
@@ -14978,6 +14981,7 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */,
 				435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */,
+				AB7090862C593F14009F7E4C /* TrackingProtectionDetailsViewController.swift in Sources */,
 				C855728429AEA3C300AF32B0 /* SurveySurfaceViewModel.swift in Sources */,
 				CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */,
 				C834ACD128D3ACA900203AD1 /* Blurrable.swift in Sources */,
