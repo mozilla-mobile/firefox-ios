@@ -53,8 +53,11 @@ class DefaultImageHandler: ImageHandler {
     }
 
     func fetchFavicon(site: SiteImageModel) async -> UIImage {
-        // TODO any extra work we should try here first?
-        return await fetchFaviconFromCache(site: site)
+        do {
+            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: site.expectedImageType)
+        } catch {
+            return await fetchFaviconFromFetcher(site: site)
+        }
     }
 
     func fetchHeroImage(site: SiteImageModel) async throws -> UIImage {
@@ -72,14 +75,6 @@ class DefaultImageHandler: ImageHandler {
     }
 
     // MARK: Private
-
-    private func fetchFaviconFromCache(site: SiteImageModel) async -> UIImage {
-        do {
-            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: site.expectedImageType)
-        } catch {
-            return await fetchFaviconFromFetcher(site: site)
-        }
-    }
 
     private func fetchFaviconFromFetcher(site: SiteImageModel) async -> UIImage {
         do {
