@@ -60,6 +60,7 @@ enum ToolbarActionType: ActionType {
     case toolbarPositionChanged
     case showMenuWarningBadge
     case didPasteSearchTerm
+    case cancelEdit
 }
 
 class ToolbarMiddlewareAction: Action {

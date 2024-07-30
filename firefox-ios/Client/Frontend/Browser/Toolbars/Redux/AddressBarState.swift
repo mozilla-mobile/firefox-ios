@@ -179,6 +179,21 @@ struct AddressBarState: StateType, Equatable {
                 isEditing: true
             )
 
+        case ToolbarActionType.cancelEdit:
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: nil,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing
+            )
+
         default:
             return AddressBarState(
                 windowUUID: state.windowUUID,
