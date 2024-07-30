@@ -510,7 +510,7 @@ public struct AccessibilityIdentifiers {
             static let fxaSignInButton = "EmailSignIn.button"
             static let qrButton = "QRCodeSignIn.button"
             static let qrScanFailedAlertOkButton = "qrCodeAlert.okButton"
-            static let signInButton = "Sign up"
+            static let signInButton = "Sign in"
         }
 
         struct Search {
