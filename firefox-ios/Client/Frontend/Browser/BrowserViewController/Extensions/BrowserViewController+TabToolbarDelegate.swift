@@ -247,10 +247,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
-            // By checking whether the refactor is enabled, we will only record telemetry for old tab tray action
-            if !isRefactorEnabled {
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
-            }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
         }.items
     }
 
