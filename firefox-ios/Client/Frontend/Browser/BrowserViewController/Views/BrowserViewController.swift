@@ -1993,7 +1993,7 @@ class BrowserViewController: UIViewController,
 
     func presentNewTabLongPressActionSheet(from view: UIView) {
         let actions = getNewTabLongPressActions()
-        
+
         let shouldPresentAsPopover = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         let style: UIModalPresentationStyle = shouldPresentAsPopover ? .popover : .overCurrentContext
         let viewModel = PhotonActionSheetViewModel(

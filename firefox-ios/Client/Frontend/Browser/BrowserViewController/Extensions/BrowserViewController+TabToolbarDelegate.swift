@@ -241,8 +241,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     private func getNewPrivateTabAction() -> PhotonRowActions {
         let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
+        let iconString = isRefactorEnabled ? StandardImageIdentifiers.Large.privateMode : StandardImageIdentifiers.Large.plus
         return SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                     iconString: isRefactorEnabled ? StandardImageIdentifiers.Large.privateMode : StandardImageIdentifiers.Large.plus,
+                                     iconString: iconString,
                                      iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
@@ -253,7 +254,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     private func getCloseTabAction() -> PhotonRowActions {
         let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
-        return SingleActionViewModel(title: isRefactorEnabled ? .Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton : .KeyboardShortcuts.CloseCurrentTab,
+        let title = isRefactorEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
+                                        String.KeyboardShortcuts.CloseCurrentTab
+        return SingleActionViewModel(title: title,
                                      iconString: StandardImageIdentifiers.Large.cross,
                                      iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {

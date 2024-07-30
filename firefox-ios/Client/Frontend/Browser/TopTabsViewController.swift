@@ -72,7 +72,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
         if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) &&
-           self.featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly){
+           self.featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
             let longPressRecognizer = UILongPressGestureRecognizer(
                 target: self,
                 action: #selector(TopTabsViewController.newTabLongPressed)
