@@ -1992,8 +1992,6 @@ class BrowserViewController: UIViewController,
     }
 
     func presentNewTabLongPressActionSheet(from view: UIView) {
-        guard presentedViewController == nil else { return }
-
         let actions = getNewTabLongPressActions()
         
         let shouldPresentAsPopover = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
