@@ -47,7 +47,10 @@ class ToolbarButton: UIButton, ThemeApplicable {
         configureLongPressGestureRecognizerIfNeeded(for: element)
         shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
 
-        let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
+        let image = UIImage(named: element.iconName)?
+            .withRenderingMode(.alwaysTemplate)
+            .imageFlippedForRightToLeftLayoutDirection()
+
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
