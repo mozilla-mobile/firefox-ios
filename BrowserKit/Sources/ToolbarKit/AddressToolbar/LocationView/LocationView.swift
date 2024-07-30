@@ -244,6 +244,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextField.text = state.isEditing ? state.searchTerm : state.url?.absoluteString
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = urlTextField.text
+
+        if state.isEditing, state.searchTerm != nil, let text = urlTextField.text {
+            locationTextField(urlTextField, didEnterText: text)
+        }
     }
 
     private func formatAndTruncateURLTextField() {
