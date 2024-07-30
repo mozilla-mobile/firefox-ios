@@ -30,6 +30,18 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.navigateTo, .newTab)
     }
 
+    func testShowNewTabLongpPressActions() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showNewTabLongPressActions)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .newTabLongPressActions)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)

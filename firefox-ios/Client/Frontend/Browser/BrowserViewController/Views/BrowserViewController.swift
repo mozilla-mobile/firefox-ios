@@ -122,6 +122,9 @@ class BrowserViewController: UIViewController,
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
+    var isOneTapNewTabEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+    }
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -1899,7 +1902,7 @@ class BrowserViewController: UIViewController,
         case .backForwardList:
             navigationHandler?.showBackForwardList()
         case .tabsLongPressActions:
-            presentActionSheet(from: view)
+            presentTabsLongPressAction(from: view)
         case .locationViewLongPressAction:
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
@@ -1921,6 +1924,8 @@ class BrowserViewController: UIViewController,
         case .share:
             guard let button = state.buttonTapped else { return }
             didTapOnShare(from: button)
+        case .newTabLongPressActions:
+            presentNewTabLongPressActionSheet(from: view)
         }
     }
 
@@ -1984,6 +1989,19 @@ class BrowserViewController: UIViewController,
         )
 
         presentSheetWith(viewModel: viewModel, on: self, from: button)
+    }
+
+    func presentNewTabLongPressActionSheet(from view: UIView) {
+        let actions = getNewTabLongPressActions()
+
+        let shouldPresentAsPopover = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        let style: UIModalPresentationStyle = shouldPresentAsPopover ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func didTapOnHome() {
@@ -2078,12 +2096,18 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func presentActionSheet(from view: UIView) {
+    func presentTabsLongPressAction(from view: UIView) {
         guard presentedViewController == nil else { return }
 
         var actions: [[PhotonRowActions]] = []
-        actions.append(getTabToolbarLongPressActionsForModeSwitching())
-        actions.append(getMoreTabToolbarLongPressActions())
+        let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) &&
+                                                 featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        if useToolbarRefactorLongPressActions {
+            actions = getTabToolbarRefactorLongPressActions()
+        } else {
+            actions.append(getTabToolbarLongPressActionsForModeSwitching())
+            actions.append(getMoreTabToolbarLongPressActions())
+        }
 
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,
@@ -3740,6 +3764,10 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         overlayManager.openNewTab(url: nil,
                                   newTabSettings: newTabSettings)
+    }
+
+    func topTabsDidLongPressNewTab(button: UIButton) {
+        presentNewTabLongPressActionSheet(from: button)
     }
 
     func topTabsDidChangeTab() {
