@@ -1785,11 +1785,21 @@ class BrowserViewController: UIViewController,
         return tab.url?.isReaderModeURL == false ? lockIconImageName : nil
     }
 
+    func dispatchReaderModeStateChangedAction(for tab: Tab?, readerModeState: ReaderModeState) {
+        let action = ToolbarMiddlewareAction(
+            lockIconImageName: lockIconImageName(for: tab),
+            readerModeState: readerModeState,
+            windowUUID: windowUUID,
+            actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+        )
+        store.dispatch(action)
+    }
+
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            guard let hasSecureContent = tab.webView?.hasOnlySecureContent else { return }
+            guard tab.webView?.hasOnlySecureContent == true else { return }
 
             let action = ToolbarMiddlewareAction(
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
@@ -3443,13 +3453,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             if isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(
-                    lockIconImageName: lockIconImageName(for: selected),
-                    readerModeState: readerMode.state,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.readerModeStateChanged
-                )
-                store.dispatch(action)
+                dispatchReaderModeStateChangedAction(for: selected, readerModeState: readerMode.state)
             } else {
                 urlBar.updateReaderModeState(readerMode.state)
             }
@@ -3460,13 +3464,7 @@ extension BrowserViewController: TabManagerDelegate {
             }
         } else {
             if isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(
-                    lockIconImageName: lockIconImageName(for: selected),
-                    readerModeState: .unavailable,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.readerModeStateChanged
-                )
-                store.dispatch(action)
+                dispatchReaderModeStateChangedAction(for: selected, readerModeState: .unavailable)
             } else {
                 urlBar.updateReaderModeState(.unavailable)
             }

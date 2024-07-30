@@ -9,19 +9,12 @@ import Common
 extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // Update reader mode state if is the selected tab. Otherwise it will update once is active
-        if tabManager.selectedTab === tab {
+        guard tabManager.selectedTab === tab else { return }
             if isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(
-                    lockIconImageName: lockIconImageName(for: tab),
-                    readerModeState: state,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.readerModeStateChanged
-                )
-                store.dispatch(action)
+                dispatchReaderModeStateChangedAction(for: tab, readerModeState: state)
             } else {
                 urlBar.updateReaderModeState(state)
             }
-        }
     }
 
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
