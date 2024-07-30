@@ -9,7 +9,6 @@ import Common
 @testable import Client
 
 class AddressLocaleFeatureValidatorTests: XCTestCase {
-
     func testValidRegionCA() {
         let locale = Locale(identifier: "en_CA")
         XCTAssertTrue(
