@@ -770,7 +770,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
-            app.tables.cells.switches["Recently Saved"].tap()
+            app.tables.cells.switches["Bookmarks"].tap()
         }
 
         screenState.backAction = navigationControllerBackAction
