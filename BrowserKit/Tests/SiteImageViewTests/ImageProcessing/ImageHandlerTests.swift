@@ -7,7 +7,6 @@ import LinkPresentation
 @testable import SiteImageView
 
 final class ImageHandlerTests: XCTestCase {
-    private var bundleImageFetcher: MockBundleImageFetcher!
     private var heroImageFetcher: MockHeroImageFetcher!
     private var siteImageCache: MockSiteImageCache!
     private var faviconFetcher: MockFaviconFetcher!
@@ -15,7 +14,6 @@ final class ImageHandlerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.bundleImageFetcher = MockBundleImageFetcher()
         self.heroImageFetcher = MockHeroImageFetcher()
         self.siteImageCache = MockSiteImageCache()
         self.faviconFetcher = MockFaviconFetcher()
@@ -24,7 +22,6 @@ final class ImageHandlerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        self.bundleImageFetcher = nil
         self.heroImageFetcher = nil
         self.siteImageCache = nil
         self.faviconFetcher = nil
@@ -46,26 +43,6 @@ final class ImageHandlerTests: XCTestCase {
                               heroImage: nil)
     }
 
-    func testFavicon_whenImageInBundle_returnsBundleImage() async {
-        let expectedResult = UIImage()
-        bundleImageFetcher.image = expectedResult
-        let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla", imageURL: URL(string: "www.mozilla.com"))
-        let result = await subject.fetchFavicon(site: site)
-        XCTAssertEqual(expectedResult, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 1)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 0)
-
-        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
-        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
-
-        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
-
-        XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-    }
-
     func testFavicon_whenImageInCache_returnsCacheImage() async {
         let expectedResult = UIImage()
         siteImageCache.image = expectedResult
@@ -73,8 +50,6 @@ final class ImageHandlerTests: XCTestCase {
         let site = createSiteImageModel(cacheKey: "Mozilla", imageURL: URL(string: "www.mozilla.com"))
         let result = await subject.fetchFavicon(site: site)
         XCTAssertEqual(expectedResult, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
@@ -93,8 +68,6 @@ final class ImageHandlerTests: XCTestCase {
         let result = await subject.fetchFavicon(site: site)
 
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -115,8 +88,6 @@ final class ImageHandlerTests: XCTestCase {
         let result = await subject.fetchFavicon(site: site)
 
         XCTAssertEqual(expectedResult, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -135,8 +106,6 @@ final class ImageHandlerTests: XCTestCase {
         let result = await subject.fetchFavicon(site: site)
 
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -231,8 +200,6 @@ final class ImageHandlerTests: XCTestCase {
 
         let result = await subject.fetchFavicon(site: site)
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
@@ -254,8 +221,6 @@ final class ImageHandlerTests: XCTestCase {
 
         let result = await subject.fetchFavicon(site: site)
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -280,28 +245,10 @@ final class ImageHandlerTests: XCTestCase {
 
 private extension ImageHandlerTests {
     func createSubject() -> ImageHandler {
-        return DefaultImageHandler(bundleImageFetcher: bundleImageFetcher,
-                                   imageCache: siteImageCache,
+        return DefaultImageHandler(imageCache: siteImageCache,
                                    faviconFetcher: faviconFetcher,
                                    letterImageGenerator: letterImageGenerator,
                                    heroImageFetcher: heroImageFetcher)
-    }
-}
-
-// MARK: - MockBundleImageFetcher
-private class MockBundleImageFetcher: BundleImageFetcher {
-    var image: UIImage?
-    var getImageFromBundleSucceedCalled = 0
-    var getImageFromBundleFailedCalled = 0
-
-    func getImageFromBundle(domain: ImageDomain?) throws -> UIImage {
-        if let image = image {
-            getImageFromBundleSucceedCalled += 1
-            return image
-        } else {
-            getImageFromBundleFailedCalled += 1
-            throw SiteImageError.noImageInBundle
-        }
     }
 }
 
