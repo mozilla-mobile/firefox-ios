@@ -45,16 +45,16 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? "", invalidCharacters: false),
                                                faviconURL: imageModel.faviconURL,
                                                type: imageModel.expectedImageType)
-
-        do {
-            switch site.expectedImageType {
-            case .heroImage:
+       
+        switch site.expectedImageType {
+        case .heroImage:
+            do {
                 imageModel.heroImage = try await getHeroImage(imageModel: imageModel)
-            case .favicon:
+            } catch {
+                // If hero image fails, we return a favicon image
                 imageModel.faviconImage = await getFaviconImage(imageModel: imageModel)
             }
-        } catch {
-            // If hero image fails, we return a favicon image
+        case .favicon:
             imageModel.faviconImage = await getFaviconImage(imageModel: imageModel)
         }
 
