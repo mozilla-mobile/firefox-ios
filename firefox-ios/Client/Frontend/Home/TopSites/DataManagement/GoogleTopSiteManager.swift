@@ -16,6 +16,9 @@ class GoogleTopSiteManager {
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
 
+        // Google favicon URL
+        static let faviconUrl = "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png"
+
         // The number of tiles taken by Google top site manager
         static let reservedSpaceCount = 1
     }
@@ -26,11 +29,13 @@ class GoogleTopSiteManager {
     private var url: String? {
         // Couldn't find a valid region hence returning a nil value for url
         guard let regionCode = Locale.current.regionCode, !invalidRegion.contains(regionCode) else { return nil }
+
         // Special case for US
         if regionCode == "US" {
             return Constants.usUrl
+        } else {
+            return Constants.rowUrl
         }
-        return Constants.rowUrl
     }
 
     var hasAdded: Bool {
@@ -61,12 +66,12 @@ class GoogleTopSiteManager {
         self.prefs = prefs
     }
 
-    func suggestedSiteData() -> PinnedSite? {
+    var suggestedSiteData: PinnedSite? {
         guard let url = self.url else { return nil }
 
         let pinnedSite = PinnedSite(
             site: Site(url: url, title: "Google"),
-            faviconURL: "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png"
+            faviconURL: Constants.faviconUrl
         )
         pinnedSite.guid = Constants.googleGUID
         return pinnedSite
@@ -75,7 +80,7 @@ class GoogleTopSiteManager {
     // Once Google top site is added, we don't remove unless it's explicitly unpinned
     // Add it when pinned websites are less than max pinned sites
     func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
-        let shouldShow = !isHidden && suggestedSiteData() != nil
+        let shouldShow = !isHidden && suggestedSiteData != nil
         return shouldShow && (hasAdded || hasSpace)
     }
 
@@ -85,7 +90,7 @@ class GoogleTopSiteManager {
     }
 
     func addGoogleTopSite(sites: inout [Site]) {
-        guard let googleSite = suggestedSiteData() else { return }
+        guard let googleSite = suggestedSiteData else { return }
         sites.insert(googleSite, at: 0)
         hasAdded = true
     }
