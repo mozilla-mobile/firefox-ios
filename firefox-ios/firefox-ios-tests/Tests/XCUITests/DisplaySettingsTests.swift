@@ -5,12 +5,6 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
         navigator.nowAt(NewTabScreen)

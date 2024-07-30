@@ -20,12 +20,6 @@ let homeTabName = "Homepage"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 
 class DragAndDropTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-    
 //  Disable test suite since in theory it does not make sense with Chron tabs implementation
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait

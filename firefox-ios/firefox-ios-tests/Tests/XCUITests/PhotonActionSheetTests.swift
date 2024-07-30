@@ -6,12 +6,6 @@ import XCTest
 import Common
 
 class PhotonActionSheetTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306849
     // Smoketest
     func testPinToShortcuts() {

@@ -5,12 +5,6 @@
 import XCTest
 
 class DataManagementTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // Testing the search bar, and clear website data option
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307015
     func testWebSiteDataOptions() {

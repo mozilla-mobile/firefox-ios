@@ -6,12 +6,6 @@ import Foundation
 import Common
 
 class ToolbarMenuTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     override func tearDown() {
         XCUIDevice.shared.orientation = .portrait
         super.tearDown()

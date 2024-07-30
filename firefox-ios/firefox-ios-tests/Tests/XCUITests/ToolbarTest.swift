@@ -16,8 +16,6 @@ class ToolbarTests: BaseTestCase {
     override func setUp() {
         super.setUp()
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
     }
 
     override func tearDown() {

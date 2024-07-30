@@ -17,8 +17,6 @@ class URLValidationTests: BaseTestCase {
         scrollToElement(app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"])
         app.tables.switches["FirefoxSuggestShowNonSponsoredSuggestions"].tap()
         navigator.goto(NewTabScreen)
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2460854

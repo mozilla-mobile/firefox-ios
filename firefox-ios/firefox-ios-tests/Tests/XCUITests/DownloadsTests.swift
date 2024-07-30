@@ -13,12 +13,6 @@ let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-downloa
 let testBLOBFileSize = "35 bytes"
 
 class DownloadsTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     override func tearDown() {
         // The downloaded file has to be removed between tests
         app.terminate()
@@ -127,7 +121,6 @@ class DownloadsTests: BaseTestCase {
         shareButton.tap(force: true)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
-        /*
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         } else {
@@ -140,7 +133,6 @@ class DownloadsTests: BaseTestCase {
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
             app.buttons["Done"].tap(force: true)
         }
-         */
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306902

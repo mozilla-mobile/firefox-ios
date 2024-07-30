@@ -14,12 +14,6 @@ let url2Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-    
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307004
     func testPrivateTabDoesNotTrackHistory() {
@@ -303,12 +297,6 @@ fileprivate extension BaseTestCase {
 }
 
 class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-    
     // This test is disabled for iPad because the toast menu is not shown there
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307013
     // Smoketest

@@ -5,12 +5,6 @@
 import XCTest
 
 class SettingsTests: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     private func checkShowImages(showImages: Bool = true) {
         let noImageStatusMode = app.otherElements.tables.cells.switches["NoImageModeStatus"]
         mozWaitForElementToExist(noImageStatusMode)

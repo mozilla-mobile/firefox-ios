@@ -18,12 +18,6 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307042
     // Smoketest
     func testAddTabFromTabTray() throws {

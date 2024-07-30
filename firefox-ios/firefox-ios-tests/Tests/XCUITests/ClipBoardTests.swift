@@ -6,12 +6,6 @@ import XCTest
 
 class ClipBoardTests: BaseTestCase {
     let url = "www.example.com"
-    
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
 
     // Check for test url in the browser
     func checkUrl() {
