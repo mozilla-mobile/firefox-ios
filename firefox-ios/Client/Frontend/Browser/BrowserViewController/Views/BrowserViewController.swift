@@ -2540,10 +2540,6 @@ class BrowserViewController: UIViewController,
         return (userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true)
     }
 
-    private func addressAutofillNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
-    }
-
     private func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyAddressAutofill = PrefsKeys.KeyAutofillAddressStatus
@@ -2563,7 +2559,7 @@ class BrowserViewController: UIViewController,
             switch fieldValues.fieldValue {
             case .address:
                 guard addressAutofillSettingsUserDefaultsIsEnabled(),
-                      addressAutofillNimbusFeatureFlag(),
+                      AddressLocaleFeatureValidator.isValidRegion(),
                       // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
                       let type = type else { return }
 
