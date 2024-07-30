@@ -1995,9 +1995,9 @@ class BrowserViewController: UIViewController,
         guard presentedViewController == nil else { return }
 
         let actions = getNewTabLongPressActions()
-
-        let shouldSuppress = UIDevice.current.userInterfaceIdiom != .pad
-        let style: UIModalPresentationStyle = !shouldSuppress ? .popover : .overCurrentContext
+        
+        let shouldPresentAsPopover = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        let style: UIModalPresentationStyle = shouldPresentAsPopover ? .popover : .overCurrentContext
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,
             closeButtonTitle: .CloseButtonTitle,
