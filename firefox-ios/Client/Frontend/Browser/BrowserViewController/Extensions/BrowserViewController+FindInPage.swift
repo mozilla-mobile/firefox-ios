@@ -22,7 +22,7 @@ extension BrowserViewController {
 
         if isVisible {
             webView.isFindInteractionEnabled = true
-            webView.findInteraction?.searchText = searchText
+            webView.findInteraction?.searchText = searchText ?? ""
             webView.findInteraction?.presentFindNavigator(showingReplace: false)
         } else {
             webView.findInteraction?.dismissFindNavigator()

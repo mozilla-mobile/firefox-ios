@@ -97,6 +97,9 @@
 /* Toast message indicating an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveError.v129" = "Osoitetta ei voitu tallentaa";
 
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "Osoitetta ei voitu poistaa";
+
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Yritä uudelleen";
 

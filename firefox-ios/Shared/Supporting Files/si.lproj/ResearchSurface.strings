@@ -1,5 +1,5 @@
 /* On the Research Survey popup, the text that explains what the screen is about. Placeholder is for the app name. */
-"Body.Text.v112" = "කෙටි සමීක්‍ෂණයෙන් %@ දියුණු කිරීමට උදවු කරන්න.";
+"Body.Text.v112" = "කෙටි සමීක්‍ෂණයෙන් %@ දියුණු කිරීමට උදව් කරන්න.";
 
 /* On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey. */
 "PrimaryButton.Label.v112" = "සමීක්‍ෂණය ගන්න";

@@ -7,3 +7,9 @@
 /* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
 "CloseTabsToast.Title.v113" = "Pestañas cerradas: %d";
 
+/* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
+"InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Cerrar";
+
+/* Button label to sync tabs in your account */
+"TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sincronizar pestañas";
+

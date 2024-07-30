@@ -64,7 +64,7 @@
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Skydd är AV. Vi föreslår att du slår på det igen.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Skydd är AV. Vi föreslår att du slår på dem igen.";
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Skydd är AV. Vi föreslår att du slår på det igen.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Om något ser trasigt ut på den här webbplatsen, försök att stänga av det.";
