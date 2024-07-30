@@ -28,16 +28,17 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var iconName: String
     var badgeImageName: String?
     var numberOfTabs: Int?
+    var isShowingTopTabs: Bool?
     var isEnabled: Bool
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
 
-    var canPerformLongPressAction: Bool {
+    func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
         return actionType == .back ||
                actionType == .forward ||
                actionType == .reload ||
                actionType == .newTab ||
-               (actionType == .tabs && UIDevice.current.userInterfaceIdiom != .pad)
+               (actionType == .tabs && isShowingTopTabs == false)
     }
 }
