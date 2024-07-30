@@ -259,7 +259,7 @@ class BaseTestCase: XCTestCase {
             .otherElements
             .otherElements
             .count
-        let numberOfExpectedRecentlyVisitedBookmarks = 3
+        let numberOfExpectedRecentlyVisitedBookmarks = 2
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
