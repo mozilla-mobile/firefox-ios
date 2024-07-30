@@ -277,21 +277,6 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     // MARK: - Debounce
-
-    // Encapsulate a callback in a way that we can use it with NSTimer.
-    private class Callback {
-        private let handler: () -> Void
-
-        init(handler: @escaping () -> Void) {
-            self.handler = handler
-        }
-
-        @objc
-        func go() {
-            handler()
-        }
-    }
-
     /**
       * Taken from http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call
       * Allows creating a block that will fire after a delay. Resets the timer if called again before the delay expires.
