@@ -1811,6 +1811,7 @@ class BrowserViewController: UIViewController,
             store.dispatch(action)
             return
         }
+
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
             let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
@@ -1819,13 +1820,11 @@ class BrowserViewController: UIViewController,
                 searchData: searchData,
                 isPrivate: tab.isPrivate)
         }
+
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
-
-        if !isToolbarRefactorEnabled {
-            navigationToolbar.updatePageStatus(isPage)
-        }
+        navigationToolbar.updatePageStatus(isPage)
     }
 
     func didSubmitSearchText(_ text: String) {
@@ -2905,6 +2904,15 @@ class BrowserViewController: UIViewController,
 
     // MARK: - AddressToolbarContainerDelegate
     func searchSuggestions(searchTerm: String) {
+        openSuggestions(searchTerm: searchTerm)
+        searchLoader?.query = searchTerm
+    }
+
+    func openBrowser(searchTerm: String) {
+        didSubmitSearchText(searchTerm)
+    }
+
+    func openSuggestions(searchTerm: String) {
         if searchTerm.isEmpty {
             hideSearchController()
         } else {
@@ -2913,15 +2921,8 @@ class BrowserViewController: UIViewController,
         searchController?.viewModel.searchQuery = searchTerm
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
-        searchLoader?.query = searchTerm
         searchController?.searchTelemetry?.determineInteractionType()
     }
-
-    func openBrowser(searchTerm: String) {
-        didSubmitSearchText(searchTerm)
-    }
-
-    func openSuggestions(searchTerm: String) {}
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }

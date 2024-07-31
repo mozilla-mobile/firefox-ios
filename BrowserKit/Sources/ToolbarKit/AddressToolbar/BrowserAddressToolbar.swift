@@ -251,6 +251,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     }
 
     // MARK: - LocationViewDelegate
+    func locationViewDidRestoreSearchTerm(_ text: String) {
+        toolbarDelegate?.openSuggestions(searchTerm: text)
+    }
+
     func locationViewDidEnterText(_ text: String) {
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
@@ -269,8 +273,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
 
-    func locationViewDidCancelEditing() {
-    }
+    func locationViewDidCancelEditing() {}
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {

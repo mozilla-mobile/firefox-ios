@@ -213,8 +213,6 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
-            _ = toolbarState.addressToolbar.isEditing ? becomeFirstResponder() : resignFirstResponder()
-
             if !toolbarState.addressToolbar.isEditing {
                 leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
             }
