@@ -613,7 +613,12 @@ class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
-        guard !isPrivateMode else {
+        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyUIEnabled &&
+                                            isFeltPrivacyDeletionEnabled && isToolbarRefactorEnabled
+        if shouldShowDataClearanceAction {
             return dataClearanceAction
         }
 
