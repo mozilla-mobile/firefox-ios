@@ -50,8 +50,8 @@ final class MicrosurveyTests: BaseTestCase {
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.tap()
 
-        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo].exists)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].exists)
+        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
         let tablesQuery = app.scrollViews.otherElements.tables
         let firstOption = tablesQuery.cells.firstMatch
         firstOption.tap()
