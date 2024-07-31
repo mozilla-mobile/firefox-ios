@@ -17,11 +17,11 @@ class AuthenticationTest: BaseTestCase {
             "A username and password are being requested by jigsaw.w3.org. The site says: test"
         ])
 
-        let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0).value as! String
-        let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0).value as! String
+        let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0)
+        let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0)
 
-        mozWaitForValueContains(app.alerts.textFields.element(boundBy: 0), value: "Username")
-        mozWaitForValueContains(app.alerts.secureTextFields.element(boundBy: 0), value: "Password")
+        mozWaitForValueContains(placeholderValueUsername, value: "Username")
+        mozWaitForValueContains(placeholderValuePassword, value: "Password")
 
         mozWaitForElementToExist(app.alerts.buttons["Cancel"])
         mozWaitForElementToExist(app.alerts.buttons["Log in"])
