@@ -40,7 +40,6 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
             attributedStatusText: statusText,
             settingDidChange: {
-                AdjustHelper.setEnabled($0)
                 DefaultGleanWrapper.shared.setUpload(isEnabled: $0)
                 Experiments.setTelemetrySetting($0)
             }
