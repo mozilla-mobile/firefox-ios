@@ -37,6 +37,8 @@ class MockTabManager: TabManager {
     var addTabsForURLsCalled = 0
     var addTabsURLs: [URL] = []
 
+    var removeTabsByURLCalled = 0
+
     init(windowUUID: WindowUUID = WindowUUID.XCTestDefaultUUID) {
         self.windowUUID = windowUUID
     }
@@ -91,6 +93,10 @@ class MockTabManager: TabManager {
     func removeTab(_ tabUUID: String) async {}
 
     func removeAllTabs(isPrivateMode: Bool) async {}
+
+    func removeTabs(by urls: [URL]) async {
+        removeTabsByURLCalled += 1
+    }
 
     func undoCloseAllTabs() {}
 
