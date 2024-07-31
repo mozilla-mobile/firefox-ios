@@ -115,7 +115,8 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
             childViewController: instructionsVC,
-            usingDimmedBackground: true)
+            usingDimmedBackground: true,
+            windowUUID: windowUUID)
 
         instructionsVC.dismissDelegate = bottomSheetVC
 
