@@ -73,7 +73,7 @@ class SyncUITests: BaseTestCase {
         // Enter only email, wrong and correct and tap sign in
         userState.fxaUsername = "foo1bar2baz3@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATapOnSignInButton)
+        navigator.performAction(Action.FxATapOnContinueButton)
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
