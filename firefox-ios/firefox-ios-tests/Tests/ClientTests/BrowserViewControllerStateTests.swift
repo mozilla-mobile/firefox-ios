@@ -42,6 +42,18 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.displayView, .newTabLongPressActions)
     }
 
+    func testClearDataAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .clearData)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .dataClearance)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
