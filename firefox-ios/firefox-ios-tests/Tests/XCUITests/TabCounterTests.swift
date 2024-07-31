@@ -6,6 +6,12 @@ import Common
 import XCTest
 
 class TabCounterTests: BaseTestCase {
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2359077
     func testTabIncrement() throws {
         navigator.nowAt(NewTabScreen)
@@ -83,7 +89,7 @@ class TabCounterTests: BaseTestCase {
         tabsOpen = app.segmentedControls.buttons.element(boundBy: 0).label
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         if !isTablet {
-            mozWaitForElementToExist(app.segmentedControls.firstMatch, timeout: 5)
+            mozWaitForElementToExist(app.segmentedControls.firstMatch)
             let tabsOpenTabTray: String = app.segmentedControls.buttons.firstMatch.label
             XCTAssertTrue(tabsOpenTabTray.hasSuffix("1"))
         }

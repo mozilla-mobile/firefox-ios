@@ -15,7 +15,7 @@ class ThirdPartySearchTest: BaseTestCase {
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
-        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
+        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"])
         app.navigationBars["Search"].buttons["Settings"].tap()
         mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
@@ -64,7 +64,7 @@ class ThirdPartySearchTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306941
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
-        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
+        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"])
 
         app.navigationBars["Search"].buttons["Settings"].tap()
         mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
@@ -75,10 +75,9 @@ class ThirdPartySearchTest: BaseTestCase {
         app.textFields.firstMatch.press(forDuration: 1)
         app.staticTexts["Paste"].tap()
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-        XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         app.tables["Context Menu"].otherElements["Settings"].tap()
@@ -91,7 +90,7 @@ class ThirdPartySearchTest: BaseTestCase {
             dismissSearchScreen()
 
             // Perform a search to check
-            mozWaitForElementToExist(app.textFields["url"], timeout: 3)
+            mozWaitForElementToExist(app.textFields["url"])
             app.textFields["url"].tap()
             mozWaitForElementToExist(app.buttons["urlBar-cancel"])
             UIPasteboard.general.string = "window"
@@ -99,7 +98,6 @@ class ThirdPartySearchTest: BaseTestCase {
             app.staticTexts["Paste"].tap()
 
             mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-            XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
         }
     }
 
@@ -107,7 +105,7 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AddCustomSearchEngine)
-        mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
+        mozWaitForElementToExist(app.buttons["customEngineSaveButton"])
         app.buttons["customEngineSaveButton"].tap()
         if #unavailable(iOS 16) {
             // Wait for "Fennec pasted from XCUITests-Runner" banner to disappear
@@ -136,7 +134,7 @@ class ThirdPartySearchTest: BaseTestCase {
             .textViews["customEngineUrl"]
             .staticTexts["URL (Replace Query with %s)"]
 
-        XCTAssertTrue(customengineurlTextView.exists)
+        mozWaitForElementToExist(customengineurlTextView)
 
         UIPasteboard.general.string = searchUrl
         customengineurlTextView.tap()
@@ -153,9 +151,9 @@ class ThirdPartySearchTest: BaseTestCase {
             pasteOption.tap()
         }
 
-        mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
+        mozWaitForElementToExist(app.buttons["customEngineSaveButton"])
         app.buttons["customEngineSaveButton"].tap()
-        mozWaitForElementToExist(app.navigationBars["Add Search Engine"], timeout: 3)
+        mozWaitForElementToExist(app.navigationBars["Add Search Engine"])
         app.navigationBars["Add Search Engine"].buttons["Save"].tap()
 
         // The alert appears on iOS 15 but it disappears by itself immediately.

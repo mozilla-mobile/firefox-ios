@@ -30,15 +30,10 @@ class SyncUITests: BaseTestCase {
 
     private func verifyFxASigninScreen() {
         mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-            timeout: 30
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
         )
         mozWaitForElementToExist(
-            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: 10
-        )
-        XCTAssertTrue(
-            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].exists
+            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
         )
 
         // Verify the placeholdervalues here for the textFields
@@ -49,7 +44,7 @@ class SyncUITests: BaseTestCase {
             defaultMailPlaceholder,
             "The mail placeholder does not show the correct value"
         )
-        XCTAssertTrue(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].exists)
+        mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2448874
@@ -59,13 +54,12 @@ class SyncUITests: BaseTestCase {
         navigator.goto(FxASigninScreen)
         mozWaitForElementToExist(
             app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-            timeout: 60
+            timeout: TIMEOUT_LONG
         )
 
         // Tap Sign in without any value in email Password focus on Email
         mozWaitForElementToExist(
-            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton],
-            timeout: 20
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton]
         )
         navigator.performAction(Action.FxATapOnContinueButton)
         mozWaitForElementToExist(app.webViews.staticTexts["Valid email required"])
@@ -93,10 +87,10 @@ class SyncUITests: BaseTestCase {
     func testCreateAnAccountLink() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
-        mozWaitForElementToExist(app.webViews.firstMatch, timeout: 20)
+        mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
         mozWaitForElementToExist(
             app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: 40
+            timeout: TIMEOUT_LONG
         )
         userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -113,7 +107,7 @@ class SyncUITests: BaseTestCase {
         navigator.goto(FxASigninScreen)
         mozWaitForElementToExist(
             app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField],
-            timeout: 20
+            timeout: TIMEOUT_LONG
         )
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
@@ -124,7 +118,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.secureTextFields.element(boundBy: 1))
         navigator.performAction(Action.FxATypePasswordNewAccount)
         let passMessage = "Your password is currently hidden."
-        mozWaitForElementToExist(app.webViews.buttons[passMessage], timeout: 3)
+        mozWaitForElementToExist(app.webViews.buttons[passMessage])
         // Remove the password typed, Show (password) option should not be shown
         app.keyboards.keys["delete"].tap()
         mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
@@ -138,8 +132,7 @@ class SyncUITests: BaseTestCase {
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
         mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
-            timeout: 5
+            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
         )
         mozWaitForElementToExist(app.buttons["Ready to Scan"])
         mozWaitForElementToExist(app.buttons["Use Email Instead"])
