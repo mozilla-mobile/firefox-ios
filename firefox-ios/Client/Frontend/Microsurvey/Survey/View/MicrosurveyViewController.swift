@@ -223,6 +223,7 @@ final class MicrosurveyViewController: UIViewController,
         scrollContainer.addArrangedSubview(containerView)
         scrollContainer.addArrangedSubview(submitButton)
         scrollContainer.addArrangedSubview(privacyPolicyButton)
+        scrollContainer.accessibilityElements = [containerView, submitButton, privacyPolicyButton]
 
         scrollView.addSubview(scrollContainer)
 
