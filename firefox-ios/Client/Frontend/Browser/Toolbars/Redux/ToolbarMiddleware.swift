@@ -643,7 +643,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             iconName: StandardImageIdentifiers.Large.appMenu,
             badgeImageName: badgeImageName,
             isEnabled: true,
-            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yLabel: .OldStrings.v130.AppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
