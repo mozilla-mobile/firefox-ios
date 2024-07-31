@@ -4221,6 +4221,12 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "Privacy settings",
                 comment: "The title for the privacy settings button inside the enhanced tracking protection screen.")
+
+            public static let viewCertificatesButtonTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "View certificate",
+                comment: "The title for the button that allows users to view certificates inside the enhanced tracking protection details screen.")
         }
     }
 }

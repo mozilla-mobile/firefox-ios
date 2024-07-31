@@ -97,6 +97,7 @@ public struct AccessibilityIdentifiers {
             static let mainView = "TrackingProtectionDetails.MainView"
             static let containerView = "TrackingProtectionDetails.BaseView"
             static let connectionView = "TrackingProtectionDetails.ConnectionView"
+            static let certificatesButton = "TrackingProtectionDetails.ViewCertificatesButton"
         }
 
         struct BlockedTrackers {
