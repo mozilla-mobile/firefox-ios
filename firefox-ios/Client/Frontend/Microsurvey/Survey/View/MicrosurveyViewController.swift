@@ -332,6 +332,7 @@ final class MicrosurveyViewController: UIViewController,
         tableView.removeFromSuperview()
         submitButton.removeFromSuperview()
         containerView.addSubview(confirmationView)
+        scrollContainer.accessibilityElements = [containerView, privacyPolicyButton]
         NSLayoutConstraint.activate(
             [
                 confirmationView.topAnchor.constraint(equalTo: containerView.topAnchor),
