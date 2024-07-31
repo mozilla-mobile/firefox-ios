@@ -47,6 +47,7 @@ struct TPMenuUX {
             static let baseDistance: CGFloat = 20
             static let imageMargins: CGFloat = 10
             static let bottomDistance: CGFloat = 350
+            static let viewCertButtonTopDistance: CGFloat = 8.0
         }
         struct BlockedTrackers {
             static let headerDistance: CGFloat = 8

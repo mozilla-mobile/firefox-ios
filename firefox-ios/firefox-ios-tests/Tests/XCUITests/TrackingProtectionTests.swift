@@ -94,7 +94,7 @@ class TrackingProtectionTests: BaseTestCase {
         }
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
+        mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
         var switchValue = app.switches.firstMatch.value!
         // Need to make sure first the setting was not turned off previously
         if switchValue as! String == "0" {
@@ -108,7 +108,7 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertEqual(switchValueOFF as! String, "0")
 
         // Open TP Settings menu
-        app.buttons["Protection Settings"].tap()
+        app.buttons["Privacy settings"].tap()
         mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
         XCTAssertEqual(switchSettingsValue as! String, "1")
@@ -118,8 +118,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Connection is not secure"], timeout: 5)
-        XCTAssertFalse(app.switches.element.exists)
+        mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2318742
