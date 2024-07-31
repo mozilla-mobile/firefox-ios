@@ -1,0 +1,15 @@
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "Conexión no segura";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Conexión segura";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Compartir esta página";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "Compartir";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Eliminar página";
+

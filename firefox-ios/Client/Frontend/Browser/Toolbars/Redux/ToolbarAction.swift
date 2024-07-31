@@ -106,6 +106,7 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case numberOfTabsChanged
     case urlDidChange
+    case searchEngineDidChange
     case didStartEditingUrl
     case cancelEdit
     case websiteLoadingStateDidChange

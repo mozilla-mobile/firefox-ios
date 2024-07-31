@@ -261,7 +261,7 @@ class BaseTestCase: XCTestCase {
             .otherElements
             .otherElements
             .count
-        let numberOfExpectedRecentlyVisitedBookmarks = 3
+        let numberOfExpectedRecentlyVisitedBookmarks = 2
         mozWaitForElementToExist(app.scrollViews
             .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell].firstMatch)
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)

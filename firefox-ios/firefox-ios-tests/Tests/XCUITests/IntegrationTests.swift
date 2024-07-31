@@ -63,9 +63,10 @@ class IntegrationTests: BaseTestCase {
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
+        mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.FxATypePasswordExistingAccount)
         navigator.performAction(Action.FxATapOnSignInButton)
-        sleep(3)
+        mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
         waitForTabsButton()
         allowNotifications()
     }

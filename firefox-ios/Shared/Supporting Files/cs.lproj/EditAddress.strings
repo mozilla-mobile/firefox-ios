@@ -121,3 +121,21 @@
 /* Title for button that offers the user the option to remove an address. */
 "Addresses.EditAddress.RemoveAddressButtonTitle.v129" = "Odebrat adresu";
 
+/* Toast message confirming that an address has been successfully removed. */
+"Addresses.Toast.AddressRemovedConfirmation.v129" = "Adresa byla odebrána";
+
+/* Toast message confirming that an address has been successfully saved. */
+"Addresses.Toast.AddressSavedConfirmation.v129" = "Adresa byla uložena";
+
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "Adresu se nepodařilo uložit";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "Adresu se nepodařilo odebrat";
+
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Zkusit znovu";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "Informace o adrese byla aktualizována";
+

@@ -130,6 +130,9 @@
 /* Toast message indicating an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveError.v129" = "לא ניתן היה לשמור את הכתובת";
 
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "לא ניתן היה להסיר את הכתובת";
+
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "ניסיון חוזר";
 

@@ -688,7 +688,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
-            app.webViews.buttons.element(boundBy: 0).tap()
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.signInButton].tap()
         }
         screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
@@ -770,7 +770,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
-            app.tables.cells.switches["Recently Saved"].tap()
+            app.tables.cells.switches["Bookmarks"].tap()
         }
 
         screenState.backAction = navigationControllerBackAction

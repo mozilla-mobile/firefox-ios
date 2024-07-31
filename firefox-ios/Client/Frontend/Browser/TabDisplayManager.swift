@@ -764,7 +764,7 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
         let previewParams = UIDragPreviewParameters()
 
         let path = UIBezierPath(
-            roundedRect: cell.selectedBackground.frame,
+            roundedRect: cell.cellBackground.frame,
             cornerRadius: TopTabsUX.TabCornerRadius
         )
         previewParams.visiblePath = path

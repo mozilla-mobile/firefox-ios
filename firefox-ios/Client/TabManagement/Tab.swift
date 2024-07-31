@@ -127,6 +127,7 @@ class Tab: NSObject, ThemeApplicable {
     var adsProviderName: String = ""
     var hasHomeScreenshot = false
     var shouldScrollToTop = false
+    var isFindInPageMode = false
 
     private var logger: Logger
 
@@ -769,6 +770,16 @@ class Tab: NSObject, ThemeApplicable {
 
     func expireSnackbars(withClass snackbarClass: String) {
         bars.reversed().filter({ $0.snackbarClassIdentifier == snackbarClass }).forEach({ removeSnackbar($0) })
+    }
+
+    func setFindInPage(isBottomSearchBar: Bool, doesFindInPageBarExist: Bool) {
+        if #available(iOS 16, *) {
+            guard let webView = self.webView,
+                  let findInteraction = webView.findInteraction else { return }
+            isFindInPageMode = findInteraction.isFindNavigatorVisible && isBottomSearchBar
+        } else {
+            isFindInPageMode = doesFindInPageBarExist && isBottomSearchBar
+        }
     }
 
     func setScreenshot(_ screenshot: UIImage?) {
