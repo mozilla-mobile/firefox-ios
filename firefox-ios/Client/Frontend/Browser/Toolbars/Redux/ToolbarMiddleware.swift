@@ -52,6 +52,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     lazy var cancelEditAction = ToolbarActionState(
         actionType: .cancelEdit,
         iconName: StandardImageIdentifiers.Large.chevronLeft,
+        isFlippedForRTL: true,
         isEnabled: true,
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
@@ -609,6 +610,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         return ToolbarActionState(
             actionType: .back,
             iconName: StandardImageIdentifiers.Large.back,
+            isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarBackAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
@@ -618,6 +620,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         return ToolbarActionState(
             actionType: .forward,
             iconName: StandardImageIdentifiers.Large.forward,
+            isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
