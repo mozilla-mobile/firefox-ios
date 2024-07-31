@@ -312,7 +312,7 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
-    
+
     override func setUp() {
         super.setUp()
         waitForTabsButton()

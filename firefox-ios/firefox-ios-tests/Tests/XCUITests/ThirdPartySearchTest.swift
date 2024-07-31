@@ -6,7 +6,7 @@ import XCTest
 
 let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
 let searchFieldPlaceholder = "Search MDN"
-class ThirdPartySearchTest: BaseTestCase {   
+class ThirdPartySearchTest: BaseTestCase {
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         app.buttons["Done"].tap()
     }

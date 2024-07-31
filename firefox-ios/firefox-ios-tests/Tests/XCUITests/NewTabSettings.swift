@@ -11,7 +11,7 @@ class NewTabSettingsTest: BaseTestCase {
         waitForTabsButton()
         mozWaitForElementToExist(app.textFields["url"])
     }
-    
+
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {

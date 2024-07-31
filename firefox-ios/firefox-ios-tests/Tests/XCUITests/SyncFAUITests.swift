@@ -15,7 +15,7 @@ let password = "nPuPEcoj"
 var uid: String!
 var code: String!
 
-class SyncUITests: BaseTestCase {   
+class SyncUITests: BaseTestCase {
     //  https://testrail.stage.mozaws.net/index.php?/cases/view/2448597
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
