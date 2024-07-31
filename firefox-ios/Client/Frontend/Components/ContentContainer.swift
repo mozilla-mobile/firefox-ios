@@ -65,6 +65,8 @@ class ContentContainer: UIView {
     ///
     /// - Parameter content: The content to update
     func update(content: ContentContainable) {
+        // If the content type is the same as the current then return early
+        guard content != type else { return }
         removePreviousContent()
         saveContentType(content: content)
     }
