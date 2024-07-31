@@ -60,6 +60,7 @@ protocol TrackingProtectionMenuDelegate: AnyObject {
     func didFinish()
 }
 
+// TODO: FXIOS-9726 #21369 - Refactor/Split TrackingProtectionViewController UI into more custom views
 class TrackingProtectionViewController: UIViewController, Themeable, Notifiable, UIScrollViewDelegate, BottomSheetChild {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
