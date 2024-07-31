@@ -284,7 +284,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
         if autofillAddressStatus {
             privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,

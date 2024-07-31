@@ -275,6 +275,11 @@ class ToolbarMiddleware: FeatureFlaggable {
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReloadLongPressAction)
             store.dispatch(action)
+        case .newTab:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions
+            )
+            store.dispatch(action)
         default:
             break
         }
@@ -580,6 +585,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         let middleActionHome = searchAction
         let middleAction = url == nil ? middleActionHome : middleActionDefault
 
+        let isShowingTopTabs = action.isShowingTopTabs ?? false
+
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
@@ -591,7 +598,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
-            tabsAction(numberOfTabs: numberOfTabs),
+            tabsAction(numberOfTabs: numberOfTabs, isShowingTopTabs: isShowingTopTabs),
             menuAction(badgeImageName: menuBadgeImageName)
         ]
 
@@ -623,11 +630,12 @@ class ToolbarMiddleware: FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private func tabsAction(numberOfTabs: Int = 1) -> ToolbarActionState {
+    private func tabsAction(numberOfTabs: Int = 1, isShowingTopTabs: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
             numberOfTabs: numberOfTabs,
+            isShowingTopTabs: isShowingTopTabs,
             isEnabled: true,
             a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)

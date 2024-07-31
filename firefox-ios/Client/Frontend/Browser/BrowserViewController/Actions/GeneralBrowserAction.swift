@@ -49,6 +49,7 @@ enum GeneralBrowserActionType: ActionType {
     case reloadWebsite
     case showShare
     case addNewTab
+    case showNewTabLongPressActions
 }
 
 class GeneralBrowserMiddlewareAction: Action {

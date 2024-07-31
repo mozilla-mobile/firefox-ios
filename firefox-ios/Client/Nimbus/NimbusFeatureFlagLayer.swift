@@ -13,9 +13,6 @@ final class NimbusFeatureFlagLayer {
         case .accountSettingsRedux:
             return checkAccountSettingsRedux(from: nimbus)
 
-        case .addressAutofill:
-            return checkAddressAutofill(from: nimbus)
-
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
@@ -254,16 +251,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
-    private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.addressAutofillFeature.value()
+    private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.addressAutofillEdit.value()
 
         return config.status
-    }
-
-    private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.addressAutofillFeature.value()
-
-        return config.addressAutofillEdit
     }
 
     private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
