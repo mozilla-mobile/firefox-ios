@@ -248,7 +248,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         _ = state.isEditing ? becomeFirstResponder() : resignFirstResponder()
 
         // Start overlay mode & select text when in edit mode with a search term
-        if state.isEditing, state.searchTerm != nil, urlTextField.text != nil {
+        if state.isEditing, state.shouldSelectSearchTerm {
             DispatchQueue.main.async {
                 self.urlTextField.selectAll(nil)
             }
@@ -348,7 +348,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
             textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
-            textField.selectAll(nil)
         }
         delegate?.locationViewDidBeginEditing(textField.text ?? "")
     }

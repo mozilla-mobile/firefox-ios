@@ -18,6 +18,7 @@ class AddressToolbarContainerModel: Equatable {
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
+    let shouldSelectSearchTerm: Bool
 
     let windowUUID: UUID
 
@@ -37,6 +38,7 @@ class AddressToolbarContainerModel: Equatable {
             url: url,
             searchTerm: term,
             isEditing: isEditing,
+            shouldSelectSearchTerm: shouldSelectSearchTerm,
             onTapLockIcon: {
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
                                                      gestureType: .tap,
@@ -74,6 +76,7 @@ class AddressToolbarContainerModel: Equatable {
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
+        self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
     }
 
     func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {

@@ -16,6 +16,7 @@ struct AddressBarState: StateType, Equatable {
     var searchTerm: String?
     var lockIconImageName: String
     var isEditing: Bool
+    var shouldSelectSearchTerm: Bool
     var isLoading: Bool
 
     init(windowUUID: WindowUUID) {
@@ -28,6 +29,7 @@ struct AddressBarState: StateType, Equatable {
                   searchTerm: nil,
                   lockIconImageName: "",
                   isEditing: false,
+                  shouldSelectSearchTerm: true,
                   isLoading: false)
     }
 
@@ -40,6 +42,7 @@ struct AddressBarState: StateType, Equatable {
          searchTerm: String? = nil,
          lockIconImageName: String,
          isEditing: Bool = false,
+         shouldSelectSearchTerm: Bool = true,
          isLoading: Bool = false) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
@@ -50,6 +53,7 @@ struct AddressBarState: StateType, Equatable {
         self.searchTerm = searchTerm
         self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
+        self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.isLoading = isLoading
     }
 
@@ -176,7 +180,24 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: toolbarAction.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: true
+                isEditing: true,
+                shouldSelectSearchTerm: false
+            )
+
+        case ToolbarActionType.didStartEditingUrl:
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                shouldSelectSearchTerm: state.shouldSelectSearchTerm
             )
 
         case ToolbarActionType.cancelEdit:
