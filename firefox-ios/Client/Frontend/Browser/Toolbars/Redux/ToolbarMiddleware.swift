@@ -90,7 +90,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.dataClearanceButton)
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
