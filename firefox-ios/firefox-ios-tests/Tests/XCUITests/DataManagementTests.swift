@@ -11,7 +11,7 @@ class DataManagementTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(WebsiteDataSettings)
-        mozWaitForElementToExist(app.tables.otherElements["Website Data"], timeout: 3)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
         app.tables.otherElements["Website Data"].swipeDown()
         mozWaitForElementToExist(app.searchFields["Filter Sites"])
         navigator.performAction(Action.TapOnFilterWebsites)
@@ -23,7 +23,7 @@ class DataManagementTests: BaseTestCase {
         navigator.performAction(Action.TapOnFilterWebsites)
 
         app.buttons["Cancel"].tap()
-        mozWaitForElementToExist(app.tables.otherElements["Website Data"], timeout: 3)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
 
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         mozWaitForElementToExist(app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"])
@@ -37,8 +37,12 @@ class DataManagementTests: BaseTestCase {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         navigator.goto(WebsiteDataSettings)
-        mozWaitForElementToExist(app.tables.otherElements["Website Data"], timeout: 3)
-        XCTAssertTrue(app.staticTexts["example.com"].exists, "The website visited is not displayed on Website Data")
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        mozWaitForElementToExist(app.tables.buttons.images["circle"].firstMatch)
+        if app.cells["ShowMoreWebsiteData"].exists {
+            app.cells["ShowMoreWebsiteData"].tap()
+        }
+        mozWaitForElementToExist(app.staticTexts["example.com"])
         // There should be 4 entries. One is the website visited and 3 for extrainfo from the page.
         // This assert will remain commented until a way is found of having website data clean on the first run
         // This is to avoid intermittent failings

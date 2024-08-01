@@ -51,8 +51,9 @@ public protocol SyncManager {
 
 /// This exists to pass in external context: e.g., the UIApplication can
 /// expose notification functionality in this way.
-public protocol SendTabDelegate: AnyObject {
+public protocol FxACommandsDelegate: AnyObject {
     func openSendTabs(for urls: [URL])
+    func closeTabs(for urls: [URL])
 }
 
 class ProfileFileAccessor: FileAccessor {
@@ -234,7 +235,7 @@ open class BrowserProfile: Profile {
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
-    var sendTabDelegate: SendTabDelegate?
+    var fxaCommandsDelegate: FxACommandsDelegate?
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -249,7 +250,7 @@ open class BrowserProfile: Profile {
      * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
     init(localName: String,
-         sendTabDelegate: SendTabDelegate? = nil,
+         fxaCommandsDelegate: FxACommandsDelegate? = nil,
          creditCardAutofillEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
@@ -260,7 +261,7 @@ open class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.logger = logger
-        self.sendTabDelegate = sendTabDelegate
+        self.fxaCommandsDelegate = fxaCommandsDelegate
 
         if clear {
             do {
@@ -603,16 +604,26 @@ open class BrowserProfile: Profile {
         if let accountManager = self.rustFxA.accountManager {
             accountManager.deviceConstellation()?.pollForCommands { commands in
                 guard let commands = try? commands.get() else { return }
-                let urls = commands.compactMap { command in
+
+                var receivedTabURLs: [URL] = []
+                var closedTabURLs: [URL] = []
+                for command in commands {
                     switch command {
                     case .tabReceived(_, let tabData):
-                        let url = tabData.entries.last?.url ?? ""
-                        return URL(string: url, invalidCharacters: false)
-                    default:
-                        return nil
+                        if let urlString = tabData.entries.last?.url, let url = URL(string: urlString) {
+                            receivedTabURLs.append(url)
+                        }
+                    case .tabsClosed(sender: _, let closeTabPayload):
+                        closedTabURLs.append(contentsOf: closeTabPayload.urls.compactMap { URL(string: $0) })
                     }
                 }
-                self.sendTabDelegate?.openSendTabs(for: urls)
+                if !receivedTabURLs.isEmpty {
+                    self.fxaCommandsDelegate?.openSendTabs(for: receivedTabURLs)
+                }
+
+                if !closedTabURLs.isEmpty {
+                    self.fxaCommandsDelegate?.closeTabs(for: closedTabURLs)
+                }
             }
         }
     }

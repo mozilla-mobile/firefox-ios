@@ -5766,6 +5766,14 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+        public struct TabToolbarLongPressActionsMenu {
+            public static let CloseThisTabButton = MZLocalizedString(
+                key: "Toolbar.Tab.CloseThisTab.Button.v130",
+                tableName: "Toolbar",
+                value: "Close This Tab",
+                comment: "Label for button on action sheet, accessed via long pressing tab toolbar button, that closes the current tab when pressed"
+            )
+        }
     }
 
     public struct AddressToolbar {

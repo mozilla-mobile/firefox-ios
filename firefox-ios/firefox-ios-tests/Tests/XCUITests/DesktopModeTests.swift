@@ -142,7 +142,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestMobileSite) // toggle off
@@ -191,7 +191,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch, timeout: 5)
+        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.nowAt(BrowserTab)

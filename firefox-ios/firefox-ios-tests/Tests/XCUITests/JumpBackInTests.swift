@@ -26,9 +26,12 @@ class JumpBackInTests: BaseTestCase {
 
         // "Jump Back In" is enabled by default. See Settings -> Homepage
         navigator.goto(HomeSettings)
+        mozWaitForElementToExist(app.switches["Jump Back In"])
         XCTAssertEqual(app.switches["Jump Back In"].value as! String, "1")
 
         navigator.goto(NewTabScreen)
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306922
@@ -43,7 +46,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // "Jump Back In" section is displayed
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         // The contextual hint box is not displayed consistently, so
         // I don't test for its existence.
     }
@@ -152,7 +155,7 @@ class JumpBackInTests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
+        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Open in New Tab"].tap()
         waitUntilPageLoad()

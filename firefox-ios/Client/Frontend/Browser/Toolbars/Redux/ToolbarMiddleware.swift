@@ -52,6 +52,7 @@ class ToolbarMiddleware: FeatureFlaggable {
     lazy var cancelEditAction = ToolbarActionState(
         actionType: .cancelEdit,
         iconName: StandardImageIdentifiers.Large.chevronLeft,
+        isFlippedForRTL: true,
         isEnabled: true,
         a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
         a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
@@ -269,6 +270,11 @@ class ToolbarMiddleware: FeatureFlaggable {
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReloadLongPressAction)
+            store.dispatch(action)
+        case .newTab:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions
+            )
             store.dispatch(action)
         default:
             break
@@ -573,6 +579,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         let middleActionHome = searchAction
         let middleAction = url == nil ? middleActionHome : middleActionDefault
 
+        let isShowingTopTabs = action.isShowingTopTabs ?? false
+
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
@@ -584,7 +592,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
-            tabsAction(numberOfTabs: numberOfTabs),
+            tabsAction(numberOfTabs: numberOfTabs, isShowingTopTabs: isShowingTopTabs),
             menuAction(badgeImageName: menuBadgeImageName)
         ]
 
@@ -602,6 +610,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         return ToolbarActionState(
             actionType: .back,
             iconName: StandardImageIdentifiers.Large.back,
+            isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarBackAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
@@ -611,16 +620,18 @@ class ToolbarMiddleware: FeatureFlaggable {
         return ToolbarActionState(
             actionType: .forward,
             iconName: StandardImageIdentifiers.Large.forward,
+            isFlippedForRTL: true,
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private func tabsAction(numberOfTabs: Int = 1) -> ToolbarActionState {
+    private func tabsAction(numberOfTabs: Int = 1, isShowingTopTabs: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
             numberOfTabs: numberOfTabs,
+            isShowingTopTabs: isShowingTopTabs,
             isEnabled: true,
             a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
