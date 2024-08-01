@@ -438,11 +438,8 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
         let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
-        let (menuBadgeImageName, maskImageName) = if isShowMenuWarningAction {
-                                                    (action.badgeImageName, action.maskImageName)
-                                                } else {
-                                                    (toolbarState.badgeImageName, toolbarState.maskImageName)
-                                                }
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
+        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
         actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs),
                                     menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
@@ -590,11 +587,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
         let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
-        let (menuBadgeImageName, maskImageName) = if isShowMenuWarningAction {
-                                                    (action.badgeImageName, action.maskImageName)
-                                                } else {
-                                                    (toolbarState.badgeImageName, toolbarState.maskImageName)
-                                                }
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
+        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
         let actions = [
             backAction(enabled: canGoBack),
