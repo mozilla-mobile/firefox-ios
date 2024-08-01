@@ -30,8 +30,6 @@ class JumpBackInTests: BaseTestCase {
         XCTAssertEqual(app.switches["Jump Back In"].value as! String, "1")
 
         navigator.goto(NewTabScreen)
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306922

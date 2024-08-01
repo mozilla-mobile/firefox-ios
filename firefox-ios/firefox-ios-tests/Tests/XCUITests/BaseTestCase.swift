@@ -408,8 +408,6 @@ class IpadOnlyTestCase: BaseTestCase {
         specificForPlatform = .pad
         if iPad() {
             super.setUp()
-            waitForTabsButton()
-            mozWaitForElementToExist(app.textFields["url"])
         }
     }
 }
@@ -419,8 +417,6 @@ class IphoneOnlyTestCase: BaseTestCase {
         specificForPlatform = .phone
         if !iPad() {
             super.setUp()
-            waitForTabsButton()
-            mozWaitForElementToExist(app.textFields["url"])
         }
     }
 }

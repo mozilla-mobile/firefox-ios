@@ -603,12 +603,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button
 // and closing the tabs by tapping 'x' button
 class TopTabsTestIpad: IpadOnlyTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307023
     func testUpdateTabCounter() {
         if skipPlatform { return }

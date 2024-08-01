@@ -313,12 +313,6 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307008
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
