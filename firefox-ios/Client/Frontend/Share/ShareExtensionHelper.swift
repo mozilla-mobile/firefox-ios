@@ -103,8 +103,6 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
 
     private func getApplicationActivities() -> [UIActivity] {
         var appActivities = [UIActivity]()
-        let copyLinkActivity = CopyLinkActivity(activityType: .copyLink, url: url)
-        appActivities.append(copyLinkActivity)
 
         let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
         appActivities.append(sendToDeviceActivity)
