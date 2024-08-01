@@ -213,6 +213,8 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
+            // Dismiss overlay mode when not editing to fix overlay mode staying open
+            // on iPad when switching tabs using top tabs
             if !toolbarState.addressToolbar.isEditing {
                 leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
             }

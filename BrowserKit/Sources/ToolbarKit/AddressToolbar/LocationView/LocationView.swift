@@ -241,9 +241,14 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
-        urlTextField.text = state.isEditing ? state.searchTerm : state.url?.absoluteString
+        if state.isEditing {
+            urlTextField.text = (state.searchTerm != nil) ? state.searchTerm : state.url?.absoluteString
+        } else {
+            urlTextField.text = state.url?.absoluteString
+        }
+
         urlTextField.placeholder = state.urlTextFieldPlaceholder
-        urlAbsolutePath = urlTextField.text
+        urlAbsolutePath = state.url?.absoluteString
 
         _ = state.isEditing ? becomeFirstResponder() : resignFirstResponder()
 
@@ -256,6 +261,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func formatAndTruncateURLTextField() {
+        guard !urlTextField.isEditing else { return }
+
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 

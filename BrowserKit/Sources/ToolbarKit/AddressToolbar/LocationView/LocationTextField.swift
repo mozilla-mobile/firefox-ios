@@ -31,12 +31,10 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     // in touchesEnd() (eg. applyCompletion() is called or not)
     private var notifyTextChanged: (() -> Void)?
 
-    /// The range of the current completion, or nil if there is no active completion.
-    private var completionRange: NSRange?
-
     // The last string used as a replacement in shouldChangeCharactersInRange.
     private var lastReplacement: String?
     private var hideCursor = false
+    private var isSettingMarkedText = false
 
     private let copyShortcutKey = "c"
 
@@ -64,7 +62,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
             if self.isEditing {
                 self.autocompleteDelegate?.locationTextField(
                     self,
-                    didEnterText: self.normalizeString(self.text ?? "")
+                    didEnterText: self.normalizeString(self.textWithoutSuggestion() ?? "")
                 )
             }
         })
@@ -108,7 +106,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         lastReplacement = nil
         hideCursor = false
 
-        guard completionRange == nil else {
+        guard markedTextRange == nil else {
             // If we have an active completion, delete it without deleting any user-typed characters.
             removeCompletion()
             forceResetCursor()
@@ -128,8 +126,10 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override open func setMarkedText(_ markedText: String?, selectedRange: NSRange) {
+        isSettingMarkedText = true
         removeCompletion()
         super.setMarkedText(markedText, selectedRange: selectedRange)
+        isSettingMarkedText = false
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -146,9 +146,8 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
             return
         }
 
-        let suggestionText = String(suggestion[suggestion.index(suggestion.startIndex, offsetBy: normalized.count)...])
+        let suggestionText = String(suggestion.dropFirst(normalized.count))
         setMarkedText(suggestionText, selectedRange: NSRange())
-        completionRange = NSRange(location: searchText.count, length: suggestionText.count)
 
         // Only call forceResetCursor() if `hideCursor` changes.
         // Because forceResetCursor() auto accept iOS user's text replacement
@@ -170,6 +169,10 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     // MARK: - Private
     @objc
     private func textDidChange(_ textField: UITextField) {
+        // When marked text (autocomplete suggestion) is set this method is called
+        // in this case we don't need to
+        guard !isSettingMarkedText else { return }
+
         hideCursor = markedTextRange != nil
         removeCompletion()
 
@@ -184,7 +187,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     /// Commits the completion by setting the text and removing the highlight.
     private func applyCompletion() {
         // Clear the current completion, then set the text without the attributed style.
-        let text = (self.text ?? "") // + (self.autocompleteTextLabel?.text ?? "")
+        let text = (self.text ?? "")
         let didRemoveCompletion = removeCompletion()
         self.text = text
         hideCursor = false
@@ -199,17 +202,19 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     @objc
     @discardableResult
     private func removeCompletion() -> Bool {
-        guard let completionRange = completionRange else { return false }
+        guard markedTextRange != nil else { return false }
 
-        // Prevents the hard crash when you select all and start a new query
-        guard let count = text?.count,
-              count > 1,
-              count < completionRange.location,
-              count <= completionRange.location + completionRange.length
-        else { return false }
-
-        text = (text as NSString?)?.replacingCharacters(in: completionRange, with: "")
+        text = textWithoutSuggestion()
         return true
+    }
+
+    private func textWithoutSuggestion() -> String? {
+        guard let markedTextRange else { return text }
+
+        let location = offset(from: beginningOfDocument, to: markedTextRange.start)
+        let length = offset(from: markedTextRange.start, to: markedTextRange.end)
+        let range = NSRange(location: location, length: length)
+        return (text as NSString?)?.replacingCharacters(in: range, with: "")
     }
 
     @objc
@@ -242,6 +247,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        lastReplacement = nil
         autocompleteDelegate?.locationTextFieldDidEndEditing(self)
     }
 
