@@ -617,7 +617,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
         let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyUIEnabled &&
                                             isFeltPrivacyDeletionEnabled
-        if shouldShowDataClearanceAction {
+        guard !shouldShowDataClearanceAction else {
             return dataClearanceAction
         }
 
