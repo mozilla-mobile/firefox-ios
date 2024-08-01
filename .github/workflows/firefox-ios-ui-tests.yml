@@ -168,7 +168,7 @@ jobs:
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./combined.xml ./github.md
           cat github.md >> $GITHUB_STEP_SUMMARY
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./combined.xml ./slack.json
-          mv ./combined "junit-smoketests-${{ matrix.ios_simulator }}-`date +"%Y-%m-%d"`.xml"
+          mv ./combined.xml "junit-smoketests-${{ matrix.ios_simulator }}-`date +"%Y-%m-%d"`.xml"
         working-directory:  ${{ env.browser }}
       - name: Upload junit files
         id: upload-junit
