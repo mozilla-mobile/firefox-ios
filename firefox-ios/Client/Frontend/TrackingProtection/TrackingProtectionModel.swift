@@ -56,24 +56,25 @@ class TrackingProtectionModel {
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
     let unsecureStatusString = String.Menu.EnhancedTrackingProtection.connectionUnsecureLabel
     var connectionStatusString: String {
-        return connectionSecure ? secureStatusString : unsecureStatusString
+        return connectionSecure && isProtectionEnabled ? secureStatusString : unsecureStatusString
     }
 
     var  connectionDetailsTitle: String {
         let titleOn = String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
-        return connectionSecure ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
+        return connectionSecure && isProtectionEnabled ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
     }
 
     let protectionOnHeaderString = String.Menu.EnhancedTrackingProtection.onHeader
-    let protectionOffHeaderString = String.Menu.EnhancedTrackingProtection.offHeader
+    let protectionOffHeaderString = String(format: .Menu.EnhancedTrackingProtection.offHeader, AppName.shortName.rawValue)
     var  connectionDetailsHeader: String {
-        return connectionSecure ? protectionOnHeaderString : protectionOffHeaderString
+        return connectionSecure && isProtectionEnabled ? protectionOnHeaderString : protectionOffHeaderString
     }
 
     let protectionOnImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     let protectionOffImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
+    var isProtectionEnabled = false
     var  connectionDetailsImage: UIImage? {
-        return connectionSecure ? protectionOnImage : protectionOffImage
+        return connectionSecure && isProtectionEnabled ? protectionOnImage : protectionOffImage
     }
 
     var isSiteETPEnabled: Bool {
