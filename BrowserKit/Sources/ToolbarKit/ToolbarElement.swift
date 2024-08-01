@@ -11,6 +11,9 @@ public struct ToolbarElement: Equatable {
     /// Badge name of the toolbar element
     let badgeImageName: String?
 
+    /// Mask name of the badge's toolbar element
+    let maskImageName: String?
+
     /// Number of open tabs
     let numberOfTabs: Int?
 
@@ -39,6 +42,7 @@ public struct ToolbarElement: Equatable {
     // can therefor not be used outside of the ToolbarKit
     public init(iconName: String,
                 badgeImageName: String? = nil,
+                maskImageName: String? = nil,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
                 shouldDisplayAsHighlighted: Bool = false,
@@ -49,6 +53,7 @@ public struct ToolbarElement: Equatable {
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
         self.badgeImageName = badgeImageName
+        self.maskImageName = maskImageName
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
@@ -62,6 +67,7 @@ public struct ToolbarElement: Equatable {
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
         lhs.iconName == rhs.iconName &&
         lhs.badgeImageName == rhs.badgeImageName &&
+        lhs.maskImageName == rhs.maskImageName &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&

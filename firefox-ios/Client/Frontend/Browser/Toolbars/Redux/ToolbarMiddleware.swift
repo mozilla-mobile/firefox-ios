@@ -390,6 +390,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                           navigationToolbarModel: navToolbarModel,
                                           badgeImageName: action.badgeImageName,
+                                          maskImageName: action.maskImageName,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.showMenuWarningBadge)
         store.dispatch(toolbarAction)
@@ -437,10 +438,14 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
         let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
-        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.menuWarningBadge
+        let (menuBadgeImageName, maskImageName) = if isShowMenuWarningAction {
+                                                    (action.badgeImageName, action.maskImageName)
+                                                } else {
+                                                    (toolbarState.badgeImageName, toolbarState.maskImageName)
+                                                }
 
         actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs),
-                                    menuAction(badgeImageName: menuBadgeImageName)])
+                                    menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
 
         return actions
     }
@@ -585,14 +590,18 @@ class ToolbarMiddleware: FeatureFlaggable {
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
         let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
-        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.menuWarningBadge
+        let (menuBadgeImageName, maskImageName) = if isShowMenuWarningAction {
+                                                    (action.badgeImageName, action.maskImageName)
+                                                } else {
+                                                    (toolbarState.badgeImageName, toolbarState.maskImageName)
+                                                }
 
         let actions = [
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
             tabsAction(numberOfTabs: numberOfTabs, isShowingTopTabs: isShowingTopTabs),
-            menuAction(badgeImageName: menuBadgeImageName)
+            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
         ]
 
         let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarState.toolbarPosition)
@@ -634,11 +643,12 @@ class ToolbarMiddleware: FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private func menuAction(badgeImageName: String? = nil) -> ToolbarActionState {
+    private func menuAction(badgeImageName: String? = nil, maskImageName: String? = nil) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .menu,
             iconName: StandardImageIdentifiers.Large.appMenu,
             badgeImageName: badgeImageName,
+            maskImageName: maskImageName,
             isEnabled: true,
             a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
