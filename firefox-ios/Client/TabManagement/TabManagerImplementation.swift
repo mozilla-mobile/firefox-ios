@@ -410,12 +410,24 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     }
 
     private func removeAllPrivateTabs() {
+<<<<<<< HEAD
             // reset the selectedTabIndex if we are on a private tab because we will be removing it.
             if selectedTab?.isPrivate ?? false {
                 _selectedIndex = -1
             }
             privateTabs.forEach { $0.close() }
             tabs = normalTabs
+=======
+        // reset the selectedTabIndex if we are on a private tab because we will be removing it.
+        if selectedTab?.isPrivate ?? false {
+            _selectedIndex = -1
+        }
+        privateTabs.forEach { tab in
+            tab.close()
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
+        }
+        tabs = normalTabs
+>>>>>>> dd3febaab (Bugfix FXIOS-9736 Fix data sync crash in v129 #21409 )
 
             privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         }
