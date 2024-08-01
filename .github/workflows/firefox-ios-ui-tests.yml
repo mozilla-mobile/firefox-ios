@@ -232,8 +232,6 @@ jobs:
         - name: Run tests
           id: run-tests
           run: |
-            xcrun simctl shutdown all
-            xcrun simctl erase all
             xcrun simctl boot '${{ matrix.ios_simulator }}'
             xcodebuild \
               test-without-building \
