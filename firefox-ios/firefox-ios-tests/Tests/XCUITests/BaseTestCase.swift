@@ -86,6 +86,7 @@ class BaseTestCase: XCTestCase {
             app.activate()
         }
         app.launch()
+        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
     }
 
     func setUpLaunchArguments() {
@@ -101,8 +102,6 @@ class BaseTestCase: XCTestCase {
         continueAfterFailure = false
         setUpApp()
         setUpScreenGraph()
-
-        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
     }
 
     override func tearDown() {
