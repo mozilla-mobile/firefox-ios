@@ -206,6 +206,7 @@ class TabDisplayPanel: UIViewController,
 
     func didTapLearnMore(urlRequest: URLRequest) {
         let action = TabPanelViewAction(panelType: panelType,
+                                        urlRequest: urlRequest,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.learnMorePrivateMode)
         store.dispatch(action)
