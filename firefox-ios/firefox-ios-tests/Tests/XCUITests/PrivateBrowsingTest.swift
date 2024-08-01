@@ -24,7 +24,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
 
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label])
         // History without counting Clear Recent History and Recently Closed
         let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
 
@@ -37,8 +37,8 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "mozilla")
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label].exists)
-        XCTAssertFalse(app.tables[HistoryPanelA11y.tableView].staticTexts[url2Label].exists)
+        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label])
+        mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[url2Label])
 
         // Open one tab in private browsing and check the total number of tabs
         let privateHistory = app.tables[HistoryPanelA11y.tableView].cells.count - 1
@@ -93,7 +93,7 @@ class PrivateBrowsingTest: BaseTestCase {
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.nowAt(NewTabScreen)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(SettingsScreen)
 
         // FXIOS-8672: "Close Private Tabs" has been removed from the settings.
@@ -129,8 +129,8 @@ class PrivateBrowsingTest: BaseTestCase {
         func checkIndexedDBIsCreated() {
             navigator.openURL(urlIndexedDB)
             waitUntilPageLoad()
-            XCTAssertTrue(app.webViews.staticTexts["DB_CREATED_PAGE"].exists)
-            XCTAssertTrue(app.webViews.staticTexts["DB_CREATED_WORKER"].exists)
+            mozWaitForElementToExist(app.webViews.staticTexts["DB_CREATED_PAGE"])
+            mozWaitForElementToExist(app.webViews.staticTexts["DB_CREATED_WORKER"])
         }
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -180,27 +180,26 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.openURL(path(forTestPage: "test-example.html"))
-        mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.webViews.links[website_2["link"]!])
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         mozWaitForElementToExist(
-            app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!],
-            timeout: TIMEOUT
+            app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!]
         )
-        XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
+        mozWaitForElementToNotExist(app.buttons["Open in New Tab"])
+        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
+        mozWaitForElementToExist(app.buttons["Copy Link"])
+        mozWaitForElementToExist(app.buttons["Download Link"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() {
-        // Several tabs opened in private tabs tray. Tap on the trashcan 
+        // Several tabs opened in private tabs tray. Tap on the trashcan
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         for _ in 1...4 {
             navigator.createNewTab()
             if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+                mozWaitForElementToExist(app.buttons["urlBar-cancel"])
                 navigator.performAction(Action.CloseURLBarOpen)
             }
         }
@@ -302,9 +301,9 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields["url"], timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"])
         mozWaitForValueContains(app.textFields["url"], value: "iana")
-        XCTAssertTrue(app.links["RFC 2606"].exists)
+        mozWaitForElementToExist(app.links["RFC 2606"])
         mozWaitForElementToExist(app.buttons["Show Tabs"])
         let numPrivTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numPrivTab)
@@ -314,6 +313,12 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
+    override func setUp() {
+        super.setUp()
+        waitForTabsButton()
+        mozWaitForElementToExist(app.textFields["url"])
+    }
+
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307008
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
@@ -321,7 +326,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
 
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)

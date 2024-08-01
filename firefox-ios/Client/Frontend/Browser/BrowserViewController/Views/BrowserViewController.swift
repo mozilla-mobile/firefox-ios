@@ -3369,13 +3369,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
@@ -3429,24 +3427,24 @@ extension BrowserViewController: TabManagerDelegate {
             webView.removeFromSuperview()
         }
 
+        if let tab = selected, previous == nil || tab.isPrivate != previous?.isPrivate {
+            applyTheme()
+
+            if !isToolbarRefactorEnabled {
+                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
+                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
+            }
+        } else {
+            // Theme is applied to the tab and webView in the else case
+            // because in the if block is applied already to all the tabs and web views
+            selected?.applyTheme(theme: currentTheme())
+            selected?.webView?.applyTheme(theme: currentTheme())
+        }
+
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
             if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
                 urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-            }
-
-            if previous == nil || tab.isPrivate != previous?.isPrivate {
-                applyTheme()
-
-                if !isToolbarRefactorEnabled {
-                    let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                    ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
-                }
-            } else {
-                // Theme is applied to the tab and webView in the else case
-                // because in the if block is applied already to all the tabs and web views
-                tab.applyTheme(theme: currentTheme())
-                webView.applyTheme(theme: currentTheme())
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance

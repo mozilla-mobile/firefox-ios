@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        sendTabDelegate: UIApplication.shared.sendTabDelegate,
+        fxaCommandsDelegate: UIApplication.shared.fxaCommandsDelegate,
         creditCardAutofillEnabled: creditCardAutofillStatus
     )
 

@@ -12,11 +12,11 @@ class ReadingListTests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        mozWaitForElementToExist(app.buttons["Reader View"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Reader View"])
         app.buttons["Reader View"].tap()
         // The settings of reader view are shown as well as the content of the web site
-        mozWaitForElementToExist(app.buttons["Display Settings"], timeout: TIMEOUT)
-        XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
+        mozWaitForElementToExist(app.buttons["Display Settings"])
+        mozWaitForElementToExist(app.webViews.staticTexts["The Book of Mozilla"])
     }
 
     private func checkReadingListNumberOfItems(items: Int) {
@@ -44,7 +44,6 @@ class ReadingListTests: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
     }
 
@@ -53,7 +52,7 @@ class ReadingListTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -71,14 +70,13 @@ class ReadingListTests: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
         app.buttons["Done"].tap()
         updateScreenGraph()
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -125,11 +123,11 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["ReadingTable"])
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        XCTAssertTrue(savedToReadingList.exists)
+        mozWaitForElementToExist(savedToReadingList)
 
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"])
         app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
@@ -148,7 +146,7 @@ class ReadingListTests: BaseTestCase {
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.buttons["Remove"])
         app.buttons["Remove"].tap()
-        XCTAssertFalse(savedToReadingList.exists)
+        mozWaitForElementToNotExist(savedToReadingList)
 
         // Reader list view should be empty
         checkReadingListNumberOfItems(items: 0)
@@ -212,7 +210,6 @@ class ReadingListTests: BaseTestCase {
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
-        XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306893
@@ -237,7 +234,7 @@ class ReadingListTests: BaseTestCase {
         // Tap on an article
         savedToReadingList.tap()
         // The article is displayed in Reader View
-        mozWaitForElementToExist(app.buttons["Reader View"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Reader View"])
         XCTAssertTrue(app.buttons["Reader View"].isSelected)
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
@@ -248,8 +245,8 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
         savedToReadingList.swipeLeft()
         // Two options are revealed
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"], timeout: TIMEOUT)
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Remove"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
+        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Remove"])
         // Tap 'Mark as Unread'
         app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
         // The article has been marked as Unread
@@ -269,7 +266,7 @@ class ReadingListTests: BaseTestCase {
     func testAddToReaderListOptions() {
         addContentToReaderView()
         // Check that Settings layouts options are shown
-        mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"])
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         let layoutOptions = ["Light", "Sepia", "Dark", "Decrease text size", "Reset text size", "Increase text size",
                              "Remove from Reading List", "Mark as Read"]
