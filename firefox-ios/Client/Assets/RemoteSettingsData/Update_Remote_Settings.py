@@ -4,7 +4,7 @@ import shutil
 import os
 import json
 
-CONFIG_FILE = "./firefox-ios/Client/Assets/RemoteSettingsData/Remote_Settings_Fetch_Config.json"
+CONFIG_FILE = "./firefox-ios/Client/Assets/RemoteSettingsData/RemoteSettingsFetchConfig.json"
 GITHUB_ACTIONS_PATH = "./firefox-ios/Client/Assets/RemoteSettingsData/"
 GITHUB_ACTIONS_TMP_PATH = f"{GITHUB_ACTIONS_PATH}tmp/"
 
