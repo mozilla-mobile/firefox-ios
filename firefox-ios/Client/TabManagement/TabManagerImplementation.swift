@@ -414,7 +414,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
-        privateTabs.forEach { $0.close() }
+        privateTabs.forEach { tab in
+            tab.close()
+            delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
+        }
         tabs = normalTabs
 
         privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
