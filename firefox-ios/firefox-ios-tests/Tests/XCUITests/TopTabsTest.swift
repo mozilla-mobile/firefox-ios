@@ -493,12 +493,6 @@ fileprivate extension BaseTestCase {
 }
 
 class TopTabsTestIphone: IphoneOnlyTestCase {
-    override func setUp() {
-        super.setUp()
-        waitForTabsButton()
-        mozWaitForElementToExist(app.textFields["url"])
-    }
-
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2355535
     // Smoketest
     func testCloseTabFromLongPressTabsButton() {
