@@ -1037,7 +1037,12 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
         /// Fix crash related to bug from `collectionView.performBatchUpdates` when the
         /// collectionView is not visible the dataSource section/items differs from the actions to be perform
         /// which causes the crash
-        collectionView.numberOfItems(inSection: 0)
+
+        let numSections = collectionView.numberOfSections
+        for sectionIdx in 0..<numSections {
+            collectionView.numberOfItems(inSection: sectionIdx)
+        }
+
         collectionView.performBatchUpdates({
             operation()
         }, completion: { [weak self] (done) in
