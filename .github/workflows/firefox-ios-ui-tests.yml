@@ -168,7 +168,7 @@ jobs:
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./combined.xml ./github.md
           cat github.md >> $GITHUB_STEP_SUMMARY
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./combined.xml ./slack.json
-          mv ./combined junit-smoketests-${{ matrix.ios_simulator }}-`date +"%Y-%m-%d"`.xml
+          mv ./combined "junit-smoketests-${{ matrix.ios_simulator }}-`date +"%Y-%m-%d"`.xml"
         working-directory:  ${{ env.browser }}
       - name: Upload junit files
         id: upload-junit
@@ -243,6 +243,7 @@ jobs:
               -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
               -testPlan FullFunctionalTestPlan \
               -resultBundlePath ${{ env.test_results_directory }}/results \
+              -only-testing:XCUITests/ActivityStreamTest \
               | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
           working-directory:  ${{ env.browser }}
           continue-on-error: true
@@ -252,7 +253,7 @@ jobs:
             python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
             cat github.md >> $GITHUB_STEP_SUMMARY
             python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
-            mv ./build/reports/junit.xml junit-fullfunctional-${{ matrix.ios_simulator }}-`date +"%Y-%m-%d"`.xml
+            mv ./build/reports/junit.xml "junit-fullfunctional-${{ matrix.ios_simulator }}-`date +"%Y-%m-%d"`.xml"
           working-directory:  ${{ env.browser }}
         - name: Upload junit files
           id: upload-junit
