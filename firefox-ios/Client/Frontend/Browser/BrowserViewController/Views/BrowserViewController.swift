@@ -3443,7 +3443,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
-            if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
+            if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode, tab.url?.displayURL != nil {
+                addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+            } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
                 urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
             }
 
