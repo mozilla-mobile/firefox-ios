@@ -85,6 +85,13 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabToolbarSearchAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
 
+    lazy var dataClearanceAction = ToolbarActionState(
+        actionType: .dataClearance,
+        iconName: StandardImageIdentifiers.Large.dataClearance,
+        isEnabled: true,
+        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
+
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
 
@@ -247,6 +254,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
+        case .dataClearance:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.clearData)
+            store.dispatch(action)
         default:
             break
         }
@@ -574,10 +585,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
-        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
-        let middleActionHome = searchAction
-        let middleAction = url == nil ? middleActionHome : middleActionDefault
+        let middleAction = getMiddleButtonAction(url: url, isPrivateMode: toolbarState.isPrivateMode)
 
         let isShowingTopTabs = action.isShowingTopTabs ?? false
 
@@ -602,6 +610,23 @@ class ToolbarMiddleware: FeatureFlaggable {
             actions: actions,
             displayBorder: displayBorder)
         return navToolbarModel
+    }
+
+    private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
+        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
+        let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyUIEnabled &&
+                                            isFeltPrivacyDeletionEnabled
+        guard !shouldShowDataClearanceAction else {
+            return dataClearanceAction
+        }
+
+        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
+        let middleActionHome = searchAction
+        let middleAction = url == nil ? middleActionHome : middleActionDefault
+
+        return middleAction
     }
 
     // MARK: - Helper

@@ -1926,6 +1926,8 @@ class BrowserViewController: UIViewController,
             didTapOnShare(from: button)
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
+        case .dataClearance:
+            didTapOnDataClearance()
         }
     }
 
