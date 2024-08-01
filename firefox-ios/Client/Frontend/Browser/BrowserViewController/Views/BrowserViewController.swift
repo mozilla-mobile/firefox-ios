@@ -1927,7 +1927,7 @@ class BrowserViewController: UIViewController,
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
-            didTapOnFire()
+            didTapOnDataClearance()
         }
     }
 

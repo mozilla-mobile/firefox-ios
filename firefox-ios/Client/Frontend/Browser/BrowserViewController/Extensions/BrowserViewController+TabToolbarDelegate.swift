@@ -42,11 +42,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     // Presents alert to clear users private session data
-    func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        didTapOnFire()
+    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        didTapOnDataClearance()
     }
 
-    func didTapOnFire() {
+    func didTapOnDataClearance() {
         let alert = UIAlertController(
             title: .Alerts.FeltDeletion.Title,
             message: .Alerts.FeltDeletion.Body,
