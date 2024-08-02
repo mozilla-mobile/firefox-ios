@@ -37,10 +37,10 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     private func setupLogins() {
         _ = self.viewModel.profile.logins.wipeLocalEngine()
-        // Create an array to hold all the expectations
+
         var expectations: [XCTestExpectation] = []
         for i in (0..<10) {
-            let addExp = XCTestExpectation(description: "Adding login \(i)\(#function)\(#line)")
+            let addExp = XCTestExpectation(description: "Adding login \(i) \(#function)\(#line)")
             expectations.append(addExp)
 
             let login = LoginEntry(fromJSONDict: [
