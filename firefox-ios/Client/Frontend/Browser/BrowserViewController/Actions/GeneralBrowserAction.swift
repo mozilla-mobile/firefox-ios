@@ -50,6 +50,7 @@ enum GeneralBrowserActionType: ActionType {
     case showShare
     case addNewTab
     case showNewTabLongPressActions
+    case clearData
 }
 
 class GeneralBrowserMiddlewareAction: Action {

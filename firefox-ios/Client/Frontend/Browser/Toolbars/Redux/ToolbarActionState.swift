@@ -29,6 +29,7 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var badgeImageName: String?
     var maskImageName: String?
     var numberOfTabs: Int?
+    var isFlippedForRTL = false
     var isShowingTopTabs: Bool?
     var isEnabled: Bool
     var a11yLabel: String

@@ -9,19 +9,19 @@ class NewTabSettingsTest: BaseTestCase {
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
-        XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
-        XCTAssertTrue(app.tables.cells["Blank Page"].exists)
-        XCTAssertTrue(app.tables.cells["NewTabAsCustomURL"].exists)
+        mozWaitForElementToExist(app.tables.cells["Firefox Home"])
+        mozWaitForElementToExist(app.tables.cells["Blank Page"])
+        mozWaitForElementToExist(app.tables.cells["NewTabAsCustomURL"])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307027
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
@@ -45,7 +45,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToNotExist(
@@ -67,8 +67,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
         // Check the placeholder value
-        let placeholderValue = app.textFields["NewTabAsCustomURLTextField"].value as! String
-        XCTAssertEqual(placeholderValue, "Custom URL")
+        mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "Custom URL")
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         // Check the value typed
         app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
@@ -80,7 +79,7 @@ class NewTabSettingsTest: BaseTestCase {
 
         navigator.nowAt(NewTabScreen)
         // Check that website is open
-        mozWaitForElementToExist(app.webViews.firstMatch, timeout: 20)
+        mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
         mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
@@ -112,7 +111,7 @@ class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testKeyboardRaisedWhenTabOpenedFromTabTray() {
         // Add New tab and set it as Blank
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         mozWaitForElementToExist(app.navigationBars["New Tab"])
@@ -133,7 +132,7 @@ class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
         // Set a custom URL
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsCustomURL)
@@ -168,7 +167,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
         // Tap the back button
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         // The keyboard is dismissed and the URL is unfocused
         mozWaitForElementToExist(app.textFields["url"])

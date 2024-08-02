@@ -20,6 +20,9 @@ public struct ToolbarElement: Equatable {
     /// Whether the toolbar element can be interacted with
     let isEnabled: Bool
 
+    /// Indicates whether the toolbar element's image should be flipped for right-to-left layout direction
+    let isFlippedForRTL: Bool
+
     /// Indicates if the element should be displayed as highlighted
     let shouldDisplayAsHighlighted: Bool
 
@@ -45,6 +48,7 @@ public struct ToolbarElement: Equatable {
                 maskImageName: String? = nil,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
+                isFlippedForRTL: Bool = false,
                 shouldDisplayAsHighlighted: Bool = false,
                 a11yLabel: String,
                 a11yHint: String?,
@@ -56,6 +60,7 @@ public struct ToolbarElement: Equatable {
         self.maskImageName = maskImageName
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
+        self.isFlippedForRTL = isFlippedForRTL
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
         self.onSelected = onSelected
         self.onLongPress = onLongPress
@@ -70,6 +75,7 @@ public struct ToolbarElement: Equatable {
         lhs.maskImageName == rhs.maskImageName &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
+        lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&

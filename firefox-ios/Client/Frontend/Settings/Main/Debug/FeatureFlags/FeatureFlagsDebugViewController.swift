@@ -34,7 +34,8 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
             self?.reloadView()
         }
-        return SettingSection(title: nil, children: [microsurveySetting])
+        let closeRemoteTabsSetting = getCloseRemoteTabSetting(theme)
+        return SettingSection(title: nil, children: [microsurveySetting, closeRemoteTabsSetting])
     }
 
     private func generateFeatureFlagList() -> SettingSection {
@@ -50,6 +51,20 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: NSAttributedString(string: "Build only status"),
             children: settingsList
         )
+    }
+
+    private func getCloseRemoteTabSetting(_ theme: Theme) -> FeatureFlagsBoolSetting {
+        FeatureFlagsBoolSetting(
+            with: .closeRemoteTabs,
+            titleText: NSAttributedString(
+                string: "Enable Close Remote Tabs",
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
+            statusText: NSAttributedString(
+                string: "Toggle to enable closing tabs remotely feature",
+                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
+        ) { [weak self] _ in
+            self?.reloadView()
+        }
     }
 
     private func reloadView() {
