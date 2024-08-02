@@ -119,6 +119,20 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(subject.tabs.count, 5)
     }
 
+    // MARK: - Select tab
+
+    func test_selectTab_doesNotRetain() {
+        let tabCount = 3
+        let subject = createSubject()
+        addTabs(to: subject, count: tabCount)
+        XCTAssertEqual(subject.selectedIndex, -1) // No tab selected yet
+
+        subject.selectTab(subject.tabs.last)
+
+        XCTAssertEqual(subject.tabs.count, tabCount)
+        XCTAssertEqual(subject.selectedIndex, tabCount - 1)
+    }
+
     // MARK: - Save preview screenshot
 
     func testSaveScreenshotWithNoImage() async throws {
