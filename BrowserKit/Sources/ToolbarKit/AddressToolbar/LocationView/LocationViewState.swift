@@ -16,7 +16,7 @@ public struct LocationViewState {
     public let urlTextFieldA11yLabel: String
 
     public let searchEngineImage: UIImage?
-    public let lockIconImageName: String
+    public let lockIconImageName: String?
     public let url: URL?
     public let searchTerm: String?
     public let isEditing: Bool
@@ -33,7 +33,7 @@ public struct LocationViewState {
         urlTextFieldA11yId: String,
         urlTextFieldA11yLabel: String,
         searchEngineImage: UIImage?,
-        lockIconImageName: String,
+        lockIconImageName: String?,
         url: URL?,
         searchTerm: String?,
         isEditing: Bool,

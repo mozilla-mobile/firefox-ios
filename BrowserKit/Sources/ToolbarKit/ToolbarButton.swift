@@ -39,9 +39,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     open func configure(element: ToolbarElement) {
-        guard var config = configuration else {
-            return
-        }
+        guard var config = configuration else { return }
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
         shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
@@ -79,9 +77,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     override public func updateConfiguration() {
-        guard var updatedConfiguration = configuration else {
-            return
-        }
+        guard var updatedConfiguration = configuration else { return }
 
         switch state {
         case .highlighted:

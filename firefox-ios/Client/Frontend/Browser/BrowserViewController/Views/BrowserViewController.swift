@@ -1793,19 +1793,39 @@ class BrowserViewController: UIViewController,
         }
     }
 
+    func lockIconImageName(for tab: Tab?) -> String? {
+        guard let tab, let hasSecureContent = tab.webView?.hasOnlySecureContent else { return nil }
+
+        let lockIconImageName = hasSecureContent ?
+        StandardImageIdentifiers.Large.lockFill :
+        StandardImageIdentifiers.Large.lockSlashFill
+
+        return tab.url?.isReaderModeURL == false ? lockIconImageName : nil
+    }
+
+    func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
+        if isToolbarRefactorEnabled {
+            let action = ToolbarMiddlewareAction(
+                lockIconImageName: lockIconImageName(for: tab),
+                readerModeState: readerModeState,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+            )
+            store.dispatch(action)
+        } else {
+            urlBar.updateReaderModeState(readerModeState)
+        }
+    }
+
     /// Updates the URL bar text and button states.
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            guard let hasSecureContent = tab.webView?.hasOnlySecureContent else { return }
-
-            let lockIconImageName = hasSecureContent ?
-            StandardImageIdentifiers.Large.lockFill :
-            StandardImageIdentifiers.Large.lockSlashFill
+            guard tab.webView?.hasOnlySecureContent == true else { return }
 
             let action = ToolbarMiddlewareAction(
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
-                lockIconImageName: lockIconImageName,
+                lockIconImageName: lockIconImageName(for: tab),
                 url: tab.url?.displayURL,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
@@ -1924,6 +1944,8 @@ class BrowserViewController: UIViewController,
         case .share:
             guard let button = state.buttonTapped else { return }
             didTapOnShare(from: button)
+        case .readerMode:
+            toggleReaderMode()
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
@@ -2040,6 +2062,23 @@ class BrowserViewController: UIViewController,
             navigationHandler?.showMainMenu()
         } else {
             showPhotonMainMenu(from: button)
+        }
+    }
+
+    func toggleReaderMode() {
+        guard let tab = tabManager.selectedTab,
+              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
+        else { return }
+
+        switch readerMode.state {
+        case .available:
+            enableReaderMode()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+        case .active:
+            disableReaderMode()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+        case .unavailable:
+            break
         }
     }
 
@@ -3510,18 +3549,14 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            if !isToolbarRefactorEnabled {
-                urlBar.updateReaderModeState(readerMode.state)
-            }
+            updateReaderModeState(for: selected, readerModeState: readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            if !isToolbarRefactorEnabled {
-                urlBar.updateReaderModeState(ReaderModeState.unavailable)
-            }
+            updateReaderModeState(for: selected, readerModeState: .unavailable)
         }
 
         if topTabsVisible {

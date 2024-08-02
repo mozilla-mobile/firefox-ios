@@ -14,7 +14,7 @@ struct AddressBarState: StateType, Equatable {
     var borderPosition: AddressToolbarBorderPosition?
     var url: URL?
     var searchTerm: String?
-    var lockIconImageName: String
+    var lockIconImageName: String?
     var isEditing: Bool
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
@@ -40,7 +40,7 @@ struct AddressBarState: StateType, Equatable {
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String? = nil,
-         lockIconImageName: String,
+         lockIconImageName: String?,
          isEditing: Bool = false,
          shouldSelectSearchTerm: Bool = true,
          isLoading: Bool = false) {
