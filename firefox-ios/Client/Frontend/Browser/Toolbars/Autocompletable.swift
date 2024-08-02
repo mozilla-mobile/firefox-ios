@@ -4,12 +4,6 @@
 
 import Foundation
 
-/// Protocol representing an address toolbar.
-public protocol AddressToolbar {
-    func configure(state: AddressToolbarState,
-                   toolbarDelegate: AddressToolbarDelegate,
-                   leadingSpace: CGFloat?,
-                   trailingSpace: CGFloat?)
-
+protocol Autocompletable: UIView {
     func setAutocompleteSuggestion(_ suggestion: String?)
 }

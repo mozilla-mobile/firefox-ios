@@ -707,9 +707,7 @@ class BrowserViewController: UIViewController,
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
-        if !isToolbarRefactorEnabled {
-            overlayManager.setURLBar(urlBarView: urlBar)
-        }
+        overlayManager.setURLBar(urlBarView: isToolbarRefactorEnabled ? addressToolbarContainer : urlBar)
 
         // Update theme of already existing views
         let theme = currentTheme()
@@ -1442,11 +1440,11 @@ class BrowserViewController: UIViewController,
         searchViewModel.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
-        if !isToolbarRefactorEnabled {
-            let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-            searchLoader.addListener(searchViewModel)
-            self.searchLoader = searchLoader
-        }
+        let searchLoader = SearchLoader(
+            profile: profile,
+            autocompleteView: isToolbarRefactorEnabled ? addressToolbarContainer : urlBar)
+        searchLoader.addListener(searchViewModel)
+        self.searchLoader = searchLoader
 
         self.searchController = searchController
         self.searchSessionState = .active
@@ -1836,6 +1834,7 @@ class BrowserViewController: UIViewController,
             store.dispatch(action)
             return
         }
+
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
             let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
@@ -1844,13 +1843,11 @@ class BrowserViewController: UIViewController,
                 searchData: searchData,
                 isPrivate: tab.isPrivate)
         }
+
         urlBar.currentURL = tab.url?.displayURL
         urlBar.locationView.updateShoppingButtonVisibility(for: tab)
         let isPage = tab.url?.displayURL?.isWebPage() ?? false
-
-        if !isToolbarRefactorEnabled {
-            navigationToolbar.updatePageStatus(isPage)
-        }
+        navigationToolbar.updatePageStatus(isPage)
     }
 
     func didSubmitSearchText(_ text: String) {
@@ -2871,9 +2868,10 @@ class BrowserViewController: UIViewController,
             afterTab: self.tabManager.selectedTab,
             isPrivate: isPrivate
         )
+        let toolbar: URLBarViewProtocol = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
-        guard !isToolbarRefactorEnabled, !topTabsVisible, !self.urlBar.inOverlayMode else { return }
+        guard !topTabsVisible, !toolbar.inOverlayMode else { return }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
@@ -2949,16 +2947,64 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - AddressToolbarContainerDelegate
-    func searchSuggestions(searchTerm: String) {}
+    func searchSuggestions(searchTerm: String) {
+        openSuggestions(searchTerm: searchTerm)
+        searchLoader?.query = searchTerm
+    }
 
     func openBrowser(searchTerm: String) {
         didSubmitSearchText(searchTerm)
     }
 
-    func openSuggestions(searchTerm: String) {}
+    func openSuggestions(searchTerm: String) {
+        if searchTerm.isEmpty {
+            hideSearchController()
+        } else {
+            configureOverlayView()
+        }
+        searchController?.viewModel.searchQuery = searchTerm
+        searchController?.searchTelemetry?.searchQuery = searchTerm
+        searchController?.searchTelemetry?.clearVisibleResults()
+        searchController?.searchTelemetry?.determineInteractionType()
+    }
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }
+    }
+
+    func addressToolbarDidEnterOverlayMode(_ view: UIView) {
+        guard let profile = profile as? BrowserProfile else { return }
+
+        if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.screenChanged,
+                argument: UIAccessibility.Notification.screenChanged
+            )
+        } else {
+            if let toast = clipboardBarDisplayHandler?.clipboardToast {
+                toast.removeFromSuperview()
+            }
+
+            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        }
+
+        (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
+    }
+
+    func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
+        if searchSessionState == .active {
+            // This delegate method may be called even if the user isn't
+            // currently searching, but we only want to update the search
+            // session state if they are.
+            searchSessionState = switch reason {
+            case .finished: .engaged
+            case .cancelled: .abandoned
+            }
+        }
+        destroySearchController()
+        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+
+        (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
     }
 }
 
@@ -3441,8 +3487,9 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let tab = selected {
             updateURLBarDisplayURL(tab)
-
-            if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
+            if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode, tab.url?.displayURL != nil {
+                addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+            } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
                 urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
             }
 

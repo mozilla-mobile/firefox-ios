@@ -12,6 +12,7 @@ final class ToolbarAction: Action {
     let toolbarPosition: AddressToolbarPosition?
     let numberOfTabs: Int?
     let url: URL?
+    let searchTerm: String?
     let isPrivate: Bool?
     let badgeImageName: String?
     let maskImageName: String?
@@ -26,6 +27,7 @@ final class ToolbarAction: Action {
          toolbarPosition: AddressToolbarPosition? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
+         searchTerm: String? = nil,
          isPrivate: Bool? = nil,
          badgeImageName: String? = nil,
          maskImageName: String? = nil,
@@ -41,6 +43,7 @@ final class ToolbarAction: Action {
         self.toolbarPosition = toolbarPosition
         self.numberOfTabs = numberOfTabs
         self.url = url
+        self.searchTerm = searchTerm
         self.isPrivate = isPrivate
         self.badgeImageName = badgeImageName
         self.maskImageName = maskImageName
@@ -62,6 +65,9 @@ enum ToolbarActionType: ActionType {
     case scrollOffsetChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
+    case didPasteSearchTerm
+    case didStartEditingUrl
+    case cancelEdit
     case readerModeStateChanged
 }
 
