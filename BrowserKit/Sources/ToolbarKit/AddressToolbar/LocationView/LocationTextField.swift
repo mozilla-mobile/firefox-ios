@@ -162,7 +162,6 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     func applyTheme(theme: Theme) {
         let colors = theme.colors
         clearButtonTintColor = colors.iconPrimary
-        textColor = colors.textPrimary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerSelectedText]
     }
 

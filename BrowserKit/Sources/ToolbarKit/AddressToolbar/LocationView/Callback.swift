@@ -5,7 +5,7 @@
 import Foundation
 
 // Encapsulate a callback in a way that we can use it with NSTimer.
-class Callback {
+final class Callback {
     private let handler: () -> Void
 
     init(handler: @escaping () -> Void) {

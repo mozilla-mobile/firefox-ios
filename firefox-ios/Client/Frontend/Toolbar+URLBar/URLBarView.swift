@@ -65,8 +65,13 @@ protocol URLBarViewProtocol {
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
 }
 
-class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
-                    SearchEngineDelegate, SearchBarLocationProvider, Autocompletable {
+class URLBarView: UIView,
+                  URLBarViewProtocol,
+                  AlphaDimmable,
+                  TopBottomInterchangeable,
+                  SearchEngineDelegate,
+                  SearchBarLocationProvider,
+                  Autocompletable {
     // Additional UIAppearance-configurable properties
     @objc dynamic lazy var locationBorderColor: UIColor = .clear {
         didSet {
