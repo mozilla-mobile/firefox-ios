@@ -541,8 +541,6 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
                 equalTo: shieldImage.trailingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            trackersLabelTopConstraint!,
-            trackersLabelBottomConstraint!,
             trackersLabel.trailingAnchor.constraint(
                 equalTo: trackersDetailArrow.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
@@ -567,6 +565,11 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             trackersHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
             trackersView.bottomAnchor.constraint(equalTo: trackersHorizontalLine.bottomAnchor),
         ]
+
+        if let trackersLabelTopConstraint, let trackersLabelBottomConstraint {
+            constraints.append(trackersLabelTopConstraint)
+            constraints.append(trackersLabelBottomConstraint)
+        }
 
         constraints.append(contentsOf: blockedTrackersConstraints)
     }
@@ -748,8 +751,6 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         connectionDetailsTitleLabel.text = viewModel.connectionDetailsTitle
         connectionDetailsStatusLabel.text = viewModel.connectionDetailsHeader
         foxStatusImage.image = viewModel.connectionDetailsImage
-        connectionDetailsContentView.backgroundColor = toggleSwitch.isOn ?
-        currentTheme().colors.layerAccentPrivateNonOpaque : currentTheme().colors.layer3
     }
 
     private func setupViewActions() {
@@ -888,8 +889,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: - Update Views
     private func updateProtectionViewStatus() {
-        switch toggleSwitch.isOn {
-        case true:
+        if toggleSwitch.isOn {
             // TODO: FXIOS-9195 #20363 Enhanced Tracking Protection screen status enabled design
             toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOnText
             trackersView.isHidden = false
@@ -898,8 +898,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             viewModel.isProtectionEnabled = true
             foxStatusImage.image = viewModel.protectionOnImage
             connectionDetailsContentView.backgroundColor = currentTheme().colors.layerAccentPrivateNonOpaque
-
-        case false:
+        } else {
             toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOffText
             trackersView.isHidden = true
             trackersLabelTopConstraint?.constant = 0
@@ -930,6 +929,8 @@ extension TrackingProtectionViewController {
         connectionView.backgroundColor = theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
         connectionStatusImage.image = viewModel.getConnectionStatusImage(themeType: theme.type)
+        connectionDetailsContentView.backgroundColor = toggleSwitch.isOn ?
+        currentTheme().colors.layerAccentPrivateNonOpaque : theme.colors.layer3
         headerContainer.tintColor = theme.colors.layer2
         siteDomainLabel.textColor = theme.colors.textSecondary
         siteDisplayTitleLabel.textColor = theme.colors.textPrimary
