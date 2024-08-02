@@ -85,6 +85,7 @@ class AddressToolbarContainerModel: Equatable {
             ToolbarElement(
                 iconName: action.iconName,
                 badgeImageName: action.badgeImageName,
+                maskImageName: action.maskImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,

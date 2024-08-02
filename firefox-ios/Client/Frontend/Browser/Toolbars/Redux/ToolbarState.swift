@@ -14,8 +14,9 @@ struct ToolbarState: ScreenState, Equatable {
     var navigationToolbar: NavigationBarState
     let isShowingNavigationToolbar: Bool
     let isShowingTopTabs: Bool
-    let menuWarningBadge: String?
     let readerModeState: ReaderModeState?
+    let badgeImageName: String?
+    let maskImageName: String?
     let canGoBack: Bool
     let canGoForward: Bool
     var numberOfTabs: Int
@@ -37,8 +38,9 @@ struct ToolbarState: ScreenState, Equatable {
                   navigationToolbar: toolbarState.navigationToolbar,
                   isShowingNavigationToolbar: toolbarState.isShowingNavigationToolbar,
                   isShowingTopTabs: toolbarState.isShowingTopTabs,
-                  menuWarningBadge: toolbarState.menuWarningBadge,
                   readerModeState: toolbarState.readerModeState,
+                  badgeImageName: toolbarState.badgeImageName,
+                  maskImageName: toolbarState.maskImageName,
                   canGoBack: toolbarState.canGoBack,
                   canGoForward: toolbarState.canGoForward,
                   numberOfTabs: toolbarState.numberOfTabs)
@@ -53,8 +55,9 @@ struct ToolbarState: ScreenState, Equatable {
             navigationToolbar: NavigationBarState(windowUUID: windowUUID),
             isShowingNavigationToolbar: true,
             isShowingTopTabs: false,
-            menuWarningBadge: nil,
             readerModeState: nil,
+            badgeImageName: nil,
+            maskImageName: nil,
             canGoBack: false,
             canGoForward: false,
             numberOfTabs: 1
@@ -69,8 +72,9 @@ struct ToolbarState: ScreenState, Equatable {
         navigationToolbar: NavigationBarState,
         isShowingNavigationToolbar: Bool,
         isShowingTopTabs: Bool,
-        menuWarningBadge: String?,
         readerModeState: ReaderModeState?,
+        badgeImageName: String?,
+        maskImageName: String?,
         canGoBack: Bool,
         canGoForward: Bool,
         numberOfTabs: Int
@@ -82,8 +86,9 @@ struct ToolbarState: ScreenState, Equatable {
         self.navigationToolbar = navigationToolbar
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
-        self.menuWarningBadge = menuWarningBadge
         self.readerModeState = readerModeState
+        self.badgeImageName = badgeImageName
+        self.maskImageName = maskImageName
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.numberOfTabs = numberOfTabs
@@ -108,8 +113,9 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
                 isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-                menuWarningBadge: state.menuWarningBadge,
                 readerModeState: toolbarAction.readerModeState ?? state.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
                 canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
                 canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -124,8 +130,9 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
                 isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-                menuWarningBadge: toolbarAction.badgeImageName,
                 readerModeState: state.readerModeState,
+                badgeImageName: toolbarAction.badgeImageName,
+                maskImageName: toolbarAction.maskImageName,
                 canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
                 canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -140,8 +147,9 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
-                menuWarningBadge: state.menuWarningBadge,
                 readerModeState: state.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: toolbarAction.numberOfTabs ?? state.numberOfTabs)
@@ -156,8 +164,9 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
-                menuWarningBadge: state.menuWarningBadge,
                 readerModeState: state.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -172,8 +181,9 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
-                menuWarningBadge: state.menuWarningBadge,
                 readerModeState: state.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
@@ -187,8 +197,9 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: state.navigationToolbar,
                 isShowingNavigationToolbar: state.isShowingNavigationToolbar,
                 isShowingTopTabs: state.isShowingTopTabs,
-                menuWarningBadge: state.menuWarningBadge,
                 readerModeState: state.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
