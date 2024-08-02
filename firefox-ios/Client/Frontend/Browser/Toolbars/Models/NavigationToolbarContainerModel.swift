@@ -22,6 +22,7 @@ struct NavigationToolbarContainerModel: Equatable {
                 badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
+                isFlippedForRTL: action.isFlippedForRTL,
                 shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
@@ -33,7 +34,7 @@ struct NavigationToolbarContainerModel: Equatable {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.canPerformLongPressAction ? { button in
+                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: action.isShowingTopTabs) ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
                                                          gestureType: .longPress,

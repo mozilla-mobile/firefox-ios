@@ -14,7 +14,7 @@
 "Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Lägg till adress";
 
 /* Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses. */
-"Addresses.EditAddress.AutofillAddressArea.v129" = "Yta";
+"Addresses.EditAddress.AutofillAddressArea.v129" = "Område";
 
 /* Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings. */
 "Addresses.EditAddress.AutofillAddressCity.v129" = "Stad";
@@ -80,7 +80,7 @@
 "Addresses.EditAddress.AutofillAddressProvince.v129" = "Län";
 
 /* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
-"Addresses.EditAddress.AutofillAddressState.v129" = "Status";
+"Addresses.EditAddress.AutofillAddressState.v129" = "Stat";
 
 /* Label for the suburb field, enabling users to add suburb details to their address. This is important for accurate delivery and services in suburban areas, enhancing autofill functionality. */
 "Addresses.EditAddress.AutofillAddressSuburb.v129" = "Förort";
@@ -129,6 +129,9 @@
 
 /* Toast message indicating an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveError.v129" = "Adressen kunde inte sparas";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "Adressen kunde inte tas bort";
 
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Försök igen";

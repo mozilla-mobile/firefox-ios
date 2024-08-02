@@ -45,7 +45,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         configureLongPressGestureRecognizerIfNeeded(for: element)
         shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
 
-        let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
+        let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
@@ -118,6 +118,11 @@ class ToolbarButton: UIButton, ThemeApplicable {
             action: #selector(handleLongPress)
         )
         addGestureRecognizer(longPressRecognizer)
+    }
+
+    private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
+        let image = UIImage(named: element.iconName)?.withRenderingMode(.alwaysTemplate)
+        return element.isFlippedForRTL ? image?.imageFlippedForRightToLeftLayoutDirection() : image
     }
 
     private func removeAllGestureRecognizers() {

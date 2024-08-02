@@ -284,7 +284,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
         if autofillAddressStatus {
             privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,
@@ -292,6 +292,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
+
+        privacySettings += [
+            BoolSetting(prefs: profile.prefs,
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        prefKey: PrefsKeys.Settings.closePrivateTabs,
+                        defaultValue: true,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription)
+        ]
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
@@ -358,7 +367,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
         ]
 
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC

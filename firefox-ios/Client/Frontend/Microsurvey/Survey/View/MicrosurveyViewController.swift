@@ -179,12 +179,16 @@ final class MicrosurveyViewController: UIViewController,
         applyTheme()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIAccessibility.post(notification: .screenChanged, argument: String.Microsurvey.Survey.SurveyA11yLabel)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         store.dispatch(
             MicrosurveyAction(surveyId: model.id, windowUUID: windowUUID, actionType: MicrosurveyActionType.surveyDidAppear)
         )
-        UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
     deinit {
@@ -219,6 +223,7 @@ final class MicrosurveyViewController: UIViewController,
         scrollContainer.addArrangedSubview(containerView)
         scrollContainer.addArrangedSubview(submitButton)
         scrollContainer.addArrangedSubview(privacyPolicyButton)
+        scrollContainer.accessibilityElements = [containerView, submitButton, privacyPolicyButton]
 
         scrollView.addSubview(scrollContainer)
 
@@ -327,6 +332,7 @@ final class MicrosurveyViewController: UIViewController,
         tableView.removeFromSuperview()
         submitButton.removeFromSuperview()
         containerView.addSubview(confirmationView)
+        scrollContainer.accessibilityElements = [containerView, privacyPolicyButton]
         NSLayoutConstraint.activate(
             [
                 confirmationView.topAnchor.constraint(equalTo: containerView.topAnchor),

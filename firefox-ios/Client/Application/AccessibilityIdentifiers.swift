@@ -72,6 +72,47 @@ public struct AccessibilityIdentifiers {
         static let actionButton = "ContextualHints.ActionButton"
     }
 
+    struct EnhancedTrackingProtection {
+        struct MainScreen {
+            static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
+            static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
+            static let foxImage = "TrackingProtection.FoxStatusImage"
+            static let shieldImage = "TrackingProtection.ShieldImage"
+            static let lockImage = "TrackingProtection.LockImage"
+            static let arrowImage = "TrackingProtection.ArrowImage"
+            static let domainLabel = "TrackingProtection.DomainTitleLabel"
+            static let domainHeaderLabel = "TrackingProtection.DomainHeaderLabel"
+            static let statusTitleLabel = "TrackingProtection.ConnectionStatusTitleLabel"
+            static let statusBodyLabel = "TrackingProtection.ConnectionStatusBodyLabel"
+            static let trackersBlockedLabel = "TrackingProtection.TrackersBlockedLabel"
+            static let securityStatusLabel = "TrackingProtection.ConnectionSecurityStatusLabel"
+            static let toggleViewTitleLabel = "TrackingProtection.ToggleViewTitleLabel"
+            static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
+            static let closeButton = "TrackingProtection.CloseButton"
+            static let faviconImage = "TrackingProtection.FaviconImage"
+        }
+
+        struct DetailsScreen {
+            static let headerView = "TrackingProtectionDetails.HeaderView"
+            static let mainView = "TrackingProtectionDetails.MainView"
+            static let containerView = "TrackingProtectionDetails.BaseView"
+            static let connectionView = "TrackingProtectionDetails.ConnectionView"
+        }
+
+        struct BlockedTrackers {
+            static let headerView = "BlockedTrackers.HeaderView"
+            static let mainView = "BlockedTrackers.MainView"
+            static let containerView = "BlockedTrackers.BaseView"
+            static let crossSiteTrackersView = "BlockedTrackers.CrossSiteTrackersView"
+            static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
+            static let fingerprintersView = "BlockedTrackers.FingerprintersView"
+            static let crossSiteTrackersImage = "BlockedTrackers.CrossSiteTrackersImage"
+            static let socialMediaTrackersImage = "BlockedTrackers.SocialMediaTrackersImage"
+            static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
+            static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
+        }
+    }
+
     struct FirefoxHomepage {
         static let collectionView = "FxCollectionView"
 
@@ -469,6 +510,7 @@ public struct AccessibilityIdentifiers {
             static let fxaSignInButton = "EmailSignIn.button"
             static let qrButton = "QRCodeSignIn.button"
             static let qrScanFailedAlertOkButton = "qrCodeAlert.okButton"
+            static let signInButton = "Sign in"
         }
 
         struct Search {
@@ -572,6 +614,10 @@ public struct AccessibilityIdentifiers {
 
         struct ShowLink {
             static let title = "showLinkPreviews"
+        }
+
+        struct ClosePrivateTabs {
+            static let title = "ClosePrivateTabs"
         }
 
         struct SearchBar {

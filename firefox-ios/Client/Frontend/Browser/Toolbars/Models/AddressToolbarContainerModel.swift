@@ -87,6 +87,7 @@ class AddressToolbarContainerModel: Equatable {
                 badgeImageName: action.badgeImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
+                isFlippedForRTL: action.isFlippedForRTL,
                 shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
@@ -98,7 +99,7 @@ class AddressToolbarContainerModel: Equatable {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.canPerformLongPressAction ? { button in
+                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: true) ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
                                                          gestureType: .longPress,

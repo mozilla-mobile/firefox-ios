@@ -60,12 +60,16 @@ final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplic
     }
 
     var optionA11yValue: String {
-        let selectedLabel: String = .Microsurvey.Survey.SelectedRadioButtonAccessibilityLabel
         let unselectedLabel: String = .Microsurvey.Survey.UnselectedRadioButtonAccessibilityLabel
 
-        var a11yValue = checked ? selectedLabel : unselectedLabel
-        if let a11yOptionsOrderValue {
-            a11yValue.append(", \(a11yOptionsOrderValue)")
+        // This check is due to the selected option having a system trait to read out selected
+        // However, there is no system trait for unselected
+        let a11yValue: String
+        let order = a11yOptionsOrderValue ?? ""
+        if checked {
+            a11yValue = order
+        } else {
+            a11yValue = unselectedLabel + ", \(order)"
         }
         return a11yValue
     }

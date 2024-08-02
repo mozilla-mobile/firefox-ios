@@ -122,6 +122,9 @@ class BrowserViewController: UIViewController,
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
+    var isOneTapNewTabEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+    }
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -529,8 +532,10 @@ class BrowserViewController: UIViewController,
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
-        // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        scrollController.showToolbars(animated: false)
+        if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
+            // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
+            scrollController.showToolbars(animated: false)
+        }
 
         browserDidBecomeActive()
     }
@@ -1107,7 +1112,11 @@ class BrowserViewController: UIViewController,
             adjustBottomContentStackView(remake)
         }
 
-        adjustBottomSearchBarForKeyboard()
+        if let tab = tabManager.selectedTab, tab.isFindInPageMode {
+            scrollController.hideToolbars(animated: true, isFindInPageMode: true)
+        } else {
+            adjustBottomSearchBarForKeyboard()
+        }
     }
 
     private func adjustBottomContentStackView(_ remake: ConstraintMaker) {
@@ -1338,7 +1347,11 @@ class BrowserViewController: UIViewController,
     }
 
     private func createMicrosurveyPrompt(with state: MicrosurveyPromptState) {
-        self.microsurvey = MicrosurveyPromptView(state: state, windowUUID: windowUUID)
+        self.microsurvey = MicrosurveyPromptView(
+            state: state,
+            windowUUID: windowUUID,
+            inOverlayMode: overlayManager.inOverlayMode
+        )
         updateMicrosurveyConstraints()
     }
 
@@ -1358,6 +1371,10 @@ class BrowserViewController: UIViewController,
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
+        logger.log("Update content on browser view controller with type \(browserViewType)",
+                   level: .info,
+                   category: .coordinator)
+
         switch browserViewType {
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
@@ -1905,7 +1922,7 @@ class BrowserViewController: UIViewController,
         case .backForwardList:
             navigationHandler?.showBackForwardList()
         case .tabsLongPressActions:
-            presentActionSheet(from: view)
+            presentTabsLongPressAction(from: view)
         case .locationViewLongPressAction:
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
@@ -1929,6 +1946,10 @@ class BrowserViewController: UIViewController,
             didTapOnShare(from: button)
         case .readerMode:
             toggleReaderMode()
+        case .newTabLongPressActions:
+            presentNewTabLongPressActionSheet(from: view)
+        case .dataClearance:
+            didTapOnDataClearance()
         }
     }
 
@@ -1992,6 +2013,19 @@ class BrowserViewController: UIViewController,
         )
 
         presentSheetWith(viewModel: viewModel, on: self, from: button)
+    }
+
+    func presentNewTabLongPressActionSheet(from view: UIView) {
+        let actions = getNewTabLongPressActions()
+
+        let shouldPresentAsPopover = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
+        let style: UIModalPresentationStyle = shouldPresentAsPopover ? .popover : .overCurrentContext
+        let viewModel = PhotonActionSheetViewModel(
+            actions: actions,
+            closeButtonTitle: .CloseButtonTitle,
+            modalStyle: style
+        )
+        presentSheetWith(viewModel: viewModel, on: self, from: view)
     }
 
     func didTapOnHome() {
@@ -2103,12 +2137,18 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func presentActionSheet(from view: UIView) {
+    func presentTabsLongPressAction(from view: UIView) {
         guard presentedViewController == nil else { return }
 
         var actions: [[PhotonRowActions]] = []
-        actions.append(getTabToolbarLongPressActionsForModeSwitching())
-        actions.append(getMoreTabToolbarLongPressActions())
+        let useToolbarRefactorLongPressActions = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) &&
+                                                 featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        if useToolbarRefactorLongPressActions {
+            actions = getTabToolbarRefactorLongPressActions()
+        } else {
+            actions.append(getTabToolbarLongPressActionsForModeSwitching())
+            actions.append(getMoreTabToolbarLongPressActions())
+        }
 
         let viewModel = PhotonActionSheetViewModel(
             actions: actions,
@@ -2541,10 +2581,6 @@ class BrowserViewController: UIViewController,
         return (userDefaults.object(forKey: keyCreditCardAutofill) as? Bool ?? true)
     }
 
-    private func addressAutofillNimbusFeatureFlag() -> Bool {
-        return featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
-    }
-
     private func addressAutofillSettingsUserDefaultsIsEnabled() -> Bool {
         let userDefaults = UserDefaults.standard
         let keyAddressAutofill = PrefsKeys.KeyAutofillAddressStatus
@@ -2564,7 +2600,7 @@ class BrowserViewController: UIViewController,
             switch fieldValues.fieldValue {
             case .address:
                 guard addressAutofillSettingsUserDefaultsIsEnabled(),
-                      addressAutofillNimbusFeatureFlag(),
+                      AddressLocaleFeatureValidator.isValidRegion(),
                       // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
                       let type = type else { return }
 
@@ -3292,7 +3328,13 @@ extension BrowserViewController: SearchViewControllerDelegate {
     @objc
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            let action = ToolbarMiddlewareAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.searchEngineDidChange
+            )
+            store.dispatch(action)
+        } else {
             urlBar.searchEnginesDidUpdate()
         }
         searchController?.reloadSearchEngines()
@@ -3322,13 +3364,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
         case .engaged:
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .engagement, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchEngagementTelemetryEvent()
         case .abandoned:
             searchViewController.searchTelemetry?.engagementType = .dismiss
             let visibleSuggestionsTelemetryInfo = searchViewController.visibleSuggestionsTelemetryInfo
             visibleSuggestionsTelemetryInfo.forEach { trackVisibleSuggestion(telemetryInfo: $0) }
-            TelemetryWrapper.gleanRecordEvent(category: .action, method: .abandonment, object: .locationBar)
             searchViewController.searchTelemetry?.recordURLBarSearchAbandonmentTelemetryEvent()
         default:
             break
@@ -3382,24 +3422,24 @@ extension BrowserViewController: TabManagerDelegate {
             webView.removeFromSuperview()
         }
 
+        if let tab = selected, previous == nil || tab.isPrivate != previous?.isPrivate {
+            applyTheme()
+
+            if !isToolbarRefactorEnabled {
+                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
+                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
+            }
+        } else {
+            // Theme is applied to the tab and webView in the else case
+            // because in the if block is applied already to all the tabs and web views
+            selected?.applyTheme(theme: currentTheme())
+            selected?.webView?.applyTheme(theme: currentTheme())
+        }
+
         if let tab = selected, let webView = tab.webView {
             updateURLBarDisplayURL(tab)
             if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
                 urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-            }
-
-            if previous == nil || tab.isPrivate != previous?.isPrivate {
-                applyTheme()
-
-                if !isToolbarRefactorEnabled {
-                    let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                    ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
-                }
-            } else {
-                // Theme is applied to the tab and webView in the else case
-                // because in the if block is applied already to all the tabs and web views
-                tab.applyTheme(theme: currentTheme())
-                webView.applyTheme(theme: currentTheme())
             }
 
             readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
@@ -3659,6 +3699,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
         finishEditionMode()
     }
 
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {
+        tabManager.selectedTab?.setFindInPage(isBottomSearchBar: isBottomSearchBar,
+                                              doesFindInPageBarExist: findInPageBar != nil)
+    }
+
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
@@ -3750,6 +3795,10 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         overlayManager.openNewTab(url: nil,
                                   newTabSettings: newTabSettings)
+    }
+
+    func topTabsDidLongPressNewTab(button: UIButton) {
+        presentNewTabLongPressActionSheet(from: button)
     }
 
     func topTabsDidChangeTab() {

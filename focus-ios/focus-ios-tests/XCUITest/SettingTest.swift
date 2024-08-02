@@ -50,15 +50,14 @@ class SettingTest: BaseTestCase {
 
         // Check the information page
         waitForExistence(app.staticTexts["Open device settings"])
-        XCTAssert(app.staticTexts["Open device settings"].exists)
-        XCTAssert(app.staticTexts["Select Safari, then select Extensions"].exists)
+        waitForExistence(app.staticTexts["Select Safari, then select Extensions"])
         if app.label == "Firefox Focus" {
-            XCTAssert(app.staticTexts["Firefox Focus is not enabled."].exists)
-            XCTAssert(app.staticTexts["Enable Firefox Focus"].exists)
+            waitForExistence(app.staticTexts["Firefox Focus is not enabled."])
+            waitForExistence(app.staticTexts["Enable Firefox Focus"])
             app.navigationBars.buttons.element(boundBy: 0).tap()
         } else {
-            XCTAssert(app.staticTexts["Firefox Klar is not enabled."].exists)
-            XCTAssert(app.staticTexts["Enable Firefox Klar"].exists)
+            waitForExistence(app.staticTexts["Firefox Klar is not enabled."])
+            waitForExistence(app.staticTexts["Enable Firefox Klar"])
             app.navigationBars.buttons.element(boundBy: 0).tap()
         }
 
@@ -231,7 +230,7 @@ class SettingTest: BaseTestCase {
         app.navigationBars.buttons["editButton"].tap()
 
         // Validate that the domain is gone
-        XCTAssertFalse(app.tables.cells["mozilla.org"].exists)
+        waitForNoExistence(app.tables.cells["mozilla.org"])
     }
 
     // Smoketest
@@ -313,7 +312,7 @@ class SettingTest: BaseTestCase {
 
         // Enter 'mozilla' on the search field
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        XCTAssertTrue(searchOrEnterAddressTextField.exists)
+        waitForExistence(searchOrEnterAddressTextField)
         XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)
 
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below

@@ -290,6 +290,8 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
         isPrivate = isOn
 
+        UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
+
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .tap,
@@ -762,7 +764,7 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
         let previewParams = UIDragPreviewParameters()
 
         let path = UIBezierPath(
-            roundedRect: cell.selectedBackground.frame,
+            roundedRect: cell.cellBackground.frame,
             cornerRadius: TopTabsUX.TabCornerRadius
         )
         previewParams.visiblePath = path

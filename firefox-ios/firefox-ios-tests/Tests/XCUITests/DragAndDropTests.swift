@@ -39,7 +39,7 @@ class DragAndDropTests: BaseTestCase {
                 dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
                 dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
             )
-            mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
+            mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"])
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
         }
     }
@@ -53,7 +53,7 @@ class DragAndDropTests: BaseTestCase {
         openTwoWebsites()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         waitUntilPageLoad()
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
