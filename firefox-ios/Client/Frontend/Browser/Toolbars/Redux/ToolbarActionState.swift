@@ -32,6 +32,7 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var isFlippedForRTL = false
     var isShowingTopTabs: Bool?
     var isEnabled: Bool
+    var shouldDisplayAsHighlighted = false
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String

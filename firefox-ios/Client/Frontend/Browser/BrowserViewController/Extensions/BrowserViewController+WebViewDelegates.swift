@@ -377,10 +377,9 @@ extension BrowserViewController: WKNavigationDelegate {
         // are going to a about:reader page. Then we keep it on screen: it will change status
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
-            if !url.isReaderModeURL, !isToolbarRefactorEnabled {
-                urlBar.updateReaderModeState(ReaderModeState.unavailable)
-                hideReaderModeBar(animated: false)
-            }
+            guard !url.isReaderModeURL else { return }
+            updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
+            hideReaderModeBar(animated: false)
         }
     }
 

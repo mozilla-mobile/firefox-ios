@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-class ToolbarMiddleware: FeatureFlaggable {
+final class ToolbarMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let manager: ToolbarManager
     private let logger: Logger
@@ -41,6 +41,13 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabLocationReloadAccessibilityLabel,
         a11yHint: .TabLocationReloadAccessibilityHint,
         a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
+
+    private lazy var readerModeAction = ToolbarActionState(
+        actionType: .readerMode,
+        iconName: StandardImageIdentifiers.Large.readerView,
+        isEnabled: true,
+        a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton)
 
     lazy var qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -126,7 +133,8 @@ class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.urlDidChange:
+        case ToolbarMiddlewareActionType.urlDidChange,
+            ToolbarMiddlewareActionType.readerModeStateChanged:
             updateUrlAndActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.didStartEditingUrl:
@@ -232,6 +240,11 @@ class ToolbarMiddleware: FeatureFlaggable {
         case .cancelEdit:
             let action = ToolbarMiddlewareAction(windowUUID: action.windowUUID,
                                                  actionType: ToolbarMiddlewareActionType.cancelEdit)
+            store.dispatch(action)
+
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatch(action)
 
         case .reload:
@@ -367,6 +380,7 @@ class ToolbarMiddleware: FeatureFlaggable {
                                           isShowingNavigationToolbar: action.isShowingNavigationToolbar,
                                           canGoBack: action.canGoBack,
                                           canGoForward: action.canGoForward,
+                                          readerModeState: action.readerModeState,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.urlDidChange)
         store.dispatch(toolbarAction)
@@ -496,15 +510,10 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func addressToolbarPageActions(
         action: ToolbarMiddlewareAction,
-        state: AppState,
+        toolbarState: borrowing ToolbarState,
         isEditing: Bool
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
-
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: action.windowUUID)
-        else { return actions }
 
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
@@ -512,6 +521,16 @@ class ToolbarMiddleware: FeatureFlaggable {
         guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
+        }
+
+        let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
+        let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.readerModeState
+        readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
+
+        switch readerModeState {
+        case .active, .available:
+            actions.append(readerModeAction)
+        default: break
         }
 
         actions.append(shareAction)
@@ -558,7 +577,7 @@ class ToolbarMiddleware: FeatureFlaggable {
             action: action,
             state: state,
             isEditing: editing)
-        let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
+        let pageActions = addressToolbarPageActions(action: action, toolbarState: toolbarState, isEditing: editing)
         let browserActions = addressToolbarBrowserActions(action: action, state: state)
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url

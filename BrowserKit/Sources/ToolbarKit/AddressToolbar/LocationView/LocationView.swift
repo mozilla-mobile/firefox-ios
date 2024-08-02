@@ -49,6 +49,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
 
     private var clearButtonWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
+    private var lockIconWidthAnchor: NSLayoutConstraint?
 
     private lazy var iconContainerStackView: UIStackView = .build { view in
         view.axis = .horizontal
@@ -235,6 +236,12 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         updateGradient()
     }
 
+    private func updateWidthForLockIcon(_ width: CGFloat) {
+        lockIconWidthAnchor?.isActive = false
+        lockIconWidthAnchor = lockIconButton.widthAnchor.constraint(equalToConstant: width)
+        lockIconWidthAnchor?.isActive = true
+    }
+
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
         urlTextField.resignFirstResponder()
@@ -269,7 +276,13 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
 
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ state: LocationViewState) {
-        let lockImage = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+        guard let lockIconImageName = state.lockIconImageName else {
+            updateWidthForLockIcon(0)
+            return
+        }
+        updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+
+        let lockImage = UIImage(named: lockIconImageName)?.withRenderingMode(.alwaysTemplate)
         lockIconButton.setImage(lockImage, for: .normal)
         onTapLockIcon = state.onTapLockIcon
     }

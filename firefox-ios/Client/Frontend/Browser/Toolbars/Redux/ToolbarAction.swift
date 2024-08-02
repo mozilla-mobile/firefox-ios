@@ -19,6 +19,7 @@ final class ToolbarAction: Action {
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
     let canGoForward: Bool?
+    let readerModeState: ReaderModeState?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
@@ -32,6 +33,7 @@ final class ToolbarAction: Action {
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
+         readerModeState: ReaderModeState? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -46,6 +48,7 @@ final class ToolbarAction: Action {
         self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
+        self.readerModeState = readerModeState
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -59,6 +62,7 @@ enum ToolbarActionType: ActionType {
     case scrollOffsetChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
+    case readerModeStateChanged
 }
 
 class ToolbarMiddlewareAction: Action {
@@ -74,6 +78,7 @@ class ToolbarMiddlewareAction: Action {
     let canGoBack: Bool?
     let canGoForward: Bool?
     let badgeImageName: String?
+    let readerModeState: ReaderModeState?
     let maskImageName: String?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
@@ -88,6 +93,7 @@ class ToolbarMiddlewareAction: Action {
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          badgeImageName: String? = nil,
+         readerModeState: ReaderModeState? = nil,
          maskImageName: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
@@ -103,6 +109,7 @@ class ToolbarMiddlewareAction: Action {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.badgeImageName = badgeImageName
+        self.readerModeState = readerModeState
         self.maskImageName = maskImageName
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
@@ -120,4 +127,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case backButtonStateChanged
     case forwardButtonStateChanged
     case showMenuWarningBadge
+    case readerModeStateChanged
 }

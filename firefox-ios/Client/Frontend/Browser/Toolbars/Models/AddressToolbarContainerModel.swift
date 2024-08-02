@@ -14,7 +14,7 @@ class AddressToolbarContainerModel: Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineImage: UIImage?
     let searchEngines: SearchEngines
-    let lockIconImageName: String
+    let lockIconImageName: String?
     let url: URL?
 
     let windowUUID: UUID
@@ -89,6 +89,7 @@ class AddressToolbarContainerModel: Equatable {
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
+                shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,

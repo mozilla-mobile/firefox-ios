@@ -32,6 +32,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                  navigationToolbar: navigationState,
                                  isShowingNavigationToolbar: true,
                                  isShowingTopTabs: true,
+                                 readerModeState: nil,
                                  badgeImageName: nil,
                                  maskImageName: nil,
                                  canGoBack: true,
