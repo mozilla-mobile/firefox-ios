@@ -368,8 +368,11 @@ class BrowserViewController: UIViewController,
 
         if isToolbarRefactorEnabled {
             let badgeImageName = showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil
+            let maskImageName = showWarningBadge ? ImageIdentifiers.menuWarningMask : nil
+
             let action = ToolbarMiddlewareAction(
                 badgeImageName: badgeImageName,
+                maskImageName: maskImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.showMenuWarningBadge
             )
@@ -1923,6 +1926,8 @@ class BrowserViewController: UIViewController,
             didTapOnShare(from: button)
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
+        case .dataClearance:
+            didTapOnDataClearance()
         }
     }
 

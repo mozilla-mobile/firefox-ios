@@ -14111,7 +14111,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
+			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
 		};
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;

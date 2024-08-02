@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-class ToolbarAction: Action {
+final class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
     let toolbarPosition: AddressToolbarPosition?
@@ -15,6 +15,7 @@ class ToolbarAction: Action {
     let searchTerm: String?
     let isPrivate: Bool?
     let badgeImageName: String?
+    let maskImageName: String?
     let isShowingNavigationToolbar: Bool?
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
@@ -28,6 +29,7 @@ class ToolbarAction: Action {
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
          badgeImageName: String? = nil,
+         maskImageName: String? = nil,
          isShowingNavigationToolbar: Bool? = nil,
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
@@ -42,6 +44,7 @@ class ToolbarAction: Action {
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
         self.badgeImageName = badgeImageName
+        self.maskImageName = maskImageName
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
@@ -77,6 +80,7 @@ class ToolbarMiddlewareAction: Action {
     let canGoBack: Bool?
     let canGoForward: Bool?
     let badgeImageName: String?
+    let maskImageName: String?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
@@ -90,6 +94,7 @@ class ToolbarMiddlewareAction: Action {
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          badgeImageName: String? = nil,
+         maskImageName: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
@@ -104,6 +109,7 @@ class ToolbarMiddlewareAction: Action {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.badgeImageName = badgeImageName
+        self.maskImageName = maskImageName
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

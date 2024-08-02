@@ -14,8 +14,6 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10
-        static let badgeImageViewBorderWidth: CGFloat = 1
-        static let badgeImageViewCornerRadius: CGFloat = 10
         static let badgeIconSize = CGSize(width: 20, height: 20)
     }
 
@@ -25,8 +23,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private(set) var backgroundColorNormal: UIColor = .clear
 
     private var badgeImageView: UIImageView?
-    private var shouldDisplayAsHighlighted = false
+    private var maskImageView: UIImageView?
 
+    private var shouldDisplayAsHighlighted = false
     private var onLongPress: ((UIButton) -> Void)?
 
     override init(frame: CGRect) {
@@ -68,6 +67,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
         configuration = config
         if let badgeName = element.badgeImageName {
             addBadgeIcon(imageName: badgeName)
+            if let maskImageName = element.maskImageName {
+                addMaskIcon(maskImageName: maskImageName)
+            }
         }
         layoutIfNeeded()
     }
@@ -99,18 +101,28 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private func addBadgeIcon(imageName: String) {
         badgeImageView = UIImageView(image: UIImage(named: imageName))
         guard let badgeImageView, configuration?.image != nil else { return }
-
-        badgeImageView.layer.borderWidth = UX.badgeImageViewBorderWidth
-        badgeImageView.layer.cornerRadius = UX.badgeImageViewCornerRadius
-        badgeImageView.clipsToBounds = true
         badgeImageView.translatesAutoresizingMaskIntoConstraints = false
 
         imageView?.addSubview(badgeImageView)
+        applyBadgeConstraints(to: badgeImageView)
+    }
+
+    private func addMaskIcon(maskImageName: String) {
+        maskImageView = UIImageView(image: UIImage(named: maskImageName))
+        guard let maskImageView, let badgeImageView else { return }
+        maskImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        maskImageView.addSubview(badgeImageView)
+        imageView?.addSubview(maskImageView)
+        applyBadgeConstraints(to: maskImageView)
+    }
+
+    private func applyBadgeConstraints(to imageView: UIImageView) {
         NSLayoutConstraint.activate([
-            badgeImageView.widthAnchor.constraint(equalToConstant: UX.badgeIconSize.width),
-            badgeImageView.heightAnchor.constraint(equalToConstant: UX.badgeIconSize.height),
-            badgeImageView.leadingAnchor.constraint(equalTo: centerXAnchor),
-            badgeImageView.bottomAnchor.constraint(equalTo: centerYAnchor)
+            imageView.widthAnchor.constraint(equalToConstant: UX.badgeIconSize.width),
+            imageView.heightAnchor.constraint(equalToConstant: UX.badgeIconSize.height),
+            imageView.leadingAnchor.constraint(equalTo: centerXAnchor),
+            imageView.bottomAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 
@@ -148,12 +160,17 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
-        foregroundColorNormal = theme.colors.iconPrimary
-        foregroundColorHighlighted = theme.colors.actionPrimary
-        foregroundColorDisabled = theme.colors.iconDisabled
-        badgeImageView?.layer.borderColor = theme.colors.layer1.cgColor
-        badgeImageView?.backgroundColor = theme.colors.layer1
+        let colors = theme.colors
+        foregroundColorNormal = colors.iconPrimary
+        foregroundColorHighlighted = colors.actionPrimary
+        foregroundColorDisabled = colors.iconDisabled
         backgroundColorNormal = .clear
+
+        badgeImageView?.layer.borderColor = colors.layer1.cgColor
+        badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
+        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInfo
+        maskImageView?.tintColor = colors.layer1
+
         setNeedsUpdateConfiguration()
     }
 }
