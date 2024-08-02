@@ -79,6 +79,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         layoutIfNeeded()
     }
 
+    public func setAutocompleteSuggestion(_ suggestion: String?) {
+        locationView.setAutocompleteSuggestion(suggestion)
+    }
+
     override public func becomeFirstResponder() -> Bool {
         return locationView.becomeFirstResponder()
     }
@@ -247,6 +251,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     }
 
     // MARK: - LocationViewDelegate
+    func locationViewDidRestoreSearchTerm(_ text: String) {
+        toolbarDelegate?.openSuggestions(searchTerm: text)
+    }
+
     func locationViewDidEnterText(_ text: String) {
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
@@ -255,7 +263,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.openSuggestions(searchTerm: text.lowercased())
     }
 
-    func locationViewShouldSearchFor(_ text: String) {
+    func locationViewDidSubmitText(_ text: String) {
         guard !text.isEmpty else { return }
 
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
@@ -264,6 +272,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
+
+    func locationViewDidCancelEditing() {}
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {

@@ -41,7 +41,7 @@
 "Addresses.EditAddress.AutofillAddressEircode.v129" = "Eircode";
 
 /* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
-"Addresses.EditAddress.AutofillAddressEmail.v129" = "Email";
+"Addresses.EditAddress.AutofillAddressEmail.v129" = "E-mail";
 
 /* Label for the emirate field, essential for addresses in the United Arab Emirates. Including emirate details ensures the autofill feature accurately represents user addresses. */
 "Addresses.EditAddress.AutofillAddressEmirate.v129" = "Emirado";
@@ -62,10 +62,10 @@
 "Addresses.EditAddress.AutofillAddressOrganization.v129" = "Organização";
 
 /* Label for the parish field, significant in places where parishes are used for local administration and addressing. Ensures users can specify parish details for better autofill accuracy. */
-"Addresses.EditAddress.AutofillAddressParish.v129" = "Freguesia";
+"Addresses.EditAddress.AutofillAddressParish.v129" = "Paróquia";
 
 /* Label for the PIN (Postal Index Number) field, used in India. It's a code representing a specific area, crucial for accurate mail delivery and autofill functionality. */
-"Addresses.EditAddress.AutofillAddressPin.v129" = "Afixar";
+"Addresses.EditAddress.AutofillAddressPin.v129" = "PIN";
 
 /* Label for the postal code field, universally used in address forms to specify the area code for mail sorting. Essential for autofill to ensure mail and services are accurately routed. */
 "Addresses.EditAddress.AutofillAddressPostalCode.v129" = "Código postal";
@@ -92,10 +92,10 @@
 "Addresses.EditAddress.AutofillAddressTownland.v129" = "Cidade";
 
 /* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
-"Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Aldeia ou município";
+"Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Vila ou município";
 
 /* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
-"Addresses.EditAddress.AutofillAddressZip.v129" = "Código postal";
+"Addresses.EditAddress.AutofillAddressZip.v129" = "Código ZIP";
 
 /* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
 "Addresses.EditAddress.AutofillCancelButton.v129" = "Cancelar";
@@ -128,7 +128,10 @@
 "Addresses.Toast.AddressSavedConfirmation.v129" = "Endereço guardado";
 
 /* Toast message indicating an error occurred while trying to save an address. */
-"Addresses.Toast.AddressSaveError.v129" = "O endereço não pôde ser guardado";
+"Addresses.Toast.AddressSaveError.v129" = "Não foi possível guardar o endereço";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "O endereço não pôde ser removido";
 
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Tentar novamente";

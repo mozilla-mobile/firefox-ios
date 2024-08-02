@@ -75,7 +75,6 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts[PDF_website["longUrlValue"]!]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307120
@@ -85,9 +84,8 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
 
         // Open pdf from pinned site
         let pdfTopSite = app
@@ -108,7 +106,7 @@ class BrowsingPDFTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
         mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
     }
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2307121
@@ -121,6 +119,6 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!].exists)
+        mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!])
     }
 }

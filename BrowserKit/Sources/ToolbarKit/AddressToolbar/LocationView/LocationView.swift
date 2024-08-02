@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
+final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -49,6 +49,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
 
     private var clearButtonWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
+    private var lockIconWidthAnchor: NSLayoutConstraint?
 
     private lazy var iconContainerStackView: UIStackView = .build { view in
         view.axis = .horizontal
@@ -73,7 +74,7 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         urlTextField.backgroundColor = .clear
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
         urlTextField.adjustsFontForContentSizeCategory = true
-        urlTextField.delegate = self
+        urlTextField.autocompleteDelegate = self
         urlTextField.accessibilityActionsSource = self
     }
 
@@ -118,6 +119,10 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         self.delegate = delegate
         searchTerm = state.searchTerm
         onLongPress = state.onLongPress
+    }
+
+    func setAutocompleteSuggestion(_ suggestion: String?) {
+        urlTextField.setAutocompleteSuggestion(suggestion)
     }
 
     // MARK: - Layout
@@ -235,15 +240,36 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         updateGradient()
     }
 
+    private func updateWidthForLockIcon(_ width: CGFloat) {
+        lockIconWidthAnchor?.isActive = false
+        lockIconWidthAnchor = lockIconButton.widthAnchor.constraint(equalToConstant: width)
+        lockIconWidthAnchor?.isActive = true
+    }
+
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
-        urlTextField.resignFirstResponder()
-        urlTextField.text = state.url?.absoluteString
+        if state.isEditing {
+            urlTextField.text = (state.searchTerm != nil) ? state.searchTerm : state.url?.absoluteString
+        } else {
+            urlTextField.text = state.url?.absoluteString
+        }
+
         urlTextField.placeholder = state.urlTextFieldPlaceholder
-        urlAbsolutePath = urlTextField.text
+        urlAbsolutePath = state.url?.absoluteString
+
+        _ = state.isEditing ? becomeFirstResponder() : resignFirstResponder()
+
+        // Start overlay mode & select text when in edit mode with a search term
+        if state.isEditing, state.shouldSelectSearchTerm {
+            DispatchQueue.main.async {
+                self.urlTextField.selectAll(nil)
+            }
+        }
     }
 
     private func formatAndTruncateURLTextField() {
+        guard !urlTextField.isEditing else { return }
+
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
 
@@ -269,7 +295,13 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
 
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ state: LocationViewState) {
-        let lockImage = UIImage(named: state.lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+        guard let lockIconImageName = state.lockIconImageName else {
+            updateWidthForLockIcon(0)
+            return
+        }
+        updateWidthForLockIcon(UX.lockIconImageViewSize.width)
+
+        let lockImage = UIImage(named: lockIconImageName)?.withRenderingMode(.alwaysTemplate)
         lockIconButton.setImage(lockImage, for: .normal)
         onTapLockIcon = state.onTapLockIcon
     }
@@ -298,34 +330,55 @@ final class LocationView: UIView, UITextFieldDelegate, ThemeApplicable, Accessib
         }
     }
 
-    // MARK: - UITextFieldDelegate
-    public func textFieldDidBeginEditing(_ textField: UITextField) {
+    // MARK: - LocationTextFieldDelegate
+    func locationTextField(_ textField: LocationTextField, didEnterText text: String) {
+        delegate?.locationViewDidEnterText(text)
+    }
+
+    func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool {
+        guard let text = textField.text else { return true }
+        if !text.trimmingCharacters(in: .whitespaces).isEmpty {
+            delegate?.locationViewDidSubmitText(text)
+            textField.resignFirstResponder()
+            return true
+        } else {
+            return false
+        }
+    }
+
+    func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
+        delegate?.locationViewDidEnterText("")
+        return true
+    }
+
+    func locationTextFieldDidCancel(_ textField: LocationTextField) {
+        delegate?.locationViewDidCancelEditing()
+    }
+
+    func locationPasteAndGo(_ textField: LocationTextField) {
+        if let pasteboardContents = UIPasteboard.general.string {
+            delegate?.locationViewDidSubmitText(pasteboardContents)
+        }
+    }
+
+    func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         updateUIForSearchEngineDisplay()
 
         DispatchQueue.main.async { [self] in
             // `attributedText` property is set to nil to remove all formatting and truncation set before.
             textField.attributedText = nil
             textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
-            textField.selectAll(nil)
         }
         delegate?.locationViewDidBeginEditing(textField.text ?? "")
     }
 
-    public func textFieldDidEndEditing(_ textField: UITextField) {
+    func locationTextFieldDidEndEditing(_ textField: UITextField) {
         formatAndTruncateURLTextField()
         if isURLTextFieldEmpty {
             updateGradient()
         } else {
             updateUIForLockIconDisplay()
         }
-    }
-
-    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let searchText = textField.text?.lowercased(), !searchText.isEmpty else { return false }
-
-        delegate?.locationViewShouldSearchFor(searchText)
-        textField.resignFirstResponder()
-        return true
     }
 
     // MARK: - Accessibility

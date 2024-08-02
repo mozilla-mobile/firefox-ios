@@ -17,8 +17,7 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 10)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -27,8 +26,7 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 5)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
 
         XCUIDevice.shared.orientation = .landscapeRight
         XCTAssertTrue(app.buttons["Home"].exists)
@@ -43,7 +41,7 @@ class HomeButtonTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
         validateHomePageAndKeyboardNotRaisedUp()
@@ -51,7 +49,7 @@ class HomeButtonTests: BaseTestCase {
 
     // https://testrail.stage.mozaws.net/index.php?/cases/view/2306881
     func testAppLaunchKeyboardNotRaisedUp() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         validateHomePageAndKeyboardNotRaisedUp()
     }
 

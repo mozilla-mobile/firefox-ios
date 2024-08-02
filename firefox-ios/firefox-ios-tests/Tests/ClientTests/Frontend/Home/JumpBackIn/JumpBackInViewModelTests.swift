@@ -628,15 +628,6 @@ actor JumpBackInDataAdaptorMock: JumpBackInDataAdaptor {
         return recentTabs
     }
 
-    var recentGroups: [ASGroup<Tab>]?
-    func setRecentGroups(recentGroups: [ASGroup<Tab>]?) {
-        self.recentGroups = recentGroups
-    }
-
-    func getGroupsData() -> [ASGroup<Tab>]? {
-        return recentGroups
-    }
-
     var mockHasSyncedTabFeatureEnabled = true
     func setMockHasSyncedTabFeatureEnabled(enabled: Bool) {
         mockHasSyncedTabFeatureEnabled = enabled

@@ -88,3 +88,54 @@
 /* Label for the telephone number field, allowing users to input their contact number. This is essential for communication and service provision, ensuring contact details are autofilled correctly. */
 "Addresses.EditAddress.AutofillAddressTel.v129" = "Telefon";
 
+/* Label for the input field for the townland, a specific type of land division used in rural areas. Enhances address detail for users in regions where townlands are a common addressing component. */
+"Addresses.EditAddress.AutofillAddressTownland.v129" = "Townland";
+
+/* Label for the field to input the name of a village or township. This is crucial for addresses in rural areas, ensuring the autofill feature accurately captures all necessary geographical details. */
+"Addresses.EditAddress.AutofillAddressVillageTownship.v129" = "Selo ili grad";
+
+/* Label for the ZIP code field, primarily used in the United States for mail sorting. Key for autofill to accurately complete addresses for shipping, billing, and service provision. */
+"Addresses.EditAddress.AutofillAddressZip.v129" = "Poštanski broj";
+
+/* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
+"Addresses.EditAddress.AutofillCancelButton.v129" = "Otkaži";
+
+/* Title for the option allowing users to edit an existing saved address. This is used within the settings for autofill, enabling users to update their address details for accurate form autofilling. */
+"Addresses.EditAddress.AutofillEditAddressTitle.v129" = "Uredi adresu";
+
+/* Title for the input field where users can enter their street address. This is used within the settings for autofill, allowing users to provide their street address for accurate form autofilling. */
+"Addresses.EditAddress.AutofillEditStreetAddressTitle.v129" = "Adresa";
+
+/* Label for the button to save the current address details entered or edited by the user. This action confirms the user's changes and updates their autofill settings accordingly. */
+"Addresses.EditAddress.AutofillSaveButton.v129" = "Sačuvaj";
+
+/* Title for the option allowing users to view an existing saved address. This is used within the settings for autofill, enabling users to see their address details for accurate form autofilling. */
+"Addresses.EditAddress.AutofillViewAddressTitle.v129" = "Prikaži adresu";
+
+/* Button label for closing the view where user can view their address info. */
+"Addresses.EditAddress.CloseNavBarButtonLabel.v129" = "Zatvori";
+
+/* Button label for editing the address details shown in the form. */
+"Addresses.EditAddress.EditNavBarButtonLabel.v129" = "Uredi";
+
+/* Title for button that offers the user the option to remove an address. */
+"Addresses.EditAddress.RemoveAddressButtonTitle.v129" = "Ukloni adresu";
+
+/* Toast message confirming that an address has been successfully removed. */
+"Addresses.Toast.AddressRemovedConfirmation.v129" = "Adresa je uklonjena";
+
+/* Toast message confirming that an address has been successfully saved. */
+"Addresses.Toast.AddressSavedConfirmation.v129" = "Adresa je sačuvana";
+
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "Adresa se ne može sačuvati";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "Adresa se ne može ukloniti";
+
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Pokušaj ponovo";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "Informacije o adresi su ažurirane";
+

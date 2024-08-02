@@ -640,6 +640,20 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
+    func removeTabs(by urls: [URL]) async {
+        let urls = Set(urls)
+        let tabsToRemove = normalTabs.filter { tab in
+            guard let url = tab.url else { return false }
+            return urls.contains(url)
+        }
+        for tab in tabsToRemove {
+            await withCheckedContinuation { continuation in
+                removeTab(tab) { continuation.resume() }
+            }
+        }
+    }
+
+    @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
         var currentSelectedTab: BackupCloseTab?

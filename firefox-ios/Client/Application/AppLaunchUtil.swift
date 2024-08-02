@@ -78,7 +78,13 @@ class AppLaunchUtil {
             }
         }
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in
+        // RustFirefoxAccounts doesn't have access to the feature flags
+        // So we check the nimbus flag here before sending it to the startup
+        var fxaFeatures: RustFxAFeatures = []
+        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.closeRemoteTabs, checking: .buildAndUser) {
+            fxaFeatures.insert(.closeRemoteTabs)
+        }
+        RustFirefoxAccounts.startup(prefs: profile.prefs, features: fxaFeatures) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
         }

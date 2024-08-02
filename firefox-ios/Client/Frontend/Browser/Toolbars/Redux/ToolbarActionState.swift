@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct ToolbarActionState: Equatable {
+struct ToolbarActionState: Equatable, FeatureFlaggable {
     enum ActionType {
         case back
         case forward
@@ -27,16 +27,21 @@ struct ToolbarActionState: Equatable {
     var actionType: ActionType
     var iconName: String
     var badgeImageName: String?
+    var maskImageName: String?
     var numberOfTabs: Int?
+    var isFlippedForRTL = false
+    var isShowingTopTabs: Bool?
     var isEnabled: Bool
+    var shouldDisplayAsHighlighted = false
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
 
-    var canPerformLongPressAction: Bool {
+    func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
         return actionType == .back ||
                actionType == .forward ||
-               actionType == .tabs ||
-               actionType == .reload
+               actionType == .reload ||
+               actionType == .newTab ||
+               (actionType == .tabs && isShowingTopTabs == false)
     }
 }

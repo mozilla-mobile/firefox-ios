@@ -16,14 +16,14 @@ private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([
  */
 class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
     fileprivate let profile: Profile
-    fileprivate let urlBar: URLBarView
+    fileprivate let autocompleteView: Autocompletable
     private let logger: Logger
 
     private var skipNextAutocomplete: Bool
 
-    init(profile: Profile, urlBar: URLBarView, logger: Logger = DefaultLogger.shared) {
+    init(profile: Profile, autocompleteView: Autocompletable, logger: Logger = DefaultLogger.shared) {
         self.profile = profile
-        self.urlBar = urlBar
+        self.autocompleteView = autocompleteView
         self.skipNextAutocomplete = false
         self.logger = logger
 
@@ -144,7 +144,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
                     // First, see if the query matches any URLs from the user's search history.
                     for site in combinedSites {
                         if let completion = self.completionForURL(site.url) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
+                            self.autocompleteView.setAutocompleteSuggestion(completion)
                             return
                         }
                     }
@@ -153,7 +153,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
                     if let topDomains = self.topDomains {
                         for domain in topDomains {
                             if let completion = self.completionForDomain(domain) {
-                                self.urlBar.setAutocompleteSuggestion(completion)
+                                self.autocompleteView.setAutocompleteSuggestion(completion)
                                 return
                             }
                         }
