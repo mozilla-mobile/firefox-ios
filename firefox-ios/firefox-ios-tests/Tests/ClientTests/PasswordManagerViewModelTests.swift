@@ -61,29 +61,40 @@ class PasswordManagerViewModelTests: XCTestCase {
         waitForExpectations(timeout: 10.0, handler: nil)
     }
 
-    func testQueryLogins() {
-        let expectation = XCTestExpectation()
+    func testQueryLoginsWithEmptyString() {
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("") { emptyQueryResult in
             XCTAssertEqual(emptyQueryResult.count, 10)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithExampleString() {
+        let expectation = XCTestExpectation("Waiting for login query to complete")
         viewModel.queryLogins("example") { exampleQueryResult in
             XCTAssertEqual(exampleQueryResult.count, 10)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithNumericString() {
+        let expectation = XCTestExpectation("Waiting for login query to complete")
         viewModel.queryLogins("3") { threeQueryResult in
             XCTAssertEqual(threeQueryResult.count, 1)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithNoResults() {
+        let expectation = XCTestExpectation("Waiting for login query to complete")
         viewModel.queryLogins("yxz") { zQueryResult in
             XCTAssertEqual(zQueryResult.count, 0)
             expectation.fulfill()
         }
-
-        wait(for: [expectation], timeout: 5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testIsDuringSearchControllerDismiss() {
