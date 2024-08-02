@@ -160,7 +160,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
         mozWaitForElementToExist(app.staticTexts["mozilla.org"])
-        mozWaitForElementToExist(app.staticTexts["Connection is secure"])
+        mozWaitForElementToExist(app.staticTexts["Secure connection"])
         XCTAssertEqual(
             app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
             "Secure connection"
