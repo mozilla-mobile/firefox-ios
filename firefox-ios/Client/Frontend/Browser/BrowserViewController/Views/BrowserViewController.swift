@@ -1785,14 +1785,18 @@ class BrowserViewController: UIViewController,
         return tab.url?.isReaderModeURL == false ? lockIconImageName : nil
     }
 
-    func dispatchReaderModeStateChangedAction(for tab: Tab?, readerModeState: ReaderModeState) {
-        let action = ToolbarMiddlewareAction(
-            lockIconImageName: lockIconImageName(for: tab),
-            readerModeState: readerModeState,
-            windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.readerModeStateChanged
-        )
-        store.dispatch(action)
+    func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
+        if isToolbarRefactorEnabled {
+            let action = ToolbarMiddlewareAction(
+                lockIconImageName: lockIconImageName(for: tab),
+                readerModeState: readerModeState,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+            )
+            store.dispatch(action)
+        } else {
+            urlBar.updateReaderModeState(readerModeState)
+        }
     }
 
     /// Updates the URL bar text and button states.
@@ -3452,22 +3456,14 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            if isToolbarRefactorEnabled {
-                dispatchReaderModeStateChangedAction(for: selected, readerModeState: readerMode.state)
-            } else {
-                urlBar.updateReaderModeState(readerMode.state)
-            }
+            updateReaderModeState(for: selected, readerModeState: readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            if isToolbarRefactorEnabled {
-                dispatchReaderModeStateChangedAction(for: selected, readerModeState: .unavailable)
-            } else {
-                urlBar.updateReaderModeState(.unavailable)
-            }
+            updateReaderModeState(for: selected, readerModeState: .unavailable)
         }
 
         if topTabsVisible {

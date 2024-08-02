@@ -378,12 +378,8 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
-                if isToolbarRefactorEnabled {
-                    dispatchReaderModeStateChangedAction(for: tabManager.selectedTab, readerModeState: .unavailable)
-                } else {
-                    urlBar.updateReaderModeState(.unavailable)
-                }
-                hideReaderModeBar(animated: false)
+            updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
+            hideReaderModeBar(animated: false)
         }
     }
 

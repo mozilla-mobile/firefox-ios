@@ -10,11 +10,7 @@ extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // Update reader mode state if is the selected tab. Otherwise it will update once is active
         guard tabManager.selectedTab === tab else { return }
-            if isToolbarRefactorEnabled {
-                dispatchReaderModeStateChangedAction(for: tab, readerModeState: state)
-            } else {
-                urlBar.updateReaderModeState(state)
-            }
+        updateReaderModeState(for: tab, readerModeState: state)
     }
 
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
