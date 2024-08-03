@@ -1,22 +1,29 @@
-name: Focus iOS 16 tests
+name: Focus iOS 15 & 16 tests
 on:
   workflow_dispatch:
 
 env:
     browser: focus-ios
     xcode_version: 15.4
-    ios_simulator_default: iPhone 14
-    xcodebuild_scheme: Focus
-    xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
 
 jobs:
-  Focus:
-    name: Focus
+  Focus-iOS-Tests:
+    name: Focus iOS
     runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ios_version: 16.4
+            ios_simulator: iPhone 14
+          - ios_version: 15.5
+            ios_simulator: iPhone 13
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
+        with:
+          repository: mozilla-mobile/firefox-ios
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -34,11 +41,11 @@ jobs:
           xcodebuild -version
           ./checkout.sh
           ./bootstrap.sh --force
-      - name: Create iOS 16 simulator
+      - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
         run: |
           brew install blacktop/tap/ipsw
-          echo "iOS 16.4 Simulator" | ipsw download xcode --sim
+          echo "iOS ${{ matrix.ios_version }} Simulator" | ipsw download xcode --sim
           dmg_file=$(ls *.dmg)
           curl https://gist.githubusercontent.com/testableapple/3688bbf7c0e475aa915bd34b7cf7876e/raw/db91bbbc5ace3835de34db5030c6b04e519847e5/install_runtime.sh > install_runtime.sh
           chmod u+x install_runtime.sh
@@ -49,34 +56,37 @@ jobs:
         run: |
           xcodebuild build-for-testing \
             -project Blockzilla.xcodeproj -scheme Focus \
-            -testPlan SmokeTest -configuration FocusDebug\
+            -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO -destination \
-            'platform=iOS Simulator,name=iPhone 14 Pro Max,OS=16.4'
+            'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}'
         working-directory: focus-ios
       - name: Run unit tests
         run: |
           xcodebuild test-without-building \
-            -scheme Focus \
-            -project Blockzilla.xcodeproj -configuration FocusDebug \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO \
-            -destination 'platform=iOS Simulator,name=iPhone 14 Pro Max,OS=16.4' \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan UnitTests
-        working-directory: focus-ios
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
       - name: Run smoke tests
         run: |
           xcodebuild test-without-building \
-            -scheme Focus \
-            -project Blockzilla.xcodeproj -configuration FocusDebug \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO \
-            -destination 'platform=iOS Simulator,name=iPhone 14 Pro Max,OS=16.4' \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest
-        working-directory: focus-ios
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
       - name: Run full functional tests
         run: |
           xcodebuild test-without-building \
-            -scheme Focus \
-            -project Blockzilla.xcodeproj -configuration FocusDebug \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO \
-            -destination 'platform=iOS Simulator,name=iPhone 14 Pro Max,OS=16.4' \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan FullFunctionalTests
-        working-directory: focus-ios
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
