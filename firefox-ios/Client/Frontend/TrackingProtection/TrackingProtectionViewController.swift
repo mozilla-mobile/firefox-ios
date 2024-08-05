@@ -737,11 +737,15 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
         siteDomainLabel.text = viewModel.websiteTitle
         siteDisplayTitleLabel.text = viewModel.displayTitle
-        let totalTrackerBlocked = String(viewModel.contentBlockerStats?.total ?? 0)
-        let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, totalTrackerBlocked)
-        trackersLabel.text = trackersText
+        if let trackersNumber = viewModel.contentBlockerStats?.total, trackersNumber > 0 {
+            trackersLabel.text = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
+                                        String(trackersNumber))
+        } else {
+            trackersLabel.text = .Menu.EnhancedTrackingProtection.noTrackersLabel
+        }
         shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
             .withRenderingMode(.alwaysTemplate)
+        connectionStatusImage.image = viewModel.getConnectionStatusImage(themeType: currentTheme().type)
         connectionStatusLabel.text = viewModel.connectionStatusString
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         viewModel.isProtectionEnabled = toggleSwitch.isOn
