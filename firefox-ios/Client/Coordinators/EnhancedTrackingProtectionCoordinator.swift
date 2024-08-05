@@ -45,7 +45,8 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 connectionSecure: connectionSecure,
                 globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
                 contentBlockerStatus: contentBlockerStatus,
-                contentBlockerStats: contentBlockerStats
+                contentBlockerStats: contentBlockerStats,
+                selectedTab: tabManager.selectedTab
             )
 
             self.enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,

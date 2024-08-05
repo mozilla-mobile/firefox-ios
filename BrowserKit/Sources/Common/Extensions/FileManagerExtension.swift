@@ -14,4 +14,30 @@ public extension FileManager {
     static var documentsDirectoryURL: URL {
       return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
+
+    /// Recursively delete the file at the path, deleting its contents
+    /// if it's a directory.
+    func removeItemAndContents(path: String) {
+        var isDirectory = ObjCBool(false)
+
+        // Do nothing if the file doesn't exist.
+        guard FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) else { return }
+
+        // If the file is a directory, first delete its contents.
+        if isDirectory.boolValue {
+            if let cacheFiles = try? FileManager.default.contentsOfDirectory(atPath: path) {
+                for file in cacheFiles {
+                    let path = (path as NSString).appendingPathComponent(file)
+                    removeItemAndContents(path: path)
+                }
+            }
+        }
+
+        // Then delete the file itself.
+        do {
+            try FileManager.default.removeItem(atPath: path)
+        } catch {
+            NSLog("Unable to delete file at \(path): \(error)")
+        }
+    }
 }
