@@ -130,6 +130,9 @@
 /* Toast message indicating an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveError.v129" = "No s’ha pogut desar l’adreça";
 
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "No s’ha pogut eliminar l’adreça";
+
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Torna-ho a provar";
 
