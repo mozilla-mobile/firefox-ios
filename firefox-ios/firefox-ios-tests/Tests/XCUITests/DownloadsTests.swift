@@ -123,6 +123,8 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+            mozWaitForElementToExist(app.collectionViews.cells["Add Tags"])
+            mozWaitForElementToExist(app.collectionViews.cells["Save to Files"])
         } else {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
@@ -146,9 +148,10 @@ class DownloadsTests: BaseTestCase {
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements["ActivityListView"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
-        /*
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+            mozWaitForElementToExist(app.collectionViews.cells["Add Tags"])
+            mozWaitForElementToExist(app.collectionViews.cells["Save to Files"])
         } else {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
@@ -159,7 +162,6 @@ class DownloadsTests: BaseTestCase {
             // XCUITest does not allow me to click the greyed out portion of the app without the force option.
             app.buttons["Done"].tap(force: true)
         }
-        */
      }
 
     private func downloadFile(fileName: String, numberOfDownloads: Int) {
