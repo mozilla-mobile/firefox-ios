@@ -136,8 +136,7 @@ public class BottomSheetViewController: UIViewController,
     // MARK: - Theme
 
     public func applyTheme() {
-        guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
-        contentView.backgroundColor = themeManager.getCurrentTheme(for: uuid).colors.layer1
+        contentView.backgroundColor = themeManager.getCurrentTheme(for: viewModel.windowUUID).colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {

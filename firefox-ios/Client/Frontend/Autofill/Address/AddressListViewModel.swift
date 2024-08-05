@@ -41,6 +41,7 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
     var toggleEditModeAction: ((Bool) -> Void)?
     var presentToast: ((AddressModifiedStatus) -> Void)?
+    var manageAddressesInfoAction: (() -> Void)?
 
     let addressProvider: AddressProvider
     let themeManager: ThemeManager
