@@ -34,6 +34,8 @@ struct TPMenuUX {
         static let faviconCornerRadius: CGFloat = 5
         static let scrollContentHorizontalPadding: CGFloat = 16
 
+        static let trackersLabelConstraintConstant = 11.0
+
         static let clearDataButtonCornerRadius: CGFloat = 12
         static let clearDataButtonBorderWidth: CGFloat = 1
         static let settingsLinkButtonBottomSpacing: CGFloat = 32
@@ -75,6 +77,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     private var foxImageHeightConstraint: NSLayoutConstraint?
     private var shieldImageHeightConstraint: NSLayoutConstraint?
     private var lockImageHeightConstraint: NSLayoutConstraint?
+    private var trackersLabelTopConstraint: NSLayoutConstraint?
+    private var trackersLabelBottomConstraint: NSLayoutConstraint?
 
     private var trackersArrowHeightConstraint: NSLayoutConstraint?
     private var connectionArrowHeightConstraint: NSLayoutConstraint?
@@ -160,6 +164,13 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     // MARK: Blocked Trackers View
+    private var trackersConnectionContainer: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.distribution = .fillProportionally
+        stack.alignment = .leading
+        stack.axis = .vertical
+    }
+
     private let trackersView: UIView = .build { view in
         view.backgroundColor = .clear
     }
@@ -319,6 +330,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
+        updateProtectionViewStatus()
         applyTheme()
     }
 
@@ -492,13 +504,20 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     // MARK: Blocked Trackers Setup
     private func setupBlockedTrackersView() {
         trackersView.addSubviews(shieldImage, trackersLabel, trackersDetailArrow, trackersButton, trackersHorizontalLine)
-        baseView.addSubview(trackersView)
-        view.bringSubviewToFront(trackersView)
+        baseView.addSubview(trackersConnectionContainer)
+        trackersConnectionContainer.addArrangedSubview(trackersView)
 
         shieldImageHeightConstraint = shieldImage.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
         trackersArrowHeightConstraint = trackersDetailArrow.heightAnchor.constraint(
             equalToConstant: TPMenuUX.UX.iconSize
         )
+
+        trackersLabelTopConstraint = trackersLabel.topAnchor.constraint(
+            equalTo: trackersView.topAnchor,
+            constant: TPMenuUX.UX.trackersLabelConstraintConstant)
+        trackersLabelBottomConstraint = trackersLabel.bottomAnchor.constraint(
+            equalTo: trackersView.bottomAnchor,
+            constant: -TPMenuUX.UX.trackersLabelConstraintConstant)
 
         let blockedTrackersConstraints = [
             trackersView.leadingAnchor.constraint(
@@ -522,8 +541,6 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
                 equalTo: shieldImage.trailingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            trackersLabel.topAnchor.constraint(equalTo: trackersView.topAnchor, constant: 11),
-            trackersLabel.bottomAnchor.constraint(equalTo: trackersView.bottomAnchor, constant: -11),
             trackersLabel.trailingAnchor.constraint(
                 equalTo: trackersDetailArrow.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
@@ -549,6 +566,11 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             trackersView.bottomAnchor.constraint(equalTo: trackersHorizontalLine.bottomAnchor),
         ]
 
+        if let trackersLabelTopConstraint, let trackersLabelBottomConstraint {
+            constraints.append(trackersLabelTopConstraint)
+            constraints.append(trackersLabelBottomConstraint)
+        }
+
         constraints.append(contentsOf: blockedTrackersConstraints)
     }
 
@@ -556,7 +578,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     private func setupConnectionStatusView() {
         connectionView.addSubviews(connectionStatusImage, connectionStatusLabel, connectionDetailArrow)
         connectionView.addSubviews(connectionButton, connectionHorizontalLine)
-        baseView.addSubviews(connectionView)
+        trackersConnectionContainer.addArrangedSubview(connectionView)
 
         lockImageHeightConstraint = connectionStatusImage.widthAnchor.constraint(
             equalToConstant: TPMenuUX.UX.iconSize
@@ -722,6 +744,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             .withRenderingMode(.alwaysTemplate)
         connectionStatusLabel.text = viewModel.connectionStatusString
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
+        viewModel.isProtectionEnabled = toggleSwitch.isOn
         toggleLabel.text = .Menu.EnhancedTrackingProtection.switchTitle
         toggleStatusLabel.text = toggleSwitch.isOn ?
             .Menu.EnhancedTrackingProtection.switchOnText : .Menu.EnhancedTrackingProtection.switchOffText
@@ -811,7 +834,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     func trackingProtectionToggleTapped() {
         // site is safelisted if site ETP is disabled
         viewModel.toggleSiteSafelistStatus()
-        toggleStatusLabel.text = toggleSwitch.isOn ? .ETPOn : .ETPOff
+        updateProtectionViewStatus()
     }
 
     @objc
@@ -863,6 +886,30 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     func willDismiss() {
     }
+
+    // MARK: - Update Views
+    private func updateProtectionViewStatus() {
+        if toggleSwitch.isOn {
+            // TODO: FXIOS-9195 #20363 Enhanced Tracking Protection screen status enabled design
+            toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOnText
+            trackersView.isHidden = false
+            trackersLabelTopConstraint?.constant = TPMenuUX.UX.trackersLabelConstraintConstant
+            trackersLabelBottomConstraint?.constant = -TPMenuUX.UX.trackersLabelConstraintConstant
+            viewModel.isProtectionEnabled = true
+            foxStatusImage.image = viewModel.protectionOnImage
+            connectionDetailsContentView.backgroundColor = currentTheme().colors.layerAccentPrivateNonOpaque
+        } else {
+            toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOffText
+            trackersView.isHidden = true
+            trackersLabelTopConstraint?.constant = 0
+            trackersLabelBottomConstraint?.constant = 0
+            viewModel.isProtectionEnabled = false
+            foxStatusImage.image = viewModel.protectionOffImage
+            connectionDetailsContentView.backgroundColor = currentTheme().colors.layer3
+        }
+        connectionDetailsTitleLabel.text = viewModel.connectionDetailsTitle
+        connectionDetailsStatusLabel.text = viewModel.connectionDetailsHeader
+    }
 }
 
 // MARK: - Themable
@@ -876,13 +923,14 @@ extension TrackingProtectionViewController {
             .tinted(withColor: theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
-        connectionDetailsContentView.backgroundColor = theme.colors.layerAccentPrivateNonOpaque
         trackersView.backgroundColor = theme.colors.layer2
         trackersDetailArrow.tintColor = theme.colors.iconSecondary
         shieldImage.tintColor = theme.colors.iconPrimary
         connectionView.backgroundColor = theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
         connectionStatusImage.image = viewModel.getConnectionStatusImage(themeType: theme.type)
+        connectionDetailsContentView.backgroundColor = toggleSwitch.isOn ?
+        currentTheme().colors.layerAccentPrivateNonOpaque : theme.colors.layer3
         headerContainer.tintColor = theme.colors.layer2
         siteDomainLabel.textColor = theme.colors.textSecondary
         siteDisplayTitleLabel.textColor = theme.colors.textPrimary
