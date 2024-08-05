@@ -36,8 +36,6 @@ public extension FileManager {
         // Then delete the file itself.
         do {
             try FileManager.default.removeItem(atPath: path)
-        } catch {
-            NSLog("Unable to delete file at \(path): \(error)")
-        }
+        } catch {}
     }
 }
