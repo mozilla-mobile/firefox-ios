@@ -26,7 +26,6 @@ class PasswordManagerViewModelTests: XCTestCase {
         )
         self.dataSource = LoginDataSource(viewModel: self.viewModel)
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
-        self.addLogins()
     }
 
     override func tearDown() {
@@ -36,54 +35,71 @@ class PasswordManagerViewModelTests: XCTestCase {
         dataSource = nil
     }
 
-    private func addLogins() {
+    private func setupLogins() {
         _ = self.viewModel.profile.logins.wipeLocalEngine()
 
+        var expectations: [XCTestExpectation] = []
         for i in (0..<10) {
+            let addExp = XCTestExpectation(description: "Adding login \(i) \(#function)\(#line)")
+            expectations.append(addExp)
+
             let login = LoginEntry(fromJSONDict: [
                 "hostname": "https://example\(i).com",
                 "formSubmitUrl": "https://example.com",
                 "username": "username\(i)",
                 "password": "password\(i)"
             ])
-            let addExp = expectation(description: "\(#function)\(#line)")
-            self.viewModel.profile.logins.addLogin(login: login).upon { addResult in
-                XCTAssertTrue(addResult.isSuccess)
-                XCTAssertNotNil(addResult.successValue)
-                addExp.fulfill()
+            self.viewModel.profile.logins.addLogin(login: login) { result in
+                switch result {
+                case .success(let logins):
+                    XCTAssertEqual(logins?.fields.origin, "https://example\(i).com")
+                    addExp.fulfill()
+                case .failure:
+                    XCTFail("Should not have failed")
+                }
             }
         }
-
-        let logins = self.viewModel.profile.logins.listLogins().value
-        XCTAssertTrue(logins.isSuccess)
-        XCTAssertNotNil(logins.successValue)
-
-        waitForExpectations(timeout: 10.0, handler: nil)
+        wait(for: expectations, timeout: 10.0)
     }
 
-    func testQueryLogins() {
-        let expectation = XCTestExpectation()
+    func testQueryLoginsWithEmptyString() {
+        setupLogins()
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("") { emptyQueryResult in
             XCTAssertEqual(emptyQueryResult.count, 10)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithExampleString() {
+        setupLogins()
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("example") { exampleQueryResult in
             XCTAssertEqual(exampleQueryResult.count, 10)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithNumericString() {
+        setupLogins()
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("3") { threeQueryResult in
             XCTAssertEqual(threeQueryResult.count, 1)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithNoResults() {
+        setupLogins()
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("yxz") { zQueryResult in
             XCTAssertEqual(zQueryResult.count, 0)
             expectation.fulfill()
         }
-
-        wait(for: [expectation], timeout: 5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testIsDuringSearchControllerDismiss() {
