@@ -22,6 +22,6 @@ features:
           one_tap_new_tab: false
       - channel: developer
         value:
-          enabled: false
+          enabled: true
           one_tap_new_tab: false
 

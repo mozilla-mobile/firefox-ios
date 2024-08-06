@@ -133,9 +133,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.urlDidChange,
-            ToolbarMiddlewareActionType.readerModeStateChanged:
+        case ToolbarMiddlewareActionType.urlDidChange:
             updateUrlAndActions(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.readerModeStateChanged:
+            updateReaderModeState(action: action, state: state)
 
         case ToolbarMiddlewareActionType.didStartEditingUrl:
             updateAddressToolbarNavigationActions(action: action,
@@ -391,6 +393,25 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                           readerModeState: action.readerModeState,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateReaderModeState(action: ToolbarMiddlewareAction,
+                                       state: AppState) {
+        guard let readerModeState = action.readerModeState,
+              let addressToolbarModel = generateAddressToolbarActions(action: action,
+                                                                      state: state,
+                                                                      lockIconImageName: action.lockIconImageName,
+                                                                      isEditing: false),
+              let navToolbarModel = generateNavigationToolbarActions(action: action,
+                                                                     state: state)
+        else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          navigationToolbarModel: navToolbarModel,
+                                          readerModeState: readerModeState,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.readerModeStateChanged)
         store.dispatch(toolbarAction)
     }
 

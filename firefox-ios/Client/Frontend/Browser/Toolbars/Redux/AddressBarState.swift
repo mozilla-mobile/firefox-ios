@@ -91,6 +91,19 @@ struct AddressBarState: StateType, Equatable {
                 isEditing: state.isEditing
             )
 
+        case ToolbarActionType.readerModeStateChanged:
+            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                lockIconImageName: addressToolbarModel.lockIconImageName
+            )
+
         case ToolbarActionType.addressToolbarActionsDidChange:
             guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
 

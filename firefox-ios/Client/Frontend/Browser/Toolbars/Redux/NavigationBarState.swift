@@ -30,7 +30,8 @@ struct NavigationBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars,
-            ToolbarActionType.urlDidChange:
+            ToolbarActionType.urlDidChange,
+            ToolbarActionType.readerModeStateChanged:
             guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(
