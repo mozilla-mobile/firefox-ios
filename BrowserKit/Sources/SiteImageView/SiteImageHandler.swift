@@ -45,7 +45,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? "", invalidCharacters: false),
                                                faviconURL: imageModel.faviconURL,
                                                type: imageModel.expectedImageType)
-       
+
         switch site.expectedImageType {
         case .heroImage:
             do {
@@ -124,7 +124,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
                 // Try to fetch the favicon URL
                 faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
             }
-            
+
             // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache
             let icon = await imageHandler.fetchFavicon(site: faviconURLImageModel)
             currentInFlightRequest = nil
