@@ -737,11 +737,10 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
         siteDomainLabel.text = viewModel.websiteTitle
         siteDisplayTitleLabel.text = viewModel.displayTitle
-        let totalTrackerBlocked = String(viewModel.contentBlockerStats?.total ?? 0)
-        let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel, totalTrackerBlocked)
-        trackersLabel.text = trackersText
+        trackersLabel.text = getTrackerString()
         shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
             .withRenderingMode(.alwaysTemplate)
+        connectionStatusImage.image = viewModel.getConnectionStatusImage(themeType: currentTheme().type)
         connectionStatusLabel.text = viewModel.connectionStatusString
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         viewModel.isProtectionEnabled = toggleSwitch.isOn
@@ -751,6 +750,15 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         connectionDetailsTitleLabel.text = viewModel.connectionDetailsTitle
         connectionDetailsStatusLabel.text = viewModel.connectionDetailsHeader
         foxStatusImage.image = viewModel.connectionDetailsImage
+    }
+
+    private func getTrackerString() -> String {
+        if let trackersNumber = viewModel.contentBlockerStats?.total, trackersNumber > 0 {
+            return String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
+                          String(trackersNumber))
+        } else {
+            return .Menu.EnhancedTrackingProtection.noTrackersLabel
+        }
     }
 
     private func setupViewActions() {
