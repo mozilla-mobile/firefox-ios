@@ -11,7 +11,7 @@ class PageShortcutsTest: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1857439
+    // https://mozilla.testrail.io/index.php?/cases/view/1857439
     func testAddRemoveShortcut() {
         addShortcut(website: "mozilla.org")
 
@@ -29,7 +29,7 @@ class PageShortcutsTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1857438
+    // https://mozilla.testrail.io/index.php?/cases/view/1857438
     func testAddRenameShortcut() {
         addShortcut(website: "mozilla.org")
 
@@ -51,7 +51,7 @@ class PageShortcutsTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1857440
+    // https://mozilla.testrail.io/index.php?/cases/view/1857440
     func testShortcutShownWhileTypingURLBar() {
         addShortcut(website: "example.com")
         app.urlTextField.tap()
