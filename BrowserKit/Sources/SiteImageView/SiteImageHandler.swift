@@ -126,13 +126,13 @@ public class DefaultSiteImageHandler: SiteImageHandler {
             }
 
             // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache
-            let icon = await imageHandler.fetchFavicon(site: faviconURLImageModel)
+            let icon = await imageHandler.fetchFavicon(imageModel: faviconURLImageModel)
             currentInFlightRequest = nil
             return icon
         } catch {
             // If no favicon URL, generate favicon without it
             currentInFlightRequest = nil
-            return await imageHandler.fetchFavicon(site: imageModel)
+            return await imageHandler.fetchFavicon(imageModel: imageModel)
         }
     }
 
