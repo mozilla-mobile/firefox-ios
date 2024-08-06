@@ -139,7 +139,8 @@ class TrackingProtectionModel {
     }
 
     func clearCookiesAndSiteData() {
+        _ = CookiesClearable().clear()
+        _ = SiteDataClearable().clear()
         selectedTab?.webView?.reload()
-        WebCacheUtils.reset()
     }
 }
