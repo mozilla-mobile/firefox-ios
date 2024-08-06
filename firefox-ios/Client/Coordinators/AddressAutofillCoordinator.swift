@@ -85,8 +85,10 @@ class AddressAutofillCoordinator: BaseCoordinator {
                 object: .addressAutofillPromptDismissed
             )
         }
-        let bottomSheetVC = BottomSheetViewController(viewModel: bottomSheetViewModel,
-                                                      childViewController: hostingController)
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetViewModel,
+            childViewController: hostingController,
+            windowUUID: tabManager.windowUUID)
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .tap,

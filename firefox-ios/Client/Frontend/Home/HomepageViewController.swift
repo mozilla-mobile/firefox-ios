@@ -417,7 +417,8 @@ class HomepageViewController:
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)
