@@ -10,7 +10,7 @@ class HomeButtonTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306925
+    // https://mozilla.testrail.io/index.php?/cases/view/2306925
     func testGoHome() throws {
         if iPad() {
             waitForTabsButton()
@@ -34,7 +34,7 @@ class HomeButtonTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306883
+    // https://mozilla.testrail.io/index.php?/cases/view/2306883
     func testSwitchHomepageKeyboardNotRaisedUp() {
         // Open a new tab and load a web page
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
@@ -47,7 +47,7 @@ class HomeButtonTests: BaseTestCase {
         validateHomePageAndKeyboardNotRaisedUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306881
+    // https://mozilla.testrail.io/index.php?/cases/view/2306881
     func testAppLaunchKeyboardNotRaisedUp() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         validateHomePageAndKeyboardNotRaisedUp()

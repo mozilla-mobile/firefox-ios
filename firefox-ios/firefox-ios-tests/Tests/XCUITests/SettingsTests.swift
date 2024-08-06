@@ -15,7 +15,7 @@ class SettingsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334757
+    // https://mozilla.testrail.io/index.php?/cases/view/2334757
     func testHelpOpensSUMOInTab() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -36,7 +36,7 @@ class SettingsTests: BaseTestCase {
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334760
+    // https://mozilla.testrail.io/index.php?/cases/view/2334760
     func testOpenSiriOption() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -44,7 +44,7 @@ class SettingsTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["SiriSettings"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334756
+    // https://mozilla.testrail.io/index.php?/cases/view/2334756
     func testCopiedLinks() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -76,7 +76,7 @@ class SettingsTests: BaseTestCase {
         XCTAssertEqual(value3 as? String, "1")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307041
+    // https://mozilla.testrail.io/index.php?/cases/view/2307041
     func testOpenMailAppSettings() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -107,7 +107,7 @@ class SettingsTests: BaseTestCase {
         navigator.goto(SettingsScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307058
+    // https://mozilla.testrail.io/index.php?/cases/view/2307058
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
     func testImageOnOff() {
@@ -133,7 +133,7 @@ class SettingsTests: BaseTestCase {
         checkShowImages(showImages: true)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306808
+    // https://mozilla.testrail.io/index.php?/cases/view/2306808
     // Smoketest
     func testSettingsOptionSubtitles() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])

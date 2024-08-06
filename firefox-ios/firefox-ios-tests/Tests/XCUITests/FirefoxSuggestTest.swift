@@ -5,7 +5,7 @@
 import XCTest
 
 class FirefoxSuggestTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2360075
+    // https://mozilla.testrail.io/index.php?/cases/view/2360075
     func testFirefoxSuggestExists() {
         navigator.openURL("www.example.com")
         navigator.createNewTab()

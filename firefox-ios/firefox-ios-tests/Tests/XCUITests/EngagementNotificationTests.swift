@@ -12,7 +12,7 @@ class EngagementNotificationTests: BaseTestCase {
         super.setUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307101
+    // https://mozilla.testrail.io/index.php?/cases/view/2307101
     func testDontAllowNotifications() {
         // Skip login
         navigator.nowAt(BrowserTab)

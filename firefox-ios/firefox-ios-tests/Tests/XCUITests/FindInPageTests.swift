@@ -19,7 +19,7 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToExist(app.searchFields["find.searchField"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323463
+    // https://mozilla.testrail.io/index.php?/cases/view/2323463
     func testFindInLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
@@ -39,7 +39,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306851
+    // https://mozilla.testrail.io/index.php?/cases/view/2306851
     // Smoketest
     func testFindFromMenu() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
@@ -76,7 +76,7 @@ class FindInPageTests: BaseTestCase {
         mozWaitForElementToNotExist(app.textFields["Book"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323705
+    // https://mozilla.testrail.io/index.php?/cases/view/2323705
     func testFindInPageTwoWordsSearch() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
@@ -88,7 +88,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["1 of 6"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323714
+    // https://mozilla.testrail.io/index.php?/cases/view/2323714
     func testFindInPageTwoWordsSearchLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         // Workaround until FxSGraph is fixed to allow the previous way with goto
@@ -103,7 +103,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323718
+    // https://mozilla.testrail.io/index.php?/cases/view/2323718
     func testFindInPageResultsPageShowHideContent() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
@@ -115,7 +115,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["1 of 6"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323801
+    // https://mozilla.testrail.io/index.php?/cases/view/2323801
     func testQueryWithNoMatches() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
@@ -126,7 +126,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["0"].exists, "There should not be any matches")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323802
+    // https://mozilla.testrail.io/index.php?/cases/view/2323802
     func testBarDisappearsWhenReloading() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
@@ -140,7 +140,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertFalse(app.searchFields["find.searchField"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323803
+    // https://mozilla.testrail.io/index.php?/cases/view/2323803
     func testBarDisappearsWhenOpeningTabsTray() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
@@ -159,7 +159,7 @@ class FindInPageTests: BaseTestCase {
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323467
+    // https://mozilla.testrail.io/index.php?/cases/view/2323467
     func testFindFromLongTap() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)

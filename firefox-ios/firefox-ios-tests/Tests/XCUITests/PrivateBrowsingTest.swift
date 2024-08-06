@@ -15,7 +15,7 @@ let url2Label = "Internet for people, not profit — Mozilla"
 class PrivateBrowsingTest: BaseTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307004
+    // https://mozilla.testrail.io/index.php?/cases/view/2307004
     func testPrivateTabDoesNotTrackHistory() {
         navigator.openURL(url1)
         waitForTabsButton()
@@ -45,7 +45,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(privateHistory, 1, "History entries in private browsing do not match")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307005
+    // https://mozilla.testrail.io/index.php?/cases/view/2307005
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
         navigator.nowAt(NewTabScreen)
@@ -89,7 +89,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307006
+    // https://mozilla.testrail.io/index.php?/cases/view/2307006
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.nowAt(NewTabScreen)
@@ -120,7 +120,7 @@ class PrivateBrowsingTest: BaseTestCase {
      created (because the db didn't exist in the cache)
      https://bugzilla.mozilla.org/show_bug.cgi?id=1646756
      */
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307011
+    // https://mozilla.testrail.io/index.php?/cases/view/2307011
     func testClearIndexedDB() {
         navigator.nowAt(NewTabScreen)
 
@@ -145,7 +145,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // checkIndexedDBIsCreated()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307007
+    // https://mozilla.testrail.io/index.php?/cases/view/2307007
     func testPrivateBrowserPanelView() {
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
@@ -174,7 +174,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(numPrivTabsOpen, 1, "The number of private tabs is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307012
+    // https://mozilla.testrail.io/index.php?/cases/view/2307012
     func testLongPressLinkOptionsPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -191,7 +191,7 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Download Link"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2497357
+    // https://mozilla.testrail.io/index.php?/cases/view/2497357
     func testAllPrivateTabsRestore() {
         // Several tabs opened in private tabs tray. Tap on the trashcan
         navigator.nowAt(NewTabScreen)
@@ -238,7 +238,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertEqual(4, numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307003
+    // https://mozilla.testrail.io/index.php?/cases/view/2307003
     func testHamburgerMenuNewPrivateTab() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(urlExample)
@@ -283,7 +283,7 @@ fileprivate extension BaseTestCase {
 
 class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
     // This test is disabled for iPad because the toast menu is not shown there
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307013
+    // https://mozilla.testrail.io/index.php?/cases/view/2307013
     // Smoketest
     func testSwitchBetweenPrivateTabsToastButton() {
         if skipPlatform { return }
@@ -314,7 +314,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     // This test is only enabled for iPad. Shortcut does not exists on iPhone
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307008
+    // https://mozilla.testrail.io/index.php?/cases/view/2307008
     func testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad() {
         if skipPlatform { return }
         waitForTabsButton()
@@ -329,7 +329,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         checkOpenTabsBeforeClosingPrivateMode()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307009
+    // https://mozilla.testrail.io/index.php?/cases/view/2307009
     func testiPadDirectAccessPrivateMode() {
         if skipPlatform { return }
         waitForTabsButton()
@@ -354,7 +354,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         XCTAssertEqual(history, 0, "History list should be empty")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307010
+    // https://mozilla.testrail.io/index.php?/cases/view/2307010
     func testiPadDirectAccessPrivateModeBrowserTab() {
         if skipPlatform { return }
         navigator.openURL("www.mozilla.org")
