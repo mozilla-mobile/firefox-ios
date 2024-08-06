@@ -14,7 +14,7 @@ let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
 
 class TrackingProtectionTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307059
+    // https://mozilla.testrail.io/index.php?/cases/view/2307059
     // Smoketest
     func testStandardProtectionLevel() {
         navigator.goto(URLBarOpen)
@@ -81,7 +81,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2319381
+    // https://mozilla.testrail.io/index.php?/cases/view/2319381
     func testLockIconMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
@@ -122,7 +122,7 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertTrue(app.switches.element.exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2318742
+    // https://mozilla.testrail.io/index.php?/cases/view/2318742
     func testProtectionLevelMoreInfoMenu() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
@@ -146,7 +146,7 @@ class TrackingProtectionTests: BaseTestCase {
         app.buttons["Tracking Protection"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307061
+    // https://mozilla.testrail.io/index.php?/cases/view/2307061
     func testLockIconSecureConnection() {
         navigator.openURL("https://www.Mozilla.org")
         waitUntilPageLoad()

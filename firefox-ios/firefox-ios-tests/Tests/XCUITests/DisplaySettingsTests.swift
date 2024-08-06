@@ -5,7 +5,7 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2337485
+    // https://mozilla.testrail.io/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
@@ -15,7 +15,7 @@ class DisplaySettingTests: BaseTestCase {
         XCTAssertEqual(switchValue as! String, "1")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2337487
+    // https://mozilla.testrail.io/index.php?/cases/view/2337487
     func testCheckSystemThemeChanges() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)

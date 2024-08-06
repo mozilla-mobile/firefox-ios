@@ -16,7 +16,7 @@ var uid: String!
 var code: String!
 
 class SyncUITests: BaseTestCase {
-    //  https://testrail.stage.mozaws.net/index.php?/cases/view/2448597
+    //  https://mozilla.testrail.io/index.php?/cases/view/2448597
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
         waitForTabsButton()
@@ -47,7 +47,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2448874
+    // https://mozilla.testrail.io/index.php?/cases/view/2448874
     func testTypeOnGivenFields() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -83,7 +83,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.webViews.staticTexts["At least 8 characters"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2449603
+    // https://mozilla.testrail.io/index.php?/cases/view/2449603
     func testCreateAnAccountLink() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
@@ -98,7 +98,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToExist(app.webViews.buttons["Create account"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2449604
+    // https://mozilla.testrail.io/index.php?/cases/view/2449604
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing
         // and disappears when no password is typed
@@ -124,7 +124,7 @@ class SyncUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.webViews.staticTexts[passMessage])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2449605
+    // https://mozilla.testrail.io/index.php?/cases/view/2449605
     func testQRPairing() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)

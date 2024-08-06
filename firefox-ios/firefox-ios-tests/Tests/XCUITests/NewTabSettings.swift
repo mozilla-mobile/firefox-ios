@@ -6,7 +6,7 @@ import XCTest
 
 let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307026
+    // https://mozilla.testrail.io/index.php?/cases/view/2307026
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -18,7 +18,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells["NewTabAsCustomURL"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307027
+    // https://mozilla.testrail.io/index.php?/cases/view/2307027
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -38,7 +38,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Highlights"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307028
+    // https://mozilla.testrail.io/index.php?/cases/view/2307028
     func testChangeNewTabSettingsShowFirefoxHome() {
         // Set to history page first since FF Home is default
         waitForTabsButton()
@@ -60,7 +60,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307029
+    // https://mozilla.testrail.io/index.php?/cases/view/2307029
     // Smoketest
     func testChangeNewTabSettingsShowCustomURL() {
         navigator.nowAt(NewTabScreen)
@@ -83,7 +83,7 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307030
+    // https://mozilla.testrail.io/index.php?/cases/view/2307030
     func testChangeNewTabSettingsLabel() {
         navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
@@ -107,7 +107,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Firefox Home")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306877
+    // https://mozilla.testrail.io/index.php?/cases/view/2306877
     // Smoketest
     func testKeyboardRaisedWhenTabOpenedFromTabTray() {
         // Add New tab and set it as Blank
@@ -128,7 +128,7 @@ class NewTabSettingsTest: BaseTestCase {
         validateKeyboardIsRaisedAndDismissed()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306875
+    // https://mozilla.testrail.io/index.php?/cases/view/2306875
     // Smoketest
     func testNewTabCustomURLKeyboardNotRaised() {
         // Set a custom URL
