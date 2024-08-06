@@ -39,8 +39,8 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertNil(result.heroImage)
         XCTAssertNotNil(result.faviconImage)
 
-        XCTAssertNil(imageHandler.capturedSite?.faviconURL)
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "example.hello")
+        XCTAssertNil(imageHandler.capturedImageModel?.faviconURL)
+        XCTAssertEqual(imageHandler.capturedImageModel?.cacheKey, "example.hello")
     }
 
     func testFavicon_wrongURL_useFallbackDomain() async {
@@ -54,7 +54,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "www.example.hello.com")
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "www.example.hello.com")
+        XCTAssertEqual(imageHandler.capturedImageModel?.cacheKey, "www.example.hello.com")
     }
 
     func testFavicon_faviconURLFound_generateFavicon() async {
@@ -75,8 +75,8 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertNil(result.heroImage)
         XCTAssertNotNil(result.faviconImage)
 
-        XCTAssertEqual(imageHandler.capturedSite?.faviconURL, faviconURL)
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "mozilla")
+        XCTAssertEqual(imageHandler.capturedImageModel?.faviconURL, faviconURL)
+        XCTAssertEqual(imageHandler.capturedImageModel?.cacheKey, "mozilla")
     }
 
     func testFaviconIndirectDomain_faviconURLFound_generateFavicon() async {
@@ -94,8 +94,8 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertNil(result.heroImage)
         XCTAssertNotNil(result.faviconImage)
 
-        XCTAssertEqual(imageHandler.capturedSite?.faviconURL?.absoluteString, "https://www.mozilla.com")
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.mozilla.com")
+        XCTAssertEqual(imageHandler.capturedImageModel?.faviconURL?.absoluteString, "https://www.mozilla.com")
+        XCTAssertEqual(imageHandler.capturedImageModel?.cacheKey, "https://www.mozilla.com")
     }
 
     // MARK: - Hero image
@@ -116,9 +116,9 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertNil(result.heroImage)
         XCTAssertNotNil(result.faviconImage)
 
-        XCTAssertNil(imageHandler.capturedSite?.faviconURL)
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.firefox.com")
-        XCTAssertEqual(imageHandler.capturedSite?.siteURL, URL(string: siteURL))
+        XCTAssertNil(imageHandler.capturedImageModel?.faviconURL)
+        XCTAssertEqual(imageHandler.capturedImageModel?.cacheKey, "https://www.firefox.com")
+        XCTAssertEqual(imageHandler.capturedImageModel?.siteURL, URL(string: siteURL))
     }
 
     func testHeroImage_heroImageFound_returnsHeroImage() async {
@@ -138,9 +138,9 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertNotNil(result.heroImage)
         XCTAssertNil(result.faviconImage)
 
-        XCTAssertNil(imageHandler.capturedSite?.faviconURL)
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.focus.com")
-        XCTAssertEqual(imageHandler.capturedSite?.siteURL, URL(string: siteURL))
+        XCTAssertNil(imageHandler.capturedImageModel?.faviconURL)
+        XCTAssertEqual(imageHandler.capturedImageModel?.cacheKey, "https://www.focus.com")
+        XCTAssertEqual(imageHandler.capturedImageModel?.siteURL, URL(string: siteURL))
     }
 
     // Test cache
@@ -197,16 +197,16 @@ private class MockFaviconURLHandler: FaviconURLHandler {
 private class MockImageHandler: ImageHandler {
     var faviconImage = UIImage()
     var heroImage: UIImage?
-    var capturedSite: SiteImageModel?
+    var capturedImageModel: SiteImageModel?
     var clearCacheCalledCount = 0
 
-    func fetchFavicon(site: SiteImageModel) async -> UIImage {
-        capturedSite = site
+    func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
+        capturedImageModel = imageModel
         return faviconImage
     }
 
-    func fetchHeroImage(site: SiteImageModel) async throws -> UIImage {
-        capturedSite = site
+    func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
+        capturedImageModel = imageModel
         if let image = heroImage {
             return image
         } else {
