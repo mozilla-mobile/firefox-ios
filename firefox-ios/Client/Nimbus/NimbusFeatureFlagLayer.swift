@@ -302,8 +302,6 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.nativeErrorPageFeature.value()
-
-        return config.enabled
+        return nimbus.features.nativeErrorPageFeature.value().enabled
     }
 }

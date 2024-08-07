@@ -1,6 +1,6 @@
 # The configuration for the nativeErrorPageFeature feature
 features:
-  nativeErrorPage-feature:
+  native-error-page-feature:
     description: >
       This feature is for managing the roll out of the native error page feature
     variables:
