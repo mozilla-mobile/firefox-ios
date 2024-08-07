@@ -32,6 +32,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
+            // [FXIOS-9785 Note #3] Toolbar delegate can't be set unless the webView is already initialized
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl(isEnabled: true)

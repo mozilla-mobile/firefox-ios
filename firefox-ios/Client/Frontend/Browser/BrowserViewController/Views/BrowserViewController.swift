@@ -3243,6 +3243,7 @@ extension BrowserViewController: TabManagerDelegate {
         updateFindInPageVisibility(isVisible: false, tab: previous)
         setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
 
+        // [FXIOS-9785 Note #2] Back button can't be enabled unless the webView is already initialized
         if isToolbarRefactorEnabled {
             dispatchBackForwardToolbarAction(selected?.canGoBack, windowUUID, .backButtonStateChanged)
             dispatchBackForwardToolbarAction(selected?.canGoForward, windowUUID, .forwardButtonStateChanged)
