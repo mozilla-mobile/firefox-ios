@@ -360,12 +360,12 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         preserveTabs()
 
-        Task(priority: .high) {
+        Task(priority: .high) { [weak self] in
             var sessionData: Data?
             if !tab.isFxHomeTab {
-                sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
+                sessionData = await self?.tabSessionStore.fetchTabSession(tabID: tabUUID)
             }
-            await selectTabWithSession(tab: tab,
+            self?.selectTabWithSession(tab: tab,
                                        previous: previous,
                                        sessionData: sessionData)
         }
@@ -436,10 +436,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         store.dispatch(action)
     }
 
-    @MainActor
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
-        selectedTab?.createWebview(with: sessionData)
-        selectedTab?.lastExecutedTime = Date.now()
+        ensureMainThread { [weak self] in
+            self?.selectedTab?.createWebview(with: sessionData)
+            self?.selectedTab?.lastExecutedTime = Date.now()
+        }
     }
 
     // MARK: - Screenshots
