@@ -34,12 +34,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
-                let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
-                if let port = Int(portString) {
-                    AppInfo.webserverPort = port
-                } else {
-                    fatalError("Failed to set web server port override.")
-                }
+                configureWebserverPort(arg)
             }
 
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
@@ -198,6 +193,15 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         self.profile = profile
         return profile
+    }
+
+    private func configureWebserverPort(_ arg: String) {
+        let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
+        if let port = Int(portString) {
+            AppInfo.webserverPort = port
+        } else {
+            fatalError("Failed to set web server port override.")
+        }
     }
 
     override func application(
