@@ -1,3 +1,4 @@
+// swiftlint:disable comment_spacing file_header
 //// This Source Code Form is subject to the terms of the Mozilla Public
 //// License, v. 2.0. If a copy of the MPL was not distributed with this
 //// file, You can obtain one at http://mozilla.org/MPL/2.0/
@@ -51,7 +52,7 @@
 //        }
 //    }
 //
-//    // MARK: - Private
+    // MARK: - Private
 //
 //    private func getConfig() -> ADJConfig? {
 //        let bundle = AppInfo.applicationBundle
@@ -85,7 +86,7 @@
 //        return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
 //    }
 //
-//    // MARK: - UserDefaults
+    // MARK: - UserDefaults
 //
 //    private enum UserDefaultsKey: String {
 //        case hasAttribution = "com.moz.adjust.hasAttribution.key"
@@ -97,7 +98,7 @@
 //    }
 //}
 //
-//// MARK: - AdjustDelegate
+// MARK: - AdjustDelegate
 //extension AdjustHelper: AdjustDelegate {
 //    /// This is called when Adjust has figured out the attribution. It will call us with a summary
 //    /// of all the things it knows. Like the campaign ID. We simply save a boolean that attribution
@@ -122,3 +123,4 @@
 //        return true
 //    }
 //}
+// swiftlint:enable comment_spacing file_header

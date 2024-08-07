@@ -1,3 +1,4 @@
+// swiftlint:disable comment_spacing file_header
 //// This Source Code Form is subject to the terms of the Mozilla Public
 //// License, v. 2.0. If a copy of the MPL was not distributed with this
 //// file, You can obtain one at http://mozilla.org/MPL/2.0/
@@ -72,7 +73,7 @@
 //        XCTAssertEqual(gleanWrapper.submitPingCalled, 1)
 //    }
 //
-//    // MARK: - Helper
+    // MARK: - Helper
 //
 //    func createSubject() -> AdjustTelemetryHelper {
 //        let subject = AdjustTelemetryHelper(gleanWrapper: gleanWrapper,
@@ -81,3 +82,4 @@
 //        return subject
 //    }
 //}
+// swiftlint:enable comment_spacing file_header
