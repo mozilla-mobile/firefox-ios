@@ -24,7 +24,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306967
+    // https://mozilla.testrail.io/index.php?/cases/view/2306967
     // SmokeTest
     func testAccessingTheCreditCardsSection() {
         navigator.nowAt(NewTabScreen)
@@ -55,7 +55,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306978
+    // https://mozilla.testrail.io/index.php?/cases/view/2306978
     // SmokeTest
     func testDeleteButtonFromEditCard() {
         addCardAndReachViewCardPage()
@@ -91,7 +91,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables.cells.element(boundBy: 1))
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306975
+    // https://mozilla.testrail.io/index.php?/cases/view/2306975
     // SmokeTest
     func testEditSavedCardsUI() {
         addCardAndReachViewCardPage()
@@ -103,7 +103,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306972
+    // https://mozilla.testrail.io/index.php?/cases/view/2306972
     func testManageCreditCardsOption() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
@@ -124,7 +124,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306969
+    // https://mozilla.testrail.io/index.php?/cases/view/2306969
     // Smoketest
     func testAutofillCreditCardsToggleOnOoff() {
         navigator.nowAt(NewTabScreen)
@@ -181,7 +181,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306971
+    // https://mozilla.testrail.io/index.php?/cases/view/2306971
     func testCreditCardsAutofill() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
@@ -200,7 +200,7 @@ class CreditCardsTests: BaseTestCase {
         XCTAssertEqual(contentView["ZIP"].value! as! String, "ZIP")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306976
+    // https://mozilla.testrail.io/index.php?/cases/view/2306976
     func testVerifyThatTheEditedCreditCardIsSaved() {
         // Go to a saved credit card and change the name on card
         let updatedName = "Firefox"
@@ -231,7 +231,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306974
+    // https://mozilla.testrail.io/index.php?/cases/view/2306974
     func testVerifyThatMultipleCardsCanBeAdded() {
         // Add multiple credit cards
         let expectedCards = 3
@@ -294,7 +294,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306977
+    // https://mozilla.testrail.io/index.php?/cases/view/2306977
     func testErrorStatesCreditCards() {
         // Go to a saved credit card and delete the name
         addCardAndReachViewCardPage()
@@ -349,7 +349,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306979
+    // https://mozilla.testrail.io/index.php?/cases/view/2306979
     func testSaveThisCardPrompt() {
         navigator.goto(NewTabScreen)
         navigator.openURL("https://checkout.stripe.dev/preview")
@@ -410,7 +410,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306980
+    // https://mozilla.testrail.io/index.php?/cases/view/2306980
     func testUpdatePrompt() throws {
         if #unavailable(iOS 16) {
             throw XCTSkip("addCreditCardAndReachAutofillWebsite() does not work on iOS 15")
@@ -491,7 +491,7 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306970
+    // https://mozilla.testrail.io/index.php?/cases/view/2306970
     func testRedirectionToCreditCardsSection() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

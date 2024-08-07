@@ -1,6 +1,21 @@
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
+"Alerts.FeltDeletion.Body.v122" = "Zatvori sve privatne kartice i izbriši povijest, kolačiće i sve ostale podatke web stranica.";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
+"Alerts.FeltDeletion.Button.Cancel.v122" = "Odustani";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
+"Alerts.FeltDeletion.Button.Confirm.v122" = "Izbriši podatke sesije";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
+"Alerts.FeltDeletion.Title.v122" = "Završiti privatnu sesiju?";
+
 /* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
 "Alerts.RestoreTabs.Button.No.v109" = "Ne";
 
 /* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
 "Alerts.RestoreTabs.Button.Yes.v109" = "Vrati kartice";
+
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ se srušio. Želiš li vratiti tvoje kartice?";
 

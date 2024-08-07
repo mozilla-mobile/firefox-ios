@@ -9,7 +9,7 @@ class SettingTest: BaseTestCase {
 
     // Smoketest
     // Check for the basic appearance of the Settings Menu
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394976
+    // https://mozilla.testrail.io/index.php?/cases/view/394976
     func testCheckSetting() {
         dismissURLBarFocused()
 
@@ -120,7 +120,7 @@ class SettingTest: BaseTestCase {
         waitForExistence(app.navigationBars["Settings"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574974
+    // https://mozilla.testrail.io/index.php?/cases/view/2574974
     func testOpenInSafari() {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)
@@ -150,7 +150,7 @@ class SettingTest: BaseTestCase {
         waitForExistence(app.staticTexts["Browsing history cleared"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574975
+    // https://mozilla.testrail.io/index.php?/cases/view/2574975
     func testEnableDisableAutocomplete() {
         dismissURLBarFocused()
 
@@ -179,7 +179,7 @@ class SettingTest: BaseTestCase {
         toggle.tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574976
+    // https://mozilla.testrail.io/index.php?/cases/view/2574976
     func testAddRemoveCustomDomain() {
         dismissURLBarFocused()
         // Navigate to Settings
@@ -234,7 +234,7 @@ class SettingTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569297
+    // https://mozilla.testrail.io/index.php?/cases/view/1569297
     func testSafariIntegration() {
         dismissURLBarFocused()
 
@@ -303,7 +303,7 @@ class SettingTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2584834
+    // https://mozilla.testrail.io/index.php?/cases/view/2584834
     func testVisitWebsite() {
         dismissURLBarFocused()
 
@@ -334,7 +334,7 @@ class SettingTest: BaseTestCase {
         checkForHomeScreen()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    // https://mozilla.testrail.io/index.php?/cases/view/394967
     func testDisableAutocomplete() {
         let urlTextField = app.urlTextField
         let searchSuggestionsOverlay = app.searchSuggestionsOverlay
@@ -351,7 +351,7 @@ class SettingTest: BaseTestCase {
         XCTAssertEqual(urlTextField.value as? String, "mozilla")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    // https://mozilla.testrail.io/index.php?/cases/view/394967
     func testReEnableAutoComplete() {
         let urlTextField = app.urlTextField
         let searchSuggestionsOverlay = app.searchSuggestionsOverlay
@@ -369,7 +369,7 @@ class SettingTest: BaseTestCase {
         XCTAssertEqual(urlTextField.value as? String, "mozilla.org/")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    // https://mozilla.testrail.io/index.php?/cases/view/394967
     func testAutocompleteCustomDomain() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()

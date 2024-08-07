@@ -1,0 +1,6 @@
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "Tko bi mogao vidjeti moju aktivnost?";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "Ne ostavljaj tragove na ovom uređaju";
+

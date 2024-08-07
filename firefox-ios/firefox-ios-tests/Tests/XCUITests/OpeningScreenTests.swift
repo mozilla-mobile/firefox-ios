@@ -4,7 +4,7 @@
 
 import Foundation
 class OpeningScreenTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307039
+    // https://mozilla.testrail.io/index.php?/cases/view/2307039
     func testLastOpenedTab() {
         // Open a web page
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)

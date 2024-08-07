@@ -4132,7 +4132,7 @@ extension String {
                 comment: "Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked")
 
             public static let noTrackersLabel = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
+                key: "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131",
                 tableName: "EnhancedTrackingProtection",
                 value: "No trackers found",
                 comment: "Text to let users know that no trackers were found on the current website.")
