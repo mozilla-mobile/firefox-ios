@@ -23,15 +23,17 @@ struct TopSitesProvider: TimelineProvider {
                                                            returning: [String: Image].self) { group in
                 for site in widgetKitTopSites {
                     let siteImageModel = SiteImageModel(id: UUID(),
-                                                        expectedImageType: .favicon,
-                                                        siteURLString: site.url.absoluteString)
+                                                        imageType: .favicon,
+                                                        siteURL: site.url)
                     group.addTask {
-                        await (site.imageKey,
-                               siteImageFetcher.getImage(site: siteImageModel))
+                        let image = await siteImageFetcher.getImage(model: siteImageModel)
+                        let newModel = SiteImageModel(siteImageModel: siteImageModel, image: image)
+
+                        return (site.imageKey, newModel)
                     }
                 }
 
-                return await group.reduce(into: [:]) { $0[$1.0] = Image(uiImage: $1.1.faviconImage ?? UIImage()) }
+                return await group.reduce(into: [:]) { $0[$1.0] = Image(uiImage: $1.1.image ?? UIImage()) }
             }
 
             let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: widgetKitTopSites)

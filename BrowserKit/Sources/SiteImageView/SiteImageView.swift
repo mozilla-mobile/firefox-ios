@@ -13,8 +13,8 @@ protocol SiteImageView: UIView {
     /// The URL string representing the currently-displayed image on the view.
     /// This is `nil` if an image has been set manually.
     var currentURLString: String? { get set }
-    func updateImage(site: SiteImageModel)
-    func setImage(imageModel: SiteImageModel)
+    func updateImage(model: SiteImageModel)
+    func setImage(model: SiteImageModel)
     func canMakeRequest(with siteURLString: String?) -> Bool
 }
 
@@ -28,13 +28,16 @@ extension SiteImageView {
         return currentURLString != siteURLString
     }
 
-    func updateImage(site: SiteImageModel) {
+    func updateImage(model: SiteImageModel) {
         Task {
-            let imageModel = await imageFetcher.getImage(site: site)
+            let image = await imageFetcher.getImage(model: model)
+            let newModel = SiteImageModel(siteImageModel: model, image: image)
 
-            DispatchQueue.main.async { [weak self] in
-                guard let self, uniqueID == imageModel.id else { return }
-                setImage(imageModel: imageModel)
+            await MainActor.run { [weak self] in
+                guard let self, uniqueID == newModel.id else {
+                    return
+                }
+                setImage(model: newModel)
             }
         }
     }

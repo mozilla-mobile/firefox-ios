@@ -73,8 +73,11 @@ public class HeroImageView: UIView, SiteImageView {
 
     // MARK: - SiteImageView
 
-    func setURL(_ siteURLString: String, type: SiteImageType) {
-        guard canMakeRequest(with: siteURLString) else { return }
+    func setURL(_ siteURLString: String, type: SiteImageType) { // FIXME
+        guard canMakeRequest(with: siteURLString),
+              let siteURL = URL(string: siteURLString, invalidCharacters: false) else {
+            return
+        }
 
         heroImageView.image = nil
         let id = UUID()
@@ -82,29 +85,30 @@ public class HeroImageView: UIView, SiteImageView {
         currentURLString = siteURLString
 
         let model = SiteImageModel(id: id,
-                                   expectedImageType: .heroImage,
-                                   siteURLString: siteURLString)
-        updateImage(site: model)
+                                   imageType: .heroImage,
+                                   siteURL: siteURL)
+        updateImage(model: model)
     }
 
-    func setImage(imageModel: SiteImageModel) {
-        setHeroImage(imageModel: imageModel)
+    func setImage(model: SiteImageModel) {
+        setHeroImage(imageModel: model)
         completionHandler?()
     }
 
     // MARK: - Hero image
 
     private func setHeroImage(imageModel: SiteImageModel) {
-        if let heroImage = imageModel.heroImage {
-            // If hero image is a square use it as a favicon
-            guard heroImage.size.width == heroImage.size.height else {
-                setHeroImage(image: heroImage)
-                return
-            }
-            setFallbackFavicon(image: heroImage)
-        } else if let faviconImage = imageModel.faviconImage {
-            setFallbackFavicon(image: faviconImage)
+        guard let image = imageModel.image else {
+            return
         }
+
+        // If hero image is a square use it as a favicon
+        guard image.size.width == image.size.height else {
+            setHeroImage(image: image)
+            return
+        }
+
+        setFallbackFavicon(image: image)
     }
 
     private func setupHeroImageLayout(viewModel: HeroImageViewModel) {

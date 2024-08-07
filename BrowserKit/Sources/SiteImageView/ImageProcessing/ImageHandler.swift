@@ -7,14 +7,12 @@ import UIKit
 protocol ImageHandler {
     /// The ImageHandler will fetch the favicon with the following precedence:
     ///     1. Tries to fetch from the cache.
-    ///     2. Tries to fetch from the favicon fetcher (from the web) if there's a URL.
-    ///        If there's no URL it fallbacks to the letter favicon.
-    ///     3. When all fails it returns the letter favicon.
+    ///     2. If there is a URL, tries to fetch from the web.
+    ///     3. When all fails, returns the letter favicon.
     ///
-    /// Any time the favicon is fetched, it will be cache for future usage.
-    ///
+    /// Any time a favicon is fetched, it will be cached for future usage.
     /// - Parameters:
-    ///   - imageURL: The image URL, can be nil if it could not be retrieved from the site
+    ///   - imageModel: The image URL, can be nil if it could not be retrieved from the site
     ///   - domain: The domain this favicon will be associated with
     /// - Returns: The favicon image
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage
@@ -53,7 +51,7 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(cacheKey: imageModel.cacheKey, type: imageModel.expectedImageType)
+            return try await imageCache.getImageFromCache(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
         }
@@ -61,7 +59,7 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(cacheKey: imageModel.cacheKey, type: .heroImage)
+            return try await imageCache.getImageFromCache(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return try await fetchHeroImageFromFetcher(imageModel: imageModel)
         }
@@ -77,12 +75,12 @@ class DefaultImageHandler: ImageHandler {
 
     private func fetchFaviconFromFetcher(imageModel: SiteImageModel) async -> UIImage {
         do {
-            guard let url = imageModel.faviconURL else {
+            guard let faviconURL = imageModel.resourceURL else {
                 return await fallbackToLetterFavicon(imageModel: imageModel)
             }
 
-            let image = try await faviconFetcher.fetchFavicon(from: url)
-            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.expectedImageType)
+            let image = try await faviconFetcher.fetchFavicon(from: faviconURL) // FIXME we don't want to cache letters!
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
             return await fallbackToLetterFavicon(imageModel: imageModel)
@@ -90,11 +88,8 @@ class DefaultImageHandler: ImageHandler {
     }
 
     private func fetchHeroImageFromFetcher(imageModel: SiteImageModel) async throws -> UIImage {
-        guard let siteURL = imageModel.siteURL else {
-            throw SiteImageError.noHeroImage
-        }
         do {
-            let image = try await heroImageFetcher.fetchHeroImage(from: siteURL)
+            let image = try await heroImageFetcher.fetchHeroImage(from: imageModel.siteURL)
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: .heroImage)
             return image
         } catch {
@@ -105,7 +100,7 @@ class DefaultImageHandler: ImageHandler {
     private func fallbackToLetterFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
             let image = try await letterImageGenerator.generateLetterImage(siteString: imageModel.cacheKey)
-            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.expectedImageType)
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
