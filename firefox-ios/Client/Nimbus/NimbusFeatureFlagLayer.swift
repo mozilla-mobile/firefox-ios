@@ -58,6 +58,9 @@ final class NimbusFeatureFlagLayer {
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
+        case .nativeErrorPage:
+            return checkNativeErrorPageFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
@@ -296,5 +299,11 @@ final class NimbusFeatureFlagLayer {
     private func checkCloseRemoteTabsFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.remoteTabManagement.value()
         return config.closeTabsEnabled
+    }
+
+    private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.nativeErrorPageFeature.value()
+
+        return config.enabled
     }
 }
