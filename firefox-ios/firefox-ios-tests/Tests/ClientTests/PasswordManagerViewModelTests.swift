@@ -13,6 +13,7 @@ import XCTest
 class PasswordManagerViewModelTests: XCTestCase {
     var viewModel: PasswordManagerViewModel!
     var dataSource: LoginDataSource!
+    var mockDelegate: MockLoginViewModelDelegate!
 
     override func setUp() {
         super.setUp()
@@ -24,15 +25,15 @@ class PasswordManagerViewModelTests: XCTestCase {
             searchController: searchController,
             theme: LightTheme()
         )
-        self.dataSource = LoginDataSource(viewModel: self.viewModel)
+        self.mockDelegate = MockLoginViewModelDelegate()
+        self.viewModel.delegate = mockDelegate
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
     }
 
     override func tearDown() {
-        super.tearDown()
-        DependencyHelperMock().reset()
         viewModel = nil
-        dataSource = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     private func setupLogins() {
@@ -60,6 +61,14 @@ class PasswordManagerViewModelTests: XCTestCase {
             }
         }
         wait(for: expectations, timeout: 10.0)
+        self.viewModel.profile.logins.listLogins(completionHandler: { result in
+            switch result {
+            case .success(let logins):
+                XCTAssertEqual(logins.count, 10)
+            case .failure:
+                XCTFail("Should not have failed")
+            }
+        })
     }
 
     func testQueryLoginsWithEmptyString() {
@@ -76,6 +85,18 @@ class PasswordManagerViewModelTests: XCTestCase {
         setupLogins()
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("example") { exampleQueryResult in
+            XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
+            XCTAssertEqual(exampleQueryResult.compactMap { $0.fields.origin }, [
+                "https://example0.com",
+                "https://example1.com",
+                "https://example2.com",
+                "https://example3.com",
+                "https://example4.com",
+                "https://example5.com",
+                "https://example6.com",
+                "https://example7.com",
+                "https://example8.com",
+                "https://example9.com"])
             XCTAssertEqual(exampleQueryResult.count, 10)
             expectation.fulfill()
         }
@@ -86,6 +107,8 @@ class PasswordManagerViewModelTests: XCTestCase {
         setupLogins()
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("3") { threeQueryResult in
+            XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
+            XCTAssertEqual(threeQueryResult.first?.fields.origin, "https://example3.com")
             XCTAssertEqual(threeQueryResult.count, 1)
             expectation.fulfill()
         }
