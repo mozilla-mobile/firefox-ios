@@ -225,7 +225,8 @@ class TabManagerMiddleware {
         // Be careful to use active tabs and not inactive tabs
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
         tabManagerTabs.forEach { tab in
-            let tabModel = TabModel(tabUUID: tab.tabUUID,
+            let tabModel = TabModel(id: tab.tabUUID,
+                                    tabUUID: tab.tabUUID,
                                     isSelected: tab.tabUUID == selectedTab?.tabUUID,
                                     isPrivate: tab.isPrivate,
                                     isFxHomeTab: tab.isFxHomeTab,
@@ -250,7 +251,9 @@ class TabManagerMiddleware {
         let tabManager = tabManager(for: uuid)
         var inactiveTabs = [InactiveTabsModel]()
         for tab in tabManager.getInactiveTabs() {
-            let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
+            let inactiveTab = InactiveTabsModel(
+                                                id: tab.tabUUID,
+                                                tabUUID: tab.tabUUID,
                                                 title: tab.displayTitle,
                                                 url: tab.url,
                                                 favIconURL: tab.faviconURL)

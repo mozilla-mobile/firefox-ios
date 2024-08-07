@@ -4,7 +4,8 @@
 
 import Foundation
 
-struct TabModel: Equatable {
+struct TabModel: Equatable, Identifiable, Hashable {
+    let id: String
     let tabUUID: TabUUID
     let isSelected: Bool
     let isPrivate: Bool
@@ -22,6 +23,7 @@ struct TabModel: Equatable {
         isSelected: Bool = false
     ) -> TabModel {
         return TabModel(
+            id: tabUUID, 
             tabUUID: tabUUID,
             isSelected: isSelected,
             isPrivate: isPrivate,

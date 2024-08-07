@@ -4,7 +4,9 @@
 
 import Foundation
 
-struct InactiveTabsModel: Equatable {
+struct InactiveTabsModel: Equatable, Identifiable, Hashable {
+    // why are these var instead of let??
+    let id: String
     var tabUUID: TabUUID
     var title: String
     var url: URL?

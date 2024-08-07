@@ -66,6 +66,7 @@ struct TabsPanelState: ScreenState, Equatable {
          toastType: ToastType? = nil,
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
+         didMoveTab: Bool = false,
          urlRequest: URLRequest? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs
@@ -151,17 +152,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   scrollState: scrollModel)
-
-//        case TabPanelAction.didTapAddTab:
-//        let didTapNewTab = context.didTapAddTab
-//        let urlRequest = context.urlRequest
-//        let isPrivateMode = context.isPrivate
-//        return TabsPanelState(windowUUID: state.windowUUID,
-//        isPrivateMode: isPrivateMode,
-//        tabs: state.tabs,
-//        inactiveTabs: state.inactiveTabs,
-//        isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-//        didTapAddTab: didTapNewTab)
 
         default:
             return defaultState(fromPreviousState: state)
