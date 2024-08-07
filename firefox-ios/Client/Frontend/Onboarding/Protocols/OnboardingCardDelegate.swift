@@ -108,7 +108,6 @@ extension OnboardingCardDelegate where Self: OnboardingViewControllerProtocol,
             }
         )
         var bottomSheetViewModel = BottomSheetViewModel(
-            windowUUID: windowUUID,
             closeButtonA11yLabel: .CloseButtonTitle,
             closeButtonA11yIdentifier:
                 AccessibilityIdentifiers.Onboarding.bottomSheetCloseButton

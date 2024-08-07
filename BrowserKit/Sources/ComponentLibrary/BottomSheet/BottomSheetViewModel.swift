@@ -22,10 +22,7 @@ public struct BottomSheetViewModel {
     public var closeButtonA11yLabel: String
     public var closeButtonA11yIdentifier: String
 
-    let windowUUID: WindowUUID
-
     public init(
-        windowUUID: WindowUUID,
         cornerRadius: CGFloat = BottomSheetViewModel.UX.cornerRadius,
         animationTransitionDuration: TimeInterval = BottomSheetViewModel.UX.animationTransitionDuration,
         backgroundColor: UIColor = .clear,
@@ -34,7 +31,6 @@ public struct BottomSheetViewModel {
         closeButtonA11yLabel: String,
         closeButtonA11yIdentifier: String
     ) {
-        self.windowUUID = windowUUID
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
         self.backgroundColor = backgroundColor

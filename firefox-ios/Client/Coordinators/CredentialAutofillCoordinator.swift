@@ -106,7 +106,6 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
 
         var bottomSheetViewModel = BottomSheetViewModel(
-            windowUUID: windowUUID,
             closeButtonA11yLabel: .CloseButtonTitle,
             closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton
         )
@@ -184,7 +183,6 @@ class CredentialAutofillCoordinator: BaseCoordinator {
         }
 
         var bottomSheetViewModel = BottomSheetViewModel(
-            windowUUID: windowUUID,
             closeButtonA11yLabel: .CloseButtonTitle,
             closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton
         )
