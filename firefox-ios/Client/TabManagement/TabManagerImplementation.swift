@@ -440,6 +440,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
+
+        // Broadcast updates for any listeners
+        delegates.forEach {
+            $0.get()?.tabManager(
+                self,
+                didSelectedTabChange: tab,
+                previous: previous,
+                isRestoring: !tabRestoreHasFinished
+            )
+        }
     }
 
     // MARK: - Screenshots
