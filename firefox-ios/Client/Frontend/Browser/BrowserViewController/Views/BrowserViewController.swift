@@ -1374,8 +1374,6 @@ class BrowserViewController: UIViewController,
 
     private func setupNativeErrorPage() {
         guard featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) else { return }
-
-        print("native error page feature enabled")
     }
 
     // MARK: - Update content
