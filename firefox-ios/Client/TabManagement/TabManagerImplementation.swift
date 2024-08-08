@@ -440,6 +440,22 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
+
+        // [FXIOS-9785 Note 1] Workaround to resolve Aug 7, 2024 incident (PR #21486)
+        //   NOTE: This needs more work because the change from PR #21328 fixed another issue,
+        //         and thus couldn't be completely rolled back.
+        //         However, now we are repeating this delegate notification which is less than ideal and may have unexpected
+        //         consequences.
+        //         See ticket for more information.
+        // Broadcast updates for any listeners
+        delegates.forEach {
+            $0.get()?.tabManager(
+                self,
+                didSelectedTabChange: tab,
+                previous: previous,
+                isRestoring: !tabRestoreHasFinished
+            )
+        }
     }
 
     // MARK: - Screenshots
