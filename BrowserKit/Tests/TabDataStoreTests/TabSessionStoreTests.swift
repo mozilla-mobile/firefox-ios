@@ -21,24 +21,24 @@ final class TabSessionStoreTests: XCTestCase {
 
     // MARK: Save
 
-    func testSaveWithoutDirectory() async {
+    func testSaveWithoutDirectory() {
         let subject = createSubject()
         let uuid = UUID()
         let dataFile = Data(count: 100)
-        await subject.saveTabSession(tabID: uuid, sessionData: dataFile)
+        subject.saveTabSession(tabID: uuid, sessionData: dataFile)
 
         XCTAssertEqual(mockFileManager.tabSessionDataDirectoryCalledCount, 1)
         XCTAssertEqual(mockFileManager.fileExistsCalledCount, 0)
         XCTAssertEqual(mockFileManager.createDirectoryAtPathCalledCount, 0)
     }
 
-    func testSaveTabSession() async {
+    func testSaveTabSession() {
         let subject = createSubject()
         let uuid = UUID()
         let dataFile = Data(count: 100)
         mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
         mockFileManager.fileExists = false
-        await subject.saveTabSession(tabID: uuid, sessionData: dataFile)
+        subject.saveTabSession(tabID: uuid, sessionData: dataFile)
 
         XCTAssertEqual(mockFileManager.tabSessionDataDirectoryCalledCount, 1)
         XCTAssertEqual(mockFileManager.fileExistsCalledCount, 1)
@@ -47,21 +47,21 @@ final class TabSessionStoreTests: XCTestCase {
 
     // MARK: Fetch
 
-    func testFetchTabSessionWithoutDirectory() async {
+    func testFetchTabSessionWithoutDirectory() {
         let subject = createSubject()
         let uuid = UUID()
 
-        _ = await subject.fetchTabSession(tabID: uuid)
+        _ = subject.fetchTabSession(tabID: uuid)
 
         XCTAssertEqual(mockFileManager.tabSessionDataDirectoryCalledCount, 1)
     }
 
-    func testFetchTabSession() async {
+    func testFetchTabSession() {
         let subject = createSubject()
         let uuid = UUID()
         mockFileManager.primaryDirectoryURL = URL(string: "some/directory")
 
-        _ = await subject.fetchTabSession(tabID: uuid)
+        _ = subject.fetchTabSession(tabID: uuid)
 
         XCTAssertEqual(mockFileManager.tabSessionDataDirectoryCalledCount, 1)
     }
