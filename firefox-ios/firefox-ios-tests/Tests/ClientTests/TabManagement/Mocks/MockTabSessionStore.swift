@@ -10,17 +10,17 @@ class MockTabSessionStore: TabSessionStore {
     var tabID: UUID?
     var sessionData: Data?
 
-    func saveTabSession(tabID: UUID, sessionData: Data) async {
+    func saveTabSession(tabID: UUID, sessionData: Data) {
         saveTabSessionCallCount += 1
         self.tabID = tabID
         self.sessionData = sessionData
     }
 
-    func fetchTabSession(tabID: UUID) async -> Data? {
+    func fetchTabSession(tabID: UUID) -> Data? {
         return Data()
     }
 
-    func clearAllData() async {}
+    func clearAllData() {}
 
-    func deleteUnusedTabSessionData(keeping: [UUID]) async {}
+    func deleteUnusedTabSessionData(keeping: [UUID]) {}
 }
