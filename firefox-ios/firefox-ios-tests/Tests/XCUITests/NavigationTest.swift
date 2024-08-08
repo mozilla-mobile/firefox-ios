@@ -368,7 +368,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.buttons["Advanced"])
+        mozWaitForElementToExist(app.buttons["Advanced"], timeout: TIMEOUT_LONG)
         app.buttons["Advanced"].tap()
 
         mozWaitForElementToExist(app.links["Visit site anyway"])

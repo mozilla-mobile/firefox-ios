@@ -12,6 +12,7 @@ class MultiWindowTests: IpadOnlyTestCase {
 
     override func setUp() {
         super.setUp()
+        super.setUpLaunchArguments()
         if dotMenuIdentifier.element(boundBy: 1).exists {
             closeSplitViewWindow(windowToClose: 1)
         }
@@ -25,11 +26,15 @@ class MultiWindowTests: IpadOnlyTestCase {
     }
 
     func testMultiWindowFromHomeScreen() {
+        if skipPlatform { return }
         dismissSurveyPrompt()
         splitViewFromHomeScreen()
+        XCTAssertEqual(dotMenuIdentifier.count, 2, "There are not 2 instances opened")
         // Tap menu button on first and second window
         let menuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
+        mozWaitForElementToExist(app.buttons.matching(identifier: menuButton).element(boundBy: 0))
         app.buttons.matching(identifier: menuButton).element(boundBy: 0).tap()
+        mozWaitForElementToExist(app.buttons.matching(identifier: menuButton).element(boundBy: 1))
         app.buttons.matching(identifier: menuButton).element(boundBy: 1).tap()
         // Tap on settings on first and second window
         let settings = StandardImageIdentifiers.Large.settings
@@ -39,6 +44,7 @@ class MultiWindowTests: IpadOnlyTestCase {
     }
 
     func testOpenWindowFromTabSwitcher() {
+        if skipPlatform { return }
         openWindowFromTabSwitcher(windowsNumber: 1)
         // selectTabFromSwitcher()
     }
