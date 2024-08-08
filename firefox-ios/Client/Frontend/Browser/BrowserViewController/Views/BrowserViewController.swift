@@ -1369,6 +1369,13 @@ class BrowserViewController: UIViewController,
         updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
+
+    // MARK: - Native Error Page
+
+    private func setupNativeErrorPage() {
+        guard featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) else { return }
+    }
+
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
