@@ -3200,8 +3200,9 @@ extension BrowserViewController: TabManagerDelegate {
             selected?.webView?.applyTheme(theme: currentTheme())
         }
 
-        if let tab = selected, let webView = tab.webView {
+        if let tab = selected {
             updateURLBarDisplayURL(tab)
+
             if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
                 urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
             }
@@ -3215,16 +3216,18 @@ extension BrowserViewController: TabManagerDelegate {
 
             scrollController.tab = tab
 
-            webView.accessibilityLabel = .WebViewAccessibilityLabel
-            webView.accessibilityIdentifier = "contentView"
-            webView.accessibilityElementsHidden = false
+            if let webView = tab.webView {
+                webView.accessibilityLabel = .WebViewAccessibilityLabel
+                webView.accessibilityIdentifier = "contentView"
+                webView.accessibilityElementsHidden = false
 
-            browserDelegate?.show(webView: webView)
+                browserDelegate?.show(webView: webView)
 
-            if webView.url == nil {
-                // The web view can go gray if it was zombified due to memory pressure.
-                // When this happens, the URL is nil, so try restoring the page upon selection.
-                tab.reload()
+                if webView.url == nil {
+                    // The web view can go gray if it was zombified due to memory pressure.
+                    // When this happens, the URL is nil, so try restoring the page upon selection.
+                    tab.reload()
+                }
             }
 
             // Update Fakespot sidebar if necessary
