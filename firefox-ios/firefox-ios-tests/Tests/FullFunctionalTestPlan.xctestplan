@@ -158,6 +158,7 @@
         "TopTabsTestIphone\/testSwitchBetweenTabsNoPrivatePrivateToastButton()",
         "TopTabsTestIphone\/testSwitchBetweenTabsToastButton()",
         "TrackingProtectionTests\/testEnableDisableTPforSite()",
+        "TrackingProtectionTests\/testStandardProtectionLevel()",
         "TrackingProtectionTests\/testTrackingProtection()",
         "URLValidationTests",
         "ZoomingTests\/testZommingActions()",
