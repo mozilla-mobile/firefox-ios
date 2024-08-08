@@ -7,6 +7,7 @@ import MozillaAppServices
 import Shared
 import Storage
 import XCTest
+import Glean
 
 @testable import Client
 
@@ -31,9 +32,11 @@ class PasswordManagerViewModelTests: XCTestCase {
         self.mockDelegate = MockLoginViewModelDelegate()
         self.viewModel.delegate = mockDelegate
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
+        Glean.shared.resetGlean(clearStores: true)
         viewModel = nil
         mockLoginProvider = nil
         mockDelegate = nil
@@ -54,6 +57,7 @@ class PasswordManagerViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
     }
 
     func testaddLoginWithString() {
@@ -69,6 +73,7 @@ class PasswordManagerViewModelTests: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
     }
 
     func testQueryLoginsWithEmptyString() {
