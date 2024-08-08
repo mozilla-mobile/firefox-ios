@@ -14,16 +14,19 @@ class PasswordManagerViewModelTests: XCTestCase {
     var viewModel: PasswordManagerViewModel!
     var dataSource: LoginDataSource!
     var mockDelegate: MockLoginViewModelDelegate!
+    var mockLoginProvider: MockLoginProvider!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         let mockProfile = MockProfile()
+        self.mockLoginProvider = MockLoginProvider()
         let searchController = UISearchController()
         self.viewModel = PasswordManagerViewModel(
             profile: mockProfile,
             searchController: searchController,
-            theme: LightTheme()
+            theme: LightTheme(),
+            loginProvider: mockLoginProvider
         )
         self.mockDelegate = MockLoginViewModelDelegate()
         self.viewModel.delegate = mockDelegate
@@ -32,94 +35,57 @@ class PasswordManagerViewModelTests: XCTestCase {
 
     override func tearDown() {
         viewModel = nil
+        mockLoginProvider = nil
+        mockDelegate = nil
         DependencyHelperMock().reset()
         super.tearDown()
     }
 
-    private func setupLogins() {
-        _ = self.viewModel.profile.logins.wipeLocalEngine()
-
-        var expectations: [XCTestExpectation] = []
-        for i in (0..<10) {
-            let addExp = XCTestExpectation(description: "Adding login \(i) \(#function)\(#line)")
-            expectations.append(addExp)
-
-            let login = LoginEntry(fromJSONDict: [
-                "hostname": "https://example\(i).com",
-                "formSubmitUrl": "https://example.com",
-                "username": "username\(i)",
-                "password": "password\(i)"
-            ])
-            self.viewModel.profile.logins.addLogin(login: login) { result in
-                switch result {
-                case .success(let logins):
-                    XCTAssertEqual(logins?.fields.origin, "https://example\(i).com")
-                    addExp.fulfill()
-                case .failure:
-                    XCTFail("Should not have failed")
-                }
-            }
+    func testaddLoginWithEmptyString() {
+        let login = LoginEntry(fromJSONDict: [
+                        "hostname": "https://example.com",
+                        "formSubmitUrl": "https://example.com",
+                        "username": "username",
+                        "password": "password"
+                    ])
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
+        viewModel.save(loginRecord: login) { exampleQueryResult in
+            XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
+            expectation.fulfill()
         }
-        wait(for: expectations, timeout: 10.0)
-        self.viewModel.profile.logins.listLogins(completionHandler: { result in
-            switch result {
-            case .success(let logins):
-                XCTAssertEqual(logins.count, 10)
-            case .failure:
-                XCTFail("Should not have failed")
-            }
-        })
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testaddLoginWithString() {
+        let login = LoginEntry(fromJSONDict: [
+                        "hostname": "https://example.com",
+                        "formSubmitUrl": "https://example.com",
+                        "username": "username",
+                        "password": "password"
+                    ])
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
+        viewModel.save(loginRecord: login) { exampleQueryResult in
+            XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
     }
 
     func testQueryLoginsWithEmptyString() {
-        setupLogins()
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("") { emptyQueryResult in
-            XCTAssertEqual(emptyQueryResult.count, 10)
+            XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
+            XCTAssertEqual(self.mockLoginProvider.searchLoginsWithQueryCalledCount, 1)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
     }
 
     func testQueryLoginsWithExampleString() {
-        setupLogins()
         let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("example") { exampleQueryResult in
             XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
-            XCTAssertEqual(exampleQueryResult.compactMap { $0.fields.origin }, [
-                "https://example0.com",
-                "https://example1.com",
-                "https://example2.com",
-                "https://example3.com",
-                "https://example4.com",
-                "https://example5.com",
-                "https://example6.com",
-                "https://example7.com",
-                "https://example8.com",
-                "https://example9.com"])
-            XCTAssertEqual(exampleQueryResult.count, 10)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testQueryLoginsWithNumericString() {
-        setupLogins()
-        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
-        viewModel.queryLogins("3") { threeQueryResult in
-            XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
-            XCTAssertEqual(threeQueryResult.first?.fields.origin, "https://example3.com")
-            XCTAssertEqual(threeQueryResult.count, 1)
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testQueryLoginsWithNoResults() {
-        setupLogins()
-        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
-        viewModel.queryLogins("yxz") { zQueryResult in
-            XCTAssertEqual(zQueryResult.count, 0)
+            XCTAssertEqual(self.mockLoginProvider.searchLoginsWithQueryCalledCount, 1)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
