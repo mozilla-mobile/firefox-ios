@@ -39,7 +39,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         request.httpMethod = "HEAD"
 
         dataTask?.cancel()
-        dataTask = URLSession.shared.dataTask(with: request) { _, response, _ in
+        dataTask = URLSession.sharedMPTCP.dataTask(with: request) { _, response, _ in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
                 completion(nil)
@@ -62,7 +62,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         guard let url = URL(string: endpoint.rawValue, invalidCharacters: false) else { return }
 
         dataTask?.cancel()
-        dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
+        dataTask = URLSession.sharedMPTCP.dataTask(with: url) { data, response, error in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
                 return

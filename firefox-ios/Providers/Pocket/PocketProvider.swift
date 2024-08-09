@@ -58,7 +58,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     private lazy var urlSession = makeURLSession(
         userAgent: UserAgent.defaultClientUserAgent,
-        configuration: URLSessionConfiguration.default
+        configuration: URLSessionConfiguration.defaultMPTCP
     )
 
     private lazy var pocketKey: String? = {

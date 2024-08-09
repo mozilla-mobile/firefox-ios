@@ -118,7 +118,7 @@ class HTTPDownload: Download {
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
 
-        self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
+        self.session = URLSession(configuration: .ephemeralMPTCP, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: self.request)
     }
 
