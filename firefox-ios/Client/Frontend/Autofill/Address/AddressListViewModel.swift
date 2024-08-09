@@ -135,12 +135,12 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
     }
 
     func saveEditButtonTap() {
-        toggleEditMode()
         saveAction? { [weak self] updatedAddress in
             guard let self else { return }
             guard case .edit(let currentAddress) = self.destination else { return }
             self.updateLocal(id: currentAddress.guid, updatedAddress: updatedAddress)
         }
+        toggleEditMode()
     }
 
     private func updateLocal(id: String, updatedAddress: UpdatableAddressFields) {
