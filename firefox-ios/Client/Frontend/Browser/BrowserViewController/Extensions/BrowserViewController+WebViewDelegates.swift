@@ -379,7 +379,6 @@ extension BrowserViewController: WKNavigationDelegate {
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
             updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
-            guard !isToolbarRefactorEnabled else { return }
             hideReaderModeBar(animated: false)
         }
     }

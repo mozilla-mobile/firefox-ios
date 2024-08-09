@@ -1708,6 +1708,7 @@ class BrowserViewController: UIViewController,
             if isToolbarRefactorEnabled {
                 let action = ToolbarMiddlewareAction(
                     isLoading: loading,
+                    url: tab.url?.displayURL,
                     windowUUID: windowUUID,
                     actionType: ToolbarMiddlewareActionType.websiteLoadingStateDidChange
                 )
@@ -1822,8 +1823,6 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            guard tab.webView != nil else { return }
-
             let action = ToolbarMiddlewareAction(
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 lockIconImageName: lockIconImageName(for: tab),

@@ -96,11 +96,11 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
+                navigationActions: state.navigationActions,
                 pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
+                browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: state.url,
+                url: addressToolbarModel.url,
                 lockIconImageName: addressToolbarModel.lockIconImageName
             )
 
