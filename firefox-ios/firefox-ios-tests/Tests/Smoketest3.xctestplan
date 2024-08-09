@@ -94,6 +94,7 @@
         "LoginTest",
         "MicrosurveyTests",
         "MultiWindowTests",
+        "NavigationTest\/testBackArrowNavigation()",
         "NavigationTest\/testBookmarkLink()",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",
