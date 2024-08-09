@@ -162,7 +162,10 @@ class TopSitesHelperTests: XCTestCase {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let subject = createSubject(
             mockPinnedSites: true,
-            pinnedSites: [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))]
+            pinnedSites: [PinnedSite(
+                site: Site(url: "https://facebook.com", title: "Facebook"),
+                faviconURL: "url-does-not-matter"
+            )]
         )
 
         subject.getTopSites { sites in
@@ -182,8 +185,16 @@ class TopSitesHelperTests: XCTestCase {
 // MARK: - Tests data
 extension TopSitesHelperTests {
     var defaultPinnedSites: [PinnedSite] {
-        return [PinnedSite(site: Site(url: "https://apinnedsite.com/", title: "a pinned site title")),
-                PinnedSite(site: Site(url: "https://apinnedsite2.com/", title: "a pinned site title2"))]
+        return [
+            PinnedSite(
+                site: Site(url: "https://apinnedsite.com/", title: "a pinned site title"),
+                faviconURL: "url-does-not-matter-1"
+            ),
+            PinnedSite(
+                site: Site(url: "https://apinnedsite2.com/", title: "a pinned site title2"),
+                faviconURL: "url-does-not-matter-2"
+            )
+        ]
     }
 
     var defaultFrecencySites: [Site] {

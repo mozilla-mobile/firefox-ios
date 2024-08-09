@@ -7,8 +7,10 @@ import Storage
 
 open class PinnedSite: Site {
     let isPinnedSite = true
+    let faviconURL: String?
 
-    init(site: Site) {
+    init(site: Site, faviconURL: String?) {
+        self.faviconURL = faviconURL
         super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
         self.metadata = site.metadata
     }

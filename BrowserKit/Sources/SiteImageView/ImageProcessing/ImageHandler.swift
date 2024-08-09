@@ -6,11 +6,10 @@ import UIKit
 
 protocol ImageHandler {
     /// The ImageHandler will fetch the favicon with the following precedence:
-    ///     1. Tries to fetch from the bundle.
-    ///     2. Tries to fetch from the cache.
-    ///     3. Tries to fetch from the favicon fetcher (from the web) if there's a URL. 
+    ///     1. Tries to fetch from the cache.
+    ///     2. Tries to fetch from the favicon fetcher (from the web) if there's a URL.
     ///        If there's no URL it fallbacks to the letter favicon.
-    ///     4. When all fails it returns the letter favicon.
+    ///     3. When all fails it returns the letter favicon.
     ///
     /// Any time the favicon is fetched, it will be cache for future usage.
     ///
@@ -37,18 +36,15 @@ protocol ImageHandler {
 }
 
 class DefaultImageHandler: ImageHandler {
-    private let bundleImageFetcher: BundleImageFetcher
     private let imageCache: SiteImageCache
     private let faviconFetcher: FaviconFetcher
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
 
-    init(bundleImageFetcher: BundleImageFetcher = DefaultBundleImageFetcher(),
-         imageCache: SiteImageCache = DefaultSiteImageCache(),
+    init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),
          letterImageGenerator: LetterImageGenerator = DefaultLetterImageGenerator(),
          heroImageFetcher: HeroImageFetcher = DefaultHeroImageFetcher()) {
-        self.bundleImageFetcher = bundleImageFetcher
         self.imageCache = imageCache
         self.faviconFetcher = faviconFetcher
         self.letterImageGenerator = letterImageGenerator
@@ -57,9 +53,9 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchFavicon(site: SiteImageModel) async -> UIImage {
         do {
-            return try bundleImageFetcher.getImageFromBundle(domain: site.domain)
+            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: site.expectedImageType)
         } catch {
-            return await fetchFaviconFromCache(site: site)
+            return await fetchFaviconFromFetcher(site: site)
         }
     }
 
@@ -78,14 +74,6 @@ class DefaultImageHandler: ImageHandler {
     }
 
     // MARK: Private
-
-    private func fetchFaviconFromCache(site: SiteImageModel) async -> UIImage {
-        do {
-            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: site.expectedImageType)
-        } catch {
-            return await fetchFaviconFromFetcher(site: site)
-        }
-    }
 
     private func fetchFaviconFromFetcher(site: SiteImageModel) async -> UIImage {
         do {

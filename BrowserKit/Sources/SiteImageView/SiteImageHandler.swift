@@ -46,15 +46,15 @@ public class DefaultSiteImageHandler: SiteImageHandler {
                                                faviconURL: imageModel.faviconURL,
                                                type: imageModel.expectedImageType)
 
-        do {
-            switch site.expectedImageType {
-            case .heroImage:
+        switch site.expectedImageType {
+        case .heroImage:
+            do {
                 imageModel.heroImage = try await getHeroImage(imageModel: imageModel)
-            case .favicon:
+            } catch {
+                // If hero image fails, we return a favicon image
                 imageModel.faviconImage = await getFaviconImage(imageModel: imageModel)
             }
-        } catch {
-            // If hero image fails, we return a favicon image
+        case .favicon:
             imageModel.faviconImage = await getFaviconImage(imageModel: imageModel)
         }
 
@@ -118,10 +118,14 @@ public class DefaultSiteImageHandler: SiteImageHandler {
 
             currentInFlightRequest = imageModel.siteURLString
             var faviconURLImageModel = imageModel
+
+            // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
             if faviconURLImageModel.faviconURL == nil {
                 // Try to fetch the favicon URL
                 faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
             }
+
+            // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache
             let icon = await imageHandler.fetchFavicon(site: faviconURLImageModel)
             currentInFlightRequest = nil
             return icon
