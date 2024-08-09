@@ -385,7 +385,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             $0.get()?.tabManager(
                 self,
                 didSelectedTabChange: tab,
-                previous: previous,
+                previousTab: previous,
                 isRestoring: !tabRestoreHasFinished
             )
         }

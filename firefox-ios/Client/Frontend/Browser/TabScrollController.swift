@@ -31,8 +31,9 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         }
 
         didSet {
+            // FXIOS-9781 This could result in scrolling not closing the toolbar
+            assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
             self.scrollView?.addGestureRecognizer(panGesture)
-            // [FXIOS-9785 Note #3] Toolbar delegate can't be set unless the webView is already initialized
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl(isEnabled: true)

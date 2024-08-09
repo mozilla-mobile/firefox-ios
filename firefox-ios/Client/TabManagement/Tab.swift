@@ -236,10 +236,16 @@ class Tab: NSObject, ThemeApplicable {
     }
 
     var canGoBack: Bool {
+        // FXIOS-9785 This could result in the back button never being enabled for restored tabs
+        assert(webView != nil, "We should not be trying to enable or disable the back button before the webView is set")
+
         return webView?.canGoBack ?? false
     }
 
     var canGoForward: Bool {
+        // FXIOS-9785 This could result in the forward button never being enabled for restored tabs
+        assert(webView != nil, "We should not be trying to enable or disable the forward button before the webView is set")
+
         return webView?.canGoForward ?? false
     }
 
