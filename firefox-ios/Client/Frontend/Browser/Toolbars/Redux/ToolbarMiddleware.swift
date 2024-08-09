@@ -133,9 +133,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.urlDidChange,
-            ToolbarMiddlewareActionType.readerModeStateChanged:
+        case ToolbarMiddlewareActionType.urlDidChange:
             updateUrlAndActions(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.readerModeStateChanged:
+            updateReaderModeState(action: action, state: state)
 
         case ToolbarMiddlewareActionType.didStartEditingUrl:
             updateAddressToolbarNavigationActions(action: action,
@@ -394,6 +396,23 @@ final class ToolbarMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
+    private func updateReaderModeState(action: ToolbarMiddlewareAction,
+                                       state: AppState) {
+        guard let readerModeState = action.readerModeState,
+              let addressToolbarModel = generateAddressToolbarActions(
+                action: action,
+                state: state,
+                lockIconImageName: action.lockIconImageName,
+                isEditing: false
+              ) else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          readerModeState: readerModeState,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.readerModeStateChanged)
+        store.dispatch(toolbarAction)
+    }
+
     private func updateNumberOfTabs(action: ToolbarMiddlewareAction,
                                     state: AppState) {
         guard let numberOfTabs = action.numberOfTabs,
@@ -523,17 +542,14 @@ final class ToolbarMiddleware: FeatureFlaggable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
-        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
-
-        guard url != nil, !isEditing else {
-            // On homepage we only show the QR code button
-            return [qrCodeScanAction]
-        }
-
         let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.readerModeState
         readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
+
+        guard action.url != nil, !isEditing else {
+            // On homepage we only show the QR code button
+            return [qrCodeScanAction]
+        }
 
         switch readerModeState {
         case .active, .available:
@@ -590,7 +606,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let pageActions = addressToolbarPageActions(action: action, toolbarState: toolbarState, isEditing: editing)
         let browserActions = addressToolbarBrowserActions(action: action, state: state)
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
-        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+        let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
+        let url = (isUrlChangeAction || isReaderModeAction) ? action.url : toolbarState.addressToolbar.url
 
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
