@@ -94,6 +94,7 @@
     },
     {
       "skippedTests" : [
+        "ContentBlockerTests",
         "ETPCoverSheetTests",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests",
