@@ -137,11 +137,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         }
         cell.imageView?.tintColor = theme.colors.iconPrimary
         if indexPath.row == 1 {
-            cell.textLabel?.font = DefaultDynamicFontHelper.preferredFont(
-                withTextStyle: .body,
-                size: 13,
-                weight: .regular
-            )
+            cell.textLabel?.font = FXFontStyles.Regular.footnote.scaledFont()
         }
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
