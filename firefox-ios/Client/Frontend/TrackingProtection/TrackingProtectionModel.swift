@@ -20,6 +20,7 @@ class TrackingProtectionModel {
     let displayTitle: String
     let connectionSecure: Bool
     let globalETPIsEnabled: Bool
+    private var selectedTab: Tab?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -95,13 +96,15 @@ class TrackingProtectionModel {
          connectionSecure: Bool,
          globalETPIsEnabled: Bool,
          contentBlockerStatus: BlockerStatus,
-         contentBlockerStats: TPPageStats?) {
+         contentBlockerStats: TPPageStats?,
+         selectedTab: Tab?) {
         self.url = url
         self.displayTitle = displayTitle
         self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
         self.contentBlockerStatus = contentBlockerStatus
         self.contentBlockerStats = contentBlockerStats
+        self.selectedTab = selectedTab
     }
 
     // MARK: - Helpers
@@ -141,5 +144,8 @@ class TrackingProtectionModel {
     }
 
     func clearCookiesAndSiteData() {
+        _ = CookiesClearable().clear()
+        _ = SiteDataClearable().clear()
+        selectedTab?.webView?.reload()
     }
 }
