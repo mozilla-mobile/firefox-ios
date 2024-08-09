@@ -227,7 +227,7 @@ export class FormAutofillHandler {
    * @param {object} profile
    *        A profile to be previewed with
    */
-  async previewFields(elementIds, profile) {
+  previewFields(elementIds, profile) {
     this.getAdaptedProfiles([profile]);
 
     for (const fieldDetail of this.fieldDetails) {

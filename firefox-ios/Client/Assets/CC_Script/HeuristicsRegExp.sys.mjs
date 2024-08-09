@@ -555,7 +555,7 @@ export const HeuristicsRegExp = {
       // Note: `cc-name` expression has been moved up, above `name`, in
       // order to handle specialization through ordering.
       "cc-number":
-        "(add)?(?:card|cc|acct).?(?:number|#|no|num|field)" +
+        "(add)?(?:card|cc|acct).?(?:number|#|no|num|field(?!s)|pan)" +
         // In order to support webkit we convert all negative lookbehinds to a capture group
         // (?<!not)word -> (?<neg>notword)|word
         // TODO: Bug 1829583
