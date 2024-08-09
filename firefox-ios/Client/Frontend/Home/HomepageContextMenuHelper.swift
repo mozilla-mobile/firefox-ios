@@ -243,7 +243,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle,
-                                     iconString: StandardImageIdentifiers.Large.shareApple,
+                                     iconString: StandardImageIdentifiers.Large.share,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             guard let url = URL(string: site.url, invalidCharacters: false) else { return }
