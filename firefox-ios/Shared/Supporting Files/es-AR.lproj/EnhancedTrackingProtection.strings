@@ -22,6 +22,9 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Conexión insegura";
 
+/* Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "No se encontraron rastreadores";
+
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Cookies de rastreo de sitios cruzados: %@";
 
@@ -31,8 +34,7 @@
 /* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Rastreadores de redes sociales: %@";
 
-/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
-   Text to let users know that no trackers were found on the current website. */
+/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Rastreadores bloqueados: %@";
 
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
