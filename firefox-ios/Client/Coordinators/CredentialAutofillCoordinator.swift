@@ -112,7 +112,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
         router.present(bottomSheetVC)
         if state == .save {
@@ -187,7 +188,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
         router.present(bottomSheetVC)
         TelemetryWrapper.recordEvent(

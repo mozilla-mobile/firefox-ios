@@ -55,7 +55,7 @@ class HistoryTests: BaseTestCase {
         super.setUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307300
+    // https://mozilla.testrail.io/index.php?/cases/view/2307300
     func testEmptyHistoryListFirstTime() {
         navigator.nowAt(NewTabScreen)
 
@@ -66,7 +66,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307301
+    // https://mozilla.testrail.io/index.php?/cases/view/2307301
     func testOpenSyncDevices() {
         // Firefox sync page should be available
         navigator.nowAt(NewTabScreen)
@@ -76,7 +76,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements.buttons["Sync and Save Data"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307487
+    // https://mozilla.testrail.io/index.php?/cases/view/2307487
     func testClearHistoryFromSettings() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
             navigator.nowAt(NewTabScreen)
@@ -102,7 +102,7 @@ class HistoryTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307014
+    // https://mozilla.testrail.io/index.php?/cases/view/2307014
     // Smoketest
     func testClearPrivateData() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -127,7 +127,7 @@ class HistoryTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307357
+    // https://mozilla.testrail.io/index.php?/cases/view/2307357
     func testRecentlyClosedWebsiteOpen() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
@@ -140,7 +140,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307463
+    // https://mozilla.testrail.io/index.php?/cases/view/2307463
     func testRecentlyClosedWebsiteClosed() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -161,7 +161,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307475
+    // https://mozilla.testrail.io/index.php?/cases/view/2307475
     func testRecentlyClosedPrivateMode() {
         // Open "Book of Mozilla" on private mode and close the tab
         waitForTabsButton()
@@ -181,7 +181,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307479
+    // https://mozilla.testrail.io/index.php?/cases/view/2307479
     func testRemoveAllTabsButtonRecentlyClosedHistory() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
@@ -200,7 +200,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307482
+    // https://mozilla.testrail.io/index.php?/cases/view/2307482
     func testClearRecentlyClosedHistory() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -226,7 +226,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307483
+    // https://mozilla.testrail.io/index.php?/cases/view/2307483
     func testLongTapOptionsRecentlyClosedItem() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -243,7 +243,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307484
+    // https://mozilla.testrail.io/index.php?/cases/view/2307484
     func testOpenInNewTabRecentlyClosedItem() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -274,7 +274,7 @@ class HistoryTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307485
+    // https://mozilla.testrail.io/index.php?/cases/view/2307485
     func testOpenInNewPrivateTabRecentlyClosedItem() {
         // Open "Book of Mozilla" and close the tab
         openBookOfMozilla()
@@ -308,7 +308,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(userState.numTabs, 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307486
+    // https://mozilla.testrail.io/index.php?/cases/view/2307486
     func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
         navigator.nowAt(NewTabScreen)
 
@@ -349,7 +349,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307025
+    // https://mozilla.testrail.io/index.php?/cases/view/2307025
     // Smoke
     func testTabHistory() {
         navigator.nowAt(NewTabScreen)
@@ -426,7 +426,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306894
+    // https://mozilla.testrail.io/index.php?/cases/view/2306894
     // Smoke
     func testClearRecentHistory() {
         // Visit a page to create a recent history entry.
@@ -467,7 +467,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["Older"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306890
+    // https://mozilla.testrail.io/index.php?/cases/view/2306890
     // Smoketest
     func testDeleteHistoryEntryBySwiping() {
         navigateToPage()

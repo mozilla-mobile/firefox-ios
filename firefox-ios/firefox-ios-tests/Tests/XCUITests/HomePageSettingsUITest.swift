@@ -38,7 +38,7 @@ class HomePageSettingsUITests: BaseTestCase {
         super.setUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339256
+    // https://mozilla.testrail.io/index.php?/cases/view/2339256
     func testCheckHomeSettingsByDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -71,7 +71,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells["HomeAsCustomURL"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339257
+    // https://mozilla.testrail.io/index.php?/cases/view/2339257
     func testTyping() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -96,7 +96,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "example")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339258
+    // https://mozilla.testrail.io/index.php?/cases/view/2339258
     func testClipboard() {
         navigator.nowAt(NewTabScreen)
         // Check that what's in clipboard is copied
@@ -121,7 +121,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: websiteUrl1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339260
+    // https://mozilla.testrail.io/index.php?/cases/view/2339260
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
         waitForTabsButton()
@@ -144,7 +144,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307031
+    // https://mozilla.testrail.io/index.php?/cases/view/2307031
     func testSetCustomURLAsHome() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -165,7 +165,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339489
+    // https://mozilla.testrail.io/index.php?/cases/view/2339489
     func testDisableTopSitesSettingsRemovesSection() {
         mozWaitForElementToExist(
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
@@ -183,7 +183,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.collectionViews.cells.staticTexts["YouTube"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2339491
+    // https://mozilla.testrail.io/index.php?/cases/view/2339491
     func testChangeHomeSettingsLabel() {
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
@@ -214,7 +214,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307033
+    // https://mozilla.testrail.io/index.php?/cases/view/2307033
     func testJumpBackIn() {
         navigator.openURL(path(forTestPage: exampleUrl))
         waitUntilPageLoad()
@@ -254,7 +254,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307034
+    // https://mozilla.testrail.io/index.php?/cases/view/2307034
     func testRecentlySaved() {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
@@ -295,7 +295,7 @@ class HomePageSettingsUITests: BaseTestCase {
         checkBookmarksUpdated()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306923
+    // https://mozilla.testrail.io/index.php?/cases/view/2306923
     // Smoketest
     // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
     // Reloads for notification
@@ -351,7 +351,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // swiftlint:enable line_length
 //    }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306871
+    // https://mozilla.testrail.io/index.php?/cases/view/2306871
     // Smoketest
     func testCustomizeHomepage() {
         if !iPad() {
@@ -399,7 +399,7 @@ class HomePageSettingsUITests: BaseTestCase {
         )
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307032
+    // https://mozilla.testrail.io/index.php?/cases/view/2307032
     func testShortcutsRows() {
         addWebsitesToShortcut(website: path(forTestPage: url_1))
         addWebsitesToShortcut(website: path(forTestPage: url_2["url"]!))

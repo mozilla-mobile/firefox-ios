@@ -1369,6 +1369,13 @@ class BrowserViewController: UIViewController,
         updateBarBordersForMicrosurvey()
         updateViewConstraints()
     }
+
+    // MARK: - Native Error Page
+
+    private func setupNativeErrorPage() {
+        guard featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) else { return }
+    }
+
     // MARK: - Update content
 
     func updateContentInHomePanel(_ browserViewType: BrowserViewType) {
@@ -3460,103 +3467,104 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
+        // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress, back/foward
+        // buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
+        assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
+
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
-        if let webView = previous?.webView {
-            webView.endEditing(true)
-            webView.accessibilityLabel = nil
-            webView.accessibilityElementsHidden = true
-            webView.accessibilityIdentifier = nil
-            webView.removeFromSuperview()
+        if let previousWebView = previousTab?.webView {
+            previousWebView.endEditing(true)
+            previousWebView.accessibilityLabel = nil
+            previousWebView.accessibilityElementsHidden = true
+            previousWebView.accessibilityIdentifier = nil
+            previousWebView.removeFromSuperview()
         }
 
-        if let tab = selected, previous == nil || tab.isPrivate != previous?.isPrivate {
+        if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
             if !isToolbarRefactorEnabled {
                 let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: tab.isPrivate, theme: currentTheme()) }
+                ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
             }
         } else {
             // Theme is applied to the tab and webView in the else case
             // because in the if block is applied already to all the tabs and web views
-            selected?.applyTheme(theme: currentTheme())
-            selected?.webView?.applyTheme(theme: currentTheme())
+            selectedTab.applyTheme(theme: currentTheme())
+            selectedTab.webView?.applyTheme(theme: currentTheme())
         }
 
-        if let tab = selected {
-            updateURLBarDisplayURL(tab)
-            if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode, tab.url?.displayURL != nil {
-                addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-            } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode, tab.url?.displayURL != nil {
-                urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
-            }
-
-            readerModeCache = tab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
-            if let privateModeButton = topTabsViewController?.privateModeButton,
-               previous != nil && previous?.isPrivate != tab.isPrivate {
-                privateModeButton.setSelected(tab.isPrivate, animated: true)
-            }
-            ReaderModeHandlers.readerModeCache = readerModeCache
-
-            scrollController.tab = tab
-
-            if let webView = tab.webView {
-                webView.accessibilityLabel = .WebViewAccessibilityLabel
-                webView.accessibilityIdentifier = "contentView"
-                webView.accessibilityElementsHidden = false
-
-                browserDelegate?.show(webView: webView)
-
-                if webView.url == nil {
-                    // The web view can go gray if it was zombified due to memory pressure.
-                    // When this happens, the URL is nil, so try restoring the page upon selection.
-                    tab.reload()
-                }
-            }
-
-            // Update Fakespot sidebar if necessary
-            updateFakespot(tab: tab)
+        updateURLBarDisplayURL(selectedTab)
+        if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode, selectedTab.url?.displayURL != nil {
+            addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+        } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode, selectedTab.url?.displayURL != nil {
+            urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
+
+        if let privateModeButton = topTabsViewController?.privateModeButton,
+           previousTab != nil && previousTab?.isPrivate != selectedTab.isPrivate {
+            privateModeButton.setSelected(selectedTab.isPrivate, animated: true)
+        }
+        readerModeCache = selectedTab.isPrivate ? MemoryReaderModeCache.sharedInstance : DiskReaderModeCache.sharedInstance
+        ReaderModeHandlers.readerModeCache = readerModeCache
+
+        scrollController.tab = selectedTab
+
+        if let webView = selectedTab.webView {
+            webView.accessibilityLabel = .WebViewAccessibilityLabel
+            webView.accessibilityIdentifier = "contentView"
+            webView.accessibilityElementsHidden = false
+
+            browserDelegate?.show(webView: webView)
+
+            if webView.url == nil {
+                // The webView can go gray if it was zombified due to memory pressure.
+                // When this happens, the URL is nil, so try restoring the page upon selection.
+                selectedTab.reload()
+            }
+        }
+
+        // Update Fakespot sidebar if necessary
+        updateFakespot(tab: selectedTab)
 
         updateTabCountUsingTabManager(tabManager)
 
         bottomContentStackView.removeAllArrangedViews()
-        if let bars = selected?.bars {
-            bars.forEach { bar in
-                bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
-            }
+
+        selectedTab.bars.forEach { bar in
+            bottomContentStackView.addArrangedViewToBottom(bar, completion: { self.view.layoutIfNeeded() })
         }
 
-        updateFindInPageVisibility(isVisible: false, tab: previous)
-        setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
+        updateFindInPageVisibility(isVisible: false, tab: previousTab)
+        setupMiddleButtonStatus(isLoading: selectedTab.loading)
 
         if isToolbarRefactorEnabled {
-            dispatchBackForwardToolbarAction(selected?.canGoBack, windowUUID, .backButtonStateChanged)
-            dispatchBackForwardToolbarAction(selected?.canGoForward, windowUUID, .forwardButtonStateChanged)
+            dispatchBackForwardToolbarAction(selectedTab.canGoBack, windowUUID, .backButtonStateChanged)
+            dispatchBackForwardToolbarAction(selectedTab.canGoForward, windowUUID, .forwardButtonStateChanged)
         } else {
-            navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
-            navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
+            navigationToolbar.updateBackStatus(selectedTab.canGoBack)
+            navigationToolbar.updateForwardStatus(selectedTab.canGoForward)
         }
 
-        if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
+        if let url = selectedTab.webView?.url, !InternalURL.isValid(url: url) {
             if isToolbarRefactorEnabled {
-                addressToolbarContainer.updateProgressBar(progress: selected?.estimatedProgress ?? 0)
+                addressToolbarContainer.updateProgressBar(progress: selectedTab.estimatedProgress)
             } else {
-                urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
+                urlBar.updateProgressBar(Float(selectedTab.estimatedProgress))
             }
         }
 
-        if let readerMode = selected?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
-            updateReaderModeState(for: selected, readerModeState: readerMode.state)
+        if let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
             } else {
                 hideReaderModeBar(animated: false)
             }
         } else {
-            updateReaderModeState(for: selected, readerModeState: .unavailable)
+            updateReaderModeState(for: selectedTab, readerModeState: .unavailable)
         }
 
         if topTabsVisible {
@@ -3564,8 +3572,8 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
        /// If the selectedTab is showing an error page trigger a reload
-        if let url = selected?.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
-            selected?.reloadPage()
+        if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+            selectedTab.reloadPage()
             return
         }
     }

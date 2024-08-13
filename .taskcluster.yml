@@ -108,7 +108,7 @@ tasks:
             $if: >
               tasks_for in ["action", "cron"]
               || (isPullRequest && pullRequestAction in ["opened", "reopened", "synchronize"])
-              || (tasks_for == "github-push" && (short_head_branch == "main" || short_head_branch[:8] == "releases"))
+              || (tasks_for == "github-push" && short_head_branch == "main")
               || (tasks_for == "github-release" && releaseAction == "published")
             then:
                 taskId: 

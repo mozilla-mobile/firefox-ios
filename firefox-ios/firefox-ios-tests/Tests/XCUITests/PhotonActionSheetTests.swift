@@ -6,7 +6,7 @@ import XCTest
 import Common
 
 class PhotonActionSheetTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306849
+    // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
     func testPinToShortcuts() {
         navigator.openURL("http://example.com")
@@ -31,7 +31,7 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2322067
+    // https://mozilla.testrail.io/index.php?/cases/view/2322067
     // Smoketest
     func testShareOptionIsShown() {
         // Temporarily disabled until url bar redesign work FXIOS-8172
@@ -44,7 +44,7 @@ class PhotonActionSheetTests: BaseTestCase {
 //        mozWaitForElementToExist(app.cells["Copy"], timeout: 15)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2322667
+    // https://mozilla.testrail.io/index.php?/cases/view/2322667
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -93,7 +93,7 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306841
+    // https://mozilla.testrail.io/index.php?/cases/view/2306841
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
@@ -104,7 +104,7 @@ class PhotonActionSheetTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323203
+    // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
@@ -117,7 +117,7 @@ class PhotonActionSheetTests: BaseTestCase {
         app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2323204
+    // https://mozilla.testrail.io/index.php?/cases/view/2323204
     func testShareSheetOpenAndCancel() {
         openNewShareSheet()
         app.buttons["Cancel"].tap()

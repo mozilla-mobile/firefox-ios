@@ -22,6 +22,15 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Tilkoblingen er ikke sikker";
 
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Sporingsinfokapsler på tvers av nettsteder: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Nettleseravtrykksporere: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Sporing via sosiale medier: %@";
+
 /* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked
    Text to let users know that no trackers were found on the current website. */
 "Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "Sporere blokkert: %@";
@@ -53,6 +62,9 @@
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Beskyttelser er AV. Vi foreslår at du slår den på igjen.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Beskyttelser er AV. Vi foreslår at du slår dem på igjen.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Hvis noe ser ødelagt ut på dette nettstedet, prøv å slå det av.";

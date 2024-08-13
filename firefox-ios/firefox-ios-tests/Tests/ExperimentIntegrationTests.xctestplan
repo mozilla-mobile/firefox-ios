@@ -74,6 +74,7 @@
         "LibraryTestsIpad",
         "LoginTest",
         "MicrosurveyTests",
+        "MultiWindowTests",
         "NightModeTests",
         "OpeningScreenTests",
         "PerformanceTests",

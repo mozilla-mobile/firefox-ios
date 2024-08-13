@@ -21,7 +21,7 @@ let website_2 = [
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
 
 class NavigationTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441488
+    // https://mozilla.testrail.io/index.php?/cases/view/2441488
     func testNavigation() {
         let urlPlaceholder = "Search or enter address"
         mozWaitForElementToExist(app.textFields["url"])
@@ -67,7 +67,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "test-mozilla-org")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441489
+    // https://mozilla.testrail.io/index.php?/cases/view/2441489
     func testTapSignInShowsFxAFromTour() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -78,7 +78,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.webViews.staticTexts["Continue to your Mozilla account"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441493
+    // https://mozilla.testrail.io/index.php?/cases/view/2441493
     func testTapSigninShowsFxAFromSettings() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -118,7 +118,7 @@ class NavigationTest: BaseTestCase {
         XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441494
+    // https://mozilla.testrail.io/index.php?/cases/view/2441494
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -131,7 +131,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Use Email Instead"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441495
+    // https://mozilla.testrail.io/index.php?/cases/view/2441495
     func testScrollsToTopWithMultipleTabs() {
         navigator.goto(TabTray)
         navigator.openURL(website_1["url"]!)
@@ -148,7 +148,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(topElement)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306836
+    // https://mozilla.testrail.io/index.php?/cases/view/2306836
     // Smoketest
     func testLongPressLinkOptions() {
         openContextMenuForArticleLink()
@@ -160,7 +160,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Bookmark Link"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441496
+    // https://mozilla.testrail.io/index.php?/cases/view/2441496
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
         navigator.goto(NewTabScreen)
@@ -173,7 +173,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441497
+    // https://mozilla.testrail.io/index.php?/cases/view/2441497
     func testCopyLinkPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -189,7 +189,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441923
+    // https://mozilla.testrail.io/index.php?/cases/view/2441923
     func testLongPressOnAddressBar() throws {
         // Long press on the URL requires copy & paste permission
         throw XCTSkip("Test needs to be updated")
@@ -267,7 +267,7 @@ class NavigationTest: BaseTestCase {
         app.buttons[optionSelected].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441498
+    // https://mozilla.testrail.io/index.php?/cases/view/2441498
     func testDownloadLink() {
         longPressLinkOptions(optionSelected: "Download Link")
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -287,7 +287,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "example-domains.html")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441499
+    // https://mozilla.testrail.io/index.php?/cases/view/2441499
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
         if #available(iOS 16, *) {
@@ -305,7 +305,7 @@ class NavigationTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441500
+    // https://mozilla.testrail.io/index.php?/cases/view/2441500
     func testShareLinkPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -325,7 +325,7 @@ class NavigationTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441776
+    // https://mozilla.testrail.io/index.php?/cases/view/2441776
     // Smoketest
     func testPopUpBlocker() throws {
         throw XCTSkip("This test is flakey")
@@ -362,13 +362,13 @@ class NavigationTest: BaseTestCase {
 //        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306858
+    // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.buttons["Advanced"])
+        mozWaitForElementToExist(app.buttons["Advanced"], timeout: TIMEOUT_LONG)
         app.buttons["Advanced"].tap()
 
         mozWaitForElementToExist(app.links["Visit site anyway"])
@@ -376,7 +376,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307022
+    // https://mozilla.testrail.io/index.php?/cases/view/2307022
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
         waitForTabsButton()
@@ -394,7 +394,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.links["link-created-by-parent"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307020
+    // https://mozilla.testrail.io/index.php?/cases/view/2307020
     // Smoketest
     func testVerifyBrowserTabMenu() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
@@ -415,7 +415,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441775
+    // https://mozilla.testrail.io/index.php?/cases/view/2441775
     // Smoketest
     func testURLBar() {
         let urlBar = app.textFields["url"]
@@ -435,7 +435,7 @@ class NavigationTest: BaseTestCase {
         // swiftlint:enable empty_count
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441772
+    // https://mozilla.testrail.io/index.php?/cases/view/2441772
     func testOpenInNewTab() {
         // Long-tap on an article link. Choose "Open in New Tab".
         openContextMenuForArticleLink()
@@ -449,7 +449,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.elementContainingText("Example Domain."))
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441773
+    // https://mozilla.testrail.io/index.php?/cases/view/2441773
     func testOpenInNewPrivateTab() {
         // Long-tap on an article link. Choose "Open in New Private Tab".
         openContextMenuForArticleLink()
@@ -470,7 +470,7 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domains"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2441774
+    // https://mozilla.testrail.io/index.php?/cases/view/2441774
     func testBookmarkLink() {
         // Long-tap on an article link. Choose "Bookmark Link".
         openContextMenuForArticleLink()

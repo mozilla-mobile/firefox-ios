@@ -83,6 +83,7 @@
         "LoginTest\/testSavedLoginSelectUnselect()",
         "LoginTest\/testSearchLogin()",
         "MicrosurveyTests",
+        "MultiWindowTests",
         "NavigationTest\/testBookmarkLink()",
         "NavigationTest\/testCopyLink()",
         "NavigationTest\/testCopyLinkPrivateMode()",

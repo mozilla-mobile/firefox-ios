@@ -39,7 +39,7 @@ class DownloadsTests: BaseTestCase {
         app.tables.cells.buttons["Delete"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306896
+    // https://mozilla.testrail.io/index.php?/cases/view/2306896
     func testDownloadFilesAppMenuFirstTime() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
@@ -49,7 +49,7 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Downloaded files will show up here."])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306897
+    // https://mozilla.testrail.io/index.php?/cases/view/2306897
     func testDownloadFileContextMenu() {
         navigator.openURL(testURL)
         waitUntilPageLoad()
@@ -69,7 +69,7 @@ class DownloadsTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306898
+    // https://mozilla.testrail.io/index.php?/cases/view/2306898
     // Smoketest
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
@@ -83,7 +83,7 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[testFileSize])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306899
+    // https://mozilla.testrail.io/index.php?/cases/view/2306899
     func testDownloadBLOBFile() {
         downloadBLOBFile()
         mozWaitForElementToExist(app.buttons["Downloads"])
@@ -97,7 +97,7 @@ class DownloadsTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[testBLOBFileSize])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306900
+    // https://mozilla.testrail.io/index.php?/cases/view/2306900
     func testDeleteDownloadedFile() throws {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -109,7 +109,7 @@ class DownloadsTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306901
+    // https://mozilla.testrail.io/index.php?/cases/view/2306901
     func testShareDownloadedFile() throws {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -137,7 +137,7 @@ class DownloadsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306902
+    // https://mozilla.testrail.io/index.php?/cases/view/2306902
     func testLongPressOnDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
@@ -189,7 +189,7 @@ class DownloadsTests: BaseTestCase {
         app.buttons["Download Link"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306903
+    // https://mozilla.testrail.io/index.php?/cases/view/2306903
     func testDownloadMoreThanOneFile() {
         downloadFile(fileName: testFileName, numberOfDownloads: 2)
         navigator.goto(BrowserTabMenu)
@@ -199,7 +199,7 @@ class DownloadsTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 2)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306904
+    // https://mozilla.testrail.io/index.php?/cases/view/2306904
     func testRemoveUserDataRemovesDownloadedFiles() {
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
@@ -239,7 +239,7 @@ class DownloadsTests: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306895
+    // https://mozilla.testrail.io/index.php?/cases/view/2306895
     // Smoketest
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)

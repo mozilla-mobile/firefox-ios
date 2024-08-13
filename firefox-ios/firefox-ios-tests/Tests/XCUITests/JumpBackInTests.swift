@@ -32,7 +32,7 @@ class JumpBackInTests: BaseTestCase {
         navigator.goto(NewTabScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306922
+    // https://mozilla.testrail.io/index.php?/cases/view/2306922
     func testJumpBackInSection() {
         // Open a tab and visit a page
         navigator.openURL("https://www.example.com")
@@ -49,7 +49,7 @@ class JumpBackInTests: BaseTestCase {
         // I don't test for its existence.
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306920
+    // https://mozilla.testrail.io/index.php?/cases/view/2306920
     // Smoketest
     func testPrivateTab() throws {
         throw XCTSkip("This test is flaky")
@@ -147,7 +147,7 @@ class JumpBackInTests: BaseTestCase {
 //        mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2445811
+    // https://mozilla.testrail.io/index.php?/cases/view/2445811
     func testLongTapOnJumpBackInLink() {
         // On homepage, go to the "Jump back in" section and long tap on one of the links
         navigator.openURL(path(forTestPage: "test-example.html"))

@@ -308,9 +308,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
               let tabID = UUID(uuidString: tab.tabUUID)
         else { return }
 
-        Task {
-            await self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
-        }
+        self.tabSessionStore.saveTabSession(tabID: tabID, sessionData: tabSession)
     }
 
     private func saveAllTabData() {
@@ -360,15 +358,13 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         preserveTabs()
 
-        Task(priority: .high) {
-            var sessionData: Data?
-            if !tab.isFxHomeTab {
-                sessionData = await tabSessionStore.fetchTabSession(tabID: tabUUID)
-            }
-            await selectTabWithSession(tab: tab,
-                                       previous: previous,
-                                       sessionData: sessionData)
+        var sessionData: Data?
+        if !tab.isFxHomeTab {
+            sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
         }
+        selectTabWithSession(tab: tab,
+                             previous: previous,
+                             sessionData: sessionData)
 
         // Default to false if the feature flag is not enabled
         var isPrivate = false
@@ -389,7 +385,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             $0.get()?.tabManager(
                 self,
                 didSelectedTabChange: tab,
-                previous: previous,
+                previousTab: previous,
                 isRestoring: !tabRestoreHasFinished
             )
         }
@@ -436,8 +432,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         store.dispatch(action)
     }
 
-    @MainActor
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
+        assert(Thread.isMainThread, "Currently expected to be called only on main thread.")
         selectedTab?.createWebview(with: sessionData)
         selectedTab?.lastExecutedTime = Date.now()
     }

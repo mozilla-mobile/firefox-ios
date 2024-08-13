@@ -8,7 +8,7 @@
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox 不会记住您的历史记录和 Cookie，但新的书签将被保留。";
 
 /* Text button displayed when there are no tabs open while in private mode */
-"Learn More" = "了解更多";
+"Learn More" = "详细了解";
 
 /* Toggled OFF accessibility value */
 "Off" = "关";

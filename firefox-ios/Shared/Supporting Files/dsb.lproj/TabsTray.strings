@@ -11,7 +11,7 @@
 "InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Zacyniś";
 
 /* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
-"TabsTray.Sync.SyncTabsDisabled.v116" = "Synchronizěrowanje rejtarkow zašaltowaś, aby se lisćina rejtarkow z drugich rědow pokazała.";
+"TabsTray.Sync.SyncTabsDisabled.v116" = "Synchronizěrowanje rejtarikow zašaltowaś, aby se lisćina rejtarikow z drugich rědow pokazała.";
 
 /* Button label to sync tabs in your account */
 "TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Rejtariki synchronizěrowaś";

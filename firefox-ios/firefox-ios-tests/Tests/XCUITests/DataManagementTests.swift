@@ -6,7 +6,7 @@ import XCTest
 
 class DataManagementTests: BaseTestCase {
     // Testing the search bar, and clear website data option
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307015
+    // https://mozilla.testrail.io/index.php?/cases/view/2307015
     func testWebSiteDataOptions() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -31,7 +31,7 @@ class DataManagementTests: BaseTestCase {
         XCTAssertEqual(expectedWebsitesCleared, 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307017
+    // https://mozilla.testrail.io/index.php?/cases/view/2307017
     // Smoketest
     func testWebSiteDataEnterFirstTime() {
         navigator.openURL("example.com")
