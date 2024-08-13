@@ -157,7 +157,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
         // First, see if the query matches any URLs from the user's search history.
         for site in combinedSites {
             if let completion = completionForURL(site.url) {
-                urlBar.setAutocompleteSuggestion(completion)
+                autocompleteView.setAutocompleteSuggestion(completion)
                 return
             }
         }
@@ -166,7 +166,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
         if let topDomains = topDomains {
             for domain in topDomains {
                 if let completion = completionForDomain(domain) {
-                    urlBar.setAutocompleteSuggestion(completion)
+                    autocompleteView.setAutocompleteSuggestion(completion)
                     return
                 }
             }
