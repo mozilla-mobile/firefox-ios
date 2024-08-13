@@ -751,7 +751,11 @@ class BrowserViewController: UIViewController,
         pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
             guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
             // Enter overlay mode and make the search controller appear.
-            overlayManager.openSearch(with: pasteboardContents)
+            if isToolbarRefactorEnabled {
+                addressToolbarContainer.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+            } else {
+                overlayManager.openSearch(with: pasteboardContents)
+            }
             searchController?.searchTelemetry?.interactionType = .pasted
             return true
         })
