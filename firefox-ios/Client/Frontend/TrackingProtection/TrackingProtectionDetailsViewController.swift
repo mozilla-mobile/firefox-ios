@@ -54,7 +54,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
-        button.titleLabel?.font = TPMenuUX.Fonts.viewTitleLabels
+        button.titleLabel?.font = TPMenuUX.Fonts.viewTitleLabels.scaledFont()
     }
 
     // MARK: Connection Status View
