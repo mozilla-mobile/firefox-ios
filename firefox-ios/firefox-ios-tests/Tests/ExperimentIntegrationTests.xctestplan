@@ -75,6 +75,7 @@
         "LoginTest",
         "MicrosurveyTests",
         "MultiWindowTests",
+        "NavigationTest",
         "NightModeTests",
         "OpeningScreenTests",
         "PerformanceTests",
