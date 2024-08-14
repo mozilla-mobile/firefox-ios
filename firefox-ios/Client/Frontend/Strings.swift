@@ -4462,6 +4462,12 @@ extension String {
                 value: "Verified by %@",
                 comment: "Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details.")
 
+            public static let viewCertificatesButtonTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "View certificate",
+                comment: "The title for the button that allows users to view certificates inside the enhanced tracking protection details screen.")
+
             public static let trackersBlockedLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
                 tableName: "EnhancedTrackingProtection",
