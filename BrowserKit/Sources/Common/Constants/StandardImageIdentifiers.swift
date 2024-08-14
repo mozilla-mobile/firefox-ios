@@ -95,7 +95,7 @@ public struct StandardImageIdentifiers {
         public static let readingListAdd = "readingListAddLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
-        public static let shareApple = "shareAppleLarge"
+        public static let share = "shareLarge"
         public static let shield = "shieldLarge"
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
