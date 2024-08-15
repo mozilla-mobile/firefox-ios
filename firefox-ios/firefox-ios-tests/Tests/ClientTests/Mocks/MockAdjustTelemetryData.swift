@@ -2,11 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 //
-//import Foundation
+// import Foundation
 //
-//@testable import Client
+// @testable import Client
 //
-//class MockAdjustTelemetryData: AdjustTelemetryData {
+// class MockAdjustTelemetryData: AdjustTelemetryData {
 //    var campaign: String?
 //    var adgroup: String?
 //    var creative: String?
@@ -21,4 +21,4 @@
 //        self.creative = creative
 //        self.network = network
 //    }
-//}
+// }

@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 //
-//@testable import Client
+// @testable import Client
 //
-//class MockAdjustWrapper: AdjustWrapper {
+// class MockAdjustWrapper: AdjustWrapper {
 //    var recordDeeplinkCalled = 0
 //    var recordCampaignCalled = 0
 //    var recordAdGroupCalled = 0
@@ -41,4 +41,4 @@
 //        recordNetworkCalled += 1
 //        savedNetwork = network
 //    }
-//}
+// }
