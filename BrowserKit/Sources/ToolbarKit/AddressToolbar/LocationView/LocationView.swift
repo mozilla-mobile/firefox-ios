@@ -43,6 +43,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         return CGFloat(width)
     }
 
+    private lazy var urlTextFieldColor: UIColor = .black
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
@@ -276,7 +277,9 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         let urlString = urlAbsolutePath ?? ""
         let (subdomain, normalizedHost) = URL.getSubdomainAndHost(from: urlString)
 
-        let attributedString = NSMutableAttributedString(string: normalizedHost)
+        let attributedString = NSMutableAttributedString(
+            string: normalizedHost,
+            attributes: [.foregroundColor : urlTextFieldColor])
 
         if let subdomain {
             let range = NSRange(location: 0, length: subdomain.count)
@@ -403,6 +406,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
+        urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         searchEngineImageView.backgroundColor = colors.iconPrimary
