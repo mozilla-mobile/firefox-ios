@@ -542,11 +542,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
+        let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.readerModeState
+        let url = (isUrlChangeAction || isReaderModeAction) ? action.url : toolbarState.addressToolbar.url
         readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
 
-        guard action.url != nil, !isEditing else {
+        guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
         }
