@@ -13,6 +13,15 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Odaberi Firefox kao zadani preglednik za automatsku brzinu, sigurnost i privatnost.";
 
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Poboljšaj svakodnevno pregledavanje";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox u prosjeku blokira više od 3000 programa za praćenje po korisniku svaki mjesec. Postavi nas kao standardni preglednik za bezbrižnu privatnost.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox pokriva privatnost";
+
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Promijeni standardni preglednik";
 

@@ -4,6 +4,9 @@
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Törlés";
 
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "A sütik és oldaladatok eltávolítása a(z) %@ webhelyről kijelentkeztetheti a webhelyekről, és törölheti a kosarait.";
+
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Sütik és oldaladatok törlése";
 
@@ -35,15 +38,34 @@
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "Ellenőrizte: %@";
 
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "A %@ szolgálaton kívül van. Javasoljuk a védelmek ismételt bekapcsolását.";
+
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Kikapcsolta a védelmeket";
 
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.
+   Header for the enhanced tracking protection screen when the user has selected to be protected. */
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "Védve van. Ha látunk valamit, értesíteni fogjuk.";
+
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Legyen óvatos ezen az oldalon";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "A %@ résen van";
 
 /* The title for the privacy settings button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "Adatvédelmi beállítások";
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Fokozott követés elleni védelem";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "A védelem KI van kapcsolva. Javasoljuk, hogy kapcsolja be újra.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "A védelem KI van kapcsolva. Javasoljuk, hogy kapcsolja be újra.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Ha valami nem működik ezen az oldalon, próbálja meg kikapcsolni.";
 
