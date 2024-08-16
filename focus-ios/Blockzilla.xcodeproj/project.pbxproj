@@ -7175,7 +7175,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 60.4.0;
+				minimumVersion = 60.5.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -7191,7 +7191,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.21.0;
+				version = 8.26.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
