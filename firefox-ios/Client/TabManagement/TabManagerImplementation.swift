@@ -415,8 +415,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: false) }
         }
         tabs = normalTabs
-
-        privateConfiguration = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
     private func willSelectTab(_ url: URL?) {
