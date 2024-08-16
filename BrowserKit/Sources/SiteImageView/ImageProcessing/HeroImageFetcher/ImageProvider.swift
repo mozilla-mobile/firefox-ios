@@ -13,6 +13,7 @@ protocol ImageProvider {
 }
 
 extension NSItemProvider: ImageProvider {
+    @MainActor
     func loadObject(ofClass aClass: NSItemProviderReading.Type) async throws -> UIImage {
         return try await withCheckedThrowingContinuation { continuation in
             loadObject(ofClass: aClass) { image, error in
