@@ -35,6 +35,12 @@ public struct ToolbarElement: Equatable {
     /// Accessibility identifier of the toolbar element
     let a11yId: String
 
+    /// Name for the custom accessibility action
+    let a11yCustomName: String?
+
+    /// Action to be performed for custom accessibility action
+    let a11yCustomAction: (() -> Void)?
+
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
 
@@ -53,6 +59,8 @@ public struct ToolbarElement: Equatable {
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
+                a11yCustomName: String? = nil,
+                a11yCustomAction: (() -> Void)? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
@@ -67,6 +75,8 @@ public struct ToolbarElement: Equatable {
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
+        self.a11yCustomName = a11yCustomName
+        self.a11yCustomAction = a11yCustomAction
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {

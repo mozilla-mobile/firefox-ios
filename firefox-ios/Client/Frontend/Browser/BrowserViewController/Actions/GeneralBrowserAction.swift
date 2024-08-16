@@ -51,6 +51,7 @@ enum GeneralBrowserActionType: ActionType {
     case showReaderMode
     case addNewTab
     case showNewTabLongPressActions
+    case addToReadingListLongPressAction
     case clearData
 }
 

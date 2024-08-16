@@ -42,6 +42,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         guard var config = configuration else { return }
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
+        configureCustomA11yActionIfNeeded(for: element)
         shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
 
         let image = imageConfiguredForRTL(for: element)
@@ -130,6 +131,16 @@ class ToolbarButton: UIButton, ThemeApplicable {
             action: #selector(handleLongPress)
         )
         addGestureRecognizer(longPressRecognizer)
+    }
+
+    private func configureCustomA11yActionIfNeeded(for element: ToolbarElement) {
+        guard let a11yCustomName = element.a11yCustomName,
+              let a11yCustomAction = element.a11yCustomAction else { return }
+        let a11yAction = UIAccessibilityCustomAction(name: a11yCustomName) { _ in
+            a11yCustomAction()
+            return true
+        }
+        accessibilityCustomActions = [a11yAction]
     }
 
     private func imageConfiguredForRTL(for element: ToolbarElement) -> UIImage? {
