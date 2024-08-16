@@ -279,7 +279,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
         let attributedString = NSMutableAttributedString(
             string: normalizedHost,
-            attributes: [.foregroundColor : urlTextFieldColor])
+            attributes: [.foregroundColor: urlTextFieldColor])
 
         if let subdomain {
             let range = NSRange(location: 0, length: subdomain.count)
