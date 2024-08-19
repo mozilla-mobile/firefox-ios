@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Hapus";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Batal";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Hapus";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Anda tidak dapat membatalkan tindakan ini.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ini akan menghapus kata sandi dari semua perangkat Anda yang disinkronkan.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Hapus Kata Sandi?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Batalkan semua pilihan";
 
