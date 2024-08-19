@@ -1466,6 +1466,34 @@ extension String {
     }
 }
 
+// MARK: - Native Error Page
+extension String {
+    struct NativeErrorPage {
+        struct GenericError {
+            public static let NoInternetConnectionTitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.NoInternetConnection.TitleLabel.v136",
+                tableName: "NativeErrorPage",
+                value: "Looks like there’s a problem with your internet connection.",
+                comment: "On error page, this is the title for no internet connection")
+            public static let NoInternetConnectionDescription = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.NoInternetConnection.Description.v136",
+                tableName: "NativeErrorPage",
+                value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
+                comment: "On error page, this is the description for no internet connection.")
+            public static let NoErrorCodeTitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.NoErrorCode.TitleLabel.v136",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error with no error code.")
+            public static let PageReload = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.PageReload.v136",
+                tableName: "NativeErrorPage",
+                value: "Reload",
+                comment: "On error page, this is shown on a button that will try to load the page again.")
+        }
+    }
+}
+
 // MARK: - Onboarding screens
 extension String {
     public struct Onboarding {
