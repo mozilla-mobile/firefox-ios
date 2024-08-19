@@ -173,7 +173,6 @@ extension String {
                 value: "Bookmarks",
                 comment: "Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen")
         }
-        
     }
 }
 
