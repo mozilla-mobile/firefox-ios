@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "4bea990fdaaeea98b7855ce682bfefa6a5acc04b",
-          "version": "60.4.0"
+          "revision": "2185e2eea2d5ce272ff5c0e851eed42d52104ce4",
+          "version": "60.5.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "842e406e43184710547089a318af8e55fbb6e436",
-          "version": "131.0.20240806050256"
+          "revision": "f04ad3ebdca06c93e14091efa7756473adb7c51a",
+          "version": "131.0.20240808050223"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "38f4f70d07117b9f958a76b1bff278c2f29ffe0e",
-          "version": "8.21.0"
+          "revision": "7fc7ca43967e2980d8691a8e017c118a84133aac",
+          "version": "8.26.0"
         }
       },
       {

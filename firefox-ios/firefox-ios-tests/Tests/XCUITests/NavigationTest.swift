@@ -368,7 +368,7 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.buttons["Advanced"])
+        mozWaitForElementToExist(app.buttons["Advanced"], timeout: TIMEOUT_LONG)
         app.buttons["Advanced"].tap()
 
         mozWaitForElementToExist(app.links["Visit site anyway"])
@@ -480,6 +480,29 @@ class NavigationTest: BaseTestCase {
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"])
         mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[website_2["link"]!])
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2695828
+    func testBackArrowNavigation() {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(NewTabScreen)
+        closeFromAppSwitcherAndRelaunch()
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        waitUntilPageLoad()
+        app.links[website_2["link"]!].tap()
+        waitUntilPageLoad()
+        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        mozWaitForElementToExist(backButton)
+        XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
+        XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
+        backButton.tap()
+        waitUntilPageLoad()
+        mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
+        XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
+        XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
+        backButton.tap()
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
 
     private func openContextMenuForArticleLink() {

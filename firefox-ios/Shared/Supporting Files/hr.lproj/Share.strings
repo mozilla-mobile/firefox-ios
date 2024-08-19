@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Nemaš nijedan drugi uređaj povezan s ovim računom koji je dostupan za sinkronizaciju.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Nisi prijavljen/a na svoj račun.";
+
