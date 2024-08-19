@@ -642,20 +642,7 @@ class BrowserViewController: UIViewController,
 
             executeToolbarActions()
 
-            // Microsurveys
-            if !state.microsurveyState.showPrompt {
-                guard microsurvey != nil else { return }
-                removeMicrosurveyPrompt()
-            } else if state.microsurveyState.showSurvey {
-                guard let model = state.microsurveyState.model else {
-                    logger.log("Microsurvey model should not be nil", level: .warning, category: .redux)
-                    return
-                }
-                navigationHandler?.showMicrosurvey(model: model)
-            } else if state.microsurveyState.showPrompt {
-                guard microsurvey == nil else { return }
-                createMicrosurveyPrompt(with: state.microsurveyState)
-            }
+            handleMicrosurvey(state: state)
         }
     }
 
@@ -673,6 +660,22 @@ class BrowserViewController: UIViewController,
         })
 
         show(toast: toast)
+    }
+
+    private func handleMicrosurvey(state: BrowserViewControllerState) {
+        if !state.microsurveyState.showPrompt {
+            guard microsurvey != nil else { return }
+            removeMicrosurveyPrompt()
+        } else if state.microsurveyState.showSurvey {
+            guard let model = state.microsurveyState.model else {
+                logger.log("Microsurvey model should not be nil", level: .warning, category: .redux)
+                return
+            }
+            navigationHandler?.showMicrosurvey(model: model)
+        } else if state.microsurveyState.showPrompt {
+            guard microsurvey == nil else { return }
+            createMicrosurveyPrompt(with: state.microsurveyState)
+        }
     }
 
     // MARK: - Lifecycle
@@ -751,7 +754,11 @@ class BrowserViewController: UIViewController,
         pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
             guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
             // Enter overlay mode and make the search controller appear.
-            overlayManager.openSearch(with: pasteboardContents)
+            if isToolbarRefactorEnabled {
+                addressToolbarContainer.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+            } else {
+                overlayManager.openSearch(with: pasteboardContents)
+            }
             searchController?.searchTelemetry?.interactionType = .pasted
             return true
         })
@@ -1715,6 +1722,7 @@ class BrowserViewController: UIViewController,
             if isToolbarRefactorEnabled {
                 let action = ToolbarMiddlewareAction(
                     isLoading: loading,
+                    url: tab.url?.displayURL,
                     windowUUID: windowUUID,
                     actionType: ToolbarMiddlewareActionType.websiteLoadingStateDidChange
                 )
@@ -1814,6 +1822,7 @@ class BrowserViewController: UIViewController,
         if isToolbarRefactorEnabled {
             let action = ToolbarMiddlewareAction(
                 lockIconImageName: lockIconImageName(for: tab),
+                url: tab?.url?.displayURL,
                 readerModeState: readerModeState,
                 windowUUID: windowUUID,
                 actionType: ToolbarMiddlewareActionType.readerModeStateChanged
@@ -1828,8 +1837,6 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            guard tab.webView?.hasOnlySecureContent == true else { return }
-
             let action = ToolbarMiddlewareAction(
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 lockIconImageName: lockIconImageName(for: tab),

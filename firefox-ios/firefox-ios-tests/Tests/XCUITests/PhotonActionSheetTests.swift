@@ -72,7 +72,7 @@ class PhotonActionSheetTests: BaseTestCase {
         // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
         // app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
         navigator.goto(BrowserTabMenu)
-        app.otherElements[StandardImageIdentifiers.Large.shareApple].tap()
+        app.otherElements[StandardImageIdentifiers.Large.share].tap()
 
         if #unavailable(iOS 16) {
             mozWaitForElementToExist(app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"])

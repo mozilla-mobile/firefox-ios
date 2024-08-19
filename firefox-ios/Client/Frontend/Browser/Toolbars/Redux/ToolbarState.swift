@@ -116,7 +116,7 @@ struct ToolbarState: ScreenState, Equatable {
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
                 isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-                readerModeState: toolbarAction.readerModeState ?? state.readerModeState,
+                readerModeState: state.readerModeState,
                 badgeImageName: state.badgeImageName,
                 maskImageName: state.maskImageName,
                 canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
@@ -190,6 +190,23 @@ struct ToolbarState: ScreenState, Equatable {
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
+
+        case ToolbarActionType.readerModeStateChanged:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+                return ToolbarState(
+                    windowUUID: state.windowUUID,
+                    toolbarPosition: state.toolbarPosition,
+                    isPrivateMode: state.isPrivateMode,
+                    addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                    navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                    isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                    isShowingTopTabs: state.isShowingTopTabs,
+                    readerModeState: toolbarAction.readerModeState,
+                    badgeImageName: state.badgeImageName,
+                    maskImageName: state.maskImageName,
+                    canGoBack: state.canGoBack,
+                    canGoForward: state.canGoForward,
+                    numberOfTabs: state.numberOfTabs)
 
         default:
             return ToolbarState(

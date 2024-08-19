@@ -106,7 +106,7 @@ class ActionProviderBuilder {
                   contentContainer: ContentContainer) {
         actions.append(UIAction(
             title: .ContextMenuShareLink,
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
             identifier: UIAction.Identifier("linkContextMenu.share")
         ) { _ in
             guard let tab = tabManager[webView],

@@ -23,7 +23,9 @@ class BrowserViewController: UIViewController {
     private lazy var webViewController: LegacyWebViewController = {
         var menuAction = WebMenuAction.live
         menuAction.openLink = { url in
-            self.submit(url: url, source: .action)
+            if let url = URIFixup.getURL(entry: url.absoluteString) {
+                self.submit(url: url, source: .action)
+            }
         }
         return LegacyWebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
     }()
