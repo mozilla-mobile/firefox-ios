@@ -1469,28 +1469,35 @@ extension String {
 // MARK: - Native Error Page
 extension String {
     struct NativeErrorPage {
-        struct GenericError {
-            public static let NoInternetConnectionTitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.NoInternetConnection.TitleLabel.v136",
+        struct NoInternetConnection {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
                 tableName: "NativeErrorPage",
                 value: "Looks like there’s a problem with your internet connection.",
                 comment: "On error page, this is the title for no internet connection")
-            public static let NoInternetConnectionDescription = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.NoInternetConnection.Description.v136",
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.NoInternetConnection.Description.v131",
                 tableName: "NativeErrorPage",
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
                 comment: "On error page, this is the description for no internet connection.")
-            public static let NoErrorCodeTitleLabel = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.NoErrorCode.TitleLabel.v136",
+        }
+        struct GenericError {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
                 tableName: "NativeErrorPage",
                 value: "Be careful. Something doesn’t look right.",
-                comment: "On error page, this is the title for generic error with no error code.")
-            public static let PageReload = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.PageReload.v136",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v131",
                 tableName: "NativeErrorPage",
-                value: "Reload",
-                comment: "On error page, this is shown on a button that will try to load the page again.")
+                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                comment: "On error page, this is the description for generic error.")
         }
+        public static let ButtonLabel = MZLocalizedString(
+            key: "NativeErrorPage.ButtonLabel.v131",
+            tableName: "NativeErrorPage",
+            value: "Reload",
+            comment: "On error page, this is the text on a button that will try to load the page again.")
     }
 }
 
