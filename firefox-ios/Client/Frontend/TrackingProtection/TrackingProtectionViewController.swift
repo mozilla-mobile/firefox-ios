@@ -18,7 +18,7 @@ struct TPMenuUX {
 
     struct UX {
         static let baseCellHeight: CGFloat = 44
-        static let popoverTopDistance: CGFloat = 20
+        static let popoverTopDistance: CGFloat = 16
         static let horizontalMargin: CGFloat = 16
         static let viewCornerRadius: CGFloat = 8
         static let headerLabelDistance: CGFloat = 2.0
@@ -34,7 +34,9 @@ struct TPMenuUX {
         static let faviconCornerRadius: CGFloat = 5
         static let scrollContentHorizontalPadding: CGFloat = 16
 
-        static let trackersLabelConstraintConstant = 11.0
+        static let trackersLabelConstraintConstant = 16.0
+        static let connectionStatusLabelConstraintConstant = 16.0
+        static let toggleLabelsContainerConstraintConstant = 16.0
 
         static let clearDataButtonCornerRadius: CGFloat = 12
         static let clearDataButtonBorderWidth: CGFloat = 1
@@ -337,8 +339,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     private func setupView() {
         constraints.removeAll()
 
-        setupContentView()
         setupHeaderView()
+        setupContentView()
         setupConnectionHeaderView()
         setupBlockedTrackersView()
         setupConnectionStatusView()
@@ -356,7 +358,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         view.addSubview(scrollView)
 
         let scrollViewConstraints = [
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -382,17 +384,17 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         headerLabelsContainer.addArrangedSubview(siteDomainLabel)
 
         headerContainer.addSubviews(favicon, headerLabelsContainer, closeButton)
-        baseView.addSubview(headerContainer)
+        view.addSubview(headerContainer)
 
         faviconHeightConstraint = favicon.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.faviconImageSize)
         faviconWidthConstraint = favicon.widthAnchor.constraint(equalToConstant: TPMenuUX.UX.faviconImageSize)
         let topDistance = asPopover ? TPMenuUX.UX.popoverTopDistance : 0
 
         let headerConstraints = [
-            headerContainer.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
-            headerContainer.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),
+            headerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerContainer.topAnchor.constraint(
-                equalTo: baseView.topAnchor,
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
                 constant: topDistance
             ),
 
@@ -454,8 +456,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
                 equalTo: view.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            connectionDetailsHeaderView.topAnchor.constraint(equalTo: headerContainer.bottomAnchor,
-                                                             constant: 0),
+            connectionDetailsHeaderView.topAnchor.constraint(equalTo: baseView.topAnchor,
+                                                             constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
             // Content
             connectionDetailsContentView.leadingAnchor.constraint(
                 equalTo: connectionDetailsHeaderView.leadingAnchor,
@@ -609,8 +611,10 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
                 equalTo: connectionStatusImage.trailingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            connectionStatusLabel.topAnchor.constraint(equalTo: connectionView.topAnchor, constant: 11),
-            connectionStatusLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: -11),
+            connectionStatusLabel.topAnchor.constraint(equalTo: connectionView.topAnchor,
+                                                       constant: TPMenuUX.UX.connectionStatusLabelConstraintConstant),
+            connectionStatusLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor,
+                                                          constant: -TPMenuUX.UX.connectionStatusLabelConstraintConstant),
             connectionStatusLabel.trailingAnchor.constraint(
                 equalTo: connectionDetailArrow.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
@@ -665,11 +669,11 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             ),
             toggleLabelsContainer.topAnchor.constraint(
                 equalTo: toggleView.topAnchor,
-                constant: 11
+                constant: TPMenuUX.UX.toggleLabelsContainerConstraintConstant
             ),
             toggleLabelsContainer.bottomAnchor.constraint(
                 equalTo: toggleView.bottomAnchor,
-                constant: -11
+                constant: -TPMenuUX.UX.toggleLabelsContainerConstraintConstant
             ),
 
             toggleSwitch.centerYAnchor.constraint(equalTo: toggleView.centerYAnchor),
@@ -815,6 +819,33 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
         lockImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
         connectionArrowHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
+
+        if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
+            let customDetent = UISheetPresentationController.Detent.custom { [weak self] context in
+                guard let self else { return 0 }
+                let viewWidth = self.view.frame.width
+                var height = siteDisplayTitleLabel.getHeight(with: viewWidth)
+                height += siteDomainLabel.getHeight(with: viewWidth)
+                height += TPMenuUX.UX.popoverTopDistance
+                height += TPMenuUX.UX.siteDomainLabelsVerticalSpacing
+                height += TPMenuUX.UX.connectionDetailsHeaderMargins
+                height += connectionDetailsTitleLabel.getHeight(with: viewWidth)
+                height += connectionDetailsStatusLabel.getHeight(with: viewWidth)
+                height += trackersLabel.getHeight(with: viewWidth)
+                height += connectionStatusLabel.getHeight(with: viewWidth)
+                height += toggleLabel.getHeight(with: viewWidth)
+                height += toggleStatusLabel.getHeight(with: viewWidth)
+                height += TPMenuUX.UX.connectionStatusLabelConstraintConstant * 2
+                height += TPMenuUX.UX.trackersLabelConstraintConstant * 2
+                height += TPMenuUX.UX.toggleLabelsContainerConstraintConstant * 2
+                height += TPMenuUX.UX.horizontalMargin * 8
+                height += TPMenuUX.UX.settingsLinkButtonBottomSpacing
+                height += clearCookiesButton.getHeight(with: viewWidth)
+                height += settingsLinkButton.getHeight(with: viewWidth)
+                return height
+            }
+            self.sheetPresentationController?.detents = [customDetent]
+        }
 
         view.setNeedsLayout()
         view.layoutIfNeeded()
