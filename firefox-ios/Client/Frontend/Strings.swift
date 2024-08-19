@@ -1469,6 +1469,11 @@ extension String {
 // MARK: - Native Error Page
 extension String {
     struct NativeErrorPage {
+        public static let ButtonLabel = MZLocalizedString(
+            key: "NativeErrorPage.ButtonLabel.v131",
+            tableName: "NativeErrorPage",
+            value: "Reload",
+            comment: "On error page, this is the text on a button that will try to load the page again.")
         struct NoInternetConnection {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
@@ -1493,11 +1498,6 @@ extension String {
                 value: "An SSL error has occurred and a secure connection to the server cannot be made.",
                 comment: "On error page, this is the description for generic error.")
         }
-        public static let ButtonLabel = MZLocalizedString(
-            key: "NativeErrorPage.ButtonLabel.v131",
-            tableName: "NativeErrorPage",
-            value: "Reload",
-            comment: "On error page, this is the text on a button that will try to load the page again.")
     }
 }
 
