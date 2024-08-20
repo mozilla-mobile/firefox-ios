@@ -28,7 +28,7 @@ class PocketDataAdaptorTests: XCTestCase {
         XCTAssertEqual(data.count, 0, "Data should be null")
     }
 
-    func testGetPocketData() {
+    func testGetPocketData() async {
         let stories: [PocketFeedStory] = [
             .make(title: "feed1"),
             .make(title: "feed2"),
@@ -36,7 +36,10 @@ class PocketDataAdaptorTests: XCTestCase {
         ]
         mockPocketAPI = MockPocketAPI(result: .success(stories))
         let subject = createSubject()
-        let data = subject.getPocketData()
+        let task = Task {
+            subject.getPocketData()
+        }
+        let data = await task.value
         XCTAssertEqual(data.count, 3, "Data should contain three pocket stories")
     }
 }
