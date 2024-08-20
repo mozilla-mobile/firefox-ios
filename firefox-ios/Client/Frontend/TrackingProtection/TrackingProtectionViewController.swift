@@ -898,23 +898,21 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     // MARK: - Update Views
     private func updateProtectionViewStatus() {
         if toggleSwitch.isOn {
-            // TODO: FXIOS-9195 #20363 Enhanced Tracking Protection screen status enabled design
             toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOnText
             trackersView.isHidden = false
             trackersLabelTopConstraint?.constant = TPMenuUX.UX.trackersLabelConstraintConstant
             trackersLabelBottomConstraint?.constant = -TPMenuUX.UX.trackersLabelConstraintConstant
             viewModel.isProtectionEnabled = true
-            foxStatusImage.image = viewModel.protectionOnImage
-            connectionDetailsContentView.backgroundColor = currentTheme().colors.layerAccentPrivateNonOpaque
         } else {
             toggleStatusLabel.text = .Menu.EnhancedTrackingProtection.switchOffText
             trackersView.isHidden = true
             trackersLabelTopConstraint?.constant = 0
             trackersLabelBottomConstraint?.constant = 0
             viewModel.isProtectionEnabled = false
-            foxStatusImage.image = viewModel.protectionOffImage
-            connectionDetailsContentView.backgroundColor = currentTheme().colors.layer3
         }
+
+        connectionDetailsContentView.backgroundColor = viewModel.getConnectionDetailsBackgroundColor(theme: currentTheme())
+        foxStatusImage.image = viewModel.connectionDetailsImage
         connectionDetailsTitleLabel.text = viewModel.connectionDetailsTitle
         connectionDetailsStatusLabel.text = viewModel.connectionDetailsHeader
     }
