@@ -132,15 +132,15 @@ class TrackingProtectionModel {
 
         let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
                                           style: .destructive) { [weak self] _ in
-            self?.clearCookiesAndSiteData()
+            self?.clearCookiesAndSiteData(cookiesClearable: CookiesClearable(), siteDataClearable: SiteDataClearable())
+            self?.selectedTab?.webView?.reload()
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)
     }
 
-    func clearCookiesAndSiteData() {
-        _ = CookiesClearable().clear()
-        _ = SiteDataClearable().clear()
-        selectedTab?.webView?.reload()
+    func clearCookiesAndSiteData(cookiesClearable: Clearable, siteDataClearable: Clearable) {
+        _ = cookiesClearable.clear()
+        _ = siteDataClearable.clear()
     }
 }
