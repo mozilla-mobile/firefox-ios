@@ -48,7 +48,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView) {
-        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
+        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: profile.autofill,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
