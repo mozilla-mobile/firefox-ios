@@ -6,7 +6,7 @@ import Common
 import XCTest
 
 class ReadingListTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287278f
+    // https://mozilla.testrail.io/index.php?/cases/view/2287278f
     // Smoketest
     func testLoadReaderContent() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -25,7 +25,7 @@ class ReadingListTests: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306991
+    // https://mozilla.testrail.io/index.php?/cases/view/2306991
     // Smoketest
     func testAddToReadingList() {
         navigator.nowAt(NewTabScreen)
@@ -47,7 +47,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306995
+    // https://mozilla.testrail.io/index.php?/cases/view/2306995
     func testAddToReadingListPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -84,7 +84,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306992
+    // https://mozilla.testrail.io/index.php?/cases/view/2306992
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 
@@ -97,7 +97,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Mark as Read"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306996
+    // https://mozilla.testrail.io/index.php?/cases/view/2306996
     func testRemoveFromReadingView() {
         addContentToReaderView()
         // Once the content has been added, remove it
@@ -114,7 +114,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306997
+    // https://mozilla.testrail.io/index.php?/cases/view/2306997
     func testMarkAsReadAndUnreadFromReadingList() throws {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -133,7 +133,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306998
+    // https://mozilla.testrail.io/index.php?/cases/view/2306998
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -152,7 +152,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306999
+    // https://mozilla.testrail.io/index.php?/cases/view/2306999
     func testAddToReadingListFromBrowserTabMenu() {
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
@@ -170,7 +170,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307000
+    // https://mozilla.testrail.io/index.php?/cases/view/2307000
     func testOpenSavedForReadingLongPressInNewTab() {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "1")
@@ -195,7 +195,7 @@ class ReadingListTests: BaseTestCase {
 //        XCTAssertEqual(numTabAfter, "2")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307001
+    // https://mozilla.testrail.io/index.php?/cases/view/2307001
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
@@ -212,7 +212,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306893
+    // https://mozilla.testrail.io/index.php?/cases/view/2306893
     // Smoketest
     func testReadingList() {
         navigator.nowAt(NewTabScreen)
@@ -261,7 +261,7 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[emptyReadingList3])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306993
+    // https://mozilla.testrail.io/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() {
         addContentToReaderView()

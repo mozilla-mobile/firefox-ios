@@ -79,6 +79,16 @@ class SettingsCoordinator: BaseCoordinator,
 
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
+        case .addresses:
+            let viewModel = AddressAutofillSettingsViewModel(
+                profile: profile,
+                windowUUID: windowUUID
+            )
+            let viewController = AddressAutofillSettingsViewController(
+                addressAutofillViewModel: viewModel,
+                windowUUID: windowUUID
+            )
+            return viewController
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs,
                                                                      windowUUID: windowUUID)

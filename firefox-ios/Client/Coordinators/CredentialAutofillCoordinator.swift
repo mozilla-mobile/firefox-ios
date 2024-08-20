@@ -107,12 +107,14 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton)
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton
+        )
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
         router.present(bottomSheetVC)
         if state == .save {
@@ -182,12 +184,14 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton)
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton
+        )
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
         router.present(bottomSheetVC)
         TelemetryWrapper.recordEvent(

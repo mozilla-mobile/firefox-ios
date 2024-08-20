@@ -112,3 +112,27 @@
 /* Button label for closing the view where user can view their address info. */
 "Addresses.EditAddress.CloseNavBarButtonLabel.v129" = "Serriñ";
 
+/* Button label for editing the address details shown in the form. */
+"Addresses.EditAddress.EditNavBarButtonLabel.v129" = "Aozañ";
+
+/* Title for button that offers the user the option to remove an address. */
+"Addresses.EditAddress.RemoveAddressButtonTitle.v129" = "Dilemel ar chomlec’h";
+
+/* Toast message confirming that an address has been successfully removed. */
+"Addresses.Toast.AddressRemovedConfirmation.v129" = "Chomlec’h dilamet";
+
+/* Toast message confirming that an address has been successfully saved. */
+"Addresses.Toast.AddressSavedConfirmation.v129" = "Chomlec’h enrollet";
+
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "N’haller ket enrollañ ar chomlec’h";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "N’haller ket dilemel ar chomlec’h";
+
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Klask en-dro";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "Titouroù ar chomlec’h hizivaet";
+

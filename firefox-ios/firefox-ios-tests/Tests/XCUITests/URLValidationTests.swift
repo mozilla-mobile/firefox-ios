@@ -19,7 +19,7 @@ class URLValidationTests: BaseTestCase {
         navigator.goto(NewTabScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2460854
+    // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest
     func testDifferentURLTypes() {
         for i in urlTypes {

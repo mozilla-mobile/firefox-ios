@@ -15,7 +15,7 @@ class URLValidationTest: BaseTestCase {
                     "mozilla.org/en-US", "https://mozilla.org/", "https://mozilla.org/en", "https://mozilla.org/en-US"]
     let urlHttpTypes=["http://example.com", "http://example.com/"]
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2460275
+    // https://mozilla.testrail.io/index.php?/cases/view/2460275
     func testDifferentURLTypes() {
         for i in urlTypes {
             loadAndValidateURL(URL: i)

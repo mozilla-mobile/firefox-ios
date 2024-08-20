@@ -54,6 +54,10 @@ class TrackingProtectionModel {
         return url.baseDomain ?? ""
     }
 
+    private var isSecuredAndProtected: Bool {
+        return connectionSecure && isProtectionEnabled
+    }
+
     let secureStatusString = String.Menu.EnhancedTrackingProtection.connectionSecureLabel
     let unsecureStatusString = String.Menu.EnhancedTrackingProtection.connectionUnsecureLabel
     var connectionStatusString: String {
@@ -62,19 +66,20 @@ class TrackingProtectionModel {
 
     var  connectionDetailsTitle: String {
         let titleOn = String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
-        return connectionSecure ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
+        return isSecuredAndProtected ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
     }
 
     let protectionOnHeaderString = String.Menu.EnhancedTrackingProtection.onHeader
-    let protectionOffHeaderString = String.Menu.EnhancedTrackingProtection.offHeader
+    let protectionOffHeaderString = String(format: .Menu.EnhancedTrackingProtection.offHeader, AppName.shortName.rawValue)
     var  connectionDetailsHeader: String {
-        return connectionSecure ? protectionOnHeaderString : protectionOffHeaderString
+        return isSecuredAndProtected ? protectionOnHeaderString : protectionOffHeaderString
     }
 
     let protectionOnImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     let protectionOffImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
+    var isProtectionEnabled = false
     var  connectionDetailsImage: UIImage? {
-        return connectionSecure ? protectionOnImage : protectionOffImage
+        return isSecuredAndProtected ? protectionOnImage : protectionOffImage
     }
 
     var isSiteETPEnabled: Bool {

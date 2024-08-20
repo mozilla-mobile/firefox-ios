@@ -267,17 +267,17 @@ extension String {
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
             public static let SaveAddressesToFirefox = MZLocalizedString(
-                key: "", // Addresses.Settings.SaveToFirefox.Title.v129
+                key: "Addresses.Settings.SaveToFirefox.Title.v130",
                 tableName: "Settings",
                 value: "Save Addresses to %@",
                 comment: "Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app.")
             public static let SecureSaveInfo = MZLocalizedString(
-                key: "", // Addresses.Settings.SecureSaveInfo.Description.v129
+                key: "Addresses.Settings.SecureSaveInfo.Description.v130",
                 tableName: "Settings",
                 value: "Securely save your information to get quick access to it later.",
                 comment: "Description text for the content unavailable view informing users they can create or add new addresses.")
             public static let ListItemA11y = MZLocalizedString(
-                key: "", // Addresses.Settings.ListItemA11y.v129
+                key: "Addresses.Settings.ListItemA11y.v130",
                 tableName: "Settings",
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
@@ -572,6 +572,11 @@ extension String {
                 tableName: "BottomSheet",
                 value: "Use a saved address?",
                 comment: "When a user is in the process of entering an address, a screen pops up prompting the user if they want to use a saved address. This string is used as the title label of the screen.")
+            public static let ManageAddressesButton = MZLocalizedString(
+                key: "Addresses.ManageAddressesButton.v130",
+                tableName: "Settings",
+                value: "Manage addresses",
+                comment: "This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses.")
         }
     }
 }
@@ -4127,7 +4132,7 @@ extension String {
                 comment: "Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked")
 
             public static let noTrackersLabel = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
+                key: "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131",
                 tableName: "EnhancedTrackingProtection",
                 value: "No trackers found",
                 comment: "Text to let users know that no trackers were found on the current website.")

@@ -18,7 +18,7 @@ let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.htm
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
 class TopTabsTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307042
+    // https://mozilla.testrail.io/index.php?/cases/view/2307042
     // Smoketest
     func testAddTabFromTabTray() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -44,7 +44,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2354300
+    // https://mozilla.testrail.io/index.php?/cases/view/2354300
     func testAddTabFromContext() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
@@ -63,7 +63,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts["Example Domain"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2354447
+    // https://mozilla.testrail.io/index.php?/cases/view/2354447
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -88,7 +88,7 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual(value, urlValueLongExample)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2354449
+    // https://mozilla.testrail.io/index.php?/cases/view/2354449
     func testCloseOneTab() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -116,7 +116,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306865
+    // https://mozilla.testrail.io/index.php?/cases/view/2306865
     // Smoketest
     func testCloseAllTabsUndo() {
         navigator.nowAt(NewTabScreen)
@@ -166,7 +166,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2354473
+    // https://mozilla.testrail.io/index.php?/cases/view/2354473
     // Smoketest
     func testCloseAllTabsPrivateModeUndo() {
         navigator.goto(URLBarOpen)
@@ -200,7 +200,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2354579
+    // https://mozilla.testrail.io/index.php?/cases/view/2354579
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -225,7 +225,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2354580
+    // https://mozilla.testrail.io/index.php?/cases/view/2354580
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -245,7 +245,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306884
+    // https://mozilla.testrail.io/index.php?/cases/view/2306884
     // Smoketest
     func testOpenNewTabLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -270,7 +270,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306838
+    // https://mozilla.testrail.io/index.php?/cases/view/2306838
     // Smoketest
     func testLongTapTabCounter() {
         if !iPad() {
@@ -321,7 +321,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307047
+    // https://mozilla.testrail.io/index.php?/cases/view/2307047
     func testOpenTabsViewCurrentTabThumbnail() {
         // Open ten or more tabs
         navigator.nowAt(NewTabScreen)
@@ -374,7 +374,7 @@ class TopTabsTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306869
+    // https://mozilla.testrail.io/index.php?/cases/view/2306869
     func testTabTrayContextMenuCloseTab() {
         // Have multiple tabs opened in the tab tray
         navigator.nowAt(NewTabScreen)
@@ -385,7 +385,7 @@ class TopTabsTest: BaseTestCase {
         addTabsAndUndoCloseTabAction(nrOfTabs: 4)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306868
+    // https://mozilla.testrail.io/index.php?/cases/view/2306868
     func testTabTrayCloseMultipleTabs() {
         navigator.nowAt(NewTabScreen)
         validateToastWhenClosingMultipleTabs()
@@ -493,7 +493,7 @@ fileprivate extension BaseTestCase {
 }
 
 class TopTabsTestIphone: IphoneOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2355535
+    // https://mozilla.testrail.io/index.php?/cases/view/2355535
     // Smoketest
     func testCloseTabFromLongPressTabsButton() {
         if skipPlatform { return }
@@ -524,7 +524,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test only runs for iPhone see bug 1409750
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2355536
+    // https://mozilla.testrail.io/index.php?/cases/view/2355536
     // Smoketest
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
@@ -537,7 +537,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test only runs for iPhone see bug 1409750
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2355537
+    // https://mozilla.testrail.io/index.php?/cases/view/2355537
     // Smoketest
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
@@ -553,7 +553,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306861
+    // https://mozilla.testrail.io/index.php?/cases/view/2306861
     // Smoketest
     func testSwitchBetweenTabsToastButton() {
         if skipPlatform { return }
@@ -577,7 +577,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     }
 
     // This test is disabled for iPad because the toast menu is not shown there
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306860
+    // https://mozilla.testrail.io/index.php?/cases/view/2306860
     // Smoketest
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if skipPlatform { return }
@@ -603,7 +603,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button
 // and closing the tabs by tapping 'x' button
 class TopTabsTestIpad: IpadOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307023
+    // https://mozilla.testrail.io/index.php?/cases/view/2307023
     func testUpdateTabCounter() {
         if skipPlatform { return }
         // Open three tabs by tapping on '+' button

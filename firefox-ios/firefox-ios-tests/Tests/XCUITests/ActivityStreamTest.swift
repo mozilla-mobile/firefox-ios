@@ -43,7 +43,7 @@ class ActivityStreamTest: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2273342
+    // https://mozilla.testrail.io/index.php?/cases/view/2273342
     // Smoketest
     func testDefaultSites() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -60,7 +60,7 @@ class ActivityStreamTest: BaseTestCase {
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Facebook"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272218
+    // https://mozilla.testrail.io/index.php?/cases/view/2272218
     func testTopSites2Add() {
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
@@ -69,7 +69,7 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272219
+    // https://mozilla.testrail.io/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         // A new site has been added to the top sites
@@ -91,7 +91,7 @@ class ActivityStreamTest: BaseTestCase {
         mozWaitForElementToNotExist(app.cells.staticTexts[newTopSite["bookmarkLabel"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272220
+    // https://mozilla.testrail.io/index.php?/cases/view/2272220
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(TopSiteCellgroup)
         if iPad() {
@@ -129,7 +129,7 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2272514
+    // https://mozilla.testrail.io/index.php?/cases/view/2272514
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
         let allTopSites = app.collectionViews.cells.matching(identifier: "TopSitesCell")
@@ -159,7 +159,7 @@ class ActivityStreamTest: BaseTestCase {
         )
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2273338
+    // https://mozilla.testrail.io/index.php?/cases/view/2273338
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
@@ -229,7 +229,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2273339
+    // https://mozilla.testrail.io/index.php?/cases/view/2273339
     func testContextMenuInLandscape() {
         // For iPhone test is failing to find top sites in landscape
         // can't scroll only to that area. Needs investigation
@@ -250,7 +250,7 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436086
+    // https://mozilla.testrail.io/index.php?/cases/view/2436086
     func testLongTapOnTopSiteOptions() {
         waitForExistence(app.cells[TopSites.itemCell])
         app.collectionViews.cells.element(boundBy: 3).press(forDuration: 1)
