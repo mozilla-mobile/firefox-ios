@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 final class TrackingProtectionModelTests: XCTestCase {
-
     func testClearCookiesAndSiteData() {
         let cookiesClearable = MockCookiesClearable()
         let siteDataClearable = MockSiteDataClearable()
