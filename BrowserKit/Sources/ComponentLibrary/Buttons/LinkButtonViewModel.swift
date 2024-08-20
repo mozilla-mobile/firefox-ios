@@ -14,14 +14,12 @@ public struct LinkButtonViewModel {
     }
 
     public let title: String
-    public let underlineStyle: NSUnderlineStyle
     public let a11yIdentifier: String
     public let font: UIFont
     public let contentInsets: NSDirectionalEdgeInsets
     public let contentHorizontalAlignment: UIControl.ContentHorizontalAlignment
 
     public init(title: String,
-                underlineStyle: NSUnderlineStyle = .single,
                 a11yIdentifier: String,
                 font: UIFont = FXFontStyles.Regular.callout.scaledFont(),
                 contentInsets: NSDirectionalEdgeInsets = NSDirectionalEdgeInsets(top: UX.verticalInset,
@@ -30,7 +28,6 @@ public struct LinkButtonViewModel {
                                                                                  trailing: UX.horizontalInset),
                 contentHorizontalAlignment: UIControl.ContentHorizontalAlignment = .leading) {
         self.title = title
-        self.underlineStyle = underlineStyle
         self.a11yIdentifier = a11yIdentifier
         self.font = font
         self.contentInsets = contentInsets

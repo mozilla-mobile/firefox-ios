@@ -848,7 +848,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     @objc
     func connectionDetailsTapped() {
         // TODO: FXIOS-9198 #20366 Enhanced Tracking Protection Connection details screen
-        //        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsViewModel(),
+        //        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
         //                                                                windowUUID: windowUUID)
         //        detailsVC.modalPresentationStyle = .pageSheet
         //        self.present(detailsVC, animated: true)

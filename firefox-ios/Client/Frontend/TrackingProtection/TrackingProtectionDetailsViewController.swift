@@ -30,68 +30,10 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
     private let baseView: UIView = .build { view in }
-    private let siteTitleLabel: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
-        label.font = FXFontStyles.Regular.headline.scaledFont()
-        label.numberOfLines = 2
-        label.accessibilityTraits.insert(.header)
-    }
 
-    // MARK: Header View
-    private let headerView = UIView()
-    private let horizontalLine: UIView = .build { _ in }
-    private var closeButton: UIButton = .build { button in
-        button.layer.cornerRadius = 0.5 * TPMenuUX.UX.closeButtonSize
-        button.clipsToBounds = true
-        button.imageView?.contentMode = .scaleAspectFit
-        button.setImage(UIImage(named: StandardImageIdentifiers.Medium.cross), for: .normal)
-    }
-    private var backButton: UIButton = .build { button in
-        button.layer.cornerRadius = 0.5 * TPMenuUX.UX.closeButtonSize
-        button.clipsToBounds = true
-        button.setTitle(.KeyboardShortcuts.Back, for: .normal)
-        button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
-            .withRenderingMode(.alwaysTemplate),
-                        for: .normal)
-        button.titleLabel?.font = TPMenuUX.Fonts.viewTitleLabels.scaledFont()
-    }
-
-    // MARK: Connection Status View
-    private let connectionView: UIView = .build { view in
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        view.layer.masksToBounds = true
-    }
-    private let connectionImage: UIImageView = .build { image in
-        image.contentMode = .scaleAspectFit
-        image.clipsToBounds = true
-        image.layer.masksToBounds = true
-        image.layer.cornerRadius = 5
-    }
-    private let connectionStatusLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .left
-    }
-    private let dividerView: UIView = .build { _ in }
-    private var lockImageHeightConstraint: NSLayoutConstraint?
-
-    // MARK: Verified By View
-    private let verifiedByView: UIView = .build { view in
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        view.layer.masksToBounds = true
-    }
-    private let verifiedByLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
-        label.numberOfLines = 0
-        label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .left
-    }
+    private let headerView: TrackingProtectionHeaderView = .build()
+    private let connectionView: TrackingProtectionStatusView = .build()
+    private let verifiedByView: TrackingProtectionVerifiedByView = .build()
 
     // MARK: See Certificates View
     private lazy var viewCertificatesButton: LinkButton = .build { button in
@@ -103,7 +45,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: - Variables
 
     private var constraints = [NSLayoutConstraint]()
-    var viewModel: TrackingProtectionDetailsModel
+    var model: TrackingProtectionDetailsModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -112,18 +54,17 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: - View Lifecycle
 
-    init(with viewModel: TrackingProtectionDetailsModel,
+    init(with model: TrackingProtectionDetailsModel,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.viewModel = viewModel
+        self.model = model
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -178,7 +119,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: Header View Setup
     private func setupHeaderView() {
         view.addSubview(headerView)
-        headerView.addSubviews(siteTitleLabel, backButton, closeButton, horizontalLine)
         headerView.translatesAutoresizingMaskIntoConstraints = false
 
         let headerViewContraints = [
@@ -191,46 +131,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight),
-
-            backButton.leadingAnchor.constraint(
-                equalTo: headerView.leadingAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.imageMargins
-            ),
-            backButton.topAnchor.constraint(equalTo: headerView.topAnchor,
-                                            constant: TPMenuUX.UX.horizontalMargin),
-            backButton.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            siteTitleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-
-            siteTitleLabel.leadingAnchor.constraint(
-                equalTo: backButton.trailingAnchor
-            ),
-            siteTitleLabel.trailingAnchor.constraint(
-                equalTo: closeButton.leadingAnchor
-            ),
-            siteTitleLabel.topAnchor.constraint(
-                equalTo: headerView.topAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.baseDistance
-            ),
-            siteTitleLabel.bottomAnchor.constraint(
-                equalTo: headerView.bottomAnchor,
-                constant: -TPMenuUX.UX.TrackingDetails.baseDistance
-            ),
-
-            closeButton.trailingAnchor.constraint(
-                equalTo: headerView.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            closeButton.topAnchor.constraint(equalTo: headerView.topAnchor,
-                                             constant: TPMenuUX.UX.horizontalMargin),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(equalTo: closeButton.heightAnchor),
-
-            horizontalLine.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
-            horizontalLine.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
-            horizontalLine.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
-            horizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
+            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight)
         ]
 
         constraints.append(contentsOf: headerViewContraints)
@@ -239,11 +140,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: Connection Status View Setup
     private func setupConnectionStatusView() {
         baseView.addSubviews(connectionView)
-        connectionView.addSubviews(connectionImage, connectionStatusLabel, dividerView)
-
-        lockImageHeightConstraint = connectionImage.widthAnchor.constraint(
-            equalToConstant: TPMenuUX.UX.iconSize
-        )
 
         let connectionViewContraints = [
             connectionView.leadingAnchor.constraint(
@@ -257,22 +153,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
             connectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight),
-
-            connectionImage.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-            connectionImage.leadingAnchor.constraint(equalTo: connectionView.leadingAnchor,
-                                                     constant: TPMenuUX.UX.horizontalMargin),
-            connectionImage.heightAnchor.constraint(equalTo: connectionView.widthAnchor),
-            lockImageHeightConstraint!,
-
-            connectionStatusLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor,
-                                                           constant: TPMenuUX.UX.TrackingDetails.imageMargins),
-            connectionStatusLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor),
-            connectionStatusLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor),
-
-            dividerView.leadingAnchor.constraint(equalTo: connectionStatusLabel.leadingAnchor),
-            dividerView.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor),
-            dividerView.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
         ]
 
         constraints.append(contentsOf: connectionViewContraints)
@@ -281,7 +161,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: Verified By View Setup
     private func setupVerifiedByView() {
         baseView.addSubview(verifiedByView)
-        verifiedByView.addSubview(verifiedByLabel)
 
         let verifiedByViewContraints = [
             verifiedByView.leadingAnchor.constraint(
@@ -295,12 +174,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            verifiedByView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight),
-
-            verifiedByLabel.leadingAnchor.constraint(equalTo: verifiedByView.leadingAnchor,
-                                                     constant: TPMenuUX.UX.horizontalMargin),
-            verifiedByLabel.trailingAnchor.constraint(equalTo: verifiedByView.trailingAnchor),
-            verifiedByLabel.centerYAnchor.constraint(equalTo: verifiedByView.centerYAnchor)
+            verifiedByView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight)
         ]
 
         constraints.append(contentsOf: verifiedByViewContraints)
@@ -309,9 +183,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: See Certificates View Setup
     private func setupSeeCertificatesView() {
         let certificatesButtonViewModel = LinkButtonViewModel(
-            title: viewModel.viewCertificatesButtonTitle,
-            underlineStyle: [],
-            a11yIdentifier: viewModel.viewCertButtonA11Id,
+            title: model.viewCertificatesButtonTitle,
+            a11yIdentifier: model.viewCertButtonA11Id,
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
@@ -337,10 +210,10 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        headerView.accessibilityIdentifier = viewModel.headerViewA11yId
-        view.accessibilityIdentifier = viewModel.detailsViewA11yId
-        baseView.accessibilityIdentifier = viewModel.containerViewA11Id
-        connectionView.accessibilityIdentifier = viewModel.connectionViewA11yId
+        headerView.accessibilityIdentifier = model.headerViewA11yId
+        view.accessibilityIdentifier = model.detailsViewA11yId
+        baseView.accessibilityIdentifier = model.containerViewA11Id
+        connectionView.accessibilityIdentifier = model.connectionViewA11yId
     }
 
     // MARK: View Transitions
@@ -358,22 +231,24 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     private func adjustLayout() {
         let iconSize = TPMenuUX.UX.iconSize
-        lockImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
+        connectionView.lockImageHeightConstraint?.constant = min(
+            UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize
+        )
 
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
 
     private func updateViewDetails() {
-        siteTitleLabel.text = viewModel.topLevelDomain
-        connectionStatusLabel.text = viewModel.connectionStatusMessage
-        verifiedByLabel.text = String(format: .Menu.EnhancedTrackingProtection.connectionVerifiedByLabel,
-                                      viewModel.topLevelDomain) // to be updated with the certificate verifier
-        viewCertificatesButton.setTitle(viewModel.viewCertificatesButtonTitle, for: .normal)
+        headerView.siteTitleLabel.text = model.topLevelDomain
+        connectionView.connectionStatusLabel.text = model.connectionStatusMessage
+        let certificateVerifier =  String(format: .Menu.EnhancedTrackingProtection.connectionVerifiedByLabel,
+                                          model.topLevelDomain) // to be updated with the certificate verifier
+        verifiedByView.configure(verifiedBy: certificateVerifier)
+        viewCertificatesButton.setTitle(model.viewCertificatesButtonTitle, for: .normal)
     }
 
     // MARK: - Actions
-
     @objc
     func closeButtonTapped() {
         self.dismiss(animated: true)
@@ -394,23 +269,11 @@ extension TrackingProtectionDetailsViewController {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor =  theme.colors.layer1
-        siteTitleLabel.textColor = theme.colors.textPrimary
-        connectionStatusLabel.textColor = theme.colors.textPrimary
-        connectionView.backgroundColor = theme.colors.layer2
-        connectionImage.image = viewModel.getLockIcon(theme.type)
-        dividerView.backgroundColor = theme.colors.borderPrimary
-        horizontalLine.backgroundColor = theme.colors.borderPrimary
-        connectionImage.tintColor = theme.colors.iconPrimary
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .tinted(withColor: theme.colors.iconSecondary)
-        closeButton.setImage(buttonImage, for: .normal)
-        closeButton.backgroundColor = theme.colors.layer2
-        backButton.titleLabel?.textColor = theme.colors.textAccent
-        backButton.tintColor = theme.colors.iconAction
-
-        verifiedByLabel.textColor = theme.colors.textPrimary
-        verifiedByView.backgroundColor = theme.colors.layer2
+        connectionView.connectionImage.image = model.getLockIcon(theme.type)
+        verifiedByView.applyTheme(theme: theme)
         viewCertificatesButton.applyTheme(theme: theme)
+        headerView.applyTheme(theme: theme)
+        connectionView.applyTheme(theme: theme)
 
         setNeedsStatusBarAppearanceUpdate()
     }
