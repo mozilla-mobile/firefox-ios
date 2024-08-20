@@ -4114,7 +4114,7 @@ extension String {
                 comment: "Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
 
             public static let onNotSecureHeader = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.On.Header.v128",
+                key: "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "Your connection is not secure.",
                 comment: "Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
