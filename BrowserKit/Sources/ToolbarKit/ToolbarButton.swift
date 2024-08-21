@@ -134,9 +134,9 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     private func configureCustomA11yActionIfNeeded(for element: ToolbarElement) {
-        guard let a11yCustomName = element.a11yCustomName,
+        guard let a11yCustomActionName = element.a11yCustomActionName,
               let a11yCustomAction = element.a11yCustomAction else { return }
-        let a11yAction = UIAccessibilityCustomAction(name: a11yCustomName) { _ in
+        let a11yAction = UIAccessibilityCustomAction(name: a11yCustomActionName) { _ in
             a11yCustomAction()
             return true
         }

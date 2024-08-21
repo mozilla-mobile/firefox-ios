@@ -49,7 +49,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         a11yLabel: .TabLocationReaderModeAccessibilityLabel,
         a11yHint: .TabLocationReloadAccessibilityHint,
         a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
-        a11yCustomName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+        a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
 
     lazy var qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,

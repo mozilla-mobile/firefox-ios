@@ -36,7 +36,7 @@ public struct ToolbarElement: Equatable {
     let a11yId: String
 
     /// Name for the custom accessibility action
-    let a11yCustomName: String?
+    let a11yCustomActionName: String?
 
     /// Action to be performed for custom accessibility action
     let a11yCustomAction: (() -> Void)?
@@ -59,7 +59,7 @@ public struct ToolbarElement: Equatable {
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
-                a11yCustomName: String? = nil,
+                a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
@@ -75,7 +75,7 @@ public struct ToolbarElement: Equatable {
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
-        self.a11yCustomName = a11yCustomName
+        self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
     }
 
