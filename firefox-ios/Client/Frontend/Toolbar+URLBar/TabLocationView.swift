@@ -66,7 +66,6 @@ class TabLocationView: UIView, FeatureFlaggable {
             hideButtons()
             updateTextWithURL()
             setNeedsUpdateConstraints()
-            showTrackingProtectionButton(for: url)
         }
     }
 
@@ -368,10 +367,12 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     func showTrackingProtectionButton(for url: URL?) {
+        guard let url else { return }
+        setTrackingProtection(theme: currentTheme())
         ensureMainThread {
             let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
-            let isReaderModeURL = url?.isReaderModeURL ?? false
-            let isFxHomeUrl = url?.isFxHomeUrl ?? false
+            let isReaderModeURL = url.isReaderModeURL
+            let isFxHomeUrl = url.isFxHomeUrl
             if !isFxHomeUrl, !isReaderModeURL, isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
                 self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
                 self.trackingProtectionButton.alpha = 0
@@ -541,16 +542,6 @@ extension TabLocationView: TabEventHandler {
         guard let blocker = tab.contentBlocker else { return }
 
         ensureMainThread { [self] in
-            self.blockerStatus = blocker.status
-        }
-    }
-
-    func tabDidGainFocus(_ tab: Tab) {
-        guard let blocker = tab.contentBlocker else { return }
-
-        ensureMainThread { [self] in
-            self.showTrackingProtectionButton(for: tab.webView?.url)
-            self.hasSecureContent = (tab.webView?.hasOnlySecureContent ?? false)
             self.blockerStatus = blocker.status
         }
     }

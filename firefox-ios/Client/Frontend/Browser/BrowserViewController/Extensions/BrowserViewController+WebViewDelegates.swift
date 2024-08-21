@@ -840,6 +840,10 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if let url = webView.url, !isToolbarRefactorEnabled {
+            urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+            urlBar.locationView.showTrackingProtectionButton(for: url)
+        }
         webviewTelemetry.stop()
 
         if let tab = tabManager[webView],

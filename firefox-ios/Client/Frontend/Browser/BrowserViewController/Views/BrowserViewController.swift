@@ -1784,10 +1784,7 @@ class BrowserViewController: UIViewController,
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
         case .hasOnlySecureContent:
-            if !isToolbarRefactorEnabled {
-                urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
-                urlBar.locationView.showTrackingProtectionButton(for: webView.url)
-            }
+            break
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
         }
@@ -3569,6 +3566,13 @@ extension BrowserViewController: TabManagerDelegate {
                 // The webView can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 selectedTab.reload()
+                // If the webView is loading, we hide the lock icon and wait for did finish to get the lasted secure content status
+            } else if webView.isLoading {
+                self.urlBar.locationView.hideTrackingProtectionButton()
+                // If not, we show the lock icon with the secure content status of the webView
+            } else {
+                self.urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+                self.urlBar.locationView.showTrackingProtectionButton(for: webView.url)
             }
         }
 
