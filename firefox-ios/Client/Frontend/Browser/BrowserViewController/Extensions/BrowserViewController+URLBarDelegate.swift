@@ -185,7 +185,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
-        toogleReaderModeLongPressAction()
+        toggleReaderModeLongPressAction()
     }
 
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {

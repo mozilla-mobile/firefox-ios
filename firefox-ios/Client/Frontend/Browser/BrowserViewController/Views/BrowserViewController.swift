@@ -1961,7 +1961,7 @@ class BrowserViewController: UIViewController,
         case .readerMode:
             toggleReaderMode()
         case .readerModeLongPressAction:
-            _ = toogleReaderModeLongPressAction()
+            _ = toggleReaderModeLongPressAction()
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
@@ -2098,7 +2098,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func toogleReaderModeLongPressAction() -> Bool {
+    func toggleReaderModeLongPressAction() -> Bool {
         guard let tab = tabManager.selectedTab,
               let url = tab.url?.displayURL
         else {
