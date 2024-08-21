@@ -51,7 +51,7 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
         }
@@ -59,7 +59,7 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return try await fetchHeroImageFromFetcher(imageModel: imageModel)
         }
@@ -67,7 +67,7 @@ class DefaultImageHandler: ImageHandler {
 
     func clearCache() {
         Task {
-            await self.imageCache.clearCache()
+            await self.imageCache.clear()
         }
     }
 
