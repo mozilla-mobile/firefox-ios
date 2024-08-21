@@ -47,7 +47,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
         iconName: StandardImageIdentifiers.Large.readerView,
         isEnabled: true,
         a11yLabel: .TabLocationReaderModeAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton)
+        a11yHint: .TabLocationReloadAccessibilityHint,
+        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+        a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
 
     lazy var qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -130,6 +132,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func resolveToolbarMiddlewareActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.actionType {
+        case ToolbarMiddlewareActionType.customA11yAction:
+            resolveToolbarMiddlewareCustomA11yActions(action: action, state: state)
+
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
@@ -181,6 +186,16 @@ final class ToolbarMiddleware: FeatureFlaggable {
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
             handleToolbarButtonLongPressActions(action: action)
+        }
+    }
+
+    func resolveToolbarMiddlewareCustomA11yActions(action: ToolbarMiddlewareAction, state: AppState) {
+        switch action.buttonType {
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
+            store.dispatch(action)
+        default: break
         }
     }
 
@@ -307,8 +322,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
         case .newTab:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions
-            )
+                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions)
+            store.dispatch(action)
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
             store.dispatch(action)
         default:
             break
