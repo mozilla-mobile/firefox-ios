@@ -14,14 +14,9 @@ class CreditCardsTests: BaseTestCase {
     var expiration: XCUIElement!
 
     func initCardFields() {
-        nameOnCard = app.otherElements.textFields.element(boundBy: 0)
-        cardNr = app.otherElements.textFields.element(boundBy: 1)
-        expiration = app.otherElements.textFields.element(boundBy: 2)
-        if !iPad() {
-            nameOnCard = app.otherElements.textFields.element(boundBy: 1)
-            cardNr = app.otherElements.textFields.element(boundBy: 2)
-            expiration = app.otherElements.textFields.element(boundBy: 3)
-        }
+        nameOnCard = app.buttons["name"]
+        cardNr = app.buttons["number"]
+        expiration = app.buttons["expiration"]
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306967
@@ -48,10 +43,10 @@ class CreditCardsTests: BaseTestCase {
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
         mozWaitForElementToExist(app.staticTexts.containingText("New").element)
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         let cardDetails = ["Test", "Expires", "5/40"]
         for i in cardDetails {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts[i])
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
         }
     }
 
@@ -689,11 +684,11 @@ class CreditCardsTests: BaseTestCase {
         app.tables.cells.element(boundBy: 1).tap()
         // The "View card" page is displayed with all the details of the card
         mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard])
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         let cardDetails = ["Test", "05 / 40"]
         for i in cardDetails {
             if #available(iOS 16, *) {
-                XCTAssertTrue(app.textFields[i].exists, "\(i) does not exists")
+                XCTAssertTrue(app.buttons[i].exists, "\(i) does not exists")
             } else {
                 mozWaitForElementToExist(app.staticTexts[i])
             }
