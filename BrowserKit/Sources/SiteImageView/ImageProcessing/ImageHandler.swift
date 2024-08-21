@@ -76,10 +76,9 @@ class DefaultImageHandler: ImageHandler {
     private func fetchFaviconFromFetcher(imageModel: SiteImageModel) async -> UIImage {
         do {
             guard let faviconURL = imageModel.resourceURL else {
-                return await fallbackToLetterFavicon(imageModel: imageModel)
+                throw SiteImageError.noFaviconURLFound
             }
-
-            let image = try await faviconFetcher.fetchFavicon(from: faviconURL) // FIXME we don't want to cache letters!
+            let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
@@ -100,6 +99,8 @@ class DefaultImageHandler: ImageHandler {
     private func fallbackToLetterFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
             let image = try await letterImageGenerator.generateLetterImage(siteString: imageModel.cacheKey)
+            // FIXME Do we really want to cache letter icons and never attempt to get a favicon again?
+            //       We can drop into here on a network timeout.
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {

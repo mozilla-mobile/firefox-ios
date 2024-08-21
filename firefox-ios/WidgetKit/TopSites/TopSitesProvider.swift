@@ -19,7 +19,7 @@ struct TopSitesProvider: TimelineProvider {
         let siteImageFetcher = DefaultSiteImageHandler.factory()
 
         Task {
-            let tabFaviconDictionary = await withTaskGroup(of: (String, SiteImageModel).self,
+            let tabFaviconDictionary = await withTaskGroup(of: (String, UIImage).self,
                                                            returning: [String: Image].self) { group in
                 for site in widgetKitTopSites {
                     let siteImageModel = SiteImageModel(id: UUID(),
@@ -27,13 +27,11 @@ struct TopSitesProvider: TimelineProvider {
                                                         siteURL: site.url)
                     group.addTask {
                         let image = await siteImageFetcher.getImage(model: siteImageModel)
-                        let newModel = SiteImageModel(siteImageModel: siteImageModel, image: image)
-
-                        return (site.imageKey, newModel)
+                        return (site.imageKey, image)
                     }
                 }
 
-                return await group.reduce(into: [:]) { $0[$1.0] = Image(uiImage: $1.1.image ?? UIImage()) }
+                return await group.reduce(into: [:]) { $0[$1.0] = Image(uiImage: $1.1) }
             }
 
             let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: widgetKitTopSites)

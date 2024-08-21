@@ -76,12 +76,11 @@ public class DefaultSiteImageHandler: SiteImageHandler {
             }
 
             currentInFlightRequest = imageModel.siteURL
-            var faviconImageModel: SiteImageModel = imageModel
+            var faviconImageModel = imageModel
 
             if imageModel.resourceURL == nil {
                 // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
-                let resourceURL = try await urlHandler.getFaviconURL(model: imageModel)
-                faviconImageModel = SiteImageModel(siteImageModel: imageModel, resourceURL: resourceURL)
+                faviconImageModel.resourceURL = try await urlHandler.getFaviconURL(model: imageModel)
             }
 
             // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache

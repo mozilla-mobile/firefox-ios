@@ -90,18 +90,7 @@ public class HeroImageView: UIView, SiteImageView {
         updateImage(model: model)
     }
 
-    func setImage(model: SiteImageModel) {
-        setHeroImage(imageModel: model)
-        completionHandler?()
-    }
-
-    // MARK: - Hero image
-
-    private func setHeroImage(imageModel: SiteImageModel) {
-        guard let image = imageModel.image else {
-            return
-        }
-
+    func setImage(image: UIImage) {
         // If hero image is a square use it as a favicon
         guard image.size.width == image.size.height else {
             setHeroImage(image: image)
@@ -109,7 +98,11 @@ public class HeroImageView: UIView, SiteImageView {
         }
 
         setFallbackFavicon(image: image)
+        
+        completionHandler?()
     }
+
+    // MARK: - Hero image
 
     private func setupHeroImageLayout(viewModel: HeroImageViewModel) {
         heroImageView.layer.cornerRadius = viewModel.generalCornerRadius

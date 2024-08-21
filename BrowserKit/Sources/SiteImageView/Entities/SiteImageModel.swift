@@ -19,10 +19,10 @@ public struct SiteImageModel {
     let cacheKey: String
 
     // URL of the image (e.g. faviconURL, preferrably high resolution)
-    private(set) var resourceURL: URL?
+    var resourceURL: URL?
 
     // Loaded image asset
-    public private(set) var image: UIImage?
+    public var image: UIImage?
 
     public init(id: UUID,
                 imageType: SiteImageType,
@@ -39,18 +39,6 @@ public struct SiteImageModel {
         self.image = image
     }
 
-    public init(siteImageModel: SiteImageModel,
-                image: UIImage) {
-        self = siteImageModel
-        self.image = image
-    }
-
-    public init(siteImageModel: SiteImageModel,
-                resourceURL: URL) {
-        self = siteImageModel
-        self.resourceURL = resourceURL
-    }
-
     /// Generates a cache key for the given image type by using its associated site URL.
     /// - Parameters:
     ///   - siteURL: The website with which this image is associated.
@@ -62,6 +50,9 @@ public struct SiteImageModel {
             // Always use the full site URL as the cache key for hero images
             return siteURL.absoluteString
         case .favicon:
+            // FIXME Why would we ever want to use a hard-coded faviconURL (sponsored tile, suggested tile, etc...)
+            // as the cache key for either a URL or Image?
+            
             // Use the domain as the key to avoid caching and fetching unnecessary duplicates
             return siteURL.shortDomain ?? siteURL.shortDisplayString
         }

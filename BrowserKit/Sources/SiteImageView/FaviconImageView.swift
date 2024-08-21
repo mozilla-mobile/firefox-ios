@@ -81,16 +81,12 @@ public class FaviconImageView: UIImageView, SiteImageView {
         updateImage(model: model)
     }
 
-    func setImage(model: SiteImageModel) {
-        setupFaviconImage(model)
+    func setImage(image: UIImage) {
+        self.image = image
         completionHandler?()
     }
 
     // MARK: - Favicon
-
-    private func setupFaviconImage(_ model: SiteImageModel) {
-        image = model.image
-    }
 
     private func setupFaviconLayout(viewModel: FaviconImageViewModel) {
         layer.cornerRadius = viewModel.faviconCornerRadius
