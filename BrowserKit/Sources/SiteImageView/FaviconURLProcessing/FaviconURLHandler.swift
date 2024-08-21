@@ -20,8 +20,8 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
         self.urlCache = urlCache
     }
 
-    /// Attempts to get the favicon URL associated with this site. First checks the URL cache. If the URL can't be obtained from the cache, then a network request
-    /// is made to hopefully scrape the favicon URL from a webpage's metadata.
+    /// Attempts to get the favicon URL associated with this site. First checks the URL cache. If the URL can't be obtained from the cache,
+    /// then a network request is made to hopefully scrape the favicon URL from a webpage's metadata.
     /// **Note**: This is a slow call when the URL is not cached.
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
         // Don't fetch favicon URL if we don't have a URL or domain for it
