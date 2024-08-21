@@ -39,7 +39,7 @@ actor DefaultSiteImageCache: SiteImageCache {
     func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage {
         let key = createCacheKey(cacheKey, forType: type)
         do {
-            guard let image = try await imageCache.retrieveImage(forKey: key) else {
+            guard let image = try await imageCache.retrieve(forKey: key) else {
                 throw SiteImageError.unableToRetrieveFromCache("Image was nil")
             }
             return image

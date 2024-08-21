@@ -47,7 +47,6 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     }
 
     public func cacheFaviconURL(siteURL: URL, faviconURL: URL) {
-        // Note: We do NOT want to cache by the faviconURL FIXME
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .favicon)
         urlHandler.cacheFaviconURL(cacheKey: cacheKey, faviconURL: faviconURL)
     }

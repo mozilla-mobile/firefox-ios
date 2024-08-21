@@ -34,7 +34,7 @@ public struct SiteImageModel {
         self.imageType = imageType
         self.siteURL = siteURL
         self.cacheKey = cacheKey
-                        ?? SiteImageModel.generateCacheKey(siteURL: siteURL, resourceURL: resourceURL, type: imageType)
+                        ?? SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
         self.resourceURL = resourceURL
         self.image = image
     }
@@ -51,24 +51,17 @@ public struct SiteImageModel {
         self.resourceURL = resourceURL
     }
 
-    // FIXME Move this somewhere more appropriate
-    /// Generates a cache key for the given image type by using its associated site URL or resource URL.
+    /// Generates a cache key for the given image type by using its associated site URL.
     /// - Parameters:
     ///   - siteURL: The website with which this image is associated.
-    ///   - resourceURL: The remote URL of the image resource.
     ///   - type: The image type.
     /// - Returns: A cache key value for storing this image in an image cache.
-    static func generateCacheKey(siteURL: URL, resourceURL: URL? = nil, type: SiteImageType) -> String {
+    static func generateCacheKey(siteURL: URL, type: SiteImageType) -> String {
         switch type {
         case .heroImage:
             // Always use the full site URL as the cache key for hero images
             return siteURL.absoluteString
         case .favicon:
-            // If we already have a favicon url, use the url as the cache key
-            if let faviconURL = resourceURL {
-                return faviconURL.absoluteString
-            }
-
             // Use the domain as the key to avoid caching and fetching unnecessary duplicates
             return siteURL.shortDomain ?? siteURL.shortDisplayString
         }
