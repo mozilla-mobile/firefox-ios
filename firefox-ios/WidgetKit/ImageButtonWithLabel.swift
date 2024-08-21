@@ -4,6 +4,7 @@
 
 #if canImport(WidgetKit)
 import SwiftUI
+import Common
 
 // View for Quick Action Widget Buttons (Small & Medium)
 // +-------------------------------------------------------+
@@ -90,7 +91,7 @@ struct ImageButtonWithLabel: View {
                         }
                         Spacer()
                         if link == .search && isSmall {
-                            Image("searchLarge")
+                            Image(StandardImageIdentifiers.Large.search)
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         } else {
