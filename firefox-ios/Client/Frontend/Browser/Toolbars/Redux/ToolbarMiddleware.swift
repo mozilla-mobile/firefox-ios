@@ -548,6 +548,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let isForwardButtonEnabled = canGoForward
             actions.append(backAction(enabled: isBackButtonEnabled))
             actions.append(forwardAction(enabled: isForwardButtonEnabled))
+            if toolbarState.isPrivateMode && isFeltPrivacyEnabled() {
+                actions.append(dataClearanceAction)
+            }
         }
 
         return actions
@@ -682,10 +685,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
-        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
-        let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyUIEnabled &&
-                                            isFeltPrivacyDeletionEnabled
+        let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyEnabled()
         guard !shouldShowDataClearanceAction else {
             return dataClearanceAction
         }
@@ -750,5 +750,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
+    }
+
+    private func isFeltPrivacyEnabled() -> Bool {
+        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
+
+        return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
     }
 }
