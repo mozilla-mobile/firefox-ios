@@ -126,7 +126,7 @@ class CreditCardsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306969
     // Smoketest
-    func testAutofillCreditCardsToggleOnOoff() {
+    func testAutofillCreditCardsToggleOnOff() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(CreditCardsSettings)
