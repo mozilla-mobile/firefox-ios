@@ -267,17 +267,17 @@ extension String {
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
             public static let SaveAddressesToFirefox = MZLocalizedString(
-                key: "", // Addresses.Settings.SaveToFirefox.Title.v129
+                key: "Addresses.Settings.SaveToFirefox.Title.v130",
                 tableName: "Settings",
                 value: "Save Addresses to %@",
                 comment: "Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app.")
             public static let SecureSaveInfo = MZLocalizedString(
-                key: "", // Addresses.Settings.SecureSaveInfo.Description.v129
+                key: "Addresses.Settings.SecureSaveInfo.Description.v130",
                 tableName: "Settings",
                 value: "Securely save your information to get quick access to it later.",
                 comment: "Description text for the content unavailable view informing users they can create or add new addresses.")
             public static let ListItemA11y = MZLocalizedString(
-                key: "", // Addresses.Settings.ListItemA11y.v129
+                key: "Addresses.Settings.ListItemA11y.v130",
                 tableName: "Settings",
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
@@ -572,6 +572,11 @@ extension String {
                 tableName: "BottomSheet",
                 value: "Use a saved address?",
                 comment: "When a user is in the process of entering an address, a screen pops up prompting the user if they want to use a saved address. This string is used as the title label of the screen.")
+            public static let ManageAddressesButton = MZLocalizedString(
+                key: "Addresses.ManageAddressesButton.v130",
+                tableName: "Settings",
+                value: "Manage addresses",
+                comment: "This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses.")
         }
     }
 }
@@ -1462,6 +1467,41 @@ extension String {
                     value: "Thanks for your feedback!",
                     comment: "On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey.")
             }
+        }
+    }
+}
+
+// MARK: - Native Error Page
+extension String {
+    struct NativeErrorPage {
+        public static let ButtonLabel = MZLocalizedString(
+            key: "NativeErrorPage.ButtonLabel.v131",
+            tableName: "NativeErrorPage",
+            value: "Reload",
+            comment: "On error page, this is the text on a button that will try to load the page again.")
+        struct NoInternetConnection {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Looks like there’s a problem with your internet connection.",
+                comment: "On error page, this is the title for no internet connection")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.NoInternetConnection.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
+                comment: "On error page, this is the description for no internet connection.")
+        }
+        struct GenericError {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                comment: "On error page, this is the description for generic error.")
         }
     }
 }
@@ -4109,7 +4149,7 @@ extension String {
                 comment: "Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
 
             public static let onNotSecureHeader = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.On.Header.v128",
+                key: "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "Your connection is not secure.",
                 comment: "Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")

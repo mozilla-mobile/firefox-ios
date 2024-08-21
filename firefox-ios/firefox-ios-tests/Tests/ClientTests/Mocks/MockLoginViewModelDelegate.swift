@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import MozillaAppServices
 @testable import Client
 
 class MockLoginViewModelDelegate: LoginViewModelDelegate {
@@ -15,35 +14,5 @@ class MockLoginViewModelDelegate: LoginViewModelDelegate {
 
     func breachPathDidUpdate() {
         breachPathDidUpdateCalledCount += 1
-    }
-}
-
-class MockLoginProvider: LoginProvider {
-    var searchLoginsWithQueryCalledCount = 0
-    var addLoginCalledCount = 0
-    func searchLoginsWithQuery(
-        _ query: String?,
-        completionHandler: @escaping (
-            Result<
-                [MozillaAppServices.EncryptedLogin],
-            any Error
-            >
-        ) -> Void
-    ) {
-        searchLoginsWithQueryCalledCount += 1
-        completionHandler(.success([]))
-    }
-
-    func addLogin(
-        login: MozillaAppServices.LoginEntry,
-        completionHandler: @escaping (
-            Result<
-            MozillaAppServices.EncryptedLogin?,
-            any Error
-            >
-        ) -> Void
-    ) {
-        addLoginCalledCount += 1
-        completionHandler(.success(nil))
     }
 }

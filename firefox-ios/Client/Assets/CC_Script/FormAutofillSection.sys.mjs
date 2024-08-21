@@ -294,7 +294,7 @@ export class FormAutofillSection {
     };
 
     for (const detail of this.fieldDetails) {
-      const { filledValue } = formFilledData[detail.elementId];
+      const { filledValue } = formFilledData.get(detail.elementId);
 
       if (
         !filledValue ||
