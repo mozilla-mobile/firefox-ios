@@ -88,6 +88,7 @@ struct CreditCardItemRow: View {
                     didSelectAction?()
                 }
             }
+            .accessibility(addTraits: .isButton)
             Rectangle()
                 .fill(separatorColor)
                 .frame(maxWidth: .infinity)
@@ -108,14 +109,14 @@ struct CreditCardItemRow: View {
     }
 
     func getImage(creditCard: CreditCard) -> Image {
-        let defaultImage = Image(StandardImageIdentifiers.Large.creditCard)
+        let defaultImage = Image(decorative: StandardImageIdentifiers.Large.creditCard)
 
         guard let type = CreditCardType(rawValue: creditCard.ccType.uppercased()),
-              let image = type.image else {
+              let image = type.imageName else {
             return defaultImage
         }
 
-        return Image(uiImage: image)
+        return Image(decorative: image)
     }
 
     func applyTheme(theme: Theme) {

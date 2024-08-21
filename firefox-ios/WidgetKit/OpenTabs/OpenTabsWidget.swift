@@ -36,7 +36,7 @@ struct OpenTabsView: View {
                     if entry.favicons[tab.imageKey] != nil {
                         (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
                     } else {
-                        Image("globeLarge")
+                        Image(decorative: "globeLarge")
                             .foregroundColor(Color.white)
                             .frame(width: 16, height: 16)
                     }
@@ -58,7 +58,7 @@ struct OpenTabsView: View {
 
     var openFirefoxButton: some View {
         HStack(alignment: .center, spacing: 15) {
-            Image("externalLinkSmall").foregroundColor(Color.white)
+            Image(decorative: "externalLinkSmall").foregroundColor(Color.white)
             Text("Open Firefox")
                 .foregroundColor(Color.white).lineLimit(1)
                 .font(.system(size: 13, weight: .semibold, design: .default))
@@ -81,7 +81,7 @@ struct OpenTabsView: View {
                     Text(String.NoOpenTabsLabel)
                     HStack {
                         Spacer()
-                        Image("externalLinkSmall")
+                        Image(decorative: "externalLinkSmall")
                         Text(String.OpenFirefoxLabel)
                             .foregroundColor(Color.white).lineLimit(1)
                             .font(.system(size: 13, weight: .semibold, design: .default))
@@ -96,7 +96,7 @@ struct OpenTabsView: View {
 
                     if entry.tabs.count > numberOfTabsToDisplay {
                         HStack(alignment: .center, spacing: 15) {
-                            Image("externalLinkSmall").foregroundColor(Color.white).frame(width: 16, height: 16)
+                            Image(decorative: "externalLinkSmall").foregroundColor(Color.white).frame(width: 16, height: 16)
                             Text(
                                 String.localizedStringWithFormat(
                                     String.MoreTabsLabel,

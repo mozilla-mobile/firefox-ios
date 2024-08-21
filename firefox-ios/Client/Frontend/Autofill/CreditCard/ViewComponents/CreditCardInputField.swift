@@ -204,7 +204,9 @@ struct CreditCardInputField: View {
             if inputType == .expiration {
                 _ = self.updateInputValidity()
             }
-        }.accessibilityLabel(fieldHeadline)
+        }
+        .accessibilityLabel(fieldHeadline)
+        .accessibility(addTraits: .isButton)
     }
 
     // MARK: Helper
