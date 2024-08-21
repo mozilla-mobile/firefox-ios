@@ -47,8 +47,8 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     }
 
     public func cacheFaviconURL(siteURL: URL, faviconURL: URL) {
-        let cacheKey = generateCacheKey(siteURL: siteURL,
-                                        type: .favicon)
+        // Note: We do NOT want to cache by the faviconURL FIXME
+        let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .favicon)
         urlHandler.cacheFaviconURL(cacheKey: cacheKey, faviconURL: faviconURL)
     }
 
@@ -58,19 +58,6 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     }
 
     // MARK: - Private
-
-    private func generateCacheKey(siteURL: URL,
-                                  type: SiteImageType) -> String {
-        switch type {
-        case .heroImage:
-            // Always use the full site URL as the cache key for hero images
-            return siteURL.absoluteString
-        case .favicon:
-            // For everything else use the domain as the key to avoid caching
-            // and fetching unnecessary duplicates
-            return siteURL.shortDomain ?? siteURL.shortDisplayString
-        }
-    }
 
     private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {

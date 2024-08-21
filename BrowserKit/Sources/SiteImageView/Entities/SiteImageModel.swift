@@ -12,7 +12,7 @@ public struct SiteImageModel {
     // The image type expected when making a request
     let imageType: SiteImageType
 
-    // Represents the website and not the image resource
+    // Represents the website (not the associated image resource)
     let siteURL: URL
 
     // Used to cache any resources related to this request
@@ -20,7 +20,7 @@ public struct SiteImageModel {
 
     // URL of the image (e.g. faviconURL, preferrably high resolution)
     private(set) var resourceURL: URL?
-    
+
     // Loaded image asset
     public private(set) var image: UIImage?
 
@@ -51,10 +51,14 @@ public struct SiteImageModel {
         self.resourceURL = resourceURL
     }
 
-    // Helper method to generate a cache key for this site image.
-    private static func generateCacheKey(siteURL: URL,
-                                         resourceURL: URL? = nil,
-                                         type: SiteImageType) -> String {
+    // FIXME Move this somewhere more appropriate
+    /// Generates a cache key for the given image type by using its associated site URL or resource URL.
+    /// - Parameters:
+    ///   - siteURL: The website with which this image is associated.
+    ///   - resourceURL: The remote URL of the image resource.
+    ///   - type: The image type.
+    /// - Returns: A cache key value for storing this image in an image cache.
+    static func generateCacheKey(siteURL: URL, resourceURL: URL? = nil, type: SiteImageType) -> String {
         switch type {
         case .heroImage:
             // Always use the full site URL as the cache key for hero images
