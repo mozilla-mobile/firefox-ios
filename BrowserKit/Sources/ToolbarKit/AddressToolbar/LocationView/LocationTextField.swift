@@ -159,7 +159,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         if isEditing {
             textColor = colors.textPrimary
         }
-        
+
         tintClearButton()
     }
 
