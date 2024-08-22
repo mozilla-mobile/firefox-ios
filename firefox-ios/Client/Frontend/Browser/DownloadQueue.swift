@@ -159,30 +159,6 @@ class HTTPDownload: Download {
             self.task?.resume()
         }
     }
-
-    // Makes a HEAD request to check the unencoded content size of the file, which reflects the NSURLSession delivery bytes
-    // size given via the `URLSessionDownloadDelegate` methods (because decoding is automatic).
-    // Note: `NSURLSession` automatically inserts the following header into requests, which can result in encoded
-    // (compressed) data from a server: `Accept-Encoding: gzip;q=1.0, compress;q=0.5`
-    func getUncompressedSize() async -> Int64? {
-        if let url = self.request.url {
-            var headRequest = URLRequest(url: url)
-            headRequest.httpMethod = "HEAD"
-            // Override URLSession's default Accept-Encoding headers (`gzip;q=1.0, compress;q=0.5`)
-            // to instead accept no transformation of the file at all.
-            headRequest.setValue("identity", forHTTPHeaderField: "Accept-Encoding")
-
-            do {
-                let (_, headResponse) = try await URLSession.shared.data(for: headRequest)
-                return headResponse.expectedContentLength != -1 ? headResponse.expectedContentLength : nil
-            } catch {
-                // Verifying the expected download size via a HEAD request is optional, so we can ignore or log the error
-                // TODO Do we care to log this error?
-            }
-        }
-
-        return nil
-    }
 }
 
 extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
@@ -317,20 +293,6 @@ class DownloadQueue {
             downloadProgress[uuid] = progress
         } else {
             downloadProgress[uuid] = nil
-        }
-
-        if let hasContentEncoding = download.hasContentEncoding,
-           hasContentEncoding,
-           let download = download as? HTTPDownload {
-            // We need to do a quick HEAD request to the server to check the uncompressed file size. Otherwise, the download
-            // progress will appear to exceed the `totalBytesExpected`. [FXIOS-9039]
-            // This is because NSURLSession automatically decodes gzip/compress encoded content and reports the decoded
-            // bytes to the delegate methods.
-            Task {
-                if let size = await download.getUncompressedSize(), size != download.totalBytesExpected {
-                    downloadProgress[uuid]?.totalExpected = size
-                }
-            }
         }
 
         download.resume()
