@@ -7,6 +7,10 @@ import ToolbarKit
 import Redux
 import UIKit
 
+protocol NavigationToolbarContainerDelegate: AnyObject {
+    func configureCFR(for: ToolbarKit.ToolbarButton)
+}
+
 class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     typealias SubscriberStateType = ToolbarState
 
@@ -19,6 +23,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
             subscribeToRedux()
         }
     }
+    weak var toolbarDelegate: NavigationToolbarContainerDelegate?
     private var toolbarState: ToolbarState?
     private var model: NavigationToolbarContainerModel?
 
@@ -30,6 +35,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
+        toolbar.toolbarDelegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -91,5 +97,11 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     func applyTheme(theme: Theme) {
         toolbar.applyTheme(theme: theme)
         backgroundColor = theme.colors.layer1
+    }
+}
+
+extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
+    func configureCFR(for button: ToolbarKit.ToolbarButton) {
+        toolbarDelegate?.configureCFR(for: button)
     }
 }

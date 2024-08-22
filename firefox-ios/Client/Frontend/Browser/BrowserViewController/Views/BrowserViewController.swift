@@ -692,6 +692,8 @@ class BrowserViewController: UIViewController,
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
+        navigationToolbarContainer.toolbarDelegate = self
+
         scrollController.header = header
         scrollController.overKeyboardContainer = overKeyboardContainer
         scrollController.bottomContainer = bottomContainer
@@ -1665,8 +1667,8 @@ class BrowserViewController: UIViewController,
         guard !showFireButton else {
             if !isToolbarRefactorEnabled {
                 navigationToolbar.updateMiddleButtonState(.fire)
+                configureDataClearanceContextualHint(dataClearanceButton: navigationToolbar.multiStateButton)
             }
-            configureDataClearanceContextualHint()
             return
         }
         resetDataClearanceCFRTimer()
@@ -3956,6 +3958,12 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                                                 theme: self.currentTheme())
             }
         }
+    }
+}
+
+extension BrowserViewController: NavigationToolbarContainerDelegate {
+    func configureCFR(for button: ToolbarKit.ToolbarButton) {
+        configureDataClearanceContextualHint(dataClearanceButton: button)
     }
 }
 
