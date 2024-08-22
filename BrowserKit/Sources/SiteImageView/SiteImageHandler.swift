@@ -14,11 +14,11 @@ public protocol SiteImageHandler {
 public actor DefaultSiteImageHandler: SiteImageHandler {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
-    
+
     /// Right now, multiple `SiteImageView`s each have their own `DefaultSiteImageHandler`. Ideally they'd all share a reference to the same
     /// `DefaultSiteImageHandler` so we could properly queue and throttle requests to get favicon URLs, download images, etc. Since that's a
     /// large architectural change, for now lets use a static queue so we can prevent too many duplicate calls to `getFaviconImage`.
-    /// (revised FXIOS-9427 bugfix)
+    /// (FXIOS-9830, revised FXIOS-9427 bugfix)
     private(set) static var requestQueue: [String: Task<UIImage, Never>] = [:]
 
     public static func factory() -> DefaultSiteImageHandler {
