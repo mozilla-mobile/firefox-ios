@@ -1379,8 +1379,12 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Native Error Page
 
-    private func setupNativeErrorPage() {
-        guard featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) else { return }
+    private func isNativeErrorPage() -> Bool {
+        featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+    }
+
+    func showEmbeddedNativeErrorPage() {
+        browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
     }
 
     // MARK: - Update content
@@ -1410,6 +1414,9 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+
+        let isErrorURL = url.flatMap { InternalURL($0)?.isErrorPage } ?? false
+
         guard url != nil else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {
@@ -1420,6 +1427,8 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        } else if isErrorURL && isNativeErrorPage() {
+            showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {
