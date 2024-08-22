@@ -4261,6 +4261,72 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "Privacy settings",
                 comment: "The title for the privacy settings button inside the enhanced tracking protection screen.")
+
+            public static let certificatesTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.Title.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Certificate",
+                comment: "The title for the certificates screen inside the certificates screen.")
+
+            public static let certificateSubjectName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Subject Name",
+                comment: "The title for the certificate subject name section inside the certificate screen.")
+
+            public static let certificateCommonName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Common Name",
+                comment: "The title for the certificate common name inside the certificate screen.")
+
+            public static let certificateIssuerName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Issuer Name",
+                comment: "The title for the certificate issuer name section inside the certificate screen.")
+
+            public static let certificateIssuerCountry = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Country",
+                comment: "The title for the certificate issuer country inside the certificate screen.")
+
+            public static let certificateIssuerOrganization = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Organization",
+                comment: "The title for the certificate issuer organization inside the certificate screen.")
+
+            public static let certificateValidity = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.Validity.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Validity",
+                comment: "The title for the certificate validity section inside the certificate screen.")
+
+            public static let certificateValidityNotBefore = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Not Before",
+                comment: "The title for the certificate validity not before date inside the certificate screen.")
+
+            public static let certificateValidityNotAfter = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Not After",
+                comment: "The title for the certificate validity not after date inside the certificate screen.")
+
+            public static let certificateSubjectAltNames = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Subject Alt Names",
+                comment: "The title for the certificate subject alt names section inside the certificate screen.")
+
+            public static let certificateSubjectAltNamesDNSName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "DNS Name",
+                comment: "The title for the certificate subject alt names DNS name inside the certificate screen.")
         }
     }
 }
