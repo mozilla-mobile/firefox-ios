@@ -821,28 +821,11 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         connectionArrowHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
 
         if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
-            let customDetent = UISheetPresentationController.Detent.custom { [weak self] context in
-                guard let self else { return 0 }
-                let viewWidth = self.view.frame.width
-                var height = siteDisplayTitleLabel.getHeight(with: viewWidth)
-                height += siteDomainLabel.getHeight(with: viewWidth)
-                height += TPMenuUX.UX.popoverTopDistance
-                height += TPMenuUX.UX.siteDomainLabelsVerticalSpacing
-                height += TPMenuUX.UX.connectionDetailsHeaderMargins
-                height += connectionDetailsTitleLabel.getHeight(with: viewWidth)
-                height += connectionDetailsStatusLabel.getHeight(with: viewWidth)
-                height += trackersLabel.getHeight(with: viewWidth)
-                height += connectionStatusLabel.getHeight(with: viewWidth)
-                height += toggleLabel.getHeight(with: viewWidth)
-                height += toggleStatusLabel.getHeight(with: viewWidth)
-                height += TPMenuUX.UX.connectionStatusLabelConstraintConstant * 2
-                height += TPMenuUX.UX.trackersLabelConstraintConstant * 2
-                height += TPMenuUX.UX.toggleLabelsContainerConstraintConstant * 2
-                height += TPMenuUX.UX.horizontalMargin * 8
-                height += TPMenuUX.UX.settingsLinkButtonBottomSpacing
-                height += clearCookiesButton.getHeight(with: viewWidth)
-                height += settingsLinkButton.getHeight(with: viewWidth)
-                return height
+            headerContainer.layoutIfNeeded()
+            scrollView.layoutIfNeeded()
+            let contentHeight = headerContainer.frame.height + scrollView.contentSize.height
+            let customDetent = UISheetPresentationController.Detent.custom { context in
+                return contentHeight
             }
             self.sheetPresentationController?.detents = [customDetent]
         }
