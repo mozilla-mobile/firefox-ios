@@ -50,6 +50,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         autocorrectionType = .no
         autocapitalizationType = .none
         returnKeyType = .go
+        tintAdjustmentMode = .normal
         delegate = self
 
         // Disable dragging urls on iPhones because it conflicts with editing the text
@@ -87,18 +88,8 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let image = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill) else { return }
         if tintedClearImage == nil {
-            if let clearButtonTintColor {
-                tintedClearImage = image.withTintColor(clearButtonTintColor)
-            }
-        }
-
-        // Since we're unable to change the tint color of the clear image, we need to iterate through the
-        // subviews, find the clear button, and tint it ourselves.
-        // https://stackoverflow.com/questions/55046917/clear-button-on-text-field-not-accessible-with-voice-over-swift
-        if let clearButton = value(forKey: "_clearButton") as? UIButton {
-            clearButton.setImage(tintedClearImage, for: [])
+            tintClearButton()
         }
     }
 
@@ -161,8 +152,15 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         let colors = theme.colors
+        tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
         markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerSelectedText]
+
+        if isEditing {
+            textColor = colors.textPrimary
+        }
+
+        tintClearButton()
     }
 
     // MARK: - Private
@@ -233,6 +231,19 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private func forceResetCursor() {
         selectedTextRange = nil
         selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
+    }
+
+    private func tintClearButton() {
+        // Since we're unable to change the tint color of the clear image, we need to use KVO to
+        // find the clear button, and tint it ourselves.
+        // https://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
+        guard let image = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill),
+              let clearButtonTintColor,
+              let clearButton = value(forKey: "_clearButton") as? UIButton
+        else { return }
+
+        tintedClearImage = image.withTintColor(clearButtonTintColor)
+        clearButton.setImage(tintedClearImage, for: [])
     }
 
     // MARK: - UITextFieldDelegate
