@@ -1513,13 +1513,13 @@ extension String {
 
 // MARK: - Native Error Page
 extension String {
-    struct NativeErrorPage {
+    public struct NativeErrorPage {
         public static let ButtonLabel = MZLocalizedString(
             key: "NativeErrorPage.ButtonLabel.v131",
             tableName: "NativeErrorPage",
             value: "Reload",
             comment: "On error page, this is the text on a button that will try to load the page again.")
-        struct NoInternetConnection {
+        public struct NoInternetConnection {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
                 tableName: "NativeErrorPage",
@@ -1531,7 +1531,7 @@ extension String {
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
                 comment: "On error page, this is the description for no internet connection.")
         }
-        struct GenericError {
+        public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.TitleLabel.v131",
                 tableName: "NativeErrorPage",
