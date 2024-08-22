@@ -67,7 +67,7 @@ class DownloadToast: Toast {
                 } else {
                     self.progressWidthConstraint?.constant = 0
                 }
-                
+
                 self.layoutIfNeeded()
             }
         }
