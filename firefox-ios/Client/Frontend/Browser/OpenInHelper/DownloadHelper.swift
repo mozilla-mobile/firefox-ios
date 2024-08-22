@@ -120,8 +120,7 @@ class DownloadHelper: NSObject {
         var modelText = host
 
         // This size reflects the (possibly compressed) download size of the file, not necessarily its true size.
-        // e.g. In the case of gzip content
-        // TODO Do we want some indication in the UI that this file will be larger once uncompressed?
+        // e.g. In the case of gzip content (FXIOS-9039)
         if let expectedSize = expectedSize {
             modelText = "\(expectedSize) — \(host)"
         }
