@@ -98,6 +98,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
+        hasCFR: true,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 

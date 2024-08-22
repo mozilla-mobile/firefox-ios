@@ -5,6 +5,10 @@
 import UIKit
 import Common
 
+public protocol BrowserNavigationToolbarDelegate: AnyObject {
+    func configureCFR(for button: ToolbarButton)
+}
+
 /// Navigation toolbar implementation.
 public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable {
     private enum UX {
@@ -13,6 +17,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         static let borderHeight: CGFloat = 1
     }
 
+    public weak var toolbarDelegate: BrowserNavigationToolbarDelegate?
     private lazy var actionStack: UIStackView = .build { view in
         view.distribution = .equalSpacing
     }
@@ -71,6 +76,10 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
             if let theme {
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
                 button.applyTheme(theme: theme)
+            }
+
+            if toolbarElement.hasCFR == true {
+                toolbarDelegate?.configureCFR(for: button)
             }
         }
     }
