@@ -67,31 +67,26 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     }
 
     private func getFaviconImage(imageModel: SiteImageModel) async -> UIImage {
-        do {
-            while let currentSiteRequest = currentInFlightRequest,
-                  imageModel.siteURL == currentSiteRequest {
-                // We are already processing a favicon request for this site
-                // Sleep this task until the previous request is completed
-                try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
-            }
-
-            currentInFlightRequest = imageModel.siteURL
-            var faviconImageModel = imageModel
-
-            if imageModel.resourceURL == nil {
-                // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
-                faviconImageModel.resourceURL = try await urlHandler.getFaviconURL(model: imageModel)
-            }
-
-            // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache
-            let icon = await imageHandler.fetchFavicon(imageModel: faviconImageModel)
-            currentInFlightRequest = nil
-            return icon
-        } catch {
-            // If no favicon URL, generate favicon without it
-            currentInFlightRequest = nil
-            return await imageHandler.fetchFavicon(imageModel: imageModel)
+        while let currentSiteRequest = currentInFlightRequest,
+              imageModel.siteURL == currentSiteRequest {
+            // We are already processing a favicon request for this site
+            // Sleep this task until the previous request is completed
+            try? await Task.sleep(nanoseconds: 50_000_000) // 50ms
         }
+
+        currentInFlightRequest = imageModel.siteURL
+        var faviconImageModel = imageModel
+
+        if imageModel.resourceURL == nil {
+            // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
+            faviconImageModel.resourceURL = try? await urlHandler.getFaviconURL(model: imageModel)
+        }
+
+        // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache
+        // If the resourceURL (e.g. favicon URL) is not set, this will generate a letter favicon
+        let icon = await imageHandler.fetchFavicon(imageModel: faviconImageModel)
+        currentInFlightRequest = nil
+        return icon
     }
 
     private func generateDomainURL(siteURL: URL) -> ImageDomain {

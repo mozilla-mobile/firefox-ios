@@ -14,7 +14,7 @@ protocol DefaultImageCache {
 
     func store(image: UIImage, forKey key: String)
 
-    func clearCache()
+    func clear()
 }
 
 extension ImageCache: DefaultImageCache {
@@ -35,7 +35,7 @@ extension ImageCache: DefaultImageCache {
         self.store(image, forKey: key)
     }
 
-    func clearCache() {
+    func clear() {
         clearMemoryCache()
         clearDiskCache()
     }

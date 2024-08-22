@@ -54,7 +54,7 @@ actor DefaultSiteImageCache: SiteImageCache {
     }
 
     func clear() async {
-        imageCache.clearCache()
+        imageCache.clear()
     }
 
     private func createCacheKey(_ cacheKey: String, forType type: SiteImageType) -> String {
