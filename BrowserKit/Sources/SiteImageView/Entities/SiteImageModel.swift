@@ -27,14 +27,12 @@ public struct SiteImageModel {
     public init(id: UUID,
                 imageType: SiteImageType,
                 siteURL: URL,
-                cacheKey: String? = nil,
                 resourceURL: URL? = nil,
                 image: UIImage? = nil) {
         self.id = id
         self.imageType = imageType
         self.siteURL = siteURL
-        self.cacheKey = cacheKey
-                        ?? SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
+        self.cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
         self.resourceURL = resourceURL
         self.image = image
     }
@@ -52,7 +50,7 @@ public struct SiteImageModel {
         case .favicon:
             // FIXME Why would we ever want to use a hard-coded faviconURL (sponsored tile, suggested tile, etc...)
             // as the cache key for either a URL or Image?
-            
+
             // Use the domain as the key to avoid caching and fetching unnecessary duplicates
             return siteURL.shortDomain ?? siteURL.shortDisplayString
         }

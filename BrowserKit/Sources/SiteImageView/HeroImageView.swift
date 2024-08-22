@@ -98,7 +98,7 @@ public class HeroImageView: UIView, SiteImageView {
         }
 
         setFallbackFavicon(image: image)
-        
+
         completionHandler?()
     }
 
