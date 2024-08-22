@@ -97,7 +97,9 @@ struct OpenTabsView: View {
 
                     if entry.tabs.count > numberOfTabsToDisplay {
                         HStack(alignment: .center, spacing: 15) {
-                            Image(StandardImageIdentifiers.Small.externalLink).foregroundColor(Color.white).frame(width: 16, height: 16)
+                            Image(StandardImageIdentifiers.Small.externalLink)
+                                .foregroundColor(Color.white)
+                                .frame(width: 16, height: 16)
                             Text(
                                 String.localizedStringWithFormat(
                                     String.MoreTabsLabel,
