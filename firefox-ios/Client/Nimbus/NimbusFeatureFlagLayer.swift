@@ -64,6 +64,9 @@ final class NimbusFeatureFlagLayer {
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
+        case .passwordGenerator:
+            return checkPasswordGeneratorFeature(from: nimbus)
+
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
@@ -245,6 +248,11 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.shopping2023.value()
 
         return config.productAds
+    }
+
+    private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.passwordGeneratorFeature.value()
+        return config.status
     }
 
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
