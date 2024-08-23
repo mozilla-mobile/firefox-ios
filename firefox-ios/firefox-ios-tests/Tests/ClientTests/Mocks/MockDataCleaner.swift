@@ -6,21 +6,19 @@ import Foundation
 import Shared
 @testable import Client
 
-class MockCookiesClearable: Clearable {
-    var label: String { .ClearableCookies }
+class MockCookiesClearable: CookiesClearable {
     var isSucceed: Success?
 
-    func clear() -> Success {
+    override func clear() -> Success {
         isSucceed = succeed()
         return succeed()
     }
 }
 
-class MockSiteDataClearable: Clearable {
-    var label: String { .ClearableOfflineData }
+class MockSiteDataClearable: SiteDataClearable {
     var isSucceed: Success?
 
-    func clear() -> Success {
+    override func clear() -> Success {
         isSucceed = succeed()
         return succeed()
     }
