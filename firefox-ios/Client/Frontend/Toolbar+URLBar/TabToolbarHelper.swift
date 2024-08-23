@@ -29,7 +29,7 @@ protocol TabToolbarProtocol: AnyObject {
 }
 
 protocol TabToolbarDelegate: AnyObject {
-    func configureDataClearanceContextualHint(dataClearanceButton: UIView)
+    func configureDataClearanceContextualHint(_ view: UIView)
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)

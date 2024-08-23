@@ -29,6 +29,7 @@ class BrowserViewController: UIViewController,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
                              BrowserFrameInfoProvider,
+                             NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              FeatureFlaggable {
     private enum UX {
@@ -1667,7 +1668,7 @@ class BrowserViewController: UIViewController,
         guard !showFireButton else {
             if !isToolbarRefactorEnabled {
                 navigationToolbar.updateMiddleButtonState(.fire)
-                configureDataClearanceContextualHint(dataClearanceButton: navigationToolbar.multiStateButton)
+                configureDataClearanceContextualHint(navigationToolbar.multiStateButton)
             }
             return
         }
@@ -3023,6 +3024,11 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
+    // Also implements NavigationToolbarContainerDelegate::configureCFR(for button: ToolbarKit.Toolbarbutton)
+    func configureCFR(for button: ToolbarKit.ToolbarButton) {
+        configureDataClearanceContextualHint(button)
+    }
+
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }
     }
@@ -3958,12 +3964,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
                                                 theme: self.currentTheme())
             }
         }
-    }
-}
-
-extension BrowserViewController: NavigationToolbarContainerDelegate {
-    func configureCFR(for button: ToolbarKit.ToolbarButton) {
-        configureDataClearanceContextualHint(dataClearanceButton: button)
     }
 }
 

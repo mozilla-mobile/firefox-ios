@@ -35,7 +35,6 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
-        toolbar.toolbarDelegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -75,7 +74,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
 
         if self.model != model {
             self.model = model
-            toolbar.configure(state: model.navigationToolbarState)
+            toolbar.configure(state: model.navigationToolbarState, toolbarDelegate: self)
         }
     }
 
