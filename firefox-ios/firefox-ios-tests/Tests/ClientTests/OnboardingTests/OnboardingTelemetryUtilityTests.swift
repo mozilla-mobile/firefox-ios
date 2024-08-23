@@ -15,11 +15,6 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
     }
 
-    override func tearDown() {
-        super.tearDown()
-        Glean.shared.resetGlean(clearStores: true)
-    }
-
     // MARK: - Card View telemetry
     func testSendOnboardingCardView_WelcomeCard_Success() {
         let subject = createTelemetryUtility(for: .freshInstall)

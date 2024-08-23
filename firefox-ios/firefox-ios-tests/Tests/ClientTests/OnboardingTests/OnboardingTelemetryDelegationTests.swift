@@ -20,9 +20,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-        Glean.shared.resetGlean(clearStores: true)
         nimbusUtility = nil
+        super.tearDown()
     }
 
     func testOnboardingCard_viewSendsCardView() {
