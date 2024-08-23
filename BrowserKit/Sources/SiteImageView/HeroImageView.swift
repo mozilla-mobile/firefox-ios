@@ -73,7 +73,7 @@ public class HeroImageView: UIView, SiteImageView {
 
     // MARK: - SiteImageView
 
-    func setURL(_ siteURLString: String, type: SiteImageType) { // FIXME
+    func setURL(_ siteURLString: String, type: SiteImageType) {
         guard canMakeRequest(with: siteURLString),
               let siteURL = URL(string: siteURLString, invalidCharacters: false) else {
             return

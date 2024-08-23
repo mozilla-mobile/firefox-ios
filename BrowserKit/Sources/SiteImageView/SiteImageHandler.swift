@@ -42,7 +42,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
                 return await getFaviconImage(imageModel: model)
             }
         case .favicon:
-            return await getFaviconImage(imageModel: model) // FIXME [fire 1]
+            return await getFaviconImage(imageModel: model)
         }
     }
 
