@@ -70,6 +70,7 @@ public struct ImageIdentifiers {
         public static let socialMediaTrackers = "socialMediaTrackersImage"
         public static let fingerprintersTrackers = "fingerprintersTrackersImage"
         public static let crossSiteTrackers = "crossSiteTrackersImage"
+        public static let analyticsTrackersImage = "analyticsTrackersImage"
     }
 
     public struct NativeErrorPage {

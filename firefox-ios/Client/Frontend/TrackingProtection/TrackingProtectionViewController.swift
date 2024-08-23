@@ -24,6 +24,19 @@ struct TPMenuUX {
         struct Line {
             static let height: CGFloat = 1
         }
+        struct TrackingDetails {
+            static let baseDistance: CGFloat = 20
+            static let imageMargins: CGFloat = 10
+            static let bottomDistance: CGFloat = 350
+            static let viewCertButtonTopDistance: CGFloat = 8.0
+        }
+        struct BlockedTrackers {
+            static let headerDistance: CGFloat = 8
+            static let textVerticalDistance: CGFloat = 11
+            static let bottomDistance: CGFloat = 235
+            static let estimatedRowHeight: CGFloat = 44
+            static let headerPreferredHeight: CGFloat = 24
+        }
     }
 }
 
@@ -33,6 +46,13 @@ protocol TrackingProtectionMenuDelegate: AnyObject {
 }
 
 class TrackingProtectionViewController: UIViewController, Themeable, Notifiable, UIScrollViewDelegate {
+// TODO: FXIOS-9726 #21369 - Refactor/Split TrackingProtectionViewController UI into more custom views
+class TrackingProtectionViewController: UIViewController,
+                                        Themeable,
+                                        Notifiable,
+                                        BottomSheetChild,
+                                        UIScrollViewDelegate {
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

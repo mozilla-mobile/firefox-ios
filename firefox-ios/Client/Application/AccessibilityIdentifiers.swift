@@ -108,6 +108,7 @@ public struct AccessibilityIdentifiers {
             static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
             static let fingerprintersView = "BlockedTrackers.FingerprintersView"
             static let crossSiteTrackersImage = "BlockedTrackers.CrossSiteTrackersImage"
+            static let analyticsTrackersImage = "BlockedTrackers.AnalyticsTrackersImage"
             static let socialMediaTrackersImage = "BlockedTrackers.SocialMediaTrackersImage"
             static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
             static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
