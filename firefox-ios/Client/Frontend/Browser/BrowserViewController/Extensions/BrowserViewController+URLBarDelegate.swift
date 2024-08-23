@@ -185,38 +185,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
-        guard let tab = tabManager.selectedTab,
-              let url = tab.url?.displayURL
-        else {
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.announcement,
-                argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel
-            )
-            return false
-        }
-
-        let result = profile.readingList.createRecordWithURL(
-            url.absoluteString,
-            title: tab.title ?? "",
-            addedBy: UIDevice.current.name
-        )
-
-        switch result.value {
-        case .success:
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.announcement,
-                argument: String.ReaderModeAddPageSuccessAcessibilityLabel
-            )
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
-        case .failure:
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.announcement,
-                argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel
-            )
-        }
-        return true
+        toggleReaderModeLongPressAction()
     }
 
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
