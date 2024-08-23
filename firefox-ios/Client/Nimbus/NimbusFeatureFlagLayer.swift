@@ -251,8 +251,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.passwordGeneratorFeature.value()
-        return config.status
+        return nimbus.features.passwordGeneratorFeature.value().enabled
     }
 
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
