@@ -4492,6 +4492,12 @@ extension String {
                 value: "Social media trackers: %@",
                 comment: "Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
 
+            public static let analyticsTrackersBlockedLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Tracking content: %@",
+                comment: "Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
+
             public static let fingerprinterBlockedLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129",
                 tableName: "EnhancedTrackingProtection",

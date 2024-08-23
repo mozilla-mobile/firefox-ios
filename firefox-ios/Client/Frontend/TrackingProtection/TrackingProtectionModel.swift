@@ -182,4 +182,14 @@ class TrackingProtectionModel {
         _ = cookiesClearable.clear()
         _ = siteDataClearable.clear()
     }
+
+    func getBlockedTrackersTableModel() -> BlockedTrackersTableModel {
+        return BlockedTrackersTableModel(
+            topLevelDomain: websiteTitle,
+            title: displayTitle,
+            URL: url.absoluteDisplayString,
+            contentBlockerStats: contentBlockerStats,
+            connectionSecure: connectionSecure
+        )
+    }
 }
