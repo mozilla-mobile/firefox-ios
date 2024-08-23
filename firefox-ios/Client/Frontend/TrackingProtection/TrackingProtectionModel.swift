@@ -133,6 +133,13 @@ class TrackingProtectionModel {
         }
     }
 
+    func getCertificatesViewModel() -> CertificatesViewModel {
+        return CertificatesViewModel(topLevelDomain: websiteTitle,
+                                     title: displayTitle,
+                                     URL: url.absoluteDisplayString,
+                                     certificates: certificates)
+    }
+
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
         ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) {
