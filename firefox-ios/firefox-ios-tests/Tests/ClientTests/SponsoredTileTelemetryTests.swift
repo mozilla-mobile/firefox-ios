@@ -107,7 +107,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
     func clearTest() {
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
         TelemetryContextualIdentifier.clearUserDefaults()
     }
 }

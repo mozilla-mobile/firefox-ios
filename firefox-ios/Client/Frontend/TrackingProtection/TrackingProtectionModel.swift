@@ -59,21 +59,35 @@ class TrackingProtectionModel {
         return connectionSecure ? secureStatusString : unsecureStatusString
     }
 
-    var  connectionDetailsTitle: String {
-        let titleOn = String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
-        return connectionSecure ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
+    var connectionDetailsTitle: String {
+        if !isProtectionEnabled {
+            return .Menu.EnhancedTrackingProtection.offTitle
+        }
+        if !connectionSecure {
+            return .Menu.EnhancedTrackingProtection.onNotSecureTitle
+        }
+        return String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
     }
 
-    let protectionOnHeaderString = String.Menu.EnhancedTrackingProtection.onHeader
-    let protectionOffHeaderString = String.Menu.EnhancedTrackingProtection.offHeader
-    var  connectionDetailsHeader: String {
-        return connectionSecure ? protectionOnHeaderString : protectionOffHeaderString
+    var connectionDetailsHeader: String {
+        if !isProtectionEnabled {
+            return String(format: .Menu.EnhancedTrackingProtection.offHeader, AppName.shortName.rawValue)
+        }
+        if !connectionSecure {
+            return .Menu.EnhancedTrackingProtection.onNotSecureHeader
+        }
+        return .Menu.EnhancedTrackingProtection.onHeader
     }
 
-    let protectionOnImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
-    let protectionOffImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
-    var  connectionDetailsImage: UIImage? {
-        return connectionSecure ? protectionOnImage : protectionOffImage
+    var isProtectionEnabled = false
+    var connectionDetailsImage: UIImage? {
+        if !isProtectionEnabled {
+            return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
+        }
+        if !connectionSecure {
+            return UIImage(named: ImageIdentifiers.TrackingProtection.protectionAlert)
+        }
+        return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     }
 
     var isSiteETPEnabled: Bool {
@@ -100,6 +114,15 @@ class TrackingProtectionModel {
     }
 
     // MARK: - Helpers
+    func getConnectionDetailsBackgroundColor(theme: Theme) -> UIColor {
+        if !isProtectionEnabled {
+            return theme.colors.layerAccentPrivateNonOpaque
+        }
+        if !connectionSecure {
+            return theme.colors.layerRatingFSubdued
+        }
+        return theme.colors.layer3
+    }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         if connectionSecure {

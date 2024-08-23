@@ -18,11 +18,6 @@ final class MockWindowManager: WindowManager {
 
     // MARK: - WindowManager Protocol
 
-    var activeWindow: WindowUUID {
-        get { wrappedManager.activeWindow }
-        set { wrappedManager.activeWindow = newValue }
-    }
-
     var windows: [WindowUUID: AppWindowInfo] {
         wrappedManager.windows
     }

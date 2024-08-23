@@ -6,7 +6,6 @@ import Common
 import Foundation
 import Storage
 import Shared
-import AuthenticationServices
 
 import struct MozillaAppServices.EncryptedLogin
 import struct MozillaAppServices.LoginEntry
@@ -22,6 +21,7 @@ final class PasswordManagerViewModel {
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
     private(set) var hasData = false
+    private let loginProvider: LoginProvider
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
     private(set) var titles = [Character]()
@@ -46,10 +46,11 @@ final class PasswordManagerViewModel {
     var hasLoadedBreaches = false
     var theme: Theme
 
-    init(profile: Profile, searchController: UISearchController, theme: Theme) {
+    init(profile: Profile, searchController: UISearchController, theme: Theme, loginProvider: LoginProvider) {
         self.profile = profile
         self.searchController = searchController
         self.theme = theme
+        self.loginProvider = loginProvider
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
@@ -78,7 +79,7 @@ final class PasswordManagerViewModel {
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String, completion: @escaping ([EncryptedLogin]) -> Void) {
-        profile.logins.searchLoginsWithQuery(query) { result in
+        loginProvider.searchLoginsWithQuery(query) { result in
             ensureMainThread {
                 switch result {
                 case .success(let logins):
@@ -155,7 +156,7 @@ final class PasswordManagerViewModel {
     }
 
     public func save(loginRecord: LoginEntry, completion: @escaping ((String?) -> Void)) {
-        profile.logins.addLogin(login: loginRecord, completionHandler: { result in
+        loginProvider.addLogin(login: loginRecord, completionHandler: { result in
             switch result {
             case .success(let encryptedLogin):
                 self.sendLoginsSavedTelemetry()

@@ -48,8 +48,9 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 contentBlockerStats: contentBlockerStats
             )
 
-            self.enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
-                                                                                     windowUUID: tabManager.windowUUID)
+            enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
+                                                                                windowUUID: tabManager.windowUUID)
+            enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
         } else {
             let oldEtpViewModel = EnhancedTrackingProtectionMenuVM(
                 url: url,
@@ -59,10 +60,10 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 contentBlockerStatus: contentBlockerStatus
             )
 
-            self.legacyEnhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: oldEtpViewModel,
-                                                                                           windowUUID: tabManager.windowUUID)
+            legacyEnhancedTrackingProtectionMenuVC = EnhancedTrackingProtectionMenuVC(viewModel: oldEtpViewModel,
+                                                                                      windowUUID: tabManager.windowUUID)
+            legacyEnhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
         }
-        enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
     }
 
     func start(sourceView: UIView) {

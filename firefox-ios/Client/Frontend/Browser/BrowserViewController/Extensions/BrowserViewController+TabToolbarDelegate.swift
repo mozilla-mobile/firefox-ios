@@ -42,7 +42,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     // Presents alert to clear users private session data
-    func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        didTapOnDataClearance()
+    }
+
+    func didTapOnDataClearance() {
         let alert = UIAlertController(
             title: .Alerts.FeltDeletion.Title,
             message: .Alerts.FeltDeletion.Body,
@@ -114,7 +118,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func dismissUrlBar() {
-        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
+        if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode {
+            addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+        } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
             urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }

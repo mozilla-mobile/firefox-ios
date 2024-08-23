@@ -5,7 +5,7 @@
 import XCTest
 
 class TrackingProtectionTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544056
+    // https://mozilla.testrail.io/index.php?/cases/view/2544056
     func testInactiveSettings() {
         // Go to in-app settings
         // Check the new options in TP Settings menu
@@ -34,7 +34,7 @@ class TrackingProtectionTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394999
+    // https://mozilla.testrail.io/index.php?/cases/view/394999
     func testProtectionSidebar() {
         // Visit https://www.mozilla.org
         loadWebPage("mozilla.org")
@@ -61,7 +61,7 @@ class TrackingProtectionTest: BaseTestCase {
     }
 
     // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569890
+    // https://mozilla.testrail.io/index.php?/cases/view/1569890
     func testAdBlocking() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
@@ -73,7 +73,7 @@ class TrackingProtectionTest: BaseTestCase {
     }
 
     // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
+    // https://mozilla.testrail.io/index.php?/cases/view/1569869
     func testShieldMenuSetting() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")

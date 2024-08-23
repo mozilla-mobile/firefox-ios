@@ -6,7 +6,7 @@ import Common
 import Redux
 import ToolbarKit
 
-class ToolbarMiddleware: FeatureFlaggable {
+final class ToolbarMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let manager: ToolbarManager
     private let logger: Logger
@@ -42,6 +42,15 @@ class ToolbarMiddleware: FeatureFlaggable {
         a11yHint: .TabLocationReloadAccessibilityHint,
         a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
 
+    private lazy var readerModeAction = ToolbarActionState(
+        actionType: .readerMode,
+        iconName: StandardImageIdentifiers.Large.readerView,
+        isEnabled: true,
+        a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+        a11yHint: .TabLocationReloadAccessibilityHint,
+        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+        a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+
     lazy var qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
         iconName: StandardImageIdentifiers.Large.qrCode,
@@ -73,7 +82,7 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     lazy var shareAction = ToolbarActionState(
         actionType: .share,
-        iconName: StandardImageIdentifiers.Large.shareApple,
+        iconName: StandardImageIdentifiers.Large.share,
         isEnabled: true,
         a11yLabel: .TabLocationShareAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
@@ -84,6 +93,13 @@ class ToolbarMiddleware: FeatureFlaggable {
         isEnabled: true,
         a11yLabel: .TabToolbarSearchAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
+
+    lazy var dataClearanceAction = ToolbarActionState(
+        actionType: .dataClearance,
+        iconName: StandardImageIdentifiers.Large.dataClearance,
+        isEnabled: true,
+        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
@@ -116,19 +132,33 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func resolveToolbarMiddlewareActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.actionType {
+        case ToolbarMiddlewareActionType.customA11yAction:
+            resolveToolbarMiddlewareCustomA11yActions(action: action, state: state)
+
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
         case ToolbarMiddlewareActionType.urlDidChange:
             updateUrlAndActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.didStartEditingUrl:
-            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
+        case ToolbarMiddlewareActionType.readerModeStateChanged:
+            updateReaderModeState(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.cancelEdit,
-            ToolbarMiddlewareActionType.websiteLoadingStateDidChange,
+        case ToolbarMiddlewareActionType.didStartEditingUrl:
+            updateAddressToolbarNavigationActions(action: action,
+                                                  state: state,
+                                                  isEditing: true,
+                                                  dispatchActionType: ToolbarActionType.didStartEditingUrl)
+
+        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.searchEngineDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
+
+        case ToolbarMiddlewareActionType.cancelEdit:
+            updateAddressToolbarNavigationActions(action: action,
+                                                  state: state,
+                                                  isEditing: false,
+                                                  dispatchActionType: ToolbarActionType.cancelEdit)
 
         case ToolbarMiddlewareActionType.traitCollectionDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state)
@@ -156,6 +186,16 @@ class ToolbarMiddleware: FeatureFlaggable {
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
             handleToolbarButtonLongPressActions(action: action)
+        }
+    }
+
+    func resolveToolbarMiddlewareCustomA11yActions(action: ToolbarMiddlewareAction, state: AppState) {
+        switch action.buttonType {
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
+            store.dispatch(action)
+        default: break
         }
     }
 
@@ -227,6 +267,11 @@ class ToolbarMiddleware: FeatureFlaggable {
                                                  actionType: ToolbarMiddlewareActionType.cancelEdit)
             store.dispatch(action)
 
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showReaderMode)
+            store.dispatch(action)
+
         case .reload:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.reloadWebsite)
@@ -247,6 +292,10 @@ class ToolbarMiddleware: FeatureFlaggable {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: true)
 
+        case .dataClearance:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.clearData)
+            store.dispatch(action)
         default:
             break
         }
@@ -273,8 +322,11 @@ class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
         case .newTab:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions
-            )
+                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions)
+            store.dispatch(action)
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
             store.dispatch(action)
         default:
             break
@@ -356,8 +408,26 @@ class ToolbarMiddleware: FeatureFlaggable {
                                           isShowingNavigationToolbar: action.isShowingNavigationToolbar,
                                           canGoBack: action.canGoBack,
                                           canGoForward: action.canGoForward,
+                                          readerModeState: action.readerModeState,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.urlDidChange)
+        store.dispatch(toolbarAction)
+    }
+
+    private func updateReaderModeState(action: ToolbarMiddlewareAction,
+                                       state: AppState) {
+        guard let readerModeState = action.readerModeState,
+              let addressToolbarModel = generateAddressToolbarActions(
+                action: action,
+                state: state,
+                lockIconImageName: action.lockIconImageName,
+                isEditing: false
+              ) else { return }
+
+        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          readerModeState: readerModeState,
+                                          windowUUID: action.windowUUID,
+                                          actionType: ToolbarActionType.readerModeStateChanged)
         store.dispatch(toolbarAction)
     }
 
@@ -391,6 +461,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                           navigationToolbarModel: navToolbarModel,
                                           badgeImageName: action.badgeImageName,
+                                          maskImageName: action.maskImageName,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.showMenuWarningBadge)
         store.dispatch(toolbarAction)
@@ -438,10 +509,11 @@ class ToolbarMiddleware: FeatureFlaggable {
 
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
         let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
-        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.menuWarningBadge
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
+        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
         actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs),
-                                    menuAction(badgeImageName: menuBadgeImageName)])
+                                    menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
 
         return actions
     }
@@ -483,22 +555,26 @@ class ToolbarMiddleware: FeatureFlaggable {
 
     private func addressToolbarPageActions(
         action: ToolbarMiddlewareAction,
-        state: AppState,
+        toolbarState: borrowing ToolbarState,
         isEditing: Bool
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: action.windowUUID)
-        else { return actions }
-
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
-        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+        let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
+        let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.readerModeState
+        let url = (isUrlChangeAction || isReaderModeAction) ? action.url : toolbarState.addressToolbar.url
+        readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
 
         guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
+        }
+
+        switch readerModeState {
+        case .active, .available:
+            actions.append(readerModeAction)
+        default: break
         }
 
         actions.append(shareAction)
@@ -515,9 +591,11 @@ class ToolbarMiddleware: FeatureFlaggable {
         return actions
     }
 
-    private func updateAddressToolbarNavigationActions(action: ToolbarMiddlewareAction,
-                                                       state: AppState,
-                                                       isEditing: Bool? = nil) {
+    private func updateAddressToolbarNavigationActions(
+        action: ToolbarMiddlewareAction,
+        state: AppState,
+        isEditing: Bool? = nil,
+        dispatchActionType: ToolbarActionType = ToolbarActionType.addressToolbarActionsDidChange) {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID),
               let addressToolbarModel = generateAddressToolbarActions(action: action,
                                                                       state: state,
@@ -527,7 +605,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                           isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
                                           windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.addressToolbarActionsDidChange)
+                                          actionType: dispatchActionType)
         store.dispatch(toolbarAction)
     }
 
@@ -545,10 +623,11 @@ class ToolbarMiddleware: FeatureFlaggable {
             action: action,
             state: state,
             isEditing: editing)
-        let pageActions = addressToolbarPageActions(action: action, state: state, isEditing: editing)
+        let pageActions = addressToolbarPageActions(action: action, toolbarState: toolbarState, isEditing: editing)
         let browserActions = addressToolbarBrowserActions(action: action, state: state)
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
-        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+        let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
+        let url = (isUrlChangeAction || isReaderModeAction) ? action.url : toolbarState.addressToolbar.url
 
         let addressToolbarModel = AddressToolbarModel(
             navigationActions: navigationActions,
@@ -574,10 +653,7 @@ class ToolbarMiddleware: FeatureFlaggable {
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
-        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
-        let middleActionHome = searchAction
-        let middleAction = url == nil ? middleActionHome : middleActionDefault
+        let middleAction = getMiddleButtonAction(url: url, isPrivateMode: toolbarState.isPrivateMode)
 
         let isShowingTopTabs = action.isShowingTopTabs ?? false
 
@@ -586,14 +662,15 @@ class ToolbarMiddleware: FeatureFlaggable {
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
         let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
-        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.menuWarningBadge
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
+        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
         let actions = [
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
             tabsAction(numberOfTabs: numberOfTabs, isShowingTopTabs: isShowingTopTabs),
-            menuAction(badgeImageName: menuBadgeImageName)
+            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
         ]
 
         let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarState.toolbarPosition)
@@ -602,6 +679,23 @@ class ToolbarMiddleware: FeatureFlaggable {
             actions: actions,
             displayBorder: displayBorder)
         return navToolbarModel
+    }
+
+    private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
+        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
+        let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyUIEnabled &&
+                                            isFeltPrivacyDeletionEnabled
+        guard !shouldShowDataClearanceAction else {
+            return dataClearanceAction
+        }
+
+        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
+        let middleActionHome = searchAction
+        let middleAction = url == nil ? middleActionHome : middleActionDefault
+
+        return middleAction
     }
 
     // MARK: - Helper
@@ -637,11 +731,12 @@ class ToolbarMiddleware: FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private func menuAction(badgeImageName: String? = nil) -> ToolbarActionState {
+    private func menuAction(badgeImageName: String? = nil, maskImageName: String? = nil) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .menu,
             iconName: StandardImageIdentifiers.Large.appMenu,
             badgeImageName: badgeImageName,
+            maskImageName: maskImageName,
             isEnabled: true,
             a11yLabel: .OldStrings.v130.AppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)

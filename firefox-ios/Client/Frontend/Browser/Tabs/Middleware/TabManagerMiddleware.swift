@@ -509,10 +509,8 @@ class TabManagerMiddleware {
         let windowManager: WindowManager = AppContainer.shared.resolve()
         guard uuid != .unavailable else {
             assertionFailure()
-            logger.log("Unexpected or unavailable UUID for TabManager. Returning active window tab manager by default.",
-                       level: .warning,
-                       category: .tabs)
-            return windowManager.tabManager(for: windowManager.activeWindow)
+            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
+            return windowManager.allWindowTabManagers().first!
         }
 
         return windowManager.tabManager(for: uuid)

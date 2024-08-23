@@ -40,7 +40,7 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(elementQuery.element)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436093
+    // https://mozilla.testrail.io/index.php?/cases/view/2436093
     func testPromptPresence() {
         // Suggestion is on by default (starting on Oct 24th 2017), so the prompt should not appear
         navigator.goto(URLBarOpen)
@@ -88,7 +88,7 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"].cells.firstMatch)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436094
+    // https://mozilla.testrail.io/index.php?/cases/view/2436094
     func testDoNotShowSuggestionsWhenEnteringURL() {
         // According to bug 1192155 if a string contains /, do not show suggestions, if there a space an a string,
         // the suggestions are shown again
@@ -122,7 +122,7 @@ class SearchTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436095
+    // https://mozilla.testrail.io/index.php?/cases/view/2436095
     func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
@@ -179,7 +179,7 @@ class SearchTests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306940
+    // https://mozilla.testrail.io/index.php?/cases/view/2306940
     // Smoketest
     func testSearchEngine() {
         navigator.nowAt(NewTabScreen)
@@ -191,14 +191,14 @@ class SearchTests: BaseTestCase {
         changeSearchEngine(searchEngine: "Wikipedia")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353246
+    // https://mozilla.testrail.io/index.php?/cases/view/2353246
     func testDefaultSearchEngine() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436091
+    // https://mozilla.testrail.io/index.php?/cases/view/2436091
     func testSearchWithFirefoxOption() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
@@ -230,7 +230,7 @@ class SearchTests: BaseTestCase {
         XCTAssertEqual("2", numTab)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2436092
+    // https://mozilla.testrail.io/index.php?/cases/view/2436092
     // Smoketest
     func testSearchStartAfterTypingTwoWords() {
         navigator.goto(URLBarOpen)
@@ -241,7 +241,7 @@ class SearchTests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: "google")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306943
+    // https://mozilla.testrail.io/index.php?/cases/view/2306943
     func testSearchIconOnAboutHome() throws {
         if iPad() {
             throw XCTSkip("iPad does not have search icon")
@@ -283,7 +283,7 @@ class SearchTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306989
+    // https://mozilla.testrail.io/index.php?/cases/view/2306989
     // Smoketest
     func testOpenTabsInSearchSuggestions() throws {
         if #unavailable(iOS 16) {
@@ -304,7 +304,7 @@ class SearchTests: BaseTestCase {
         validateSearchSuggestionText(typeText: "localhost")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306886
+    // https://mozilla.testrail.io/index.php?/cases/view/2306886
     // SmokeTest
     func testBottomVIewURLBar() throws {
         if iPad() {
@@ -357,7 +357,7 @@ class SearchTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306942
+    // https://mozilla.testrail.io/index.php?/cases/view/2306942
     func testSearchSuggestions() {
         // Tap on URL Bar and type "g"
         navigator.nowAt(NewTabScreen)

@@ -55,7 +55,7 @@ class LoginTest: BaseTestCase {
         navigator.nowAt(LoginsSettings)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306961
+    // https://mozilla.testrail.io/index.php?/cases/view/2306961
     func testLoginsListFromBrowserTabMenu() {
         closeURLBar()
         // Make sure you can access empty Login List from Browser Tab Menu
@@ -77,7 +77,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306951
+    // https://mozilla.testrail.io/index.php?/cases/view/2306951
     // Smoketest
     func testSaveLogin() {
         closeURLBar()
@@ -122,7 +122,7 @@ class LoginTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306965
+    // https://mozilla.testrail.io/index.php?/cases/view/2306965
     func testDoNotSaveLogin() {
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
@@ -135,7 +135,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306962
+    // https://mozilla.testrail.io/index.php?/cases/view/2306962
     func testSavedLoginSelectUnselect() {
         saveLogin(givenUrl: testLoginPage)
         navigator.goto(SettingsScreen)
@@ -154,7 +154,7 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Delete"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306963
+    // https://mozilla.testrail.io/index.php?/cases/view/2306963
     func testDeleteLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
@@ -170,7 +170,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306966
+    // https://mozilla.testrail.io/index.php?/cases/view/2306966
     func testEditOneLoginEntry() {
         // Go to test login page and save the login: test-password.html
         saveLogin(givenUrl: testLoginPage)
@@ -204,7 +204,7 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells[loginsListPasswordLabel])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306964
+    // https://mozilla.testrail.io/index.php?/cases/view/2306964
     func testSearchLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
@@ -226,7 +226,7 @@ class LoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306952
+    // https://mozilla.testrail.io/index.php?/cases/view/2306952
     // Smoketest
     func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
@@ -261,7 +261,7 @@ class LoginTest: BaseTestCase {
         // XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306953
+    // https://mozilla.testrail.io/index.php?/cases/view/2306953
     // Smoketest
     func testCreateLoginManually() {
         closeURLBar()
@@ -278,7 +278,7 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.tables["Login List"].staticTexts["https://testweb"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306954
+    // https://mozilla.testrail.io/index.php?/cases/view/2306954
     func testAddDuplicateLogin() {
         // Add login credential
         openLoginsSettingsFromBrowserTab()

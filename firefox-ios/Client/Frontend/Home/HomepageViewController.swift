@@ -412,12 +412,13 @@ class HomepageViewController:
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton)
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton
+        )
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)

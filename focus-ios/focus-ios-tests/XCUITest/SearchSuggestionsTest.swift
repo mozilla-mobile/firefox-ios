@@ -46,7 +46,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkToggle(isOn: false)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707746
+    // https://mozilla.testrail.io/index.php?/cases/view/1707746
     func testEnableThroughPrompt() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
@@ -80,7 +80,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkToggle(isOn: true)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524590
+    // https://mozilla.testrail.io/index.php?/cases/view/2524590
     func testDisableThroughPrompt() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
@@ -117,7 +117,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkToggle(isOn: false)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524591
+    // https://mozilla.testrail.io/index.php?/cases/view/2524591
     func testEnableThroughToggle() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
@@ -140,7 +140,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         checkSuggestions()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524592
+    // https://mozilla.testrail.io/index.php?/cases/view/2524592
     func testEnableThenDisable() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()

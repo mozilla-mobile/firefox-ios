@@ -11,7 +11,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2443998
+    // https://mozilla.testrail.io/index.php?/cases/view/2443998
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
@@ -36,7 +36,7 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2444328
+    // https://mozilla.testrail.io/index.php?/cases/view/2444328
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
@@ -61,7 +61,7 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306941
+    // https://mozilla.testrail.io/index.php?/cases/view/2306941
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
         mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"])
@@ -120,7 +120,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2444333
+    // https://mozilla.testrail.io/index.php?/cases/view/2444333
     func testCustomEngineFromIncorrectTemplate() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)

@@ -124,3 +124,18 @@
 /* Toast message confirming that an address has been successfully removed. */
 "Addresses.Toast.AddressRemovedConfirmation.v129" = "Adresse fjernet";
 
+/* Toast message confirming that an address has been successfully saved. */
+"Addresses.Toast.AddressSavedConfirmation.v129" = "Adresse lagret";
+
+/* Toast message indicating an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveError.v129" = "Klarte ikke å lagre adressen";
+
+/* Toast message indicating an error occurred while trying to remove an address. */
+"Addresses.Toast.AddressSaveError.v130" = "Klarte ikke å fjerne adressen";
+
+/* Suggestion to try again after an error occurred while trying to save an address. */
+"Addresses.Toast.AddressSaveRetrySuggestion.v129" = "Prøv igjen";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "Adresseinformasjon oppdatert";
+

@@ -27,19 +27,23 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var actionType: ActionType
     var iconName: String
     var badgeImageName: String?
+    var maskImageName: String?
     var numberOfTabs: Int?
     var isFlippedForRTL = false
     var isShowingTopTabs: Bool?
     var isEnabled: Bool
+    var shouldDisplayAsHighlighted = false
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
+    var a11yCustomActionName: String?
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
         return actionType == .back ||
                actionType == .forward ||
                actionType == .reload ||
                actionType == .newTab ||
+               actionType == .readerMode ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

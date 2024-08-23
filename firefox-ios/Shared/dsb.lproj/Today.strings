@@ -1,8 +1,8 @@
 /* Close Private Tabs button label */
-"TodayWidget.ClosePrivateTabsButton" = "Priwatne rejtarki zacyniś";
+"TodayWidget.ClosePrivateTabsButton" = "Priwatne rejtariki zacyniś";
 
 /* Close Private Tabs */
-"TodayWidget.ClosePrivateTabsLabelV2" = "Priwatne rejtarki zacyniś";
+"TodayWidget.ClosePrivateTabsLabelV2" = "Priwatne\nrejtariki zacyniś";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
 "TodayWidget.FirefoxShortcutGalleryDescription" = "Pśidajśo swójej startowej wobrazowce zwězanja Firefox";

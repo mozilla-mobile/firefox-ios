@@ -35,7 +35,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -246,7 +246,7 @@ open class TabToolbarHelper: NSObject {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
         case .fire:
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressFire(toolbar, button: toolbar.multiStateButton)
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressDataClearance(toolbar, button: toolbar.multiStateButton)
         }
     }
 }

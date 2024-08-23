@@ -64,15 +64,8 @@ extension PhotonActionSheetProtocol {
             if let pasteboardContents = UIPasteboard.general.string {
                 if let urlBar = view as? URLBarView {
                     urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-                } else if view is AddressToolbarContainer {
-                    guard let uuid = view.currentWindowUUID else { return }
-
-                    let action = ToolbarAction(
-                        url: URL(string: pasteboardContents),
-                        windowUUID: uuid,
-                        actionType: ToolbarActionType.urlDidChange
-                    )
-                    store.dispatch(action)
+                } else if let toolbar = view as? AddressToolbarContainer {
+                    toolbar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
                 }
             }
         }

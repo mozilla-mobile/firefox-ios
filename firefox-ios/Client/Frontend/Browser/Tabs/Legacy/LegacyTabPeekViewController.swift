@@ -87,8 +87,8 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
             }
             if self.hasRemoteClients {
                 actions.append(UIAction(
-                    title: .OldStrings.v130.AppMenu.TouchActions.SendToDeviceTitle,
-                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.shareApple),
+                    title: .AppMenu.TouchActions.SendToDeviceTitle,
+                    image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.share),
                     identifier: nil
                 ) { [weak self] _ in
                     guard let wself = self,

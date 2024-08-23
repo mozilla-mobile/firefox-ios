@@ -11,6 +11,9 @@ public struct ToolbarElement: Equatable {
     /// Badge name of the toolbar element
     let badgeImageName: String?
 
+    /// Mask name of the badge's toolbar element
+    let maskImageName: String?
+
     /// Number of open tabs
     let numberOfTabs: Int?
 
@@ -32,6 +35,12 @@ public struct ToolbarElement: Equatable {
     /// Accessibility identifier of the toolbar element
     let a11yId: String
 
+    /// Name for the custom accessibility action
+    let a11yCustomActionName: String?
+
+    /// Action to be performed for custom accessibility action
+    let a11yCustomAction: (() -> Void)?
+
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
 
@@ -42,6 +51,7 @@ public struct ToolbarElement: Equatable {
     // can therefor not be used outside of the ToolbarKit
     public init(iconName: String,
                 badgeImageName: String? = nil,
+                maskImageName: String? = nil,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
@@ -49,10 +59,13 @@ public struct ToolbarElement: Equatable {
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
+                a11yCustomActionName: String? = nil,
+                a11yCustomAction: (() -> Void)? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
         self.badgeImageName = badgeImageName
+        self.maskImageName = maskImageName
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
@@ -62,11 +75,14 @@ public struct ToolbarElement: Equatable {
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
+        self.a11yCustomActionName = a11yCustomActionName
+        self.a11yCustomAction = a11yCustomAction
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
         lhs.iconName == rhs.iconName &&
         lhs.badgeImageName == rhs.badgeImageName &&
+        lhs.maskImageName == rhs.maskImageName &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&

@@ -52,16 +52,6 @@ public extension String {
         return self.removingPercentEncoding
     }
 
-    /// Returns a new string made by removing the leading String characters contained
-    /// in a given character set.
-    func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
-        var trimmed = self
-        while trimmed.rangeOfCharacter(from: set)?.lowerBound == trimmed.startIndex {
-            trimmed.remove(at: trimmed.startIndex)
-        }
-        return trimmed
-    }
-
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
     func stringSplitWithNewline() -> String {

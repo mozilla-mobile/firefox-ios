@@ -20,12 +20,21 @@ struct NavigationToolbarContainerModel: Equatable {
             ToolbarElement(
                 iconName: action.iconName,
                 badgeImageName: action.badgeImageName,
+                maskImageName: action.maskImageName,
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
+                shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
+                a11yCustomActionName: action.a11yCustomActionName,
+                a11yCustomAction: action.a11yCustomActionName != nil ? {
+                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         windowUUID: windowUUID,
+                                                         actionType: ToolbarMiddlewareActionType.customA11yAction)
+                    store.dispatch(action)
+                } : nil,
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,

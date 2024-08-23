@@ -12,6 +12,8 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    func addressToolbarDidEnterOverlayMode(_ view: UIView)
+    func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
 }
 
 final class AddressToolbarContainer: UIView,
@@ -20,7 +22,9 @@ final class AddressToolbarContainer: UIView,
                                      AlphaDimmable,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
-                                     MenuHelperURLBarInterface {
+                                     MenuHelperURLBarInterface,
+                                     Autocompletable,
+                                     URLBarViewProtocol {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
         static let compactLeadingEdgeDisplay: CGFloat = 16
@@ -101,6 +105,10 @@ final class AddressToolbarContainer: UIView,
         default: return nil
         }
     }
+
+    /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
+    /// and the Cancel button is visible (allowing the user to leave overlay mode).
+    var inOverlayMode = false
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -205,7 +213,11 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
-            _ = toolbarState.addressToolbar.isEditing ? becomeFirstResponder() : resignFirstResponder()
+            // Dismiss overlay mode when not editing to fix overlay mode staying open
+            // on iPad when switching tabs using top tabs
+            if !toolbarState.addressToolbar.isEditing {
+                leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
+            }
         }
     }
 
@@ -291,5 +303,32 @@ final class AddressToolbarContainer: UIView,
     func menuHelperPasteAndGo() {
         guard let pasteboardContents = UIPasteboard.general.string else { return }
         delegate?.openBrowser(searchTerm: pasteboardContents)
+    }
+
+    // MARK: - Autocompletable
+    func setAutocompleteSuggestion(_ suggestion: String?) {
+        toolbar.setAutocompleteSuggestion(suggestion)
+    }
+
+    // MARK: - Overlay Mode
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        guard let windowUUID else { return }
+        inOverlayMode = true
+        delegate?.addressToolbarDidEnterOverlayMode(self)
+
+        if pasted {
+            let action = ToolbarAction(
+                searchTerm: locationText,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didPasteSearchTerm
+            )
+            store.dispatch(action)
+        }
+    }
+
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        _ = toolbar.resignFirstResponder()
+        inOverlayMode = false
+        delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
     }
 }

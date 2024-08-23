@@ -54,6 +54,234 @@ private func MZLocalizedString(
 // Note that strings shouldn't be reused in multiple places in the application. Depending
 // on the Locale we can't guarantee one string will be translated the same even if its value is the same.
 
+// MARK: - Alerts
+extension String {
+    public struct Alerts {
+        public struct RestoreTabs {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.RestoreTabs.Title.v109.v2",
+                tableName: "Alerts",
+                value: "%@ crashed. Restore your tabs?",
+                comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name.")
+            public static let Message = MZLocalizedString(
+                key: "Alerts.RestoreTabs.Message.v109",
+                tableName: "Alerts",
+                value: "Sorry about that. Restore tabs to pick up where you left off.",
+                comment: "The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed.")
+            public static let ButtonNo = MZLocalizedString(
+                key: "Alerts.RestoreTabs.Button.No.v109",
+                tableName: "Alerts",
+                value: "No",
+                comment: "The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs.")
+            public static let ButtonYes = MZLocalizedString(
+                key: "Alerts.RestoreTabs.Button.Yes.v109",
+                tableName: "Alerts",
+                value: "Restore tabs",
+                comment: "The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs.")
+        }
+
+        public struct FeltDeletion {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Title.v122",
+                tableName: "Alerts",
+                value: "End your private session?",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert.")
+            public static let Body = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Body.v122",
+                tableName: "Alerts",
+                value: "Close all private tabs and delete history, cookies, and all other site data.",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert.")
+            public static let ConfirmButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Confirm.v122",
+                tableName: "Alerts",
+                value: "Delete session data",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that.")
+            public static let CancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v122",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
+        }
+    }
+}
+
+// MARK: - Biometric Authentication
+extension String {
+    public struct Biometry {
+        public struct Screen {
+            public static let UniversalAuthenticationReason = MZLocalizedString(
+                key: "Biometry.Screen.UniversalAuthenticationReason.v115",
+                tableName: "BiometricAuthentication",
+                value: "Authenticate to access passwords.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
+            public static let UniversalAuthenticationReasonV2 = MZLocalizedString(
+                key: "Biometry.Screen.UniversalAuthenticationReason.v122",
+                tableName: "BiometricAuthentication",
+                value: "Authenticate to access your saved passwords and payment methods.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards.")
+        }
+    }
+}
+
+// MARK: - Bookmarks Menu
+extension String {
+    public struct Bookmarks {
+        public struct Menu {
+            public static let DesktopBookmarks = MZLocalizedString(
+                key: "Bookmarks.Menu.DesktopBookmarks",
+                tableName: nil,
+                value: "Desktop Bookmarks",
+                comment: "A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'.")
+            public static let EditBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Edit Bookmark",
+                comment: "When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present.")
+            public static let EditFolder = MZLocalizedString(
+                key: "Bookmarks.Menu.EditFolder.v131",
+                tableName: "Bookmarks",
+                value: "Edit Folder",
+                comment: "When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present.")
+            public static let DeleteFolder = MZLocalizedString(
+                key: "Bookmarks.Menu.DeleteFolder.v131",
+                tableName: "Bookmarks",
+                value: "Delete Folder",
+                comment: "When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present.")
+            public static let AllBookmarks = MZLocalizedString(
+                key: "Bookmarks.Menu.AllBookmarks.v131",
+                tableName: "Bookmarks",
+                value: "All",
+                comment: "When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu.")
+            public static let EditBookmarkSaveIn = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkSaveIn.v131",
+                tableName: "Bookmarks",
+                value: "Save in",
+                comment: "When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`.")
+            public static let EditBookmarkTitle = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkTitle.v131",
+                tableName: "Bookmarks",
+                value: "Edit Bookmark",
+                comment: "Label on the top of the `Edit Bookmarks` screen.")
+            public static let DeletedBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.DeletedBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Deleted \"%@\"",
+                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
+            public static let BookmarksTopLevelTitle = MZLocalizedString(
+                key: "Bookmarks.Menu.BookmarksTopLevelTitle.v131",
+                tableName: "Bookmarks",
+                value: "Bookmarks",
+                comment: "Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen")
+        }
+    }
+}
+
+// MARK: - Contextual Hints
+extension String {
+    public struct ContextualHints {
+        public static let ContextualHintsCloseAccessibility = MZLocalizedString(
+            key: "ContextualHintsCloseButtonAccessibility.v105",
+            tableName: nil,
+            value: "Close",
+            comment: "Accessibility label for action denoting closing contextual hint.")
+
+        public struct FirefoxHomepage {
+            public struct JumpBackIn {
+                public static let PersonalizedHome = MZLocalizedString(
+                    key: "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHome",
+                    tableName: "JumpBackIn",
+                    value: "Meet your personalized homepage. Recent tabs, bookmarks, and search results will appear here.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about additions to the Firefox homepage regarding a more personalized experience.")
+                public static let SyncedTab = MZLocalizedString(
+                    key: "ContextualHints.FirefoxHomepage.JumpBackIn.SyncedTab.v106",
+                    tableName: "JumpBackIn",
+                    value: "Your tabs are syncing! Pick up where you left off on your other device.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user is logged in and has a tab synced from desktop, this popup indicates which tab that is within the Jump Back In section.")
+            }
+        }
+
+        public struct TabsTray {
+            public struct InactiveTabs {
+                public static let Action = MZLocalizedString(
+                    key: "ContextualHints.TabTray.InactiveTabs.CallToAction",
+                    tableName: nil,
+                    value: "Turn off in settings",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup.")
+                public static let Body = MZLocalizedString(
+                    key: "ContextualHints.TabTray.InactiveTabs",
+                    tableName: nil,
+                    value: "Tabs you haven’t viewed for two weeks get moved here.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature.")
+            }
+        }
+
+        public struct Toolbar {
+            public static let SearchBarPlacementButtonText = MZLocalizedString(
+                key: "ContextualHints.SearchBarPlacement.CallToAction",
+                tableName: nil,
+                value: "Toolbar Settings",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.")
+            public static let SearchBarTopPlacement = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Top.Description.v107",
+                tableName: "ToolbarLocation",
+                value: "Move the toolbar to the bottom if that’s more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom.")
+            public static let SearchBarBottomPlacement = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Bottom.Description.v107",
+                tableName: "ToolbarLocation",
+                value: "Move the toolbar to the top if that’s more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
+        }
+
+        public struct Shopping {
+            public static let NotOptedInBody = MZLocalizedString(
+                key: "ContextualHints.Shopping.NotOptedIn.v120",
+                tableName: "Shopping",
+                value: "Find out if you can trust this product’s reviews — before you buy.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates that a user can tap on the shopping button to start using the Shopping feature.")
+            public static let NotOptedInAction = MZLocalizedString(
+                key: "ContextualHints.Shopping.NotOptedInAction.v120",
+                tableName: "Shopping",
+                value: "Try Review Checker",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing the Shopping feature. It indicates that a user can go directly to the Shopping feature by tapping the text of the action.")
+            public static let OptedInBody = MZLocalizedString(
+                key: "ContextualHints.Shopping.OptedInBody.v120",
+                tableName: "Shopping",
+                value: "Are these reviews reliable? Check now to see an adjusted rating.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one appears after the user has opted in and informs him if he wants use the review checker by tapping the Shopping button.")
+            public static let OptedInAction = MZLocalizedString(
+                key: "ContextualHints.Shopping.OptedInAction.v120",
+                tableName: "Shopping",
+                value: "Open Review Checker",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears after the user has opted in for the Shopping feature. It indicates that a user can directly open the review checker by tapping the text of the action.")
+        }
+
+        public struct FeltDeletion {
+            public static let Body = MZLocalizedString(
+                key: "ContextualHints.FeltDeletion.Body.v122",
+                tableName: "ContextualHints",
+                value: "Tap here to start a fresh private session. Delete your history, cookies — everything.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode.")
+        }
+    }
+}
+
+// MARK: - Keyboard Accessory View
+extension String {
+    public struct KeyboardAccessory {
+        public static let NextButtonA11yLabel = MZLocalizedString(
+            key: "KeyboardAccessory.NextButton.Accessibility.Label.v124",
+            tableName: "KeyboardAccessory",
+            value: "Next form field",
+            comment: "Accessibility label for next button that is displayed above the keyboard when a form field on a website was tapped.")
+        public static let PreviousButtonA11yLabel = MZLocalizedString(
+            key: "KeyboardAccessory.PreviousButton.Accessibility.Label.v124",
+            tableName: "KeyboardAccessory",
+            value: "Previous form field",
+            comment: "Accessibility label for previous button that is displayed above the keyboard when a form field on a website was tapped.")
+    }
+}
+
 // MARK: - Address Autofill
 extension String {
     public struct Addresses {
@@ -79,17 +307,17 @@ extension String {
                 value: "Use saved address",
                 comment: "Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form.")
             public static let SaveAddressesToFirefox = MZLocalizedString(
-                key: "", // Addresses.Settings.SaveToFirefox.Title.v129
+                key: "Addresses.Settings.SaveToFirefox.Title.v130",
                 tableName: "Settings",
                 value: "Save Addresses to %@",
                 comment: "Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app.")
             public static let SecureSaveInfo = MZLocalizedString(
-                key: "", // Addresses.Settings.SecureSaveInfo.Description.v129
+                key: "Addresses.Settings.SecureSaveInfo.Description.v130",
                 tableName: "Settings",
                 value: "Securely save your information to get quick access to it later.",
                 comment: "Description text for the content unavailable view informing users they can create or add new addresses.")
             public static let ListItemA11y = MZLocalizedString(
-                key: "", // Addresses.Settings.ListItemA11y.v129
+                key: "Addresses.Settings.ListItemA11y.v130",
                 tableName: "Settings",
                 value: "Address for %@",
                 comment: "Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available.")
@@ -384,6 +612,11 @@ extension String {
                 tableName: "BottomSheet",
                 value: "Use a saved address?",
                 comment: "When a user is in the process of entering an address, a screen pops up prompting the user if they want to use a saved address. This string is used as the title label of the screen.")
+            public static let ManageAddressesButton = MZLocalizedString(
+                key: "Addresses.ManageAddressesButton.v130",
+                tableName: "Settings",
+                value: "Manage addresses",
+                comment: "This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses.")
         }
     }
 }
@@ -1831,6 +2064,41 @@ extension String {
     }
 }
 
+// MARK: - Native Error Page
+extension String {
+    struct NativeErrorPage {
+        public static let ButtonLabel = MZLocalizedString(
+            key: "NativeErrorPage.ButtonLabel.v131",
+            tableName: "NativeErrorPage",
+            value: "Reload",
+            comment: "On error page, this is the text on a button that will try to load the page again.")
+        struct NoInternetConnection {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Looks like there’s a problem with your internet connection.",
+                comment: "On error page, this is the title for no internet connection")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.NoInternetConnection.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
+                comment: "On error page, this is the description for no internet connection.")
+        }
+        struct GenericError {
+            public static let TitleLabel = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.TitleLabel.v131",
+                tableName: "NativeErrorPage",
+                value: "Be careful. Something doesn’t look right.",
+                comment: "On error page, this is the title for generic error.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                comment: "On error page, this is the description for generic error.")
+        }
+    }
+}
+
 // MARK: - Onboarding screens
 extension String {
     public struct Onboarding {
@@ -2931,6 +3199,11 @@ extension String {
         tableName: nil,
         value: "Remove",
         comment: "The title for the Remove context menu action for sites in Home Panels")
+    public static let EditContextMenuTitle = MZLocalizedString(
+        key: "HomePanel.ContextMenu.Edit.v131",
+        tableName: "Bookmarks",
+        value: "Edit",
+        comment: "The title for the Edit context menu action for sites in Home Panels")
     public static let PinTopsiteActionTitle2 = MZLocalizedString(
         key: "ActivityStream.ContextMenu.PinTopsite2",
         tableName: nil,
@@ -4176,7 +4449,7 @@ extension String {
                 comment: "Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
 
             public static let onNotSecureHeader = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.On.Header.v128",
+                key: "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128",
                 tableName: "EnhancedTrackingProtection",
                 value: "Your connection is not secure.",
                 comment: "Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.")
@@ -4194,7 +4467,7 @@ extension String {
                 comment: "Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked")
 
             public static let noTrackersLabel = MZLocalizedString(
-                key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",
+                key: "Menu.EnhancedTrackingProtection.Details.NoTrackers.v131",
                 tableName: "EnhancedTrackingProtection",
                 value: "No trackers found",
                 comment: "Text to let users know that no trackers were found on the current website.")
@@ -4288,6 +4561,72 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "Privacy settings",
                 comment: "The title for the privacy settings button inside the enhanced tracking protection screen.")
+
+            public static let certificatesTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.Title.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Certificate",
+                comment: "The title for the certificates screen inside the certificates screen.")
+
+            public static let certificateSubjectName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Subject Name",
+                comment: "The title for the certificate subject name section inside the certificate screen.")
+
+            public static let certificateCommonName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.CommonName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Common Name",
+                comment: "The title for the certificate common name inside the certificate screen.")
+
+            public static let certificateIssuerName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Issuer Name",
+                comment: "The title for the certificate issuer name section inside the certificate screen.")
+
+            public static let certificateIssuerCountry = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Country",
+                comment: "The title for the certificate issuer country inside the certificate screen.")
+
+            public static let certificateIssuerOrganization = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Organization",
+                comment: "The title for the certificate issuer organization inside the certificate screen.")
+
+            public static let certificateValidity = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.Validity.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Validity",
+                comment: "The title for the certificate validity section inside the certificate screen.")
+
+            public static let certificateValidityNotBefore = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Not Before",
+                comment: "The title for the certificate validity not before date inside the certificate screen.")
+
+            public static let certificateValidityNotAfter = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Not After",
+                comment: "The title for the certificate validity not after date inside the certificate screen.")
+
+            public static let certificateSubjectAltNames = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "Subject Alt Names",
+                comment: "The title for the certificate subject alt names section inside the certificate screen.")
+
+            public static let certificateSubjectAltNamesDNSName = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "DNS Name",
+                comment: "The title for the certificate subject alt names DNS name inside the certificate screen.")
         }
     }
 }
