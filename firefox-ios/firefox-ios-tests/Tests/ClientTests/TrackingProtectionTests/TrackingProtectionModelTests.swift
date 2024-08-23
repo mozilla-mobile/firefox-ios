@@ -19,7 +19,7 @@ final class TrackingProtectionModelTests: XCTestCase {
                                                               selectedTab: nil)
         trackingProtectionModel.clearCookiesAndSiteData(cookiesClearable: cookiesClearable,
                                                         siteDataClearable: siteDataClearable)
-        XCTAssertTrue(cookiesClearable.isSucceed != nil, "Cookies may be cleared")
-        XCTAssertTrue(siteDataClearable.isSucceed != nil, "Site data may be cleared")
+        XCTAssertNotNil(cookiesClearable.isSucceed)
+        XCTAssertNotNil(siteDataClearable.isSucceed)
     }
 }
