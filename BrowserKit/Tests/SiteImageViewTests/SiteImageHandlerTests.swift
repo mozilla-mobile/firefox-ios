@@ -231,7 +231,6 @@ private class MockFaviconURLHandler: FaviconURLHandler {
     var sleepOnGetFaviconURL = false
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
-        print("**    [getFaviconURL] called")
         getFaviconURLCalled += 1
 
         if sleepOnGetFaviconURL {
