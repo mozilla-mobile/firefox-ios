@@ -10,4 +10,5 @@ public protocol AddressToolbarDelegate: AnyObject {
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    func configureCFR(for button: ToolbarButton)
 }

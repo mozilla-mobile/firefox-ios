@@ -15,7 +15,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         dataClearanceContextHintVC.stopTimer()
     }
 
-    func configureDataClearanceContextualHint(dataClearanceButton: UIView) {
+    func configureDataClearanceContextualHint(_ view: UIView) {
         guard contentContainer.hasWebView,
                 tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
         else {
@@ -23,7 +23,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             return
         }
         dataClearanceContextHintVC.configure(
-            anchor: dataClearanceButton,
+            anchor: view,
             withArrowDirection: topTabsVisible ? .up : .down,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },

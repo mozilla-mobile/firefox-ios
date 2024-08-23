@@ -17,7 +17,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         static let borderHeight: CGFloat = 1
     }
 
-    public weak var toolbarDelegate: BrowserNavigationToolbarDelegate?
+    private weak var toolbarDelegate: BrowserNavigationToolbarDelegate?
     private lazy var actionStack: UIStackView = .build { view in
         view.distribution = .equalSpacing
     }
@@ -34,7 +34,9 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: NavigationToolbarState) {
+    public func configure(state: NavigationToolbarState, toolbarDelegate: BrowserNavigationToolbarDelegate) {
+        self.toolbarDelegate = toolbarDelegate
+
         updateActionStack(toolbarElements: state.actions)
 
         // Update border
