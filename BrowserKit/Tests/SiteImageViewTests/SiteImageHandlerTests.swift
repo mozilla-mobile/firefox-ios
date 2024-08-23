@@ -167,13 +167,13 @@ final class SiteImageHandlerTests: XCTestCase {
         // This method duplicates the behaviour currently seen in the app where each TopSiteItemCell has its own
         // SiteImageHandler, which is repeatedly deallocated and reallocated during reloads.
         let urlHandler1 = MockFaviconURLHandler()
-        urlHandler1.getFaviconURLSleepSeconds = 1
+        urlHandler1.sleepOnGetFaviconURL = true
 
         let urlHandler2 = MockFaviconURLHandler()
-        urlHandler2.getFaviconURLSleepSeconds = 1
+        urlHandler2.sleepOnGetFaviconURL = true
 
         let urlHandler3 = MockFaviconURLHandler()
-        urlHandler3.getFaviconURLSleepSeconds = 1
+        urlHandler3.sleepOnGetFaviconURL = true
 
         let siteURL = "https://www.example.hello.com"
         let subject1 = DefaultSiteImageHandler(urlHandler: urlHandler1,
@@ -228,14 +228,15 @@ private class MockFaviconURLHandler: FaviconURLHandler {
     var getFaviconURLCalled = 0
     var cacheFaviconURLCalled = 0
     var clearCacheCalled = 0
-    var getFaviconURLSleepSeconds: UInt64? = 0
+    var sleepOnGetFaviconURL = false
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
         print("**    [getFaviconURL] called")
         getFaviconURLCalled += 1
 
-        if let getFaviconURLSleepSeconds {
-            try? await Task.sleep(nanoseconds: getFaviconURLSleepSeconds * NSEC_PER_SEC)
+        if sleepOnGetFaviconURL {
+            let sleepTime = UInt64(0.3 * Double(NSEC_PER_SEC))
+            try? await Task.sleep(nanoseconds: sleepTime)
         }
 
         capturedImageModel = site
