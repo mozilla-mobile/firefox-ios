@@ -26,7 +26,6 @@ export class FormStateManager {
    * @returns {Array<object> | null}
    *          Return target form's handler from content cache
    *          (or return null if the information is not found in the cache).
-   *
    */
   getFormHandler(element) {
     if (!element) {
