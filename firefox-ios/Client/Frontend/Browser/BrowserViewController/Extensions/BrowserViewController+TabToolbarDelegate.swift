@@ -24,7 +24,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         dataClearanceContextHintVC.configure(
             anchor: view,
-            withArrowDirection: topTabsVisible ? .up : .down,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
