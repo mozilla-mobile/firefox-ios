@@ -7,6 +7,7 @@ import TabDataStore
 import Storage
 import Common
 import Shared
+import WebKit
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
@@ -432,7 +433,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
         assert(Thread.isMainThread, "Currently expected to be called only on main thread.")
-        selectedTab?.createWebview(with: sessionData)
+        let configuration: WKWebViewConfiguration = tab.isPrivate ? self.privateConfiguration : self.configuration
+
+        selectedTab?.createWebview(with: sessionData, configuration: configuration)
         selectedTab?.lastExecutedTime = Date.now()
     }
 

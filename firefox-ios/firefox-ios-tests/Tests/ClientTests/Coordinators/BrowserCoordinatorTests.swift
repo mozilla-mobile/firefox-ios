@@ -286,9 +286,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     func testShowBackForwardList_presentsBackForwardListViewController() {
-        let mockTab = Tab(profile: profile, configuration: .init(), windowUUID: windowUUID)
+        let mockTab = Tab(profile: profile, windowUUID: windowUUID)
         mockTab.url = URL(string: "https://www.google.com")
-        mockTab.createWebview()
+        mockTab.createWebview(configuration: .init())
         tabManager.selectedTab = mockTab
 
         let subject = createSubject()

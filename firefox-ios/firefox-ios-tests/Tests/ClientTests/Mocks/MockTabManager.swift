@@ -62,9 +62,8 @@ class MockTabManager: TabManager {
     }
 
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
-        let configuration = WKWebViewConfiguration()
         let profile = MockProfile()
-        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         tabs.append(tab)
         return tab
     }
@@ -137,7 +136,7 @@ class MockTabManager: TabManager {
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        return Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+        return Tab(profile: MockProfile(), windowUUID: windowUUID)
     }
 
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
@@ -148,12 +147,11 @@ class MockTabManager: TabManager {
 
     @discardableResult
     func addTab(_ request: URLRequest!,
-                configuration: WKWebViewConfiguration!,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool
     ) -> Tab {
-        return Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+        return Tab(profile: MockProfile(), windowUUID: windowUUID)
     }
 
     func backgroundRemoveAllTabs(isPrivate: Bool,

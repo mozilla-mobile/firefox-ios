@@ -62,7 +62,6 @@ protocol TabManager: AnyObject {
 
     @discardableResult
     func addTab(_ request: URLRequest!,
-                configuration: WKWebViewConfiguration!,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
@@ -131,13 +130,11 @@ extension TabManager {
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         addTab(request,
-               configuration: configuration,
                afterTab: afterTab,
                zombie: zombie,
                isPrivate: isPrivate)
