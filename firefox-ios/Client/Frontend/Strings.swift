@@ -132,6 +132,46 @@ extension String {
                 tableName: nil,
                 value: "Desktop Bookmarks",
                 comment: "A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'.")
+            public static let EditBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Edit Bookmark",
+                comment: "When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present.")
+            public static let EditFolder = MZLocalizedString(
+                key: "Bookmarks.Menu.EditFolder.v131",
+                tableName: "Bookmarks",
+                value: "Edit Folder",
+                comment: "When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present.")
+            public static let DeleteFolder = MZLocalizedString(
+                key: "Bookmarks.Menu.DeleteFolder.v131",
+                tableName: "Bookmarks",
+                value: "Delete Folder",
+                comment: "When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present.")
+            public static let AllBookmarks = MZLocalizedString(
+                key: "Bookmarks.Menu.AllBookmarks.v131",
+                tableName: "Bookmarks",
+                value: "All",
+                comment: "When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu.")
+            public static let EditBookmarkSaveIn = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkSaveIn.v131",
+                tableName: "Bookmarks",
+                value: "Save in",
+                comment: "When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`.")
+            public static let EditBookmarkTitle = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkTitle.v131",
+                tableName: "Bookmarks",
+                value: "Edit Bookmark",
+                comment: "Label on the top of the `Edit Bookmarks` screen.")
+            public static let DeletedBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.DeletedBookmark.v131",
+                tableName: "Bookmarks",
+                value: "Deleted \"%@\"",
+                comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
+            public static let BookmarksTopLevelTitle = MZLocalizedString(
+                key: "Bookmarks.Menu.BookmarksTopLevelTitle.v131",
+                tableName: "Bookmarks",
+                value: "Bookmarks",
+                comment: "Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen")
         }
     }
 }
@@ -2606,6 +2646,11 @@ extension String {
         tableName: nil,
         value: "Remove",
         comment: "The title for the Remove context menu action for sites in Home Panels")
+    public static let EditContextMenuTitle = MZLocalizedString(
+        key: "HomePanel.ContextMenu.Edit.v131",
+        tableName: "Bookmarks",
+        value: "Edit",
+        comment: "The title for the Edit context menu action for sites in Home Panels")
     public static let PinTopsiteActionTitle2 = MZLocalizedString(
         key: "ActivityStream.ContextMenu.PinTopsite2",
         tableName: nil,

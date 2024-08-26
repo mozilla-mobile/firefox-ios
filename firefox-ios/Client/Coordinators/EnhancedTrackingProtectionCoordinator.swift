@@ -45,7 +45,8 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 connectionSecure: connectionSecure,
                 globalETPIsEnabled: FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs),
                 contentBlockerStatus: contentBlockerStatus,
-                contentBlockerStats: contentBlockerStats
+                contentBlockerStats: contentBlockerStats,
+                selectedTab: tabManager.selectedTab
             )
 
             enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
@@ -74,6 +75,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                     sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
                     sheetPresentationController.preferredCornerRadius = TPMenuUX.UX.modalMenuCornerRadius
                 }
+                enhancedTrackingProtectionMenuVC.asPopover = true
                 router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
             } else {
                 enhancedTrackingProtectionMenuVC.asPopover = true

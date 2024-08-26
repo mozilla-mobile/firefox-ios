@@ -20,6 +20,7 @@ class TrackingProtectionModel {
     let displayTitle: String
     let connectionSecure: Bool
     let globalETPIsEnabled: Bool
+    private var selectedTab: Tab?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -104,13 +105,15 @@ class TrackingProtectionModel {
          connectionSecure: Bool,
          globalETPIsEnabled: Bool,
          contentBlockerStatus: BlockerStatus,
-         contentBlockerStats: TPPageStats?) {
+         contentBlockerStats: TPPageStats?,
+         selectedTab: Tab?) {
         self.url = url
         self.displayTitle = displayTitle
         self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
         self.contentBlockerStatus = contentBlockerStatus
         self.contentBlockerStats = contentBlockerStats
+        self.selectedTab = selectedTab
     }
 
     // MARK: - Helpers
@@ -159,12 +162,15 @@ class TrackingProtectionModel {
 
         let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
                                           style: .destructive) { [weak self] _ in
-            self?.clearCookiesAndSiteData()
+            self?.clearCookiesAndSiteData(cookiesClearable: CookiesClearable(), siteDataClearable: SiteDataClearable())
+            self?.selectedTab?.webView?.reload()
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)
     }
 
-    func clearCookiesAndSiteData() {
+    func clearCookiesAndSiteData(cookiesClearable: Clearable, siteDataClearable: Clearable) {
+        _ = cookiesClearable.clear()
+        _ = siteDataClearable.clear()
     }
 }

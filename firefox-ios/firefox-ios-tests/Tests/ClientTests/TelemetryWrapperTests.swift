@@ -19,7 +19,6 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     override func tearDown() {
-        Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
         DependencyHelperMock().reset()
         super.tearDown()

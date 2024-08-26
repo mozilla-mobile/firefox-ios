@@ -36,7 +36,6 @@ class PasswordManagerViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        Glean.shared.resetGlean(clearStores: true)
         viewModel = nil
         mockLoginProvider = nil
         mockDelegate = nil

@@ -19,7 +19,6 @@ class TabsTelemetryTests: XCTestCase {
         inactiveTabsManager = MockInactiveTabsManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
         DependencyHelperMock().bootstrapDependencies()
     }
 

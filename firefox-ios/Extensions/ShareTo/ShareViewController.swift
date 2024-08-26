@@ -147,28 +147,28 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareOpenInFirefox,
-                imageName: "logoFirefoxLarge",
+                imageName: StandardImageIdentifiers.Large.logoFirefox,
                 action: #selector(actionOpenInFirefoxNow),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareLoadInBackground,
-                imageName: "tabTrayLarge",
+                imageName: StandardImageIdentifiers.Large.tabTray,
                 action: #selector(actionLoadInBackground),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareBookmarkThisPage,
-                imageName: "bookmarkLarge",
+                imageName: StandardImageIdentifiers.Large.bookmark,
                 action: #selector(actionBookmarkThisPage),
                 hasNavigation: false
             )
             makeActionRow(
                 addTo: stackView,
                 label: .ShareAddToReadingList,
-                imageName: "readingListAddLarge",
+                imageName: StandardImageIdentifiers.Large.readingListAdd,
                 action: #selector(actionAddToReadingList),
                 hasNavigation: false
             )
@@ -176,7 +176,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareSendToDevice,
-                imageName: "deviceDesktopSendLarge",
+                imageName: StandardImageIdentifiers.Large.deviceDesktopSend,
                 action: #selector(actionSendToDevice),
                 hasNavigation: true
             )
@@ -185,7 +185,7 @@ class ShareViewController: UIViewController {
             makeActionRow(
                 addTo: stackView,
                 label: .ShareSearchInFirefox,
-                imageName: "searchLarge",
+                imageName: StandardImageIdentifiers.Large.search,
                 action: #selector(actionSearchInFirefox),
                 hasNavigation: false
             )
@@ -317,7 +317,7 @@ class ShareViewController: UIViewController {
 
         if hasNavigation {
             let navButton = UIImageView(
-                image: UIImage(named: "chevronRightLarge")?.withRenderingMode(.alwaysTemplate)
+                image: UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
             )
             navButton.contentMode = .scaleAspectFit
             navButton.tintColor = theme.colors.textPrimary
