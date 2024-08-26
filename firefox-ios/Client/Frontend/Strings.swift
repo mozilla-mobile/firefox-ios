@@ -1684,6 +1684,12 @@ extension String {
             tableName: "Menu",
             value: "Request Mobile Site",
             comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.")
+        public static let AppMenuCloseAllTabsTitleString = MZLocalizedString(
+            key: "Menu.CloseAllTabsAction.Title",
+            tableName: "Menu",
+            value: "Close All Tabs",
+            comment: "Label for the button, displayed in the menu, used to close all tabs currently open.")
+
         public static let AppMenuSettingsTitleString = MZLocalizedString(
             key: "Menu.OpenSettingsAction.Title",
             tableName: "Menu",

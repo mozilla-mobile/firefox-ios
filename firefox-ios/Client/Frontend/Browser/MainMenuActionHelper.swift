@@ -475,7 +475,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var items: [PhotonRowActions] = []
 
         let nightModeEnabled = NightModeHelper.isActivated()
-        typealias MenuStrings = String.OldStrings.v130.AppMenu
+        typealias MenuStrings = String.LegacyAppMenu
         let nightMode = SingleActionViewModel(
             title: nightModeEnabled ? MenuStrings.AppMenuTurnOffNightMode : MenuStrings.AppMenuTurnOnNightMode,
             iconString: StandardImageIdentifiers.Large.nightMode,
