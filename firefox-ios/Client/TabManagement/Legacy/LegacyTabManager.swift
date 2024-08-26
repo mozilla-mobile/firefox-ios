@@ -446,9 +446,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                  isRestoring: !tabRestoreHasFinished)
         }
 
-//        if !zombie {
-//            tab.createWebview()
-//        }
         tab.navigationDelegate = self.navDelegate
 
         if let request = request {
