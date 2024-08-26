@@ -19,7 +19,7 @@ class LegacyTabPeekPreviewActionBuilder {
 
     func addSendToDeviceTitle(handler: @escaping (UIPreviewAction, UIViewController) -> Void) {
         actions.append(UIPreviewAction(
-            title: .OldStrings.v130.AppMenu.TouchActions.SendToDeviceTitle,
+            title: .LegacyAppMenu.TouchActions.SendToDeviceTitle,
             style: .default,
             handler: handler
         ))

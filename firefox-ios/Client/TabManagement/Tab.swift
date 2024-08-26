@@ -195,7 +195,7 @@ class Tab: NSObject, ThemeApplicable {
     /// or not, it will resort to other displayable titles.
     var displayTitle: String {
         if self.isFxHomeTab {
-            return .OldStrings.v130.AppMenu.AppMenuOpenHomePageTitleString
+            return .LegacyAppMenu.AppMenuOpenHomePageTitleString
         }
 
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
@@ -227,7 +227,7 @@ class Tab: NSObject, ThemeApplicable {
         var backUpName: String = "" // In case display title is empty
 
         if let baseDomain = baseDomain {
-            backUpName = baseDomain.contains("local") ? .OldStrings.v130.AppMenu.AppMenuOpenHomePageTitleString : baseDomain
+            backUpName = baseDomain.contains("local") ? .LegacyAppMenu.AppMenuOpenHomePageTitleString : baseDomain
         } else if let url = url, let about = InternalURL(url)?.aboutComponent {
             backUpName = about
         }

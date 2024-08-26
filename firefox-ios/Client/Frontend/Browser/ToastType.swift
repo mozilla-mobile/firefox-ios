@@ -23,9 +23,9 @@ enum ToastType: Equatable {
                 .TabsTray.CloseTabsToast.Title,
                 tabsCount)
         case .copyURL:
-            return .OldStrings.v130.AppMenu.AppMenuCopyURLConfirmMessage
+            return .LegacyAppMenu.AppMenuCopyURLConfirmMessage
         case .addBookmark:
-            return .OldStrings.v130.AppMenu.AddBookmarkConfirmMessage
+            return .LegacyAppMenu.AddBookmarkConfirmMessage
         }
     }
 

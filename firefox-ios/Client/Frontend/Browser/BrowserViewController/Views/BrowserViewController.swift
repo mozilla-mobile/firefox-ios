@@ -1561,14 +1561,14 @@ class BrowserViewController: UIViewController,
         switch action {
         case .add:
             self.showToast(
-                message: .OldStrings.v130.AppMenu.AddBookmarkConfirmMessage,
+                message: .LegacyAppMenu.AddBookmarkConfirmMessage,
                 toastAction: .bookmarkPage
             )
         case .remove:
             self.showToast(
                 bookmarkURL,
                 title,
-                message: .OldStrings.v130.AppMenu.RemoveBookmarkConfirmMessage,
+                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
                 toastAction: .removeBookmark
             )
         }
@@ -3959,7 +3959,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.OldStrings.v130.AppMenu.AppMenuTabSentConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.contentContainer,
                                                 theme: self.currentTheme())
             }
