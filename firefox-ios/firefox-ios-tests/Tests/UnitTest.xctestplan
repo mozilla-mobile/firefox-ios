@@ -206,6 +206,13 @@
         "identifier" : "ContentBlockingGeneratorTests",
         "name" : "ContentBlockingGeneratorTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "MenuKitTests",
+        "name" : "MenuKitTests"
+      }
     }
   ],
   "version" : 1
