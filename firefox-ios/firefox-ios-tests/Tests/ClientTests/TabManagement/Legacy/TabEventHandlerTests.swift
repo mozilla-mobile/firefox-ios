@@ -14,7 +14,6 @@ class TabEventHandlerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     func testEventDelivery() {
         let tab = Tab(profile: MockProfile(),
-                      configuration: WKWebViewConfiguration(),
                       windowUUID: windowUUID)
         let handler = DummyHandler()
 

@@ -12,7 +12,6 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
     let sleepTime: UInt64 = 100_000_000
-    let webViewConfig = WKWebViewConfiguration()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -149,7 +148,7 @@ extension JumpBackInDataAdaptorTests {
 
     func createTab(profile: MockProfile,
                    urlString: String? = "www.website.com") -> Tab {
-        let tab = Tab(profile: profile, configuration: webViewConfig, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, windowUUID: windowUUID)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!

@@ -586,9 +586,8 @@ extension JumpBackInViewModelTests {
     }
 
     func createTab(profile: MockProfile,
-                   configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
                    urlString: String? = "www.website.com") -> Tab {
-        let tab = Tab(profile: profile, configuration: configuration, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, windowUUID: windowUUID)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!
