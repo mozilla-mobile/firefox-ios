@@ -28,21 +28,19 @@ final class NativeErrorPageViewController: UIViewController,
     // MARK: UI Elements
     private struct UX {
         static let logoSizeWidth: CGFloat = 221
-        static let logoSizeHeight: CGFloat = 181
         static let mainStackSpacing: CGFloat = 24
         static let textStackSpacing: CGFloat = 16
-        static let buttonWidth: CGFloat = 343
         static let portraitPadding = NSDirectionalEdgeInsets(
-            top: 74,
+            top: 76,
             leading: 16,
-            bottom: -74,
+            bottom: -16,
             trailing: -16
         )
         static let landscapePadding = NSDirectionalEdgeInsets(
-            top: 32,
-            leading: 30,
-            bottom: -32,
-            trailing: -30
+            top: 60,
+            leading: 64,
+            bottom: -16,
+            trailing: -64
         )
     }
 
@@ -85,15 +83,11 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(
-            self,
-            action: #selector(
-                self.didTapSubmit
-            ),
-            for: .touchUpInside
-        )
+        button.addTarget(self, action: #selector(self.didTapSubmit), for: .touchUpInside)
         button.isEnabled = true
     }
+
+    private var contraintsList = [NSLayoutConstraint]()
 
     required init?(
         coder aDecoder: NSCoder
@@ -122,15 +116,13 @@ final class NativeErrorPageViewController: UIViewController,
 
         configureUI()
         setupLayout()
-        adjustConstraintsForOrientation()
-        showViewForOrientation()
+        adjustConstraints()
+        showViewForCurrentOrientation()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange(
-            view
-        )
+        listenForThemeChange(view)
         applyTheme()
     }
 
@@ -142,10 +134,11 @@ final class NativeErrorPageViewController: UIViewController,
             to: size,
             with: coordinator
         )
-        adjustConstraintsForOrientation()
-        showViewForOrientation()
+        adjustConstraints()
+        showViewForCurrentOrientation()
     }
 
+    // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .NativeErrorPage.ButtonLabel,
@@ -158,68 +151,61 @@ final class NativeErrorPageViewController: UIViewController,
 
     private func setupLayout() {
         textStack.addArrangedSubview(titleLabel)
-        textStack.addArrangedSubview( errorDescriptionLabel)
+        textStack.addArrangedSubview(errorDescriptionLabel)
         commonContainer.addArrangedSubview(textStack)
-        commonContainer.addArrangedSubview( reloadButton)
-        scrollContainer.addArrangedSubview( logoImage )
+        commonContainer.addArrangedSubview(reloadButton)
+        scrollContainer.addArrangedSubview(logoImage)
         scrollContainer.addArrangedSubview(commonContainer)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
     }
 
-    func adjustConstraintsForOrientation() {
-        NSLayoutConstraint.activate(
-            [
-                scrollView.topAnchor.constraint(
+    func adjustConstraints() {
+        NSLayoutConstraint.deactivate(contraintsList)
+        contraintsList = [
+            scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
-             scrollView.leadingAnchor.constraint(
+            scrollView.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor
-             ),
-             scrollView.trailingAnchor.constraint(
+            ),
+            scrollView.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor
-             ),
-             scrollView.bottomAnchor.constraint(
+            ),
+            scrollView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor
-             ),
-             scrollContainer.topAnchor.constraint(
+            ),
+            scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.top :  UX.portraitPadding.top
-             ),
-             scrollContainer.leadingAnchor.constraint(
+                constant: self.isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
+            ),
+            scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.leading :  UX.portraitPadding.leading
-             ),
-             scrollContainer.trailingAnchor.constraint(
+                constant: self.isLandscape ? UX.landscapePadding.leading : UX.portraitPadding.leading
+            ),
+            scrollContainer.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.trailing :  UX.portraitPadding.trailing
-             ),
-             scrollContainer.bottomAnchor.constraint(
+                constant: self.isLandscape ? UX.landscapePadding.trailing : UX.portraitPadding.trailing
+            ),
+            scrollContainer.bottomAnchor.constraint(
                 equalTo: scrollView.bottomAnchor,
-                constant: self.isLandscape ? UX.landscapePadding.bottom :  UX.portraitPadding.bottom
-             ),
-//             logoImage.heightAnchor.constraint(
-//                equalToConstant: UX.logoSizeHeight
-//             ),
-             logoImage.widthAnchor.constraint(
-                equalToConstant: UX.logoSizeWidth
-             )
-            ]
-        )
+                constant: self.isLandscape ? UX.landscapePadding.bottom : UX.portraitPadding.bottom
+            ),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
+        ]
+        NSLayoutConstraint.activate(contraintsList)
     }
 
     private var isLandscape: Bool {
         return UIDevice.current.isIphoneLandscape
     }
 
-    private func showViewForOrientation() {
+    private func showViewForCurrentOrientation() {
         if isLandscape {
-            scrollContainer.alignment = .top
             scrollContainer.axis = .horizontal
             titleLabel.textAlignment = .left
             errorDescriptionLabel.textAlignment = .left
         } else {
-            scrollContainer.alignment = .center
             scrollContainer.axis = .vertical
             titleLabel.textAlignment = .center
             errorDescriptionLabel.textAlignment = .center
@@ -235,6 +221,7 @@ final class NativeErrorPageViewController: UIViewController,
         reloadButton.applyTheme(theme: theme)
     }
 
+    // TODO: FXIOS-9860 #21645 Integration with Redux - reload button
     @objc
     private func didTapSubmit() {
     }

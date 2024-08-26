@@ -1384,6 +1384,7 @@ class BrowserViewController: UIViewController,
     }
 
     func showEmbeddedNativeErrorPage() {
+    // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
         browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
     }
 
