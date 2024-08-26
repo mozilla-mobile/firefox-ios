@@ -46,9 +46,11 @@
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "You turned off protections";
 
-/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.
-   Header for the enhanced tracking protection screen when the user has selected to be protected. */
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "You’re protected. If we spot something, we’ll let you know.";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Your connection is not secure.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Be careful on this site";

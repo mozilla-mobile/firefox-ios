@@ -1,0 +1,9 @@
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Bir SSL hatası oluştu ve sunucuyla güvenli bağlantı kurulamadı.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Farklı bir cihazdan bağlanmayı deneyin. Modeminizi veya yönlendiricinizi kontrol edin. Wi-Fi bağlantınızı kesip yeniden bağlanın.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "İnternet bağlantınızla ilgili bir sorun var.";
+

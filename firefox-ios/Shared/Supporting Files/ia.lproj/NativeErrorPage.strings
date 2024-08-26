@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Recargar";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Un error SSL ha occurrite e un connexion secur al servitor non pote esser facite.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Attention! Alco non pare correcte.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Prova a connecter te ab un altere apparato. Controla le modem o le router. Disactiva e reactiva le connexion Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Il pare que il ha un problema con tu connexion internet.";
+
