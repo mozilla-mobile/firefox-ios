@@ -123,7 +123,8 @@ final class NativeErrorPageViewController: UIViewController,
 
         configureUI()
         setupLayout()
-        showViewBasedOnOrientation()
+        adjustConstraintsForOrientation()
+        showViewForOrientation()
     }
 
     override func viewDidLoad() {
@@ -142,8 +143,8 @@ final class NativeErrorPageViewController: UIViewController,
             to: size,
             with: coordinator
         )
-        setupLayout()
-        showViewBasedOnOrientation()
+        adjustConstraintsForOrientation()
+        showViewForOrientation()
     }
 
     private func configureUI() {
@@ -157,29 +158,17 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private func setupLayout() {
-        textStack.addArrangedSubview(
-            titleLabel
-        )
-        textStack.addArrangedSubview(
-            errorDescriptionLabel
-        )
-        commonContainer.addArrangedSubview(
-            textStack
-        )
-        commonContainer.addArrangedSubview(
-            reloadButton
-        )
-        scrollContainer.addArrangedSubview(
-            logoImage
-        )
-        scrollContainer.addArrangedSubview(
-            commonContainer
-        )
+        textStack.addArrangedSubview(titleLabel)
+        textStack.addArrangedSubview( errorDescriptionLabel)
+        commonContainer.addArrangedSubview(textStack)
+        commonContainer.addArrangedSubview( reloadButton)
+        scrollContainer.addArrangedSubview( logoImage )
+        scrollContainer.addArrangedSubview(commonContainer)
         scrollView.addSubview(scrollContainer)
-        view.addSubview(
-            scrollView
-        )
+        view.addSubview(scrollView)
+    }
 
+    func adjustConstraintsForOrientation() {
         NSLayoutConstraint.activate(
             [scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
@@ -199,11 +188,11 @@ final class NativeErrorPageViewController: UIViewController,
              ),
              scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: UX.portraitPadding.leading
+                constant: self.isLandscape ? UX.landscapePadding.leading :  UX.portraitPadding.leading
              ),
              scrollContainer.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: UX.portraitPadding.trailing
+                constant: self.isLandscape ? UX.landscapePadding.trailing :  UX.portraitPadding.trailing
              ),
              scrollContainer.bottomAnchor.constraint(
                 equalTo: scrollView.bottomAnchor,
@@ -222,7 +211,7 @@ final class NativeErrorPageViewController: UIViewController,
         return UIDevice.current.isIphoneLandscape
     }
 
-    private func showViewBasedOnOrientation() {
+    private func showViewForOrientation() {
         if isLandscape {
             scrollContainer.axis = .horizontal
             titleLabel.textAlignment = .left
