@@ -1040,6 +1040,13 @@ class BrowserViewController: UIViewController,
             themeManager.applyThemeUpdatesToWindows()
         }
         setupMiddleButtonStatus(isLoading: false)
+
+        // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
+        // so only necessary to dismiss when vertical size class changes
+        if dataClearanceContextHintVC.isPresenting &&
+            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            dataClearanceContextHintVC.dismiss(animated: true)
+        }
     }
 
     // MARK: - Constraints
