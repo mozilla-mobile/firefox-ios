@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Endurhlaða";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "SSL-villa kom upp og ekki er hægt að koma á öruggri tengingu við netþjóninn.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Farðu varlega. Eitthvað lítur ekki út fyrir að vera rétt.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Prófaðu að tengjast í öðru tæki. Athugaðu mótaldið þitt eða beininn. Aftengdu og tengdu aftur við Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Það virðist vera vandamál með nettenginguna þína.";
+

@@ -46,8 +46,7 @@
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "보호 기능을 사용 중지했습니다.";
 
-/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.
-   Header for the enhanced tracking protection screen when the user has selected to be protected. */
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "보호받고 있습니다. 뭔가를 발견하면 알려드리겠습니다.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */

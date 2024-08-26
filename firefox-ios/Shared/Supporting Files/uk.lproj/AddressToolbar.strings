@@ -1,0 +1,3 @@
+/* Accessibility label for the address field in the address toolbar. */
+"AddressToolbar.Location.A11y.Label.v128" = "Введіть запит чи адресу";
+

@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "ਮੁੜ-ਲੋਡ";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "ਇੱਕ SSL ਗਲਤੀ ਆਈ ਹੈ ਅਤੇ ਸਰਵਰ ਨਾਲ ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਨਹੀਂ ਬਣਾਇਆ ਜਾ ਸਕਦਾ ਹੈ।";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "ਧਿਆਨ ਰੱਖੋ। ਕੁਝ ਸਹੀ ਨਹੀਂ ਜਾਪਦਾ ਹੈ।";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "ਵੱਖਰੇ ਡਿਵਾਈਸ ਨਾਲ ਕਨੈਕਟ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਆਪਣੇ ਮਾਡਮ ਜਾਂ ਰਾਊਟਰ ਦੀ ਜਾਂਚ ਕਰੋ। Wi-Fi ਤੋਂ ਡਿਸ-ਕਨੈਕਟ ਕਰਕੇ ਫੇਰ ਕਨੈਕਟ ਕਰੋ।";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "ਤੁਹਾਡੇ ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਾਲ ਸਮੱਸਿਆ ਜਾਪਦੀ ਹੈ।";
+
