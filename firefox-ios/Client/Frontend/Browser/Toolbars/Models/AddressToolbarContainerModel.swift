@@ -19,6 +19,7 @@ class AddressToolbarContainerModel: Equatable {
     let searchTerm: String?
     let isEditing: Bool
     let shouldSelectSearchTerm: Bool
+    let shouldDisplayCompact: Bool
 
     let windowUUID: UUID
 
@@ -77,6 +78,7 @@ class AddressToolbarContainerModel: Equatable {
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
+        self.shouldDisplayCompact = state.isShowingNavigationToolbar
     }
 
     func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {

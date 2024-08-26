@@ -43,8 +43,15 @@ final class AddressToolbarContainer: UIView,
     private(set) weak var delegate: AddressToolbarContainerDelegate?
 
     private var toolbar: BrowserAddressToolbar {
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        return isCompact ? compactToolbar : regularToolbar
+        return shouldDisplayCompact ? compactToolbar : regularToolbar
+    }
+
+    private var shouldDisplayCompact: Bool {
+        guard let model else {
+            return traitCollection.horizontalSizeClass == .compact
+        }
+
+        return model.shouldDisplayCompact
     }
 
     private var isTransitioning = false {
@@ -73,7 +80,7 @@ final class AddressToolbarContainer: UIView,
                                                          window: windowUUID)
         else { return nil }
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isCompact = shouldDisplayCompact
         let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
@@ -93,7 +100,7 @@ final class AddressToolbarContainer: UIView,
                                                          window: windowUUID)
         else { return nil }
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isCompact = shouldDisplayCompact
         let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
@@ -147,12 +154,6 @@ final class AddressToolbarContainer: UIView,
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return toolbar.resignFirstResponder()
-    }
-
-    // MARK: View Transitions
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustLayout()
     }
 
     // MARK: - Redux
@@ -212,6 +213,9 @@ final class AddressToolbarContainer: UIView,
                                      toolbarDelegate: self,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
+
+            // the layout (compact/regular) that should be displayed is driven by the state
+            adjustLayout()
 
             // Dismiss overlay mode when not editing to fix overlay mode staying open
             // on iPad when switching tabs using top tabs
