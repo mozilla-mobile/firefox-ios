@@ -91,11 +91,11 @@ struct ImageButtonWithLabel: View {
                         }
                         Spacer()
                         if link == .search && isSmall {
-                            Image(StandardImageIdentifiers.Large.search)
+                            Image(decorative: StandardImageIdentifiers.Large.search)
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         } else {
-                            Image(link.imageName)
+                            Image(decorative: link.imageName)
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         }
@@ -103,7 +103,7 @@ struct ImageButtonWithLabel: View {
                     if isSmall {
                         HStack(alignment: .bottom) {
                             Spacer()
-                            Image("faviconFox")
+                            Image(decorative: "faviconFox")
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         }
