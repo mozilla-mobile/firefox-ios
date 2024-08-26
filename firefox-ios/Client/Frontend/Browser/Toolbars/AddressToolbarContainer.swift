@@ -292,8 +292,10 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarContainerAccessibilityActions()
     }
 
-    func configureCFR(for button: ToolbarKit.ToolbarButton) {
-        delegate?.configureCFR(for: button)
+    func configureCFR(_ addressToolbar: BrowserAddressToolbar, for button: ToolbarKit.ToolbarButton) {
+        if addressToolbar == toolbar {
+            delegate?.configureCFR(for: button)
+        }
     }
 
     // MARK: - MenuHelperURLBarInterface

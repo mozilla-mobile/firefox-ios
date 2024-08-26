@@ -220,7 +220,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             }
 
             if toolbarElement.hasCFR == true {
-                toolbarDelegate?.configureCFR(for: button)
+                toolbarDelegate?.configureCFR(self, for: button)
             }
         }
     }
