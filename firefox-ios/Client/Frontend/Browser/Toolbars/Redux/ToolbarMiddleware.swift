@@ -512,7 +512,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
-        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs),
+        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
                                     menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
 
         return actions
@@ -672,7 +672,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
-            tabsAction(numberOfTabs: numberOfTabs, isShowingTopTabs: isShowingTopTabs),
+            tabsAction(numberOfTabs: numberOfTabs,
+                       isPrivateMode: toolbarState.isPrivateMode,
+                       isShowingTopTabs: isShowingTopTabs),
             menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
         ]
 
@@ -720,10 +722,14 @@ final class ToolbarMiddleware: FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private func tabsAction(numberOfTabs: Int = 1, isShowingTopTabs: Bool = false) -> ToolbarActionState {
+    private func tabsAction(numberOfTabs: Int = 1,
+                            isPrivateMode: Bool = false,
+                            isShowingTopTabs: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
+            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isShowingTopTabs: isShowingTopTabs,
             isEnabled: true,
