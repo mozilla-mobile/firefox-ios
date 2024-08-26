@@ -75,6 +75,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                     sheetPresentationController.prefersScrollingExpandsWhenScrolledToEdge = true
                     sheetPresentationController.preferredCornerRadius = TPMenuUX.UX.modalMenuCornerRadius
                 }
+                enhancedTrackingProtectionMenuVC.asPopover = true
                 router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
             } else {
                 enhancedTrackingProtectionMenuVC.asPopover = true
