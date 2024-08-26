@@ -91,7 +91,7 @@ struct ImageButtonWithLabel: View {
                         }
                         Spacer()
                         if link == .search && isSmall {
-                            Image(StandardImageIdentifiers.Large.search)
+                            Image(decorative: StandardImageIdentifiers.Large.search)
                                 .scaledToFit()
                                 .frame(height: 24.0)
                         } else {
