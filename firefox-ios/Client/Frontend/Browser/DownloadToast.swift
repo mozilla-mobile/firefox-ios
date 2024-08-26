@@ -63,9 +63,10 @@ class DownloadToast: Toast {
                 self.descriptionLabel.text = self.descriptionText
 
                 if let percent = self.percent {
+                    self.progressView.isHidden = false
                     self.progressWidthConstraint?.constant = self.toastView.frame.width * percent
                 } else {
-                    self.progressWidthConstraint?.constant = 0
+                    self.progressView.isHidden = true
                 }
 
                 self.layoutIfNeeded()
