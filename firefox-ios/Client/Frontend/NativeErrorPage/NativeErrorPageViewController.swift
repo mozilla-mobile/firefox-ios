@@ -39,17 +39,16 @@ final class NativeErrorPageViewController: UIViewController,
             trailing: -16
         )
         static let landscapePadding = NSDirectionalEdgeInsets(
-            top: 16,
-            leading: 16,
-            bottom: -16,
-            trailing: -16
+            top: 32,
+            leading: 30,
+            bottom: -32,
+            trailing: -30
         )
     }
 
     private lazy var scrollView: UIScrollView = .build()
 
     private lazy var scrollContainer: UIStackView = .build { stackView in
-        stackView.axis = .vertical
         stackView.spacing = UX.mainStackSpacing
     }
 
