@@ -10,7 +10,7 @@ let newTopSite = [
     "topSiteLabel": "Mozilla",
     "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"
 ]
-let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
+let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
 
 class ActivityStreamTest: BaseTestCase {
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
