@@ -39,29 +39,23 @@ final class NativeErrorPageViewController: UIViewController,
         static let buttonHeight: CGFloat = 45
         static let buttonWidth: CGFloat = 343
         static let portraitPadding = NSDirectionalEdgeInsets(
-            top: 16,
+            top: 74,
             leading: 16,
-            bottom: -16,
+            bottom: -74,
             trailing: -16
         )
         static let landscapePadding = NSDirectionalEdgeInsets(
-            top: 30,
+            top: 58,
             leading: 32,
-            bottom: -32,
-            trailing: -30
+            bottom: -58,
+            trailing: -32
         )
     }
 
     private lazy var scrollView: UIScrollView = .build()
 
-    private lazy var verticalStack: UIStackView = .build { stackView in
+    private lazy var scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.alignment = .center
-        stackView.spacing = UX.mainStackSpacing
-    }
-
-    private lazy var horizontalStack: UIStackView = .build { stackView in
-        stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.spacing = UX.mainStackSpacing
     }
@@ -184,70 +178,59 @@ final class NativeErrorPageViewController: UIViewController,
         commonContainer.addArrangedSubview(
             reloadButton
         )
-        horizontalStack.addArrangedSubview(
+        scrollContainer.addArrangedSubview(
             logoImage
         )
-        horizontalStack.addArrangedSubview(
-            commonContainer
-        )
-        verticalStack.addArrangedSubview(
-            logoImage
-        )
-        verticalStack.addArrangedSubview(
+        scrollContainer.addArrangedSubview(
             commonContainer
         )
         scrollView.addSubview(
-             verticalStack
-        )
-        scrollView.addSubview(
-            horizontalStack
+            scrollContainer
         )
         view.addSubview(
             scrollView
         )
 
-        verticalStack.isHidden = true
-        horizontalStack.isHidden = true
-
         NSLayoutConstraint.activate(
             [scrollView.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: UX.portraitPadding.top
+                equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
              scrollView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+             ),
+             scrollView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+             ),
+             scrollView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+             ),
+             scrollContainer.topAnchor.constraint(
+                equalTo: scrollView.topAnchor,
+                constant: UX.portraitPadding.top
+             ),
+             scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: UX.portraitPadding.leading
              ),
-             scrollView.trailingAnchor.constraint(
+             scrollContainer.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: UX.portraitPadding.trailing
              ),
-             scrollView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor,
+             scrollContainer.bottomAnchor.constraint(
+                equalTo: scrollView.bottomAnchor,
                 constant: UX.portraitPadding.bottom
              ),
-             // MainScrollContainer constraints
-             verticalStack.centerXAnchor.constraint(
-                equalTo: scrollView.centerXAnchor
+             logoImage.heightAnchor.constraint(
+                equalToConstant: UX.logoSizeHeight
              ),
-             verticalStack.centerYAnchor.constraint(
-                equalTo: scrollView.centerYAnchor
+             logoImage.widthAnchor.constraint(
+                equalToConstant: UX.logoSizeHeight
              ),
-             verticalStack.leadingAnchor.constraint(
-                equalTo: scrollView.leadingAnchor
+             commonContainer.bottomAnchor.constraint(
+                equalTo: scrollContainer.bottomAnchor
              ),
-             verticalStack.trailingAnchor.constraint(
-                equalTo: scrollView.trailingAnchor
-             ),
-             horizontalStack.centerXAnchor.constraint(
-                equalTo: scrollView.centerXAnchor
-             ),
-             horizontalStack.centerYAnchor.constraint(
-                equalTo: scrollView.centerYAnchor
-             ),
-             horizontalStack.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: UX.portraitPadding.leading
+             reloadButton.widthAnchor.constraint(
+                equalToConstant: UX.buttonWidth
              )]
         )
     }
@@ -258,15 +241,15 @@ final class NativeErrorPageViewController: UIViewController,
 
     private func showViewBasedOnOrientation() {
         if isLandscape {
-            verticalStack.isHidden = true
-            horizontalStack.isHidden = false
+            scrollContainer.axis = .horizontal
+            scrollContainer.alignment = .leading
             commonContainer.alignment = .leading
             textStack.alignment = .leading
             titleLabel.textAlignment = .left
             errorDescriptionLabel.textAlignment = .left
         } else {
-            verticalStack.isHidden = false
-            horizontalStack.isHidden = true
+            scrollContainer.axis = .vertical
+            scrollContainer.alignment = .center
             commonContainer.alignment = .center
             textStack.alignment = .center
             titleLabel.textAlignment = .center
