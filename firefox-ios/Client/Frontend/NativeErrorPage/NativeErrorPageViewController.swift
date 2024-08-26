@@ -60,8 +60,7 @@ final class NativeErrorPageViewController: UIViewController,
     private lazy var commonContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.mainStackSpacing
-        stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
@@ -170,7 +169,8 @@ final class NativeErrorPageViewController: UIViewController,
 
     func adjustConstraintsForOrientation() {
         NSLayoutConstraint.activate(
-            [scrollView.topAnchor.constraint(
+            [
+                scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
              scrollView.leadingAnchor.constraint(
@@ -198,12 +198,13 @@ final class NativeErrorPageViewController: UIViewController,
                 equalTo: scrollView.bottomAnchor,
                 constant: self.isLandscape ? UX.landscapePadding.bottom :  UX.portraitPadding.bottom
              ),
-             logoImage.heightAnchor.constraint(
-                equalToConstant: UX.logoSizeHeight
-             ),
+//             logoImage.heightAnchor.constraint(
+//                equalToConstant: UX.logoSizeHeight
+//             ),
              logoImage.widthAnchor.constraint(
                 equalToConstant: UX.logoSizeWidth
-             )]
+             )
+            ]
         )
     }
 
@@ -213,10 +214,12 @@ final class NativeErrorPageViewController: UIViewController,
 
     private func showViewForOrientation() {
         if isLandscape {
+            scrollContainer.alignment = .top
             scrollContainer.axis = .horizontal
             titleLabel.textAlignment = .left
             errorDescriptionLabel.textAlignment = .left
         } else {
+            scrollContainer.alignment = .center
             scrollContainer.axis = .vertical
             titleLabel.textAlignment = .center
             errorDescriptionLabel.textAlignment = .center
@@ -225,15 +228,11 @@ final class NativeErrorPageViewController: UIViewController,
 
     // MARK: ThemeApplicable
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(
-            for: windowUUID
-        )
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
         titleLabel.textColor = theme.colors.textPrimary
         errorDescriptionLabel.textColor = theme.colors.textPrimary
-        reloadButton.applyTheme(
-            theme: theme
-        )
+        reloadButton.applyTheme(theme: theme)
     }
 
     @objc
