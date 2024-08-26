@@ -43,8 +43,7 @@
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Heu desactivat les proteccions";
 
-/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.
-   Header for the enhanced tracking protection screen when the user has selected to be protected. */
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Esteu protegit. Si detectem alguna cosa, us ho farem saber.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
