@@ -135,12 +135,16 @@ class AddressToolbarContainerModel: Equatable {
         lhs.navigationActions == rhs.navigationActions &&
         lhs.pageActions == rhs.pageActions &&
         lhs.browserActions == rhs.browserActions &&
+
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
+        lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
+        lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
+
         lhs.windowUUID == rhs.windowUUID
     }
 }
