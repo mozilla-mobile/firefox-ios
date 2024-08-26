@@ -49,11 +49,26 @@ class DownloadToast: Toast {
 
     var downloads: [Download] = []
 
-    var percent: CGFloat = 0.0 {
+    // Returns true if one or more downloads have encoded data (indicated via response `Content-Encoding` header).
+    // If at least one download has encoded data, we cannot get a correct total estimate for all the downloads.
+    // In that case, we do not show descriptive text. This will be improved in a later rework of the download manager.
+    // FXIOS-9039
+    var hasContentEncoding: Bool {
+        return downloads.contains(where: { $0.hasContentEncoding ?? false })
+    }
+
+    var percent: CGFloat? = 0.0 {
         didSet {
             UIView.animate(withDuration: 0.05) {
                 self.descriptionLabel.text = self.descriptionText
-                self.progressWidthConstraint?.constant = self.toastView.frame.width * self.percent
+
+                if let percent = self.percent {
+                    self.progressView.isHidden = false
+                    self.progressWidthConstraint?.constant = self.toastView.frame.width * percent
+                } else {
+                    self.progressView.isHidden = true
+                }
+
                 self.layoutIfNeeded()
             }
         }
@@ -72,6 +87,11 @@ class DownloadToast: Toast {
     }
 
     var descriptionText: String {
+        guard !hasContentEncoding else {
+            // We cannot get a correct estimate of encoded downloaded bytes (FXIOS-9039)
+            return String()
+        }
+
         let downloadedSize = ByteCountFormatter.string(
             fromByteCount: combinedBytesDownloaded,
             countStyle: .file
@@ -144,6 +164,12 @@ class DownloadToast: Toast {
 
     func updatePercent() {
         DispatchQueue.main.async {
+            guard !self.hasContentEncoding else {
+                // We cannot get a correct estimate of encoded downloaded bytes (FXIOS-9039)
+                self.percent = nil
+                return
+            }
+
             guard let combinedTotalBytesExpected = self.combinedTotalBytesExpected else {
                 self.percent = 0.0
                 return
