@@ -206,7 +206,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Webview configuration
     // A WKWebViewConfiguration used for normal tabs
-    private lazy var configuration: WKWebViewConfiguration = {
+    lazy var configuration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
@@ -344,7 +344,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Add tabs
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
         return addTab(request,
-                      configuration: nil,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: false,
@@ -353,13 +352,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         return addTab(request,
-                      configuration: configuration,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: zombie,
@@ -389,23 +386,18 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func addTab(_ request: URLRequest? = nil,
-                configuration: WKWebViewConfiguration? = nil,
                 afterTab: Tab? = nil,
                 flushToDisk: Bool,
                 zombie: Bool,
                 isPrivate: Bool = false
     ) -> Tab {
-        // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
-        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
-
-        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         let popup = Tab(profile: profile,
-                        configuration: configuration,
                         isPrivate: parentTab.isPrivate,
                         windowUUID: windowUUID)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
@@ -454,9 +446,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                                  isRestoring: !tabRestoreHasFinished)
         }
 
-        if !zombie {
-            tab.createWebview()
-        }
+//        if !zombie {
+//            tab.createWebview()
+//        }
         tab.navigationDelegate = self.navDelegate
 
         if let request = request {

@@ -62,7 +62,6 @@ protocol TabManager: AnyObject {
 
     @discardableResult
     func addTab(_ request: URLRequest!,
-                configuration: WKWebViewConfiguration!,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
