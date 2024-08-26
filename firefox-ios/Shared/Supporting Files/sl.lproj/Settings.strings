@@ -94,6 +94,9 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Pomožni iskalniki";
 
+/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
+"Settings.Search.DefaultSearchEngine.Footer.v122" = "Rezultati iskanja, zgodovine, zaznamkov in drugo";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "Privzeti iskalnik";
 
@@ -153,4 +156,7 @@
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Podprite %@ z občasnimi sponzoriranimi predlogi";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Predlogi sponzorjev";
 

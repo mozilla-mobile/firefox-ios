@@ -611,7 +611,7 @@
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Squassà";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
-"LibraryPanel.History.NoHistoryFound.v99" = "Nisunu elementu trovu in a cronolugia";
+"LibraryPanel.History.NoHistoryFound.v99" = "Ùn si trova nunda in a cronolugia";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
 "LibraryPanel.History.RecentlyClosedTabs.v99" = "Unghjette chjose pocu fà";
