@@ -1413,7 +1413,7 @@ extension String {
                 tableName: "MainMenu",
                 value: "Sign back in to sync",
                 comment: "On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state.")
-            public static let SignedOutDescription = MZLocalizedString(
+            public static let SyncErrorDescription = MZLocalizedString(
                 key: "MainMenu.Account.SyncError.Description.v131",
                 tableName: "MainMenu",
                 value: "Syncing paused",
