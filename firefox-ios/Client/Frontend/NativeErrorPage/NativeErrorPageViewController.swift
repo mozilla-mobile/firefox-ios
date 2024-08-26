@@ -22,11 +22,6 @@ final class NativeErrorPageViewController: UIViewController,
         windowUUID
     }
 
-    // MARK: Contraints Variables
-    private var commonViewContraints = [NSLayoutConstraint]()
-    private var portraitViewContraints = [NSLayoutConstraint]()
-    private var landscapeViewContraints = [NSLayoutConstraint]()
-
     private var overlayManager: OverlayModeManager
     var contentType: ContentType = .nativeErrorPage
 
@@ -36,7 +31,6 @@ final class NativeErrorPageViewController: UIViewController,
         static let logoSizeHeight: CGFloat = 181
         static let mainStackSpacing: CGFloat = 24
         static let textStackSpacing: CGFloat = 16
-        static let buttonHeight: CGFloat = 45
         static let buttonWidth: CGFloat = 343
         static let portraitPadding = NSDirectionalEdgeInsets(
             top: 74,
@@ -45,10 +39,10 @@ final class NativeErrorPageViewController: UIViewController,
             trailing: -16
         )
         static let landscapePadding = NSDirectionalEdgeInsets(
-            top: 58,
-            leading: 32,
-            bottom: -58,
-            trailing: -32
+            top: 16,
+            leading: 16,
+            bottom: -16,
+            trailing: -16
         )
     }
 
@@ -56,20 +50,19 @@ final class NativeErrorPageViewController: UIViewController,
 
     private lazy var scrollContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.alignment = .center
         stackView.spacing = UX.mainStackSpacing
     }
 
     private lazy var textStack: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.textStackSpacing
-        stackView.alignment = .center
     }
 
     private lazy var commonContainer: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.spacing = UX.mainStackSpacing
-        stackView.alignment = .center
+        stackView.alignment = .fill
+        stackView.distribution = .fillProportionally
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
@@ -84,7 +77,6 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
         label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
-        label.textAlignment = .center
     }
 
     private lazy var errorDescriptionLabel: UILabel = .build { label in
@@ -92,7 +84,6 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.text = .NativeErrorPage.NoInternetConnection.Description
-        label.textAlignment = .center
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
@@ -152,6 +143,7 @@ final class NativeErrorPageViewController: UIViewController,
             to: size,
             with: coordinator
         )
+        setupLayout()
         showViewBasedOnOrientation()
     }
 
@@ -184,9 +176,7 @@ final class NativeErrorPageViewController: UIViewController,
         scrollContainer.addArrangedSubview(
             commonContainer
         )
-        scrollView.addSubview(
-            scrollContainer
-        )
+        scrollView.addSubview(scrollContainer)
         view.addSubview(
             scrollView
         )
@@ -206,7 +196,7 @@ final class NativeErrorPageViewController: UIViewController,
              ),
              scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: UX.portraitPadding.top
+                constant: self.isLandscape ? UX.landscapePadding.top :  UX.portraitPadding.top
              ),
              scrollContainer.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
@@ -218,19 +208,13 @@ final class NativeErrorPageViewController: UIViewController,
              ),
              scrollContainer.bottomAnchor.constraint(
                 equalTo: scrollView.bottomAnchor,
-                constant: UX.portraitPadding.bottom
+                constant: self.isLandscape ? UX.landscapePadding.bottom :  UX.portraitPadding.bottom
              ),
              logoImage.heightAnchor.constraint(
                 equalToConstant: UX.logoSizeHeight
              ),
              logoImage.widthAnchor.constraint(
-                equalToConstant: UX.logoSizeHeight
-             ),
-             commonContainer.bottomAnchor.constraint(
-                equalTo: scrollContainer.bottomAnchor
-             ),
-             reloadButton.widthAnchor.constraint(
-                equalToConstant: UX.buttonWidth
+                equalToConstant: UX.logoSizeWidth
              )]
         )
     }
@@ -242,16 +226,10 @@ final class NativeErrorPageViewController: UIViewController,
     private func showViewBasedOnOrientation() {
         if isLandscape {
             scrollContainer.axis = .horizontal
-            scrollContainer.alignment = .leading
-            commonContainer.alignment = .leading
-            textStack.alignment = .leading
             titleLabel.textAlignment = .left
             errorDescriptionLabel.textAlignment = .left
         } else {
             scrollContainer.axis = .vertical
-            scrollContainer.alignment = .center
-            commonContainer.alignment = .center
-            textStack.alignment = .center
             titleLabel.textAlignment = .center
             errorDescriptionLabel.textAlignment = .center
         }
