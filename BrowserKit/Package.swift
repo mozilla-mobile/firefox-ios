@@ -31,6 +31,9 @@ let package = Package(
             name: "ToolbarKit",
             targets: ["ToolbarKit"]),
         .library(
+            name: "MenuKit",
+            targets: ["MenuKit"]),
+        .library(
             name: "ContentBlockingGenerator",
             targets: ["ContentBlockingGenerator"]),
         .executable(
@@ -109,6 +112,13 @@ let package = Package(
         .testTarget(
             name: "ToolbarKitTests",
             dependencies: ["ToolbarKit"]),
+        .target(
+            name: "MenuKit",
+            dependencies: ["Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "MenuKitTests",
+            dependencies: ["MenuKit"]),
         .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
