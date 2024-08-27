@@ -354,10 +354,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         return true
     }
 
-    func locationTextFieldDidCancel(_ textField: LocationTextField) {
-        delegate?.locationViewDidCancelEditing()
-    }
-
     func locationPasteAndGo(_ textField: LocationTextField) {
         if let pasteboardContents = UIPasteboard.general.string {
             delegate?.locationViewDidSubmitText(pasteboardContents)

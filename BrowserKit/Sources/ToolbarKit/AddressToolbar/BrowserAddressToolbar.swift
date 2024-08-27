@@ -273,8 +273,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
 
-    func locationViewDidCancelEditing() {}
-
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
