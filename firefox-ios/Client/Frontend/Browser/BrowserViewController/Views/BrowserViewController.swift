@@ -3531,7 +3531,7 @@ extension BrowserViewController: TabManagerDelegate {
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
-            // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates. Investigate refactor.
+            // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates.
             var ui = [PrivateModeUI?]()
             if isToolbarRefactorEnabled {
                 ui = [topTabsViewController]
