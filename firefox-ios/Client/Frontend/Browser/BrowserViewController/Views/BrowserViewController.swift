@@ -29,6 +29,7 @@ class BrowserViewController: UIViewController,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
                              BrowserFrameInfoProvider,
+                             NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              FeatureFlaggable {
     private enum UX {
@@ -692,6 +693,8 @@ class BrowserViewController: UIViewController,
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
+        navigationToolbarContainer.toolbarDelegate = self
+
         scrollController.header = header
         scrollController.overKeyboardContainer = overKeyboardContainer
         scrollController.bottomContainer = bottomContainer
@@ -1037,6 +1040,13 @@ class BrowserViewController: UIViewController,
             themeManager.applyThemeUpdatesToWindows()
         }
         setupMiddleButtonStatus(isLoading: false)
+
+        // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
+        // so only necessary to dismiss when vertical size class changes
+        if dataClearanceContextHintVC.isPresenting &&
+            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            dataClearanceContextHintVC.dismiss(animated: true)
+        }
     }
 
     // MARK: - Constraints
@@ -1665,8 +1675,8 @@ class BrowserViewController: UIViewController,
         guard !showFireButton else {
             if !isToolbarRefactorEnabled {
                 navigationToolbar.updateMiddleButtonState(.fire)
+                configureDataClearanceContextualHint(navigationToolbar.multiStateButton)
             }
-            configureDataClearanceContextualHint()
             return
         }
         resetDataClearanceCFRTimer()
@@ -3019,6 +3029,11 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
         searchController?.searchTelemetry?.determineInteractionType()
+    }
+
+    // Also implements NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton)
+    func configureContextualHint(for button: UIButton) {
+        configureDataClearanceContextualHint(button)
     }
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {

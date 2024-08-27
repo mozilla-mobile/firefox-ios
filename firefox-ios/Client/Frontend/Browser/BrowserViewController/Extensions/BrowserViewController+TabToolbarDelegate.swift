@@ -15,17 +15,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         dataClearanceContextHintVC.stopTimer()
     }
 
-    func configureDataClearanceContextualHint() {
-        guard !isToolbarRefactorEnabled,
-                contentContainer.hasWebView,
+    func configureDataClearanceContextualHint(_ view: UIView) {
+        guard contentContainer.hasWebView,
                 tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
         else {
             resetDataClearanceCFRTimer()
             return
         }
         dataClearanceContextHintVC.configure(
-            anchor: navigationToolbar.multiStateButton,
-            withArrowDirection: topTabsVisible ? .up : .down,
+            anchor: view,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
