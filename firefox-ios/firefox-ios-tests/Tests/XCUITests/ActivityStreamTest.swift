@@ -10,7 +10,7 @@ let newTopSite = [
     "topSiteLabel": "Mozilla",
     "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"
 ]
-let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
+let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
 
 class ActivityStreamTest: BaseTestCase {
     typealias TopSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites
@@ -53,7 +53,7 @@ class ActivityStreamTest: BaseTestCase {
         // There should be 5 top sites by default
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         // Check their names so that test is added to Smoketest
-        mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Twitter"])
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts["X"])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Amazon"])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["Wikipedia"])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts["YouTube"])
