@@ -153,19 +153,19 @@ open class TabToolbarHelper: NSObject {
         let appMenuImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.appMenu)
         toolbar.appMenuButton.contentMode = .center
         toolbar.appMenuButton.showsLargeContentViewer = true
-        toolbar.appMenuButton.largeContentTitle = .AppMenu.Toolbar.MenuButtonAccessibilityLabel
+        toolbar.appMenuButton.largeContentTitle = .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel
         toolbar.appMenuButton.largeContentImage = appMenuImage
         toolbar.appMenuButton.setImage(appMenuImage, for: .normal)
-        toolbar.appMenuButton.accessibilityLabel = .AppMenu.Toolbar.MenuButtonAccessibilityLabel
+        toolbar.appMenuButton.accessibilityLabel = .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel
         toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.settingsMenuButton
 
         toolbar.bookmarksButton.contentMode = .center
         toolbar.bookmarksButton.showsLargeContentViewer = true
         toolbar.bookmarksButton.largeContentImage = ImageBookmark
-        toolbar.bookmarksButton.largeContentTitle = .AppMenu.Toolbar.BookmarksButtonAccessibilityLabel
+        toolbar.bookmarksButton.largeContentTitle = .LegacyAppMenu.Toolbar.BookmarksButtonAccessibilityLabel
         toolbar.bookmarksButton.setImage(ImageBookmark, for: .normal)
-        toolbar.bookmarksButton.accessibilityLabel = .AppMenu.Toolbar.BookmarksButtonAccessibilityLabel
+        toolbar.bookmarksButton.accessibilityLabel = .LegacyAppMenu.Toolbar.BookmarksButtonAccessibilityLabel
         toolbar.bookmarksButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
         toolbar.bookmarksButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.bookmarksButton
 

@@ -745,7 +745,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             badgeImageName: badgeImageName,
             maskImageName: maskImageName,
             isEnabled: true,
-            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 

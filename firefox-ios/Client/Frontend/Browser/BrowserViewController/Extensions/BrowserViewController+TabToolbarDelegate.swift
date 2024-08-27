@@ -366,7 +366,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if !urls.isEmpty {
-            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+            showToast(message: .LegacyAppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
         }
     }
 
