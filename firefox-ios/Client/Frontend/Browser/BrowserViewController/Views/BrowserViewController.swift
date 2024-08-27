@@ -1562,7 +1562,12 @@ class BrowserViewController: UIViewController,
         case .add:
             self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
         case .remove:
-            self.showToast(bookmarkURL, title, message: .LegacyAppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(
+                bookmarkURL,
+                title,
+                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
+                toastAction: .removeBookmark
+            )
         }
     }
 
