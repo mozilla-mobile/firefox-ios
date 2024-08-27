@@ -2861,8 +2861,8 @@ class BrowserViewController: UIViewController,
             $0.applyTheme(theme: currentTheme)
         }
 
-        let isPrivate = (currentTheme.type == .privateMode)
         if !isToolbarRefactorEnabled {
+            let isPrivate = (currentTheme.type == .privateMode)
             urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
@@ -3531,10 +3531,14 @@ extension BrowserViewController: TabManagerDelegate {
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
-            if !isToolbarRefactorEnabled {
-                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
+            // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates.
+            var ui = [PrivateModeUI?]()
+            if isToolbarRefactorEnabled {
+                ui = [topTabsViewController]
+            } else {
+                ui = [toolbar, topTabsViewController, urlBar]
             }
+            ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
         } else {
             // Theme is applied to the tab and webView in the else case
             // because in the if block is applied already to all the tabs and web views
