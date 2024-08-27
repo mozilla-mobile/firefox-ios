@@ -10,9 +10,6 @@ import Common
 import Shared
 
 class TabToolbarHelperTests: XCTestCase {
-    var subject: TabToolbarHelper!
-    var mockToolbar: MockTabToolbar!
-
     let backButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.back)?
         .imageFlippedForRightToLeftLayoutDirection()
     let forwardButtonImage = UIImage.templateImageNamed(StandardImageIdentifiers.Large.forward)?
@@ -25,36 +22,41 @@ class TabToolbarHelperTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        mockToolbar = MockTabToolbar()
-        subject = TabToolbarHelper(toolbar: mockToolbar)
-        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
+        DependencyHelperMock().reset()
         super.tearDown()
-        AppContainer.shared.reset()
-        mockToolbar = nil
-        subject = nil
     }
 
     func testSetsInitialImages() {
+        let mockToolbar = MockTabToolbar()
+        _ = TabToolbarHelper(toolbar: mockToolbar)
         XCTAssertEqual(mockToolbar.backButton.image(for: .normal), backButtonImage)
         XCTAssertEqual(mockToolbar.forwardButton.image(for: .normal), forwardButtonImage)
     }
 
     func testSearchStateImages() {
+        let mockToolbar = MockTabToolbar()
+        let subject = TabToolbarHelper(toolbar: mockToolbar)
         subject.setMiddleButtonState(.search)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
     }
 
     func testTapHome() {
+        let mockToolbar = MockTabToolbar()
+        let subject = TabToolbarHelper(toolbar: mockToolbar)
         subject.setMiddleButtonState(.home)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), imageHome)
     }
 
     func testTelemetryForSiteMenu() {
+        Glean.shared.resetGlean(clearStores: true)
+        let mockToolbar = MockTabToolbar()
+        _ = TabToolbarHelper(toolbar: mockToolbar)
         mockToolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(mockToolbar, button: mockToolbar.appMenuButton)
         testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     func test_tabToolBarHelper_basicCreation_doesntLeak() {
@@ -123,7 +125,7 @@ class MockTabToolbar: TabToolbarProtocol {
 
     init() {
         profile = MockProfile()
-        tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        tabManager = MockTabManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         _tabToolBarDelegate = BrowserViewController(profile: profile, tabManager: tabManager)
     }

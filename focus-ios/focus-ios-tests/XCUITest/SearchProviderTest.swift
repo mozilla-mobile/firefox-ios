@@ -5,22 +5,22 @@
 import XCTest
 
 class SearchProviderTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707743
+    // https://mozilla.testrail.io/index.php?/cases/view/1707743
     func testGoogleSearchProvider() {
         searchProviderTestHelper(provider: "Google")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2512720
+    // https://mozilla.testrail.io/index.php?/cases/view/2512720
     func testDuckDuckGoSearchProvider() {
         searchProviderTestHelper(provider: "DuckDuckGo")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2512721
+    // https://mozilla.testrail.io/index.php?/cases/view/2512721
     func testWikipediaSearchProvider() {
         searchProviderTestHelper(provider: "Wikipedia")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524588
+    // https://mozilla.testrail.io/index.php?/cases/view/2524588
     func testSearchQuery() {
         searchQuery("test", provider: "Google")
         dismissKeyboardFocusMenuSettings()
@@ -38,10 +38,10 @@ class SearchProviderTest: BaseTestCase {
         doSearch(searchWord: "mozilla", provider: provider)
         waitForWebPageLoad()
 
-        waitForExistence(app.buttons["URLBar.deleteButton"], timeout: 5)
+        waitForExistence(app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
         if !iPad() {
-            waitForExistence(app.buttons["URLBar.cancelButton"], timeout: 5)
+            waitForExistence(app.buttons["URLBar.cancelButton"])
             app.buttons["URLBar.cancelButton"].tap()
         }
         checkForHomeScreen()
@@ -65,15 +65,15 @@ class SearchProviderTest: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707744
+    // https://mozilla.testrail.io/index.php?/cases/view/1707744
     func testAddRemoveCustomSearchProvider() {
         dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
@@ -110,39 +110,39 @@ class SearchProviderTest: BaseTestCase {
         app.navigationBars.buttons["edit"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707745
+    // https://mozilla.testrail.io/index.php?/cases/view/1707745
     func testPreventionOfRemovingDefaultSearchProvider() {
         dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
-        waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         let defaultEngineName = app.tables.cells["SettingsViewController.searchCell"].staticTexts.element(boundBy: 1).label
         app.tables.cells["SettingsViewController.searchCell"].tap()
 
-        XCTAssertTrue(app.tables.cells["restoreDefaults"].exists)
+        waitForExistence(app.tables.cells["restoreDefaults"])
 
         // enter edit mode
         app.navigationBars.buttons["edit"].tap()
-        XCTAssertFalse(app.tables.cells["restoreDefaults"].exists)
+        waitForNoExistence(app.tables.cells["restoreDefaults"])
 
-        XCTAssertFalse(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"].exists)
+        waitForNoExistence(app.tables.cells["defaultEngineName"].buttons["Delete \(defaultEngineName)"])
     }
 
     private func changeSearchProvider(provider: String) {
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
-        waitForExistence(app.tables.cells["SettingsViewController.searchCell"], timeout: 5)
+        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.cells["SettingsViewController.searchCell"].tap()
-        waitForExistence(app.tables.staticTexts[provider], timeout: 5)
+        waitForExistence(app.tables.staticTexts[provider])
         app.tables.staticTexts[provider].tap()
         app.buttons["Done"].tap()
     }

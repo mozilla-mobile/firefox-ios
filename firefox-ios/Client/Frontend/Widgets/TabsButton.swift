@@ -9,7 +9,7 @@ import Common
 class TabsButton: UIButton, ThemeApplicable {
     struct UX {
         static let cornerRadius: CGFloat = 2
-        static let titleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
+        static let titleFont: UIFont = FXFontStyles.Bold.caption2.systemFont()
         static let insideButtonSize: CGFloat = 24
 
         // Animation constants

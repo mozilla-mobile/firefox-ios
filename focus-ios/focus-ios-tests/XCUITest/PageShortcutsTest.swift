@@ -11,7 +11,7 @@ class PageShortcutsTest: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1857439
+    // https://mozilla.testrail.io/index.php?/cases/view/1857439
     func testAddRemoveShortcut() {
         addShortcut(website: "mozilla.org")
 
@@ -19,18 +19,17 @@ class PageShortcutsTest: BaseTestCase {
         app.eraseButton.tap()
 
         // Verify the shortcut is created
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
+        waitForExistence(app.otherElements.staticTexts["Mozilla"])
 
         // Remove created shortcut
         app.otherElements["outerView"].press(forDuration: 2)
         waitForExistence(app.collectionViews.cells.buttons["Remove from Shortcuts"])
         app.collectionViews.cells.buttons["Remove from Shortcuts"].tap()
         waitForNoExistence(app.otherElements.staticTexts["Mozilla"])
-        XCTAssertFalse(app.otherElements.staticTexts["Mozilla"].exists)
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1857438
+    // https://mozilla.testrail.io/index.php?/cases/view/1857438
     func testAddRenameShortcut() {
         addShortcut(website: "mozilla.org")
 
@@ -38,7 +37,7 @@ class PageShortcutsTest: BaseTestCase {
         app.eraseButton.tap()
 
         // Verify the shortcut is created
-        XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists)
+        waitForExistence(app.otherElements.staticTexts["Mozilla"])
 
         // Rename shortcut
         app.otherElements["outerView"].press(forDuration: 2)
@@ -49,19 +48,18 @@ class PageShortcutsTest: BaseTestCase {
         app.alerts.buttons["Save"].tap()
 
         waitForExistence(app.otherElements.staticTexts["Cheese"])
-        XCTAssertTrue(app.otherElements.staticTexts["Cheese"].exists)
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1857440
+    // https://mozilla.testrail.io/index.php?/cases/view/1857440
     func testShortcutShownWhileTypingURLBar() {
         addShortcut(website: "example.com")
         app.urlTextField.tap()
-        XCTAssertTrue(app.otherElements.staticTexts["Example"].exists)
+        waitForExistence(app.otherElements.staticTexts["Example"])
 
         app.urlTextField.typeText("foo")
         waitForNoExistence(app.otherElements.staticTexts["E"])
-        XCTAssertFalse(app.otherElements.staticTexts["Example"].exists)
+        waitForNoExistence(app.otherElements.staticTexts["Example"])
     }
 
     private func addShortcut(website: String) {
@@ -69,7 +67,7 @@ class PageShortcutsTest: BaseTestCase {
         waitForWebPageLoad()
 
         // Tap on shortcuts settings menu option
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 15)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         if iPad() {
             waitForExistence(app.collectionViews.cells.element(boundBy: 0))

@@ -5,7 +5,7 @@
 import XCTest
 
 class CopyPasteTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/395745
+    // https://mozilla.testrail.io/index.php?/cases/view/395745
     func testCopyMenuItem() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("https://www.example.com")
@@ -34,7 +34,7 @@ class CopyPasteTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609148
+    // https://mozilla.testrail.io/index.php?/cases/view/2609148
     // Test the clipboard contents are displayed/updated properly
     func testClipboard() throws {
         let app = XCUIApplication()
@@ -50,6 +50,7 @@ class CopyPasteTest: BaseTestCase {
         // Check clipboard suggestion is shown
         waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
         waitForExistence(app.buttons["Search for mozilla"])
+        waitForHittable(app.buttons["Search for mozilla"])
         app.typeText("\n")
 
         // Check the correct site is reached
@@ -84,7 +85,7 @@ class CopyPasteTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609149
+    // https://mozilla.testrail.io/index.php?/cases/view/2609149
     // Test Paste & Go feature
     func testPastenGo() {
         // Inject a string into clipboard
@@ -95,7 +96,7 @@ class CopyPasteTest: BaseTestCase {
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
         waitForExistence(searchOrEnterAddressTextField, timeout: 30)
         searchOrEnterAddressTextField.tap()
-        waitForExistence(app.menuItems["Paste"], timeout: 10)
+        waitForExistence(app.menuItems["Paste"])
         XCTAssertTrue(app.menuItems["Paste & Go"].isEnabled)
 
         // Note: I can't click through "XCUITest-Runner would like to paste from Firefox Focus"

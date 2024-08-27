@@ -69,6 +69,7 @@
         "LibraryTestsIpad",
         "LibraryTestsIphone",
         "LoginTest",
+        "MultiWindowTests",
         "NavigationTest",
         "NewTabSettingsTest",
         "NightModeTests",

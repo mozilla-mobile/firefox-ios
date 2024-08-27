@@ -29,7 +29,8 @@ struct NavigationBarState: StateType, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case ToolbarActionType.didLoadToolbars:
+        case ToolbarActionType.didLoadToolbars,
+            ToolbarActionType.urlDidChange:
             guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(
@@ -39,61 +40,29 @@ struct NavigationBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.numberOfTabsChanged:
-            guard let numberOfTabs = (action as? ToolbarAction)?.numberOfTabs else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .tabs }) {
-                actions[index].numberOfTabs = numberOfTabs
-            }
+            guard let navToolbarModel = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: actions,
+                actions: navToolbarModel.actions ?? state.actions,
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.backButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .back }) {
-                actions[index].isEnabled = isEnabled
-            }
+        case ToolbarActionType.backForwardButtonStatesChanged:
+            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: actions,
-                displayBorder: state.displayBorder
-            )
-
-        case ToolbarActionType.forwardButtonStateChanged:
-            guard let isEnabled = (action as? ToolbarAction)?.isButtonEnabled else { return state }
-
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .forward }) {
-                actions[index].isEnabled = isEnabled
-            }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: actions,
+                actions: model.actions ?? state.actions,
                 displayBorder: state.displayBorder
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            let badgeImageName = (action as? ToolbarAction)?.badgeImageName
-            var actions = state.actions
-
-            if let index = actions.firstIndex(where: { $0.actionType == .menu }) {
-                actions[index].badgeImageName = badgeImageName
-            }
+            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: actions,
+                actions: model.actions ?? state.actions,
                 displayBorder: state.displayBorder
             )
 

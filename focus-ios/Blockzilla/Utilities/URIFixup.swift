@@ -19,7 +19,7 @@ class URIFixup {
         // If it starts with "file://", return nil, indicating that this function
         // does not handle local file URLs, resulting in a search
 
-        guard !trimmed.lowercased().hasPrefix("file://") else {
+        guard !trimmed.lowercased().hasPrefix("file:") else {
             return nil
         }
 

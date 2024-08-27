@@ -36,17 +36,17 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
     func checkToggleStartsOff() {
         dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1707746
+    // https://mozilla.testrail.io/index.php?/cases/view/1707746
     func testEnableThroughPrompt() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
@@ -74,13 +74,13 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: true)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524590
+    // https://mozilla.testrail.io/index.php?/cases/view/2524590
     func testDisableThroughPrompt() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
@@ -111,19 +111,19 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForHittable(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         checkToggle(isOn: false)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524591
+    // https://mozilla.testrail.io/index.php?/cases/view/2524591
     func testEnableThroughToggle() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
 
         // Turn toggle ON
-        waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"], timeout: 5)
+        waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"])
 
         app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
 
@@ -134,13 +134,13 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Adding a delay in case of slow network
         sleep(4)
 
-        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"], timeoutValue: 5)
+        waitForNoExistence(app.otherElements["SearchSuggestionsPromptView"])
 
         // Ensure search suggestions are shown
         checkSuggestions()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2524592
+    // https://mozilla.testrail.io/index.php?/cases/view/2524592
     func testEnableThenDisable() {
         // Check search suggestions toggle is initially OFF
         checkToggleStartsOff()
@@ -168,7 +168,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()

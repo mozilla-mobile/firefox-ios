@@ -10,7 +10,8 @@ import Shared
 
 // MARK: - TabManagerDelegate
 protocol TabManagerDelegate: AnyObject {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
+    // Must be called on the main thread
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
@@ -21,7 +22,7 @@ protocol TabManagerDelegate: AnyObject {
 }
 
 extension TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
 
@@ -205,7 +206,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Webview configuration
     // A WKWebViewConfiguration used for normal tabs
-    private lazy var configuration: WKWebViewConfiguration = {
+    lazy var configuration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
@@ -274,6 +275,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func preserveTabs() { fatalError("should never be called") }
 
+    func shouldClearPrivateTabs() -> Bool {
+        // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
+        return profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
+    }
+
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
         DispatchQueue.main.async { [unowned self] in
             // select normal tab if there are no private tabs, we need to do this
@@ -297,6 +303,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func storeChanges() { fatalError("should never be called") }
+    func saveSessionData(forTab tab: Tab?) { fatalError("should never be called") }
 
     private func addTabForRestoration(isPrivate: Bool) -> Tab {
         return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
@@ -337,7 +344,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Add tabs
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
         return addTab(request,
-                      configuration: nil,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: false,
@@ -346,13 +352,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         return addTab(request,
-                      configuration: configuration,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: zombie,
@@ -382,23 +386,18 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func addTab(_ request: URLRequest? = nil,
-                configuration: WKWebViewConfiguration? = nil,
                 afterTab: Tab? = nil,
                 flushToDisk: Bool,
                 zombie: Bool,
                 isPrivate: Bool = false
     ) -> Tab {
-        // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
-        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
-
-        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         let popup = Tab(profile: profile,
-                        configuration: configuration,
                         isPrivate: parentTab.isPrivate,
                         windowUUID: windowUUID)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
@@ -448,7 +447,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
 
         if !zombie {
-            tab.createWebview()
+            let configuration = tab.isPrivate ? self.privateConfiguration : self.configuration
+            tab.createWebview(configuration: configuration)
         }
         tab.navigationDelegate = self.navDelegate
 
@@ -592,6 +592,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return
         }
 
+        // Save the tab's session state before closing it and losing the webView
+        if flushToDisk {
+            saveSessionData(forTab: tab)
+        }
+
         backupCloseTab = BackupCloseTab(tab: tab,
                                         restorePosition: removalIndex,
                                         isSelected: selectedTab?.tabUUID == tab.tabUUID)
@@ -629,17 +634,40 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
+    func removeTabs(by urls: [URL]) async {
+        let urls = Set(urls)
+        let tabsToRemove = normalTabs.filter { tab in
+            guard let url = tab.url else { return false }
+            return urls.contains(url)
+        }
+        for tab in tabsToRemove {
+            await withCheckedContinuation { continuation in
+                removeTab(tab) { continuation.resume() }
+            }
+        }
+    }
+
+    @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
+        var currentSelectedTab: BackupCloseTab?
+
+        // Backup the selected tab in separate variable as the `removeTab` method called below for each tab will
+        // automatically update tab selection as if there was a single tab removal.
         if let tab = selectedTab, tab.isPrivate == isPrivateMode {
-            backupCloseTab = BackupCloseTab(tab: tab,
-                                            restorePosition: tabs.firstIndex(of: tab),
-                                            isSelected: selectedTab?.tabUUID == tab.tabUUID)
+            currentSelectedTab = BackupCloseTab(tab: tab,
+                                                restorePosition: tabs.firstIndex(of: tab),
+                                                isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         backupCloseTabs = tabs
+
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
+
+        // Save the tab state that existed prior to removals (preserves original selected tab)
+        backupCloseTab = currentSelectedTab
+
         storeChanges()
     }
 

@@ -7,7 +7,7 @@ import XCTest
 class DragAndDropTest: BaseTestCase {
     let websiteWithSearchField = ["url": "https://developer.mozilla.org/en-US/", "urlSearchField": "Search MDN"]
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609718
+    // https://mozilla.testrail.io/index.php?/cases/view/2609718
     func testDragElement() {
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage(websiteWithSearchField["url"]!)
@@ -22,7 +22,7 @@ class DragAndDropTest: BaseTestCase {
             // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
             urlBarTextField.firstMatch.press(forDuration: 1, thenDragTo: app.webViews.otherElements["search"].firstMatch)
             // Verify that the text in the search field is the same as the text in the url text field
-            XCTAssertEqual(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!].firstMatch.value as? String, websiteWithSearchField["url"]!)
+            waitForValueContains(app.webViews.textFields[websiteWithSearchField["urlSearchField"]!].firstMatch, value: websiteWithSearchField["url"]!)
         }
     }
 }

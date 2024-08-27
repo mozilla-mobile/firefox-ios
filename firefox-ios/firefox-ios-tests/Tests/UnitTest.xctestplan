@@ -94,6 +94,7 @@
     },
     {
       "skippedTests" : [
+        "ContentBlockerTests",
         "ETPCoverSheetTests",
         "GleanPlumbMessageManagerTests\/testManagerOnMessagePressed_withMalformedURL()",
         "HistoryHighlightsDataAdaptorTests",
@@ -204,6 +205,13 @@
         "containerPath" : "container:..\/BrowserKit",
         "identifier" : "ContentBlockingGeneratorTests",
         "name" : "ContentBlockingGeneratorTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "MenuKitTests",
+        "name" : "MenuKitTests"
       }
     }
   ],

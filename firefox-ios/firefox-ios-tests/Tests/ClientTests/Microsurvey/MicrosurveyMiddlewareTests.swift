@@ -12,13 +12,12 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
         DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testDismissSurveyAction() throws {

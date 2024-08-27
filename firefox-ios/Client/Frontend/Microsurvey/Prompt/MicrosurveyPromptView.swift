@@ -72,6 +72,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
+        label.accessibilityTraits.insert(.header)
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -112,7 +113,8 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     init(
         state: MicrosurveyPromptState,
         windowUUID: WindowUUID,
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        inOverlayMode: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
@@ -121,6 +123,7 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
                            observing: [.DynamicFontChanged])
         configure(with: state)
         setupView()
+        guard !inOverlayMode else { return }
         UIAccessibility.post(notification: .layoutChanged, argument: titleLabel)
     }
 

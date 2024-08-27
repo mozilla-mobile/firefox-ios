@@ -34,7 +34,7 @@ class ClipBoardTests: BaseTestCase {
             if let myString = UIPasteboard.general.string {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]
-                if allowBtn.waitForExistence(timeout: 10) {
+                if allowBtn.waitForExistence(timeout: TIMEOUT) {
                     allowBtn.tap()
                 }
 
@@ -49,7 +49,7 @@ class ClipBoardTests: BaseTestCase {
     }
 
     // This test is disabled in release, but can still run on master
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2325688
+    // https://mozilla.testrail.io/index.php?/cases/view/2325688
     func testClipboard() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(url)
@@ -67,7 +67,7 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307051
+    // https://mozilla.testrail.io/index.php?/cases/view/2307051
     func testCopyLink() {
         // Tap on "Copy Link
         navigator.openURL(url_3)
@@ -87,7 +87,7 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Example Domain"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2325691
+    // https://mozilla.testrail.io/index.php?/cases/view/2325691
     // Smoketest
     func testClipboardPasteAndGo() {
         // Temporarily disabled until url bar redesign work FXIOS-8172

@@ -82,6 +82,8 @@ only_rules: # Only enforce these rules, ignore all others
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
   - yoda_condition
+  - accessibility_label_for_image
+  - accessibility_trait_for_button
 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.

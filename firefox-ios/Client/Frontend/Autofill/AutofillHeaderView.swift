@@ -39,6 +39,7 @@ struct AutofillHeaderView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UX.logoSize, height: UX.logoSize)
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.body)

@@ -14,10 +14,6 @@ public struct UIConstants {
     static var ToolbarPadding: CGFloat = 17
     static let ZoomPageBarHeight: CGFloat = 54
 
-    // Static fonts
-    static let DefaultChromeSmallSize: CGFloat = 11
-    static let DefaultChromeSmallFontBold = UIFont.boldSystemFont(ofSize: DefaultChromeSmallSize)
-
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 1
     static let ActiveScreenshotQuality: CGFloat = 0.5

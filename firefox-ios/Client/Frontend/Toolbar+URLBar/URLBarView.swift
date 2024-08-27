@@ -65,8 +65,13 @@ protocol URLBarViewProtocol {
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool)
 }
 
-class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable,
-                    SearchEngineDelegate, SearchBarLocationProvider {
+class URLBarView: UIView,
+                  URLBarViewProtocol,
+                  AlphaDimmable,
+                  TopBottomInterchangeable,
+                  SearchEngineDelegate,
+                  SearchBarLocationProvider,
+                  Autocompletable {
     // Additional UIAppearance-configurable properties
     @objc dynamic lazy var locationBorderColor: UIColor = .clear {
         didSet {
@@ -100,6 +105,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
+    var isMicrosurveyShown = false
 
     var locationTextField: ToolbarTextField?
     private var isActivatingLocationTextField = false
@@ -123,7 +129,9 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         return locationContainer
     }()
 
-    private let line = UIView()
+    private let line: UIView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.urlBarBorder
+    }
 
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton()
@@ -520,6 +528,10 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     func hideProgressBar() {
         progressBar.isHidden = true
         progressBar.setProgress(0, animated: false)
+    }
+
+    func updateTopBorderDisplay() {
+        line.isHidden = isBottomSearchBar && isMicrosurveyShown
     }
 
     func updateReaderModeState(_ state: ReaderModeState) {

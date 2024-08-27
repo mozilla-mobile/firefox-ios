@@ -47,7 +47,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         self.viewModel = PasswordManagerViewModel(
             profile: profile,
             searchController: searchController,
-            theme: themeManager.getCurrentTheme(for: windowUUID)
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            loginProvider: profile.logins
         )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.themeManager = themeManager

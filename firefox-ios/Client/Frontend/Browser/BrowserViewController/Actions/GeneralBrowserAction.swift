@@ -42,9 +42,17 @@ enum GeneralBrowserActionType: ActionType {
     case showBackForwardList
     case showTrackingProtectionDetails
     case showTabsLongPressActions
+    case showReloadLongPressAction
     case showMenu
+    case showLocationViewLongPressActionSheet
     case stopLoadingWebsite
     case reloadWebsite
+    case showShare
+    case showReaderMode
+    case addNewTab
+    case showNewTabLongPressActions
+    case addToReadingListLongPressAction
+    case clearData
 }
 
 class GeneralBrowserMiddlewareAction: Action {

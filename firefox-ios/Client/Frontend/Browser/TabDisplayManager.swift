@@ -290,6 +290,8 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
         isPrivate = isOn
 
+        UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
+
         TelemetryWrapper.recordEvent(
             category: .action,
             method: .tap,
@@ -762,7 +764,7 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
         let previewParams = UIDragPreviewParameters()
 
         let path = UIBezierPath(
-            roundedRect: cell.selectedBackground.frame,
+            roundedRect: cell.cellBackground.frame,
             cornerRadius: TopTabsUX.TabCornerRadius
         )
         previewParams.visiblePath = path
@@ -935,19 +937,12 @@ extension LegacyTabDisplayManager: TabEventHandler {
 
 // MARK: - TabManagerDelegate
 extension LegacyTabDisplayManager: TabManagerDelegate {
-    func tabManager(
-        _ tabManager: TabManager,
-        didSelectedTabChange selected: Tab?,
-        previous: Tab?,
-        isRestoring: Bool
-    ) {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
         cancelDragAndGestures()
 
-        if let selected = selected {
-            // A tab can be re-selected during deletion
-            let changed = selected != previous
-            updateCellFor(tab: selected, selectedTabChanged: changed)
-        }
+        // A tab can be re-selected during deletion
+        let changedTab = selectedTab != previousTab
+        updateCellFor(tab: selectedTab, selectedTabChanged: changedTab)
 
         // Rather than using 'previous' Tab to deselect, just check if the selected tab
         // is different, and update the required cells. The refreshStore() cancels

@@ -305,6 +305,15 @@ extension URL {
         let schemes = includeDataURIs ? ["http", "https", "data"] : ["http", "https"]
         return scheme.map { schemes.contains($0) } ?? false
     }
+
+    /// Returns the standard location of the website's favicon. (This is the base directoy path with
+    /// favicon.ico appended).
+    public func faviconUrl() -> URL? {
+        if let host = host, let rootDirectoryURL = URL(string: (scheme ?? "https") + "://" + host) {
+            return rootDirectoryURL.appendingPathComponent("favicon.ico")
+        }
+        return nil
+    }
 }
 
 private struct ETLDEntry: CustomStringConvertible {

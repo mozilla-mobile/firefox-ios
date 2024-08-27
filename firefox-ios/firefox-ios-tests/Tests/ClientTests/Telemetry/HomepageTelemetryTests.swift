@@ -11,7 +11,6 @@ final class HomepageTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
     }
 
     func testPrivateModeShortcutToggleTappedInNormalMode() throws {

@@ -5,7 +5,7 @@
 import XCTest
 
 class PageActionMenuTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587660
+    // https://mozilla.testrail.io/index.php?/cases/view/2587660
     func testFindInPageURLBarElement() {
         // Navigate to website
         loadWebPage("https://www.example.com")
@@ -16,7 +16,7 @@ class PageActionMenuTest: BaseTestCase {
         app.textFields["Search or enter address"].typeText("domain")
 
         // Try all functions of find in page bar
-        waitForExistence(app.buttons["FindInPageBar.button"], timeout: 5)
+        waitForExistence(app.buttons["FindInPageBar.button"])
         app.buttons["FindInPageBar.button"].tap()
 
         waitForHittable(app.buttons["FindInPage.find_previous"])
@@ -33,7 +33,7 @@ class PageActionMenuTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/395022
+    // https://mozilla.testrail.io/index.php?/cases/view/395022
     func testActivityMenuFindInPageAction() {
         // Navigate to website
         loadWebPage("https://www.example.com")
@@ -43,7 +43,7 @@ class PageActionMenuTest: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         let findInPageButton = app.findInPageButton
-        waitForExistence(findInPageButton, timeout: 10)
+        waitForExistence(findInPageButton)
         findInPageButton.tap()
 
         // Activate find in page activity item and search for a keyword

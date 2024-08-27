@@ -16,7 +16,6 @@ class TabManagerTests: XCTestCase {
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
-    let webViewConfig = WKWebViewConfiguration()
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -26,8 +25,7 @@ class TabManagerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         // For this test suite, use a consistent window UUID for all test cases
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        let uuid = windowManager.activeWindow
+        let uuid: WindowUUID = .XCTestDefaultUUID
         tabWindowUUID = uuid
 
         mockProfile = MockProfile()
@@ -211,7 +209,7 @@ class TabManagerTests: XCTestCase {
     private func createSubject() -> TabManagerImplementation {
         let subject = TabManagerImplementation(profile: mockProfile,
                                                imageStore: mockDiskImageStore,
-                                               uuid: tabWindowUUID,
+                                               uuid: ReservedWindowUUID(uuid: tabWindowUUID, isNew: false),
                                                tabDataStore: mockTabStore,
                                                tabSessionStore: mockSessionStore)
         trackForMemoryLeaks(subject)
@@ -220,7 +218,7 @@ class TabManagerTests: XCTestCase {
 
     private func addTabs(to subject: TabManagerImplementation, count: Int) {
         for _ in 0..<count {
-            let tab = Tab(profile: mockProfile, configuration: webViewConfig, windowUUID: windowUUID)
+            let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
             tab.url = URL(string: "https://mozilla.com")!
             subject.tabs.append(tab)
         }

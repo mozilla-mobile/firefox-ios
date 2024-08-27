@@ -64,8 +64,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat?,
                           trailingSpace: CGFloat?) {
-        configure(state: state)
         self.toolbarDelegate = toolbarDelegate
+        configure(state: state)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
     }
 
@@ -77,6 +77,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
         setNeedsLayout()
         layoutIfNeeded()
+    }
+
+    public func setAutocompleteSuggestion(_ suggestion: String?) {
+        locationView.setAutocompleteSuggestion(suggestion)
     }
 
     override public func becomeFirstResponder() -> Bool {
@@ -214,6 +218,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
                 button.applyTheme(theme: theme)
             }
+
+            if toolbarElement.hasContextualHint == true {
+                toolbarDelegate?.configureContextualHint(self, for: button)
+            }
         }
     }
 
@@ -247,6 +255,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     }
 
     // MARK: - LocationViewDelegate
+    func locationViewDidRestoreSearchTerm(_ text: String) {
+        toolbarDelegate?.openSuggestions(searchTerm: text)
+    }
+
     func locationViewDidEnterText(_ text: String) {
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
@@ -255,7 +267,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.openSuggestions(searchTerm: text.lowercased())
     }
 
-    func locationViewShouldSearchFor(_ text: String) {
+    func locationViewDidSubmitText(_ text: String) {
         guard !text.isEmpty else { return }
 
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
@@ -265,11 +277,13 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
 
+    func locationViewDidCancelEditing() {}
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
         locationContainer.backgroundColor = theme.colors.layerSearch
-        locationDividerView.backgroundColor = theme.colors.layer2
+        locationDividerView.backgroundColor = theme.colors.layer1
         toolbarTopBorderView.backgroundColor = theme.colors.borderPrimary
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
         locationView.applyTheme(theme: theme)

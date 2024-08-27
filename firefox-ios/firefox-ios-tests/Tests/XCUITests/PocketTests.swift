@@ -5,7 +5,7 @@
 import XCTest
 
 class PocketTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306924
+    // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])

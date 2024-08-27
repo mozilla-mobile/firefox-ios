@@ -4,9 +4,7 @@
 
 import XCTest
 
-class OnboardingTest: XCTestCase {
-    let app = XCUIApplication()
-
+class OnboardingTest: BaseTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
@@ -19,49 +17,31 @@ class OnboardingTest: XCTestCase {
         app.terminate()
     }
 
-    // Copied from BaseTestCase
-    private func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
-    }
-
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
-           let predicate = NSPredicate(format: predicateString)
-           let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
-           let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-           if result != .completed {
-               let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-               var issue = XCTIssue(type: .assertionFailure, compactDescription: message)
-               let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
-               issue.sourceCodeContext = XCTSourceCodeContext(location: location)
-               self.record(issue)
-           }
-       }
-
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394959
+    // https://mozilla.testrail.io/index.php?/cases/view/394959
     func testPressingDots() throws {
         let pageIndicatorButton = app.pageIndicators.firstMatch
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
 
-        waitForExistence(app.staticTexts["Welcome to Firefox Focus!"], timeout: 15)
-        XCTAssert(app.images["icon_background"].exists)
+        waitForExistence(app.staticTexts["Welcome to Firefox Focus!"])
+        waitForExistence(app.images["icon_background"])
         XCTAssert(app.buttons["Get Started"].isEnabled)
         XCTAssert(app.buttons["icon_close"].isEnabled)
         pageIndicatorButton.tap()
 
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 2 of 2")
-        waitForExistence(app.staticTexts["Focus isn’t like other browsers"], timeout: 15)
-        XCTAssert(app.images["icon_hugging_focus"].exists)
-        XCTAssert(app.buttons["Set as Default Browser"].isEnabled)
-        XCTAssert(app.buttons["Skip"].isEnabled)
-        XCTAssert(app.buttons["icon_close"].isEnabled)
+        waitForExistence(app.staticTexts["Focus isn’t like other browsers"])
+        waitForExistence(app.images["icon_hugging_focus"])
+        waitForEnable(app.buttons["Set as Default Browser"])
+        waitForEnable(app.buttons["Skip"])
+        waitForEnable(app.buttons["icon_close"])
         pageIndicatorButton.tap()
 
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
-        waitForExistence(app.staticTexts["Welcome to Firefox Focus!"], timeout: 15)
+        waitForExistence(app.staticTexts["Welcome to Firefox Focus!"])
         pageIndicatorButton.tap()
 
         XCTAssertEqual(pageIndicatorButton.value as? String, "page 2 of 2")
-        waitForExistence(app.staticTexts["Focus isn’t like other browsers"], timeout: 15)
+        waitForExistence(app.staticTexts["Focus isn’t like other browsers"])
     }
 }

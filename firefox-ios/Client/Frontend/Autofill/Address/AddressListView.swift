@@ -65,7 +65,9 @@ struct AddressListView: View {
                 Spacer()
             }
         }
-        .sheet(item: $viewModel.destination) { destination in
+        .sheet(item: $viewModel.destination, onDismiss: {
+            viewModel.isEditMode = false
+        }) { destination in
             NavigationView {
                 switch destination {
                 case .add:

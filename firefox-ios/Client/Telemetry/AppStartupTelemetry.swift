@@ -41,7 +41,8 @@ final class AppStartupTelemetry {
         let loginsViewModel = PasswordManagerViewModel(
             profile: profile,
             searchController: searchController,
-            theme: LightTheme()
+            theme: LightTheme(),
+            loginProvider: profile.logins
         )
         let dataSource = LoginDataSource(viewModel: loginsViewModel)
         loginsViewModel.loadLogins(loginDataSource: dataSource)
