@@ -839,7 +839,6 @@ class BrowserViewController: UIViewController,
         if isToolbarRefactorEnabled {
             addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
             addressToolbarContainer.applyTheme(theme: currentTheme())
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
             urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
