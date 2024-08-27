@@ -4,8 +4,8 @@
 
 import Foundation
 
-extension URLSessionConfiguration{
-    static var defaultMPTCP: URLSessionConfiguration{
+extension URLSessionConfiguration {
+    static var defaultMPTCP: URLSessionConfiguration {
         var conf = self.default
         #if os(iOS)
             // multipath is only available on iOS, enable it only in this case
@@ -14,8 +14,8 @@ extension URLSessionConfiguration{
         // if we aren't building for iOS, defaultMPTCP == default, thus fall back to TCP
         return conf
     }
-    
-    static var ephemeralMPTCP: URLSessionConfiguration{
+
+    static var ephemeralMPTCP: URLSessionConfiguration {
         var conf = self.ephemeral
         #if os(iOS)
             // multipath is only available on iOS, enable it only in this case

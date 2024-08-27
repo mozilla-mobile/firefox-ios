@@ -4,6 +4,6 @@
 
 import Foundation
 
-extension URLSession{
-    static let sharedMPTCP: URLSession = URLSession(configuration: URLSessionConfiguration.defaultMPTCP)
+extension URLSession {
+    static let sharedMPTCP = URLSession(configuration: URLSessionConfiguration.defaultMPTCP)
 }
