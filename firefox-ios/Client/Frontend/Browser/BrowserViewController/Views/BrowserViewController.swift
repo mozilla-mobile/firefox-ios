@@ -3031,8 +3031,8 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements NavigationToolbarContainerDelegate::configureCFR(for button: ToolbarKit.Toolbarbutton)
-    func configureCFR(for button: ToolbarKit.ToolbarButton) {
+    // Also implements NavigationToolbarContainerDelegate::configureCFR(for button: UIButton)
+    func configureCFR(for button: UIButton) {
         configureDataClearanceContextualHint(button)
     }
 

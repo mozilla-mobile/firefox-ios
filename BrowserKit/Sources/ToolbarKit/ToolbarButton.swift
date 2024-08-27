@@ -10,7 +10,7 @@ public enum ToolbarButtonGesture {
     case longPress
 }
 
-public class ToolbarButton: UIButton, ThemeApplicable {
+class ToolbarButton: UIButton, ThemeApplicable {
     private struct UX {
         static let verticalInset: CGFloat = 10
         static let horizontalInset: CGFloat = 10

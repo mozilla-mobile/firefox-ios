@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 public protocol BrowserNavigationToolbarDelegate: AnyObject {
-    func configureCFR(for button: ToolbarButton)
+    func configureCFR(for button: UIButton)
 }
 
 /// Navigation toolbar implementation.
