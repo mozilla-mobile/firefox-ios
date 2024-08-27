@@ -32,7 +32,14 @@ public struct SiteImageModel {
         self.id = id
         self.imageType = imageType
         self.siteURL = siteURL
-        self.cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
+        if case .favicon = imageType, let faviconURL = resourceURL {
+            // If we already have a favicon url, use the url as the cache key.
+            // This is a special case where we want to use the exact URL that's provided (e.g. sponsored site, default
+            // top sites, etc.).
+            self.cacheKey = faviconURL.absoluteString
+        } else {
+            self.cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
+        }
         self.resourceURL = resourceURL
         self.image = image
     }
@@ -48,9 +55,6 @@ public struct SiteImageModel {
             // Always use the full site URL as the cache key for hero images
             return siteURL.absoluteString
         case .favicon:
-            // FIXME Why would we ever want to use a hard-coded faviconURL (sponsored tile, suggested tile, etc...)
-            // as the cache key for either a URL or Image?
-
             // Use the domain as the key to avoid caching and fetching unnecessary duplicates
             return siteURL.shortDomain ?? siteURL.shortDisplayString
         }

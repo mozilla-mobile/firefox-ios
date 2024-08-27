@@ -25,7 +25,7 @@ class FaviconURLHandlerTests: XCTestCase {
                                                urlCache: mockCache)
         do {
             let url = try await subject.getFaviconURL(model: model)
-            
+
             XCTAssertEqual(url, faviconURL)
             let getURLCount = await mockCache.getURLFromCacheCalledCount
             let cacheURLCount = await mockCache.cacheURLCalledCount
