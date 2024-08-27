@@ -365,6 +365,10 @@ class HomepageViewController:
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
+
+            let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.cancelEdit)
+            store.dispatch(action)
         }
     }
 
