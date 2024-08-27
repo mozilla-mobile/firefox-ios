@@ -1560,9 +1560,9 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
         case .remove:
-            self.showToast(bookmarkURL, title, message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(bookmarkURL, title, message: .LegacyAppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
         }
     }
 
@@ -3951,7 +3951,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.contentContainer,
                                                 theme: self.currentTheme())
             }

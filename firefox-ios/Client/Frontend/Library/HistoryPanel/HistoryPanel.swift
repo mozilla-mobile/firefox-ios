@@ -884,7 +884,7 @@ extension HistoryPanel {
     func pinToTopSites(_ site: Site) {
         profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
             if result.isSuccess {
-                SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AddPinToShortcutsConfirmMessage,
                                                 bottomContainer: self.view,
                                                 theme: self.currentTheme())
             }
