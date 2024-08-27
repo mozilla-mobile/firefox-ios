@@ -21,11 +21,10 @@ class CertificatesHandler {
     /// Extracts and handles the certificate chain.
     /// - Parameters:
     ///   - completion: A completion block that provides the extracted certificates.
-    func handleCertificates(completion: @escaping ([Certificate]) -> Void) {
+    func handleCertificates() -> [Certificate] {
         var certificates = [Certificate]()
         guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
-            completion(certificates)
-            return
+            return certificates
         }
         for certificate in certificateChain {
             let certificateData = SecCertificateCopyData(certificate) as Data
@@ -36,7 +35,7 @@ class CertificatesHandler {
                 print("Error decoding certificate: \(error)")
             }
         }
-        completion(certificates)
+        return certificates
     }
 }
 
@@ -71,9 +70,7 @@ class CertificateDelegate: NSObject, URLSessionDelegate {
                     completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if let serverTrust = challenge.protectionSpace.serverTrust {
             let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
-            certificatesHandler.handleCertificates { certificates in
-                self.completion(certificates)
-            }
+            self.completion(certificatesHandler.handleCertificates())
             // Use the server trust
             completionHandler(.useCredential, URLCredential(trust: serverTrust))
         } else {

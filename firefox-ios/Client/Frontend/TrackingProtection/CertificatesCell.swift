@@ -11,7 +11,6 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.textAlignment = .right
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.translatesAutoresizingMaskIntoConstraints = false
     }
 
     var allSectionItemsStackView: UIStackView = .build { stack in
@@ -57,15 +56,13 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func configure(theme: Theme, sectionTitle: String, items: CertificateItems) {
         applyTheme(theme: theme)
         sectionLabel.text = sectionTitle
-        for (key, values) in items {
-            for value in values {
-                let stackView = getSectionItemStackView()
-                let titleLabel = getItemLabel(theme: theme, with: key, isTitle: true)
-                titleLabel.widthAnchor.constraint(equalToConstant: CertificatesUX.sectionLabelWidth).isActive = true
-                stackView.addArrangedSubview(titleLabel)
-                stackView.addArrangedSubview(getItemLabel(theme: theme, with: value, isTitle: false))
-                allSectionItemsStackView.addArrangedSubview(stackView)
-            }
+        for (key, value) in items {
+            let stackView = getSectionItemStackView()
+            let titleLabel = getItemLabel(theme: theme, with: key, isTitle: true)
+            titleLabel.widthAnchor.constraint(equalToConstant: CertificatesUX.sectionLabelWidth).isActive = true
+            stackView.addArrangedSubview(titleLabel)
+            stackView.addArrangedSubview(getItemLabel(theme: theme, with: value, isTitle: false))
+            allSectionItemsStackView.addArrangedSubview(stackView)
         }
     }
 
@@ -81,7 +78,6 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
             label.textAlignment = isTitle ? .right : .left
             label.numberOfLines = 0
             label.lineBreakMode = .byWordWrapping
-            label.translatesAutoresizingMaskIntoConstraints = false
         }
         return itemLabel
     }

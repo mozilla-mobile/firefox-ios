@@ -34,9 +34,16 @@ struct CertificatesUX {
     static let tableViewTopMargin = 20.0
 }
 
-typealias CertificateItems = [(key: String, value: [String])]
+typealias CertificateItems = [(key: String, value: String)]
 
 class CertificatesViewController: UIViewController, Themeable, UITableViewDelegate, UITableViewDataSource {
+    private enum CertificatesItemType: Int {
+        case subjectName = 0
+        case issuerName = 1
+        case validity = 2
+        case subjectAltName = 3
+    }
+
     // MARK: - UI
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
@@ -47,15 +54,16 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         stack.spacing = CertificatesUX.headerStackViewSpacing
-        stack.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    private let tableViewTopSpacer: UIView = .build { view in
-        view.translatesAutoresizingMaskIntoConstraints = false
+    private let tableViewTopSpacer: UIView = .build()
+
+    let certificatesTableView: UITableView = .build { tableView in
+        tableView.allowsSelection = false
+        tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
     }
 
     // MARK: - Variables
-    let certificatesTableView = UITableView()
     private var constraints = [NSLayoutConstraint]()
     var viewModel: CertificatesViewModel
     var notificationCenter: NotificationProtocol
@@ -144,14 +152,10 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     }
 
     private func setupCertificatesTableView() {
-        certificatesTableView.allowsSelection = false
         certificatesTableView.delegate = self
         certificatesTableView.dataSource = self
-        certificatesTableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
-
         view.addSubview(tableViewTopSpacer)
         view.addSubview(certificatesTableView)
-        certificatesTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableViewTopSpacer.topAnchor.constraint(equalTo: headerStackView.bottomAnchor,
                                                     constant: CertificatesUX.tableViewSpacerTopMargin),
@@ -192,36 +196,36 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         let certificate = viewModel.certificates[viewModel.selectedCertificateIndex]
 
         switch indexPath.row {
-        case 0:
+        case CertificatesItemType.subjectName.rawValue:
             if let commonName = viewModel.getCertificateValues(from: "\(certificate.subject)")[CertificateKeys.commonName] {
                 cell.configure(theme: currentTheme(),
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectName,
-                               items: [(.Menu.EnhancedTrackingProtection.certificateCommonName, [commonName])])
+                               items: [(.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
             }
 
-        case 1:
+        case CertificatesItemType.issuerName.rawValue:
             let issuerData = viewModel.getCertificateValues(from: "\(certificate.issuer)")
             if let country = issuerData[CertificateKeys.country],
                let organization = issuerData[CertificateKeys.organization],
                let commonName = issuerData[CertificateKeys.commonName] {
                 cell.configure(theme: currentTheme(),
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateIssuerName,
-                               items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, [country]),
-                                       (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, [organization]),
-                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, [commonName])])
+                               items: [(.Menu.EnhancedTrackingProtection.certificateIssuerCountry, country),
+                                       (.Menu.EnhancedTrackingProtection.certificateIssuerOrganization, organization),
+                                       (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
             }
 
-        case 2:
+        case CertificatesItemType.validity.rawValue:
             cell.configure(theme: currentTheme(),
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateValidity,
                            items: [
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotBefore,
-                                [certificate.notValidBefore.toRFC822String()]),
+                                certificate.notValidBefore.toRFC822String()),
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotAfter,
-                                [certificate.notValidAfter.toRFC822String()])
+                                certificate.notValidAfter.toRFC822String())
                            ])
 
-        case 3:
+        case CertificatesItemType.subjectAltName.rawValue:
             cell.configure(theme: currentTheme(),
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectAltNames,
                            items: viewModel.getDNSNames(for: certificate))

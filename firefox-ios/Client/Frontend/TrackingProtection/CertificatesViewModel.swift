@@ -5,6 +5,7 @@
 import Foundation
 import X509
 
+// TODO FXIOS-9853 ⁃ Enhanced Tracking Protection Redux
 final class CertificatesViewModel {
     let topLevelDomain: String
     let title: String
@@ -56,7 +57,7 @@ final class CertificatesViewModel {
         if let certificateExtension =
             certificate.extensions.first(where: { $0.description.contains("SubjectAlternativeNames") }) {
             for dnsName in getDNSNamesList(from: certificateExtension.description) {
-                dnsNames.append((.Menu.EnhancedTrackingProtection.certificateSubjectAltNamesDNSName, [dnsName]))
+                dnsNames.append((.Menu.EnhancedTrackingProtection.certificateSubjectAltNamesDNSName, dnsName))
             }
         }
         return dnsNames
