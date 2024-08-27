@@ -55,7 +55,7 @@ class TabToolbarHelperTests: XCTestCase {
         let mockToolbar = MockTabToolbar()
         _ = TabToolbarHelper(toolbar: mockToolbar)
         mockToolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(mockToolbar, button: mockToolbar.appMenuButton)
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.LegacyAppMenu.siteMenu)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
         Glean.shared.resetGlean(clearStores: true)
     }
 
