@@ -219,8 +219,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 button.applyTheme(theme: theme)
             }
 
-            if toolbarElement.hasCFR == true {
-                toolbarDelegate?.configureCFR(self, for: button)
+            if toolbarElement.hasContextualHint == true {
+                toolbarDelegate?.configureContextualHint(self, for: button)
             }
         }
     }

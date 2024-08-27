@@ -26,7 +26,8 @@ public struct ToolbarElement: Equatable {
     /// Indicates if the element should be displayed as highlighted
     let shouldDisplayAsHighlighted: Bool
 
-    let hasCFR: Bool?
+    /// Indicates that there is an associated contextual hint
+    let hasContextualHint: Bool?
 
     /// Accessibility label of the toolbar element
     let a11yLabel: String
@@ -58,7 +59,7 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 shouldDisplayAsHighlighted: Bool = false,
-                hasCFR: Bool = false,
+                hasContextualHint: Bool = false,
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
@@ -73,7 +74,7 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
-        self.hasCFR = hasCFR
+        self.hasContextualHint = hasContextualHint
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel

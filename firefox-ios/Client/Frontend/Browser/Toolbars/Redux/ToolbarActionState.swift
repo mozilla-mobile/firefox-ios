@@ -33,7 +33,7 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var isShowingTopTabs: Bool?
     var isEnabled: Bool
     var shouldDisplayAsHighlighted = false
-    var hasCFR = false
+    var hasContextualHint = false
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String

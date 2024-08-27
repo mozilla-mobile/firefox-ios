@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 public protocol BrowserNavigationToolbarDelegate: AnyObject {
-    func configureCFR(for button: UIButton)
+    func configureContextualHint(for button: UIButton)
 }
 
 /// Navigation toolbar implementation.
@@ -80,8 +80,8 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
                 button.applyTheme(theme: theme)
             }
 
-            if toolbarElement.hasCFR == true {
-                toolbarDelegate?.configureCFR(for: button)
+            if toolbarElement.hasContextualHint == true {
+                toolbarDelegate?.configureContextualHint(for: button)
             }
         }
     }
