@@ -549,7 +549,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let isForwardButtonEnabled = canGoForward
             actions.append(backAction(enabled: isBackButtonEnabled))
             actions.append(forwardAction(enabled: isForwardButtonEnabled))
-            if shouldShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
+            if canShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
                 actions.append(dataClearanceAction)
             }
         }
@@ -688,15 +688,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
-        let shouldShowDataClearanceAction = shouldShowDataClearanceAction(isPrivate: isPrivateMode)
-        guard !shouldShowDataClearanceAction else {
-            return dataClearanceAction
-        }
-
+        let canShowDataClearanceAction = canShowDataClearanceAction(isPrivate: isPrivateMode)
         let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
-        let middleActionHome = searchAction
-        let middleAction = url == nil ? middleActionHome : middleActionDefault
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        let middleActionForWebpage = canShowDataClearanceAction ?
+                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+        let middleActionForHomepage = isToolbarRefactorEnabled || !isPrivateMode ? searchAction : dataClearanceAction
+        let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 
         return middleAction
     }
@@ -759,7 +757,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
-    private func shouldShowDataClearanceAction(isPrivate: Bool) -> Bool {
+    private func canShowDataClearanceAction(isPrivate: Bool) -> Bool {
         let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
 
