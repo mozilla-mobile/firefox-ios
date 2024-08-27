@@ -18,6 +18,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
 
 final class AddressToolbarContainer: UIView,
                                      ThemeApplicable,
+                                     PrivateModeUI,
                                      TopBottomInterchangeable,
                                      AlphaDimmable,
                                      StoreSubscriber,
@@ -265,11 +266,21 @@ final class AddressToolbarContainer: UIView,
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+    }
+
+    // MARK: - PrivateModeUI
+    func applyUIMode(isPrivate: Bool, theme: Theme) {
+        let gradientStartColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivate ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivate ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+
         progressBar.setGradientColors(
-            startColor: theme.colors.borderAccent,
-            middleColor: theme.colors.iconAccentPink,
-            endColor: theme.colors.iconAccentYellow
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
         )
+
+        applyTheme(theme: theme)
     }
 
     // MARK: - AddressToolbarDelegate

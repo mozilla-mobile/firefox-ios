@@ -839,6 +839,8 @@ class BrowserViewController: UIViewController,
         if isToolbarRefactorEnabled {
             addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
             addressToolbarContainer.applyTheme(theme: currentTheme())
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+            addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
             urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
@@ -2862,9 +2864,8 @@ class BrowserViewController: UIViewController,
         }
 
         let isPrivate = (currentTheme.type == .privateMode)
-        if !isToolbarRefactorEnabled {
-            urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
-        }
+        let addressToolbar = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar
+        (addressToolbar as? PrivateModeUI)?.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
 
         toolbar.applyTheme(theme: currentTheme)
 
@@ -3531,10 +3532,13 @@ extension BrowserViewController: TabManagerDelegate {
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
-            if !isToolbarRefactorEnabled {
-                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
+            var ui = [PrivateModeUI?]()
+            if isToolbarRefactorEnabled {
+                ui = [topTabsViewController, addressToolbarContainer]
+            } else {
+                ui = [toolbar, topTabsViewController, urlBar]
             }
+            ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
         } else {
             // Theme is applied to the tab and webView in the else case
             // because in the if block is applied already to all the tabs and web views
