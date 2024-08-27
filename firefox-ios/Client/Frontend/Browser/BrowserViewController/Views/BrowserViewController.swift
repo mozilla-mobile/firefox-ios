@@ -840,7 +840,6 @@ class BrowserViewController: UIViewController,
             addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
             addressToolbarContainer.applyTheme(theme: currentTheme())
             let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-            addressToolbarContainer.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
             urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
@@ -2863,9 +2862,10 @@ class BrowserViewController: UIViewController,
             $0.applyTheme(theme: currentTheme)
         }
 
-        let isPrivate = (currentTheme.type == .privateMode)
-        let addressToolbar = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar
-        (addressToolbar as? PrivateModeUI)?.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
+        if !isToolbarRefactorEnabled {
+            let isPrivate = (currentTheme.type == .privateMode)
+            urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
+        }
 
         toolbar.applyTheme(theme: currentTheme)
 
@@ -3534,7 +3534,7 @@ extension BrowserViewController: TabManagerDelegate {
 
             var ui = [PrivateModeUI?]()
             if isToolbarRefactorEnabled {
-                ui = [topTabsViewController, addressToolbarContainer]
+                ui = [topTabsViewController]
             } else {
                 ui = [toolbar, topTabsViewController, urlBar]
             }
