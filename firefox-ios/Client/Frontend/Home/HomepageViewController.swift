@@ -385,6 +385,15 @@ class HomepageViewController:
                                                          theme: theme)
         }
 
+        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           toolbarState.addressToolbar.isEditing {
+            let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.cancelEdit)
+            store.dispatch(action)
+        }
+
         let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
         let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
 
