@@ -27,6 +27,14 @@ workers:
             implementation: docker-worker
             os: linux
             worker-type: 'images-gcp'
+        b-macos:
+            provisioner: 'releng-hardware'
+            implementation: generic-worker
+            os: macosx
+            worker-type:
+                by-level:
+                    "3": 'mozilla-b-3-osx'
+                    default: 'mozilla-b-1-osx'
         misc:
             provisioner: 'mobile-{level}'
             implementation: docker-worker

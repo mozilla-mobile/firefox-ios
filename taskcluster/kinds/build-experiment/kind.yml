@@ -1,0 +1,23 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - taskgraph.transforms.run:transforms
+    - taskgraph.transforms.task:transforms
+
+tasks:
+  mac:
+    description: demo task
+    worker-type: b-macos
+    worker:
+      max-run-time: 300
+    run:
+      using: run-task
+      cwd: '{checkout}'
+      run-task-command: ["./run-task"]
+      command: >-
+        echo "Hello MacOS!"
