@@ -31,6 +31,11 @@ final class CertificatesViewModelTests: XCTestCase {
         XCTAssertEqual(result["C"], "US")
     }
 
+    func testGetCertificateFromInvalidData() {
+        let result = viewModel.getCertificateValues(from: "")
+        XCTAssertEqual(result, [:])
+    }
+
     func testGetCertificateValuesWithMissingValue() {
         let data = "CN=www.google.com, O=, C=US"
         let result = viewModel.getCertificateValues(from: data)
@@ -43,5 +48,10 @@ final class CertificatesViewModelTests: XCTestCase {
         let input = #"DNSName("www.google.com"), DNSName("*www.google.com")"#
         let result = viewModel.getDNSNamesList(from: input)
         XCTAssertEqual(result, ["www.google.com", "*www.google.com"])
+    }
+
+    func testGetDNSNamesFromInvalidInput() {
+        let result = viewModel.getDNSNamesList(from: "")
+        XCTAssertEqual(result, [])
     }
 }
