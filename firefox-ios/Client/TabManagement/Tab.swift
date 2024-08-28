@@ -195,7 +195,7 @@ class Tab: NSObject, ThemeApplicable {
     /// or not, it will resort to other displayable titles.
     var displayTitle: String {
         if self.isFxHomeTab {
-            return .AppMenu.AppMenuOpenHomePageTitleString
+            return .LegacyAppMenu.AppMenuOpenHomePageTitleString
         }
 
         if let lastTitle = lastTitle, !lastTitle.isEmpty {
@@ -227,7 +227,7 @@ class Tab: NSObject, ThemeApplicable {
         var backUpName: String = "" // In case display title is empty
 
         if let baseDomain = baseDomain {
-            backUpName = baseDomain.contains("local") ? .AppMenu.AppMenuOpenHomePageTitleString : baseDomain
+            backUpName = baseDomain.contains("local") ? .LegacyAppMenu.AppMenuOpenHomePageTitleString : baseDomain
         } else if let url = url, let about = InternalURL(url)?.aboutComponent {
             backUpName = about
         }
@@ -391,23 +391,21 @@ class Tab: NSObject, ThemeApplicable {
     // If this tab has been opened from another, its parent will point to the tab from which it was opened
     weak var parent: Tab?
 
-    fileprivate var contentScriptManager = TabContentScriptManager()
+    private var contentScriptManager = TabContentScriptManager()
 
-    fileprivate let configuration: WKWebViewConfiguration
+    private var configuration: WKWebViewConfiguration?
 
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
-    fileprivate var alertQueue = [JSAlertInfo]()
+    private var alertQueue = [JSAlertInfo]()
 
     var profile: Profile
 
     init(profile: Profile,
-         configuration: WKWebViewConfiguration,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
          logger: Logger = DefaultLogger.shared) {
-        self.configuration = configuration
         self.nightMode = false
         self.windowUUID = windowUUID
         self.noImageMode = false
@@ -460,7 +458,8 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
-    func createWebview(with restoreSessionData: Data? = nil) {
+    func createWebview(with restoreSessionData: Data? = nil, configuration: WKWebViewConfiguration) {
+        self.configuration = configuration
         if webView == nil {
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true

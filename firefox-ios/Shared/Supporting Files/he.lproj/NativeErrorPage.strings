@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "טעינה מחדש";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "אירעה שגיאת SSL ולא ניתן ליצור חיבור מאובטח לשרת.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "נא להיזהר. משהו לא נראה תקין.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "נא לנסות להתחבר במכשיר אחר, לבדוק את המודם או הנתב שלך, ולהתנתק ולהתחבר מחדש ל־Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "נראה שיש בעיה בחיבור האינטרנט שלך.";
+

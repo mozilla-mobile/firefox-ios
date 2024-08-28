@@ -11,6 +11,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func configureContextualHint(for button: UIButton)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
@@ -43,8 +44,15 @@ final class AddressToolbarContainer: UIView,
     private(set) weak var delegate: AddressToolbarContainerDelegate?
 
     private var toolbar: BrowserAddressToolbar {
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        return isCompact ? compactToolbar : regularToolbar
+        return shouldDisplayCompact ? compactToolbar : regularToolbar
+    }
+
+    private var shouldDisplayCompact: Bool {
+        guard let model else {
+            return traitCollection.horizontalSizeClass == .compact
+        }
+
+        return model.shouldDisplayCompact
     }
 
     private var isTransitioning = false {
@@ -73,7 +81,7 @@ final class AddressToolbarContainer: UIView,
                                                          window: windowUUID)
         else { return nil }
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isCompact = shouldDisplayCompact
         let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
@@ -93,7 +101,7 @@ final class AddressToolbarContainer: UIView,
                                                          window: windowUUID)
         else { return nil }
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isCompact = shouldDisplayCompact
         let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
@@ -147,12 +155,6 @@ final class AddressToolbarContainer: UIView,
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return toolbar.resignFirstResponder()
-    }
-
-    // MARK: View Transitions
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustLayout()
     }
 
     // MARK: - Redux
@@ -213,6 +215,9 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
+            // the layout (compact/regular) that should be displayed is driven by the state
+            adjustLayout()
+
             // Dismiss overlay mode when not editing to fix overlay mode staying open
             // on iPad when switching tabs using top tabs
             if !toolbarState.addressToolbar.isEditing {
@@ -261,10 +266,16 @@ final class AddressToolbarContainer: UIView,
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+
+        let isPrivateMode = model?.isPrivateMode ?? false
+        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+
         progressBar.setGradientColors(
-            startColor: theme.colors.borderAccent,
-            middleColor: theme.colors.iconAccentPink,
-            endColor: theme.colors.iconAccentYellow
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
         )
     }
 
@@ -289,6 +300,12 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton) {
+        if addressToolbar == toolbar {
+            delegate?.configureContextualHint(for: button)
+        }
     }
 
     // MARK: - MenuHelperURLBarInterface

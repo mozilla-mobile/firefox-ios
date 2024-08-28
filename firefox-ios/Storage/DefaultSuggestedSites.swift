@@ -73,7 +73,7 @@ open class DefaultSuggestedSites {
                 imageUrl: "asset://suggestedsites_twitter",
                 faviconUrl: "asset://defaultFavicon",
                 trackingId: 628,
-                title: .DefaultSuggestedTwitter
+                title: .DefaultSuggestedX
             )
         ],
         "zh_CN": [

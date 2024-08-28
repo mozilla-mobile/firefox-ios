@@ -47,7 +47,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
         iconName: StandardImageIdentifiers.Large.readerView,
         isEnabled: true,
         a11yLabel: .TabLocationReaderModeAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton)
+        a11yHint: .TabLocationReloadAccessibilityHint,
+        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+        a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
 
     lazy var qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -96,6 +98,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
+        hasContextualHint: true,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
@@ -130,6 +133,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func resolveToolbarMiddlewareActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.actionType {
+        case ToolbarMiddlewareActionType.customA11yAction:
+            resolveToolbarMiddlewareCustomA11yActions(action: action, state: state)
+
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
@@ -181,6 +187,16 @@ final class ToolbarMiddleware: FeatureFlaggable {
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
             handleToolbarButtonLongPressActions(action: action)
+        }
+    }
+
+    func resolveToolbarMiddlewareCustomA11yActions(action: ToolbarMiddlewareAction, state: AppState) {
+        switch action.buttonType {
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
+            store.dispatch(action)
+        default: break
         }
     }
 
@@ -307,8 +323,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
         case .newTab:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
-                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions
-            )
+                                              actionType: GeneralBrowserActionType.showNewTabLongPressActions)
+            store.dispatch(action)
+        case .readerMode:
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.addToReadingListLongPressAction)
             store.dispatch(action)
         default:
             break
@@ -494,7 +513,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
-        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs),
+        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
                                     menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
 
         return actions
@@ -530,6 +549,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let isForwardButtonEnabled = canGoForward
             actions.append(backAction(enabled: isBackButtonEnabled))
             actions.append(forwardAction(enabled: isForwardButtonEnabled))
+            if canShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
+                actions.append(dataClearanceAction)
+            }
         }
 
         return actions
@@ -651,7 +673,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
-            tabsAction(numberOfTabs: numberOfTabs, isShowingTopTabs: isShowingTopTabs),
+            tabsAction(numberOfTabs: numberOfTabs,
+                       isPrivateMode: toolbarState.isPrivateMode,
+                       isShowingTopTabs: isShowingTopTabs),
             menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
         ]
 
@@ -664,18 +688,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
-        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
-        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
-        let shouldShowDataClearanceAction = isPrivateMode && isFeltPrivacyUIEnabled &&
-                                            isFeltPrivacyDeletionEnabled
-        guard !shouldShowDataClearanceAction else {
-            return dataClearanceAction
-        }
-
+        let canShowDataClearanceAction = canShowDataClearanceAction(isPrivate: isPrivateMode)
         let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
-        let middleActionHome = searchAction
-        let middleAction = url == nil ? middleActionHome : middleActionDefault
+        let middleActionForWebpage = canShowDataClearanceAction ?
+                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+        let middleActionForHomepage = searchAction
+        let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 
         return middleAction
     }
@@ -702,10 +720,14 @@ final class ToolbarMiddleware: FeatureFlaggable {
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private func tabsAction(numberOfTabs: Int = 1, isShowingTopTabs: Bool = false) -> ToolbarActionState {
+    private func tabsAction(numberOfTabs: Int = 1,
+                            isPrivateMode: Bool = false,
+                            isShowingTopTabs: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
+            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isShowingTopTabs: isShowingTopTabs,
             isEnabled: true,
@@ -720,7 +742,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             badgeImageName: badgeImageName,
             maskImageName: maskImageName,
             isEnabled: true,
-            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
@@ -732,5 +754,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
+    }
+
+    private func canShowDataClearanceAction(isPrivate: Bool) -> Bool {
+        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
+
+        return isPrivate && isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
     }
 }

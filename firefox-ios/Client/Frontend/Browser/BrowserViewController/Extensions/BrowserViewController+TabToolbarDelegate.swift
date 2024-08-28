@@ -15,17 +15,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         dataClearanceContextHintVC.stopTimer()
     }
 
-    func configureDataClearanceContextualHint() {
-        guard !isToolbarRefactorEnabled,
-                contentContainer.hasWebView,
+    func configureDataClearanceContextualHint(_ view: UIView) {
+        guard contentContainer.hasWebView,
                 tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
         else {
             resetDataClearanceCFRTimer()
             return
         }
         dataClearanceContextHintVC.configure(
-            anchor: navigationToolbar.multiStateButton,
-            withArrowDirection: topTabsVisible ? .up : .down,
+            anchor: view,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
@@ -367,7 +366,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if !urls.isEmpty {
-            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+            showToast(message: .LegacyAppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
         }
     }
 

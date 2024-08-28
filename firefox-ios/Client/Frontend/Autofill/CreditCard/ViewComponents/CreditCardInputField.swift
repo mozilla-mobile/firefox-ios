@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 import Shared
 
-enum CreditCardInputType {
+enum CreditCardInputType: String {
     case name, number, expiration
 }
 
@@ -204,7 +204,10 @@ struct CreditCardInputField: View {
             if inputType == .expiration {
                 _ = self.updateInputValidity()
             }
-        }.accessibilityLabel(fieldHeadline)
+        }
+        .accessibilityLabel(fieldHeadline)
+        .accessibilityIdentifier(inputType.rawValue)
+        .accessibility(addTraits: .isButton)
     }
 
     // MARK: Helper

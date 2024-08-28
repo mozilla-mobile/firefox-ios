@@ -33,15 +33,18 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var isShowingTopTabs: Bool?
     var isEnabled: Bool
     var shouldDisplayAsHighlighted = false
+    var hasContextualHint = false
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String
+    var a11yCustomActionName: String?
 
     func canPerformLongPressAction(isShowingTopTabs: Bool?) -> Bool {
         return actionType == .back ||
                actionType == .forward ||
                actionType == .reload ||
                actionType == .newTab ||
+               actionType == .readerMode ||
                (actionType == .tabs && isShowingTopTabs == false)
     }
 }

@@ -16,7 +16,6 @@ class TabManagerTests: XCTestCase {
     var mockSessionStore: MockTabSessionStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
-    let webViewConfig = WKWebViewConfiguration()
     let sleepTime: UInt64 = 1 * NSEC_PER_SEC
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
@@ -219,7 +218,7 @@ class TabManagerTests: XCTestCase {
 
     private func addTabs(to subject: TabManagerImplementation, count: Int) {
         for _ in 0..<count {
-            let tab = Tab(profile: mockProfile, configuration: webViewConfig, windowUUID: windowUUID)
+            let tab = Tab(profile: mockProfile, windowUUID: windowUUID)
             tab.url = URL(string: "https://mozilla.com")!
             subject.tabs.append(tab)
         }

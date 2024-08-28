@@ -46,9 +46,11 @@
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Ochrana je vypnutá";
 
-/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure.
-   Header for the enhanced tracking protection screen when the user has selected to be protected. */
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Ste chránení. Ak niečo zistíme, dáme vám vedieť.";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Vaše pripojenie nie je zabezpečené.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Buďte opatrní na tejto stránke";

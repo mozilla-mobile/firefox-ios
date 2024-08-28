@@ -301,6 +301,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         hostingCell.selectionStyle = .none
         hostingCell.isAccessibilityElement = true
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: creditCard)
+        hostingCell.accessibilityIdentifier = "creditCardCell_\(indexPath.row)"
 
         return hostingCell
     }

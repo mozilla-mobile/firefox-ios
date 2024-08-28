@@ -35,7 +35,7 @@ final class LegacyTabPeekPreviewActionBuilderTests: XCTestCase {
         builder.addSendToDeviceTitle { _, __ in }
 
         let action = builder.build().first ?? UIPreviewAction()
-        XCTAssertEqual(action.title, String.AppMenu.TouchActions.SendToDeviceTitle)
+        XCTAssertEqual(action.title, String.LegacyAppMenu.TouchActions.SendToDeviceTitle)
     }
 
     func test_addCopyUrl_afterAdded_shouldContainsInActions() {

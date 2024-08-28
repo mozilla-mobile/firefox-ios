@@ -29,6 +29,7 @@ class BrowserViewController: UIViewController,
                              QRCodeViewControllerDelegate,
                              StoreSubscriber,
                              BrowserFrameInfoProvider,
+                             NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
                              FeatureFlaggable {
     private enum UX {
@@ -692,6 +693,8 @@ class BrowserViewController: UIViewController,
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
 
+        navigationToolbarContainer.toolbarDelegate = self
+
         scrollController.header = header
         scrollController.overKeyboardContainer = overKeyboardContainer
         scrollController.bottomContainer = bottomContainer
@@ -1037,6 +1040,13 @@ class BrowserViewController: UIViewController,
             themeManager.applyThemeUpdatesToWindows()
         }
         setupMiddleButtonStatus(isLoading: false)
+
+        // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
+        // so only necessary to dismiss when vertical size class changes
+        if dataClearanceContextHintVC.isPresenting &&
+            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            dataClearanceContextHintVC.dismiss(animated: true)
+        }
     }
 
     // MARK: - Constraints
@@ -1560,9 +1570,14 @@ class BrowserViewController: UIViewController,
     private func showBookmarkToast(bookmarkURL: URL? = nil, title: String? = nil, action: BookmarkAction) {
         switch action {
         case .add:
-            self.showToast(message: .AppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
+            self.showToast(message: .LegacyAppMenu.AddBookmarkConfirmMessage, toastAction: .bookmarkPage)
         case .remove:
-            self.showToast(bookmarkURL, title, message: .AppMenu.RemoveBookmarkConfirmMessage, toastAction: .removeBookmark)
+            self.showToast(
+                bookmarkURL,
+                title,
+                message: .LegacyAppMenu.RemoveBookmarkConfirmMessage,
+                toastAction: .removeBookmark
+            )
         }
     }
 
@@ -1665,8 +1680,8 @@ class BrowserViewController: UIViewController,
         guard !showFireButton else {
             if !isToolbarRefactorEnabled {
                 navigationToolbar.updateMiddleButtonState(.fire)
+                configureDataClearanceContextualHint(navigationToolbar.multiStateButton)
             }
-            configureDataClearanceContextualHint()
             return
         }
         resetDataClearanceCFRTimer()
@@ -1960,6 +1975,8 @@ class BrowserViewController: UIViewController,
             didTapOnShare(from: button)
         case .readerMode:
             toggleReaderMode()
+        case .readerModeLongPressAction:
+            _ = toggleReaderModeLongPressAction()
         case .newTabLongPressActions:
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
@@ -2094,6 +2111,43 @@ class BrowserViewController: UIViewController,
         case .unavailable:
             break
         }
+    }
+
+    func toggleReaderModeLongPressAction() -> Bool {
+        guard let tab = tabManager.selectedTab,
+              let url = tab.url?.displayURL
+        else {
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.announcement,
+                argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel
+            )
+
+            return false
+        }
+
+        let result = profile.readingList.createRecordWithURL(
+            url.absoluteString,
+            title: tab.title ?? "",
+            addedBy: UIDevice.current.name
+        )
+
+        switch result.value {
+        case .success:
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.announcement,
+                argument: String.ReaderModeAddPageSuccessAcessibilityLabel
+            )
+            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
+                                            bottomContainer: contentContainer,
+                                            theme: currentTheme())
+        case .failure:
+            UIAccessibility.post(
+                notification: UIAccessibility.Notification.announcement,
+                argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel
+            )
+        }
+
+        return true
     }
 
     private func showPhotonMainMenu(from button: UIButton?) {
@@ -2822,8 +2876,8 @@ class BrowserViewController: UIViewController,
             $0.applyTheme(theme: currentTheme)
         }
 
-        let isPrivate = (currentTheme.type == .privateMode)
         if !isToolbarRefactorEnabled {
+            let isPrivate = (currentTheme.type == .privateMode)
             urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
@@ -2980,6 +3034,11 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.searchQuery = searchTerm
         searchController?.searchTelemetry?.clearVisibleResults()
         searchController?.searchTelemetry?.determineInteractionType()
+    }
+
+    // Also implements NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton)
+    func configureContextualHint(for button: UIButton) {
+        configureDataClearanceContextualHint(button)
     }
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
@@ -3492,10 +3551,14 @@ extension BrowserViewController: TabManagerDelegate {
         if previousTab == nil || selectedTab.isPrivate != previousTab?.isPrivate {
             applyTheme()
 
-            if !isToolbarRefactorEnabled {
-                let ui: [PrivateModeUI?] = [toolbar, topTabsViewController, urlBar]
-                ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
+            // TODO: [FXIOS-8907] Ideally we shouldn't create tabs as a side-effect of UI theme updates.
+            var ui = [PrivateModeUI?]()
+            if isToolbarRefactorEnabled {
+                ui = [topTabsViewController]
+            } else {
+                ui = [toolbar, topTabsViewController, urlBar]
             }
+            ui.forEach { $0?.applyUIMode(isPrivate: selectedTab.isPrivate, theme: currentTheme()) }
         } else {
             // Theme is applied to the tab and webView in the else case
             // because in the if block is applied already to all the tabs and web views
@@ -3912,7 +3975,7 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.contentContainer,
                                                 theme: self.currentTheme())
             }

@@ -31,6 +31,9 @@ let package = Package(
             name: "ToolbarKit",
             targets: ["ToolbarKit"]),
         .library(
+            name: "MenuKit",
+            targets: ["MenuKit"]),
+        .library(
             name: "ContentBlockingGenerator",
             targets: ["ContentBlockingGenerator"]),
         .executable(
@@ -52,7 +55,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.26.0"),
+            exact: "8.34.0"),
         .package(url: "https://github.com/nbhasin2/GCDWebServer.git",
                  branch: "master")
     ],
@@ -109,6 +112,13 @@ let package = Package(
         .testTarget(
             name: "ToolbarKitTests",
             dependencies: ["ToolbarKit"]),
+        .target(
+            name: "MenuKit",
+            dependencies: ["Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "MenuKitTests",
+            dependencies: ["MenuKit"]),
         .target(
             name: "ContentBlockingGenerator",
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),

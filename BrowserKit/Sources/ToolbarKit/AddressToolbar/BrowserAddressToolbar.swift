@@ -64,8 +64,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat?,
                           trailingSpace: CGFloat?) {
-        configure(state: state)
         self.toolbarDelegate = toolbarDelegate
+        configure(state: state)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
     }
 
@@ -217,6 +217,10 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             if let theme {
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
                 button.applyTheme(theme: theme)
+            }
+
+            if toolbarElement.hasContextualHint == true {
+                toolbarDelegate?.configureContextualHint(self, for: button)
             }
         }
     }

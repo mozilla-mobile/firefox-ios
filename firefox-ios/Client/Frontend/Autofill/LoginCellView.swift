@@ -47,6 +47,7 @@ struct LoginCellView: View {
                     .padding(.leading, 16)
                     .foregroundColor(iconPrimary)
                     .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading) {
                     Text(login.decryptedUsername.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
                          : login.decryptedUsername)

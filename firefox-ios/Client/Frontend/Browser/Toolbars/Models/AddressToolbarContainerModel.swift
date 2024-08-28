@@ -18,7 +18,9 @@ class AddressToolbarContainerModel: Equatable {
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
+    let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
+    let shouldDisplayCompact: Bool
 
     let windowUUID: UUID
 
@@ -76,7 +78,9 @@ class AddressToolbarContainerModel: Equatable {
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
+        self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
+        self.shouldDisplayCompact = state.isShowingNavigationToolbar
     }
 
     func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
@@ -100,9 +104,17 @@ class AddressToolbarContainerModel: Equatable {
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
+                hasContextualHint: action.hasContextualHint,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
+                a11yCustomActionName: action.a11yCustomActionName,
+                a11yCustomAction: action.a11yCustomActionName != nil ? {
+                    let action = ToolbarMiddlewareAction(buttonType: action.actionType,
+                                                         windowUUID: windowUUID,
+                                                         actionType: ToolbarMiddlewareActionType.customA11yAction)
+                    store.dispatch(action)
+                } : nil,
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
@@ -126,12 +138,16 @@ class AddressToolbarContainerModel: Equatable {
         lhs.navigationActions == rhs.navigationActions &&
         lhs.pageActions == rhs.pageActions &&
         lhs.browserActions == rhs.browserActions &&
+
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
+        lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
+        lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
+
         lhs.windowUUID == rhs.windowUUID
     }
 }

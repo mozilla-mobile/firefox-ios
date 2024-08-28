@@ -150,18 +150,18 @@ extension SponsoredContentFilterUtilityTests {
                     sponsoredTabsCount: Int) -> [Tab] {
         var tabs = [Tab]()
         (0..<normalTabsCount).forEach { index in
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+            let tab = Tab(profile: profile, windowUUID: windowUUID)
             tab.url = URL(string: normalURL)
             tabs.append(tab)
         }
 
         (0..<emptyURLTabsCount).forEach { index in
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+            let tab = Tab(profile: profile, windowUUID: windowUUID)
             tabs.append(tab)
         }
 
         (0..<sponsoredTabsCount).forEach { index in
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+            let tab = Tab(profile: profile, windowUUID: windowUUID)
             tab.url = URL(string: SponsoredContentFilterUtilityTests.sponsoredStandardURL)
             tabs.append(tab)
         }

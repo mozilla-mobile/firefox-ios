@@ -10,6 +10,7 @@ import Foundation
 public struct StandardImageIdentifiers {
     // Icon size 16x16
     public struct Small {
+        public static let externalLink = "externalLinkSmall"
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
         public static let pinBadgeFill = "pinBadgeFillSmall"

@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Actualiser";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Une erreur SSL s’est produite et une connexion sécurisée avec le serveur ne peut pas être établie.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Faites preuve de prudence, il semble y avoir un problème.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Essayez de vous connecter sur un autre appareil. Vérifiez votre modem ou votre routeur. Déconnectez-vous puis reconnectez-vous au Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Il semble y avoir un problème avec votre connexion Internet.";
+

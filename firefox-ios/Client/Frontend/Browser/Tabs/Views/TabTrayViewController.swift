@@ -108,7 +108,7 @@ class TabTrayViewController: UIViewController,
         return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(deleteTabsButtonTapped),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
-                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+                                a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButton: UIBarButtonItem = {
@@ -481,7 +481,7 @@ class TabTrayViewController: UIViewController,
 
     private func showCloseAllConfirmation() {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,
+        controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
                                            handler: { _ in self.confirmCloseAll() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)

@@ -26,6 +26,9 @@ public struct ToolbarElement: Equatable {
     /// Indicates if the element should be displayed as highlighted
     let shouldDisplayAsHighlighted: Bool
 
+    /// Indicates that there is an associated contextual hint
+    let hasContextualHint: Bool?
+
     /// Accessibility label of the toolbar element
     let a11yLabel: String
 
@@ -34,6 +37,12 @@ public struct ToolbarElement: Equatable {
 
     /// Accessibility identifier of the toolbar element
     let a11yId: String
+
+    /// Name for the custom accessibility action
+    let a11yCustomActionName: String?
+
+    /// Action to be performed for custom accessibility action
+    let a11yCustomAction: (() -> Void)?
 
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
@@ -50,9 +59,12 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 shouldDisplayAsHighlighted: Bool = false,
+                hasContextualHint: Bool = false,
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
+                a11yCustomActionName: String? = nil,
+                a11yCustomAction: (() -> Void)? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
@@ -62,11 +74,14 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
+        self.hasContextualHint = hasContextualHint
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
+        self.a11yCustomActionName = a11yCustomActionName
+        self.a11yCustomAction = a11yCustomAction
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {

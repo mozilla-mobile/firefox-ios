@@ -48,7 +48,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                                 viewType state: CreditCardBottomSheetState,
                                 frame: WKFrameInfo?,
                                 alertContainer: UIView) {
-        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(profile: profile,
+        let creditCardControllerViewModel = CreditCardBottomSheetViewModel(creditCardProvider: profile.autofill,
                                                                            creditCard: creditCard,
                                                                            decryptedCreditCard: decryptedCard,
                                                                            state: state)
@@ -107,7 +107,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton)
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.creditCardCloseButton
+        )
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(
@@ -183,7 +184,8 @@ class CredentialAutofillCoordinator: BaseCoordinator {
 
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton)
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.Autofill.loginCloseButton
+        )
         bottomSheetViewModel.shouldDismissForTapOutside = false
 
         let bottomSheetVC = BottomSheetViewController(

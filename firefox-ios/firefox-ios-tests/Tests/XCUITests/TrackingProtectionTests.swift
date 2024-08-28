@@ -192,11 +192,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(app.staticTexts["Secure connection"])
-        if iPad() {
-            app.popovers.scrollViews.buttons.element(boundBy: 2).tap()
-        } else {
-            app.buttons["Close"].tap()
-        }
+        navigator.performAction(Action.CloseTPContextMenu)
         mozWaitForElementToNotExist(app.staticTexts["Secure connection"])
     }
 }

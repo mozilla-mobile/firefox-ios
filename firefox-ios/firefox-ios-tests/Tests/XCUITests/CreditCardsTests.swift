@@ -14,14 +14,9 @@ class CreditCardsTests: BaseTestCase {
     var expiration: XCUIElement!
 
     func initCardFields() {
-        nameOnCard = app.otherElements.textFields.element(boundBy: 0)
-        cardNr = app.otherElements.textFields.element(boundBy: 1)
-        expiration = app.otherElements.textFields.element(boundBy: 2)
-        if !iPad() {
-            nameOnCard = app.otherElements.textFields.element(boundBy: 1)
-            cardNr = app.otherElements.textFields.element(boundBy: 2)
-            expiration = app.otherElements.textFields.element(boundBy: 3)
-        }
+        nameOnCard = app.buttons["name"]
+        cardNr = app.buttons["number"]
+        expiration = app.buttons["expiration"]
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306967
@@ -48,10 +43,10 @@ class CreditCardsTests: BaseTestCase {
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
         mozWaitForElementToExist(app.staticTexts.containingText("New").element)
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         let cardDetails = ["Test", "Expires", "5/40"]
         for i in cardDetails {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts[i])
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
         }
     }
 
@@ -126,7 +121,7 @@ class CreditCardsTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306969
     // Smoketest
-    func testAutofillCreditCardsToggleOnOoff() {
+    func testAutofillCreditCardsToggleOnOff() {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(CreditCardsSettings)
@@ -211,7 +206,7 @@ class CreditCardsTests: BaseTestCase {
         typeCardName(name: updatedName)
         app.buttons["Save"].tap()
         // The name of the card is saved without issues
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts[updatedName])
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[updatedName])
         // Go to an saved credit card and change the credit card number
         app.tables.cells.element(boundBy: 1).tap()
         app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
@@ -220,7 +215,7 @@ class CreditCardsTests: BaseTestCase {
         typeCardNr(cardNo: cards[1])
         app.buttons["Save"].tap()
         // The credit card number is saved without issues
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1111"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         // Reach autofill website
         // reachAutofillWebsite() does not work on iOS 15
         if #available(iOS 16, *) {
@@ -254,12 +249,12 @@ class CreditCardsTests: BaseTestCase {
                          ["1111", "Test2", "6/40"],
                          ["9631", "Test3", "7/40"]]
         for i in 1...3 {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: i).staticTexts.firstMatch)
-            XCTAssertTrue(app.tables.cells.element(boundBy: i).staticTexts.elementContainingText(cardsInfo[i-1][0]).exists,
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: i).buttons.firstMatch)
+            XCTAssertTrue(app.tables.cells.element(boundBy: i).buttons.elementContainingText(cardsInfo[i-1][0]).exists,
                           "\(cardsInfo[i-1][0]) info is not displayed")
-            XCTAssertTrue(app.tables.cells.element(boundBy: i).staticTexts[cardsInfo[i-1][1]].exists,
+            XCTAssertTrue(app.tables.cells.element(boundBy: i).buttons[cardsInfo[i-1][1]].exists,
                           "\(cardsInfo[i-1][1]) info is not displayed")
-            XCTAssertTrue(app.tables.cells.element(boundBy: i).staticTexts[cardsInfo[i-1][2]].exists,
+            XCTAssertTrue(app.tables.cells.element(boundBy: i).buttons[cardsInfo[i-1][2]].exists,
                           "\(cardsInfo[i-1][2]) info is not displayed")
         }
         // reachAutofillWebsite() not working on iOS 15
@@ -343,9 +338,9 @@ class CreditCardsTests: BaseTestCase {
         saveButton.tap()
         // The credit card is saved
         let cardsInfo = ["Test", "5/40"]
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         for i in cardsInfo {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts[i])
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
         }
     }
 
@@ -403,10 +398,10 @@ class CreditCardsTests: BaseTestCase {
         unlockLoginsView()
         // The credit card is saved and displayed in the Credit cards section
         mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.savedCards])
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1111"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1111"))
         let cardDetails = ["Test", "Expires", "5/40"]
         for i in cardDetails {
-            XCTAssertTrue(app.tables.cells.element(boundBy: 1).staticTexts[i].exists, "\(i) does not exists")
+            XCTAssertTrue(app.tables.cells.element(boundBy: 1).buttons[i].exists, "\(i) does not exists")
         }
     }
 
@@ -484,10 +479,10 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Credit cards details changed
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         cardDetails = ["TestTest2", "Expires", "5/40"]
         for i in cardDetails {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts[i])
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
         }
     }
 
@@ -510,9 +505,9 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func selectCreditCardOnFormWebsite() {
-        mozWaitForElementToExist(app.scrollViews.otherElements.tables.staticTexts["Test"])
+        mozWaitForElementToExist(app.scrollViews.otherElements.tables.buttons["Test"])
         var attempts = 4
-        while app.scrollViews.otherElements.tables.staticTexts["Test"].isHittable && attempts > 0 {
+        while app.scrollViews.otherElements.tables.buttons["Test"].isHittable && attempts > 0 {
             app.scrollViews.otherElements.tables.cells.firstMatch.tapOnApp()
             attempts -= 1
         }
@@ -689,11 +684,11 @@ class CreditCardsTests: BaseTestCase {
         app.tables.cells.element(boundBy: 1).tap()
         // The "View card" page is displayed with all the details of the card
         mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.ViewCreditCard.viewCard])
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         let cardDetails = ["Test", "05 / 40"]
         for i in cardDetails {
             if #available(iOS 16, *) {
-                XCTAssertTrue(app.textFields[i].exists, "\(i) does not exists")
+                XCTAssertTrue(app.buttons[i].exists, "\(i) does not exists")
             } else {
                 mozWaitForElementToExist(app.staticTexts[i])
             }

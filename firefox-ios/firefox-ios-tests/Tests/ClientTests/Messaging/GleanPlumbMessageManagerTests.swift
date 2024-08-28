@@ -18,7 +18,6 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         super.setUp()
 
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         applicationHelper = MockApplicationHelper()
         subject = GleanPlumbMessageManager(
