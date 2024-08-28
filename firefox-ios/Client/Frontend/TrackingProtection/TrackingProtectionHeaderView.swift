@@ -51,13 +51,9 @@ class TrackingProtectionHeaderView: UIView {
                 equalTo: leadingAnchor,
                 constant: TPMenuUX.UX.TrackingDetails.imageMargins
             ),
-            backButton.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            backButton.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
+            backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            siteTitleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
+            siteTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             siteTitleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor),
             siteTitleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
             siteTitleLabel.topAnchor.constraint(
@@ -73,7 +69,7 @@ class TrackingProtectionHeaderView: UIView {
                 equalTo: trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            closeButton.topAnchor.constraint(equalTo: topAnchor, constant: TPMenuUX.UX.horizontalMargin),
+            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
             closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
             closeButton.widthAnchor.constraint(equalTo: closeButton.heightAnchor),

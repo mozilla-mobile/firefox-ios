@@ -18,21 +18,22 @@ struct TrackingProtectionDetailsModel {
     let connectionSecure: Bool
 
     let viewCertificatesButtonTitle: String = .Menu.EnhancedTrackingProtection.viewCertificatesButtonTitle
-
-    let detailsViewA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
-    let connectionViewA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.connectionView
-    let headerViewA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.headerView
-    let containerViewA11Id = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
-    let viewCertButtonA11Id = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.certificatesButton
 }
 
 class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
-    private let baseView: UIView = .build { view in }
+    private let baseView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
+    }
 
-    private let headerView: TrackingProtectionHeaderView = .build()
-    private let connectionView: TrackingProtectionStatusView = .build()
+    private let headerView: TrackingProtectionHeaderView = .build { header in
+        header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.headerView
+    }
+    private let connectionView: TrackingProtectionStatusView = .build { view in
+        view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.connectionView
+    }
     private let verifiedByView: TrackingProtectionVerifiedByView = .build()
 
     // MARK: See Certificates View
@@ -104,13 +105,22 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
         let contentViewContraints = [
             scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor,
+                constant: -TPMenuUX.UX.TrackingDetails.bottomDistance
+            ),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            baseView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            baseView.topAnchor.constraint(
+                equalTo: scrollView.topAnchor,
+                constant: TPMenuUX.UX.TrackingDetails.baseDistance
+            ),
             baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            baseView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            baseView.widthAnchor.constraint(
+                equalTo: scrollView.widthAnchor,
+                constant: -(2 * TPMenuUX.UX.horizontalMargin)
+            ),
         ]
 
         constraints.append(contentsOf: contentViewContraints)
@@ -139,19 +149,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: Connection Status View Setup
     private func setupConnectionStatusView() {
-        baseView.addSubviews(connectionView)
-
+        baseView.addArrangedSubview(connectionView)
         let connectionViewContraints = [
-            connectionView.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            connectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor,
-                                                constant: TPMenuUX.UX.TrackingDetails.baseDistance),
-            connectionView.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
             connectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight),
         ]
 
@@ -160,20 +159,8 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     // MARK: Verified By View Setup
     private func setupVerifiedByView() {
-        baseView.addSubview(verifiedByView)
-
+        baseView.addArrangedSubview(verifiedByView)
         let verifiedByViewContraints = [
-            verifiedByView.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            verifiedByView.topAnchor.constraint(equalTo: connectionView.bottomAnchor),
-            verifiedByView.bottomAnchor.constraint(equalTo: baseView.bottomAnchor,
-                                                   constant: -TPMenuUX.UX.TrackingDetails.bottomDistance),
-            verifiedByView.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
             verifiedByView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight)
         ]
 
@@ -184,36 +171,20 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private func setupSeeCertificatesView() {
         let certificatesButtonViewModel = LinkButtonViewModel(
             title: model.viewCertificatesButtonTitle,
-            a11yIdentifier: model.viewCertButtonA11Id,
+            a11yIdentifier: AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.certificatesButton,
             font: FXFontStyles.Regular.footnote.scaledFont()
         )
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
-        baseView.addSubview(viewCertificatesButton)
-
-        let viewCertificatesConstraints = [
-            viewCertificatesButton.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            viewCertificatesButton.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            viewCertificatesButton.topAnchor.constraint(
-                equalTo: verifiedByView.bottomAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.viewCertButtonTopDistance
-            ),
-        ]
-
-        constraints.append(contentsOf: viewCertificatesConstraints)
+        baseView.addArrangedSubview(viewCertificatesButton)
+        baseView.setCustomSpacing(
+            TPMenuUX.UX.TrackingDetails.viewCertButtonTopDistance,
+            after: verifiedByView
+        )
     }
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        headerView.accessibilityIdentifier = model.headerViewA11yId
-        view.accessibilityIdentifier = model.detailsViewA11yId
-        baseView.accessibilityIdentifier = model.containerViewA11Id
-        connectionView.accessibilityIdentifier = model.connectionViewA11yId
+        view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.mainView
     }
 
     // MARK: View Transitions
@@ -256,6 +227,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
     @objc
     func viewCertificatesTapped() {
+        // TODO: FXIOS-9853 connect with the certificates screen
     }
 
     private func currentTheme() -> Theme {
@@ -267,7 +239,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 extension TrackingProtectionDetailsViewController {
     func applyTheme() {
         let theme = currentTheme()
-        overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor =  theme.colors.layer1
         connectionView.connectionImage.image = model.getLockIcon(theme.type)
         verifiedByView.applyTheme(theme: theme)
