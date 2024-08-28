@@ -7,7 +7,7 @@ import XCTest
 import X509
 @testable import Client
 
-final class CertificatesModelTests: XCTestCase {
+final class CertificatesViewModelTests: XCTestCase {
     private var viewModel: CertificatesViewModel!
 
     override func setUp() {

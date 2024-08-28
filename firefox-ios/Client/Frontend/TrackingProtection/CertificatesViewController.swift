@@ -18,33 +18,28 @@ struct CertificateKeys {
     static let organization = "O"
 }
 
-struct CertificatesUX {
-    static let sectionLabelWidth = 150.0
-    static let sectionLabelMargin = 20.0
-    static let sectionItemsSpacing = 40.0
-    static let allSectionItemsSpacing = 10.0
-    static let allSectionItemsTopMargin = 20.0
-    static let headerStackViewSpacing = 16.0
-    static let titleLabelMargin = 8.0
-    static let titleLabelTopMargin = 20.0
-    static let headerStackViewMargin = 8.0
-    static let headerStackViewTopMargin = 20.0
-    static let tableViewSpacerTopMargin = 20.0
-    static let tableViewSpacerHeight = 1.0
-    static let tableViewTopMargin = 20.0
-}
-
 typealias CertificateItems = [(key: String, value: String)]
 
 class CertificatesViewController: UIViewController, Themeable, UITableViewDelegate, UITableViewDataSource {
     private enum CertificatesItemType: Int {
-        case subjectName = 0
-        case issuerName = 1
-        case validity = 2
-        case subjectAltName = 3
+        case subjectName
+        case issuerName
+        case validity
+        case subjectAltName
     }
 
     // MARK: - UI
+    struct UX {
+        static let headerStackViewSpacing = 16.0
+        static let titleLabelMargin = 8.0
+        static let titleLabelTopMargin = 20.0
+        static let headerStackViewMargin = 8.0
+        static let headerStackViewTopMargin = 20.0
+        static let tableViewSpacerTopMargin = 20.0
+        static let tableViewSpacerHeight = 1.0
+        static let tableViewTopMargin = 20.0
+    }
+
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
@@ -53,7 +48,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     private let headerStackView: UIStackView = .build { stack in
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = CertificatesUX.headerStackViewSpacing
+        stack.spacing = UX.headerStackViewSpacing
     }
 
     private let tableViewTopSpacer: UIView = .build()
@@ -118,36 +113,39 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     private func setupTitleConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CertificatesUX.titleLabelMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CertificatesUX.titleLabelMargin),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: CertificatesUX.titleLabelTopMargin)
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.titleLabelMargin),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.titleLabelMargin),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.titleLabelTopMargin)
         ])
     }
 
     private func setupCertificatesHeaderView() {
         // TODO: FXIOS-9834 Add tab indicator for table view tabs and hide/unhide it on selection
         for (index, certificate) in viewModel.certificates.enumerated() {
-            let button: UIButton = .build { [weak self] button in
-                button.setTitle(self?.viewModel.getCertificateValues(from: "\(certificate.subject)")[CertificateKeys.commonName], for: .normal)
-                button.setTitleColor(self?.currentTheme().colors.textPrimary, for: .normal)
-                button.configuration?.titleLineBreakMode = .byWordWrapping
-                button.titleLabel?.numberOfLines = 2
-                button.titleLabel?.textAlignment = .center
-                button.tag = index
-                button.addTarget(self, action: #selector(self?.certificateButtonTapped(_:)), for: .touchUpInside)
+            let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
+            if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
+                let button: UIButton = .build { [weak self] button in
+                    button.setTitle(commonName, for: .normal)
+                    button.setTitleColor(self?.currentTheme().colors.textPrimary, for: .normal)
+                    button.configuration?.titleLineBreakMode = .byWordWrapping
+                    button.titleLabel?.numberOfLines = 2
+                    button.titleLabel?.textAlignment = .center
+                    button.tag = index
+                    button.addTarget(self, action: #selector(self?.certificateButtonTapped(_:)), for: .touchUpInside)
+                }
+                headerStackView.addArrangedSubview(button)
             }
-            headerStackView.addArrangedSubview(button)
         }
 
         view.addSubview(headerStackView)
 
         NSLayoutConstraint.activate([
             headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                     constant: CertificatesUX.headerStackViewMargin),
+                                                     constant: UX.headerStackViewMargin),
             headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                      constant: -CertificatesUX.headerStackViewMargin),
+                                                      constant: -UX.headerStackViewMargin),
             headerStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                 constant: CertificatesUX.headerStackViewTopMargin)
+                                                 constant: UX.headerStackViewTopMargin)
         ])
     }
 
@@ -158,13 +156,13 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
             tableViewTopSpacer.topAnchor.constraint(equalTo: headerStackView.bottomAnchor,
-                                                    constant: CertificatesUX.tableViewSpacerTopMargin),
+                                                    constant: UX.tableViewSpacerTopMargin),
             tableViewTopSpacer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableViewTopSpacer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableViewTopSpacer.heightAnchor.constraint(equalToConstant: CertificatesUX.tableViewSpacerHeight),
+            tableViewTopSpacer.heightAnchor.constraint(equalToConstant: UX.tableViewSpacerHeight),
 
             certificatesTableView.topAnchor.constraint(equalTo: tableViewTopSpacer.bottomAnchor,
-                                                       constant: CertificatesUX.tableViewTopMargin),
+                                                       constant: UX.tableViewTopMargin),
             certificatesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             certificatesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -195,15 +193,15 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
 
         let certificate = viewModel.certificates[viewModel.selectedCertificateIndex]
 
-        switch indexPath.row {
-        case CertificatesItemType.subjectName.rawValue:
+        switch CertificatesItemType(rawValue: indexPath.row) {
+        case .subjectName:
             if let commonName = viewModel.getCertificateValues(from: "\(certificate.subject)")[CertificateKeys.commonName] {
                 cell.configure(theme: currentTheme(),
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
             }
 
-        case CertificatesItemType.issuerName.rawValue:
+        case .issuerName:
             let issuerData = viewModel.getCertificateValues(from: "\(certificate.issuer)")
             if let country = issuerData[CertificateKeys.country],
                let organization = issuerData[CertificateKeys.organization],
@@ -215,7 +213,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
                                        (.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
             }
 
-        case CertificatesItemType.validity.rawValue:
+        case .validity:
             cell.configure(theme: currentTheme(),
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateValidity,
                            items: [
@@ -225,11 +223,11 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
                                 certificate.notValidAfter.toRFC822String())
                            ])
 
-        case CertificatesItemType.subjectAltName.rawValue:
+        case .subjectAltName:
             cell.configure(theme: currentTheme(),
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectAltNames,
                            items: viewModel.getDNSNames(for: certificate))
-        default: break
+        case .none: break
         }
         return cell
     }

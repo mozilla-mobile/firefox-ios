@@ -20,9 +20,9 @@ final class CertificatesViewModel {
         self.certificates = certificates
     }
 
-    func getCertificateValues(from data: String) -> [String: String] {
+    func getCertificateValues(from input: String) -> [String: String] {
         var result = [String: String]()
-        let components = data.split(separator: ",")
+        let components = input.split(separator: ",")
         for component in components {
             let parts = component.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
             if parts.count == 2 {
