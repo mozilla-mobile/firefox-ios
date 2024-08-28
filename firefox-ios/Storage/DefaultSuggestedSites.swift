@@ -49,7 +49,8 @@ open class DefaultSuggestedSites {
             ),
             SuggestedSiteData(
                 url: "https://www.amazon.com/",
-                // FIXME Need the correct favicon URL... grabbed this one from the contile services link
+                // NOTE: Amazon does not host a high quality favicon. We are falling back to the one hosted in our
+                // ContileProvider.contileProdResourceEndpoint (https://ads.mozilla.org/v1/tiles).
                 faviconUrl: "https://tiles-cdn.prod.ads.prod.webservices.mozgcp.net/CAP5k4gWqcBGwir7bEEmBWveLMtvldFu-y_kyO3txFA=.9991.jpg",
                 trackingId: 630,
                 title: .DefaultSuggestedAmazon
@@ -61,7 +62,7 @@ open class DefaultSuggestedSites {
                 title: .DefaultSuggestedWikipedia
             ),
             SuggestedSiteData(
-                url: "https://x.com/", // TODO Update Twitter to X
+                url: "https://x.com/",
                 faviconUrl: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png",
                 trackingId: 628,
                 title: .DefaultSuggestedTwitter
@@ -70,7 +71,7 @@ open class DefaultSuggestedSites {
         "zh_CN": [ // FIXME Do we still want this as a special case localization? Android doesn't compile this vers. anymore
             SuggestedSiteData(
                 url: "http://mozilla.com.cn",
-                faviconUrl: "asset://mozChinaLogo", // FIXME We need a favicon link
+                faviconUrl: "http://mozilla.com.cn/favicon.ico", // FIXME We need a higher quality favicon link
                 trackingId: 700,
                 title: "火狐社区"
             ),
@@ -105,7 +106,7 @@ open class DefaultSuggestedSites {
                 QIHUV9bCUkQAF8LGFoRXgcAXVttOEsSMyRmGmsXXAcAXFdaAEwVM28PH10TVAMHVVpbDE8\
                 nBG8BKydLFl5fCQ5eCUsSM184GGsSXQ8WUiwcWl8RcV84G1slXTZdEAMAOEkWAmsBK2s
                 """,
-                faviconUrl: "asset://jdLogo", // FIXME We need a favicon link
+                faviconUrl: "https://corporate.jd.com/favicon.ico", // FIXME We need a higher quality favicon link
                 trackingId: 705,
                 title: "京东"
             )
