@@ -98,6 +98,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
+        hasContextualHint: true,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
@@ -548,7 +549,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let isForwardButtonEnabled = canGoForward
             actions.append(backAction(enabled: isBackButtonEnabled))
             actions.append(forwardAction(enabled: isForwardButtonEnabled))
-            if shouldShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
+            if canShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
                 actions.append(dataClearanceAction)
             }
         }
@@ -687,15 +688,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
-        let shouldShowDataClearanceAction = shouldShowDataClearanceAction(isPrivate: isPrivateMode)
-        guard !shouldShowDataClearanceAction else {
-            return dataClearanceAction
-        }
-
+        let canShowDataClearanceAction = canShowDataClearanceAction(isPrivate: isPrivateMode)
         let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let middleActionDefault = isNewTabEnabled ? newTabAction : homeAction
-        let middleActionHome = searchAction
-        let middleAction = url == nil ? middleActionHome : middleActionDefault
+        let middleActionForWebpage = canShowDataClearanceAction ?
+                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+        let middleActionForHomepage = searchAction
+        let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 
         return middleAction
     }
@@ -744,7 +742,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             badgeImageName: badgeImageName,
             maskImageName: maskImageName,
             isEnabled: true,
-            a11yLabel: .AppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 
@@ -758,7 +756,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
     }
 
-    private func shouldShowDataClearanceAction(isPrivate: Bool) -> Bool {
+    private func canShowDataClearanceAction(isPrivate: Bool) -> Bool {
         let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
         let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
 

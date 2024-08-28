@@ -11,6 +11,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func configureContextualHint(for button: UIButton)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
@@ -265,10 +266,16 @@ final class AddressToolbarContainer: UIView,
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+
+        let isPrivateMode = model?.isPrivateMode ?? false
+        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+
         progressBar.setGradientColors(
-            startColor: theme.colors.borderAccent,
-            middleColor: theme.colors.iconAccentPink,
-            endColor: theme.colors.iconAccentYellow
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
         )
     }
 
@@ -293,6 +300,12 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         delegate?.addressToolbarContainerAccessibilityActions()
+    }
+
+    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton) {
+        if addressToolbar == toolbar {
+            delegate?.configureContextualHint(for: button)
+        }
     }
 
     // MARK: - MenuHelperURLBarInterface

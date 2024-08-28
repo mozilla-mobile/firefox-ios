@@ -18,6 +18,7 @@ class AddressToolbarContainerModel: Equatable {
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
+    let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
 
@@ -77,6 +78,7 @@ class AddressToolbarContainerModel: Equatable {
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
+        self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
     }
@@ -102,6 +104,7 @@ class AddressToolbarContainerModel: Equatable {
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
+                hasContextualHint: action.hasContextualHint,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
