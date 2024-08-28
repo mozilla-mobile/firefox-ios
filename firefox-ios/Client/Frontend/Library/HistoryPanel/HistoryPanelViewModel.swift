@@ -248,14 +248,33 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     func deleteGroupsFor(dateOption: HistoryDeletionUtilityDateOptions) {
-        guard let deletableSections = getDeletableSection(for: dateOption) else { return }
+        if dateOption != .lastHour {
+            guard let deletableSections = getDeletableSection(for: dateOption) else { return }
+            deletableSections.forEach { section in
+                // Remove grouped items for delete section
+                var sectionItems: [AnyHashable] = groupsForSection(section: section)
+                let singleItems = groupedSites.itemsForSection(section.rawValue - 1)
+                sectionItems.append(contentsOf: singleItems)
+                removeHistoryItems(item: sectionItems, at: section.rawValue)
+            }
+        } else {
+            deleteLastHourHistory()
+        }
+    }
 
+    private func deleteLastHourHistory() {
+        guard let deletableSections = getDeletableSection(for: .lastHour) else { return }
         deletableSections.forEach { section in
-            // Remove grouped items for delete section
-            var sectionItems: [AnyHashable] = groupsForSection(section: section)
-            let singleItems = groupedSites.itemsForSection(section.rawValue - 1)
-            sectionItems.append(contentsOf: singleItems)
-            removeHistoryItems(item: sectionItems, at: section.rawValue)
+            var lastHourHistory = groupedSites.itemsForSection(section.rawValue - 1)
+            // Filter to only include history items that have been visited in the last hour
+            lastHourHistory = lastHourHistory.filter { site in
+                if let latestVisit = site.latestVisit {
+                    return TimeInterval.fromMicrosecondTimestamp(latestVisit.date) >=
+                    TimeInterval.fromMicrosecondTimestamp(Date(timeIntervalSinceNow: -(60 * 60)).toMicrosecondsSince1970())
+                }
+                return false
+            }
+            removeHistoryItems(item: lastHourHistory, at: section.rawValue)
         }
     }
 
@@ -361,6 +380,8 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     private func getDeletableSection(for dateOption: HistoryDeletionUtilityDateOptions) -> [Sections]? {
         switch dateOption {
+        case .lastHour:
+            return [.today, .yesterday]
         case .today:
             return [.today]
         case .yesterday:

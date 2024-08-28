@@ -64,7 +64,7 @@ class ClearHistorySheetProvider {
         typealias DateOptions = HistoryDeletionUtilityDateOptions
         [
             // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
-//            (String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
+            (String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
             (String.ClearHistoryMenuOptionToday, DateOptions.today),
             (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)
         ].forEach { (name, timeRange) in
