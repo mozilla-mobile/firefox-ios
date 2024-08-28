@@ -2744,7 +2744,7 @@ class BrowserViewController: UIViewController,
                                         webView: WKWebView,
                                         frame: WKFrameInfo?) {
         guard addressAutofillSettingsUserDefaultsIsEnabled(),
-              addressAutofillNimbusFeatureFlag(),
+              AddressLocaleFeatureValidator.isValidRegion(),
               // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
               let type = type else { return }
 
