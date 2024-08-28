@@ -690,10 +690,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
         let canShowDataClearanceAction = canShowDataClearanceAction(isPrivate: isPrivateMode)
         let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
         let middleActionForWebpage = canShowDataClearanceAction ?
                                      dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
-        let middleActionForHomepage = isToolbarRefactorEnabled || !isPrivateMode ? searchAction : dataClearanceAction
+        let middleActionForHomepage = searchAction
         let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 
         return middleAction
