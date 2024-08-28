@@ -165,7 +165,7 @@ extension String {
             public static let DeletedBookmark = MZLocalizedString(
                 key: "Bookmarks.Menu.DeletedBookmark.v131",
                 tableName: "Bookmarks",
-                value: "Deleted \"%@\"",
+                value: "Deleted “%@”",
                 comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
             public static let BookmarksTopLevelTitle = MZLocalizedString(
                 key: "Bookmarks.Menu.BookmarksTopLevelTitle.v131",
