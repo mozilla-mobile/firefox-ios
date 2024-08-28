@@ -42,10 +42,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             Experiments.shared.initializeTooling(url: url)
         }
 
+        // By default if no bool value is set we close the private tabs and open app in normal mode
+        let isClosePrivateTabsEnabled = profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
         routeBuilder.configure(
-            isPrivate: UserDefaults.standard.bool(
-                forKey: PrefsKeys.LastSessionWasPrivate
-            ),
+            isPrivate: UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate) && !isClosePrivateTabsEnabled,
             prefs: profile.prefs
         )
 
