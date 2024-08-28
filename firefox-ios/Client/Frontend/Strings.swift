@@ -6791,6 +6791,11 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Tile title for Twitter")
+    public static let DefaultSuggestedX = MZLocalizedString(
+        key: "SuggestedSites.X.Title.v131",
+        tableName: "SuggestedSites",
+        value: "X",
+        comment: "Title for X (formerly Twitter) tile in the suggested sites section of the homepage.")
 }
 
 // MARK: - Credential Provider
