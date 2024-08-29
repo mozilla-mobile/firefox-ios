@@ -63,7 +63,30 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
 
-    func testFavicon_whenNoUrl_returnsFallbackLetterFavicon() async {
+    func testFavicon_whenNoImages_returnsFallbackLetterFavicon_forHardcodedFaviconURL() async {
+        let subject = createSubject()
+        let model = createSiteImageModel(resourceURL: faviconURL)
+        let result = await subject.fetchFavicon(imageModel: model)
+
+        XCTAssertEqual(letterImageGenerator.image, result)
+
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
+
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
+
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
+
+        // `cacheKey` will be the `shortDomain` if no `resourceURL` was provided at time of SiteImageModel creation,
+        // as it is with sites having hard coded `faviconURL`s
+        XCTAssertEqual(model.cacheKey, siteURL.absoluteString)
+        XCTAssertEqual(letterImageGenerator.capturedSiteString, siteURL.absoluteString)
+    }
+
+    func testFavicon_whenNoUrl_returnsFallbackLetterFavicon_noFaviconURL() async {
         let subject = createSubject()
         let site = createSiteImageModel(resourceURL: nil)
 
