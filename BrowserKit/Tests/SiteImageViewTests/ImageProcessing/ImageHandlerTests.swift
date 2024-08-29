@@ -128,7 +128,7 @@ final class ImageHandlerTests: XCTestCase {
         siteImageCache.image = expectedResult
         let subject = createSubject()
         let model = createSiteImageModel(resourceURL: faviconURL,
-                                        type: .heroImage)
+                                         type: .heroImage)
         do {
             let result = try await subject.fetchHeroImage(imageModel: model)
 
@@ -151,7 +151,7 @@ final class ImageHandlerTests: XCTestCase {
         heroImageFetcher.image = expectedResult
         let subject = createSubject()
         let model = createSiteImageModel(resourceURL: faviconURL,
-                                        type: .heroImage)
+                                         type: .heroImage)
         do {
             let result = try await subject.fetchHeroImage(imageModel: model)
 
@@ -170,7 +170,7 @@ final class ImageHandlerTests: XCTestCase {
     func testHeroImage_whenNoHeroImage_throwsNoHeroImageError() async {
         let subject = createSubject()
         let model = createSiteImageModel(resourceURL: faviconURL,
-                                        type: .heroImage)
+                                         type: .heroImage)
         do {
             _ = try await subject.fetchHeroImage(imageModel: model)
 
@@ -194,7 +194,7 @@ final class ImageHandlerTests: XCTestCase {
         let expectedResult = UIImage()
         let subject = createSubject()
         let model = createSiteImageModel(resourceURL: faviconURL,
-                                        type: .heroImage)
+                                         type: .heroImage)
         siteImageCache.image = expectedResult
 
         let result = await subject.fetchFavicon(imageModel: model)
@@ -215,7 +215,7 @@ final class ImageHandlerTests: XCTestCase {
         let expectedResult = UIImage()
         let subject = createSubject()
         let model = createSiteImageModel(resourceURL: faviconURL,
-                                        type: .heroImage)
+                                         type: .heroImage)
         faviconFetcher.image = expectedResult
 
         let result = await subject.fetchFavicon(imageModel: model)
