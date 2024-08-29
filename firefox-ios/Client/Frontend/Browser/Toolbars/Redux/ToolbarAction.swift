@@ -68,6 +68,7 @@ enum ToolbarActionType: ActionType {
     case didPasteSearchTerm
     case didStartEditingUrl
     case cancelEdit
+    case didScrollDuringEdit
     case readerModeStateChanged
 }
 

@@ -106,7 +106,8 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.urlDidChange,
             ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl,
-            ToolbarActionType.cancelEdit:
+            ToolbarActionType.cancelEdit,
+            ToolbarActionType.didScrollDuringEdit:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,
