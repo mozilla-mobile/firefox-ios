@@ -5,6 +5,7 @@
 import Common
 import Shared
 import UIKit
+import ComponentLibrary
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     // MARK: Data Clearance CFR / Contextual Hint
@@ -362,6 +363,20 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
         presentSignInViewController(fxaParameters.launchParameters,
                                     flowType: fxaParameters.flowType,
                                     referringPage: fxaParameters.referringPage)
+    }
+    func showPasswordGeneratorBottomSheet() {
+        let passwordGeneratorVC = PasswordGeneratorViewController(windowUUID: windowUUID)
+
+        var bottomSheetVM = BottomSheetViewModel(
+            closeButtonA11yLabel: .PasswordGenerator.CloseButtonA11yLabel,
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.bottomSheet)
+        bottomSheetVM.shouldDismissForTapOutside = true
+        let bottomSheetVC = BottomSheetViewController(
+            viewModel: bottomSheetVM,
+            childViewController: passwordGeneratorVC,
+            usingDimmedBackground: true,
+            windowUUID: windowUUID)
+        showViewController(viewController: bottomSheetVC)
     }
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {

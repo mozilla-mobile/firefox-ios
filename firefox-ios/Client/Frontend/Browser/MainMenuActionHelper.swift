@@ -27,6 +27,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showCreditCardSettings()
     func showSignInView(fxaParameters: FxASignInViewParameters)
     func showFilePicker(fileURL: URL)
+    func showPasswordGeneratorBottomSheet()
 }
 
 extension ToolBarActionMenuDelegate {
@@ -252,6 +253,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             append(to: &section, action: reportSiteIssueAction)
         }
 
+        // TODO: FXIOS-9659 [TEMPORARY] Remove password generator prompt menu button after this ticket has been implemented
+        if featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
+            let showPasswordGeneratorPromptAction = getShowPasswordGeneratorPromptAction()
+            append(to: &section, action: showPasswordGeneratorPromptAction)
+        }
+
         return section
     }
 
@@ -432,6 +439,17 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             guard let tabURL = self.selectedTab?.url?.absoluteString else { return }
             self.delegate?.openURLInNewTab(SupportUtils.URLForReportSiteIssue(tabURL), isPrivate: false)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reportSiteIssue)
+        }.items
+    }
+
+    // TODO: FXIOS-9659 [TEMPORARY] Remove password generator prompt menu button after this ticket has been implemented
+    private func getShowPasswordGeneratorPromptAction() -> PhotonRowActions? {
+        guard featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) else { return nil }
+
+        // This method will be removed so the title not being localized doesn't matter
+        return SingleActionViewModel(title: "Show Password Generator Prompt",
+                                     iconString: StandardImageIdentifiers.Large.lock) { _ in
+            self.delegate?.showPasswordGeneratorBottomSheet()
         }.items
     }
 

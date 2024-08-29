@@ -47,6 +47,7 @@
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
+		0E456F152C541CB300EE93BF /* PasswordGeneratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E456F142C541CB300EE93BF /* PasswordGeneratorViewController.swift */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
@@ -2220,6 +2221,7 @@
 		0E134A0087CE6D183E5DA1D4 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/Search.strings; sourceTree = "<group>"; };
 		0E2440E3AD220D7C5EB7BB50 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0E2D4E0FA5490EF048AEE106 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
+		0E456F142C541CB300EE93BF /* PasswordGeneratorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorViewController.swift; sourceTree = "<group>"; };
 		0E4E4A54808AB93E32297350 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		0E524676A2657BD8147C072A /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		0E854FF68376A644D3C0FA95 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -8925,6 +8927,14 @@
 			path = SearchQuickLinksMedium;
 			sourceTree = "<group>";
 		};
+		0E456F132C541C8F00EE93BF /* PasswordGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				0E456F142C541CB300EE93BF /* PasswordGeneratorViewController.swift */,
+			);
+			path = PasswordGenerator;
+			sourceTree = "<group>";
+		};
 		1D7B78952ADF324E0011E9F2 /* Event Queue */ = {
 			isa = PBXGroup;
 			children = (
@@ -12945,6 +12955,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				0E456F132C541C8F00EE93BF /* PasswordGenerator */,
 				8A1A93572B757C7B0069C190 /* LottieFiles */,
 				392ED7D51D0AEEEE009D9B62 /* Accessors */,
 				E692E3271C46E62D009D1240 /* AuthenticationManager */,
@@ -15298,6 +15309,7 @@
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
 				8A0A1BA32B22030100E8706F /* PrivateMessageCardCell.swift in Sources */,
 				AB9CBC022C53B64C00102610 /* TrackingProtectionAction.swift in Sources */,
+				0E456F152C541CB300EE93BF /* PasswordGeneratorViewController.swift in Sources */,
 				213BF7532AC21D1B00C53A64 /* TabDisplayPanel.swift in Sources */,
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,
 				C88E7A5B2A0553510072E638 /* OnboardingLinkInfoModel.swift in Sources */,

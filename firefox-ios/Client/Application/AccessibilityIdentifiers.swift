@@ -752,5 +752,12 @@ public struct AccessibilityIdentifiers {
         static let creditCardCloseButton = "Autofill.creditCardCloseButton"
         static let loginCloseButton = "Autofill.loginCloseButton"
     }
+
+    enum PasswordGenerator {
+        static let bottomSheet = "PasswordGenerator.bottomSheet"
+        static let bottomSheetHeader = "PasswordGenerator.bottomSheetHeader"
+        static let bottomSheetUsePasswordButton = "PasswordGenerator.bottomSheetUsePasswordButton"
+        static let bottomSheetRefreshStrongPasswordButton = "PasswordGenerator.bottomSheetRefreshStrongPasswordButton"
+    }
 }
 // swiftlint:enable line_length
