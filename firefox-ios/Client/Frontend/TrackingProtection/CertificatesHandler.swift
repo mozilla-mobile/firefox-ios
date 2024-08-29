@@ -7,6 +7,7 @@ import Security
 import CryptoKit
 import X509
 import SwiftASN1
+import Common
 
 class CertificatesHandler {
     private let serverTrust: SecTrust
@@ -32,7 +33,9 @@ class CertificatesHandler {
                 let certificate = try Certificate(derEncoded: Array(certificateData))
                 certificates.append(certificate)
             } catch {
-                print("Error decoding certificate: \(error)")
+                DefaultLogger.shared.log("\(error)",
+                                         level: .warning,
+                                         category: .homepage)
             }
         }
         return certificates
@@ -49,7 +52,9 @@ func getCertificates(for url: URL, completion: @escaping ([Certificate]?) -> Voi
     // Start a data task to trigger the certificate retrieval
     let task = session.dataTask(with: url) { _, _, error in
         if let error = error {
-            print("Error fetching data: \(error)")
+            DefaultLogger.shared.log("\(error)",
+                                     level: .warning,
+                                     category: .homepage)
             completion(nil)
         }
     }
