@@ -100,7 +100,8 @@ class DefaultImageHandler: ImageHandler {
         do {
             var siteString = imageModel.cacheKey
             if imageModel.siteURL.scheme == "internal", imageModel.siteURL.lastPathComponent == "home" {
-                // We should use an "H" letter favicon, not "L" from "local", in home page URL: `internal://local/about/home`
+                // We should use an "H" letter favicon for the home page with internal URL `internal://local/about/home`,
+                // not an "L" from the "local" shortDomain.
                 siteString = "home"
             }
 

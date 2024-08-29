@@ -66,7 +66,7 @@ class FaviconURLHandlerTests: XCTestCase {
         let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher,
                                                urlCache: mockCache)
         do {
-            let _ = try await subject.getFaviconURL(model: model)
+            _ = try await subject.getFaviconURL(model: model)
             XCTFail("Should throw an error")
         } catch {
             XCTAssertEqual(error as? SiteImageError, SiteImageError.noFaviconFound)
