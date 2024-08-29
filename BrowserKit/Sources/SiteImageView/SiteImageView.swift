@@ -29,13 +29,11 @@ extension SiteImageView {
     }
 
     func updateImage(model: SiteImageModel) {
-        Task {
-            let image = await imageFetcher.getImage(model: model)
+        Task { [weak self] in
+            let image = await self?.imageFetcher.getImage(model: model)
 
             await MainActor.run { [weak self] in
-                guard let self, uniqueID == model.id else {
-                    return
-                }
+                guard let self, let image, uniqueID == model.id else { return }
                 setImage(image: image)
             }
         }
