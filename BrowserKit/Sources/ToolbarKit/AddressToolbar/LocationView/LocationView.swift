@@ -258,10 +258,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
 
-        _ = state.isEditing ? becomeFirstResponder() : resignFirstResponder()
+        let shouldShowKeyboard = state.isEditing && !state.isScrollingDuringEdit
+        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Start overlay mode & select text when in edit mode with a search term
-        if state.isEditing, state.shouldSelectSearchTerm {
+        if shouldShowKeyboard, state.shouldSelectSearchTerm {
             DispatchQueue.main.async {
                 self.urlTextField.selectAll(nil)
             }
