@@ -31,10 +31,14 @@ class BrowsingTest: BaseTestCase {
 
         // Launch external app
         let RemindersApp: XCUIElement
-        if iPad() {
-            RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
+        if #available(iOS 17, *) {
+            RemindersApp = app.collectionViews.scrollViews.cells["Reminders"]
         } else {
-            RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+            if iPad() {
+                RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
+            } else {
+                RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+            }
         }
         waitForExistence(RemindersApp)
         waitForHittable(RemindersApp)
