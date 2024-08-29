@@ -366,13 +366,13 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         updateUIForSearchEngineDisplay()
+        let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
 
-        DispatchQueue.main.async { [self] in
-            // `attributedText` property is set to nil to remove all formatting and truncation set before.
-            textField.attributedText = nil
-            textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
-        }
-        delegate?.locationViewDidBeginEditing(textField.text ?? "")
+        // `attributedText` property is set to nil to remove all formatting and truncation set before.
+        textField.attributedText = nil
+        textField.text = searchText
+
+        delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
 
     func locationTextFieldDidEndEditing(_ textField: UITextField) {

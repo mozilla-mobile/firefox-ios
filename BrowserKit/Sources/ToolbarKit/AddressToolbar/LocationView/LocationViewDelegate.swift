@@ -15,8 +15,11 @@ protocol LocationViewDelegate: AnyObject {
 
     /// Called when the user begins editing text in the location view.
     ///
-    /// - Parameter text: The initial text in the location view when the user began editing.
-    func locationViewDidBeginEditing(_ text: String)
+    /// - Parameters:
+    ///   - text: The initial text in the location view when the user began editing.
+    ///   - shouldShowSuggestions: Indicates whether search suggestions should be displayed
+    ///
+    func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool)
 
     /// Called when the location view should perform a search based on the entered text.
     ///

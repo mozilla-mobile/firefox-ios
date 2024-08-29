@@ -12,6 +12,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func configureContextualHint(for button: UIButton)
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
@@ -296,6 +297,20 @@ final class AddressToolbarContainer: UIView,
         let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
                                              actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
         store.dispatch(action)
+    }
+
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
+        enterOverlayMode(nil, pasted: false, search: false)
+
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+        store.dispatch(action)
+
+        if shouldShowSuggestions {
+            delegate?.openSuggestions(searchTerm: searchTerm)
+        }
     }
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
