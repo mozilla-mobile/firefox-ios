@@ -31,7 +31,4 @@ protocol LocationViewDelegate: AnyObject {
     /// - Returns: An optional array of `UIAccessibilityCustomAction` objects.
     /// Return `nil` if no custom actions are provided.
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]?
-
-    /// Called when the user cancels entering text into the location view.
-    func locationViewDidCancelEditing()
 }
