@@ -11,7 +11,10 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func configureContextualHint(for button: UIButton)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
+    func addressToolbarDidEnterOverlayMode(_ view: UIView)
+    func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
 }
 
 final class AddressToolbarContainer: UIView,
@@ -20,7 +23,9 @@ final class AddressToolbarContainer: UIView,
                                      AlphaDimmable,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
-                                     MenuHelperURLBarInterface {
+                                     MenuHelperURLBarInterface,
+                                     Autocompletable,
+                                     URLBarViewProtocol {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
         static let compactLeadingEdgeDisplay: CGFloat = 16
@@ -39,8 +44,15 @@ final class AddressToolbarContainer: UIView,
     private(set) weak var delegate: AddressToolbarContainerDelegate?
 
     private var toolbar: BrowserAddressToolbar {
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        return isCompact ? compactToolbar : regularToolbar
+        return shouldDisplayCompact ? compactToolbar : regularToolbar
+    }
+
+    private var shouldDisplayCompact: Bool {
+        guard let model else {
+            return traitCollection.horizontalSizeClass == .compact
+        }
+
+        return model.shouldDisplayCompact
     }
 
     private var isTransitioning = false {
@@ -69,7 +81,7 @@ final class AddressToolbarContainer: UIView,
                                                          window: windowUUID)
         else { return nil }
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isCompact = shouldDisplayCompact
         let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
@@ -89,7 +101,7 @@ final class AddressToolbarContainer: UIView,
                                                          window: windowUUID)
         else { return nil }
 
-        let isCompact = traitCollection.horizontalSizeClass == .compact
+        let isCompact = shouldDisplayCompact
         let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
@@ -101,6 +113,10 @@ final class AddressToolbarContainer: UIView,
         default: return nil
         }
     }
+
+    /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
+    /// and the Cancel button is visible (allowing the user to leave overlay mode).
+    var inOverlayMode = false
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -139,12 +155,6 @@ final class AddressToolbarContainer: UIView,
     override func resignFirstResponder() -> Bool {
         super.resignFirstResponder()
         return toolbar.resignFirstResponder()
-    }
-
-    // MARK: View Transitions
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        adjustLayout()
     }
 
     // MARK: - Redux
@@ -205,7 +215,14 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
-            _ = toolbarState.addressToolbar.isEditing ? becomeFirstResponder() : resignFirstResponder()
+            // the layout (compact/regular) that should be displayed is driven by the state
+            adjustLayout()
+
+            // Dismiss overlay mode when not editing to fix overlay mode staying open
+            // on iPad when switching tabs using top tabs
+            if !toolbarState.addressToolbar.isEditing {
+                leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
+            }
         }
     }
 
@@ -249,10 +266,16 @@ final class AddressToolbarContainer: UIView,
     func applyTheme(theme: Theme) {
         compactToolbar.applyTheme(theme: theme)
         regularToolbar.applyTheme(theme: theme)
+
+        let isPrivateMode = model?.isPrivateMode ?? false
+        let gradientStartColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.borderAccent
+        let gradientMiddleColor = isPrivateMode ? nil : theme.colors.iconAccentPink
+        let gradientEndColor = isPrivateMode ? theme.colors.borderAccentPrivate : theme.colors.iconAccentYellow
+
         progressBar.setGradientColors(
-            startColor: theme.colors.borderAccent,
-            middleColor: theme.colors.iconAccentPink,
-            endColor: theme.colors.iconAccentYellow
+            startColor: gradientStartColor,
+            middleColor: gradientMiddleColor,
+            endColor: gradientEndColor
         )
     }
 
@@ -279,6 +302,12 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarContainerAccessibilityActions()
     }
 
+    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton) {
+        if addressToolbar == toolbar {
+            delegate?.configureContextualHint(for: button)
+        }
+    }
+
     // MARK: - MenuHelperURLBarInterface
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == MenuHelperURLBarModel.selectorPasteAndGo {
@@ -291,5 +320,32 @@ final class AddressToolbarContainer: UIView,
     func menuHelperPasteAndGo() {
         guard let pasteboardContents = UIPasteboard.general.string else { return }
         delegate?.openBrowser(searchTerm: pasteboardContents)
+    }
+
+    // MARK: - Autocompletable
+    func setAutocompleteSuggestion(_ suggestion: String?) {
+        toolbar.setAutocompleteSuggestion(suggestion)
+    }
+
+    // MARK: - Overlay Mode
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        guard let windowUUID else { return }
+        inOverlayMode = true
+        delegate?.addressToolbarDidEnterOverlayMode(self)
+
+        if pasted {
+            let action = ToolbarAction(
+                searchTerm: locationText,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didPasteSearchTerm
+            )
+            store.dispatch(action)
+        }
+    }
+
+    func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        _ = toolbar.resignFirstResponder()
+        inOverlayMode = false
+        delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
     }
 }

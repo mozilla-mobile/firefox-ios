@@ -24,6 +24,8 @@ class Download: NSObject {
 
     fileprivate(set) var totalBytesExpected: Int64?
     fileprivate(set) var bytesDownloaded: Int64
+    // Whether the server has indicated it will send encoded data (via response `Content-Encoding` header) (FXIOS-9039)
+    fileprivate(set) var hasContentEncoding: Bool?
 
     init(originWindow: WindowUUID) {
         self.filename = "unknown"
@@ -117,6 +119,17 @@ class HTTPDownload: Download {
         }
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
+        if let contentEncodingHeader = (preflightResponse as? HTTPURLResponse)?
+                                       .allHeaderFields["Content-Encoding"] as? String,
+           !contentEncodingHeader.isEmpty {
+            // If this header is present, some encoding has been applied to the payload (likely gzip compression), so the
+            // above `preflightResponse.expectedContentLength` reflects the size of the encoded content, not the actual file
+            // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+            // FXIOS-9039
+            self.hasContentEncoding = true
+        } else {
+            self.hasContentEncoding = false
+        }
 
         self.session = URLSession(configuration: .ephemeral, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: self.request)

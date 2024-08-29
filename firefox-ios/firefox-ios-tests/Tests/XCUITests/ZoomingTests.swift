@@ -25,7 +25,7 @@ class ZoomingTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306947
+    // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
     func testZoomingActions() {
         // Regular browsing
@@ -42,7 +42,7 @@ class ZoomingTests: BaseTestCase {
         validateZoomActions()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306949
+    // https://mozilla.testrail.io/index.php?/cases/view/2306949
     func testZoomForceCloseFirefox() {
         openWebsiteAndReachZoomSetting(website: 0)
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
@@ -59,7 +59,7 @@ class ZoomingTests: BaseTestCase {
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306948
+    // https://mozilla.testrail.io/index.php?/cases/view/2306948
     func testSwitchingZoomedTabs() {
         validateZoomLevelOnSwitchingTabs()
         // Repeat all steps in private browsing
@@ -72,7 +72,7 @@ class ZoomingTests: BaseTestCase {
         validateZoomLevelOnSwitchingTabs()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2609150
+    // https://mozilla.testrail.io/index.php?/cases/view/2609150
     func testSwitchingZoomedTabsLandscape() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
         validateZoomLevelOnSwitchingTabs()

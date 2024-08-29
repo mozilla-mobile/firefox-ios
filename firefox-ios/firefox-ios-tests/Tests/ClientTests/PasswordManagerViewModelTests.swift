@@ -7,83 +7,92 @@ import MozillaAppServices
 import Shared
 import Storage
 import XCTest
+import Glean
 
 @testable import Client
 
 class PasswordManagerViewModelTests: XCTestCase {
     var viewModel: PasswordManagerViewModel!
     var dataSource: LoginDataSource!
+    var mockDelegate: MockLoginViewModelDelegate!
+    var mockLoginProvider: MockLoginProvider!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         let mockProfile = MockProfile()
+        self.mockLoginProvider = MockLoginProvider()
         let searchController = UISearchController()
         self.viewModel = PasswordManagerViewModel(
             profile: mockProfile,
             searchController: searchController,
-            theme: LightTheme()
+            theme: LightTheme(),
+            loginProvider: mockLoginProvider
         )
-        self.dataSource = LoginDataSource(viewModel: self.viewModel)
+        self.mockDelegate = MockLoginViewModelDelegate()
+        self.viewModel.delegate = mockDelegate
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
-        self.addLogins()
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
-        super.tearDown()
-        DependencyHelperMock().reset()
         viewModel = nil
-        dataSource = nil
+        mockLoginProvider = nil
+        mockDelegate = nil
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
-    private func addLogins() {
-        _ = self.viewModel.profile.logins.wipeLocalEngine()
-
-        for i in (0..<10) {
-            let login = LoginEntry(fromJSONDict: [
-                "hostname": "https://example\(i).com",
-                "formSubmitUrl": "https://example.com",
-                "username": "username\(i)",
-                "password": "password\(i)"
-            ])
-            let addExp = expectation(description: "\(#function)\(#line)")
-            self.viewModel.profile.logins.addLogin(login: login).upon { addResult in
-                XCTAssertTrue(addResult.isSuccess)
-                XCTAssertNotNil(addResult.successValue)
-                addExp.fulfill()
-            }
+    func testaddLoginWithEmptyString() {
+        let login = LoginEntry(fromJSONDict: [
+                        "hostname": "https://example.com",
+                        "formSubmitUrl": "https://example.com",
+                        "username": "username",
+                        "password": "password"
+                    ])
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
+        viewModel.save(loginRecord: login) { exampleQueryResult in
+            XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
+            expectation.fulfill()
         }
-
-        let logins = self.viewModel.profile.logins.listLogins().value
-        XCTAssertTrue(logins.isSuccess)
-        XCTAssertNotNil(logins.successValue)
-
-        waitForExpectations(timeout: 10.0, handler: nil)
+        wait(for: [expectation], timeout: 1)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
     }
 
-    func testQueryLogins() {
-        let expectation = XCTestExpectation()
+    func testaddLoginWithString() {
+        let login = LoginEntry(fromJSONDict: [
+                        "hostname": "https://example.com",
+                        "formSubmitUrl": "https://example.com",
+                        "username": "username",
+                        "password": "password"
+                    ])
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
+        viewModel.save(loginRecord: login) { exampleQueryResult in
+            XCTAssertEqual(self.mockLoginProvider.addLoginCalledCount, 1)
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.Logins.saved)
+    }
+
+    func testQueryLoginsWithEmptyString() {
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("") { emptyQueryResult in
-            XCTAssertEqual(emptyQueryResult.count, 10)
+            XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
+            XCTAssertEqual(self.mockLoginProvider.searchLoginsWithQueryCalledCount, 1)
             expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 1)
+    }
 
+    func testQueryLoginsWithExampleString() {
+        let expectation = XCTestExpectation(description: "Waiting for login query to complete")
         viewModel.queryLogins("example") { exampleQueryResult in
-            XCTAssertEqual(exampleQueryResult.count, 10)
+            XCTAssertEqual(self.mockDelegate.loginSectionsDidUpdateCalledCount, 0)
+            XCTAssertEqual(self.mockLoginProvider.searchLoginsWithQueryCalledCount, 1)
             expectation.fulfill()
         }
-
-        viewModel.queryLogins("3") { threeQueryResult in
-            XCTAssertEqual(threeQueryResult.count, 1)
-            expectation.fulfill()
-        }
-
-        viewModel.queryLogins("yxz") { zQueryResult in
-            XCTAssertEqual(zQueryResult.count, 0)
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testIsDuringSearchControllerDismiss() {

@@ -18,8 +18,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
 
     private var excludingActivities: [UIActivity.ActivityType] {
-        return [UIActivity.ActivityType.addToReadingList,
-                 UIActivity.ActivityType.copyToPasteboard]
+        return [UIActivity.ActivityType.addToReadingList]
     }
 
     // Can be a file:// or http(s):// url
@@ -104,8 +103,6 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
 
     private func getApplicationActivities() -> [UIActivity] {
         var appActivities = [UIActivity]()
-        let copyLinkActivity = CopyLinkActivity(activityType: .copyLink, url: url)
-        appActivities.append(copyLinkActivity)
 
         let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
         appActivities.append(sendToDeviceActivity)

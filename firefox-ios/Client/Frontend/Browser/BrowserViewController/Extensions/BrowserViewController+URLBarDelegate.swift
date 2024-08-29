@@ -181,55 +181,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
-        guard let tab = tabManager.selectedTab,
-              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
-        else { return }
-
-        switch readerMode.state {
-        case .available:
-            enableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
-        case .active:
-            disableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
-        case .unavailable:
-            break
-        }
+        toggleReaderMode()
     }
 
     func urlBarDidLongPressReaderMode(_ urlBar: URLBarView) -> Bool {
-        guard let tab = tabManager.selectedTab,
-              let url = tab.url?.displayURL
-        else {
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.announcement,
-                argument: String.ReaderModeAddPageGeneralErrorAccessibilityLabel
-            )
-            return false
-        }
-
-        let result = profile.readingList.createRecordWithURL(
-            url.absoluteString,
-            title: tab.title ?? "",
-            addedBy: UIDevice.current.name
-        )
-
-        switch result.value {
-        case .success:
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.announcement,
-                argument: String.ReaderModeAddPageSuccessAcessibilityLabel
-            )
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
-                                            bottomContainer: contentContainer,
-                                            theme: currentTheme())
-        case .failure:
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.announcement,
-                argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel
-            )
-        }
-        return true
+        toggleReaderModeLongPressAction()
     }
 
     func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
@@ -287,20 +243,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        if text.isEmpty {
-            hideSearchController()
-        } else {
-            configureOverlayView()
-        }
+        searchSuggestions(searchTerm: text)
         urlBar.locationTextField?.applyUIMode(
             isPrivate: tabManager.selectedTab?.isPrivate ?? false,
             theme: self.currentTheme()
         )
-        searchController?.viewModel.searchQuery = text
-        searchController?.searchTelemetry?.searchQuery = text
-        searchController?.searchTelemetry?.clearVisibleResults()
-        searchLoader?.query = text
-        searchController?.searchTelemetry?.determineInteractionType()
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
@@ -335,38 +282,11 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
         urlBar.searchEnginesDidUpdate()
-        guard let profile = profile as? BrowserProfile else { return }
-
-        if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
-            UIAccessibility.post(
-                notification: UIAccessibility.Notification.screenChanged,
-                argument: UIAccessibility.Notification.screenChanged
-            )
-        } else {
-            if let toast = clipboardBarDisplayHandler?.clipboardToast {
-                toast.removeFromSuperview()
-            }
-
-            showEmbeddedHomepage(inline: false, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        }
-
-        urlBar.applyTheme(theme: currentTheme())
+        addressToolbarDidEnterOverlayMode(urlBar)
     }
 
     func urlBar(_ urlBar: URLBarView, didLeaveOverlayModeForReason reason: URLBarLeaveOverlayModeReason) {
-        if searchSessionState == .active {
-            // This delegate method may be called even if the user isn't
-            // currently searching, but we only want to update the search
-            // session state if they are.
-            searchSessionState = switch reason {
-            case .finished: .engaged
-            case .cancelled: .abandoned
-            }
-        }
-        destroySearchController()
-        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
-
-        urlBar.applyTheme(theme: currentTheme())
+        addressToolbar(urlBar, didLeaveOverlayModeForReason: reason)
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {

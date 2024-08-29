@@ -10,7 +10,7 @@ import XCTest
 
 @testable import Client
 
-final class BrowserCoordinatorTests: XCTestCase {
+final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -200,7 +200,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
+
+        if featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly) {
+            XCTAssertTrue(mockRouter.presentedViewController is TrackingProtectionViewController)
+        } else {
+            XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
+        }
     }
 
     func testShowShareExtension_addsShareExtensionCoordinator() {
@@ -281,9 +286,9 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testShowBackForwardList_presentsBackForwardListViewController() {
-        let mockTab = Tab(profile: profile, configuration: .init(), windowUUID: windowUUID)
+        let mockTab = Tab(profile: profile, windowUUID: windowUUID)
         mockTab.url = URL(string: "https://www.google.com")
-        mockTab.createWebview()
+        mockTab.createWebview(configuration: .init())
         tabManager.selectedTab = mockTab
 
         let subject = createSubject()

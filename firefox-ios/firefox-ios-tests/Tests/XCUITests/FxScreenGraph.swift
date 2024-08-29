@@ -369,7 +369,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
             } else {
-                app.buttons["PhotonMenu.close"].tap()
+                app.buttons["Close"].tap()
             }
         }
     }
@@ -688,7 +688,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
-            app.webViews.buttons.element(boundBy: 0).tap()
+            app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.signInButton].tap()
         }
         screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
@@ -770,7 +770,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.ToggleRecentlySaved) { userState in
-            app.tables.cells.switches["Recently Saved"].tap()
+            app.tables.cells.switches["Bookmarks"].tap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -934,7 +934,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
-            sleep(1)
             app.textFields["url"].press(forDuration: 1.0)
         }
     }
@@ -1086,6 +1085,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
+        sleep(1)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.settings],
             to: SettingsScreen
@@ -1140,7 +1140,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.shareApple],
+            app.tables.otherElements[StandardImageIdentifiers.Large.share],
             forAction: Action.ShareBrowserTabMenuOption
         ) { userState in
         }

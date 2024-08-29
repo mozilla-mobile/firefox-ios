@@ -20,6 +20,7 @@ class TrackingProtectionModel {
     let displayTitle: String
     let connectionSecure: Bool
     let globalETPIsEnabled: Bool
+    private var selectedTab: Tab?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -59,21 +60,35 @@ class TrackingProtectionModel {
         return connectionSecure ? secureStatusString : unsecureStatusString
     }
 
-    var  connectionDetailsTitle: String {
-        let titleOn = String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
-        return connectionSecure ? titleOn : .Menu.EnhancedTrackingProtection.offTitle
+    var connectionDetailsTitle: String {
+        if !isProtectionEnabled {
+            return .Menu.EnhancedTrackingProtection.offTitle
+        }
+        if !connectionSecure {
+            return .Menu.EnhancedTrackingProtection.onNotSecureTitle
+        }
+        return String(format: String.Menu.EnhancedTrackingProtection.onTitle, AppName.shortName.rawValue)
     }
 
-    let protectionOnHeaderString = String.Menu.EnhancedTrackingProtection.onHeader
-    let protectionOffHeaderString = String.Menu.EnhancedTrackingProtection.offHeader
-    var  connectionDetailsHeader: String {
-        return connectionSecure ? protectionOnHeaderString : protectionOffHeaderString
+    var connectionDetailsHeader: String {
+        if !isProtectionEnabled {
+            return String(format: .Menu.EnhancedTrackingProtection.offHeader, AppName.shortName.rawValue)
+        }
+        if !connectionSecure {
+            return .Menu.EnhancedTrackingProtection.onNotSecureHeader
+        }
+        return .Menu.EnhancedTrackingProtection.onHeader
     }
 
-    let protectionOnImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
-    let protectionOffImage = UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
-    var  connectionDetailsImage: UIImage? {
-        return connectionSecure ? protectionOnImage : protectionOffImage
+    var isProtectionEnabled = false
+    var connectionDetailsImage: UIImage? {
+        if !isProtectionEnabled {
+            return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
+        }
+        if !connectionSecure {
+            return UIImage(named: ImageIdentifiers.TrackingProtection.protectionAlert)
+        }
+        return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     }
 
     var isSiteETPEnabled: Bool {
@@ -90,16 +105,27 @@ class TrackingProtectionModel {
          connectionSecure: Bool,
          globalETPIsEnabled: Bool,
          contentBlockerStatus: BlockerStatus,
-         contentBlockerStats: TPPageStats?) {
+         contentBlockerStats: TPPageStats?,
+         selectedTab: Tab?) {
         self.url = url
         self.displayTitle = displayTitle
         self.connectionSecure = connectionSecure
         self.globalETPIsEnabled = globalETPIsEnabled
         self.contentBlockerStatus = contentBlockerStatus
         self.contentBlockerStats = contentBlockerStats
+        self.selectedTab = selectedTab
     }
 
     // MARK: - Helpers
+    func getConnectionDetailsBackgroundColor(theme: Theme) -> UIColor {
+        if !isProtectionEnabled {
+            return theme.colors.layerAccentPrivateNonOpaque
+        }
+        if !connectionSecure {
+            return theme.colors.layerRatingFSubdued
+        }
+        return theme.colors.layer3
+    }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         if connectionSecure {
@@ -108,6 +134,13 @@ class TrackingProtectionModel {
         } else {
             return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
         }
+    }
+
+    func getCertificatesViewModel() -> CertificatesViewModel {
+        return CertificatesViewModel(topLevelDomain: websiteTitle,
+                                     title: displayTitle,
+                                     URL: url.absoluteDisplayString,
+                                     certificates: certificates)
     }
 
     func toggleSiteSafelistStatus() {
@@ -129,12 +162,15 @@ class TrackingProtectionModel {
 
         let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
                                           style: .destructive) { [weak self] _ in
-            self?.clearCookiesAndSiteData()
+            self?.clearCookiesAndSiteData(cookiesClearable: CookiesClearable(), siteDataClearable: SiteDataClearable())
+            self?.selectedTab?.webView?.reload()
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)
     }
 
-    func clearCookiesAndSiteData() {
+    func clearCookiesAndSiteData(cookiesClearable: Clearable, siteDataClearable: Clearable) {
+        _ = cookiesClearable.clear()
+        _ = siteDataClearable.clear()
     }
 }

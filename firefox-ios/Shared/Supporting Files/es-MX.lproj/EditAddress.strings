@@ -1,0 +1,36 @@
+/* Title for the cancel button in the remove address alert. */
+"Addresses.EditAddress.Alert.CancelButton.v129" = "Cancelar";
+
+/* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
+"Addresses.EditAddress.AutofillAddAddressTitle.v129" = "Agregar dirección";
+
+/* Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings. */
+"Addresses.EditAddress.AutofillAddressCity.v129" = "Ciudad";
+
+/* Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary. */
+"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "País";
+
+/* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "País o región";
+
+/* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
+"Addresses.EditAddress.AutofillAddressCounty.v129" = "Municipio";
+
+/* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
+"Addresses.EditAddress.AutofillAddressEmail.v129" = "Correo electrónico";
+
+/* Label for the postal code field, universally used in address forms to specify the area code for mail sorting. Essential for autofill to ensure mail and services are accurately routed. */
+"Addresses.EditAddress.AutofillAddressPostalCode.v129" = "Código postal";
+
+/* Label for the prefecture field, essential for addresses in countries like Japan where prefectures are a major administrative division. Aids in precise location specification for autofill. */
+"Addresses.EditAddress.AutofillAddressPrefecture.v129" = "Prefectura";
+
+/* Label for the province field, required in countries where provinces are a primary administrative division. Helps in pinpointing the user's location more accurately for autofill purposes. */
+"Addresses.EditAddress.AutofillAddressProvince.v129" = "Provincia";
+
+/* Label for the state field, a necessary component of addresses in many countries, especially the USA. It ensures that state-specific details are correctly filled in forms using autofill. */
+"Addresses.EditAddress.AutofillAddressState.v129" = "Estado";
+
+/* Label for the button to cancel the current autofill operation or exit the form without saving changes. Provides users with an option to back out of a process without making any modifications. */
+"Addresses.EditAddress.AutofillCancelButton.v129" = "Cancelar";
+

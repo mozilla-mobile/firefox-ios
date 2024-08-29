@@ -11,14 +11,23 @@ public struct ToolbarElement: Equatable {
     /// Badge name of the toolbar element
     let badgeImageName: String?
 
+    /// Mask name of the badge's toolbar element
+    let maskImageName: String?
+
     /// Number of open tabs
     let numberOfTabs: Int?
 
     /// Whether the toolbar element can be interacted with
     let isEnabled: Bool
 
+    /// Indicates whether the toolbar element's image should be flipped for right-to-left layout direction
+    let isFlippedForRTL: Bool
+
     /// Indicates if the element should be displayed as highlighted
     let shouldDisplayAsHighlighted: Bool
+
+    /// Indicates that there is an associated contextual hint
+    let hasContextualHint: Bool?
 
     /// Accessibility label of the toolbar element
     let a11yLabel: String
@@ -28,6 +37,12 @@ public struct ToolbarElement: Equatable {
 
     /// Accessibility identifier of the toolbar element
     let a11yId: String
+
+    /// Name for the custom accessibility action
+    let a11yCustomActionName: String?
+
+    /// Action to be performed for custom accessibility action
+    let a11yCustomAction: (() -> Void)?
 
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
@@ -39,31 +54,43 @@ public struct ToolbarElement: Equatable {
     // can therefor not be used outside of the ToolbarKit
     public init(iconName: String,
                 badgeImageName: String? = nil,
+                maskImageName: String? = nil,
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
+                isFlippedForRTL: Bool = false,
                 shouldDisplayAsHighlighted: Bool = false,
+                hasContextualHint: Bool = false,
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
+                a11yCustomActionName: String? = nil,
+                a11yCustomAction: (() -> Void)? = nil,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
         self.badgeImageName = badgeImageName
+        self.maskImageName = maskImageName
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
+        self.isFlippedForRTL = isFlippedForRTL
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
+        self.hasContextualHint = hasContextualHint
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
+        self.a11yCustomActionName = a11yCustomActionName
+        self.a11yCustomAction = a11yCustomAction
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
         lhs.iconName == rhs.iconName &&
         lhs.badgeImageName == rhs.badgeImageName &&
+        lhs.maskImageName == rhs.maskImageName &&
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
+        lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&
